@@ -1,7 +1,7 @@
 /**
  * The sample shop's catalog, safe to import from client components (no server code here). Brightline Home is a
- * fictional sample firm; the power bank is a fictional sample product sold only in the PayPal sandbox, so a judge can
- * buy it, claim it, and see the refund go back to that same purchase.
+ * fictional sample firm; the charger is its sample product, sold only in the PayPal sandbox and recalled in its own
+ * fictional sample recall BH-2026-01, so a judge can buy it, claim it, and see the refund go back to that purchase.
  */
 export const SHOP = {
   firmName: "Brightline Home (sample)",
@@ -9,12 +9,18 @@ export const SHOP = {
   referenceId: "brightline-shop",
   customIdPrefix: "remedy-shop:",
   softDescriptor: "BRIGHTLINE SAMPLE",
+  /** The sample recall this product is in. */
+  recall: "BH-2026-01",
   product: {
-    sku: "BLH-PC10K",
-    name: "Brightline PowerCell 10K power bank (sample)",
-    description: "10,000 mAh portable power bank. A fictional sample product for the Remedy demo.",
+    sku: "BLH-65W",
+    name: "Brightline 65W laptop charger (sample)",
+    description: "65W laptop charger with a fixed cord. A fictional sample product for the Remedy demo.",
     priceCents: 3499,
     currency: "USD",
+    /** Public-domain photo of one real charger, brand marks removed (public/samples/charger/CREDITS.json). */
+    image: "/samples/charger/intact.jpg",
+    imageAlt: "A black laptop charger with its cord coiled beside it.",
+    imageCredit: "Photo: Dmitry G, Wikimedia Commons, public domain. Brand marks removed; the product is a fictional sample.",
   },
   label: "Demonstration in PayPal sandbox. Brightline Home is a fictional sample firm.",
 } as const;

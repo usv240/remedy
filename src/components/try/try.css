@@ -327,6 +327,30 @@
   width: 60%;
   height: auto;
 }
+/* The sample product's photo fills the frame; its credit sits under it in small type. */
+.tr-product-art img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.tr-product-art {
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+.tr-product {
+  min-width: 0;
+}
+.tr-product-art figcaption {
+  grid-row: 2;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8125rem;
+}
 .tr-product-name {
   font-family: var(--font-ui);
   font-size: 1.125rem;

@@ -192,6 +192,13 @@ export function storedOfficialHashes(recallNumber: string): HashRef[] {
     } catch {
       stored = {};
     }
+    // The fictional sample recalls keep their image hashes in content/recalls/samples.json, apart from the CPSC data.
+    try {
+      const s = JSON.parse(readFileSync(path.join(process.cwd(), "content", "recalls", "samples.json"), "utf8")) as { recalls?: { number: string; images: { url: string; dhash?: string; caption?: string }[] }[] };
+      for (const r of s.recalls ?? []) stored![r.number] = r.images.filter((i) => i.dhash).map((i) => ({ url: i.url, dhash: i.dhash!, caption: i.caption }));
+    } catch {
+      /* no samples */
+    }
   }
   return (stored?.[recallNumber] ?? []).filter((i) => isHash(i.dhash)).map((i) => ({ ref: i.url, dhash: i.dhash.toLowerCase(), caption: i.caption ?? null }));
 }

@@ -110,7 +110,7 @@ export function formRows(n: ReportNumbers): FormRow[] {
     r("Remedy", "Claims verified", fmtInt(n.claimsVerified), "Verified by the checks or approved by a reviewer", false),
     r("Remedy", "Refunds paid", `${fmtInt(n.refundsPaidCount)} (${fmtUsd(n.refundsPaidCents)})`, "PayPal payouts and refunds that landed in the period", false),
     r("Remedy", "Replacements", `${fmtInt(n.replacementsCount)} (${fmtUsd(n.replacementsCents)})`, "Replacement orders paid in the period", false),
-    r("Remedy", "Unclaimed payouts", `${fmtInt(n.unclaimedCount)} (${fmtUsd(n.unclaimedCents)})`, "Payouts sent and not yet accepted", false),
+    r("Remedy", "Payouts waiting to be accepted", `${fmtInt(n.unclaimedCount)} (${fmtUsd(n.unclaimedCents)})`, "Sent through PayPal and not yet accepted by the owner", false),
     r("Remedy", "Completion", fmtPct(n.completionPercent), "Cumulative corrections over products affected", false),
   ];
 }

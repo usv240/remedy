@@ -506,6 +506,28 @@
   font-size: 0.8125rem;
   color: var(--muted);
 }
+/* Claimant cell, line 2: the recall number first, then the product name, cut with an ellipsis only at its end. */
+.cq-recall-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+.cq-recall-n {
+  flex: none;
+  color: var(--ink);
+}
+.cq-recall-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Marked in words, not a second pill: the row's one status mark is in the payout column. */
+.cq-sample {
+  flex: none;
+  color: var(--muted);
+}
 .cq-open {
   background: none;
   border: 0;

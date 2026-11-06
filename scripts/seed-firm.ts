@@ -6,10 +6,11 @@
 //                                                                  and saves it to src/lib/firm/samples/look-alike.json
 //
 // What it writes, all labelled sample (claim.is_sample = true):
-// - about 40 claims on the sample recall (CPSC 27056) from the announcement to today: verified and paid, waiting to be
-//   accepted, in firm review, new photo asked. Their payments are "sample history (not paid)": paypal_status SAMPLE,
-//   no PayPal batch id, so nothing polls PayPal for them. They use the firm's refund for the recall: the sample shop's
-//   price ($34.99) on 27056, and a labelled $20.00 sample amount on the others.
+// - about 40 claims on the firm's own sample recall (BH-2026-01, the fictional Brightline 65W charger) from the
+//   announcement to today: verified and paid, waiting to be accepted, in firm review, new photo asked. Their payments
+//   are "sample history (not paid)": paypal_status SAMPLE, no PayPal batch id, so nothing polls PayPal for them. They
+//   use the firm's refund for the recall: the sample shop's price ($34.99) on BH-2026-01, and a labelled $20.00
+//   sample amount on the real CPSC recalls the console also lists.
 // - two verified claims ready to pay, $1.00 each to the sandbox buyer (SANDBOX_BUYER_EMAIL): paying them sends real
 //   sandbox payouts. tests/e2e/firm.mjs pays them with bulk "Approve and pay".
 // - one firm-review claim on recall 26754 whose photo, checks and Two reviewers come from a recorded live run, when
@@ -32,7 +33,7 @@ import type { Checks, CheckId, CheckStatus } from "../src/lib/verify/types";
 const DAY = 86_400_000;
 /**
  * The sample firm's refund per recall (firm_recall.default_refund). The main recall pays the sample shop's price for
- * its fictional power bank; the others say "a full refund" of the price paid, which Remedy cannot know, so they use a
+ * its fictional charger; the others say "a full refund" of the price paid, which Remedy cannot know, so they use a
  * stated sample amount, labelled in refund_by_model._note.
  */
 const SHOP_PRICE = (SHOP.product.priceCents / 100).toFixed(2);
@@ -76,19 +77,42 @@ function check(id: CheckId, status: CheckStatus, plain: string, score?: number) 
   return { id, name: names[id], pass: status === "pass", status, ...(score !== undefined ? { score } : {}), reason_plain: plain, reason_technical: "Sample check result, seeded by scripts/seed-firm.ts. No model call was made." };
 }
 
+/**
+ * The words the sample history uses for the main recall's product and its remedy. Brightline's own sample charger
+ * recall (cut the cord) is the main recall; the power bank words stay for a database still on 27056.
+ */
+type Words = { product: string; done: string; notYet: string; unclear: string; retake: string[] };
+const WORDS: Record<string, Words> = {
+  "BH-2026-01": {
+    product: "Brightline 65W laptop charger",
+    done: "The cord is cut where it meets the charger case.",
+    notYet: "The cord is not cut yet.",
+    unclear: "This looks like the recalled charger, but the case is hard to see in the photo.",
+    retake: ["Cut the cord where it meets the charger case.", "Take one photo that shows the cut cord with the charger."],
+  },
+  "27056": {
+    product: "HAIARA power bank",
+    done: "The word recalled is written on the power bank in marker.",
+    notYet: "The word recalled is not on the power bank yet.",
+    unclear: "The power bank looks like the recalled one, but the model label is not readable in the photo.",
+    retake: ["Write RECALLED on the power bank in permanent marker, in big letters.", "Take one photo that shows the whole power bank and the word."],
+  },
+};
+const words = () => WORDS[SAMPLE_RECALL] ?? WORDS["27056"];
+
 function checksFor(kind: Kind, r: () => number): Checks {
   const s = (lo: number) => Math.round((lo + r() * (0.99 - lo)) * 100) / 100;
+  const w = words();
   const base: Checks = {
-    C1: check("C1", "pass", "This is the recalled HAIARA power bank.", s(0.86)),
-    C2: check("C2", "pass", "The word recalled is written on the power bank in marker.", s(0.84)),
+    C1: check("C1", "pass", `This is the recalled ${w.product}.`, s(0.86)),
+    C2: check("C2", "pass", w.done, s(0.84)),
     C3: check("C3", "pass", "This is the owner's own photo, not the recall picture or a screen."),
-    C4: check("C4", "pass", "The power bank matches the model in the recall."),
+    C4: check("C4", "pass", "No model or lot number is needed for this recall."),
     C5: check("C5", "pass", "One claim for one unit, within the limits."),
     C6: check("C6", "pass", "No earlier refund for this purchase."),
   };
-  if (kind === "review" || kind === "reviewed_paid" || kind === "review_retake")
-    base.C1 = check("C1", "unclear", "The power bank looks like the recalled one, but the model label is not readable in the photo.", Math.round((0.45 + r() * 0.2) * 100) / 100);
-  if (kind === "retake") base.C2 = check("C2", "fail", "The word recalled is not on the power bank yet.", Math.round((0.2 + r() * 0.3) * 100) / 100);
+  if (kind === "review" || kind === "reviewed_paid" || kind === "review_retake") base.C1 = check("C1", "unclear", w.unclear, Math.round((0.45 + r() * 0.2) * 100) / 100);
+  if (kind === "retake") base.C2 = check("C2", "fail", w.notYet, Math.round((0.2 + r() * 0.3) * 100) / 100);
   return base;
 }
 
@@ -152,10 +176,8 @@ async function insertClaim(o: {
 /** claim.result for a seeded claim, in the shape the claim route stores (src/app/api/claims/_lib/claims.ts). */
 function sampleResult(decision: string) {
   const plain = decision === "verified" ? "All six checks pass." : decision === "retake" ? "The photo needs one more try." : "The checks were unsure, so a person at the firm will look.";
-  const guidance =
-    decision === "retake"
-      ? { plain: "Write the word recalled on the power bank, then take the photo again.", steps: ["Write RECALLED on the power bank in permanent marker, in big letters.", "Take one photo that shows the whole power bank and the word."], technical: "Sample guidance." }
-      : null;
+  const w = words();
+  const guidance = decision === "retake" ? { plain: `${w.retake[0].replace(/\.$/, "")}, then take the photo again.`, steps: w.retake, technical: "Sample guidance." } : null;
   return { decided_by: decision === "firm_review" ? "reviewers" : "checks", summary: { plain, technical: "Sample result, seeded by scripts/seed-firm.ts. No model call was made." }, guidance, model: null, timings: null, sample: true };
 }
 
@@ -213,12 +235,12 @@ async function main() {
     update firm_recall fr set announced_on = coalesce(fr.announced_on, r.date),
       default_refund = coalesce(fr.default_refund, case when fr.recall_number = ${recall.number} then ${SHOP_PRICE}::numeric else ${SAMPLE_AMOUNT}::numeric end),
       refund_by_model = fr.refund_by_model || jsonb_build_object('_note', case when fr.recall_number = ${recall.number}
-        then ${`Sample firm setting: $${SHOP_PRICE}, the sample shop's price for its fictional power bank.`}::text
+        then ${`Sample firm setting: $${SHOP_PRICE}, the sample shop's price for its fictional charger.`}::text
         else ${`Sample amount: $${SAMPLE_AMOUNT}. The recall offers a full refund of the price paid, which Remedy cannot know.`}::text end)
     from recall r where r.number = fr.recall_number and fr.firm_id = ${firm.id}`);
 
   const removed = await clearSamples(firm.id);
-  const r = rng(27056);
+  const r = rng(26_0101);
   const now = new Date();
   const announced = new Date(`${recall.date}T15:00:00Z`);
   const span = Math.max(DAY, now.getTime() - announced.getTime());

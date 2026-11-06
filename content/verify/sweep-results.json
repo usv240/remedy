@@ -1,0 +1,3033 @@
+{
+ "ranAt": "2026-11-06T04:08:45.971Z",
+ "trials": 3,
+ "configs": [
+  {
+   "id": "opus-medium",
+   "model": "claude-opus-5-5",
+   "effort": "medium",
+   "note": "today's setting"
+  },
+  {
+   "id": "opus-low",
+   "model": "claude-opus-5-5",
+   "effort": "low",
+   "note": "same model, less thinking"
+  },
+  {
+   "id": "sonnet-default",
+   "model": "claude-sonnet-5-5",
+   "note": "Sonnet 5.5 at its own default effort (high)"
+  },
+  {
+   "id": "haiku-medium",
+   "model": "claude-haiku-5-5",
+   "effort": "medium",
+   "note": "Haiku 5.5 at its default (medium)"
+  }
+ ],
+ "stopped": null,
+ "runs": [
+  {
+   "trials": "earlier",
+   "note": "kept from --merge-with"
+  },
+  {
+   "trials": "2 to 3",
+   "direct": true,
+   "spentUsd": 0.971
+  }
+ ],
+ "summary": [
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "pass": 6,
+   "of": 8,
+   "pass %": 75,
+   "usd": 0.257,
+   "usd per case": 0.0321,
+   "median ms": 11524
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "pass": 7,
+   "of": 8,
+   "pass %": 88,
+   "usd": 0.176,
+   "usd per case": 0.022,
+   "median ms": 8222
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "pass": 5,
+   "of": 8,
+   "pass %": 63,
+   "usd": 0.089,
+   "usd per case": 0.0111,
+   "median ms": 7934
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "pass": 5,
+   "of": 8,
+   "pass %": 63,
+   "usd": 0.007,
+   "usd per case": 0.0008,
+   "median ms": 7311
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "pass": 7,
+   "of": 8,
+   "pass %": 88,
+   "usd": 0.294,
+   "usd per case": 0.0368,
+   "median ms": 12431
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "pass": 7,
+   "of": 8,
+   "pass %": 88,
+   "usd": 0.169,
+   "usd per case": 0.0211,
+   "median ms": 6985
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "pass": 7,
+   "of": 8,
+   "pass %": 88,
+   "usd": 0.111,
+   "usd per case": 0.0139,
+   "median ms": 7064
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "pass": 4,
+   "of": 8,
+   "pass %": 50,
+   "usd": 0.009,
+   "usd per case": 0.0012,
+   "median ms": 7318
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "pass": 5,
+   "of": 8,
+   "pass %": 63,
+   "usd": 0.161,
+   "usd per case": 0.0201,
+   "median ms": 11614
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "pass": 6,
+   "of": 8,
+   "pass %": 75,
+   "usd": 0.143,
+   "usd per case": 0.0179,
+   "median ms": 7210
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "pass": 7,
+   "of": 8,
+   "pass %": 88,
+   "usd": 0.078,
+   "usd per case": 0.0097,
+   "median ms": 7019
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "pass": 4,
+   "of": 8,
+   "pass %": 50,
+   "usd": 0.006,
+   "usd per case": 0.0007,
+   "median ms": 6901
+  }
+ ],
+ "cases": [
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.92,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0568,
+   "ms": 17226,
+   "vision_ms": 17118,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 1267,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4861
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0316,
+   "ms": 15169,
+   "vision_ms": 15045,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 1110,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.026,
+   "ms": 11524,
+   "vision_ms": 11449,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 955,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 891
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.2,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": "person",
+   "usd": 0.0781,
+   "ms": 22858,
+   "vision_ms": 13059,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1083,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 608,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 2142
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 746,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 1664
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.022,
+   "ms": 8521,
+   "vision_ms": 8378,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 671,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 1031
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0212,
+   "ms": 8735,
+   "vision_ms": 8635,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 719,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 955
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0214,
+   "ms": 6868,
+   "vision_ms": 6752,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 544,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 647
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 1,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "referee": null,
+   "usd": 0,
+   "ms": 58,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0214,
+   "ms": 7600,
+   "vision_ms": 7418,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 662,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0216,
+   "ms": 8222,
+   "vision_ms": 8048,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 607,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "referee": "person",
+   "usd": 0.0499,
+   "ms": 19728,
+   "vision_ms": 10801,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 835,
+     "cache_read_input_tokens": 4261,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 592,
+      "cache_read_input_tokens": 1419,
+      "cache_creation_input_tokens": 729
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 462,
+      "cache_read_input_tokens": 1386,
+      "cache_creation_input_tokens": 341
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.2,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": "person",
+   "usd": 0.0377,
+   "ms": 15252,
+   "vision_ms": 8807,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 656,
+     "cache_read_input_tokens": 4244,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 468,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 414,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0153,
+   "ms": 8292,
+   "vision_ms": 8196,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 582,
+     "cache_read_input_tokens": 4401,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0126,
+   "ms": 6507,
+   "vision_ms": 6461,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 519,
+     "cache_read_input_tokens": 4325,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0179,
+   "ms": 6405,
+   "vision_ms": 6328,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 523,
+     "cache_read_input_tokens": 4017,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 1,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "referee": null,
+   "usd": 0,
+   "ms": 26,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.88,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0233,
+   "ms": 9500,
+   "vision_ms": 9391,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 752,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4861
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.88,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.012,
+   "ms": 9521,
+   "vision_ms": 9427,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 728,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0104,
+   "ms": 8072,
+   "vision_ms": 8008,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 698,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 891
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "look-alike-hair-dryer",
+   "ok": false,
+   "misses": "decision retake, expected firm_review",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.05,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0107,
+   "ms": 6656,
+   "vision_ms": 6595,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 729,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.6,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0119,
+   "ms": 7836,
+   "vision_ms": 7741,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 762,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 1031
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.55,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0105,
+   "ms": 7934,
+   "vision_ms": 7874,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 707,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 955
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.01,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0104,
+   "ms": 5072,
+   "vision_ms": 4951,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 508,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 647
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 1,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "referee": null,
+   "usd": 0,
+   "ms": 26,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": false,
+   "misses": "C1 unclear, expected pass",
+   "decision": "firm_review",
+   "decided_by": "checks",
+   "C1": 0.7,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0017,
+   "ms": 17991,
+   "vision_ms": 9890,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 1824,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4861
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C1 unclear, expected pass; C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.7,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0009,
+   "ms": 7311,
+   "vision_ms": 7206,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 1347,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "checks",
+   "C1": 0.85,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.001,
+   "ms": 16907,
+   "vision_ms": 8475,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1600,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 891
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "look-alike-hair-dryer",
+   "ok": false,
+   "misses": "decision retake, expected firm_review",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.1,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0007,
+   "ms": 6382,
+   "vision_ms": 6283,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1117,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.85,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0008,
+   "ms": 5997,
+   "vision_ms": 5894,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 1062,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 1031
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.7,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0008,
+   "ms": 8176,
+   "vision_ms": 8123,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 1187,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 955
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "referee": null,
+   "usd": 0.0008,
+   "ms": 5402,
+   "vision_ms": 5299,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 1049,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 647
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 1,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "referee": null,
+   "usd": 0,
+   "ms": 66,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.92,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.92 (pass at 0.85, unclear from 0.5). The DHL prefix serial label matches the recall data format; the vent layout and dial adjuster match the official images. The DROYD logo on the back is not visible because the helmet is shown from inside, so the brand is not directly confirmed.",
+   "C2_reason": "other: confirmed, confidence 0.88. Two strap pieces lie above the helmet, one at top left and one at top right, each with frayed cut ends and buckle parts attached. Only small strap stubs remain at the helmet's side edges, so both straps appear cut off.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shadows, real foam texture and a dark table edge around the paper sheets show a camera photo of a real object, with no screen or printout signs. dHash 294cf0e8c8ccec78; ",
+   "referee": null,
+   "usd": 0.0548,
+   "ms": 13257,
+   "vision_ms": 13095,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 1167,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4861
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.92,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.92 (pass at 0.85, unclear from 0.5). Serial label format DHL plus six digits matches recall data; vent pattern, black shell, black padding and rear dial match official images. Exterior logo not visible, no conflicting details.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.4. Black straps and buckle pieces are bunched inside the helmet right of center, but no clear cut strap ends are visible and the straps may still be attached to the shell; separately cut straps cannot be confirmed.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, real trash bag and carpet with chair mat edges, normal camera perspective and noise; no screen or print signs. dHash 0e337179796933af; nearest official none, nearest ear",
+   "referee": null,
+   "usd": 0.0303,
+   "ms": 12431,
+   "vision_ms": 12342,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 1045,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Printed MY ONLY STYLER branding, white body with black bristle head, button layout, perforated vent end and cord strain relief all match the official image and description; model number MOS-22 on the back of the handle is not visible.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. Near the center of the photo the black cord ends in a cut end with exposed wire at the end of one loop, and a second free cord end lies to its left near the velcro tie, showing the cord severed into two pieces. The photo is identical to the official CPSC image, so it may not show the owner's own unit.",
+   "C3_reason": "Claude: digital_image (confidence 0.6; signs: none). The image looks like a real camera photo, but it matches the official CPSC recall image exactly in framing, cord layout, lighting and background, so it is most likely a downloaded copy of",
+   "referee": "person",
+   "usd": 0.0795,
+   "ms": 21642,
+   "vision_ms": 13034,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1095,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 891
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 711,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 2148
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 677,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 1727
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). White body color, MY ONLY STYLER branding, narrow straight brush head and perforated end grille all conflict with the black, pink striped paddle brush in the CPSC images. Same product category only.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.75. Near the center top of the photo, just right of the Velcro strap, a black cord end stops in a clean cut with small exposed wire ends showing. The cord appears severed, but it is hard to trace which piece leads to the plug at the top.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real shadows and wood grain texture with normal camera noise. No screen, paper or studio signs. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim no",
+   "referee": "person",
+   "usd": 0.0666,
+   "ms": 22484,
+   "vision_ms": 12776,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1075,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 760,
+      "cache_read_input_tokens": 1419,
+      "cache_creation_input_tokens": 723
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 700,
+      "cache_read_input_tokens": 1386,
+      "cache_creation_input_tokens": 278
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Pattern, bow print, collar piping, pocket, button placement, elastic waist and ruffle hems all match the CPSC Pink Bow image; layout is nearly identical to the official image, suggesting a copy of it.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. The top and pants are whole with no cuts, tears or separated pieces anywhere in the image.",
+   "C3_reason": "Claude: digital_image (confidence 0.93; signs: studio_background, no_camera_noise). Perfectly clean white background, flat illustration style with no shadows, texture or camera noise, and the layout nearly matches the official CPSC image. d",
+   "referee": null,
+   "usd": 0.0203,
+   "ms": 6993,
+   "vision_ms": 6889,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 584,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 1031
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Logo, shape, orange ring, base display and remote all match image 1. The model label is not visible, so the model and date cannot be confirmed. The image is pixel-for-pixel the same as official image 1, so it is not evidence of a physical unit the owner has.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible anywhere in the image, so there is no cut cord or severed piece in view.",
+   "C3_reason": "Claude: digital_image (confidence 0.93; signs: studio_background, no_camera_noise). The image has a perfectly clean white background, no camera noise and no shadows, and it matches the official CPSC catalog image exactly. dHash 3878686ef8a6",
+   "referee": null,
+   "usd": 0.0207,
+   "ms": 8490,
+   "vision_ms": 8432,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 693,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 955
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). The object is a white ceramic mug with a handle, filled with coffee. It has none of the recalled product's traits: black rectangular case, 20W print on the front, circular charging ring, or W5 PRO side label. It is a different kind of product entirely.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real reflections in the coffee, shallow depth of field and normal camera noise point to a phone camera photo of real objects. No screen or paper signs are visible. dHash ",
+   "referee": null,
+   "usd": 0.0221,
+   "ms": 6681,
+   "vision_ms": 6586,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 579,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 647
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 2,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 32,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Vent layout, rear dial, all black color scheme and serial label in DHL format matching the recall example decided the score; exterior logo not visible.",
+   "C2_reason": "other: confirmed, confidence 0.85. Two separate strap pieces with buckles lie at the top left and top right of the photo with frayed cut ends, and the helmet below shows only short strap stubs at its sides, so both straps appear cut off.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, slight shadows, paper sheets on a dark table and camera perspective indicate a real photo of a physical object. dHash 294cf0e8c8ccec78; nearest official none, nearest ear",
+   "referee": null,
+   "usd": 0.0202,
+   "ms": 6985,
+   "vision_ms": 6905,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 603,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Serial label DHL000076 matches the DHL prefix format, black shell, black pads, rear dial and vent layout match official images. DROYD logo on back not visible from this angle.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.6. Black straps and both buckle pieces are still visible inside the helmet at center right, apparently still attached; no clearly cut strap ends or separated straps are visible. The helmet is in a trash can as asked.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, carpet and trash bag texture, real camera perspective with no screen or print artifacts. dHash 0e337179796933af; nearest official none, nearest earlier claim none (reused",
+   "referee": null,
+   "usd": 0.0217,
+   "ms": 8084,
+   "vision_ms": 7983,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 614,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white body, black bristles, MY ONLY STYLER print, buttons and vent cap all match. Model number MOS-22 is not visible. The image appears identical to the official CPSC image in framing, cord layout, floor grain and lighting.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. The cord is cut through near the upper middle of the photo: a cut end with exposed inner wire sits center top, and the plug end is a separate piece at the top. However the whole image matches the official recall photo exactly.",
+   "C3_reason": "Claude: digital_image (confidence 0.7; signs: none). No screen or print signs are visible, but the picture is identical to the official CPSC recall image in every detail, so it is likely a downloaded copy rather than the owner's own photo. ",
+   "referee": "person",
+   "usd": 0.0421,
+   "ms": 15783,
+   "vision_ms": 9588,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 798,
+     "cache_read_input_tokens": 4261,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 533,
+      "cache_read_input_tokens": 2148,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 428,
+      "cache_read_input_tokens": 1727,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.3,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.3 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), brand text MY ONLY STYLER, and narrow brush head vs oval paddle all conflict with the official images; only the product category matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. Upper center of the photo, the cord ends abruptly with a cut end showing near a velcro strap, and the plug end is a separate length running to the upper right; the cord appears cut through.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and floor texture with no screen or print artifacts. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none (reused at 10 or less).",
+   "referee": "person",
+   "usd": 0.0394,
+   "ms": 15312,
+   "vision_ms": 8145,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 666,
+     "cache_read_input_tokens": 4244,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 532,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 424,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Print, gingham pattern, collar piping, button count, pocket and ruffle hems all match the official Pink Bow image; the image appears nearly identical to the official CPSC image, so it is likely not a photo of the owner's own item.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. Both the top and pants are whole with no cuts, tears or separated pieces anywhere in the image.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). Perfectly clean white background, flat illustration style rendering with no shadows, folds or camera noise, and it closely matches the official catalog image",
+   "referee": null,
+   "usd": 0.0153,
+   "ms": 6139,
+   "vision_ms": 6017,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 583,
+     "cache_read_input_tokens": 4401,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, orange ring, DREO logo, display and remote all match official image 1 exactly; the image appears pixel identical to the catalog shot, so it shows the right product but not the owner's own unit.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible anywhere in the photo, cut or uncut. The image matches the official product shot.",
+   "C3_reason": "Claude: digital_image (confidence 0.95; signs: studio_background, no_camera_noise). Perfectly clean white background, no camera noise, and the image is the same as official CPSC image 1. dHash 3878686ef8a63c38; nearest official none, neares",
+   "referee": null,
+   "usd": 0.0121,
+   "ms": 6683,
+   "vision_ms": 6592,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 495,
+     "cache_read_input_tokens": 4325,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). The object is a white ceramic mug with a handle, holding liquid. It does not match the black rectangular power bank shape, 20W print, or charging ring in the official images. It is a different kind of product.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus, camera noise and a real table scene with food suggest an ordinary camera photo of physical objects. dHash 22626e3a339458d1; nearest official 26 bits, neare",
+   "referee": null,
+   "usd": 0.0181,
+   "ms": 6178,
+   "vision_ms": 6089,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 534,
+     "cache_read_input_tokens": 4017,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 2,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 59,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.88,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.88 (pass at 0.85, unclear from 0.5). The serial label DHL000076 matches the recall's DHL000001 format. Black shell, black padding, black straps and buckles, the vent layout and the dial retainer are consistent with the official images. The exterior logo cannot be seen, so the score is below 0.9.",
+   "C2_reason": "other: confirmed, confidence 0.8. Two black straps with buckle parts are detached from the helmet and lie on separate white sheets at the top, with frayed cut ends visible. The helmet interior below has no straps attached. The trash can step is not shown.",
+   "C3_reason": "Claude: camera_photo (confidence 0.85; signs: paper_texture). The photo shows a real helmet and straps on paper sheets and a dark surface with natural lighting and shadows, with no screen or catalog signs. dHash 294cf0e8c8ccec78; nearest of",
+   "referee": null,
+   "usd": 0.0234,
+   "ms": 7868,
+   "vision_ms": 7733,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 770,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4861
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.88,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.88 (pass at 0.85, unclear from 0.5). The serial label DHL000076 follows the recall format, and the black shell, padding, straps, buckle and rear dial match the reference images. The exterior logo is hidden, so the score stays below 0.9.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.55. The helmet is in a trash can as required. Straps at the right side look short with a frayed or cut-looking end near the buckle, but the photo does not clearly show both straps cut through, and no separate cut straps are visible. This is only the helmet-in-trash photo, not both straps clearly severed.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, a real trash can with a bag, carpet and floor mat visible, with normal camera detail and no screen or paper signs. dHash 0e337179796933af; nearest official none, nearest ",
+   "referee": null,
+   "usd": 0.0115,
+   "ms": 7064,
+   "vision_ms": 6895,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 675,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Shape, color, bristle head, handle text, buttons, vented end and cord all match the official image. The score stays under 1 because the MOS-22 label is not readable. The photo also looks nearly identical to the official CPSC image, in framing, cord layout and surface.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. The cord has a severed end curling near the center left, and another cut end on the left side near the cable tie. The plug piece is separate from the piece attached to the dryer. The whole dryer is in view. Confidence is limited because the photo appears identical to the official reference image.",
+   "C3_reason": "Claude: unsure (confidence 0.4; signs: none). The photo looks the same as the official CPSC image in framing, cord layout and surface, which suggests it may be a copied image, but there is no clear screen, paper or watermark sign. dHash e08",
+   "referee": null,
+   "usd": 0.011,
+   "ms": 8923,
+   "vision_ms": 8820,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 756,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 891
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.05,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.05 (pass at 0.85, unclear from 0.5). Color, head shape, size and branding all conflict with the official images and description. Only the general product type (hot air brush with a black cord) matches. No model number is readable.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. The black cord has a free cut end visible in the upper middle-left of the photo, near the velcro tie, with a separate loose cord end to its left. The plug remains attached to the cord at the top. The cord appears severed, but the cut is small in view and the two ends are not clearly shown as separate pieces.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, wood grain surface with realistic shadows and camera detail, with no screen or paper signs. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none (",
+   "referee": "person",
+   "usd": 0.0333,
+   "ms": 14664,
+   "vision_ms": 7173,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 705,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 589,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 2142
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 561,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 1664
+     }
+    ]
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.8,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Pattern, bow print, collar piping, pocket, buttons and ruffled pant hems all match the official Pink Bow image. No model or label is visible. The very clean render-style look lowers confidence that this is the owner's own item.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. The top and pants are both whole and uncut. The top is intact with its collar, sleeves and buttons, and the pants are intact from waistband to ruffled hems. No cut edges or separated pieces are visible.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). The set sits on a perfectly clean white background with flat, even rendering, no fabric wrinkles, no shadows and no camera noise, like a catalog or product l",
+   "referee": null,
+   "usd": 0.0114,
+   "ms": 6724,
+   "vision_ms": 6639,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 712,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 1031
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.6,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Shape, orange ring, DREO logo, display and remote match the official image 1 closely, but the photo appears pixel-identical to the catalog image with a clean background, and no label shows the model or date. Score is capped because ownership and exact model cannot be confirmed.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible anywhere in the photo, so there are no cut ends or severed piece to see.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). The image has a perfectly clean white background with no camera noise or shadows, and matches the official catalog picture exactly. dHash 3878686ef8a63c38; n",
+   "referee": null,
+   "usd": 0.0098,
+   "ms": 5904,
+   "vision_ms": 5830,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 640,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 955
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0 (pass at 0.85, unclear from 0.5). The only product in the photo is a white ceramic mug with a handle and coffee in it. It is a different kind of product from the black W5 PRO power bank in the official images, so the score is zero.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). The photo has natural lighting, a reflection on the coffee, and a real table and plate in the background. It shows no screen or paper signs. dHash 22626e3a339458d1; nearest official 26 bi",
+   "referee": null,
+   "usd": 0.0107,
+   "ms": 5335,
+   "vision_ms": 5207,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 538,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 647
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 2,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 45,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": false,
+   "misses": "C1 unclear, expected pass",
+   "decision": "verified",
+   "decided_by": "reviewers",
+   "C1": 0.7,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.7 (pass at 0.85, unclear from 0.5). Color, helmet shape, interior construction and the DHL-style serial label fit the recall. The outside logo is not visible and the label number is not clearly readable, so the score stays at 0.7.",
+   "C2_reason": "other: confirmed, confidence 0.7. Two black webbing straps with buckles lie separated from the helmet on the white paper at the top of the photo. Their ends look frayed and cut, and the helmet interior is shown in the center. Strap attachment points on the helmet edges are partly visible and no stub is clearly confirmed.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Shows a physical helmet and straps with natural shadows and lighting, with no screen glare, moire, halftone dots or digital UI. dHash 294cf0e8c8ccec78; nearest official none, nearest earli",
+   "referee": "verify",
+   "usd": 0.0041,
+   "ms": 18781,
+   "vision_ms": 10416,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 1946,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4861
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1791,
+      "output_tokens": 1498,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 2755
+     },
+     {
+      "input_tokens": 1790,
+      "output_tokens": 1313,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 1730
+     }
+    ]
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C1 unclear, expected pass; C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.8,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Score based on matching color, black strap and buckle hardware, and a DHL-format serial label on the inside. Exterior DROYD logo not visible, so the exact product is not fully confirmed.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.7. Both straps appear attached to the helmet: one strap with a buckle runs down the right side near the top, and a buckle with strap sits at the lower center. No cut ends or severed strap pieces are visible.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Shows a physical helmet in a trash bag on a carpet and metal floor with natural texture and lighting. No screen, printout, or digital-image signs. dHash 0e337179796933af; nearest official ",
+   "referee": null,
+   "usd": 0.001,
+   "ms": 7735,
+   "vision_ms": 7628,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 1451,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C1 unclear, expected pass; C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.8,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Several visual details match the official images and product name. The model number is not visible. The photo appears identical to CPSC image 1 of 1, which lowers confidence that it is the owner's own unit.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.3. The power cord runs in one continuous piece from the plug at the top right to the dryer. A tapered tip near the velcro tie at the left middle may be an end, but no severed piece or clear cut ends are confirmed in this photo.",
+   "C3_reason": "Claude: digital_image (confidence 0.6; signs: none). The photo appears identical to the official CPSC image, which suggests a downloaded or catalog picture rather than a new camera photo of the owner's product. dHash e0808ed69ce174f8; neare",
+   "referee": null,
+   "usd": 0.001,
+   "ms": 8497,
+   "vision_ms": 8440,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1615,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 891
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "look-alike-hair-dryer",
+   "ok": false,
+   "misses": "decision retake, expected firm_review",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.1,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.1 (pass at 0.85, unclear from 0.5). Color, body design, brand text and brush styling all conflict with the official images and product data. No model number is visible to offset these differences.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.4. The cord from the plug runs down the left side and ends in a free curved tip near the middle left of the photo, which could be a cut end. The cord running from the styler body is intact. It is not clear whether this is a deliberate cut, so it cannot be confirmed.",
+   "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). The photo shows a real object on a wood-look table with natural lighting and no screen, print, or digital interface signs. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlie",
+   "referee": null,
+   "usd": 0.0009,
+   "ms": 7318,
+   "vision_ms": 7251,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1358,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.85,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Pattern, color, collar, pocket, piping and pant style match the official image. No label or model number is visible, so the exact product cannot be confirmed. Score held below 0.9 for that reason.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. Both the top and the pants are intact and whole. The top is buttoned closed and the pants are one connected piece, with no cut ends or separated pieces visible anywhere in the photo.",
+   "C3_reason": "Claude: digital_image (confidence 0.85; signs: studio_background, no_camera_noise). The background is a perfectly clean white with no shadows, texture or camera noise, and the product looks like a catalog or product-listing picture rather t",
+   "referee": null,
+   "usd": 0.0009,
+   "ms": 6372,
+   "vision_ms": 6273,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 1247,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 1031
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.85,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Visible details match the official CPSC image and no conflicts appear. The photo is nearly identical to official image 1, so it may be a copy of the product photo rather than the owner's unit. Score is held below 0.9 for that reason.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible in the photo. The heater base is shown with no cut ends or severed cord anywhere in the frame.",
+   "C3_reason": "Claude: digital_image (confidence 0.85; signs: studio_background, no_camera_noise). The image has a clean studio background and no camera noise, and it matches the official CPSC product image. dHash 3878686ef8a63c38; nearest official none, ",
+   "referee": null,
+   "usd": 0.0008,
+   "ms": 5642,
+   "vision_ms": 5553,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 1127,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 955
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). The photo contains no power bank. The only object is a white ceramic mug with coffee, which is a different kind of product from the recalled battery charger, so the score is near zero.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). The image shows a physical mug and plate on a wooden table with natural lighting, surface reflections and slight camera softness. It has no screen bezel, halftone dots, paper edge or clean",
+   "referee": null,
+   "usd": 0.0008,
+   "ms": 4632,
+   "vision_ms": 4547,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 943,
+     "cache_read_input_tokens": 3370,
+     "cache_creation_input_tokens": 647
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 2,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 50,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). The DHL-prefixed serial label matches the recall's stated label format for size L. The six teardrop vents around a central hole and the rear dial match the official images. The DROYD logo on the outer back is not visible, so it was not confirmed.",
+   "C2_reason": "other: confirmed, confidence 0.85. Two strap pieces with buckles lie separately at the top left and top right of the photo, with frayed cut ends. Short strap stubs remain on the left side of the helmet shell. Both straps appear cut off. The helmet is not shown inside a trash can in this photo.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real shadows, paper sheets and a dark table edge with normal camera texture. No screen or print artifacts. dHash 294cf0e8c8ccec78; nearest official none, nearest earlier ",
+   "referee": null,
+   "usd": 0.0297,
+   "ms": 12136,
+   "vision_ms": 12006,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 1078,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Serial label DHL000076 follows the recall's DHL###### format for size L. Color, padding, buckle, rear dial and vent layout match the official images. The DROYD back logo is not visible because the helmet is upside down.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.6. Black straps and both buckle halves are bunched inside the helmet on the right side, but no clean cut ends or straps separated from the helmet can be seen. The straps may still be attached.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, real carpet and plastic bag texture, and normal camera perspective. No screen or print signs. dHash 0e337179796933af; nearest official none, nearest earlier claim none (",
+   "referee": null,
+   "usd": 0.0289,
+   "ms": 11614,
+   "vision_ms": 11490,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 974,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.93,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.93 (pass at 0.85, unclear from 0.5). The handle print, white body with black bristles, button layout, vent cap and cord strain relief all match the official image. Model number MOS-22 is not visible. The owner's photo matches the CPSC reference image pixel for pixel, including cord path, Velcro tie position and wood grain.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.6. The black cord is cut through near the center left of the photo, with one cut end showing exposed wire just right of the Velcro tie and a second cut end lying to its left. However, this photo is identical to the official CPSC image, so it may not show the owner's own dryer.",
+   "C3_reason": "Claude: digital_image (confidence 0.75; signs: none). The image looks like a real camera photo, but it is identical to the official CPSC recall image in every detail: same cord loops, Velcro tie placement, cut ends, lighting and wood grain.",
+   "referee": null,
+   "usd": 0.0248,
+   "ms": 13147,
+   "vision_ms": 13096,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1107,
+     "cache_read_input_tokens": 4261,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "look-alike-hair-dryer",
+   "ok": false,
+   "misses": "decision retake, expected firm_review",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.2,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.2 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), head shape (narrow rectangle vs wide paddle), and printed brand MY ONLY STYLER conflict with the recalled Wantefully XR-8801; only the product category matches.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.65. Near the top center of the photo, a black cord end stops in the open with what looks like a cut face, separate from the plug at the top and from the cord entering the styler at the right. A second loose end sits to its left near the velcro tie, suggesting a severed piece. The cut faces are small and not shown up close.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real shadows and a wood-look floor texture with normal camera detail; no screen, print or studio signs. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier ",
+   "referee": null,
+   "usd": 0.0257,
+   "ms": 14316,
+   "vision_ms": 14257,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1151,
+     "cache_read_input_tokens": 4244,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Pattern, bow print, collar piping, buttons, pocket, elastic waist and ruffled pant hems all match the official Pink Bow image. No labels visible to confirm the brand. The image is nearly identical to the official image, suggesting a digital copy rather than an owner photo.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. Both the top and the pants appear whole and intact. No cuts, separated pieces or cut edges are visible anywhere in the image.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). The image is a flat, evenly lit illustration style product shot on a perfectly clean white background with no shadows, wrinkles or camera noise, and it nearl",
+   "referee": null,
+   "usd": 0.0169,
+   "ms": 7817,
+   "vision_ms": 7737,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 666,
+     "cache_read_input_tokens": 4401,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Shape, orange ring, DREO hub logo, control panel and remote all match official image 1. The image appears identical to the CPSC image, so it does not show the owner's own unit. No model label is visible to confirm DR-HSH015.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible anywhere in the photo, so no cut cord or cut ends can be seen.",
+   "C3_reason": "Claude: digital_image (confidence 0.95; signs: studio_background, no_camera_noise). The image has a perfectly clean white background, no camera noise, and appears identical to the official CPSC product image. dHash 3878686ef8a63c38; nearest",
+   "referee": null,
+   "usd": 0.0159,
+   "ms": 8108,
+   "vision_ms": 8075,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 683,
+     "cache_read_input_tokens": 4325,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). The object is a white ceramic mug with a handle and liquid inside. The recalled product is a flat black rectangular power bank with 20W and a ring printed on the front. These are different kinds of product, and no power bank appears in the frame.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, a shallow depth of field, real reflections on the coffee, and camera noise show a phone photo of a real table scene. There are no screen or print signs. dHash 22626e3a339",
+   "referee": null,
+   "usd": 0.019,
+   "ms": 6429,
+   "vision_ms": 6354,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 578,
+     "cache_read_input_tokens": 4017,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-medium",
+   "trial": 3,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 31,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Serial label DHL0000076 matches DHL format, vent layout, black color and rear dial match official images; exterior logo not visible.",
+   "C2_reason": "other: confirmed, confidence 0.85. Two separate strap pieces with buckles lie on paper at the top with frayed cut ends; strap stubs remain attached at the helmet's left edge. Not shown in a trash can.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and texture of a real helmet on paper on a desk; no screen or print signs. dHash 294cf0e8c8ccec78; nearest official none, nearest earlier claim none (reused at 10",
+   "referee": null,
+   "usd": 0.0202,
+   "ms": 7210,
+   "vision_ms": 7111,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 605,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Serial label DHL prefix matches recall format, black shell and padding, rear dial adjuster and radial vent pattern match official images. DROYD logo on back not visible from this angle.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.75. Straps and both buckles are visible at the center right of the helmet interior and appear still attached; no cut strap ends or severed strap pieces are clearly visible.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, carpet floor, real trash bag texture and camera noise; no screen or print signs. dHash 0e337179796933af; nearest official none, nearest earlier claim none (reused at 10 ",
+   "referee": null,
+   "usd": 0.0211,
+   "ms": 7416,
+   "vision_ms": 7332,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 586,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Brand text, white body, black bristles, button layout and vent end all match. Model MOS-22 is not readable. The image appears pixel for pixel the same as the CPSC reference image, including cord layout and wood grain.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.6. A severed cord end is visible near the center top, below the plug, showing the cord cut through. However, the whole image matches the official CPSC photo exactly, so it may not show the owner's own dryer.",
+   "C3_reason": "Claude: digital_image (confidence 0.75; signs: none). No screen or print signs are visible, but the photo is the same as the official CPSC recall image in every detail, including cord placement, lighting and background, which suggests it wa",
+   "referee": null,
+   "usd": 0.0178,
+   "ms": 9444,
+   "vision_ms": 9376,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 758,
+     "cache_read_input_tokens": 4261,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.2,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.2 (pass at 0.85, unclear from 0.5). Color (white vs black/pink), printed brand MY ONLY STYLER, and head shape (slim rectangular vs wide paddle) all conflict with the official images; only product category matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. The black power cord is cut through; a cut end with exposed inner wires is visible near the center top of the photo, and the plug end piece runs separately to the top center.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and floor texture consistent with a real camera photo; no screen or print artifacts. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none ",
+   "referee": "person",
+   "usd": 0.0394,
+   "ms": 14951,
+   "vision_ms": 8077,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 662,
+     "cache_read_input_tokens": 4244,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 559,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 400,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Pattern, collar, piping, buttons, pocket, elastic waist and ruffled hems all match the official Pink Bow image; layout is nearly identical to the reference image.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. Top and pants are whole with no cuts, tears or separated pieces anywhere in the image.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). Perfectly clean white background, no shadows, no camera noise, and the layout matches the official catalog style image almost exactly. dHash c088ace8f8e8d870",
+   "referee": null,
+   "usd": 0.0147,
+   "ms": 6529,
+   "vision_ms": 6401,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 554,
+     "cache_read_input_tokens": 4401,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Logo, orange ring, grille pattern, base shape, display and remote all match image 1 exactly; the image is pixel-for-pixel the same as the official catalog image.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible anywhere in the image, cut or uncut.",
+   "C3_reason": "Claude: digital_image (confidence 0.95; signs: studio_background, no_camera_noise). The image has a perfectly clean white background, no camera noise, and matches the official CPSC product image exactly. dHash 3878686ef8a63c38; nearest offi",
+   "referee": null,
+   "usd": 0.012,
+   "ms": 6117,
+   "vision_ms": 6073,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 492,
+     "cache_read_input_tokens": 4325,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). Object is a white ceramic mug with a handle, containing liquid. It shares no shape, color, markings or features with the black rectangular W5 PRO power bank in the official images.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real reflections in the coffee, shallow focus and camera noise show a real photo of a physical scene. dHash 22626e3a339458d1; nearest official 26 bits, nearest earlier cl",
+   "referee": null,
+   "usd": 0.0176,
+   "ms": 6024,
+   "vision_ms": 5944,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 506,
+     "cache_read_input_tokens": 4017,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "opus-low",
+   "trial": 3,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 39,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.88,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.88 (pass at 0.85, unclear from 0.5). The serial label format DHL000076 matches the recall's example format DHL000001, and the black shell, black padding and vent pattern match the official top view. The brand logo cannot be seen from the inside, so the score is not higher.",
+   "C2_reason": "other: confirmed, confidence 0.8. Two black straps with buckle parts are detached from the helmet and lie on white papers at the top of the photo, each with frayed cut ends. The helmet interior at the bottom shows no straps attached. The trash can step is not shown in this photo.",
+   "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). The photo shows a real helmet and straps on paper and a dark surface with natural lighting, shadows and camera detail, and no screen or print signs. dHash 294cf0e8c8ccec78; nearest offici",
+   "referee": null,
+   "usd": 0.0112,
+   "ms": 7094,
+   "vision_ms": 7010,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 717,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.88,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.88 (pass at 0.85, unclear from 0.5). The serial label DHL000076 follows the recall's DHL###### pattern. The black shell, black padding, black strap and buckle, and the vent layout are consistent with the official images. The exterior logo is not visible, so the score stays below 0.9.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.55. The helmet is in a trash can, but the straps are still attached at the right side of the helmet interior. Short strap ends near the buckle may be cut, but no clearly severed strap pieces or cut ends can be seen. Both straps cannot be confirmed cut off.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). The photo shows a real trash can, a carpeted floor, a plastic bag with natural wrinkles and ordinary camera lighting. There is no screen or paper sign. dHash 0e337179796933af; nearest off",
+   "referee": null,
+   "usd": 0.0118,
+   "ms": 6904,
+   "vision_ms": 6777,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 708,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "checks",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Shape, color, bristle head, logo text, button layout and vent cap all agree with the official image and description. The model number on the back of the handle cannot be seen. The arrangement of the cord, strap and wood background matches the official image exactly, which lowers confidence that this is an original owner photo.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. The cord has a free cut end in the upper middle of the photo, with the plug on a separate length at the top, so the cord appears severed. The two pieces are close together and the cut is small, so the view is not perfectly clear.",
+   "C3_reason": "Claude: unsure (confidence 0.4; signs: none). The image looks identical to the official CPSC reference photo in composition, cord position and lighting. It could be a reused or downloaded image, but no screen or paper marks are visible. dHa",
+   "referee": null,
+   "usd": 0.0084,
+   "ms": 7896,
+   "vision_ms": 7825,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 710,
+     "cache_read_input_tokens": 4261,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.05,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.05 (pass at 0.85, unclear from 0.5). Same product category only. Color (white vs black and pink), brush head shape (narrow vs wide paddle), and branding (MY ONLY STYLER vs Wantefully) all conflict with the official images, so the match score is very low.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. The black cord has a free severed end curling in the upper middle of the photo, so the cord appears cut with a loose end in view. However, the cord still appears connected from the plug to the brush, and the cut belongs to a different product than the recalled one.",
+   "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). The photo shows a physical object on a wood surface with natural lighting and camera detail, and no screen or paper signs. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlie",
+   "referee": "person",
+   "usd": 0.0215,
+   "ms": 13147,
+   "vision_ms": 6278,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 698,
+     "cache_read_input_tokens": 4244,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 647,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 454,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Pattern, collar piping, buttons, pocket and ruffled pant hems all match the official Pink Bow image. The pose and layout are nearly identical to the reference, and no fabric texture or camera detail is visible, which suggests a digital image.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.97. The top and pants are both fully intact. There are no cuts, severed pieces or separated parts anywhere in the image.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). The image has a perfectly clean white background, flat graphic rendering with no fabric folds, shadows or camera noise, and nearly matches the official catal",
+   "referee": null,
+   "usd": 0.0083,
+   "ms": 5888,
+   "vision_ms": 5809,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 652,
+     "cache_read_input_tokens": 4401,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.6,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Shape, orange ring, DREO logo, display and remote all match, but the image is pixel-identical to the official catalog image with a studio background, so it cannot be treated as the owner's own unit. No label is visible to confirm the model or date.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. No power cord is visible anywhere in the photo, and no cut ends or severed piece are shown. The heater appears intact.",
+   "C3_reason": "Claude: digital_image (confidence 0.93; signs: studio_background, no_camera_noise). The image has a perfectly clean white background, no camera noise, and matches the official catalog image exactly, so it looks like a downloaded product pic",
+   "referee": null,
+   "usd": 0.0075,
+   "ms": 7019,
+   "vision_ms": 6914,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 638,
+     "cache_read_input_tokens": 4325,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0 (pass at 0.85, unclear from 0.5). The photo shows a ceramic mug with coffee, a plate and a wooden table. There is no battery charger, no black rectangular body, no 20W marking and no model text, so it is a completely different kind of product.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, a casual restaurant table scene with wood grain, reflections on the coffee and background clutter. There are no screen or paper signs. dHash 22626e3a339458d1; nearest off",
+   "referee": null,
+   "usd": 0.009,
+   "ms": 5198,
+   "vision_ms": 5105,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 532,
+     "cache_read_input_tokens": 4017,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "sonnet-default",
+   "trial": 3,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 28,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "made-safe-helmet-straps-cut",
+   "ok": false,
+   "misses": "C1 unclear, expected pass",
+   "decision": "firm_review",
+   "decided_by": "checks",
+   "C1": 0.7,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.7 (pass at 0.85, unclear from 0.5). Color, padding, rear dial, black straps and buckles and interior serial sticker are consistent with the recalled Droyd youth helmet. The official images show only the exterior, and the owner photo shows only the interior, so the exact model and size cannot be confirmed. No conflicting details are visible.",
+   "C2_reason": "other: confirmed, confidence 0.7. Two black straps with buckles lie detached from the helmet on the white paper, at the upper left and upper right. Both straps show frayed, cut ends, which suggests they were cut off.",
+   "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). The image shows a physical helmet and straps with natural shadows and lighting, with no screen, printout or digital-image signs. dHash 294cf0e8c8ccec78; nearest official none, nearest ear",
+   "referee": null,
+   "usd": 0.0012,
+   "ms": 17497,
+   "vision_ms": 10822,
+   "usage": {
+    "vision": {
+     "input_tokens": 1792,
+     "output_tokens": 2032,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "made-safe-helmet-in-trash",
+   "ok": false,
+   "misses": "C1 unclear, expected pass; C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Color, interior construction, and DHL serial label format match the recall. The DROYD logo and exterior shape are not visible, and the size and model text are not clearly readable, so the score is held at 0.75.",
+   "C2_reason": "other: not confirmed (not_visible), confidence 0.7. Both straps are not clearly shown cut. The right side shows a black strap with a buckle and a loose end hanging near the right edge of the helmet interior. The left side strap with buckle appears attached. No clean cut ends are clearly visible in the photo.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real object in a trash bag and carpeted floor, no screen, printout, or digital image signs. dHash 0e337179796933af; nearest official none, nearest earlier claim none (reu",
+   "referee": null,
+   "usd": 0.001,
+   "ms": 7804,
+   "vision_ms": 7710,
+   "usage": {
+    "vision": {
+     "input_tokens": 2114,
+     "output_tokens": 1407,
+     "cache_read_input_tokens": 4861,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C1 unclear, expected pass; C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.6,
+   "C1_status": "unclear",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Visible design details match the recall description, but the owner's photo appears identical to the official CPSC image, so it cannot confirm the dryer or cut cord belong to the owner. The model number on the back of the handle is not visible.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.3. The cord has loose ends near the velcro tie at the left of the photo, but the photo matches the official CPSC image, so it cannot show the owner's own cut cord.",
+   "C3_reason": "Claude: digital_image (confidence 0.6; signs: no_camera_noise). The owner's photo appears identical to the official CPSC recall image, which suggests it was copied from a reference source rather than taken by the owner. dHash e0808ed69ce174",
+   "referee": null,
+   "usd": 0.001,
+   "ms": 8808,
+   "vision_ms": 8752,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1772,
+     "cache_read_input_tokens": 4261,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "look-alike-hair-dryer",
+   "ok": false,
+   "misses": "decision retake, expected firm_review",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.05,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.05 (pass at 0.85, unclear from 0.5). Brand text, body color, grille and body shape differ from the official images and description. No matching detail was found.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.3. The black power cord has a plug at the top and runs to the styler. Some cord ends near the cable tie look loose, but no clear cut through the cord with severed ends is confirmed.",
+   "C3_reason": "Claude: camera_photo (confidence 0.8; signs: none). Looks like a physical object on a real table with natural lighting. No screen, printout or digital image signs are visible. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlie",
+   "referee": null,
+   "usd": 0.0007,
+   "ms": 6718,
+   "vision_ms": 6559,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1187,
+     "cache_read_input_tokens": 4244,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "not-yet-safe-pajamas",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.85,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Pattern, color, collar, pocket, piping, and pant style match the official Pink Bow image. The photo looks like a clean catalog-style image, and no label or size tag is visible to confirm the exact product, so the score stays below 0.9.",
+   "C2_reason": "cut_in_half: not confirmed (not_visible), confidence 0.95. The top and both pant legs are intact and connected in the set. No cut, tear, or separated piece is visible anywhere in the photo.",
+   "C3_reason": "Claude: digital_image (confidence 0.8; signs: studio_background, no_camera_noise). The background is a perfectly clean white with no shadows, texture, or camera noise, and the set looks flat and evenly lit like a catalog or product image. I",
+   "referee": null,
+   "usd": 0.0008,
+   "ms": 6901,
+   "vision_ms": 6823,
+   "usage": {
+    "vision": {
+     "input_tokens": 687,
+     "output_tokens": 1339,
+     "cache_read_input_tokens": 4401,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "not-yet-safe-heater",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "own_photo",
+   "C1": 0.9,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "fail",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.9 (pass at 0.85, unclear from 0.5). Visible shape, orange ring, DREO logo, display and remote all match the official image 1. The image is identical to the CPSC reference picture, so it cannot show the owner's unit or any cut cord. Score is for product appearance only.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.97. The power cord is not visible anywhere in the photo. No cut ends or severed piece appear, so the required cord cut is not shown.",
+   "C3_reason": "Claude: digital_image (confidence 0.9; signs: studio_background, no_camera_noise). The background is a perfectly clean white studio backdrop with no camera noise, and the image matches the official CPSC picture exactly. It appears to be a c",
+   "referee": null,
+   "usd": 0.0007,
+   "ms": 6299,
+   "vision_ms": 6220,
+   "usage": {
+    "vision": {
+     "input_tokens": 336,
+     "output_tokens": 1197,
+     "cache_read_input_tokens": 4325,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "unrelated-object",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.02,
+   "C1_status": "fail",
+   "C2": "fail",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). The object is a ceramic cup with a handle and liquid contents. It is a different kind of product from the recalled portable battery charger, so the score is near zero.",
+   "C2_reason": "write_recalled: not confirmed (missing). No handwriting found on the product.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). The image shows a physical cup and table with natural lighting, reflections on the liquid and glaze, and uneven wood grain. It has no screen, printout, or digital image signs. dHash 22626e",
+   "referee": null,
+   "usd": 0.0006,
+   "ms": 4561,
+   "vision_ms": 4434,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 862,
+     "cache_read_input_tokens": 4017,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "haiku-medium",
+   "trial": 3,
+   "case": "not-yet-safe-power-bank",
+   "ok": true,
+   "misses": "",
+   "decision": "retake",
+   "decided_by": "quality",
+   "C1": "skipped",
+   "C1_status": "skipped",
+   "C2": "skipped",
+   "C3": "skipped",
+   "C4": "skipped",
+   "C1_reason": "The photo did not pass the quality precheck.",
+   "C2_reason": "The photo did not pass the quality precheck.",
+   "C3_reason": "The photo did not pass the quality precheck.",
+   "referee": null,
+   "usd": 0,
+   "ms": 26,
+   "vision_ms": 0,
+   "usage": {
+    "vision": null,
+    "reviewers": []
+   }
+  }
+ ],
+ "spentUsd": 0.971
+}

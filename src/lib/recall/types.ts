@@ -31,13 +31,16 @@ export type RecallProduct = {
   unitsText: string;
 };
 
-export type RecallImage = { url: string; caption: string };
+/** `file` (a repo path) and `dhash` are set only on sample recalls, whose images ship with the app. */
+export type RecallImage = { url: string; caption: string; file?: string; dhash?: string };
 
 export type RecallFirm = { name: string; role: "manufacturer" | "importer" | "distributor" };
 
 export type Recall = {
-  /** CPSC recall number, for example "27056". */
+  /** CPSC recall number, for example "27056"; or a fictional sample recall's number, for example "BH-2026-01". */
   number: string;
+  /** A fictional sample recall from content/recalls/samples.json, never a CPSC recall. Absent on CPSC recalls. */
+  sample?: true;
   title: string;
   /** Recall date, YYYY-MM-DD. */
   date: string;

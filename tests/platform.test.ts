@@ -79,19 +79,17 @@ describe("health checks", () => {
       elastic: "fallback",
       channel3: "fallback",
       bryntum: "live",
-      "ag-grid": "fallback",
-      kernel: "fallback",
-      render: "fallback",
+      "ag-grid": "live",
       apimatic: "live",
+      render: "fallback",
       database: "not_connected",
-      checks: "not_connected",
     });
 
-    Object.assign(process.env, { ELASTIC_URL: "https://x", ELASTIC_API_KEY: "k", CHANNEL3_API_KEY: "k", KERNEL_API_KEY: "k", RENDER_EXTERNAL_URL: "https://remedy.onrender.com", CHECKS_SECRET: "s", CHECKS_WORKFLOW_SLUG: "remedy-checks" });
+    Object.assign(process.env, { ELASTIC_URL: "https://x", ELASTIC_API_KEY: "k", CHANNEL3_API_KEY: "k", RENDER_EXTERNAL_URL: "https://remedy.onrender.com" });
     const set = Object.fromEntries((await runChecks()).map((c) => [c.id, c.mode]));
-    expect(set).toMatchObject({ elastic: "live", channel3: "live", kernel: "live", render: "live", checks: "live" });
+    expect(set).toMatchObject({ elastic: "live", channel3: "live", render: "live" });
 
-    process.env.FALLBACK_KERNEL = "true";
-    expect((await runChecks()).find((c) => c.id === "kernel")?.mode).toBe("fallback");
+    process.env.FALLBACK_ELASTIC = "true";
+    expect((await runChecks()).find((c) => c.id === "elastic")?.mode).toBe("fallback");
   });
 });

@@ -6,7 +6,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { extractBaseline, type ProofRule } from "@/lib/recall/proof-rule";
-import { loadRecalls } from "@/lib/recall/search";
+import { loadAllRecalls, loadSamplesFile } from "@/lib/recall/search";
 import type { Recall } from "@/lib/recall/types";
 import type { RecallImage, VerifyProofRule, VerifyRecall } from "@/lib/verify/types";
 import { exampleFor, plainHazard, productName, type MadeSafeExample } from "./recall-text";
@@ -22,15 +22,21 @@ function rulesFile(): RulesFile {
   return rulesCache;
 }
 
+/** A CPSC recall, or one of the fictional sample firm's recalls (content/recalls/samples.json, marked sample). */
 export function getRecall(number: string): Recall | null {
-  return loadRecalls().find((r) => r.number === number) ?? null;
+  return loadAllRecalls().find((r) => r.number === number) ?? null;
 }
 
-/** Where the rule came from: the stored Claude extraction, or the deterministic quick read when none is stored. */
-export type RuleSource = "ai" | "quick_read";
+/**
+ * Where the rule came from: the stored Claude extraction, the deterministic quick read when none is stored, or, for a
+ * sample recall, the rule the sample firm wrote by hand.
+ */
+export type RuleSource = "ai" | "quick_read" | "firm";
 export type RuleFor = { rule: ProofRule; source: RuleSource; model: string | null };
 
 export function ruleFor(r: Recall): RuleFor {
+  const own = r.sample ? loadSamplesFile().rules[r.number] : undefined;
+  if (own) return { rule: own, source: "firm", model: null };
   const f = rulesFile();
   const stored = f.rules[r.number];
   if (stored) return { rule: stored, source: "ai", model: f.model ?? "claude-opus-5-5" };
@@ -65,9 +71,22 @@ function localOfficial(url: string): Buffer | undefined {
   }
 }
 
+/** An image file inside the repo (public/samples/...), read for a sample recall. Never a path outside it. */
+function sampleFile(rel: string | undefined): Buffer | undefined {
+  if (!rel) return undefined;
+  const full = path.resolve(ROOT, rel);
+  if (!full.startsWith(path.resolve(ROOT, "public") + path.sep)) return undefined;
+  try {
+    return readFileSync(full);
+  } catch {
+    return undefined;
+  }
+}
+
 /** The recall as the verifier reads it. Official images come from disk when a fixture copy exists, else from cpsc.gov. */
 export function verifyRecallFor(r: Recall): VerifyRecall {
-  const images: RecallImage[] = r.images.map((i) => ({ url: i.url, caption: i.caption || null, data: localOfficial(i.url) }));
+  // A sample recall's images ship with the app (images[].file), so they are read from disk like the fixtures.
+  const images: RecallImage[] = r.images.map((i) => ({ url: i.url, caption: i.caption || null, data: localOfficial(i.url) ?? sampleFile(i.file) }));
   return {
     number: r.number,
     title: r.title,
@@ -117,6 +136,8 @@ export type PublicRecall = {
   ruleSource: RuleSource;
   ruleModel: string | null;
   example: MadeSafeExample | null;
+  /** A fictional sample recall (Brightline Home): label it "Sample recall; fictional", and show no cpsc.gov link. */
+  sample: boolean;
 };
 
 export function publicRecall(r: Recall): PublicRecall {
@@ -142,5 +163,6 @@ export function publicRecall(r: Recall): PublicRecall {
     ruleSource: source,
     ruleModel: model,
     example: exampleFor(rule),
+    sample: Boolean(r.sample),
   };
 }

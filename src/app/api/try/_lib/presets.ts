@@ -36,6 +36,8 @@ export type Preset = {
   recorded?: string;
   /** One of the team's own photos, from content/verify/fixtures/user/expected.json. */
   user?: boolean;
+  /** Runs against a fictional sample recall (Brightline Home's BH-2026-01): label it "Sample recall; fictional". */
+  sample?: boolean;
 };
 
 export type Recorded = {

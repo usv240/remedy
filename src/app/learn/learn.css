@@ -179,3 +179,61 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Each section's answer first; its detail one press away. The example photo sits beside the text it shows. */
+.ln-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 13rem;
+  gap: 1.5rem;
+  align-items: start;
+  max-width: 52rem;
+}
+.ln-split .ln-fig {
+  margin: 0.25rem 0 0;
+  max-width: none;
+}
+.ln-more + .ln-more {
+  margin-top: 0.25rem;
+}
+.ln-sec .ln-more > .ln-gloss,
+.ln-sec .ln-more > .ln-table-wrap,
+.ln-sec .ln-more > .ln-sources,
+.ln-sec .ln-more > .ln-checks {
+  margin-top: 0.5rem;
+}
+/* The read page's own rhythm: sections a step closer than the default. */
+.learn .ln-sec + .ln-sec {
+  margin-top: clamp(2.25rem, 1.75rem + 1.4vw, 3.25rem);
+}
+/* On a wide screen the sections sit two by two beside the contents, like a reference sheet: each one stands alone,
+   so the right half of the page carries the next answer instead of nothing. */
+@media (min-width: 1200px) {
+  .ln-main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 1rem + 2vw, 3.5rem);
+    row-gap: clamp(2.25rem, 1.75rem + 1.4vw, 3.25rem);
+    align-items: start;
+  }
+  .learn .ln-main > .ln-sec {
+    margin-top: 0;
+  }
+  .ln-split {
+    grid-template-columns: minmax(0, 1fr) 10rem;
+  }
+  .ln-gloss > div {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .learn .ln-sec + .ln-sec {
+    margin-top: 2rem;
+  }
+  .ln-split {
+    grid-template-columns: minmax(0, 1fr) 7.5rem;
+    gap: 1rem;
+  }
+  .ln-split .ln-fig figcaption {
+    font-size: 0.8125rem;
+  }
+}

@@ -83,7 +83,7 @@ export function BuyersImport({ recall, product, today }: { recall: string; produ
     <>
       <section className="firm-section" aria-labelledby="by-csv">
         <h2 id="by-csv">From a sales file</h2>
-        <p className="muted">One line per order. Lines that name {product}, or the sample shop&rsquo;s PowerCell, are matched; everything else is left out.</p>
+        <p className="muted">One line per order. Lines that name {product}, or the sample shop&rsquo;s charger, are matched; everything else is left out.</p>
         <form className="by-drop" onSubmit={(e) => void upload(e)}>
           <label className="firm-field">
             Sales CSV

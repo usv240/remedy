@@ -4,12 +4,16 @@
 
 :root {
   --lp-gap: clamp(0.75rem, 0.4rem + 1.2vw, 1.5rem);
+  /* The home page's own section rhythm: about 88px at 1440 and 56px on a phone, so the page reads as one run of
+     sentences with evidence instead of a scroll of posters. */
+  --lp-section: clamp(3.5rem, 1.4rem + 4.6vw, 5.5rem);
 }
 
 /* ------------------------------------------------------------------ Hero: "Title in the sky, line on the horizon" */
+/* The first screen, held to about 38rem so the note under the actions sits with them, not at the foot of an empty band. */
 .hero {
   position: relative;
-  min-height: min(calc(100svh - 72px), 46rem);
+  min-height: min(calc(100svh - 72px), 35rem);
 }
 .hero-sky {
   padding-top: clamp(2.5rem, 1rem + 4vw, 4.5rem);
@@ -25,9 +29,8 @@
 .hero-line {
   display: block;
 }
-.hero-sky > .info-trigger {
-  display: inline-flex;
-  margin-top: 1rem;
+.hero-half-b > .info-trigger {
+  vertical-align: middle;
 }
 
 /* The picture in the sentence: one line tall and 2.6em wide, set in em so it scales with the letters and sits on
@@ -76,12 +79,14 @@
   }
 }
 
-/* The horizon at 52%: the sentence split in two, the first half ending at column 5, the second starting at column 8. */
+/* The hero is one column: the sky, the horizon line under it, the actions, and the photo's note at the foot. The
+   horizon is the sentence split in two, the first half ending at column 5, the second starting at column 8. */
+.hero {
+  display: flex;
+  flex-direction: column;
+}
 .hero-horizon {
-  position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  top: 52%;
+  margin-top: clamp(2rem, 1rem + 2vw, 3rem);
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--lp-gap);
@@ -96,10 +101,7 @@
   grid-column: 8 / 13;
 }
 .hero-actions {
-  position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  top: calc(52% + 5.5rem);
+  margin-top: 2.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,10 +119,8 @@
   min-height: 44px;
 }
 .hero-note {
-  position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  bottom: 1.5rem;
+  margin-top: auto;
+  padding-top: 2.5rem;
   text-align: center;
   font-size: var(--step-small);
   color: var(--muted);
@@ -173,23 +173,25 @@
   .hero-half-a {
     text-align: center;
   }
+  /* The action takes the full width; the two text links share the line under it. */
   .hero-actions {
-    margin-top: 2rem;
-    flex-direction: column;
-    gap: 0.25rem;
+    margin-top: 1.75rem;
+    gap: 0 1.5rem;
   }
   .hero-cta {
     width: 100%;
     min-height: 56px;
+    margin-bottom: 0.25rem;
   }
   .hero-note {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+    padding-top: 0;
   }
 }
 
 /* ------------------------------------------------------------------ Intro: "Headline crossing onto a photograph" */
 .intro {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
 }
 .intro-grid {
   position: relative;
@@ -247,6 +249,62 @@
   height: auto;
   background: var(--surface-2);
 }
+/* Cropped to 4:3 from the top, so the cut straps and the helmet they came off stay in frame at half the height. */
+.intro-photo img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 8%;
+}
+/* The other two quotes, one press away, with the same plus as every disclosure on the site. */
+.intro-more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--step-small);
+  color: var(--muted);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  -webkit-tap-highlight-color: transparent;
+}
+.intro-more > summary::-webkit-details-marker {
+  display: none;
+}
+.intro-more > summary::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:
+    10px 1.5px,
+    1.5px 10px;
+  transition:
+    transform var(--dur-menu) var(--ease-out),
+    background-size var(--dur-menu) var(--ease-out);
+}
+.intro-more[open] > summary::after {
+  background-size:
+    10px 1.5px,
+    1.5px 0;
+  transform: rotate(180deg);
+}
+.intro-more > summary:active {
+  opacity: 0.7;
+}
+.intro-more > .intro-quotes {
+  margin-top: 0.25rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-more > summary::after {
+    transition: none;
+  }
+}
 .intro-photo figcaption,
 .intro-photo-2 figcaption {
   margin-top: 0.6rem;
@@ -258,7 +316,7 @@
 .intro-text {
   grid-column: 1 / 6;
   grid-row: 2;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
 }
 .intro-stat {
   font-size: var(--step-lead);
@@ -271,30 +329,44 @@
 }
 .intro-quotes {
   list-style: none;
-  margin: 2.25rem 0 0;
+  margin: 1.75rem 0 0;
   padding: 0;
   display: grid;
-  gap: 1.25rem;
+  gap: 0.5rem;
   max-width: 34rem;
 }
-.intro-quotes blockquote {
-  margin: 0;
+/* Each quote runs on into its source, so the link closes the line instead of taking one of its own. */
+.intro-quotes li {
   font-size: 1.0625rem;
   line-height: 1.5;
+}
+.intro-quotes blockquote {
+  display: inline;
+  margin: 0;
 }
 .intro-q-src {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  margin-left: 0.4em;
   font-size: var(--step-small);
   color: var(--muted);
+  white-space: nowrap;
 }
+/* The second photo it asks for, small, with its caption beside it. */
 .intro-photo-2 {
-  grid-column: 1 / 5;
+  grid-column: 1 / 6;
   grid-row: 3;
   align-self: end;
-  margin-top: 3rem;
-  max-width: 22.5rem;
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: 16px;
+  align-items: end;
+  max-width: 30rem;
+}
+.intro-photo-2 figcaption {
+  margin-top: 0;
 }
 
 @media (max-width: 760px) {
@@ -325,14 +397,24 @@
   .intro-lead {
     font-size: 1.0625rem;
   }
+  /* The second photo beside its caption. */
   .intro-photo-2 {
-    width: 50%;
+    max-width: none;
+    margin-top: 1.25rem;
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 12px;
+    align-items: end;
+  }
+  .intro-photo-2 figcaption {
+    margin-top: 0;
+    padding-right: 0;
   }
 }
 
 /* ------------------------------------------------------------------ How it works: "Lines that step across" */
 .how {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
 }
 .how-steps {
   list-style: none;
@@ -341,7 +423,7 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--lp-gap);
-  row-gap: 56px;
+  row-gap: 24px;
 }
 .how-step {
   grid-column-end: 13;
@@ -369,8 +451,8 @@
   color: var(--accent-text);
 }
 .how-note {
-  margin-top: 12px;
-  max-width: 34ch;
+  margin-top: 10px;
+  max-width: 46ch;
   font-size: 1.0625rem;
   color: var(--muted);
 }
@@ -379,7 +461,7 @@
     display: block;
   }
   .how-step + .how-step {
-    margin-top: 40px;
+    margin-top: 28px;
   }
   .how-step:nth-child(2) {
     padding-left: 6vw;
@@ -401,8 +483,7 @@
 /* ------------------------------------------------------------------ Showcase: "Headline you can type" */
 .showcase {
   position: relative;
-  margin-top: var(--section-gap);
-  min-height: 70svh;
+  margin-top: var(--lp-section);
 }
 .showcase-info {
   position: absolute;
@@ -446,19 +527,29 @@
   color: var(--muted);
 }
 .sc-results {
-  margin-top: 48px;
-  max-width: 35rem;
+  margin-top: 36px;
   transition: opacity 160ms ease;
 }
 .sc-results[data-busy] {
   opacity: 0.55;
 }
+/* The answers sit side by side across the grid, so the typed line keeps its width and nothing leaves half a screen empty. */
 .sc-rows {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--lp-gap);
+}
+.sc-rows > li {
+  display: grid;
+}
+@media (max-width: 900px) {
+  .sc-rows {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
 }
 .sc-row {
   display: grid;
@@ -545,10 +636,20 @@
   font-size: 0.8125rem;
 }
 .sc-examples {
-  margin-top: 2.5rem;
+  margin-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1.75rem;
+}
+/* On a wide screen the examples share the line of "All results", at its far end. */
+@media (min-width: 901px) {
+  .sc-examples {
+    margin-top: -44px;
+    justify-content: flex-end;
+    position: relative;
+    width: fit-content;
+    margin-left: auto;
+  }
 }
 .sc-example {
   background: none;
@@ -611,7 +712,7 @@
 
 /* ------------------------------------------------------------------ Try a photo: a 5/7 product row */
 .try {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--lp-gap);
@@ -677,7 +778,7 @@
 }
 .tp-pick img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   border-radius: 7px;
   background: #fff;
@@ -757,7 +858,7 @@
   grid-template-columns: 10.5rem auto minmax(0, 1fr);
   gap: 4px 12px;
   align-items: baseline;
-  padding: 8px 0;
+  padding: 6px 0;
   opacity: 0.45;
   transition: opacity 240ms var(--ease-out);
 }
@@ -835,8 +936,16 @@
   }
 }
 @media (max-width: 560px) {
+  /* Four across on a phone too: square thumbnails, so the run itself starts within the first screen of the panel. */
   .tp-picks {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .tp-pick {
+    padding: 4px 4px 6px;
+    border-radius: 10px;
+  }
+  .tp-pick img {
+    aspect-ratio: 1;
   }
   .tp-check {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -851,7 +960,7 @@
 
 /* ------------------------------------------------------------------ Stats: "Column aligned on the decimal" */
 .stats {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--lp-gap);
@@ -867,7 +976,6 @@
 }
 .stats-h1 {
   display: block;
-  color: var(--muted);
 }
 .stats-h2 {
   display: block;
@@ -885,13 +993,16 @@
   margin: 0;
   display: grid;
   grid-template-columns: max-content max-content minmax(0, 1fr);
-  align-items: baseline;
-  row-gap: 20px;
+  /* A caption's last line sits on its figure's baseline, so a two-line caption rises beside the figure instead of
+     hanging below it and pushing the next row down. */
+  align-items: last baseline;
+  row-gap: 6px;
 }
 .stats-row,
 .stats-fig {
   display: contents;
 }
+/* Set close (leading 0.92, 6px apart) so the six figures keep their display size and fit in about one screen. */
 .stats-whole,
 .stats-dec {
   font-family: var(--font-display);
@@ -899,7 +1010,7 @@
   font-size: var(--step-display);
   font-variant-numeric: lining-nums tabular-nums;
   letter-spacing: -0.02em;
-  line-height: 1;
+  line-height: 0.92;
 }
 .stats-whole {
   grid-column: 1;
@@ -915,43 +1026,46 @@
   padding-left: 1.25rem;
   font-size: 1rem;
   line-height: 1.35;
-  max-width: 19rem;
+  max-width: 21rem;
 }
 @media (max-width: 900px) {
   .stats {
     display: block;
   }
+  /* On a phone each caption sits beside its figure, still aligned on the point. */
   .stats-list {
-    margin-top: 2rem;
-    grid-template-columns: 52% minmax(0, 1fr);
-    row-gap: 6px;
+    margin-top: 1.75rem;
+    align-items: center;
+    row-gap: 18px;
   }
   .stats-whole,
   .stats-dec {
-    font-size: 15vw;
+    font-size: 12vw;
   }
   .stats-cap {
-    grid-column: 1 / -1;
-    padding-left: 0;
-    margin-bottom: 22px;
+    padding-left: 0.875rem;
     font-size: 0.9375rem;
     max-width: none;
   }
 }
 
 /* ------------------------------------------------------------------ Grounded in research: "Names as one sentence" */
-.research {
-  position: relative;
-  margin-top: var(--section-gap);
+/* Set under the stats heading, beside the figures it stands behind: a statement at the lead step, not a headline. */
+.stats-research {
+  margin-top: 2rem;
+  scroll-margin-top: 1.5rem;
 }
-.rs-info {
-  position: absolute;
-  right: var(--margin);
-  top: -2.75rem;
+.rs-foot {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
-/* A statement, not a headline: at most 36px on three lines (24px on a phone). */
+.rs-foot > .info-trigger {
+  margin-top: 0.6rem;
+}
 .rs-line {
-  font-size: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);
+  font-size: var(--step-lead);
   font-weight: 300;
   font-family: var(--font-display);
   line-height: 1.25;
@@ -981,7 +1095,6 @@
   color: var(--ink);
 }
 .rs-more {
-  margin-top: 2rem;
   max-width: 48rem;
 }
 .rs-more > summary {
@@ -1014,13 +1127,13 @@
 }
 @media (max-width: 760px) {
   .rs-line {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 }
 
 /* ------------------------------------------------------------------ How it is built: "Statement, table pushed right" */
 .built {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
 }
 .built-h {
   font-size: var(--step-head);
@@ -1033,33 +1146,45 @@
 .built-h span:first-child {
   padding-left: 3vw;
 }
-.built-body {
-  margin-top: 96px;
+/* The statement on the left, the table pushed right and starting level with it: one row, no empty half. */
+.built {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--lp-gap);
+  align-items: start;
+}
+.built-h {
+  grid-column: 1 / 7;
+  grid-row: 1;
+}
+.built-body {
+  grid-column: 7 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
 }
 .built-k {
-  grid-column: 7;
+  grid-column: 1;
   font-size: 0.875rem;
   color: var(--muted);
   padding-top: 0.55rem;
 }
 .built-table {
-  grid-column: 8 / -1;
+  grid-column: 2 / -1;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 .built-row:nth-child(4n + 1):not(:first-child) {
-  margin-top: 44px;
+  margin-top: 20px;
 }
 .built-link {
   display: grid;
   grid-template-columns: 8.5rem minmax(0, 1fr) 1rem;
   gap: 0 1rem;
   align-items: baseline;
-  padding: 13px 0;
+  padding: 8px 0;
   min-height: 44px;
   color: var(--ink);
   text-decoration: none;
@@ -1095,13 +1220,29 @@
   }
 }
 .built-more {
-  grid-column: 8 / -1;
-  margin-top: 1.5rem;
+  grid-column: 2 / -1;
+  margin-top: 1rem;
 }
 .built-more .text-link {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
+}
+@media (max-width: 1000px) {
+  .built {
+    display: block;
+  }
+  .built-body {
+    margin-top: 2.5rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .built-k {
+    grid-column: 1 / 3;
+  }
+  .built-table,
+  .built-more {
+    grid-column: 3 / -1;
+  }
 }
 @media (max-width: 760px) {
   .built-h {
@@ -1117,26 +1258,23 @@
   .built-k {
     display: none;
   }
+  /* The tool and its job share a row on a phone too, in a narrower first column. */
   .built-link {
-    grid-template-columns: minmax(0, 1fr) 1rem;
-  }
-  .built-tool {
-    grid-column: 1;
-  }
-  .built-job {
-    grid-column: 1;
-    grid-row: 2;
+    grid-template-columns: 6.25rem minmax(0, 1fr) 0.75rem;
+    gap: 0 0.75rem;
+    font-size: 0.9375rem;
   }
   .built-arrow {
-    grid-column: 2;
-    grid-row: 1 / 3;
     align-self: center;
+  }
+  .built-row:nth-child(4n + 1):not(:first-child) {
+    margin-top: 12px;
   }
 }
 
 /* ------------------------------------------------------------------ For developers */
 .devs {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--lp-gap);
@@ -1207,25 +1345,34 @@
     margin-top: 2rem;
   }
 }
+/* On a phone the response would scroll sideways inside a narrow card; the docs, one press away, show it whole. */
+@media (max-width: 760px) {
+  .devs-fragment {
+    display: none;
+  }
+}
 
 /* ------------------------------------------------------------------ FAQ: "Wide heading, indented questions" */
+/* The wide heading holds the left four columns and the questions start level with it, indented to column 5. */
 .faq {
-  margin-top: var(--section-gap);
+  margin-top: var(--lp-section);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  align-items: start;
 }
 .faq-h {
+  grid-column: 1 / 5;
   font-size: var(--step-head);
   font-weight: 300;
   line-height: 1;
 }
 .faq-list {
-  margin-top: 80px;
+  grid-column: 5 / -1;
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--lp-gap);
-  row-gap: 12px;
+  row-gap: 4px;
 }
 .faq-item {
-  grid-column: 5 / -1;
   border-radius: 12px;
   margin-inline: -24px;
   padding-inline: 24px;
@@ -1243,7 +1390,7 @@
   align-items: center;
   gap: 1.5rem;
   min-height: 44px;
-  padding: 16px 0;
+  padding: 10px 0;
   font-size: var(--step-lead);
   line-height: 1.25;
 }
@@ -1283,12 +1430,15 @@
   }
 }
 @media (max-width: 760px) {
+  .faq {
+    display: block;
+  }
   .faq-h {
     font-size: 10vw;
   }
   .faq-list {
     display: block;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
   .faq-item {
     margin-inline: calc(-1 * var(--margin));
@@ -1305,13 +1455,12 @@
 
 /* ------------------------------------------------------------------ CTA: "The idea again, inverted" */
 /* The sheet asks for 90svh; with a two-line headline and one sentence that left a void in the middle of the field,
-   so it is held to two thirds of a screen. */
+   so it ends where its content ends: the headline, then the sentence and the action on one line. */
 .cta {
-  margin-top: var(--section-gap);
-  min-height: min(68svh, 46rem);
+  margin-top: var(--lp-section);
   display: grid;
-  grid-template-rows: 1fr auto;
-  padding-top: clamp(3rem, 2rem + 4vw, 6rem);
+  row-gap: clamp(2rem, 1rem + 3vw, 4rem);
+  padding-top: clamp(3rem, 2rem + 3vw, 5rem);
   padding-bottom: 40px;
   background: var(--invert-bg);
   color: var(--invert-ink);
@@ -1322,8 +1471,14 @@
   line-height: 0.9;
   letter-spacing: -0.02em;
 }
+/* One line on a wide screen, two on a phone. */
 .cta-h span {
-  display: block;
+  display: inline;
+}
+@media (max-width: 1100px) {
+  .cta-h span {
+    display: block;
+  }
 }
 .cta-foot {
   display: grid;
@@ -1347,9 +1502,6 @@
   outline-color: var(--invert-ink);
 }
 @media (max-width: 760px) {
-  .cta {
-    min-height: min(70svh, 34rem);
-  }
   .cta-h {
     font-size: 15vw;
   }

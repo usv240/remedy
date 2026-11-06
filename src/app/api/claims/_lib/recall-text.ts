@@ -3,16 +3,26 @@
  */
 import type { ProofRule } from "@/lib/recall/proof-rule";
 
-/** CPSC recall numbers are five digits ("27056"); a few older ones run four to six. */
-export const isRecallNumber = (s: string) => /^\d{4,6}$/.test(s);
+/**
+ * Brightline Home's fictional sample recalls are numbered "BH-2026-01" (content/recalls/samples.json), a form no CPSC
+ * recall uses, so a sample can never be mistaken for a real recall number.
+ */
+export const SAMPLE_NUMBER = /^BH-\d{4}-\d{2}$/;
+export const isSampleNumber = (s: string) => SAMPLE_NUMBER.test(s);
+
+/** CPSC recall numbers are five digits ("27056"); a few older ones run four to six. Sample numbers are accepted too. */
+export const isRecallNumber = (s: string) => /^\d{4,6}$/.test(s) || isSampleNumber(s);
 
 /**
  * A recall number from what an owner pastes: "27056", "Recall 27056", "#27056", or a cpsc.gov recall URL. A URL has no
- * number in it, so it comes back as `url` and is matched against the recall list.
+ * number in it, so it comes back as `url` and is matched against the recall list. A sample number ("bh-2026-01")
+ * comes back in capitals.
  */
 export function parseRecallInput(raw: string): { number: string } | { url: string } | null {
   const s = raw.trim();
   if (!s) return null;
+  const sample = /\bBH-\d{4}-\d{2}\b/i.exec(s);
+  if (sample) return { number: sample[0].toUpperCase() };
   const asUrl = /^(?:https?:\/\/)?(?:www\.)?cpsc\.gov\/Recalls\/\d{4}\/([^\s?#]+)/i.exec(s);
   if (asUrl) return { url: asUrl[1].replace(/\/$/, "").toLowerCase() };
   const n = /(?:^|\D)(\d{4,6})(?:\D|$)/.exec(s);

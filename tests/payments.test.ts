@@ -534,10 +534,10 @@ describe("Transaction Search buyers", () => {
 
   it("scores cart lines against the product name", () => {
     const product = { name: SHOP.product.name, sku: SHOP.product.sku };
-    expect(matchItem({ name: "Brightline PowerCell 10K power bank (sample)" }, product)).toBe(1);
-    expect(matchItem({ name: "powercell 10k POWER-BANK" }, product)).toBeGreaterThanOrEqual(0.6);
+    expect(matchItem({ name: "Brightline 65W laptop charger (sample)" }, product)).toBe(1);
+    expect(matchItem({ name: "65w LAPTOP-CHARGER" }, product)).toBeGreaterThanOrEqual(0.6);
     expect(matchItem({ name: "Garden hose" }, product)).toBe(0);
-    expect(matchItem({ name: "x", sku: "blh-pc10k" }, product)).toBe(1);
+    expect(matchItem({ name: "x", sku: "blh-65w" }, product)).toBe(1);
   });
 
   it("finds matching buyers across windows, incoming payments only", async () => {
@@ -549,7 +549,7 @@ describe("Transaction Search buyers", () => {
     });
     pp.transactions = [
       tx("CAPA", daysAgo(3), "34.99", SHOP.product.name),
-      tx("CAPB", daysAgo(50), "34.99", "PowerCell 10K power bank"),
+      tx("CAPB", daysAgo(50), "34.99", "65W laptop charger"),
       tx("CAPC", daysAgo(4), "-34.99", SHOP.product.name, "T1107"),
       tx("CAPD", daysAgo(5), "12.00", "Lamp"),
       tx("CAPE", daysAgo(200), "34.99", SHOP.product.name),

@@ -9,7 +9,7 @@ export function Adoption() {
       who: "Small firms",
       fig: pct(S.all.under50k.share / 100),
       figWhat: "of recalls cover fewer than 50,000 units",
-      text: `${fmtInt(S.all.under50k.count)} of ${fmtInt(S.recalls.count)} recalls since 2024, and ${fmtInt(S.photoRefund.under50k.count)} of the ${fmtInt(S.all.photoRefund.count)} photo-refund recalls. A firm connects its own PayPal account and works its claims in the console; the monthly report is drafted for it.`,
+      text: `${fmtInt(S.all.under50k.count)} of ${fmtInt(S.recalls.count)} recalls since 2024, and ${fmtInt(S.photoRefund.under50k.count)} of the ${fmtInt(S.all.photoRefund.count)} photo-refund recalls. A firm works its claims in the console and pays them through PayPal; the monthly report is drafted for it. Next: each firm connecting its own PayPal account.`,
       link: { href: "/firm", label: "The firm console" },
     },
     {
@@ -23,7 +23,7 @@ export function Adoption() {
       who: "Recall service providers",
       fig: fmtInt(S.all.recallVendor.count),
       figWhat: "recalls name a professional recall vendor",
-      text: "A provider handling many firms' recalls can send each emailed photo to the verify endpoint, keep its own process for the rest, and pay through each firm's own PayPal account.",
+      text: "A provider handling many firms' recalls can send each emailed photo to the verify endpoint, keep its own process for the rest, and pay the refunds through PayPal.",
       link: { href: "/developers/docs#verify", label: "The verify endpoint" },
     },
   ];

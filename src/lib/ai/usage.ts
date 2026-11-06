@@ -86,6 +86,32 @@ export async function spendToday(): Promise<{ usd: number; calls: number; source
   return { usd: memory.day === today ? memory.usd : 0, calls: 0, source: "memory" };
 }
 
+/**
+ * Spend logged since a moment, from the ai_usage table: the shared meter for an approved measurement budget, so a cap
+ * holds across several scripts and across a rerun. Throws without a database, since a cap that cannot be read is no cap.
+ */
+export async function spendSince(since: Date): Promise<{ usd: number; calls: number }> {
+  if (!dbConfigured()) throw new Error("DATABASE_URL is not set, so spend cannot be measured against the cap.");
+  const [row] = await db()
+    .select({ usd: sql<string>`coalesce(sum(${schema.aiUsage.usd}), 0)`, calls: sql<number>`count(*)::int` })
+    .from(schema.aiUsage)
+    .where(gte(schema.aiUsage.at, since));
+  return { usd: Number(row?.usd ?? 0), calls: Number(row?.calls ?? 0) };
+}
+
+/** A measurement budget: `--cap-usd 4.75 --since 2026-11-05T22:00:00Z`, checked against ai_usage before each paid step. */
+export function capFromArgs(argv: string[]): { cap: number; since: Date } | null {
+  const get = (n: string) => {
+    const i = argv.indexOf(n);
+    return i > 0 ? argv[i + 1] : undefined;
+  };
+  const cap = get("--cap-usd");
+  const since = get("--since");
+  if (!cap && !since) return null;
+  if (!cap || !since || !Number.isFinite(Number(cap)) || Number.isNaN(Date.parse(since))) throw new Error("Pass both --cap-usd <dollars> and --since <ISO time>.");
+  return { cap: Number(cap), since: new Date(since) };
+}
+
 /** Today's spend per feature, largest first, for /status in Technical view. Empty without a database. */
 export async function spendByRouteToday(): Promise<{ route: string; calls: number; usd: number; inputTokens: number; outputTokens: number; cacheReadTokens: number }[]> {
   if (!dbConfigured()) return [];

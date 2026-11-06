@@ -5,7 +5,7 @@ import "./firm.css";
 /** The firm console's frame: navigation on the tinted ground, each screen on the white sheet. */
 export default function FirmLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="firm" data-ui>
+    <div className="firm">
       <aside className="firm-side">
         <p className="firm-side-name">Brightline Home</p>
         <p className="firm-side-note">Recall console</p>

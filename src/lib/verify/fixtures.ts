@@ -26,8 +26,9 @@ export function loadFixtureRecalls(): Record<string, { recall: VerifyRecall; rul
   );
 }
 
-export type FixtureExpect = { decision?: string; not_decision?: string; decided_by?: string; checks?: Record<string, string>; c3_plain?: string };
-export type FixtureCase = { id: string; photo: string; recall: string; prior_from?: string[]; needs_vision?: boolean; official_hash_check?: boolean; expect: FixtureExpect };
+export type FixtureExpect = { decision?: string; not_decision?: string; decided_by?: string; checks?: Record<string, string>; not_checks?: Record<string, string>; c3_plain?: string };
+/** `sweep: false`: run once (as a preset), not in the model sweep. */
+export type FixtureCase = { id: string; photo: string; recall: string; prior_from?: string[]; needs_vision?: boolean; official_hash_check?: boolean; sweep?: boolean; expect: FixtureExpect };
 
 /** Whether a finished verification meets a case's expectation, with the reasons when it does not. */
 export function meetsExpectation(
@@ -39,6 +40,7 @@ export function meetsExpectation(
   if (e.not_decision && r.decision === e.not_decision) misses.push(`decision ${r.decision}, expected anything else`);
   if (e.decided_by && r.decided_by !== e.decided_by) misses.push(`decided by ${r.decided_by}, expected ${e.decided_by}`);
   for (const [id, status] of Object.entries(e.checks ?? {})) if (r.checks[id]?.status !== status) misses.push(`${id} ${r.checks[id]?.status}, expected ${status}`);
+  for (const [id, status] of Object.entries(e.not_checks ?? {})) if (r.checks[id]?.status === status) misses.push(`${id} ${status}, expected anything else`);
   if (e.c3_plain && r.checks.C3?.reason_plain !== e.c3_plain) misses.push(`C3 said "${r.checks.C3?.reason_plain}"`);
   return { ok: misses.length === 0, misses };
 }

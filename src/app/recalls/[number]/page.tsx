@@ -94,16 +94,24 @@ async function Detail({ params }: { params: Promise<{ number: string }> }) {
             <Link className="btn btn-primary" href={d.claim_page}>
               Start a claim
             </Link>
-            <a className="text-link" href={d.cpsc_url} target="_blank" rel="noreferrer">
-              The recall on cpsc.gov
-            </a>
+            {d.sample ? (
+              <span className="muted">Sample recall; the firm and the recall are fictional.</span>
+            ) : (
+              <a className="text-link" href={d.cpsc_url} target="_blank" rel="noreferrer">
+                The recall on cpsc.gov
+              </a>
+            )}
           </div>
         )}
         {!d.photo_refund && (
           <div className="rd-cta">
-            <a className="text-link" href={d.cpsc_url} target="_blank" rel="noreferrer">
-              The recall on cpsc.gov
-            </a>
+            {d.sample ? (
+              <span className="muted">Sample recall; the firm and the recall are fictional.</span>
+            ) : (
+              <a className="text-link" href={d.cpsc_url} target="_blank" rel="noreferrer">
+                The recall on cpsc.gov
+              </a>
+            )}
           </div>
         )}
       </header>

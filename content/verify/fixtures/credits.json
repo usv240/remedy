@@ -1,5 +1,5 @@
 {
-  "note": "Every fixture is honestly what its name says. Three show a product made safe, and all three were published by the U.S. CPSC with their recalls as the example of the photo the remedy asks for (26125, and 25007 images 4 and 5). Nothing here was drawn on or edited to look made safe; the user's own made-safe photos go in user/ (see user/README.md).",
+  "note": "Every fixture is honestly what its name says: official CPSC images (public domain), openly licensed test photos from Wikimedia Commons, and copies of those made with sharp (rotated, cropped, blurred), each listed with its source. Three show a product made safe, and all three were published by the U.S. CPSC with their recalls as the example of the photo the remedy asks for (26125, and 25007 images 4 and 5). None is an owner's own claim photo, and nothing here was drawn on or edited to look made safe. See user/README.md for the full set.",
   "files": [
     { "file": "official/26125-hair-dryer-cord-cut.png", "source": "https://www.cpsc.gov/s3fs-public/RecalledMyOnlyStylerRootBoosterHairDryer.png", "caption": "Recalled MyOnlyStyler Root Booster Hair Dryer with the power cord cut in half for disposal", "recall": "26125", "made_safe": "cut_cord, published by CPSC as the example photo", "credit": "U.S. Consumer Product Safety Commission, recall 26125", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
     { "file": "official/25007-droyd-1.jpg", "source": "https://www.cpsc.gov/s3fs-public/Droyd1.jpg", "caption": "Recalled Droyd helmet, top view", "recall": "25007", "credit": "U.S. Consumer Product Safety Commission, recall 25007", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
@@ -28,6 +28,50 @@
       "use": "Unrelated object for the C1 right-product check",
       "fetched": "2026-11-05"
     },
+    {
+      "file": "other/commons-powerbank-oraimo.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Oraimo.jpg",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Oraimo.jpg/1280px-Oraimo.jpg",
+      "title": "Oraimo",
+      "description": "Oraimo 27,000 mAh power bank, black, standing on a table (the uploader's photo carries small colored square decorations in the corners)",
+      "author": "Reladex",
+      "taken": "2022-04-05",
+      "credit": "Reladex, via Wikimedia Commons",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "category": "Category:Powerbanks",
+      "use": "A test photo of a different power bank model (look-alike) for recall 27056 HAIARA. Not an owner's claim photo.",
+      "fetched": "2026-11-05"
+    },
+    {
+      "file": "other/commons-powerbank-romoss.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:A_Romoss_power_bank-20210312.jpg",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/A_Romoss_power_bank-20210312.jpg/1280px-A_Romoss_power_bank-20210312.jpg",
+      "title": "A Romoss power bank-20210312",
+      "description": "A white Romoss power bank with a charge display and a large \"20\" printed on the front, held in a hand",
+      "author": "Shwangtianyuan",
+      "taken": "2021-03-12",
+      "credit": "Shwangtianyuan, via Wikimedia Commons",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "category": "Category:Powerbanks",
+      "use": "A test photo of a different power bank model (look-alike, with a \"20\" print like the HAIARA's \"20W\") for recall 27056. Not an owner's claim photo.",
+      "fetched": "2026-11-05"
+    },
+    {
+      "file": "other/commons-deskck-monitors.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Deskck.jpg",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/0/01/Deskck.jpg",
+      "title": "Deskck",
+      "description": "28\" monitor FTW! A desk with two computer monitors showing a space wallpaper, a printer and a PC tower",
+      "author": "GuitarFreak",
+      "credit": "GuitarFreak, via Wikimedia Commons",
+      "licence": "Public domain (released by the author)",
+      "category": "Category:Computer monitors",
+      "use": "Source of the photo-of-a-screen test (see the crop below).",
+      "fetched": "2026-11-05"
+    },
+    { "file": "derived/commons-deskck-lower-monitor.crop.jpg", "from": "other/commons-deskck-monitors.jpg", "made_with": "sharp: crop to the lower monitor (left 100, top 330, 450 x 310 px), JPEG quality 92. A crop only: nothing added or changed.", "licence": "Public domain (derived from a public-domain photo)", "use": "A test photo of a computer screen, sent as a claim for recall 27056, for the screen-or-printout check. Not an owner's claim photo." },
     { "file": "derived/27056-haiara-1.rotated90-q55.jpg", "from": "official/27056-haiara-1.jpg", "made_with": "sharp: rotate 90 degrees, resize to 85 percent, JPEG quality 55", "licence": "Public domain (derived from a US government work)", "use": "Rotated and recompressed duplicate for C3" },
     { "file": "derived/27054-dreo-2.tilt4-crop-q60.jpg", "from": "official/27054-dreo-2.jpg", "made_with": "sharp: rotate 4 degrees on white, crop 6 percent from each edge, JPEG quality 60", "licence": "Public domain (derived from a US government work)", "use": "Small tilt and crop duplicate for C3, at the edge of the threshold" },
     { "file": "derived/commons-coffee-in-a-mug.blur8.jpg", "from": "other/commons-coffee-in-a-mug.jpg", "made_with": "sharp: Gaussian blur, sigma 8, JPEG quality 85", "licence": "CC0 1.0 (derived from a CC0 work)", "use": "Blurred copy for the quality precheck" }

@@ -99,20 +99,25 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
           ) : null,
       },
       {
-        headerName: "Claimant",
+        headerName: "Claimant and recall",
         field: "claimant",
-        flex: 1.4,
-        minWidth: 180,
+        flex: 2,
+        minWidth: 205,
         suppressHeaderMenuButton: false,
         filter: "agTextColumnFilter",
+        // Line 2 leads with the recall number, so a narrow column cuts the end of the product name, never the number a
+        // reviewer matches on; the full name is in the tooltip and the drawer.
+        tooltipValueGetter: (p) => (p.data ? `${p.data.recallNumber} ${p.data.recallShort}${p.data.sample ? " (sample claim)" : ""}` : ""),
         cellRenderer: (p: ICellRendererParams<QueueRow>) =>
           p.data ? (
             <span className="cq-cell-2">
               <button type="button" className="cq-open" onClick={(e) => onOpen(p.data!.id, e.currentTarget)}>
                 {p.data.claimant}
               </button>
-              <span>
-                {p.data.recallShort} ({p.data.recallNumber}){p.data.sample ? ", sample" : ""}
+              <span className="cq-recall-line">
+                <span className="tabular cq-recall-n">{p.data.recallNumber}</span>
+                <span className="cq-recall-name">{p.data.recallShort}</span>
+                {p.data.sample && <span className="cq-sample">sample</span>}
               </span>
             </span>
           ) : null,
@@ -121,7 +126,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         headerName: "Checks",
         colId: "checks",
         headerTooltip: CHECK_ORDER.map((id) => `${id} ${CHECK_LABEL[id].long}`).join(", "),
-        width: 196,
+        width: 172,
         sortable: false,
         filter: false,
         valueGetter: (p) => (p.data ? CHECK_ORDER.map((id) => `${id} ${WORD[p.data!.checks[id]]}`).join(", ") : ""),
@@ -139,7 +144,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
       {
         headerName: "Confidence",
         field: "confidence",
-        width: 104,
+        width: 94,
         suppressHeaderFilterButton: true,
         type: "rightAligned",
         filter: "agNumberColumnFilter",
@@ -149,7 +154,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
       {
         headerName: "Decision",
         field: "decision",
-        width: 116,
+        width: 106,
         filter: "agSetColumnFilter",
         valueFormatter: (p) => DECISION[p.value as string] ?? String(p.value ?? ""),
         filterParams: { valueFormatter: (p: { value: string }) => DECISION[p.value] ?? p.value },
@@ -157,7 +162,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
       {
         headerName: "Amount",
         field: "amountCents",
-        width: 92,
+        width: 86,
         suppressHeaderFilterButton: true,
         type: "rightAligned",
         filter: "agNumberColumnFilter",
@@ -169,27 +174,32 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         colId: "stage",
         field: "stage",
         flex: 1,
-        minWidth: 172,
+        minWidth: 178,
         filter: "agSetColumnFilter",
         suppressHeaderMenuButton: false,
         valueFormatter: (p) => STAGE_LABEL[p.value as QueueRow["stage"]] ?? "",
         filterParams: { valueFormatter: (p: { value: QueueRow["stage"] }) => STAGE_LABEL[p.value] ?? p.value },
-        cellRenderer: (p: ICellRendererParams<QueueRow>) =>
-          p.data ? (
+        cellRenderer: (p: ICellRendererParams<QueueRow>) => {
+          if (!p.data) return null;
+          // One status mark per row: the second line only says something the pill does not.
+          const label = STAGE_LABEL[p.data.stage];
+          const sub = p.data.payout.status ? p.data.payout.label : p.data.payable ? "Not paid yet" : "";
+          return (
             <span className="cq-cell-2">
               <span>
                 <span className="pill" data-tone={STAGE_TONE[p.data.stage]}>
-                  {STAGE_LABEL[p.data.stage]}
+                  {label}
                 </span>
               </span>
-              <span>{p.data.payout.status ? p.data.payout.label : p.data.payable ? "Not paid yet" : " "}</span>
+              {sub && sub !== label && <span>{sub}</span>}
             </span>
-          ) : null,
+          );
+        },
       },
       {
         headerName: "Submitted",
         field: "submittedAt",
-        width: 140,
+        width: 128,
         suppressHeaderFilterButton: true,
         sort: "desc",
         type: "rightAligned",

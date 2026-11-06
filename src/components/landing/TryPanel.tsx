@@ -32,12 +32,13 @@ const STATUS: Record<string, { word: string; tone: string }> = {
 const DECISION: Record<PanelRun["decision"], string> = {
   verified: "Verified",
   retake: "Retake",
-  firm_review: "A closer look",
+  firm_review: "Firm review",
 };
 
 /**
  * The "Try a photo" fragment: three recorded runs of the real verifier, replayed check by check. Every reason, score
- * and time shown is the recorded one (content/public/verify-runs.json). The live run, with a sandbox payout, is on /try.
+ * and time shown is the recorded one (content/public/verify-runs.json; the 26125 photo uses the owner flow's recorded
+ * answer, as /try and /judges do). The live run, with a sandbox payout, is on /try.
  */
 export function TryPanel({ runs }: { runs: PanelRun[] }) {
   const [pick, setPick] = useState(0);

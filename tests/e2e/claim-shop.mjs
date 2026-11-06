@@ -1,7 +1,9 @@
-// The sample-shop path end to end in the PayPal sandbox: buy Brightline Home's sample power bank, claim it on the
-// power bank recall with the sale linked, and see the refund go back to the original capture (inside 180 days).
-// The claim runs with no live AI (firm review, no Claude spend) at a $1.50 test amount; the firm approves through the
-// e2e-only route guarded by CHECKS_SECRET. Needs the dev server at BASE_URL and Chrome for the sandbox buyer login.
+// The sample-shop path end to end in the PayPal sandbox, fully automatic: buy Brightline Home's sample 65W charger
+// ($34.99), claim it on Brightline's own sample recall BH-2026-01 with the sale linked and the photo of the charger
+// with its cord cut (public domain, Dmitry G, Wikimedia Commons), see it verified, and see the firm's auto rule refund
+// $34.99 to the original capture at once, with no person. The verification is answered by the verify cache
+// (precomputed by scripts/verify/precompute.ts from one recorded live run), so the suite makes no Claude call.
+// Needs the server at BASE_URL and Chrome for the sandbox buyer login.
 //   npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs [--keep]
 import { readFileSync } from "node:fs";
 import pg from "pg";
@@ -24,14 +26,15 @@ const post = async (path, body, headers = {}) => {
   return { status: r.status, j: await r.json().catch(() => null) };
 };
 
+const RECALL = "BH-2026-01";
+const PHOTO = "content/verify/fixtures/sample/cord-cut.jpg";
+
 function claimForm(sale) {
   const fd = new FormData();
-  fd.set("recall", "27056");
-  fd.set("photo", new Blob([readFileSync("content/verify/fixtures/other/commons-coffee-in-a-mug.jpg")], { type: "image/jpeg" }), "photo.jpg");
+  fd.set("recall", RECALL);
+  fd.set("photo", new Blob([readFileSync(PHOTO)], { type: "image/jpeg" }), "cord-cut.jpg");
   fd.set("sale_id", String(sale.sale_id));
   fd.set("capture_id", sale.capture_id);
-  fd.set("e2e_no_ai", "1");
-  fd.set("e2e_amount", "1.50");
   return fd;
 }
 
@@ -45,26 +48,36 @@ async function main() {
   made.sale = sale?.sale_id ?? null;
   check("purchase captured and stored as a sale", cap.status === 200 && Boolean(sale?.capture_id), `capture ${sale?.capture_id}, sale ${sale?.sale_id}, $${sale?.amount}`);
 
+  const tPhoto = Date.now();
   const c = await post("/api/claims", claimForm(sale), { "x-checks-secret": SECRET });
   const claim = c.j?.data;
+  const tVerified = Date.now();
   if (claim?.id) made.claims.push(claim.id);
   check("the claim links the purchase", claim?.link?.status === "linked" && claim.link.amount === sale.amount, JSON.stringify(claim?.link));
+  check(
+    "verified: right charger, cord cut, own photo (answered by the verify cache, no Claude call)",
+    claim?.decision === "verified",
+    `${claim?.decision} by ${claim?.decided_by}; ${claim?.checks?.map((x) => `${x.id} ${x.status}`).join(", ")}; ${tVerified - tPhoto} ms; ${claim?.summary?.technical?.includes("verification cache") ? "cache hit" : "no cache hit"}`,
+  );
   check("C6 asks PayPal about the capture: no earlier refund or dispute", claim?.checks?.find((x) => x.id === "C6")?.status === "pass", claim?.checks?.find((x) => x.id === "C6")?.reason_technical);
-  check("the refund is the lower of the firm's amount and the purchase", claim?.amount?.value === "1.50");
+  check("the refund is the lower of the firm's $34.99 and the purchase", claim?.amount?.value === "34.99", claim?.amount?.value);
 
   const plan = await post(`/api/claims/${claim.id}/pay`, JSON.stringify({ choice: "money" }), { "Content-Type": "application/json" });
   check("no payee needed: the router picks a refund to the original capture", plan.status === 200 && plan.j?.data?.claim?.payment?.route === "refund", plan.j?.data?.claim?.payment?.reasons?.plain ?? plan.j?.error?.message);
-  const ok = await post(`/api/claims/${claim.id}/e2e-approve`, undefined, { "x-checks-secret": SECRET });
-  check("the firm approves and the refund is sent", ok.j?.data?.kind === "sent", ok.j?.data?.plain);
-  const t0 = Date.now();
-  let view = ok.j?.data?.claim;
-  while (view?.payment?.status !== "paid" && Date.now() - t0 < 90_000) {
-    await sleep(3000);
+  check("the firm's auto rule approves it ($34.99 is under the $50.00 cap) and the refund is sent, with no person", plan.j?.data?.kind === "sent", `${plan.j?.data?.kind}: ${plan.j?.data?.plain}`);
+  let view = plan.j?.data?.claim;
+  while (view?.payment?.status !== "paid" && Date.now() - tPhoto < 120_000) {
+    await sleep(2000);
     view = (await (await fetch(`${B}/api/claims/${claim.id}?refresh=1`)).json()).data ?? view;
   }
-  check("PayPal completes the refund to the capture", view?.payment?.status === "paid" && Boolean(view?.payment?.ids?.refund_id), `${Math.round((Date.now() - t0) / 1000)} s, refund ${view?.payment?.ids?.refund_id}`);
+  const tPaid = Date.now();
+  check(
+    "PayPal completes the refund to the capture",
+    view?.payment?.status === "paid" && Boolean(view?.payment?.ids?.refund_id),
+    `refund ${view?.payment?.ids?.refund_id}; photo to verified ${((tVerified - tPhoto) / 1000).toFixed(1)} s, photo to PayPal COMPLETED ${((tPaid - tPhoto) / 1000).toFixed(1)} s`,
+  );
   const receipt = await (await fetch(`${B}/r/${claim.id}`)).text();
-  check("the receipt says Refunded $1.50 to your PayPal payment", receipt.includes("Refunded $1.50 to your PayPal payment") && receipt.includes("Sandbox refund ID"));
+  check("the receipt says Refunded $34.99 to your PayPal payment", receipt.includes("Refunded $34.99 to your PayPal payment") && receipt.includes("Sandbox refund ID"));
 
   const again = await post("/api/claims", claimForm(sale), { "x-checks-secret": SECRET });
   if (again.j?.data?.id) made.claims.push(again.j.data.id);

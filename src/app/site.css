@@ -219,8 +219,8 @@
 
 /* Stack strip: one sentence of names, above the footer on every page. */
 .stack-strip {
-  padding-top: clamp(4rem, 3rem + 3vw, 6rem);
-  padding-bottom: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  padding-top: clamp(2.75rem, 2rem + 3vw, 5rem);
+  padding-bottom: clamp(1.75rem, 1.25rem + 1.5vw, 3rem);
 }
 .stack-sentence {
   font-size: var(--step-lead);
@@ -234,7 +234,7 @@
 
 /* Footer: "Contact as the headline". A saturated field (lime with ink in light, the second tone step in dark),
    three notes and Back to top on the top row, the project's address at display size in the lower half, and one
-   row of small text. On the home page it is a full screen; elsewhere it keeps its proportions, shorter. */
+   row of small text. It ends where its content ends, on every page. */
 .footer-contact {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -256,18 +256,25 @@
     color: var(--ink);
   }
 }
-.footer-contact[data-home] {
-  min-height: 48svh;
-}
-/* On a phone the notes stack and Back to top sits on its own line, inside the page margin. */
+/* On a phone the notes stack and Back to top sits at the right of the wordmark's line, inside the page margin. */
 @media (max-width: 640px) {
   .fc-top {
-    flex-direction: column;
-    gap: 0.75rem;
+    position: relative;
+    min-width: 0;
   }
+  /* A wrapping column flexbox sizes itself to its widest note, which ran 7px past the margin; a plain column wraps. */
   .fc-notes {
     max-width: none;
     flex-direction: column;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+  .fc-top-link {
+    position: absolute;
+    right: 0;
+    top: -11px;
+    padding-block: 11px;
+    padding-left: 16px;
   }
 }
 .footer-contact a {
@@ -305,8 +312,8 @@
   flex-wrap: wrap;
   font-family: var(--font-display);
   font-weight: 300;
-  /* The longer half fills at least 80% of the width. */
-  font-size: clamp(2.75rem, 8.4vw, 9rem);
+  /* Sized so the whole address runs on one line from 900px up (about 90% of the width); on a phone it breaks at the slash. */
+  font-size: clamp(2.75rem, 7.4vw, 8.25rem);
   letter-spacing: -0.03em;
   line-height: 0.95;
   text-decoration: none;
@@ -351,6 +358,7 @@
   .fc-notes {
     max-width: none;
     flex-direction: column;
+    flex-wrap: nowrap;
   }
   .fc-meta {
     grid-template-columns: 1fr;
@@ -361,9 +369,10 @@
   .fc-year {
     padding-bottom: 0;
   }
+  /* 10vw keeps "github.com/usv240" inside the margins at 390px (11vw ran 7px past them). */
   .fc-display {
     flex-direction: column;
-    font-size: clamp(2.5rem, 11vw, 5rem);
+    font-size: clamp(2.25rem, 10vw, 5rem);
   }
 }
 

@@ -38,7 +38,7 @@ export default function TryPage() {
         <p className="tr-shop-line">
           Want the refund to go back to a PayPal purchase?{" "}
           <Link className="text-link" href="/try/shop">
-            Buy the sample power bank
+            Buy the sample charger
           </Link>{" "}
           in the sandbox, then claim it.
         </p>

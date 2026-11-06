@@ -3,6 +3,7 @@ import Link from "next/link";
 import credits from "../../../content/verify/fixtures/credits.json";
 import { Info } from "@/components/Info";
 import "../pages.css";
+import "../learn/disclosure.css";
 import "./about.css";
 
 export const metadata: Metadata = { title: "About", description: "What Remedy is and is not, and how it labels what is real and what is a sample." };
@@ -10,7 +11,7 @@ export const metadata: Metadata = { title: "About", description: "What Remedy is
 const IS = [
   "A way to pay recall refunds the moment a photo of the product made safe is verified, through PayPal.",
   "Built on the CPSC's public recall data: every US consumer product recall since January 2024.",
-  "A tool a recalling firm runs with its own PayPal account. The refund comes from the firm; Remedy never holds the money.",
+  "A tool a recalling firm runs to pay its refunds through PayPal. The refund comes from the firm; Remedy never holds the money. Next: each firm connecting its own PayPal account.",
   "Open source under the MIT license, built for the PayPal AI Hackathon, November 2026.",
 ];
 
@@ -41,6 +42,8 @@ export default function AboutPage() {
         <p className="lede">Remedy pays recall refunds the moment a photo of the product made safe is verified, through PayPal, so recalled products leave homes faster.</p>
       </header>
 
+      {/* What it is and what it is not, side by side on a wide screen: one reads as the answer to the other. */}
+      <div className="about-pair">
       <section className="page-section" aria-labelledby="is-h">
         <h2 id="is-h">What Remedy is</h2>
         <ul className="about-list">
@@ -58,6 +61,7 @@ export default function AboutPage() {
           ))}
         </ul>
       </section>
+      </div>
 
       <section id="labels" className="page-section" aria-labelledby="labels-h">
         <h2 id="labels-h">What is real and what is a sample</h2>
@@ -97,6 +101,11 @@ export default function AboutPage() {
 
       <section id="credits" className="page-section" aria-labelledby="credits-h">
         <h2 id="credits-h">Credits</h2>
+        <p className="page-prose">Recall data and images: U.S. Consumer Product Safety Commission, public domain (US government works). One photo is CC0 from Wikimedia Commons. The type is Sentient and IBM Plex Sans.</p>
+        <details className="dsc about-more">
+          <summary>
+            <span className="dsc-k">Every image and font, with its credit and licence</span>
+          </summary>
         <ul className="credits-list">
           <li>Recall data and images: U.S. Consumer Product Safety Commission, public domain (US government works).</li>
           {photos.map((f) => (
@@ -109,6 +118,7 @@ export default function AboutPage() {
           <li>IBM Plex Sans by IBM, under the SIL Open Font License.</li>
           <li>Built for the PayPal AI Hackathon, November 2026. Open source under the MIT license.</li>
         </ul>
+        </details>
       </section>
     </div>
   );

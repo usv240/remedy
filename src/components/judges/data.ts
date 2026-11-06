@@ -5,6 +5,8 @@
  */
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { cacheLife } from "next/cache";
+import { getPreset, runPreset } from "@/app/api/try/_lib/presets";
 import stats from "../../../content/recalls/stats.json";
 import runsFile from "../../../content/public/verify-runs.json";
 import bench from "../../../content/recalls/benchmark/results.json";
@@ -73,6 +75,41 @@ export function cpscExampleRun(): { score: number; cut: boolean; ms: number; rec
     if (!r) return null;
     const cut = (r.actions ?? []).find((a: { action: string }) => a.action === "cut_cord");
     return { score: r.product.match_score, cut: Boolean(cut?.done), ms: f.vision.ms, recordedAt: f.recorded_at, noticed: r.photo_source?.kind === "digital_image" ? r.photo_source.reason : null };
+  } catch {
+    return null;
+  }
+}
+
+export type ReplayCheck = { id: string; name: string; status: string; score: number | null; reason: string; technical: string };
+export type CpscReplay = { decision: string; decidedBy: string; checks: ReplayCheck[]; summaryPlain: string; summaryTechnical: string; visionMs: number; recordedAt: string; settings: string };
+
+/**
+ * The 26125 example as the site shows it everywhere (home, /try, /judges): the owner flow's one recorded Claude answer,
+ * read with the recall's official pictures, replayed through the real verifier with no model call. The official-picture
+ * match is off for this run so the AI check can be seen; with it on (the default), the photo is answered in code.
+ * Null when the recording or the verifier cannot run, so callers fall back to their own recorded row.
+ */
+export async function cpscExampleReplay(): Promise<CpscReplay | null> {
+  "use cache";
+  cacheLife("days");
+  try {
+    const p = getPreset("cpsc-example");
+    if (!p?.technical) return null;
+    const run = await runPreset(p, { technical: true });
+    const ex = cpscExampleRun();
+    if (!run.replay.used || !ex) return null;
+    const r = run.result;
+    if (!r.decision || !r.decided_by || !r.summary) return null;
+    return {
+      decision: r.decision,
+      decidedBy: r.decided_by,
+      checks: r.checks.map((c) => ({ id: c.id, name: c.name, status: c.status, score: c.score, reason: c.reason_plain, technical: c.reason_technical })),
+      summaryPlain: r.summary.plain,
+      summaryTechnical: r.summary.technical,
+      visionMs: ex.ms,
+      recordedAt: ex.recordedAt,
+      settings: "Official-picture match turned off for this run, so the AI check can be seen; reviewers off.",
+    };
   } catch {
     return null;
   }

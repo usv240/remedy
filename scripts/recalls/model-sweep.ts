@@ -5,7 +5,7 @@
  *
  *   npx tsx --env-file=.env.local scripts/recalls/model-sweep.ts                 estimate only, free
  *   npx tsx --env-file=.env.local scripts/recalls/model-sweep.ts --run --yes     spends real money; get approval first
- *   options: --models haiku,sonnet   --effort medium
+ *   options: --models haiku,sonnet   --effort medium   --cap-usd 4.75 --since <ISO time> (shared approved budget)
  *
  * The estimate uses the measured Opus 5.5 usage on the same 130 requests (mean 3,288 input and 453 output tokens) and
  * assumes up to twice the output for the smaller models. A batch is remembered in
@@ -15,7 +15,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { costUsd } from "../../src/lib/ai/usage";
+import { capFromArgs, costUsd, spendSince } from "../../src/lib/ai/usage";
 import { runBatch } from "../../src/lib/recall/batch";
 import { SCORED_FIELDS, scoreVariant, type LabelRecord } from "../../src/lib/recall/bench";
 import { batchRequest, parseRuleMessage, type ProofRule } from "../../src/lib/recall/proof-rule";
@@ -31,6 +31,8 @@ const run = process.argv.includes("--run");
 const yes = process.argv.includes("--yes");
 const effort = (arg("--effort") ?? "medium") as "low" | "medium" | "high";
 const pick = (arg("--models") ?? "haiku,sonnet").split(",").filter((m) => MODELS[m]);
+/** The shared measurement cap (--cap-usd and --since), read from ai_usage before each batch is submitted. */
+const budget = capFromArgs(process.argv);
 
 const dir = path.join(process.cwd(), "content", "recalls");
 const read = <T>(p: string) => JSON.parse(readFileSync(p, "utf8")) as T;
@@ -39,10 +41,13 @@ const byNum = new Map(recalls.map((r) => [r.number, r]));
 const labels = Object.values(read<{ labels: Record<string, LabelRecord> }>(path.join(dir, "benchmark", "labels.draft.json")).labels);
 const opus = read<RawOutputsFile>(path.join(dir, "extract", "plain.json"));
 
+const used = labels.map((l) => opus.outputs[l.number]?.usage).filter((u): u is NonNullable<typeof u> => Boolean(u));
+const meanIn = used.reduce((s, u) => s + u.input_tokens, 0) / used.length;
+const meanOut = used.reduce((s, u) => s + u.output_tokens, 0) / used.length;
+/** The upper estimate for one model on the whole sample: Opus's measured input, twice its output, batch prices. */
+const upperFor = (model: string) => labels.length * costUsd(model, { input_tokens: meanIn, output_tokens: meanOut * 2 }, { batch: true });
+
 function estimate() {
-  const used = labels.map((l) => opus.outputs[l.number]?.usage).filter((u): u is NonNullable<typeof u> => Boolean(u));
-  const meanIn = used.reduce((s, u) => s + u.input_tokens, 0) / used.length;
-  const meanOut = used.reduce((s, u) => s + u.output_tokens, 0) / used.length;
   const rows = pick.map((k) => {
     const m = MODELS[k];
     const at = (outFactor: number) => labels.length * costUsd(m, { input_tokens: meanIn, output_tokens: meanOut * outFactor }, { batch: true });
@@ -85,6 +90,12 @@ async function sweep() {
   for (const k of pick) {
     const model = MODELS[k];
     const prefix = `sw${k}`;
+    if (budget) {
+      // Submit only if this model's upper estimate (twice Opus's output) still fits under the shared cap.
+      const upper = upperFor(model);
+      const s = await spendSince(budget.since);
+      if (s.usd + upper > budget.cap) throw new Error(`Stopped before ${model}: $${s.usd.toFixed(3)} spent since ${budget.since.toISOString()}, its upper estimate $${upper.toFixed(3)} would pass the $${budget.cap} cap.`);
+    }
     const requests = labels.map((l) => {
       const req = batchRequest(prefix, byNum.get(l.number)!);
       return { ...req, params: { ...req.params, model, output_config: { ...req.params.output_config, effort } } };

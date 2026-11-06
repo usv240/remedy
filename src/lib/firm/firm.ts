@@ -7,6 +7,7 @@ import path from "node:path";
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import demoPicks from "../../../content/recalls/demo-picks.json";
+import samples from "../../../content/recalls/samples.json";
 
 export type Firm = { id: number; name: string; slug: string; isSample: boolean; settings: FirmSettings };
 export type FirmSettings = { autoApproveCap?: number; dailyPayoutCap?: number; reviewHours?: number; replyName?: string };
@@ -26,8 +27,11 @@ export type FirmRecall = {
   products: { name: string; model?: string }[];
 };
 
-/** The first demo pick (content/recalls/demo-picks.json) is the sample firm's main recall. */
-export const SAMPLE_RECALL = String((demoPicks as { picks: { number: string }[] }).picks[0]?.number ?? "27056");
+/**
+ * The sample firm's main recall: its own fictional sample recall (content/recalls/samples.json), so the queue, the
+ * plan and the monthly report describe Brightline's own recall. The real CPSC demo picks stay linked as extra recalls.
+ */
+export const SAMPLE_RECALL = String((samples as { recalls: { number: string }[] }).recalls[0]?.number ?? (demoPicks as { picks: { number: string }[] }).picks[0]?.number ?? "27056");
 
 type Row = Record<string, unknown>;
 const rows = async <T = Row>(q: ReturnType<typeof sql>) => (await db().execute(q)).rows as T[];

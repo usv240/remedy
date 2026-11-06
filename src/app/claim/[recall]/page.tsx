@@ -76,7 +76,7 @@ async function Claim({ params }: Params) {
           </ol>
           {pr.example && <Example example={pr.example} />}
           <div className="cl-tech cl-rule" data-ui>
-            <p className="cl-rule-k">Proof rule {pr.ruleSource === "ai" ? `(${pr.ruleModel}, stored)` : "(quick read, keyword rules)"}</p>
+            <p className="cl-rule-k">Proof rule {pr.ruleSource === "ai" ? `(${pr.ruleModel}, stored)` : pr.ruleSource === "firm" ? "(written by the firm, no model)" : "(quick read, keyword rules)"}</p>
             <dl className="cl-rule-dl">
               <div>
                 <dt>Actions</dt>

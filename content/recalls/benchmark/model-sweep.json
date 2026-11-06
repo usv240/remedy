@@ -1,0 +1,49 @@
+{
+ "ranAt": "2026-11-06T03:47:30.196Z",
+ "effort": "medium",
+ "note": "Same prompt, schema and draft labels as results.json; scores share its caveat while labels are unconfirmed.",
+ "summary": {
+  "claude-opus-5-5 (existing)": {
+   "allFields": 0.846,
+   "photo_required": 0.992,
+   "actions": 0.954,
+   "marker_text": 1,
+   "must_show": 0.954,
+   "remedy": 0.977,
+   "refund_amount": 0.992,
+   "contact_channel": 0.938,
+   "actionsF1": 0.974,
+   "mustShowF1": 0.983,
+   "missing": 0,
+   "usd": 1.444
+  },
+  "claude-haiku-5-5 (medium)": {
+   "allFields": 0.738,
+   "photo_required": 0.992,
+   "actions": 0.854,
+   "marker_text": 1,
+   "must_show": 0.846,
+   "remedy": 0.977,
+   "refund_amount": 0.962,
+   "contact_channel": 0.992,
+   "actionsF1": 0.913,
+   "mustShowF1": 0.949,
+   "missing": 0,
+   "usd": 0.055
+  },
+  "claude-sonnet-5-5 (medium)": {
+   "allFields": 0.792,
+   "photo_required": 0.985,
+   "actions": 0.877,
+   "marker_text": 1,
+   "must_show": 0.892,
+   "remedy": 0.969,
+   "refund_amount": 0.985,
+   "contact_channel": 0.977,
+   "actionsF1": 0.919,
+   "mustShowF1": 0.963,
+   "missing": 0,
+   "usd": 0.639
+  }
+ }
+}

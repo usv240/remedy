@@ -1,0 +1,100 @@
+{
+ "madeAt": "2026-11-06T04:09:16.266Z",
+ "baseline": "opus-medium",
+ "summary": [
+  {
+   "config": "opus-medium",
+   "trials": 3,
+   "known-answer correct per trial": "6/8, 7/8, 5/8",
+   "accuracy %": 75,
+   "same decision as Opus medium": "baseline",
+   "USD per case": 0.0297,
+   "median s": 8.7
+  },
+  {
+   "config": "opus-low",
+   "trials": 3,
+   "known-answer correct per trial": "7/8, 7/8, 6/8",
+   "accuracy %": 83,
+   "same decision as Opus medium": "22/24",
+   "USD per case": 0.0203,
+   "median s": 7
+  },
+  {
+   "config": "sonnet-default",
+   "trials": 3,
+   "known-answer correct per trial": "5/8, 7/8, 7/8",
+   "accuracy %": 79,
+   "same decision as Opus medium": "20/24",
+   "USD per case": 0.0116,
+   "median s": 7
+  },
+  {
+   "config": "haiku-medium",
+   "trials": 3,
+   "known-answer correct per trial": "5/8, 4/8, 4/8",
+   "accuracy %": 54,
+   "same decision as Opus medium": "18/24",
+   "USD per case": 0.0009,
+   "median s": 6.7
+  }
+ ],
+ "perCase": [
+  {
+   "case": "made-safe-helmet-straps-cut",
+   "opus-medium": "ok verified C1 0.92 | ok verified C1 0.92 | ok verified C1 0.9",
+   "opus-low": "ok verified C1 0.9 | ok verified C1 0.9 | ok verified C1 0.9",
+   "sonnet-default": "ok verified C1 0.88 | ok verified C1 0.88 | ok verified C1 0.88",
+   "haiku-medium": "MISS firm_review C1 0.7 | MISS verified C1 0.7 | MISS firm_review C1 0.7"
+  },
+  {
+   "case": "made-safe-helmet-in-trash",
+   "opus-medium": "MISS retake C1 0.9 | MISS retake C1 0.92 | MISS retake C1 0.9",
+   "opus-low": "MISS retake C1 0.9 | MISS retake C1 0.9 | MISS retake C1 0.9",
+   "sonnet-default": "MISS retake C1 0.88 | MISS retake C1 0.88 | MISS retake C1 0.88",
+   "haiku-medium": "MISS retake C1 0.7 | MISS retake C1 0.8 | MISS retake C1 0.75"
+  },
+  {
+   "case": "made-safe-hair-dryer-cord-cut",
+   "opus-medium": "MISS retake C1 0.95 | ok firm_review C1 0.95 | MISS retake C1 0.93",
+   "opus-low": "ok firm_review C1 0.95 | ok firm_review C1 0.95 | MISS retake C1 0.95",
+   "sonnet-default": "MISS retake C1 0.9 | ok verified C1 0.9 | ok verified C1 0.9",
+   "haiku-medium": "ok firm_review C1 0.85 | MISS retake C1 0.8 | MISS retake C1 0.6"
+  },
+  {
+   "case": "look-alike-hair-dryer",
+   "opus-medium": "ok firm_review C1 0.2 | ok firm_review C1 0.15 | MISS retake C1 0.2",
+   "opus-low": "ok firm_review C1 0.2 | ok firm_review C1 0.3 | ok firm_review C1 0.2",
+   "sonnet-default": "MISS retake C1 0.05 | ok firm_review C1 0.05 | ok firm_review C1 0.05",
+   "haiku-medium": "MISS retake C1 0.1 | MISS retake C1 0.1 | MISS retake C1 0.05"
+  },
+  {
+   "case": "not-yet-safe-pajamas",
+   "opus-medium": "ok retake C1 0.95 | ok retake C1 0.95 | ok retake C1 0.95",
+   "opus-low": "ok retake C1 0.95 | ok retake C1 0.95 | ok retake C1 0.95",
+   "sonnet-default": "ok retake C1 0.6 | ok retake C1 0.8 | ok retake C1 0.9",
+   "haiku-medium": "ok retake C1 0.85 | ok retake C1 0.85 | ok retake C1 0.85"
+  },
+  {
+   "case": "not-yet-safe-heater",
+   "opus-medium": "ok retake C1 0.9 | ok retake C1 0.9 | ok retake C1 0.9",
+   "opus-low": "ok retake C1 0.95 | ok retake C1 0.95 | ok retake C1 0.95",
+   "sonnet-default": "ok retake C1 0.55 | ok retake C1 0.6 | ok retake C1 0.6",
+   "haiku-medium": "ok retake C1 0.7 | ok retake C1 0.85 | ok retake C1 0.9"
+  },
+  {
+   "case": "unrelated-object",
+   "opus-medium": "ok retake C1 0.02 | ok retake C1 0.02 | ok retake C1 0.02",
+   "opus-low": "ok retake C1 0.02 | ok retake C1 0.02 | ok retake C1 0.02",
+   "sonnet-default": "ok retake C1 0.01 | ok retake C1 0 | ok retake C1 0",
+   "haiku-medium": "ok retake C1 0.02 | ok retake C1 0.02 | ok retake C1 0.02"
+  },
+  {
+   "case": "not-yet-safe-power-bank",
+   "opus-medium": "ok retake | ok retake | ok retake",
+   "opus-low": "ok retake | ok retake | ok retake",
+   "sonnet-default": "ok retake | ok retake | ok retake",
+   "haiku-medium": "ok retake | ok retake | ok retake"
+  }
+ ]
+}

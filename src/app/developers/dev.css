@@ -723,3 +723,26 @@
     transition: none;
   }
 }
+
+/* API docs: the MCP tools and the error codes open from one row each, under the sentence that sums them up. */
+.doc-more {
+  margin-top: 0.5rem;
+}
+.doc-more > .doc-table-wrap,
+.doc-more > .doc-errors {
+  margin-top: 0.5rem;
+}
+/* On a phone a closed endpoint row is two lines: the name with its route, then what it does. */
+@media (max-width: 640px) {
+  .dsc.doc-ep > summary {
+    grid-template-areas:
+      "title icon"
+      "route icon"
+      "line icon";
+    gap: 2px 16px;
+    padding: 10px 0;
+  }
+  .doc-ep-line {
+    font-size: 0.875rem;
+  }
+}

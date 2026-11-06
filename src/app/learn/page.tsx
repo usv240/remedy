@@ -43,6 +43,18 @@ const GLOSSARY: [string, string][] = [
   ["Sandbox", "PayPal's test system. Every payment on this site runs there, and no real money moves."],
 ];
 
+/** The words an owner meets first stay in view (a proof rule has its own section above); the rest are one press away. */
+const GLOSSARY_SHOWN = 3;
+
+function Term({ t, d }: { t: string; d: string }) {
+  return (
+    <div id={`term-${t.toLowerCase().replace(/[^a-z]+/g, "-")}`}>
+      <dt>{t}</dt>
+      <dd>{d}</dd>
+    </div>
+  );
+}
+
 const DEFS: { label: string; count: number; share: number | null; of: string; definition: string }[] = [
   { label: "Recalls in the period", count: C.recalls.count, share: null, of: "", definition: C.recalls.definition },
   { label: "Ask for a photo", count: C.all.photo.count, share: C.all.photo.share, of: C.all.photo.of, definition: C.all.photo.definition },
@@ -108,15 +120,18 @@ export default function LearnPage() {
             <p className="ln-answer">
               When the remedy is a refund, many firms ask for a photo that shows the product made safe, so it cannot be used or sold again. <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> recalls since 2024 do.
             </p>
-            <figure className="ln-fig">
-              <img src="/landing/helmet-straps-25007-sm.webp" alt="A recalled bike helmet seen from inside, with both chin straps cut off and laid above it." width={600} height={730} loading="lazy" />
-              <figcaption>Recall 25007: the CPSC&rsquo;s example of a photo the firm accepts, the helmet&rsquo;s straps cut off. Photo: CPSC.</figcaption>
-            </figure>
-            <div className="page-prose">
-              <p>
-                The remedy says what to do first: cut the cord (<span className="tabular">{fmtInt(C.photoRefund.cut.count)}</span> of the photo-refund recalls mention cutting), or write a word such as RECALLED on it in marker (<span className="tabular">{fmtInt(C.photoRefund.marker.count)}</span>). Then the owner sends the photo, most often by email: <span className="tabular">{fmtInt(C.photoRefund.email.count)}</span> of the <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> give an address.
-              </p>
-              <p>Remedy takes that photo on a phone, checks it in seconds, and pays the refund through PayPal.</p>
+            {/* The example photo beside the text it shows, not above it. */}
+            <div className="ln-split">
+              <div className="page-prose">
+                <p>
+                  The remedy says what to do first: cut the cord (<span className="tabular">{fmtInt(C.photoRefund.cut.count)}</span> of the photo-refund recalls mention cutting), or write a word such as RECALLED on it in marker (<span className="tabular">{fmtInt(C.photoRefund.marker.count)}</span>). Then the owner sends the photo, most often by email: <span className="tabular">{fmtInt(C.photoRefund.email.count)}</span> of the <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> give an address.
+                </p>
+                <p>Remedy takes that photo on a phone, checks it in seconds, and pays the refund through PayPal.</p>
+              </div>
+              <figure className="ln-fig">
+                <img src="/landing/helmet-straps-25007-sm.webp" alt="A recalled bike helmet seen from inside, with both chin straps cut off and laid above it." width={600} height={730} loading="lazy" />
+                <figcaption>Recall 25007: the CPSC&rsquo;s example of a photo the firm accepts, straps cut off. Photo: CPSC.</figcaption>
+              </figure>
             </div>
           </section>
 
@@ -177,6 +192,13 @@ export default function LearnPage() {
           <section id="checks" className="page-section ln-sec" aria-labelledby="checks-h">
             <h2 id="checks-h">How a photo is checked</h2>
             <p className="ln-answer">Six checks: right product, made safe, your own photo, within the recall, claim limits, and not already refunded.</p>
+            <div className="page-prose">
+              <p>When every check passes, PayPal pays. When the photo needs another try, you see exactly what to change. When the checks cannot settle it, two AI reviewers look, and then a person at the firm.</p>
+            </div>
+            <details className="dsc ln-more">
+              <summary>
+                <span className="dsc-k">What each check looks for</span>
+              </summary>
             <ol className="ln-checks">
               <li>
                 <strong>Right product.</strong> The photo is compared with the recall&rsquo;s official pictures, its name and its model numbers.
@@ -197,21 +219,28 @@ export default function LearnPage() {
                 <strong>Not already refunded.</strong> A linked PayPal purchase has no earlier refund.
               </li>
             </ol>
-            <div className="page-prose">
-              <p>When every check passes, PayPal pays. When the photo needs another try, you see exactly what to change. When the checks cannot settle it, two AI reviewers look, and then a person at the firm.</p>
-            </div>
+            </details>
           </section>
 
           <section id="glossary" className="page-section ln-sec" aria-labelledby="glossary-h">
             <h2 id="glossary-h">Glossary</h2>
             <dl className="ln-gloss">
-              {GLOSSARY.map(([t, d]) => (
-                <div key={t} id={`term-${t.toLowerCase().replace(/[^a-z]+/g, "-")}`}>
-                  <dt>{t}</dt>
-                  <dd>{d}</dd>
-                </div>
+              {GLOSSARY.slice(0, GLOSSARY_SHOWN).map(([t, d]) => (
+                <Term key={t} t={t} d={d} />
               ))}
             </dl>
+            <details className="dsc ln-more">
+              <summary>
+                <span className="dsc-k">
+                  {GLOSSARY.length - GLOSSARY_SHOWN} more words, from {GLOSSARY[GLOSSARY_SHOWN][0]} to {GLOSSARY[GLOSSARY.length - 1][0]}
+                </span>
+              </summary>
+              <dl className="ln-gloss">
+                {GLOSSARY.slice(GLOSSARY_SHOWN).map(([t, d]) => (
+                  <Term key={t} t={t} d={d} />
+                ))}
+              </dl>
+            </details>
           </section>
 
           <section id="data" className="page-section ln-sec" aria-labelledby="data-h">
@@ -221,9 +250,19 @@ export default function LearnPage() {
             </p>
             <div className="page-prose">
               <p>
-                A small deterministic classifier reads each recall&rsquo;s remedy text (every <code>Remedies[].Name</code> joined), its consumer contact, retailers and units. No AI is used to count. The rule for each figure is below, word for word from the stats file.
+                A small deterministic classifier reads each recall&rsquo;s remedy text (every <code>Remedies[].Name</code> joined), its consumer contact, retailers and units. No AI is used to count.
               </p>
             </div>
+            <p className="ln-years tabular">
+              Photo-refund recalls by year: {Object.entries(C.byYear)
+                .map(([y, v]) => `${y}: ${v.photoRefund} of ${v.recalls}`)
+                .join("; ")}
+              {" "}(2026 to {fmtDate(C.range.to)}).
+            </p>
+            <details id="figures" className="dsc ln-more">
+              <summary>
+                <span className="dsc-k">The rule for each of the {DEFS.length} figures, word for word from the stats file</span>
+              </summary>
             <div className="ln-table-wrap" data-ui role="region" aria-label="Every figure and how it was counted" tabIndex={0}>
               <table className="ln-table">
                 <thead>
@@ -253,12 +292,7 @@ export default function LearnPage() {
                 </tbody>
               </table>
             </div>
-            <p className="ln-years tabular">
-              Photo-refund recalls by year: {Object.entries(C.byYear)
-                .map(([y, v]) => `${y}: ${v.photoRefund} of ${v.recalls}`)
-                .join("; ")}
-              {" "}(2026 to {fmtDate(C.range.to)}).
-            </p>
+            </details>
             <details className="dsc ln-more">
               <summary>
                 <span className="dsc-k">The earlier snapshot, and what changed</span>
@@ -281,6 +315,13 @@ export default function LearnPage() {
 
           <section id="sources" className="page-section ln-sec" aria-labelledby="sources-h">
             <h2 id="sources-h">Sources</h2>
+            <p className="ln-answer">
+              {SOURCES.length} public sources, from the CPSC&rsquo;s own records to one peer-reviewed study.
+            </p>
+            <details className="dsc ln-more">
+              <summary>
+                <span className="dsc-k">All {SOURCES.length} sources, with what each one says</span>
+              </summary>
             <ul className="ln-sources">
               {SOURCES.map((s) => (
                 <li key={s.href}>
@@ -291,6 +332,7 @@ export default function LearnPage() {
                 </li>
               ))}
             </ul>
+            </details>
             <p className="page-note">Recall data and images: U.S. Consumer Product Safety Commission, public domain. Remedy is independent and not affiliated with the CPSC.</p>
           </section>
         </div>

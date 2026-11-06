@@ -8,9 +8,12 @@
  * claim, a blurred photo): free and deterministic. --vision adds two live Claude calls (about $0.05 to $0.10 each,
  * reviewers off), replayed from AI_CACHE_DIR when it is set.
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { verifyRecallFor } from "@/app/api/claims/_lib/recall";
 import { costUsd } from "@/lib/ai/usage";
+import type { ReviewRun } from "@/lib/verify/reviewers";
+import type { VisionRun } from "@/lib/verify/vision";
 import { recallByNumber, storedRule } from "@/lib/api/recall-data";
 import { photoHashes, verifyPhoto, type VerifyRecall, type VerifyResult } from "@/lib/verify";
 import { FIXTURES_DIR, fixtureFile, loadFixtureCases, loadFixtureRecalls } from "@/lib/verify/fixtures";
@@ -83,6 +86,41 @@ async function main() {
     const r = await verifyPhoto({ photo: fixtureFile(c.photo), recall, proofRule: rule, priorHashes: prior }, { aiAvailable: () => false });
     runs.push({ id: c.id, ...t, photo: c.photo, recall: c.recall, needs_vision: false, result: slim(r), usd: 0, ran_at: at });
     console.log(`${c.id}: ${r.decision} (${r.decided_by}) in ${r.timings.total_ms} ms`);
+  }
+
+  // 0. Brightline's sample charger with its cord cut (fictional sample recall BH-2026-01): the full automatic path,
+  //    first in the panel. It replays the one recorded live answer (content/presets/recorded/sample-charger-cut.json,
+  //    recorded by scripts/verify/precompute.ts), so it costs nothing; every check around that answer runs in code.
+  const samplePath = path.join(process.cwd(), "content", "presets", "recorded", "sample-charger-cut.json");
+  if (existsSync(samplePath)) {
+    const rec = JSON.parse(readFileSync(samplePath, "utf8")) as { recorded_at: string; cost_usd: number; vision: VisionRun; reviews: ReviewRun | null };
+    const sample = recallByNumber("BH-2026-01")!;
+    const rs = await verifyPhoto(
+      {
+        photo: readFileSync(path.join(FIXTURES_DIR, "sample", "cord-cut.jpg")),
+        recall: verifyRecallFor(sample),
+        proofRule: storedRule("BH-2026-01")!.rule,
+        claimContext: { firmAmount: { value: "34.99", currency: "USD" }, autoCap: { value: "50.00", currency: "USD" }, firmName: "Brightline Home" },
+        options: { cache: false },
+      },
+      { aiAvailable: () => false, cache: null, vision: async () => ({ ...rec.vision, replayed: true }), reviewers: rec.reviews ? async () => rec.reviews! : undefined },
+    );
+    // The panel shows the recorded live timings, not the replay's.
+    rs.timings = { ...rs.timings, vision_ms: rec.vision.ms, reviewers_ms: rec.reviews?.ms ?? 0, total_ms: rs.timings.total_ms + rec.vision.ms + (rec.reviews?.ms ?? 0) };
+    runs.unshift({
+      id: "sample-charger-cut",
+      title: "Brightline's sample charger, cord cut",
+      about: "Public-domain photos of one charger, before and after its cord was cut (Dmitry G, Wikimedia Commons). Sample recall; fictional.",
+      photo: "sample/cord-cut.jpg",
+      recall: "BH-2026-01",
+      expect: "Verified, then the refund goes out",
+      needs_vision: true,
+      settings: `Brightline Home's sample recall BH-2026-01, refund $34.99, auto-approve cap $50.00. One live Claude Opus 5.5 run recorded ${rec.recorded_at.slice(0, 10)} ($${rec.cost_usd.toFixed(4)}), replayed here.`,
+      result: slim(rs),
+      usd: 0,
+      ran_at: rec.recorded_at,
+    });
+    console.log(`sample-charger-cut: ${rs.decision} (${rs.decided_by}), replayed from the recording`);
   }
 
   if (vision) {

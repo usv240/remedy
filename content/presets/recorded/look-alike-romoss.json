@@ -1,0 +1,66 @@
+{
+  "recorded_at": "2026-11-06T03:41:24.252Z",
+  "preset": "look-alike-romoss",
+  "recall": "27056",
+  "options": {},
+  "vision": {
+    "report": {
+      "scene": "A hand holds a white ROMOSS power bank with a round digital display showing 31% and a large outlined 20+ graphic on the front.",
+      "product": {
+        "match_score": 0.2,
+        "matching_details": [
+          "It is a rectangular power bank with rounded corners, the same kind of product as the recall",
+          "A large 20 graphic is printed on the lower front, loosely similar to the 20W print on the recalled unit"
+        ],
+        "differing_details": [
+          "The power bank is white, while the recalled HAIARA W5 PRO is black",
+          "The brand ROMOSS is printed on the front center, not HAIARA",
+          "A round digital display showing 31% sits at the top front; the official images show no display",
+          "The front shows 20 with a plus sign, not 20W",
+          "No magnetic ring graphic like the one in official image 2",
+          "The shape is longer and narrower than the official images"
+        ],
+        "reason_plain": "No. This is a white ROMOSS power bank, not the black HAIARA W5 PRO in the recall.",
+        "reason_technical": "Color (white vs black), printed ROMOSS brand, digital percent display, 20+ marking instead of 20W, and different proportions all conflict with the official images; only the product type matches."
+      },
+      "actions": [
+        {
+          "action": "write_recalled",
+          "done": false,
+          "confidence": 0.97,
+          "evidence": "No handwritten or marker writing is visible anywhere on the front of the power bank; only printed ROMOSS, 20+ and the lit 31% display are visible."
+        }
+      ],
+      "handwritten_text": [],
+      "identifiers": {
+        "model_text": null,
+        "lot_text": null,
+        "date_code_text": null,
+        "label_visible": false,
+        "where": null
+      },
+      "photo_source": {
+        "kind": "camera_photo",
+        "signs": [
+          "none"
+        ],
+        "confidence": 0.9,
+        "reason": "Handheld shot with a real hand, natural lighting, a lit display and a fabric background, with no screen or print artifacts."
+      },
+      "retake_tip": "This looks like a different power bank, so please photograph the black HAIARA W5 PRO with the word recalled written on it in permanent marker."
+    },
+    "model": "claude-opus-5-5",
+    "ms": 8459,
+    "usage": {
+      "input_tokens": 1198,
+      "output_tokens": 659,
+      "cache_read_input_tokens": 4113,
+      "cache_creation_input_tokens": 0
+    },
+    "replayed": false
+  },
+  "reviews": null,
+  "cost_usd": 0.0188,
+  "decision": "retake",
+  "decided_by": "made_safe"
+}

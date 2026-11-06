@@ -1,6 +1,21 @@
 {
-  "note": "Ready-made examples for /try. Every photo is honestly what its name says (content/verify/fixtures/credits.json). None shows a product its owner made safe: those come from the team's own photos, listed in content/verify/fixtures/user/expected.json once they are taken. Runs that need Claude replay one recorded live answer from content/presets/recorded/, so pressing Run costs nothing; every check around that answer runs again in code.",
+  "note": "Ready-made examples for /try. Every photo is honestly what its name says (content/verify/fixtures/credits.json and public/samples/charger/CREDITS.json): official CPSC images, the CPSC's published made-safe examples, test photos from Wikimedia Commons, and public-domain photos of one charger before and after its cord was cut, for Brightline Home's fictional sample recall. None is an owner's own claim photo. Runs that need Claude replay one recorded live answer from content/presets/recorded/, so pressing Run costs nothing; every check around that answer runs again in code.",
   "presets": [
+    {
+      "id": "sample-charger-cut",
+      "title": "Brightline's sample charger, cord cut",
+      "summary": "A charger with its cord cut where it meets the case, sent for Brightline Home's sample recall BH-2026-01. The full automatic path: verified, then the sandbox refund.",
+      "recall": "BH-2026-01",
+      "photo": "sample/cord-cut.jpg",
+      "photo_alt": "A hand holding a laptop charger's cord, cut where it met the charger case, with the bare wires showing; the opened charger case lies behind it.",
+      "photo_credit": "Public-domain photos of one charger, before and after its cord was cut (Dmitry G, Wikimedia Commons). Sample recall; fictional.",
+      "sample": true,
+      "expected": {
+        "decision": "verified",
+        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so the sandbox refund goes out at once. Sample recall; fictional."
+      },
+      "recorded": "sample-charger-cut.json"
+    },
     {
       "id": "cpsc-example",
       "title": "The CPSC's own made-safe photo",
@@ -62,6 +77,46 @@
         "plain": "The right-product check does not pass, so there is no payout, and the owner hears what to send instead."
       },
       "recorded": "unrelated-object.json"
+    },
+    {
+      "id": "look-alike-oraimo",
+      "title": "A different power bank",
+      "summary": "A test photo from Wikimedia Commons of an Oraimo power bank, a different brand and model, sent for the HAIARA power bank recall 27056.",
+      "recall": "27056",
+      "photo": "other/commons-powerbank-oraimo.jpg",
+      "photo_alt": "A black Oraimo power bank with a round charge display, standing on a table.",
+      "photo_credit": "\"Oraimo\" by Reladex, via Wikimedia Commons. CC BY-SA 4.0.",
+      "expected": {
+        "plain": "The right-product check should not pass for a different model, so there is no payout. A test photo, not an owner's claim."
+      },
+      "recorded": "look-alike-oraimo.json"
+    },
+    {
+      "id": "look-alike-romoss",
+      "title": "A look-alike with a 20 on it",
+      "summary": "A test photo from Wikimedia Commons of a Romoss power bank with a large 20 printed on it, like the 20W on the HAIARA, sent for recall 27056.",
+      "recall": "27056",
+      "photo": "other/commons-powerbank-romoss.jpg",
+      "photo_alt": "A hand holding a white Romoss power bank with a charge display and a large 20 printed on the front.",
+      "photo_credit": "\"A Romoss power bank-20210312\" by Shwangtianyuan, via Wikimedia Commons. CC BY-SA 4.0.",
+      "expected": {
+        "plain": "A similar print is not enough: the right-product check should not pass, so there is no payout. A test photo, not an owner's claim."
+      },
+      "recorded": "look-alike-romoss.json"
+    },
+    {
+      "id": "photo-of-a-screen",
+      "title": "A photo of a screen",
+      "summary": "A test photo from Wikimedia Commons of a computer monitor, cropped to the screen, sent as if it were a claim photo for recall 27056.",
+      "recall": "27056",
+      "photo": "derived/commons-deskck-lower-monitor.crop.jpg",
+      "photo_alt": "A computer monitor showing a desktop with a picture of a planet in space, its bezel and desktop icons in view.",
+      "photo_credit": "Cropped from \"Deskck\" by GuitarFreak, via Wikimedia Commons. Public domain.",
+      "expected": {
+        "decision": "retake",
+        "plain": "The checker sees a computer monitor, not the recalled power bank, so there is no payout and the owner is asked for a photo of the product itself, made safe. A test photo, not an owner's claim."
+      },
+      "recorded": "photo-of-a-screen.json"
     }
   ]
 }

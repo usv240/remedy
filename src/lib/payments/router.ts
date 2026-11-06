@@ -340,7 +340,7 @@ async function sendPayoutBatch(plans: PaymentPlan[], deps: PaymentsDeps): Promis
     recallNumber: plans[0].recallNumber,
     kind: "follow_up",
     source: "system",
-    name: "Unclaimed payout follow-up (batch plus 30 days)",
+    name: "Follow-up on payouts waiting to be accepted (batch plus 30 days)",
     startDate: new Date(now.getTime() + 30 * 86_400_000).toISOString().slice(0, 10),
     durationDays: 1,
     dependsOn: `payout-batch:${r.payoutBatchId}`,

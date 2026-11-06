@@ -1,0 +1,64 @@
+{
+  "recorded_at": "2026-11-06T03:41:15.573Z",
+  "preset": "look-alike-oraimo",
+  "recall": "27056",
+  "options": {},
+  "vision": {
+    "report": {
+      "scene": "A tall black power bank with a round digital display showing 67 and the printed brand oraimo stands upright in a corner on a wood surface, in a heavily filtered black and white photo with colored square overlays in the corners.",
+      "product": {
+        "match_score": 0.2,
+        "matching_details": [
+          "Center of photo: the product is a black power bank, the same kind of product as the recall."
+        ],
+        "differing_details": [
+          "Bottom center of the product: printed brand name reads oraimo, not HAIARA.",
+          "Upper center of the product: a round digital display showing 67, while the official images show a plain 20W print or a light gray magnetic ring with no display.",
+          "Center of photo: tall, narrow rectangular body with squared edges, unlike the shorter, flatter, rounded rectangle in the official images.",
+          "Lower half of the product front: a field of small dots, which the official images do not have.",
+          "No 20W print is visible on the front."
+        ],
+        "reason_plain": "No. This is an oraimo power bank with a digital display, not the recalled HAIARA W5 PRO.",
+        "reason_technical": "The printed oraimo logo, the round LED percentage display, the dotted texture and the tall body proportions all conflict with the official W5 PRO images. Only the product category and black color match."
+      },
+      "actions": [
+        {
+          "action": "write_recalled",
+          "done": false,
+          "confidence": 0.95,
+          "evidence": "No handwritten or marker writing is visible anywhere on the power bank front or sides. The only text on it is the printed oraimo logo near the bottom and the digital display reading 67."
+        }
+      ],
+      "handwritten_text": [],
+      "identifiers": {
+        "model_text": null,
+        "lot_text": null,
+        "date_code_text": null,
+        "label_visible": false,
+        "where": null
+      },
+      "photo_source": {
+        "kind": "camera_photo",
+        "signs": [
+          "none"
+        ],
+        "confidence": 0.6,
+        "reason": "It looks like a real camera photo of a physical object with natural shadows and a wood surface, though it has been heavily edited with a black and white filter and decorative colored square overlays in the corners."
+      },
+      "retake_tip": "This looks like a different power bank, so please photo the HAIARA W5 PRO with recalled written on it in marker, and show the side label too."
+    },
+    "model": "claude-opus-5-5",
+    "ms": 8850,
+    "usage": {
+      "input_tokens": 1658,
+      "output_tokens": 701,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 4113
+    },
+    "replayed": false
+  },
+  "reviews": null,
+  "cost_usd": 0.0412,
+  "decision": "retake",
+  "decided_by": "made_safe"
+}

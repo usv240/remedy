@@ -5,6 +5,7 @@
  *   npx tsx --env-file=.env.local scripts/verify/sweep.ts                 estimate only, free (count_tokens)
  *   npx tsx --env-file=.env.local scripts/verify/sweep.ts --run --yes     spends real money; get approval first
  *   options: --config opus-low,haiku-medium   --trials 3   --max-usd 3   --fresh (ignore AI_CACHE_DIR replays)
+ *            --cap-usd 4.75 --since <ISO time>: stop before the shared approved budget, read from ai_usage, runs out
  *
  * Cells differ only in model and effort; every cell runs the identical cases in the same order, with the
  * verification cache off. Cases for one recall run back to back, so the recall prefix is read from the prompt cache
@@ -13,9 +14,9 @@
  * twice; pass --fresh for repeat trials. Writes content/verify/sweep-results.json.
  */
 import Anthropic from "@anthropic-ai/sdk";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { costUsd } from "../../src/lib/ai/usage";
+import { capFromArgs, costUsd, spendSince } from "../../src/lib/ai/usage";
 import { verifyPhoto, type VerifyResult } from "../../src/lib/verify";
 import { fixtureFile, FIXTURES_DIR, loadFixtureCases, loadFixtureRecalls, loadUserCases, meetsExpectation, type FixtureCase } from "../../src/lib/verify/fixtures";
 import { claimMaxSide, decodeImage } from "../../src/lib/verify/image";
@@ -46,14 +47,31 @@ const yes = process.argv.includes("--yes");
 const trials = Number(arg("--trials") ?? 1);
 const maxUsd = Number(arg("--max-usd") ?? 3);
 const only = arg("--config")?.split(",");
-if (process.argv.includes("--fresh")) delete process.env.AI_CACHE_DIR;
+/** The shared measurement cap, checked against ai_usage before every case (--cap-usd and --since). */
+const budget = capFromArgs(process.argv);
+/** Stop while this much is still left: one case with both reviewers on Opus 5.5 costs about $0.15. */
+const MARGIN_USD = 0.25;
+/** Number this run's trials from N + 1, to add repeat trials to an earlier run (with --merge-with). */
+const trialOffset = Number(arg("--trial-offset") ?? 0);
+/** An earlier results file whose other trials are kept in the output. */
+const mergeWith = arg("--merge-with");
+if (process.argv.includes("--fresh")) {
+  delete process.env.AI_CACHE_DIR;
+  // A local proxy (for example headroom on 127.0.0.1) can answer a repeated identical request from its own cache, which
+  // makes a repeat trial a copy of the first. Repeat trials go straight to the API, as the hosted app does.
+  const base = process.env.ANTHROPIC_BASE_URL ?? "";
+  if (/^https?:\/\/(127\.|localhost|\[::1\])/i.test(base)) {
+    delete process.env.ANTHROPIC_BASE_URL;
+    console.log("--fresh: calling api.anthropic.com directly, not the local proxy, so repeat trials are real samples.");
+  }
+}
 
 const recalls = loadFixtureRecalls();
 const claimContext = { firmAmount: { value: "34.99", currency: "USD" }, autoCap: { value: "50.00", currency: "USD" } };
 
 /** Vision cases with a known answer, grouped by recall so the prompt cache is read within a cell. */
 function sweepCases(): FixtureCase[] {
-  return [...loadFixtureCases(), ...loadUserCases()].filter((c) => c.needs_vision).sort((a, b) => a.recall.localeCompare(b.recall));
+  return [...loadFixtureCases(), ...loadUserCases()].filter((c) => c.needs_vision && c.sweep !== false).sort((a, b) => a.recall.localeCompare(b.recall));
 }
 
 async function estimate(configs: Config[], cases: FixtureCase[]) {
@@ -98,17 +116,50 @@ async function estimate(configs: Config[], cases: FixtureCase[]) {
   return { rows, total };
 }
 
+/** Room left under the shared measurement cap (ai_usage since --since), or Infinity when no cap is given. */
+async function roomLeft(): Promise<number> {
+  if (!budget) return Number.POSITIVE_INFINITY;
+  return budget.cap - (await spendSince(budget.since)).usd;
+}
+
 async function sweep(configs: Config[], cases: FixtureCase[]) {
   let spent = 0;
   const results: Record<string, unknown>[] = [];
   const perCase: Record<string, unknown>[] = [];
-  for (const cfg of configs) {
-    for (let t = 1; t <= trials; t++) {
+  let stopped: string | null = null;
+  // Trials from an earlier run that this run does not repeat are kept, so repeat trials can be added later.
+  const prior = mergeWith ? (JSON.parse(readFileSync(mergeWith, "utf8")) as { summary: Record<string, unknown>[]; cases: Record<string, unknown>[]; runs?: unknown[] }) : null;
+  const mine = (t: unknown) => typeof t === "number" && t > trialOffset && t <= trialOffset + trials;
+  const save = () =>
+    writeFileSync(
+      path.join(FIXTURES_DIR, "..", "sweep-results.json"),
+      JSON.stringify(
+        {
+          ranAt: new Date().toISOString(),
+          trials: trialOffset + trials,
+          configs,
+          stopped,
+          runs: [...(prior?.runs ?? (prior ? [{ trials: "earlier", note: "kept from --merge-with" }] : [])), { trials: `${trialOffset + 1} to ${trialOffset + trials}`, direct: !process.env.ANTHROPIC_BASE_URL, spentUsd: Number(spent.toFixed(4)) }],
+          summary: [...(prior?.summary.filter((s) => !mine(s.trial)) ?? []), ...results],
+          cases: [...(prior?.cases.filter((c) => !mine(c.trial)) ?? []), ...perCase],
+          spentUsd: Number(spent.toFixed(4)),
+        },
+        null,
+        1,
+      ) + "\n",
+    );
+  // Trials outermost: each trial runs every configuration before the next begins, so a stop at the cap leaves whole trials.
+  outer: for (let t = trialOffset + 1; t <= trialOffset + trials; t++) {
+    for (const cfg of configs) {
       let pass = 0;
       let usd = 0;
       const times: number[] = [];
       for (const c of cases) {
-        if (spent >= maxUsd) throw new Error(`Stopped: $${spent.toFixed(2)} spent, at the --max-usd ${maxUsd} limit.`);
+        const left = await roomLeft();
+        if (spent >= maxUsd || left < MARGIN_USD) {
+          stopped = `Stopped before ${cfg.id} trial ${t} ${c.id}: $${spent.toFixed(3)} spent by this run, $${left.toFixed(3)} left under the cap.`;
+          break outer;
+        }
         const { recall, rule } = recalls[c.recall];
         const r: VerifyResult = await verifyPhoto(
           { photo: fixtureFile(c.photo), recall, proofRule: rule, claimContext, options: { officialHashCheck: c.official_hash_check, cache: false } },
@@ -125,16 +176,39 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
         const m = meetsExpectation(c.expect, r);
         if (m.ok) pass++;
         if (r.timings.vision_ms > 0) times.push(r.timings.total_ms);
-        perCase.push({ config: cfg.id, trial: t, case: c.id, ok: m.ok, misses: m.misses.join("; "), decision: r.decision, C1: r.checks.C1.score ?? r.checks.C1.status, C2: r.checks.C2.status, C3: r.checks.C3.status, usd: Number(callUsd.toFixed(4)), ms: r.timings.total_ms, usage: r.usage });
+        perCase.push({
+          config: cfg.id,
+          trial: t,
+          case: c.id,
+          ok: m.ok,
+          misses: m.misses.join("; "),
+          decision: r.decision,
+          decided_by: r.decided_by,
+          C1: r.checks.C1.score ?? r.checks.C1.status,
+          C1_status: r.checks.C1.status,
+          C2: r.checks.C2.status,
+          C3: r.checks.C3.status,
+          C4: r.checks.C4.status,
+          C1_reason: r.checks.C1.reason_technical.slice(0, 400),
+          C2_reason: r.checks.C2.reason_technical.slice(0, 400),
+          C3_reason: r.checks.C3.reason_technical.slice(0, 240),
+          referee: r.review?.referee.decision ?? null,
+          usd: Number(callUsd.toFixed(4)),
+          ms: r.timings.total_ms,
+          vision_ms: r.timings.vision_ms,
+          usage: r.usage,
+        });
         console.log(`${cfg.id} #${t} ${c.id}: ${m.ok ? "ok" : `MISS (${m.misses.join("; ")})`} ${r.decision} $${callUsd.toFixed(4)} ${r.timings.total_ms} ms`);
       }
       times.sort((a, b) => a - b);
       results.push({ config: cfg.id, trial: t, pass, of: cases.length, "pass %": Math.round((pass / cases.length) * 100), usd: Number(usd.toFixed(3)), "usd per case": Number((usd / cases.length).toFixed(4)), "median ms": times[Math.floor((times.length - 1) / 2)] ?? null });
+      save();
     }
   }
+  if (stopped) console.log(stopped);
   console.table(results);
-  writeFileSync(path.join(FIXTURES_DIR, "..", "sweep-results.json"), JSON.stringify({ ranAt: new Date().toISOString(), trials, configs, summary: results, cases: perCase, spentUsd: Number(spent.toFixed(4)) }, null, 1) + "\n");
-  console.log(`Spent $${spent.toFixed(3)}. Results in content/verify/sweep-results.json.`);
+  save();
+  console.log(`Spent $${spent.toFixed(3)} by this run. Results in content/verify/sweep-results.json.`);
 }
 
 (async () => {

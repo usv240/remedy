@@ -8,7 +8,7 @@ import { HOSTED_URL } from "@/lib/origin";
 import "../pages.css";
 import "./dev.css";
 
-export const metadata: Metadata = { title: "Developers", description: "Add verify-and-refund to any recall page: free sandbox keys, a live playground, docs, signed webhooks and an MCP server." };
+export const metadata: Metadata = { title: "Developers", description: "Add verify-and-refund to any recall page: free sandbox keys, a live playground, docs and an MCP server." };
 
 const HOST = (process.env.RENDER_EXTERNAL_URL || HOSTED_URL).replace(/\/$/, "");
 
@@ -17,7 +17,7 @@ const FIRST_CURL = `curl "${HOST}/api/v1/recalls?query=power%20bank&photo_refund
 
 const USES: { who: string; what: string; link?: { href: string; label: string } }[] = [
   { who: "Marketplaces and retailers", what: "Show a recall's proof rule on the product page, and verify a buyer's photo before the refund is sent.", link: { href: "/developers/docs#verify", label: "Verify a photo" } },
-  { who: "Recall service providers", what: "Turn emailed photos into verified claims, with each check and its reason, and pay through the firm's own PayPal account.", link: { href: "/developers/docs#proof-rule", label: "Read a proof rule" } },
+  { who: "Recall service providers", what: "Turn emailed photos into verified claims, with each check and its reason, and pay the refund through PayPal.", link: { href: "/developers/docs#proof-rule", label: "Read a proof rule" } },
   { who: "AI agents", what: "Connect the Remedy MCP server: search_recalls, get_proof_rule, verify_photo, open_claim and claim_status.", link: { href: "/developers/docs#mcp", label: "The MCP server" } },
 ];
 
@@ -30,7 +30,7 @@ export default function DevelopersPage() {
             <h1 className="page-title">Developers</h1>
             <Info id="page.developers" />
           </div>
-          <p className="lede">Add verify-and-refund to any recall page. One API call, signed webhooks, or our MCP server.</p>
+          <p className="lede">Add verify-and-refund to any recall page. One API call, or our MCP server.</p>
         </header>
         <figure className="dev-first" data-ui>
           <div className="dev-first-head">

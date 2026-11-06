@@ -21,8 +21,8 @@ export const metadata: Metadata = { title: "For judges", description: "The five-
 /** The five-minute path: six stops, in the order the story runs. */
 const PATH = [
   { href: "/#showcase", label: "Every recall, read as a checklist", time: "20 s", look: "On the home page, type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund." },
-  { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy, word for word, and the checklist Claude read from it, with how sure it is of each field. Switch Display to Technical for the batch trace and the raw CPSC record." },
-  { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Run a preset, or your own photo, through the six checks. In the sample shop, buy the Brightline power bank, claim, and watch the refund go back to the original PayPal purchase. The receipt follows the payout live." },
+  { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy (CPSC 27056), word for word, and the checklist Claude read from it, with how sure it is of each field. Switch Display to Technical for the batch trace and the raw CPSC record." },
+  { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Run a preset, or your own photo, through the six checks. In the sample shop, buy Brightline's sample charger, claim it with the cut-cord photo, see it verified, and watch the refund go back to the original PayPal purchase. The receipt follows the payout live." },
   { href: "/firm", label: "The firm's side", time: "60 s", look: "Brightline Home, a fictional sample firm: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report." },
   { href: "/developers", label: "For developers and AI agents", time: "40 s", look: "A free key and a live playground. The same search, proof rules and photo checks are tools on the MCP server." },
   { href: "#results", label: "The numbers, and where they come from", time: "30 s", look: "The CPSC count, the extraction benchmark and the recorded photo checks, each with its source file." },
@@ -82,7 +82,7 @@ const CRITERIA: Criterion[] = [
 const COST = [
   { what: "Identical requests replay", how: "A request that matches one already answered (same model, prompt, images and settings) is read back from a local cache in test runs instead of paid for again." },
   { what: "An identical photo reuses its result", how: "The same claim photo for the same recall and rule reuses its checked result from the database, with no new AI call." },
-  { what: "Images are downscaled", how: "Photos and official images are shrunk before the vision call: 11 to 16% fewer input tokens, measured by the verification builder." },
+  { what: "Images are downscaled", how: "Photos and official images are shrunk before the vision call: up to 16% fewer input tokens on large photos, measured by the verification builder." },
   { what: "The recall's part is cached", how: "Each request puts the recall's data and official images first, so repeat checks on one recall read that part from Claude's prompt cache." },
   { what: "A daily spend cap", how: "The hosted site keeps to a daily AI budget. Past it, every free check still runs and a person at the firm looks at the rest." },
 ];
@@ -212,8 +212,9 @@ export default function JudgesPage() {
       <section id="data" className="page-section" aria-labelledby="data-h">
         <h2 id="data-h">The data</h2>
         <p className="page-prose">
-          Every figure comes from the CPSC Recalls API, pulled {fmtDate(S.pulledAt.slice(0, 10))}: {fmtInt(S.recalls.count)} recalls from {fmtDate(S.range.from)} to {fmtDate(S.range.to)}. A recall counts as a photo refund when its remedy text mentions a photo, picture or image and a refund ({fmtInt(S.all.photoRefund.count)}). Run on the earlier snapshot behind our research note (1,227 recalls to October 29), the same classifier gives the same 523 photo-refund recalls.
+          Every figure comes from the CPSC Recalls API, pulled {fmtDate(S.pulledAt.slice(0, 10))}: {fmtInt(S.recalls.count)} recalls from {fmtDate(S.range.from)} to {fmtDate(S.range.to)}. A recall counts as a photo refund when its remedy text mentions a photo, picture or image and a refund ({fmtInt(S.all.photoRefund.count)}).
         </p>
+        <p className="page-note">Run on the earlier snapshot behind our research note (1,227 recalls to October 29), the same classifier gives the same 523 photo-refund recalls.</p>
         <p className="page-prose">
           <Link className="text-link" href="/learn#data">
             The method, with every definition
@@ -229,14 +230,19 @@ export default function JudgesPage() {
         <p className="page-prose jp-intro tabular">
           Reading all {fmtInt(ex.counts.recalls)} remedies cost ${ex.usage.usd.toFixed(2)} in one batch run. Each photo check is one vision call, and only when the free checks pass.
         </p>
-        <ul className="jc">
-          {COST.map((c) => (
-            <li key={c.what}>
-              <p className="jc-what">{c.what}</p>
-              <p className="jc-how">{c.how}</p>
-            </li>
-          ))}
-        </ul>
+        <details className="jx-disc">
+          <summary>The {COST.length} ways each check stays cheap</summary>
+          <div className="jx-body">
+            <ul className="jc">
+              {COST.map((c) => (
+                <li key={c.what}>
+                  <p className="jc-what">{c.what}</p>
+                  <p className="jc-how">{c.how}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </details>
         <p className="page-note">
           Today&rsquo;s spend, by route, is on{" "}
           <Link className="text-link" href="/status?mode=technical">

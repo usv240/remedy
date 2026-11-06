@@ -47,7 +47,7 @@ function loadSdk(clientId: string) {
 }
 
 /**
- * Buy Brightline Home's sample power bank with the PayPal JavaScript SDK v6 button (Orders v2 on the server). On
+ * Buy Brightline Home's sample charger with the PayPal JavaScript SDK v6 button (Orders v2 on the server). On
  * approval the server captures it and stores the sale; this device keeps the sale and capture id, so the claim page
  * can link it and the refund can go back to this purchase.
  */
@@ -140,14 +140,14 @@ export function ShopBuy() {
         <p className="pill" data-tone="paid">
           Paid
         </p>
-        <h2 className="tr-bought-title">You bought the sample power bank.</h2>
+        <h2 className="tr-bought-title">You bought the sample charger.</h2>
         <p>
           <span className="tabular">{money(bought.amount)}</span> on {day(bought.paid_at)}, with PayPal in the sandbox
           {bought.payer_first_name ? `, ${bought.payer_first_name}` : ""}. It can be refunded to this payment until {day(bought.refundable_until)}.
         </p>
         <p className="tabular cl-hint">Sandbox capture ID {bought.capture_id}</p>
         <p>
-          <Link className="btn btn-primary cl-send" href="/claim/27056">
+          <Link className="btn btn-primary cl-send" href={`/claim/${SHOP.recall}`}>
             Now claim it
           </Link>
         </p>

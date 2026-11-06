@@ -13,7 +13,7 @@ const ROWS: { label: string; cells: [string, string, string] }[] = [
     cells: [
       `${fmtInt(S.photoRefund.email.count)} of ${fmtInt(S.all.photoRefund.count)} photo-refund recalls give an email address; ${fmtInt(S.photoRefund.webmail.count)} are free webmail`,
       `${fmtInt(S.all.recallVendor.count)} of ${fmtInt(S.recalls.count)} recalls name a professional recall vendor`,
-      "Any firm, from its own PayPal account",
+      "Any firm that pays its refunds through PayPal",
     ],
   },
   { label: "The owner sends", cells: ["An email with the photo attached", "A form on the vendor's site", "One photo from a phone, no account"] },

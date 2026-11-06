@@ -109,7 +109,7 @@ export default function DocsPage() {
           <a className="text-link" href="/openapi.json">
             /openapi.json
           </a>{" "}
-          for Postman, SDK generators and AI agents.
+          for API clients, SDK generators and AI agents.
         </p>
       </header>
 
@@ -211,6 +211,10 @@ export default function DocsPage() {
             <pre className="dev-pre tabular" tabIndex={0} aria-label="Add the MCP server">
               {`claude mcp add --transport http remedy ${HOST}/api/mcp`}
             </pre>
+            <details className="dsc doc-more">
+              <summary>
+                <span className="dsc-k">The {TOOLS.length} tools, with what each one does</span>
+              </summary>
             <div className="doc-table-wrap" tabIndex={0} role="region" aria-label="MCP tools">
               <table className="doc-table">
                 <thead>
@@ -234,6 +238,7 @@ export default function DocsPage() {
                 </tbody>
               </table>
             </div>
+            </details>
             <p className="page-prose">
               Send your key as <code>Authorization: Bearer {KEY_PREFIX}…</code> for the full photo checks (up to {VERIFY_LIMITS.visionPerKeyPerDay} a day per key); without one, verify_photo runs the free checks only. Discovery:{" "}
               <a className="text-link" href="/api/mcp/server-card">
@@ -254,6 +259,10 @@ export default function DocsPage() {
           <section id="errors" className="page-section doc-sec" aria-labelledby="errors-h">
             <h2 id="errors-h">Errors</h2>
             <p className="page-prose">Every error has a code you can branch on and a plain message you can show to people.</p>
+            <details className="dsc doc-more">
+              <summary>
+                <span className="dsc-k">All {ERRORS.length} error codes, with their HTTP status</span>
+              </summary>
             <dl className="doc-errors">
               {ERRORS.map((x) => (
                 <div key={x.code} id={`errors-${x.code}`} className="doc-error">
@@ -264,6 +273,7 @@ export default function DocsPage() {
                 </div>
               ))}
             </dl>
+            </details>
           </section>
         </div>
       </div>

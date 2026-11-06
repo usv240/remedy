@@ -13,7 +13,7 @@ export function publicOrigin(req?: Request): string {
  * The hosted demo, shown where no request is at hand (for example, the address in a printed curl example).
  * Render names the service from render.yaml; set APP_URL to override it once the service is live.
  */
-export const HOSTED_URL = (process.env.APP_URL || "https://remedy.onrender.com").replace(/\/$/, "");
+export const HOSTED_URL = (process.env.APP_URL || "https://remedy-y0ym.onrender.com").replace(/\/$/, "");
 
 /** The public address for a page rendered on the server: Render's, or the host the visitor used. */
 export async function pageOrigin(): Promise<string> {

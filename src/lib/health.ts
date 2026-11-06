@@ -79,37 +79,22 @@ export async function runChecks(): Promise<Check[]> {
     },
     {
       id: "ag-grid",
-      name: "AG Grid and AG Studio",
-      mode: set("NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY") ? "live" : "fallback",
-      detail: set("NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY")
-        ? `ag-grid-enterprise ${pinned("ag-grid-enterprise")} and ag-studio-react ${pinned("ag-studio-react")}, licensed`
-        : `ag-grid-enterprise ${pinned("ag-grid-enterprise")} and ag-studio-react ${pinned("ag-studio-react")} on the trial; they show a licence notice until a key is set`,
-    },
-    {
-      id: "kernel",
-      name: "KERNEL cloud browser",
-      mode: on("KERNEL_API_KEY", "FALLBACK_KERNEL") ? "live" : "fallback",
-      detail: on("KERNEL_API_KEY", "FALLBACK_KERNEL") ? "Reads cpsc.gov recall pages and firm recall sites in a cloud browser" : "Recall pages are read with a plain fetch, without a cloud browser",
-    },
-    {
-      id: "render",
-      name: "Render",
-      mode: onRender ? "live" : "fallback",
-      detail: onRender ? "Hosting, Postgres and payout workflows on Render" : "Running locally; jobs run in this process instead of Render Workflows",
+      name: "AG Grid",
+      mode: "live",
+      detail: `ag-grid-enterprise ${pinned("ag-grid-enterprise")} for the claims queue, on the trial, which shows a license notice`,
     },
     {
       id: "apimatic",
       name: "PayPal Server SDK (APIMatic)",
       mode: "live",
-      detail: `@paypal/paypal-server-sdk ${pinned("@paypal/paypal-server-sdk")} creates, captures and refunds orders`,
+      detail: `@paypal/paypal-server-sdk ${pinned("@paypal/paypal-server-sdk")} carries every order, capture and refund`,
+    },
+    {
+      id: "render",
+      name: "Render",
+      mode: onRender ? "live" : "fallback",
+      detail: onRender ? "Hosting and Postgres on Render" : "Running locally, not on Render",
     },
     { id: "database", name: "Postgres", mode: database?.ok ? "live" : "not_connected", detail: database ? database.detail : "DATABASE_URL not set", ms: database?.ms },
-    {
-      id: "checks",
-      name: "Outside checks",
-      // Live once the outside-checks workflow is deployed: its slug and the shared secret are both set.
-      mode: set("CHECKS_SECRET") && set("CHECKS_WORKFLOW_SLUG") ? "live" : "not_connected",
-      detail: set("CHECKS_SECRET") && set("CHECKS_WORKFLOW_SLUG") ? "A Render Workflow runs the judges' path and the public API from outside the app" : "Not set up on this server",
-    },
   ];
 }

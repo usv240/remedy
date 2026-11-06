@@ -1,6 +1,7 @@
 // Seeds the sample firm, Brightline Home (fictional, is_sample = true). Safe to run again: the firm is upserted by its
-// slug. When the recalls are loaded and content/recalls/demo-picks.json names the demo recalls, each one is linked
-// to the firm as a firm_recall, so the claim flow and the console have a recall to run.
+// slug. The firm's own fictional sample recall (content/recalls/samples.json, BH-2026-01) and the real CPSC recalls in
+// content/recalls/demo-picks.json are each linked to the firm as a firm_recall, once loaded, so the claim flow and the
+// console have recalls to run.
 //
 //   npx tsx --env-file=.env.local scripts/seed.ts
 import { existsSync, readFileSync } from "node:fs";
@@ -27,6 +28,13 @@ function demoNumbers(): string[] {
   return [...new Set(nums)];
 }
 
+/** The fictional sample recalls the firm runs itself (BH-2026-01). */
+function sampleNumbers(): string[] {
+  const p = join(process.cwd(), "content", "recalls", "samples.json");
+  if (!existsSync(p)) return [];
+  return ((JSON.parse(readFileSync(p, "utf8")) as { recalls?: { number: string }[] }).recalls ?? []).map((r) => r.number);
+}
+
 async function main() {
   if (!dbConfigured()) {
     console.error("seed: DATABASE_URL is not set. Run with: npx tsx --env-file=.env.local scripts/seed.ts");
@@ -38,7 +46,8 @@ async function main() {
     .onConflictDoUpdate({ target: schema.firms.slug, set: { name: SAMPLE_FIRM.name, isSample: true, contactEmail: SAMPLE_FIRM.contactEmail, settings: SAMPLE_FIRM.settings } })
     .returning();
 
-  const wanted = demoNumbers();
+  // The firm's own sample recall (content/recalls/samples.json) first, then the real CPSC demo recalls as extras.
+  const wanted = [...new Set([...sampleNumbers(), ...demoNumbers()])];
   const present = wanted.length ? (await db().select({ n: schema.recalls.number }).from(schema.recalls).where(inArray(schema.recalls.number, wanted))).map((r) => r.n) : [];
   for (const recallNumber of present) {
     await db()

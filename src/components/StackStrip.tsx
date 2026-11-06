@@ -5,18 +5,16 @@ import { usePathname } from "next/navigation";
 import { Fragment, Suspense } from "react";
 import { Info } from "./Info";
 
-// Only tools that are running in this build. Add one here when it ships, not before (Zapier, Postman and Astropods
-// join when their parts of the plan ship).
+// Only tools the running code uses. Add one here when its code ships and is called, not before.
 export const STACK = [
   { id: "paypal", name: "PayPal" },
   { id: "claude", name: "Claude" },
   { id: "elastic", name: "Elastic" },
   { id: "channel3", name: "Channel3" },
   { id: "bryntum", name: "Bryntum" },
-  { id: "ag-grid", name: "AG Grid and AG Studio" },
-  { id: "kernel", name: "KERNEL" },
-  { id: "render", name: "Render" },
+  { id: "ag-grid", name: "AG Grid" },
   { id: "apimatic", name: "APIMatic" },
+  { id: "render", name: "Render" },
 ] as const;
 
 /** Shown above the footer on every page but printable records: every tool used, with what it does here. */
@@ -30,8 +28,9 @@ export function StackStrip() {
 
 function StackStripAt() {
   const path = usePathname() ?? "/";
-  // A claim receipt and a printable report are documents; they end with the record.
-  if (/^\/claim\/[^/]+\/done\/|^\/firm\/reports\/print/.test(path)) return null;
+  // A claim receipt and a printable report are documents; they end with the record. The home page names every tool in
+  // its own "Every tool has one job" table, so the sentence would only repeat it.
+  if (path === "/" || /^\/claim\/[^/]+\/done\/|^\/firm\/reports\/print/.test(path)) return null;
   return (
     <section className="stack-strip frame" aria-labelledby="stack-strip-title">
       <h2 id="stack-strip-title" className="sr-only">

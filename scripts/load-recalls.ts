@@ -116,6 +116,28 @@ async function loadHashes(file: unknown, known: Set<string>) {
   return rows.length;
 }
 
+/**
+ * The fictional sample recalls (content/recalls/samples.json): the recall row, the sample firm's hand-written rule as a
+ * firm rule (source "firm", so a later run never overwrites it with a model rule), and its official image hashes.
+ */
+async function loadSamples(file: unknown) {
+  const f = file as { recalls?: { number: string; images?: { url: string; dhash?: string }[] }[]; rules?: Record<string, unknown> } | null;
+  if (!f?.recalls?.length) return { recalls: 0, rules: 0, hashes: 0 };
+  const loaded = await loadRecalls({ recalls: f.recalls });
+  let ruleCount = 0;
+  for (const [recallNumber, raw] of Object.entries(f.rules ?? {})) {
+    if (!loaded.numbers.has(recallNumber)) continue;
+    const rule = clean(raw);
+    const [latest] = await db().select({ id: schema.proofRules.id, rule: schema.proofRules.rule }).from(schema.proofRules).where(eq(schema.proofRules.recallNumber, recallNumber)).orderBy(desc(schema.proofRules.version)).limit(1);
+    if (!latest) await db().insert(schema.proofRules).values({ recallNumber, rule, source: "firm", model: null, version: 1, approvedBy: "Brightline Home (sample firm)" });
+    else if (JSON.stringify(latest.rule) !== JSON.stringify(rule)) await db().update(schema.proofRules).set({ rule, source: "firm", model: null }).where(eq(schema.proofRules.id, latest.id));
+    ruleCount++;
+  }
+  const hashFile = Object.fromEntries(f.recalls.map((r) => [r.number, (r.images ?? []).filter((i) => i.dhash).map((i) => ({ url: i.url, dhash: i.dhash }))]));
+  const hashes = await loadHashes(hashFile, loaded.numbers);
+  return { recalls: loaded.loaded, rules: ruleCount, hashes };
+}
+
 async function main() {
   if (!dbConfigured()) {
     console.error("load-recalls: DATABASE_URL is not set. Run with: npx tsx --env-file=.env.local scripts/load-recalls.ts");
@@ -125,8 +147,9 @@ async function main() {
   const recalls = await loadRecalls(readJson("recalls.json"));
   const rules = await loadRules(readJson("proof-rules.json"));
   const hashes = await loadHashes(readJson("image-hashes.json"), recalls.numbers);
+  const samples = await loadSamples(readJson("samples.json"));
   const [{ n }] = await db().select({ n: sql<number>`count(*)::int` }).from(schema.recalls);
-  const summary = { recallsInFile: recalls.loaded, recallsSkipped: recalls.skipped, recallsInDatabase: n, rules, officialHashes: hashes, ms: Date.now() - started };
+  const summary = { recallsInFile: recalls.loaded, recallsSkipped: recalls.skipped, recallsInDatabase: n, rules, officialHashes: hashes, samples, ms: Date.now() - started };
   console.log(`load-recalls: ${JSON.stringify(summary)}`);
   if (recalls.loaded || rules.inserted || rules.updated || hashes) await audit("system", "recalls.loaded", "content/recalls", summary);
   process.exit(0);

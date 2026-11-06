@@ -19,36 +19,49 @@
     "what": "Large makes all text about a fifth bigger.",
     "why": "Comfortable reading for everyone, including people with low vision."
   },
-
   "page.home": {
     "title": "About this page",
     "what": "Remedy pays recall refunds the moment a photo is verified. Try a photo, or take the 2-minute tour.",
     "why": "Many recalls already ask owners to send a photo of the product made safe. Remedy turns that photo into a refund in seconds.",
     "technical": "Each recall's remedy becomes a structured proof rule. A photo is checked against it, and a verified claim is paid through PayPal Payouts or refunded to the original PayPal purchase.",
-    "learnMore": { "label": "How recalls work", "href": "/learn" },
-    "sponsor": ["PayPal", "Claude", "Elastic"]
+    "learnMore": {
+      "label": "How recalls work",
+      "href": "/learn"
+    },
+    "sponsor": [
+      "PayPal",
+      "Claude",
+      "Elastic"
+    ]
   },
   "how.steps": {
     "title": "How it works",
     "what": "The recall is read into a checklist, you snap a photo, the photo is checked, and PayPal pays you.",
     "why": "Each step is one the recall already asks for. Remedy makes the wait between them seconds instead of weeks.",
     "technical": "Proof rule (Claude Opus 5.5, structured output), then checks C1 to C6, then a decision made in code, then a PayPal payout or a refund to the original capture.",
-    "sponsor": ["Claude", "PayPal"]
+    "sponsor": [
+      "Claude",
+      "PayPal"
+    ]
   },
-
   "page.try": {
     "title": "About this page",
     "what": "Try Remedy with one of our sample photos or your own, and see each check and the result.",
     "why": "It is the quickest way to see a photo become a refund.",
     "technical": "Payouts here come from the sample firm's PayPal sandbox account. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.",
-    "sponsor": ["PayPal", "Claude"]
+    "sponsor": [
+      "PayPal",
+      "Claude"
+    ]
   },
   "page.recalls": {
     "title": "About this page",
     "what": "Every US consumer product recall since January 2024 from the CPSC, with the ones that offer a refund for a photo marked.",
     "why": "Find your recall, read what it asks you to do, and start a claim.",
     "technical": "Recall data comes from the CPSC Recalls API, which is public. Search is hybrid keyword and semantic search on Elastic.",
-    "sponsor": ["Elastic"]
+    "sponsor": [
+      "Elastic"
+    ]
   },
   "page.judges": {
     "title": "About this page",
@@ -73,7 +86,11 @@
     "what": "The console for a recalling firm: the claims to review, the recall plan and the monthly report.",
     "why": "Small firms handle recall claims by hand today. This puts every claim, payment and deadline in one place.",
     "technical": "Brightline Home is a fictional sample firm. Its payouts run from a PayPal sandbox account.",
-    "sponsor": ["AG Grid", "Bryntum", "PayPal"]
+    "sponsor": [
+      "AG Grid",
+      "Bryntum",
+      "PayPal"
+    ]
   },
   "page.developers": {
     "title": "About this page",
@@ -99,7 +116,6 @@
     "why": "If a service is not connected, Remedy uses its fallback so every flow keeps working. This page shows which mode each one is in.",
     "technical": "GET /api/health runs the same checks and returns JSON. PayPal and Postgres answer a real call; the rest are read from their settings."
   },
-
   "dev.keys": {
     "title": "Sandbox keys",
     "what": "A free key for testing. It is shown once; Remedy keeps only a fingerprint of it.",
@@ -112,93 +128,77 @@
     "why": "You can see exactly what your code will get back before you write it.",
     "technical": "Requests go to the same endpoints your code will call, through the same key check and rate limits."
   },
-
   "stack.strip": {
     "title": "Every tool, with a job",
     "what": "These are the tools Remedy is built with. Each one does one specific job here.",
     "why": "Open any name to see what it does in Remedy, or visit How it is built for where each one lives in the code.",
-    "learnMore": { "label": "How it is built", "href": "/stack" }
+    "learnMore": {
+      "label": "How it is built",
+      "href": "/stack"
+    }
   },
   "stack.paypal": {
     "title": "PayPal",
     "what": "Pays refunds instantly, and refunds to the original purchase inside 180 days.",
     "why": "An owner who made the product safe gets the money in seconds, the way they already get paid by friends.",
     "technical": "Payouts (email, phone, Venmo), Payments v2 refunds to the original capture, Orders v2 and the JavaScript SDK v6, with signature-checked webhooks. Sandbox only.",
-    "sponsor": ["PayPal"]
+    "sponsor": [
+      "PayPal"
+    ]
   },
   "stack.claude": {
     "title": "Claude Opus 5.5",
     "what": "Reads each recall's remedy into a checklist, checks photos, and runs the two reviewers.",
     "why": "Recall remedies are written as free text. A clear checklist tells the owner exactly what to do and what the photo must show.",
     "technical": "claude-opus-5-5 with structured outputs validated by Zod. Rules for every photo-refund recall are extracted with the Message Batches API. The decision and the money are plain code.",
-    "sponsor": ["Claude"]
+    "sponsor": [
+      "Claude"
+    ]
   },
   "stack.elastic": {
     "title": "Elastic",
-    "what": "Searches every recall, and matches photos to the official recall images.",
+    "what": "Searches every recall in plain words: keyword and semantic, reranked.",
     "why": "Owners describe products in their own words. Search that understands meaning finds the right recall.",
     "technical": "Hybrid search: keyword and semantic retrieval fused by reciprocal rank, then reranked. An in-app keyword search stands in when Elastic is not connected.",
-    "sponsor": ["Elastic"]
+    "sponsor": [
+      "Elastic"
+    ]
   },
   "stack.channel3": {
     "title": "Channel3",
     "what": "Finds a safe replacement product for an owner who would rather have one.",
     "why": "Some owners need the product, not the money. Each replacement is checked against active recalls first.",
     "technical": "POST /v1/search for in-stock products in the same category and price range, then GET /v1/products/{id} for the current offer.",
-    "sponsor": ["Channel3"]
+    "sponsor": [
+      "Channel3"
+    ]
   },
   "stack.bryntum": {
     "title": "Bryntum",
     "what": "The firm's corrective-action plan and review schedule, as a timeline.",
     "why": "A recall has deadlines: notices, payouts, follow-ups and monthly reports. The plan keeps them in order and updates itself.",
     "technical": "Bryntum Gantt 7.3 (trial), loaded as a script and themed to match the site. Payout webhooks add follow-up tasks to the plan.",
-    "sponsor": ["Bryntum"]
+    "sponsor": [
+      "Bryntum"
+    ]
   },
   "stack.ag-grid": {
-    "title": "AG Grid and AG Studio",
-    "what": "The firm's claims queue and its completion dashboard.",
+    "title": "AG Grid",
+    "what": "The firm's claims queue.",
     "why": "A reviewer sees every claim with its photo and checks in one place, and pays verified claims in bulk.",
-    "technical": "AG Grid 36 (community and enterprise) for the claims queue; AG Studio 3 for the completion dashboard and its analyst.",
-    "sponsor": ["AG Grid", "AG Studio"]
-  },
-  "stack.kernel": {
-    "title": "KERNEL",
-    "what": "Reads recall pages and firm recall sites in a cloud browser.",
-    "why": "Model numbers and lot ranges are often only on the recall page, not in the data feed.",
-    "technical": "A KERNEL cloud browser opens the page and returns its text and a live-view link. Without a key, a plain fetch reads static pages.",
-    "sponsor": ["KERNEL"]
-  },
-  "stack.zapier": {
-    "title": "Zapier",
-    "what": "Turns photos emailed to a firm's recall inbox into claims, and sends notices.",
-    "why": "Firms keep the inbox they already use; the photos still become refunds.",
-    "sponsor": ["Zapier"]
+    "technical": "AG Grid 36 (community and enterprise modules) for the claims queue: set filters, the column menu and the status bar.",
+    "sponsor": [
+      "AG Grid"
+    ]
   },
   "stack.render": {
     "title": "Render",
-    "what": "Hosts the site, its Postgres database and the payout workflows.",
-    "why": "One place runs the site, keeps the records and sends payouts in the background.",
+    "what": "Hosts the site and its Postgres database.",
+    "why": "One place runs the site and keeps every record.",
     "technical": "render.yaml defines the web service and managed Postgres. Tables come from the reviewed SQL in db/schema.sql.",
-    "sponsor": ["Render"]
-  },
-  "stack.apimatic": {
-    "title": "APIMatic",
-    "what": "Generated the PayPal Server SDK Remedy builds with, and the SDKs and docs for Remedy's own API.",
-    "why": "Typed SDKs mean fewer mistakes when money moves.",
-    "technical": "@paypal/paypal-server-sdk, generated by APIMatic, creates, captures and refunds orders. Remedy's API is described in OpenAPI 3.1 at /openapi.json.",
-    "sponsor": ["APIMatic"]
-  },
-  "stack.postman": {
-    "title": "Postman",
-    "what": "The Remedy API as a collection anyone can import and run.",
-    "why": "Developers can try every endpoint without writing code.",
-    "sponsor": ["Postman"]
-  },
-  "stack.astropods": {
-    "title": "Astropods",
-    "what": "Hosts and traces the photo-verifier agent.",
-    "why": "Every check leaves a trace a person can read later.",
-    "sponsor": ["Astropods"]
+    "sponsor": [
+      "Render"
+    ]
   },
   "stack.postgres": {
     "title": "Postgres",
@@ -210,38 +210,54 @@
     "title": "Every PayPal API Remedy calls",
     "what": "Each PayPal API Remedy uses, the call it makes, and the one job it does here.",
     "why": "PayPal is how the refund reaches the owner: every payout, refund and order goes through these calls.",
-    "technical": "Orders and refunds go through @paypal/paypal-server-sdk; Payouts, Transaction Search, Disputes and webhook checks use fetch with one cached OAuth token."
+    "technical": "Every call, from Payouts and refunds to Orders, Transaction Search, Disputes and webhook checks, uses fetch with one cached OAuth token."
   },
-
   "intro.stat": {
     "title": "How 525 was counted",
     "what": "Out of every US consumer product recall the CPSC published since January 2024, these are the ones whose remedy asks for a photo and offers a refund.",
     "why": "Many recalls already pay on a photo. Remedy makes that photo quick to check and quick to pay.",
     "technical": "CPSC Recalls API, every recall dated on or after 2024-01-01. A recall counts when its remedy text matches /photo|picture|image/i and /refund/i (src/lib/recall/classify.ts). The figures are read from content/recalls/stats.json.",
-    "learnMore": { "label": "The data method", "href": "/learn#data" }
+    "learnMore": {
+      "label": "The data method",
+      "href": "/learn#data"
+    }
   },
   "showcase.search": {
     "title": "Recall search",
     "what": "Type what you bought. The three closest recalls appear, each with what it asks you to do and what you get.",
     "why": "People describe products in their own words, not by recall number.",
     "technical": "GET /api/v1/recalls?query=: Elastic keyword and semantic search fused by reciprocal rank, reranked, with an in-app keyword ranking as the fallback. The chips come from each recall's stored proof rule.",
-    "learnMore": { "label": "Browse every recall", "href": "/recalls" },
-    "sponsor": ["Elastic", "Claude"]
+    "learnMore": {
+      "label": "Browse every recall",
+      "href": "/recalls"
+    },
+    "sponsor": [
+      "Elastic",
+      "Claude"
+    ]
   },
   "try.panel": {
     "title": "The photo checks",
     "what": "Each sample photo goes through the same checks a real claim does: right product, made safe, your own photo, within the recall, claim limits, and not already refunded.",
     "why": "A refund should go to someone who has the recalled product and made it safe. The checks keep the refund pool for real owners.",
     "technical": "These are recorded runs of verifyPhoto (content/public/verify-runs.json). The free checks (quality, and the match against the recall's official images and earlier claims) need no AI. The vision checks use Claude Opus 5.5 with structured output; the decision is plain code.",
-    "learnMore": { "label": "Run one live", "href": "/try" },
-    "sponsor": ["Claude"]
+    "learnMore": {
+      "label": "Run one live",
+      "href": "/try"
+    },
+    "sponsor": [
+      "Claude"
+    ]
   },
   "stats.figures": {
     "title": "These figures",
     "what": "Every figure is counted from the CPSC's public recall data, for the dates shown.",
     "why": "So you can check each one yourself.",
     "technical": "content/recalls/stats.json, written by scripts/recalls/stats.ts from the CPSC Recalls API. Units use the first number in the first product's NumberOfUnits, as the CPSC states it for the US.",
-    "learnMore": { "label": "The data method", "href": "/learn#data" }
+    "learnMore": {
+      "label": "The data method",
+      "href": "/learn#data"
+    }
   },
   "research.row": {
     "title": "The sources",
@@ -266,7 +282,9 @@
     "what": "The recall's remedy read as a checklist: what to do to the product, what the photo must show, and what you get.",
     "why": "The official remedy is written for lawyers. The checklist is written for you, and Remedy checks photos against it.",
     "technical": "Claude Opus 5.5 with structured output at medium effort, then a self-check pass against the remedy text and a deterministic lint, run for every photo-refund recall with the Message Batches API. Confidence is the model's own, per field.",
-    "sponsor": ["Claude"]
+    "sponsor": [
+      "Claude"
+    ]
   },
   "recall.images": {
     "title": "Official images",
@@ -331,5 +349,11 @@
     "what": "AI assistants can search recalls, read a proof rule, check a photo and open a claim with Remedy's tools.",
     "why": "An assistant helping someone with a recall can give exact steps, and the owner still chooses where the refund goes.",
     "technical": "Model Context Protocol over streamable HTTP at /api/mcp, stateless JSON-RPC. Tools: search_recalls, get_proof_rule, verify_photo, open_claim, claim_status and ping. Discovery: /api/mcp/server-card and /.well-known/ai-catalog.json."
+  },
+  "stack.apimatic": {
+    "title": "APIMatic",
+    "what": "Generated the PayPal Server SDK that Remedy uses for every order, capture and refund.",
+    "why": "A typed SDK catches mistakes in PayPal requests before they reach PayPal.",
+    "technical": "@paypal/paypal-server-sdk (APIMatic): OrdersController for create, get and capture; PaymentsController for captures and refunds, each with PayPal-Request-Id. Payouts, Transaction Search and Disputes use REST, which the SDK does not cover."
   }
 }

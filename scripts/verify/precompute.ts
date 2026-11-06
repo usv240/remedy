@@ -1,87 +1,115 @@
 /**
- * Precompute the verification answers for every demo preset (cost free win B), so judges pressing a preset cost $0:
- * the answers go to the verify_result table marked "precomputed", and verifyPhoto reads them like any cache entry.
- * Every check that depends on the claim still runs in code each time.
+ * Precompute the verification answers for every demo preset (cost free win B), so judges pressing a preset cost $0.
+ * For each preset that needs Claude:
+ *   - with a recording in content/presets/recorded/, the recorded answer seeds the verify_result table, at no cost;
+ *   - without one, one live run records it (the /try page replays it) and seeds verify_result.
+ * Every check that depends on the claim still runs in code each time. Presets decided before any model call need nothing.
  *
- *   npx tsx --env-file=.env.local scripts/verify/precompute.ts                 list presets and the expected cost, free
- *   npx tsx --env-file=.env.local scripts/verify/precompute.ts --run --yes     one live run per preset that needs Claude
+ *   npx tsx --env-file=.env.local scripts/verify/precompute.ts                  plan and expected cost, free
+ *   npx tsx --env-file=.env.local scripts/verify/precompute.ts --run --yes      records what is missing
+ *   add --cap-usd 4.75 --since <ISO time> to stop before the approved measurement budget (read from ai_usage) runs out
  *
  * Presets come from content/presets/index.json, plus the team's own photos in content/verify/fixtures/user/expected.json.
- * Recalls and proof rules are the stored ones (content/recalls), so the keys match what the live claim path computes.
- * A preset decided before any model call (official image, blur) needs nothing. A preset already in the table is skipped.
  */
-import { existsSync, readFileSync } from "node:fs";
-import path from "node:path";
-import { costUsd } from "../../src/lib/ai/usage";
+import { capFromArgs, costUsd, spendSince } from "../../src/lib/ai/usage";
 import { dbConfigured } from "../../src/lib/db";
+import { getRecall, ruleFor, verifyRecallFor } from "../../src/app/api/claims/_lib/recall";
+import { listPresets, presetPhoto, readRecorded, recordPreset, type Preset, type Recorded } from "../../src/app/api/try/_lib/presets";
 import { verifyPhoto } from "../../src/lib/verify";
 import { cacheKey, dbVerifyCache, engineVersion, photoSha256, ruleVersion } from "../../src/lib/verify/cache";
-import { FIXTURES_DIR, loadFixtureRecalls } from "../../src/lib/verify/fixtures";
-import type { VerifyProofRule, VerifyRecall } from "../../src/lib/verify/types";
+import { loadFixtureCases, meetsExpectation } from "../../src/lib/verify/fixtures";
 
 const run = process.argv.includes("--run");
 const yes = process.argv.includes("--yes");
-const root = process.cwd();
-const read = <T>(p: string) => JSON.parse(readFileSync(p, "utf8")) as T;
+const budget = capFromArgs(process.argv);
+/** One Opus 5.5 vision call, from the measured ones in ai_usage ($0.022 to $0.038); a firm review adds two reviewers. */
+const PER_CALL = costUsd("claude-opus-5-5", { input_tokens: 1700, cache_creation_input_tokens: 900, cache_read_input_tokens: 3400, output_tokens: 1000 });
 
-type Preset = { id: string; recall: string; photo: string; options?: Record<string, unknown> };
+type Job = { p: Preset; technical: boolean; recordedName: string | null };
 
-function presets(): Preset[] {
-  const out: Preset[] = [];
-  const idx = path.join(root, "content", "presets", "index.json");
-  if (existsSync(idx)) {
-    for (const p of read<{ presets: (Preset & { technical?: { options?: Record<string, unknown> } })[] }>(idx).presets) {
-      out.push({ id: p.id, recall: p.recall, photo: p.photo, options: p.options });
-      if (p.technical?.options) out.push({ id: `${p.id} (technical)`, recall: p.recall, photo: p.photo, options: p.technical.options });
-    }
-  }
-  const user = path.join(FIXTURES_DIR, "user", "expected.json");
-  if (existsSync(user)) {
-    for (const [name, e] of Object.entries(read<Record<string, { recall: string }>>(user))) {
-      if (existsSync(path.join(FIXTURES_DIR, "user", name))) out.push({ id: `user/${name}`, recall: e.recall, photo: `user/${name}` });
-    }
+function jobs(): Job[] {
+  const all = listPresets();
+  const out: Job[] = [];
+  for (const p of [...all.presets, ...all.user]) {
+    out.push({ p, technical: false, recordedName: p.recorded ?? null });
+    if (p.technical) out.push({ p, technical: true, recordedName: p.technical.recorded });
   }
   return out;
 }
 
-/** The recall and rule as the claim path loads them, with official image bytes from the fixtures when on disk. */
-function recallFor(num: string): { recall: VerifyRecall; rule: VerifyProofRule } {
-  const all = read<{ recalls: (VerifyRecall & { products: { name: string; model: string; type: string; unitsText?: string }[] })[] }>(path.join(root, "content", "recalls", "recalls.json")).recalls;
-  const rules = read<{ rules: Record<string, VerifyProofRule> }>(path.join(root, "content", "recalls", "proof-rules.json")).rules;
-  const r = all.find((x) => x.number === num);
-  const rule = rules[num];
-  if (!r || !rule) throw new Error(`Recall ${num} or its proof rule is not in content/recalls.`);
-  const onDisk = new Map((loadFixtureRecalls()[num]?.recall.images ?? []).map((i) => [i.url, i.data]));
-  return { recall: { ...r, images: r.images.map((i) => ({ ...i, data: onDisk.get(i.url) })) }, rule };
+async function seed(j: Job, rec: Recorded) {
+  const recall = getRecall(j.p.recall)!;
+  const rule = ruleFor(recall).rule;
+  const photo = presetPhoto(j.p).bytes;
+  const key = cacheKey({ photoSha256: photoSha256(photo), recallNumber: recall.number, ruleVersion: ruleVersion(rule), engineVersion: engineVersion() });
+  if (!rec.vision) return false;
+  await dbVerifyCache.put({
+    key,
+    recallNumber: recall.number,
+    photoSha256: photoSha256(photo),
+    ruleVersion: ruleVersion(rule),
+    engineVersion: engineVersion(),
+    decision: rec.decision as "verified" | "retake" | "firm_review",
+    result: { vision: rec.vision, reviews: rec.reviews?.reviews ?? null },
+    source: "precomputed",
+  });
+  return true;
 }
 
 (async () => {
   if (!dbConfigured()) throw new Error("DATABASE_URL is not set: the precomputed answers live in the verify_result table.");
-  const list = presets();
-  const plan: { p: Preset; needs: boolean; cached: boolean; usd: number }[] = [];
-  for (const p of list) {
-    const { recall, rule } = recallFor(p.recall);
-    const photo = readFileSync(path.join(FIXTURES_DIR, p.photo));
-    const opts = p.options as { effort?: "low" | "medium" | "high" } | undefined;
-    const key = cacheKey({ photoSha256: photoSha256(photo), recallNumber: recall.number, ruleVersion: ruleVersion(rule), engineVersion: engineVersion(undefined, opts?.effort) });
-    const cached = Boolean(await dbVerifyCache.get(key));
-    // A dry run with no AI shows whether this preset needs Claude at all.
-    const dry = await verifyPhoto({ photo, recall, proofRule: rule, options: { ...(p.options ?? {}), cache: false } }, { aiAvailable: () => false, cache: null });
+  const cases = new Map(loadFixtureCases().map((c) => [`${c.recall}|${c.photo}`, c]));
+  const plan: { j: Job; needs: boolean; recording: Recorded | null; usd: number }[] = [];
+  for (const j of jobs()) {
+    const recall = getRecall(j.p.recall);
+    if (!recall) throw new Error(`Preset ${j.p.id} names recall ${j.p.recall}, which is not in recalls.json.`);
+    const options = j.technical && j.p.technical ? j.p.technical.options : {};
+    // A run with no AI shows whether this preset needs Claude at all.
+    const dry = await verifyPhoto({ photo: presetPhoto(j.p).bytes, recall: verifyRecallFor(recall), proofRule: ruleFor(recall).rule, options: { ...options, cache: false } }, { aiAvailable: () => false, cache: null });
     const needs = Object.values(dry.checks).some((c) => c.status === "unavailable");
-    // Measured Opus 5.5 vision calls cost $0.022 to $0.038 (ai_usage, 2026-11-05); a firm review adds two reviewers.
-    const usd = needs && !cached ? costUsd("claude-opus-5-5", { input_tokens: 1700, cache_creation_input_tokens: 900, cache_read_input_tokens: 3400, output_tokens: 1000 }) * (dry.decision === "firm_review" ? 3 : 1) : 0;
-    plan.push({ p, needs, cached, usd });
+    const recording = j.recordedName ? readRecorded(j.recordedName) : null;
+    plan.push({ j, needs, recording, usd: needs && !recording?.vision ? PER_CALL : 0 });
   }
-  console.table(plan.map((x) => ({ preset: x.p.id, recall: x.p.recall, "needs Claude": x.needs, "already stored": x.cached, "expected USD": Number(x.usd.toFixed(3)) })));
+  console.table(plan.map((x) => ({ preset: `${x.j.p.id}${x.j.technical ? " (technical)" : ""}`, recall: x.j.p.recall, "needs Claude": x.needs, recorded: Boolean(x.recording?.vision), "expected USD": Number(x.usd.toFixed(3)) })));
   const total = plan.reduce((s, x) => s + x.usd, 0);
-  console.log(`Expected cost: about $${total.toFixed(2)} (upper estimate: assumes a firm review runs both reviewers wherever one could).`);
+  console.log(`Expected cost: about $${total.toFixed(2)} (one Opus 5.5 vision call per preset still to record; a firm review would add two reviewer calls).`);
   if (!run) return console.log("Nothing was spent. Rerun with --run --yes after approval.");
   if (!yes) throw new Error(`This spends about $${total.toFixed(2)}. Add --yes once the spend is approved.`);
-  for (const x of plan.filter((y) => y.needs && !y.cached)) {
-    const { recall, rule } = recallFor(x.p.recall);
-    const r = await verifyPhoto({ photo: readFileSync(path.join(FIXTURES_DIR, x.p.photo)), recall, proofRule: rule, options: { ...(x.p.options ?? {}), cacheSource: "precomputed" } }, { cache: dbVerifyCache });
-    console.log(`${x.p.id}: ${r.decision} (${r.decided_by}); stored ${r.cache.stored}; ${r.timings.total_ms} ms`);
+
+  const rows: Record<string, unknown>[] = [];
+  for (const x of plan.filter((y) => y.needs)) {
+    let rec = x.recording;
+    let fresh = false;
+    if (!rec?.vision) {
+      if (budget) {
+        const s = await spendSince(budget.since);
+        if (s.usd + PER_CALL * 3 > budget.cap) throw new Error(`Stopped before ${x.j.p.id}: $${s.usd.toFixed(3)} spent since ${budget.since.toISOString()}, cap $${budget.cap}.`);
+      }
+      if (!x.j.recordedName) throw new Error(`Preset ${x.j.p.id} needs Claude but names no recording file.`);
+      rec = await recordPreset(x.j.p, { technical: x.j.technical });
+      fresh = true;
+    }
+    const seeded = await seed(x.j, rec);
+    const c = cases.get(`${x.j.p.recall}|${x.j.p.photo}`);
+    const replay = await (await import("../../src/app/api/try/_lib/presets")).runPreset(x.j.p, { technical: x.j.technical });
+    const checks = Object.fromEntries(replay.result.checks.map((k) => [k.id, { status: k.status, reason_plain: k.reason_plain }]));
+    const meets = c && !x.j.technical ? meetsExpectation(c.expect, { decision: replay.result.decision, decided_by: replay.result.decided_by ?? "", checks }) : null;
+    const score = (id: string) => replay.result.checks.find((k) => k.id === id);
+    rows.push({
+      preset: `${x.j.p.id}${x.j.technical ? " (technical)" : ""}`,
+      run: fresh ? "recorded now" : "existing recording",
+      decision: `${replay.result.decision} (${replay.result.decided_by})`,
+      C1: `${score("C1")?.status}${score("C1")?.score !== null && score("C1")?.score !== undefined ? ` ${score("C1")?.score}` : ""}`,
+      C2: score("C2")?.status,
+      C3: `${score("C3")?.status}${score("C3")?.score !== null && score("C3")?.score !== undefined ? ` ${score("C3")?.score}` : ""}`,
+      "meets fixture case": meets ? (meets.ok ? "yes" : `no: ${meets.misses.join("; ")}`) : "n/a",
+      usd: fresh ? rec.cost_usd : 0,
+      seeded,
+    });
   }
+  console.table(rows);
+  if (budget) console.log(`Spent since ${budget.since.toISOString()}: $${(await spendSince(budget.since)).usd.toFixed(4)} (ai_usage).`);
+  process.exit(0);
 })().catch((e) => {
   console.error(e instanceof Error ? e.message : e);
   process.exit(1);

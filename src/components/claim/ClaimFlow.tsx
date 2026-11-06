@@ -265,7 +265,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
                   <p className="cl-hint">
                     If we find your Brightline purchase, the refund goes back to that payment. No purchase yet?{" "}
                     <a className="text-link" href="/try/shop">
-                      Buy the sample power bank
+                      Buy the sample charger
                     </a>
                     .
                   </p>

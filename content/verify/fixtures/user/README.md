@@ -1,36 +1,33 @@
-# Your photos for the verifier
+# The verifier's photo set
 
-Put photos of products you own here, with an `expected.json` beside them. `tests/verify.live.test.ts` picks up every image listed in `expected.json` and runs `verifyPhoto` on it against the named recall in `../recalls.json`.
+Remedy's verifier is tested on photos that are honestly what they say. None of them is an owner's own claim photo, and nothing was drawn on or edited to look made safe. Every file, its source, author and license is in `../credits.json`. On `/try` they are shown as "a test photo from Wikimedia Commons" or "the CPSC's published example", never as a customer's claim.
 
-Only use products you own. Please do not edit, draw on or composite a photo after taking it: the point is to test real photos.
+## What is in the set
 
-## Shot list (plan section 12)
-
-The verifier checks the product too (C1), so "verified" needs the photo to match the recall it is checked against. Against a recall for a different model, expect `firm_review` instead.
-
-| ID | Photo | Use | Expected |
+| Kind | Files | Source and license | What it tests |
 |---|---|---|---|
-| P1 | Power bank with RECALLED written on it in marker | Preset `power-bank-marked` | verified, against its own recall |
-| P2 | Small appliance with its power cord cut through, cut ends in view | Preset `cord-cut` | verified, against its own recall |
-| P3 | Garment cut in half, both pieces in view | Preset `pajamas-cut` | verified, against its own recall |
-| P4 | The same power bank as P1, before marking | Preset `not-yet-safe` | retake, "write RECALLED on the product first" |
-| P5 | A different power bank model, marked RECALLED | Preset `look-alike` | firm_review, the Two reviewers run |
-| T1 to T30 | 6 product types (power bank, charger cable, small appliance, toy, pillow, garment), 5 photos each, made safe, varied light and angle | Benchmark | verified for most; record what happens |
-| T31 to T40 | 10 photos of a monitor showing official CPSC images | Benchmark, screen check | retake, "Please send a photo of your own product" |
+| Official recall images | `official/27056-*`, `27054-*`, `27045-*`, `25007-droyd-1..3`, `26754-*` | U.S. CPSC, public domain | "Please send a photo of your own product" (C3, by perceptual hash) and the product reference for C1 |
+| The CPSC's published made-safe examples | `official/26125-hair-dryer-cord-cut.png`, `official/25007-droyd-4-straps-cut.jpg`, `official/25007-droyd-5-in-trash.jpg` | U.S. CPSC, recalls 26125 and 25007, public domain | Claim path: recognized as the recall's own example (C3). With that match set aside: right product (C1) and made safe (C2) |
+| Look-alike power banks | `other/commons-powerbank-oraimo.jpg`, `other/commons-powerbank-romoss.jpg` | Wikimedia Commons, CC BY-SA 4.0 (Reladex; Shwangtianyuan) | A different model is not the recalled HAIARA power bank (C1), never verified |
+| A photo of a computer screen | `derived/commons-deskck-lower-monitor.crop.jpg`, a crop of `other/commons-deskck-monitors.jpg` | Wikimedia Commons, public domain (GuitarFreak) | The screen-or-printout part of C3 |
+| An unrelated object, and a blurred copy | `other/commons-coffee-in-a-mug.jpg`, `derived/commons-coffee-in-a-mug.blur8.jpg` | Wikimedia Commons, CC0 (Kurt Kaiser) | C1 mismatch; the blur precheck |
+| Copies of official images | `derived/27056-haiara-1.rotated90-q55.jpg`, `derived/27054-dreo-2.tilt4-crop-q60.jpg` | Made with sharp from CPSC images, public domain | A turned or cropped copy is still caught by the hash |
 
-Tips for the shot: whole product in view, good light, phone held still. For marker photos, write the word large enough to read across the room.
+The known answers are in `../cases.json`; `scripts/verify/sweep.ts` and `tests/verify.live.test.ts` run them against Claude, and the unit tests run the cases that need no model.
 
-## expected.json
+## What the set cannot show yet
 
-A map from file name to the recall it is checked against and what should happen. `decision` is one of `verified`, `retake` or `firm_review`; `checks` lists any check results you want asserted (`pass`, `fail`, `unclear`).
+There is no photo here of a recalled product made safe by its own owner, so the fully verified path (a real owner's power bank marked RECALLED, checked against its own recall) is shown only with the CPSC's published examples, with the official-image match set aside. The screen photo shows a wallpaper, not a recall picture, so it tests the screen check only partly.
+
+## Adding photos later
+
+If the team photographs products it owns, put them here with an `expected.json` beside them. The live test and `/try` pick up every listed image that exists:
 
 ```json
 {
   "P1-power-bank-marked.jpg": { "recall": "27056", "decision": "verified" },
-  "P4-power-bank-unmarked.jpg": { "recall": "27056", "decision": "retake", "checks": { "C2": "fail" } },
-  "P5-other-power-bank-marked.jpg": { "recall": "27056", "decision": "firm_review" },
   "T31-screen.jpg": { "recall": "27054", "decision": "retake", "checks": { "C3": "fail" } }
 }
 ```
 
-The recalls in `../recalls.json` are real CPSC recalls (27056 HAIARA power banks, write "recalled"; 27054 DREO space heaters, cut the cord; 27045 QZH.DUAO pajama sets, cut in half). Your product does not have to be the recalled one: a photo of a different product made safe is a fair test of the look-alike path, so set `decision` to what you expect (usually `firm_review`). To test a verified path, add the real recall your product belongs to in `recalls.json`, or ask the lead to add it.
+`decision` is `verified`, `retake` or `firm_review`; `checks` lists results to assert (`pass`, `fail`, `unclear`). Only use products you own, and do not edit a photo after taking it. The most useful additions match plan section 12: a product made safe and checked against its own recall (P1 to P3), the same product before it is made safe (P4), a different model made safe (P5), and photos of a monitor showing the official CPSC image (T31 to T40).

@@ -7,6 +7,7 @@ import { LitNames, type Source } from "@/components/landing/LitNames";
 import { ShowcaseSearch } from "@/components/landing/ShowcaseSearch";
 import { TourButton } from "@/components/landing/TourButton";
 import { TryPanel, type PanelRun } from "@/components/landing/TryPanel";
+import { cpscExampleReplay } from "@/components/judges/data";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
 import "./landing-shared.css";
@@ -82,13 +83,12 @@ const SOURCES: (Source & { full: string; says: string })[] = [
 const TOOLS = [
   { tool: "PayPal", job: "Pays refunds in seconds, or back to the original purchase inside 180 days", href: "/stack#paypal" },
   { tool: "Claude Opus 5.5", job: "Reads each remedy into a checklist, checks photos, runs two reviewers", href: "/stack#claude" },
-  { tool: "Elastic", job: "Searches every recall in plain words", href: "/stack#elastic" },
+  { tool: "Elastic", job: "Searches every recall in plain words, keyword and semantic", href: "/stack#elastic" },
   { tool: "Channel3", job: "Finds a safe replacement product", href: "/stack#channel3" },
   { tool: "Bryntum", job: "The corrective-action plan", href: "/stack#bryntum" },
   { tool: "AG Grid", job: "The firm's claims queue", href: "/stack#ag-grid" },
-  { tool: "KERNEL", job: "Reads recall pages and firm recall sites", href: "/stack#kernel" },
-  { tool: "Render", job: "Hosting, Postgres and payout jobs", href: "/stack#render" },
-  { tool: "APIMatic", job: "PayPal's SDK for building, and our API's SDKs", href: "/stack#apimatic" },
+  { tool: "APIMatic", job: "Generated the PayPal SDK behind every order, capture and refund", href: "/stack#apimatic" },
+  { tool: "Render", job: "Hosting and Postgres", href: "/stack#render" },
 ];
 
 const FAQ = [
@@ -96,7 +96,7 @@ const FAQ = [
   { q: "Where does the money go?", a: "To your PayPal or Venmo, or, if you bought with PayPal in the last 180 days, straight back to how you paid. This demo runs in PayPal's sandbox." },
   { q: "How is the photo checked?", a: "Remedy checks that it shows the recalled product, that it has been made safe as the recall asks, and that it is your own photo. Unclear photos get two AI reviewers and then a person at the firm." },
   { q: "What if my photo needs another try?", a: "You will see exactly what to change, and you can take a new photo right away." },
-  { q: "Who pays the refund?", a: "The recalling company, from its own PayPal account. Remedy never holds the money." },
+  { q: "Who pays the refund?", a: "The recalling company, through PayPal. Remedy never holds the money. In this demo, the sample firm's PayPal sandbox account pays." },
   { q: "Is this connected to the CPSC?", a: "Remedy uses the CPSC's public recall data and helps firms prepare their monthly progress reports. It is an independent tool, not affiliated with the CPSC or any recalling firm." },
 ];
 
@@ -118,37 +118,38 @@ const PRESETS: { id: string; thumb: string; w: number; h: number; credit: string
   { id: "blurry", thumb: "/landing/blurry-mug.webp", w: 360, h: 270, credit: "Photo: Kurt Kaiser, CC0, via Wikimedia Commons, blurred by us." },
 ];
 
-function nextFor(r: RunFile["runs"][number]): string {
-  const res = r.result;
-  if (res.decision === "verified") return "Every check passed. The refund is ready to send through PayPal.";
-  if (res.decision === "retake") return res.guidance?.plain ? `${res.guidance.plain} Nothing is paid until the photo checks out.` : res.summary.plain;
-  const c1 = res.checks.C1;
-  if (c1?.status === "unclear" && c1.score !== null)
-    return `The cut cord is confirmed. With no official picture to compare in this run, the product match is ${c1.score.toFixed(2)}, just under the 0.85 bar, so two AI reviewers and then a person at the firm take a look.`;
+function nextFor(decision: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
+  if (decision === "verified") return "Every check passed. The refund is ready to send through PayPal.";
+  if (decision === "retake") return guidance ? `${guidance} Nothing is paid until the photo checks out.` : summary;
+  const { C1, C2, C3 } = checks;
+  if (C3?.status === "unclear" && C1?.status === "pass" && C2?.status === "pass")
+    return `Right product (${C1.score?.toFixed(2) ?? "passed"}) and the cut cord are confirmed. Claude also saw that this is the CPSC's own published photo, not one the owner took, so a person at the firm takes a look. With the free picture match on, Remedy asks for the owner's own photo in code.`;
+  if (C1?.status === "unclear" && C1.score !== null) return `The product match is ${C1.score.toFixed(2)}, just under the 0.85 bar, so two AI reviewers and then a person at the firm take a look.`;
   return "Two AI reviewers and then a person at the firm take a look.";
 }
 
-function panelRuns(): PanelRun[] {
+/** The three sample runs. The 26125 photo is told as everywhere else on the site: the owner flow's recorded answer, replayed. */
+async function panelRuns(): Promise<PanelRun[]> {
   const all = (runs as RunFile).runs;
+  const replay = await cpscExampleReplay();
   return PRESETS.flatMap((p) => {
     const r = all.find((x) => x.id === p.id);
     const rec = r ? recallByNumber(r.recall) : null;
     if (!r || !rec) return [];
+    const base = { id: r.id, title: r.title, about: r.about, thumb: p.thumb, thumbW: p.w, thumbH: p.h, credit: p.credit, recall: { number: rec.number, title: shortTitle(rec.title) } };
+    if (r.id === "cord-cut-example" && replay) {
+      const byId = Object.fromEntries(replay.checks.map((c) => [c.id, c]));
+      return [{ ...base, decision: replay.decision as PanelRun["decision"], next: nextFor(replay.decision, byId, null, replay.summaryPlain), totalMs: replay.visionMs, settings: replay.settings, checks: replay.checks }];
+    }
+    const res = r.result;
     return [
       {
-        id: r.id,
-        title: r.title,
-        about: r.about,
-        thumb: p.thumb,
-        thumbW: p.w,
-        thumbH: p.h,
-        credit: p.credit,
-        recall: { number: rec.number, title: shortTitle(rec.title) },
-        decision: r.result.decision as PanelRun["decision"],
-        next: nextFor(r),
-        totalMs: r.result.timings.total_ms,
+        ...base,
+        decision: res.decision as PanelRun["decision"],
+        next: nextFor(res.decision, res.checks, res.guidance?.plain ?? null, res.summary.plain),
+        totalMs: res.timings.total_ms,
         settings: r.settings ?? null,
-        checks: Object.entries(r.result.checks).map(([id, c]) => ({ id, ...c })),
+        checks: Object.entries(res.checks).map(([id, c]) => ({ id, ...c })),
       },
     ];
   });
@@ -158,11 +159,25 @@ function devFragment() {
   const rule = storedRule("27056")?.rule;
   if (!rule) return null;
   const body = { photo_required: rule.photo_required, actions: rule.actions, marker_text: rule.marker_text, must_show: rule.must_show, remedy: rule.remedy, steps: rule.steps.slice(0, 2) };
+  // Short arrays of words stay on one line, as a person would write them; the steps keep one line each.
+  const json = JSON.stringify(body, null, 2).replace(/\[\n\s+("[^"\n]{0,24}")(?:,\n\s+("[^"\n]{0,24}"))?\n\s+\]/g, (_m, a: string, b?: string) => `[${a}${b ? `, ${b}` : ""}]`);
   return `POST /api/v1/proof-rule
 { "recall_number": "27056" }
 
 200 OK
-{ "data": { "rule": ${JSON.stringify(body, null, 2).replace(/\n/g, "\n    ")} } }`;
+{ "data": { "rule": ${json.replace(/\n/g, "\n    ")} } }`;
+}
+
+/** One remedy, word for word, running on into its recall number. */
+function Quote({ q }: { q: (typeof QUOTES)[number] }) {
+  return (
+    <li>
+      <blockquote cite={`/recalls/${q.n}`}>&ldquo;{q.text}&hellip;&rdquo;</blockquote>
+      <Link className="intro-q-src text-link" href={`/recalls/${q.n}`}>
+        Recall {q.n}
+      </Link>
+    </li>
+  );
 }
 
 export default async function Home() {
@@ -183,10 +198,13 @@ export default async function Home() {
               in seconds
             </span>
           </h1>
-          <Info id="page.home" topic="Remedy" />
         </div>
+        {/* The Info button closes the sentence it explains, instead of floating alone under the headline. */}
         <p className="hero-horizon">
-          <span className="hero-half hero-half-a">Snap the product made safe.</span> <span className="hero-half hero-half-b">AI checks it. PayPal pays you.</span>
+          <span className="hero-half hero-half-a">Snap the product made safe.</span>{" "}
+          <span className="hero-half hero-half-b">
+            AI checks it. PayPal pays you. <Info id="page.home" topic="Remedy" />
+          </span>
         </p>
         <div className="hero-actions">
           <Link href="/try" className="btn btn-primary hero-cta">
@@ -233,14 +251,21 @@ export default async function Home() {
             <p className="intro-lead">Remedy turns that photo into a refund in seconds.</p>
             {quotes.length > 0 && (
               <ul className="intro-quotes" aria-label="In the recalls' own words">
-                {quotes.map((q) => (
-                  <li key={q.n}>
-                    <blockquote cite={`/recalls/${q.n}`}>&ldquo;{q.text}&hellip;&rdquo;</blockquote>
-                    <Link className="intro-q-src text-link" href={`/recalls/${q.n}`}>
-                      Recall {q.n}
-                    </Link>
+                <Quote q={quotes[0]} />
+                {quotes.length > 1 && (
+                  <li>
+                    <details className="intro-more">
+                      <summary>
+                        {quotes.length - 1} more, in the recalls&rsquo; own words
+                      </summary>
+                      <ul className="intro-quotes">
+                        {quotes.slice(1).map((q) => (
+                          <Quote key={q.n} q={q} />
+                        ))}
+                      </ul>
+                    </details>
                   </li>
-                ))}
+                )}
               </ul>
             )}
           </div>
@@ -296,7 +321,7 @@ export default async function Home() {
           </p>
         </div>
         <div className="try-fragment" data-reveal="" style={{ "--reveal-i": 1 } as React.CSSProperties}>
-          <TryPanel runs={panelRuns()} />
+          <TryPanel runs={await panelRuns()} />
         </div>
       </section>
 
@@ -312,6 +337,27 @@ export default async function Home() {
             </Link>{" "}
             <Info id="stats.figures" label="" topic="These figures" />
           </p>
+          {/* The sources sit under the heading the figures answer, so the column beside the figures carries its proof. */}
+          <div id="research" className="stats-research">
+            <h3 className="sr-only">Grounded in research</h3>
+            <LitNames lead="Grounded in" sources={SOURCES} />
+            <div className="rs-foot">
+              <details className="rs-more">
+                <summary>What each source says</summary>
+                <ul className="rs-list">
+                {SOURCES.map((s) => (
+                  <li key={s.href}>
+                    <a className="text-link" href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                      {s.full}
+                    </a>
+                    . {s.says}
+                  </li>
+                ))}
+                </ul>
+              </details>
+              <Info id="research.row" label="" topic="The sources" />
+            </div>
+          </div>
         </div>
         <dl className="stats-list">
           {FIGURES.map((f, i) => (
@@ -324,29 +370,6 @@ export default async function Home() {
             </div>
           ))}
         </dl>
-      </section>
-
-      <section id="research" className="research frame" aria-labelledby="research-h">
-        <h2 id="research-h" className="sr-only">
-          Grounded in research
-        </h2>
-        <div className="rs-info">
-          <Info id="research.row" label="" topic="The sources" />
-        </div>
-        <LitNames lead="Grounded in" sources={SOURCES} />
-        <details className="rs-more">
-          <summary>What each source says</summary>
-          <ul className="rs-list">
-            {SOURCES.map((s) => (
-              <li key={s.href}>
-                <a className="text-link" href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
-                  {s.full}
-                </a>
-                . {s.says}
-              </li>
-            ))}
-          </ul>
-        </details>
       </section>
 
       <section id="built" className="built frame" aria-labelledby="built-h">
@@ -379,7 +402,7 @@ export default async function Home() {
           <h2 id="devs-h" className="devs-h">
             For developers
           </h2>
-          <p className="devs-p">Add verify-and-refund to any recall page. One API call, signed webhooks, or our MCP server for AI agents.</p>
+          <p className="devs-p">Add verify-and-refund to any recall page. One API call, or our MCP server for AI agents.</p>
           <p className="devs-actions">
             <Link className="btn btn-ink" href="/developers#key-h">
               Get an API key

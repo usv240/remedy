@@ -48,12 +48,22 @@ export function RecallCard({ recall, compact = false }: { recall: PublicRecall; 
       )}
       {!compact && (
         <details className="cl-remedy">
-          <summary>The remedy, in the CPSC&rsquo;s words</summary>
+          <summary>
+            <span className="cl-remedy-k">The remedy, in the CPSC&rsquo;s words</span>
+            {/* Closed, the first line of the quote shows under the label, so it reads as a quote to open, not a heading. */}
+            <span className="cl-remedy-peek" aria-hidden="true">
+              &ldquo;{recall.remedyText}&rdquo;
+            </span>
+          </summary>
           <blockquote>{recall.remedyText}</blockquote>
           <p className="cl-hint">
-            <a className="text-link" href={recall.url} target="_blank" rel="noreferrer">
-              Read recall {recall.number} on cpsc.gov
-            </a>
+            {recall.sample ? (
+              "Sample recall; the firm and the recall are fictional."
+            ) : (
+              <a className="text-link" href={recall.url} target="_blank" rel="noreferrer">
+                Read recall {recall.number} on cpsc.gov
+              </a>
+            )}
           </p>
         </details>
       )}

@@ -8,8 +8,11 @@ import { db, dbConfigured, schema } from "@/lib/db";
 
 export const SAMPLE_FIRM = "Brightline Home";
 
-/** The recall the sample shop's power bank stands in for: "Bought it from Brightline with PayPal?" appears on it. */
-export const SHOP_RECALL = "27056";
+/**
+ * The recall the sample shop's product belongs to: Brightline Home's own fictional sample recall of its 65W laptop
+ * charger (content/recalls/samples.json). "Bought it from Brightline with PayPal?" appears on it.
+ */
+export const SHOP_RECALL = "BH-2026-01";
 
 /**
  * The refund the sample firm pays in this demonstration when it has set none for a recall (firm_recall.default_refund).

@@ -4,6 +4,7 @@ import path from "node:path";
 import { categorize } from "./classify";
 import { searchCpscLive } from "./cpsc-client";
 import { normalizeRecall } from "./ingest";
+import type { ProofRule } from "./proof-rule";
 import type { Recall, RecallsFile } from "./types";
 
 export const INDEX = "remedy-recalls";
@@ -28,10 +29,55 @@ export type SearchResult = { mode: "elastic" | "local"; model: string | null; re
 // ---------------------------------------------------------------- Data
 
 let cache: { file: RecallsFile; at: number } | null = null;
-/** recalls.json, read once per process from the app root. */
+/**
+ * recalls.json, read once per process from the app root: the CPSC recalls only. Statistics, the explorer's list and
+ * counts, and the benchmark read this, so the fictional sample recalls never count in them.
+ */
 export function loadRecalls(): Recall[] {
   if (!cache) cache = { file: JSON.parse(readFileSync(path.join(process.cwd(), "content", "recalls", "recalls.json"), "utf8")) as RecallsFile, at: Date.now() };
   return cache.file.recalls;
+}
+
+export type SamplesFile = { note: string; recalls: Recall[]; rules: Record<string, ProofRule> };
+let samples: SamplesFile | null = null;
+/** content/recalls/samples.json: the fictional sample firm's own recalls (Brightline Home), each marked sample: true. */
+export function loadSamplesFile(): SamplesFile {
+  if (!samples) {
+    try {
+      const f = JSON.parse(readFileSync(path.join(process.cwd(), "content", "recalls", "samples.json"), "utf8")) as SamplesFile;
+      samples = { note: f.note ?? "", recalls: (f.recalls ?? []).map((r) => ({ ...r, sample: true as const })), rules: f.rules ?? {} };
+    } catch {
+      samples = { note: "", recalls: [], rules: {} };
+    }
+  }
+  return samples;
+}
+export const loadSampleRecalls = (): Recall[] => loadSamplesFile().recalls;
+
+/** Every recall a page, a claim or the API can open: the sample recalls first, then the CPSC recalls. */
+export function loadAllRecalls(): Recall[] {
+  return [...loadSampleRecalls(), ...loadRecalls()];
+}
+
+const SAMPLE_STOP = new Set(["recall", "recalls", "recalled", "the", "and", "for", "with"]);
+/**
+ * Sample recalls that match a search: only when every meaningful word of the query appears in the sample, so a
+ * search for "power bank" never puts the sample charger above real CPSC recalls.
+ */
+export function sampleHits(query: string, opts: { filters?: SearchFilters } = {}): RecallHit[] {
+  const words = query.toLowerCase().split(/[^a-z0-9-]+/).filter((w) => w.length >= 3 && !SAMPLE_STOP.has(w));
+  if (!words.length) return [];
+  return loadSampleRecalls()
+    .filter((r) => matchesFilters(r, opts.filters))
+    .filter((r) => {
+      const text = [r.number, r.title, r.description, r.hazard, r.remedyText, ...r.products.map((p) => p.name)].join(" ").toLowerCase();
+      return words.every((w) => text.includes(w));
+    })
+    .map((r) => ({ ...localSearch(query, { recalls: [r], k: 1 })[0], ...hitOf(r) }));
+}
+
+function hitOf(r: Recall): Omit<RecallHit, "score"> & { score?: number } {
+  return { number: r.number, title: r.title, date: r.date, category: r.category, productNames: [...new Set(r.products.map((p) => p.name).filter(Boolean))], photoRefund: r.photoRefund, units: r.units, image: r.images[0]?.url ?? null, url: r.url };
 }
 
 /** The document indexed for one recall. `summary` is the short text the reranker reads. */
@@ -294,14 +340,17 @@ export async function elasticSearch(query: string, opts: { k?: number; filters?:
 export async function searchRecalls(query: string, opts: { k?: number; filters?: SearchFilters } = {}): Promise<SearchResult> {
   const q = query.trim();
   if (!q) return { mode: elasticConfigured() ? "elastic" : "local", model: null, reranker: null, hits: [] };
+  // A matching sample recall (fictional, marked sample) comes first; the CPSC results follow unchanged.
+  const samples = sampleHits(q, opts);
+  const withSamples = (r: SearchResult): SearchResult => (samples.length ? { ...r, hits: [...samples, ...r.hits.filter((h) => !samples.some((s) => s.number === h.number))].slice(0, Math.max(opts.k ?? r.hits.length, samples.length)) } : r);
   if (elasticConfigured()) {
     try {
-      return await elasticSearch(q, opts);
+      return withSamples(await elasticSearch(q, opts));
     } catch {
       /* fall through to the in-app ranking */
     }
   }
-  return { mode: "local", model: null, reranker: null, hits: localSearch(q, opts) };
+  return withSamples({ mode: "local", model: null, reranker: null, hits: localSearch(q, opts) });
 }
 
 /** Live lookup: the full CPSC database by product name, normalized to `Recall`. */

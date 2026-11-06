@@ -10,8 +10,8 @@ services:
     plan: starter # 0.5 CPU, 512 MB, always on
     region: oregon
     buildCommand: npm ci && npm run build
-    # Apply the reviewed schema (idempotent), seed the sample firm, and load the recall data before each release.
-    preDeployCommand: node scripts/migrate.mjs && npx tsx scripts/load-recalls.ts && npx tsx scripts/seed.ts
+    # Apply the reviewed schema (idempotent), load the recall data, and seed the sample firm and its sample claim history.
+    preDeployCommand: node scripts/migrate.mjs && npx tsx scripts/load-recalls.ts && npx tsx scripts/seed.ts && npx tsx scripts/seed-firm.ts
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeployTrigger: commit
@@ -41,6 +41,8 @@ services:
       - key: NEXT_PUBLIC_PAYPAL_CLIENT_ID
         sync: false
       - key: PAYPAL_WEBHOOK_ID # from a sandbox webhook pointed at https://<service>/api/webhooks/paypal
+        sync: false
+      - key: PAYPAL_VENDOR_EMAIL # the sandbox business account that stands in for the retailer of a safe replacement
         sync: false
       - key: NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY
         sync: false

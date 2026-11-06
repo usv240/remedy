@@ -27,9 +27,16 @@ export async function GET(req: Request) {
           photo_refund: r.recall.photoRefund,
         },
         proof_rule: r.recall.rule,
-        proof_rule_source: r.recall.ruleSource === "ai" ? `Claude (${r.recall.ruleModel}), extracted from the remedy text and stored` : "Quick read: Remedy's deterministic keyword rules, no model",
-        source: r.from === "list" ? "Remedy's list of CPSC recalls since January 2024" : "CPSC Recalls API, fetched live",
-        credit: "Recall data and images: US Consumer Product Safety Commission (cpsc.gov), public domain.",
+        proof_rule_source:
+          r.recall.ruleSource === "ai"
+            ? `Claude (${r.recall.ruleModel}), extracted from the remedy text and stored`
+            : r.recall.ruleSource === "firm"
+              ? "Written by hand by Brightline Home, a fictional sample firm, no model"
+              : "Quick read: Remedy's deterministic keyword rules, no model",
+        source: r.recall.sample ? "Brightline Home's fictional sample recall (content/recalls/samples.json), not a CPSC recall" : r.from === "list" ? "Remedy's list of CPSC recalls since January 2024" : "CPSC Recalls API, fetched live",
+        credit: r.recall.sample
+          ? "Sample recall; fictional. Photos: one real charger before and after its cord was cut, by Dmitry G, Wikimedia Commons, public domain (brand marks removed)."
+          : "Recall data and images: US Consumer Product Safety Commission (cpsc.gov), public domain.",
       };
       return new Response(JSON.stringify(body, null, 2), {
         headers: { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": `attachment; filename="remedy-recall-${r.recall.number}.json"` },

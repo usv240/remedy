@@ -203,6 +203,90 @@
   cursor: pointer;
   font-weight: 500;
 }
+/* Both disclosures carry the site's plus, which folds into a minus when open, so a closed one never reads as a heading. */
+.cl-remedy > summary,
+.cl-sale > summary {
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 6px;
+  transition: background-color var(--dur-press) var(--ease-out);
+}
+.cl-remedy > summary::-webkit-details-marker,
+.cl-sale > summary::-webkit-details-marker {
+  display: none;
+}
+.cl-remedy > summary::after,
+.cl-sale > summary::after {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-left: auto;
+  color: var(--muted);
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:
+    12px 1.5px,
+    1.5px 12px;
+  transition:
+    transform var(--dur-menu) var(--ease-out),
+    background-size var(--dur-menu) var(--ease-out);
+}
+.cl-remedy[open] > summary::after,
+.cl-sale[open] > summary::after {
+  background-size:
+    12px 1.5px,
+    1.5px 0;
+  transform: rotate(180deg);
+}
+.cl-remedy > summary:active,
+.cl-sale > summary:active {
+  background-color: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+/* The remedy's summary is two lines: the label with the plus, then the quote's first line, cut with an ellipsis. */
+.cl-remedy > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.75rem;
+  padding: 6px 0;
+}
+.cl-remedy > summary::after {
+  grid-column: 2;
+  grid-row: 1;
+}
+.cl-remedy-k {
+  grid-column: 1;
+  grid-row: 1;
+}
+.cl-remedy-peek {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-top: 2px;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cl-remedy[open] .cl-remedy-peek {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cl-remedy > summary:hover .cl-remedy-k,
+  .cl-sale > summary:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cl-remedy > summary::after,
+  .cl-sale > summary::after {
+    transition: none;
+  }
+}
 .cl-remedy blockquote {
   margin: 4px 0 0;
   padding: 12px 14px;

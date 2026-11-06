@@ -21,7 +21,8 @@ export function Measured() {
           <li>
             <p className="jm-fig tabular">{ex.score.toFixed(2)}</p>
             <p className="jm-what">
-              right-product score for the CPSC&rsquo;s own 26125 photo, with the cut cord {ex.cut ? "confirmed" : "not confirmed"}, when the official-picture match is switched off to see what Claude reads.
+              right-product score for the CPSC&rsquo;s own 26125 photo, cut cord {ex.cut ? "confirmed" : "not confirmed"}, with the official-picture match off.
+              {ex.noticed ? " Claude also saw it is the CPSC's picture, so a person looks; with the match on, it is answered in code." : ""}
             </p>
             <p className="jm-src">
               {MEASURED.environment}, one live call in {fmtMs(ex.ms)}, content/presets/recorded/cpsc-example.technical.json
@@ -29,11 +30,6 @@ export function Measured() {
           </li>
         )}
       </ul>
-      {ex?.noticed && (
-        <p className="page-prose jm-note">
-          In that same run Claude also noted that the photo matches the official CPSC image in every detail, so it is not the owner&rsquo;s own. With the match switched on, Remedy answers it in code and asks for the owner&rsquo;s photo.
-        </p>
-      )}
       <p className="page-note">
         Measured {new Date(`${MEASURED.measuredAt}T12:00:00Z`).toLocaleDateString("en-US", { dateStyle: "long" })}. Try each one:{" "}
         <Link className="text-link" href="/try">

@@ -6,7 +6,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { loadRecalls, searchRecalls, type SearchFilters } from "@/lib/recall/search";
+import { loadAllRecalls, loadRecalls, loadSamplesFile, searchRecalls, type SearchFilters } from "@/lib/recall/search";
 import type { ProofRule } from "@/lib/recall/proof-rule";
 import type { RawCpscRecall, Recall } from "@/lib/recall/types";
 import type { RuleSummary } from "./rule-chips";
@@ -37,14 +37,20 @@ let extract: { plain: ExtractFile | null; selfcheck: ExtractFile | null } | null
 export const rules = () => (rulesFile ??= readJson<RulesFile>("proof-rules.json"));
 const imageRows = () => (images ??= readJson<Record<string, ImageRow[]>>("image-hashes.json"));
 
+/** A CPSC recall, or one of the fictional sample firm's recalls (marked sample: true). */
 export function recallByNumber(n: string): Recall | null {
-  byNumber ??= new Map(loadRecalls().map((r) => [r.number, r]));
+  byNumber ??= new Map(loadAllRecalls().map((r) => [r.number, r]));
   return byNumber.get(normalizeNumber(n)) ?? null;
 }
 
-/** "27056", "Recall 27056", "26-127" and the cpsc.gov recall URL all name a recall number. */
+/**
+ * "27056", "Recall 27056", "26-127" and the cpsc.gov recall URL all name a recall number. A sample recall number
+ * ("bh-2026-01") comes back in capitals.
+ */
 export function normalizeNumber(s: string): string {
   const t = String(s ?? "").trim();
+  const sample = /\bBH-\d{4}-\d{2}\b/i.exec(t);
+  if (sample) return sample[0].toUpperCase();
   const m = /\b(\d{2})-?(\d{3})\b/.exec(t);
   return m ? `${m[1]}${m[2]}` : t;
 }
@@ -57,8 +63,11 @@ export function rawRecord(n: string): RawCpscRecall | null {
 
 /** The stored rule and where it came from. */
 export function storedRule(n: string): { rule: ProofRule; source: string; model: string; extractedAt: string; method: string } | null {
-  const f = rules();
   const num = normalizeNumber(n);
+  // A sample recall's rule was written by hand by the sample firm: no model, no extraction run.
+  const own = loadSamplesFile().rules[num];
+  if (own) return { rule: own, source: "firm", model: "none (written by the sample firm)", extractedAt: "", method: "Written by hand by Brightline Home, a fictional sample firm. No model call." };
+  const f = rules();
   const rule = f.rules[num];
   return rule ? { rule, source: f.sources[num] ?? "selfcheck", model: f.model, extractedAt: f.extractedAt, method: f.method } : null;
 }
@@ -98,7 +107,8 @@ export function extractionTrace(n: string) {
 
 /** Official images with a local thumbnail where one was downloaded (public/recalls/<number>/<i>.webp). */
 export function imagesFor(r: Recall): { url: string; caption: string; thumb: string | null; width: number | null; height: number | null }[] {
-  const local = imageRows()[r.number] ?? [];
+  // A sample recall carries its own thumbnails and sizes (content/recalls/samples.json).
+  const local: { url: string; thumb?: string; width?: number; height?: number }[] = r.sample ? (r.images as { url: string; thumb?: string; width?: number; height?: number }[]) : (imageRows()[r.number] ?? []);
   return r.images.map((img) => {
     const hit = local.find((l) => l.url === img.url || l.url.replace(/^https?:\/\/(www\.)?/, "") === img.url.replace(/^https?:\/\/(www\.)?/, ""));
     return { url: img.url, caption: img.caption, thumb: hit?.thumb ?? null, width: hit?.width ?? null, height: hit?.height ?? null };
@@ -162,10 +172,13 @@ export type ApiHit = {
   units: number | null;
   remedies: string[];
   image: { url: string; thumb: string | null; caption: string } | null;
+  /** Empty for a sample recall, which has no cpsc.gov page. */
   cpsc_url: string;
   page: string;
   score: number | null;
   proof_rule: RuleSummary | null;
+  /** True for a fictional sample recall (Brightline Home), never a CPSC recall. */
+  sample: boolean;
 };
 
 export function toApiHit(r: Recall, score: number | null): ApiHit {
@@ -185,6 +198,7 @@ export function toApiHit(r: Recall, score: number | null): ApiHit {
     page: `/recalls/${r.number}`,
     score,
     proof_rule: rule ? summarize(rule) : null,
+    sample: Boolean(r.sample),
   };
 }
 
@@ -262,6 +276,9 @@ export function recallDetail(n: string) {
     page: `/recalls/${r.number}`,
     claim_page: `/claim/${r.number}`,
     proof_rule: stored ? { ...stored.rule, source: stored.source, model: stored.model, extracted_at: stored.extractedAt } : null,
+    /** A fictional sample recall: the sample firm's own, not from the CPSC. */
+    sample: Boolean(r.sample),
+    sample_note: r.sample ? "Sample recall; fictional. Brightline Home is a fictional sample firm, and this is not a CPSC recall." : null,
   };
 }
 export type RecallDetail = NonNullable<ReturnType<typeof recallDetail>>;

@@ -7,9 +7,10 @@ import { ClaimInfo } from "@/components/claim/ClaimInfo";
 import { FindRecall, type RecallPick } from "@/components/claim/FindRecall";
 import { RecallCard } from "@/components/claim/RecallCard";
 import { StepArt } from "@/components/claim/StepArt";
+import { SHOP } from "@/lib/payments/shop-catalog";
 import { markerWord, ownerSteps } from "@/components/claim/steps";
 
-const SHOP_RECALL = "27056";
+const SHOP_RECALL = SHOP.recall;
 
 /** "Your photo": pick a recall, then the same photo, checks and result as an owner's claim, live. */
 export function YourPhoto({ picks }: { picks: RecallPick[] }) {

@@ -577,3 +577,175 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* The section rhythm, a step tighter on a wide screen so the evidence reads as one page, not a stack of posters. */
+.judges .page-section {
+  margin-top: clamp(2.25rem, 1.75rem + 1.4vw, 3.25rem);
+}
+.jm-note {
+  font-size: 0.9375rem;
+  max-width: 76ch;
+}
+.judges .lede {
+  max-width: 44rem;
+}
+.judges .page-note,
+.judges .jx-body > p {
+  max-width: 76ch;
+}
+.jb th,
+.jb td {
+  padding-block: 8px;
+}
+.jc {
+  margin: 0;
+  padding: 0;
+}
+
+/* The photo checks: a table from 761px, a list on a phone. Only one of the two is ever shown. */
+.jf-list {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 4px 16px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+.jf-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--edge);
+}
+.jf-item:last-child {
+  border-bottom: 0;
+}
+.jf-item p {
+  margin: 0;
+}
+.jf-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.jf-time {
+  flex: none;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+}
+.jf-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.jf-item-meta .pill {
+  flex: none;
+}
+.jf-item-why {
+  font-size: 0.9375rem;
+}
+.jf-abouts {
+  display: none;
+  margin: 0;
+  padding-left: 1.1rem;
+  gap: 6px;
+}
+@media (max-width: 760px) {
+  .jb-wrap:has(> .jf) {
+    display: none;
+  }
+  .jf-list {
+    display: block;
+  }
+  .jf-abouts {
+    display: grid;
+  }
+  .jm-note {
+    font-size: 0.9375rem;
+  }
+  .ja-item {
+    padding: 14px 16px;
+    gap: 6px;
+  }
+  .ja-text,
+  .judges .jp-step p:not(.jp-head) {
+    font-size: 0.875rem;
+  }
+  /* The four results as a 2-up grid of figures, the way a phone shows key numbers. */
+  .jr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .jr-link {
+    padding: 12px 12px 14px;
+    gap: 4px;
+  }
+  .jr-fig {
+    font-size: 1.5rem;
+  }
+  .jr-what {
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+  .jr-base {
+    font-size: 0.8125rem;
+  }
+  .jf-item {
+    padding: 10px 0;
+    gap: 3px;
+  }
+  .judges .page-section {
+    margin-top: 2rem;
+  }
+  .jp-tour .muted {
+    font-size: 0.875rem;
+  }
+  /* The jump links wrap onto a second line instead of running off the edge, where they read as clipped. */
+  .jp-toc ul {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+  .jp-toc-link {
+    padding: 0 12px;
+    font-size: 0.875rem;
+  }
+  .cmp {
+    min-width: 60rem;
+  }
+  /* The criteria's "more" opens from a plain row, not a second card under each one. */
+  .jp-criterion .jx-disc > summary {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+  /* The benchmark: field names on one line, tighter cells, so each row is one line and the table scrolls sideways. */
+  .jb th,
+  .jb td {
+    padding: 7px 8px;
+  }
+  .jb tbody th {
+    white-space: nowrap;
+  }
+  /* Measured: the figure beside what it measures. */
+  .jm li {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 12px 14px;
+  }
+  .jm-fig {
+    grid-row: 1 / 3;
+    font-size: 1.5rem;
+  }
+  .jm-src {
+    grid-column: 2;
+  }
+  /* How it compares: wider columns (60rem, set below), so each cell wraps to two lines, not five. */
+  .cmp tbody th {
+    width: 9rem;
+  }
+}

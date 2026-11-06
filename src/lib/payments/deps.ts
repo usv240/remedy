@@ -26,10 +26,11 @@ export const LIMITS = { perPaymentCents: 5000, perDayCents: 50_000, bulkClaims: 
 let defaults: Promise<PaymentsDeps> | null = null;
 
 async function loadDefaults(): Promise<PaymentsDeps> {
-  const [{ PgStore }, { audit }, { paypalRest }] = await Promise.all([import("./pg-store"), import("@/lib/audit"), import("@/lib/paypal/client")]);
+  // Orders and Payments go through the APIMatic-generated PayPal Server SDK; Payouts and Transaction Search use REST.
+  const [{ PgStore }, { audit }, { sdkRest }] = await Promise.all([import("./pg-store"), import("@/lib/audit"), import("@/lib/paypal/sdk-rest")]);
   const store = new PgStore();
   const firmId = await store.sampleFirmId().catch(() => null);
-  return { store, ledger: audit as Ledger, rest: paypalRest as Rest, now: () => new Date(), firm: { id: firmId, name: SAMPLE_FIRM_NAME } };
+  return { store, ledger: audit as Ledger, rest: sdkRest as Rest, now: () => new Date(), firm: { id: firmId, name: SAMPLE_FIRM_NAME } };
 }
 
 export async function resolveDeps(partial: Partial<PaymentsDeps> = {}): Promise<PaymentsDeps> {

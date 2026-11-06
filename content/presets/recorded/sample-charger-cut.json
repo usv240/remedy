@@ -1,0 +1,255 @@
+{
+  "recorded_at": "2026-11-06T04:16:52.023Z",
+  "preset": "sample-charger-cut",
+  "recall": "BH-2026-01",
+  "options": {},
+  "vision": {
+    "report": {
+      "scene": "A hand holds the end of a black charger cord with exposed bare wires sticking out of its strain relief, with an opened black charger case and yellow insulating pieces lying on a white surface behind it.",
+      "product": {
+        "match_score": 0.8,
+        "matching_details": [
+          "Black cord with a ridged, dotted strain relief at the case end, held at left, matches the cord collar in official image 2",
+          "Thin black cord looping across the white surface in the middle of the photo matches the long black cord in official image 1",
+          "Black rectangular charger case at right matches the black case shape in official image 1",
+          "Small ferrite bead on the cord in the upper middle, near the DC plug, matches the ferrite bead in official image 1"
+        ],
+        "differing_details": [
+          "The charger case at right is pried open and empty, with yellow insulating shields lying loose at top, so the outer shape and any label cannot be compared",
+          "No brand name, label or wattage is visible to confirm it is a Brightline 65W charger"
+        ],
+        "reason_plain": "Probably the same charger, but the case is taken apart and no label shows, so the exact product cannot be confirmed.",
+        "reason_technical": "Strain relief style, black cord, ferrite bead and black case shape fit the reference images, but the case is disassembled and no printed label, brand or rating is readable, so it cannot be confirmed as the exact recalled product."
+      },
+      "actions": [
+        {
+          "action": "cut_cord",
+          "done": true,
+          "confidence": 0.85,
+          "evidence": "At left, the cord end held in the fingers shows its strain relief collar with a white insulated wire and two bare braided metal conductors sticking out, cut ends showing. The cord is separated from the charger case, which lies opened at right."
+        }
+      ],
+      "handwritten_text": [],
+      "identifiers": {
+        "model_text": null,
+        "lot_text": null,
+        "date_code_text": null,
+        "label_visible": false,
+        "where": null
+      },
+      "photo_source": {
+        "kind": "camera_photo",
+        "signs": [
+          "none"
+        ],
+        "confidence": 0.9,
+        "reason": "Real fingers in the foreground, shallow depth of field, uneven lighting and shadows show a normal camera photo of physical objects, with no screen or print signs."
+      },
+      "retake_tip": "Please also show the charger's label with the brand and model in the same photo as the cut cord."
+    },
+    "model": "claude-opus-5-5",
+    "ms": 9359,
+    "usage": {
+      "input_tokens": 1658,
+      "output_tokens": 729,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 4582
+    },
+    "replayed": false
+  },
+  "reviews": {
+    "votes": [
+      {
+        "answer": "meets",
+        "evidence": [
+          {
+            "check": "right_product",
+            "seen": "Black cord strain relief with a ribbed, dotted grip pattern and a flanged collar, matching the cord exit shown in official image 2",
+            "where": "left center, held between the fingers"
+          },
+          {
+            "check": "right_product",
+            "seen": "Black charger housing with rounded ends, opened up, consistent with the black brick shape in official image 1",
+            "where": "right side of the photo"
+          },
+          {
+            "check": "right_product",
+            "seen": "Long black fixed cord running from the cut strain relief back across the table, with a barrel plug end",
+            "where": "center and upper middle, looping across the background"
+          },
+          {
+            "check": "made_safe",
+            "seen": "Cord cut at the strain relief with three exposed conductors: one white insulated wire and two bare stranded metal wires",
+            "where": "center left, sticking out to the right of the strain relief"
+          },
+          {
+            "check": "made_safe",
+            "seen": "Yellow insulating sheets removed from the housing, one with holes punched in it",
+            "where": "top center and top right"
+          },
+          {
+            "check": "own_photo",
+            "seen": "Real fingers holding the cord, natural shadows, and background blur from shallow focus, with no screen pixels or print edges",
+            "where": "left edge and across the whole image"
+          }
+        ],
+        "model_read": null,
+        "marker_text_read": null,
+        "reason_plain": "Meets. This looks like a real camera photo of a black laptop charger with a fixed cord, opened up and cut, matching the recall pictures.",
+        "reason_technical": "Owner photo shows a black laptop power brick with rounded end caps, a fixed DC cord with ribbed strain relief and a barrel plug, all consistent with official images 1 and 2. The housing is opened and the cord severed at the strain relief, with exposed conductors. Photo shows a hand, depth of field blur and natural lighting, so it is a camera photo of a physical object. No brand or model label is visible, and the recall lists no model numbers, so the match rests on shape, color and cord details.",
+        "confidence": 0.7,
+        "reviewer": "product",
+        "model": "claude-opus-5-5",
+        "ms": 11033,
+        "usage": {
+          "input_tokens": 1653,
+          "output_tokens": 935,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 2492
+        },
+        "counted": true
+      },
+      {
+        "answer": "meets",
+        "evidence": [
+          {
+            "check": "made_safe",
+            "seen": "Black cord end with its molded strain relief grommet, fully separated, with a white insulated wire and two bare stranded metal wires sticking out of the end",
+            "where": "left center, held between the owner's thumb and finger"
+          },
+          {
+            "check": "made_safe",
+            "seen": "The separation is at the strain relief collar, the part that sits where the cord enters the charger case",
+            "where": "center left, at the flanged black collar on the held cord"
+          },
+          {
+            "check": "own_photo",
+            "seen": "Black charger case, opened up, with internal parts visible and no cord attached",
+            "where": "right side of the photo"
+          },
+          {
+            "check": "own_photo",
+            "seen": "Yellow insulating sheets from inside the charger and the rest of the black cord with a small plug end",
+            "where": "top center and top right, with the cord looping across the middle"
+          }
+        ],
+        "model_read": null,
+        "marker_text_read": null,
+        "reason_plain": "Meets. The cord is cut off where it meets the charger case, with bare wires showing, and the charger body is in the same photo.",
+        "reason_technical": "Required action cut_cord is shown: the cord terminates at its strain relief grommet with exposed conductors (white insulated lead and two stranded bare conductors), detached from the housing. cut_or_damage is visible in the foreground. whole_product is satisfied loosely: the charger housing (opened, out of focus) and the remaining cord with plug are in frame on the right and background. No model number is readable, and the case is disassembled, so confidence is moderate.",
+        "confidence": 0.72,
+        "reviewer": "remedy",
+        "model": "claude-opus-5-5",
+        "ms": 10614,
+        "usage": {
+          "input_tokens": 1652,
+          "output_tokens": 841,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 1621
+        },
+        "counted": true
+      }
+    ],
+    "decision": "verify",
+    "agreed": true,
+    "summary": {
+      "plain": "Both reviewers found it in the photo: this is the recalled product, made safe.",
+      "technical": "Product reviewer: meets, confidence 0.7; evidence: [right_product] Black cord strain relief with a ribbed, dotted grip pattern and a flanged collar, matching the cord exit shown in official image 2 (left center, held between the fingers); [right_product] Black charger housing with rounded ends, opened up, consistent with the black brick shape in official image 1 (right side of the photo); [right_product] Long black fixed cord running from the cut strain relief back across the table, with a barrel plug end (center and upper middle, looping across the background); [made_safe] Cord cut at the strain relief with three exposed conductors: one white insulated wire and two bare stranded metal wires (center left, sticking out to the right of the strain relief); [made_safe] Yellow insulating sheets removed from the housing, one with holes punched in it (top center and top right); [own_photo] Real fingers holding the cord, natural shadows, and background blur from shallow focus, with no screen pixels or print edges (left edge and across the whole image) | Remedy reviewer: meets, confidence 0.72; evidence: [made_safe] Black cord end with its molded strain relief grommet, fully separated, with a white insulated wire and two bare stranded metal wires sticking out of the end (left center, held between the owner's thumb and finger); [made_safe] The separation is at the strain relief collar, the part that sits where the cord enters the charger case (center left, at the flanged black collar on the held cord); [own_photo] Black charger case, opened up, with internal parts visible and no cord attached (right side of the photo); [own_photo] Yellow insulating sheets from inside the charger and the rest of the black cord with a small plug end (top center and top right, with the cord looping across the middle)"
+    },
+    "reviews": [
+      {
+        "answer": "meets",
+        "evidence": [
+          {
+            "check": "right_product",
+            "seen": "Black cord strain relief with a ribbed, dotted grip pattern and a flanged collar, matching the cord exit shown in official image 2",
+            "where": "left center, held between the fingers"
+          },
+          {
+            "check": "right_product",
+            "seen": "Black charger housing with rounded ends, opened up, consistent with the black brick shape in official image 1",
+            "where": "right side of the photo"
+          },
+          {
+            "check": "right_product",
+            "seen": "Long black fixed cord running from the cut strain relief back across the table, with a barrel plug end",
+            "where": "center and upper middle, looping across the background"
+          },
+          {
+            "check": "made_safe",
+            "seen": "Cord cut at the strain relief with three exposed conductors: one white insulated wire and two bare stranded metal wires",
+            "where": "center left, sticking out to the right of the strain relief"
+          },
+          {
+            "check": "made_safe",
+            "seen": "Yellow insulating sheets removed from the housing, one with holes punched in it",
+            "where": "top center and top right"
+          },
+          {
+            "check": "own_photo",
+            "seen": "Real fingers holding the cord, natural shadows, and background blur from shallow focus, with no screen pixels or print edges",
+            "where": "left edge and across the whole image"
+          }
+        ],
+        "model_read": null,
+        "marker_text_read": null,
+        "reason_plain": "Meets. This looks like a real camera photo of a black laptop charger with a fixed cord, opened up and cut, matching the recall pictures.",
+        "reason_technical": "Owner photo shows a black laptop power brick with rounded end caps, a fixed DC cord with ribbed strain relief and a barrel plug, all consistent with official images 1 and 2. The housing is opened and the cord severed at the strain relief, with exposed conductors. Photo shows a hand, depth of field blur and natural lighting, so it is a camera photo of a physical object. No brand or model label is visible, and the recall lists no model numbers, so the match rests on shape, color and cord details.",
+        "confidence": 0.7,
+        "reviewer": "product",
+        "model": "claude-opus-5-5",
+        "ms": 11033,
+        "usage": {
+          "input_tokens": 1653,
+          "output_tokens": 935,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 2492
+        }
+      },
+      {
+        "answer": "meets",
+        "evidence": [
+          {
+            "check": "made_safe",
+            "seen": "Black cord end with its molded strain relief grommet, fully separated, with a white insulated wire and two bare stranded metal wires sticking out of the end",
+            "where": "left center, held between the owner's thumb and finger"
+          },
+          {
+            "check": "made_safe",
+            "seen": "The separation is at the strain relief collar, the part that sits where the cord enters the charger case",
+            "where": "center left, at the flanged black collar on the held cord"
+          },
+          {
+            "check": "own_photo",
+            "seen": "Black charger case, opened up, with internal parts visible and no cord attached",
+            "where": "right side of the photo"
+          },
+          {
+            "check": "own_photo",
+            "seen": "Yellow insulating sheets from inside the charger and the rest of the black cord with a small plug end",
+            "where": "top center and top right, with the cord looping across the middle"
+          }
+        ],
+        "model_read": null,
+        "marker_text_read": null,
+        "reason_plain": "Meets. The cord is cut off where it meets the charger case, with bare wires showing, and the charger body is in the same photo.",
+        "reason_technical": "Required action cut_cord is shown: the cord terminates at its strain relief grommet with exposed conductors (white insulated lead and two stranded bare conductors), detached from the housing. cut_or_damage is visible in the foreground. whole_product is satisfied loosely: the charger housing (opened, out of focus) and the remaining cord with plug are in frame on the right and background. No model number is readable, and the case is disassembled, so confidence is moderate.",
+        "confidence": 0.72,
+        "reviewer": "remedy",
+        "model": "claude-opus-5-5",
+        "ms": 10614,
+        "usage": {
+          "input_tokens": 1652,
+          "output_tokens": 841,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 1621
+        }
+      }
+    ],
+    "ms": 11034,
+    "model": "claude-opus-5-5"
+  },
+  "cost_usd": 0.1134,
+  "decision": "verified",
+  "decided_by": "reviewers"
+}

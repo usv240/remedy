@@ -90,7 +90,7 @@ type Linked = { sale: SaleRow; view: LinkView };
 /** Link the owner's PayPal purchase from the sample shop, so the refund can go back to it inside 180 days. */
 async function linkSale(recallNumber: string, link: SaleLinkInput | null | undefined, now: Date): Promise<Linked | { view: LinkView } | null> {
   if (!link || (!link.saleId && !link.paypalEmail)) return null;
-  if (recallNumber !== SHOP_RECALL) return { view: { status: "not_this_recall", message: "Purchases from the Brightline sample shop link only to the sample power bank recall." } };
+  if (recallNumber !== SHOP_RECALL) return { view: { status: "not_this_recall", message: "Purchases from the Brightline sample shop link only to the sample charger recall, BH-2026-01." } };
   let sale: SaleRow | undefined;
   if (link.saleId && link.captureId) {
     [sale] = await db()
@@ -192,7 +192,8 @@ export type StoredResult = {
   official: VerifyResult["official"];
   photo: { width: number; height: number; exif: boolean; mime: string | null; dhash: string | null };
   amount_source: "firm" | "capture" | "demo" | null;
-  rule_source: "ai" | "quick_read";
+  /** firm: written by hand by the (sample) firm, no model. */
+  rule_source: "ai" | "quick_read" | "firm";
   source: SubmitInput["source"];
   link: LinkView | null;
   resting: boolean;
