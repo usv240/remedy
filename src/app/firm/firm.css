@@ -1190,3 +1190,102 @@
     display: none;
   }
 }
+
+/* Scan a catalog */
+.sc-form {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+.sc-area textarea {
+  width: 100%;
+  min-height: 11rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.sc-file input {
+  padding-top: 8px;
+}
+.sc-sample {
+  background: none;
+  border: 0;
+  padding: 0 4px;
+  min-height: 44px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  color: var(--link);
+}
+.sc-sample:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+/* Count cards that filter the table: peers, each one doing work (app sheet, list). */
+.sc-counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.sc-count {
+  min-height: 61px;
+  padding: 10px 12px;
+  text-align: left;
+  display: grid;
+  gap: 2px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    transform var(--dur-press) var(--ease-out);
+}
+.sc-count:active {
+  transform: scale(0.98);
+}
+.sc-count[aria-pressed="true"] {
+  border: 1.5px solid var(--accent-edge);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  padding: 9.5px 11.5px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sc-count:hover:not([aria-pressed="true"]) {
+    background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
+  }
+}
+.sc-count-k {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.sc-count-v {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.sc-ai {
+  margin-top: 10px;
+  font-size: 0.875rem;
+}
+.sc-table {
+  min-width: 56rem;
+}
+.sc-by {
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.sc-link {
+  min-height: 0;
+  display: inline;
+}
+.sc-why {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  max-width: 22rem;
+}
+.by-table-wrap + .by-drop {
+  margin-top: 12px;
+}

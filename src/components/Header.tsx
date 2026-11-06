@@ -10,7 +10,7 @@ const LINKS = [
   { href: "/try", label: "Try a photo" },
   { href: "/recalls", label: "Recalls" },
   { href: "/developers", label: "Developers" },
-  { href: "/judges", label: "For judges" },
+  { href: "/evidence", label: "Evidence" },
 ];
 
 const CTA = { href: "/try", label: "Try a photo" };

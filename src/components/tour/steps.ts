@@ -1,5 +1,5 @@
 /**
- * The guided tour: the five-minute path for judges, one stop per thing to look at. Each stop names a page, a CSS
+ * The guided tour: the five-minute path through the product, one stop per thing to look at. Each stop names a page, a CSS
  * selector for the element it describes, and one sentence. Stops are added as the pages they point at ship.
  */
 import { STOPS } from "./stops";

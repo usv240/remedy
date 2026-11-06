@@ -22,7 +22,7 @@ const PAGES = [
   ["/claim/BH-2026-01", "Get your refund"],
   ["/recalls/BH-2026-01", "65W laptop chargers (sample recall)"],
   ["/try/presets/sample-charger-cut", "Brightline's sample charger, cord cut"],
-  ["/judges", "For judges"],
+  ["/evidence", "Evidence"],
   ["/learn", "How recalls work"],
   ["/about", "About Remedy"],
   ["/firm", "Brightline Home"],
@@ -30,6 +30,8 @@ const PAGES = [
   ["/firm/plan", "Recall plan"],
   ["/firm/reports", "CPSC monthly report"],
   ["/firm/buyers", "Buyers"],
+
+  ["/firm/scan", "Scan a catalog"],
   ["/developers", "Developers"],
   ["/developers/docs", "API docs"],
   ["/developers/keys", "Your keys"],
@@ -93,6 +95,32 @@ check("Bryntum theme is served", theme.status === 200 && (theme.headers.get("con
 const head = await fetch(B + "/");
 check("security headers", Boolean(head.headers.get("strict-transport-security") && head.headers.get("x-content-type-options") && head.headers.get("content-security-policy")));
 
+// Catalog scan: the sample catalog scans without AI (ai=false keeps CI at zero spend), and the MCP tool is listed.
+const sample = await (await fetch(`${B}/api/v1/scan/sample`)).json().catch(() => null);
+check("scan: sample catalog has real recalls and clear items", sample?.data?.items?.length >= 6, `${sample?.data?.items?.length} items`);
+const scan = await (await fetch(`${B}/api/v1/scan`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: sample?.data?.items ?? [{ name: "HAIARA power bank" }], ai: false }) })).json().catch(() => null);
+check("scan: photo-refund rows carry the recall and a claim link, clear rows have none", scan?.data?.summary?.photo_refund >= 3 && scan.data.summary.clear >= 3 && scan.data.results.filter((r) => r.status === "photo_refund").every((r) => r.recall?.number && r.claim_url?.includes("/claim/")), `${JSON.stringify(scan?.data?.summary)} ${scan?.meta?.search?.mode}`);
+const scanCsv = await fetch(`${B}/api/v1/scan?format=csv`, { method: "POST", headers: { "Content-Type": "text/csv" }, body: "name,brand\nHAIARA power bank,HAIARA\n" });
+check("scan: a CSV in, a CSV out", scanCsv.status === 200 && (await scanCsv.text()).startsWith("row,name,model,sku,brand,status"));
+const tooMany = await (await fetch(`${B}/api/v1/scan`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: Array.from({ length: 51 }, (_, i) => ({ name: `item ${i}` })), ai: false }) })).json().catch(() => null);
+check("scan: more than 50 rows without a key is a plain 401", tooMany?.error?.code === "unauthorized");
+check("MCP: scan_catalog is listed", tools?.result?.tools?.some((t) => t.name === "scan_catalog"));
+// The embeddable badge: framed by any site, inputs escaped, one-script embed.
+const badge = await fetch(`${B}/api/embed/badge?recall=27056`);
+const badgeHtml = await badge.text();
+check("badge: 27056 says write RECALLED, full refund, with the claim link", badge.status === 200 && badgeHtml.includes("Write RECALLED") && badgeHtml.includes("/claim/27056") && badgeHtml.includes("Get your refund"));
+check("badge: may be framed by any site", (badge.headers.get("content-security-policy") ?? "").includes("frame-ancestors *") && !badge.headers.get("x-frame-options"));
+const badgeQ = await (await fetch(`${B}/api/embed/badge?q=${encodeURIComponent("<img src=x onerror=alert(1)>")}`)).text();
+check("badge: inputs are escaped", !badgeQ.includes("<img") && !badgeQ.includes("onerror="));
+const badgeJs = await fetch(`${B}/api/embed/badge.js`);
+check("badge.js: the one-script embed", badgeJs.status === 200 && (badgeJs.headers.get("content-type") ?? "").includes("javascript") && (await badgeJs.text()).includes("/api/embed/badge?"));
+// Three agencies: the search answer carries the agency tier (hits only when the CPSC has no good hit and the agencies answer).
+check("API: search carries the agency tier", search?.data?.agencies && typeof search.data.agencies.checked === "boolean", JSON.stringify(search?.data?.agencies?.checked));
+// The daily ingest: hidden without the secret; its status row is on /status.
+const ops = await fetch(`${B}/api/ops/recalls/daily`, { method: "POST" });
+check("ops: the daily ingest route does not exist without CHECKS_SECRET", ops.status === 404);
+const statusPage = await (await fetch(`${B}/status`)).text();
+check("status: the daily recall ingest row", statusPage.includes("Daily recall ingest"));
 const firmClaims = await fetch(`${B}/api/firm/claims`);
 check("firm: claims API answers", [200, 404].includes(firmClaims.status), `${firmClaims.status}`);
 const firmTemplate = await fetch(`${B}/api/firm/buyers/template`);

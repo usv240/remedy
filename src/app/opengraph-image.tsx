@@ -10,7 +10,7 @@ export default async function Image() {
   const fonts = await ogFonts();
   return new ImageResponse(
     (
-      <OgFrame foot="Built for the PayPal AI Hackathon, November 2026. Demonstration in PayPal sandbox.">
+      <OgFrame foot="Recall refunds on a verified photo, paid through PayPal. Demonstration in PayPal sandbox.">
         <div style={{ display: "flex", flexDirection: "column", width: "100%", justifyContent: "center" }}>
           <div style={{ display: "flex", fontSize: 118, fontWeight: 300, letterSpacing: -3, lineHeight: 0.95 }}>Recall refunds</div>
           <div style={{ display: "flex", alignItems: "center", fontSize: 118, fontWeight: 300, letterSpacing: -3, lineHeight: 0.95, marginTop: 6 }}>

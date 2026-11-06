@@ -1,4 +1,4 @@
-/* Developers: uses, key request and reveal, playground, docs and usage. Also used by /agents, /stack, /judges,
+/* Developers: uses, key request and reveal, playground, docs and usage. Also used by /agents, /stack, /evidence,
    /manage, /organizations and the report check page for .doc-table and .dev-pre. */
 .dev-hero {
   display: grid;
@@ -114,7 +114,7 @@
 .dev-field textarea {
   padding: 10px 12px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.875rem;
+  font-size: var(--step-small);
   line-height: 1.5;
   resize: vertical;
 }
@@ -149,7 +149,7 @@
   gap: 10px;
 }
 .dev-reveal-k {
-  font-size: 0.875rem;
+  font-size: var(--step-small);
   color: var(--muted);
 }
 .dev-key {
@@ -218,7 +218,7 @@
 .dev-ep,
 .dev-lang {
   font: inherit;
-  font-size: 0.875rem;
+  font-size: var(--step-small);
   min-height: 2.25rem;
   padding: 0 12px;
   border-radius: 8px;
@@ -275,7 +275,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 14px;
-  font-size: 0.875rem;
+  font-size: var(--step-small);
 }
 .dev-code-badge {
   font-weight: 600;
@@ -316,7 +316,7 @@
   margin-inline-start: auto;
   min-height: 2.25rem;
   padding: 0 12px;
-  font-size: 0.875rem;
+  font-size: var(--step-small);
 }
 .dev-more {
   margin-top: 1.25rem;
@@ -389,7 +389,7 @@
 .open-all {
   min-height: 2.25rem;
   padding: 0 14px;
-  font-size: 0.875rem;
+  font-size: var(--step-small);
 }
 .doc-ep-list {
   margin-top: 1rem;
@@ -425,7 +425,7 @@
 }
 .dsc.doc-ep > summary .dev-route {
   grid-area: route;
-  font-size: 0.875rem;
+  font-size: var(--step-small);
 }
 .doc-ep-line {
   grid-area: line;
@@ -487,7 +487,7 @@
   border-bottom: 1px solid var(--surface-2);
 }
 .doc-table th {
-  font-size: 0.875rem;
+  font-size: var(--step-small);
   font-weight: 500;
   color: var(--muted);
 }
@@ -745,4 +745,50 @@
   .doc-ep-line {
     font-size: 0.875rem;
   }
+}
+
+/* Embed a recall badge: two live previews, then the one-script snippet. */
+.dev-embed {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  max-width: 68rem;
+}
+.dev-embed-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 12px;
+}
+.dev-embed-fig {
+  max-width: none;
+  border: 1px solid var(--edge);
+}
+.dev-embed-frame {
+  display: block;
+  width: 100%;
+  height: 7.5rem;
+  border: 0;
+  border-radius: 12px;
+  background: var(--surface);
+}
+.dev-embed-src {
+  min-width: 0;
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dev-embed-script {
+  margin-top: 12px;
+  max-width: none;
+  border: 1px solid var(--edge);
+}
+
+/* The one link to the code, small and last. */
+.dev-source {
+  margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  font-size: var(--step-small);
+  color: var(--muted);
 }

@@ -83,6 +83,7 @@ describe("health checks", () => {
       apimatic: "live",
       render: "fallback",
       database: "not_connected",
+      "recall-ingest": "fallback",
     });
 
     Object.assign(process.env, { ELASTIC_URL: "https://x", ELASTIC_API_KEY: "k", CHANNEL3_API_KEY: "k", RENDER_EXTERNAL_URL: "https://remedy.onrender.com" });

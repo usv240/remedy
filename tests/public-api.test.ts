@@ -142,8 +142,8 @@ describe("the MCP tools", () => {
   const ctx = { origin: "https://remedy.example", keyId: null, auth: null };
   const run = (name: string, input: unknown) => (TOOLS.find((t) => t.name === name)!.run as (i: unknown, c: typeof ctx) => Promise<{ text: string; data?: Record<string, unknown>; isError?: boolean }>)(input, ctx);
 
-  it("are the five plan tools plus ping, each with a schema and plain description", () => {
-    expect(TOOLS.map((t) => t.name).sort()).toEqual(["claim_status", "get_proof_rule", "open_claim", "ping", "search_recalls", "verify_photo"]);
+  it("are the five plan tools, the catalog scan and ping, each with a schema and plain description", () => {
+    expect(TOOLS.map((t) => t.name).sort()).toEqual(["claim_status", "get_proof_rule", "open_claim", "ping", "scan_catalog", "search_recalls", "verify_photo"]);
     for (const t of TOOLS) expect(t.description).not.toMatch(/—|\bfraud|\bfake/i);
     expect(TOOLS.find((t) => t.name === "open_claim")!.changes).toBeTruthy();
   });

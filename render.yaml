@@ -1,8 +1,9 @@
 # Render Blueprint: the Remedy web service and its Postgres database.
 # In the Render Dashboard choose New > Blueprint, pick this repository, and fill in the values marked sync: false.
 #
-#   remedy      the web app (Next.js), its API and MCP server
-#   remedy-db   Postgres 17; tables come from the reviewed SQL in db/schema.sql
+#   remedy                 the web app (Next.js), its API and MCP server
+#   remedy-recall-ingest   a daily cron job that asks the web app to pull the day's new recalls
+#   remedy-db              Postgres 17; tables come from the reviewed SQL in db/schema.sql
 services:
   - type: web
     name: remedy
@@ -63,6 +64,24 @@ services:
         sync: false
       - key: RENDER_API_KEY
         sync: false
+
+  # Once a day: pull every new CPSC recall, read its proof rule, hash its images, and refresh search (scripts/recalls/daily.ts).
+  - type: cron
+    name: remedy-recall-ingest
+    runtime: node
+    plan: starter
+    region: oregon
+    schedule: "20 14 * * *" # 14:20 UTC, after the CPSC's morning announcements
+    buildCommand: "true"
+    startCommand: curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $CHECKS_SECRET" "$REMEDY_URL/api/ops/recalls/daily"
+    envVars:
+      - key: CHECKS_SECRET # the same secret the web service holds
+        fromService:
+          type: web
+          name: remedy
+          envVarKey: CHECKS_SECRET
+      - key: REMEDY_URL # the web service's public address, with no trailing slash
+        value: https://remedy-y0ym.onrender.com
 
 databases:
   - name: remedy-db

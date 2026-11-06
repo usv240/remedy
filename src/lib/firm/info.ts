@@ -103,6 +103,13 @@ export const FIRM_INFO = {
     why: "It is the simplest refund for the owner, and PayPal allows it for 180 days after the purchase.",
     technical: "POST /v2/payments/captures/{capture_id}/refund, with the sale's capture id.",
   },
+  "firm.scan": {
+    title: "Scan a catalog",
+    what: "Paste or upload the products you sell. Each row comes back as a photo-refund recall, another recall, clear, or unknown.",
+    why: "A retailer or marketplace finds every recalled listing in one pass, and sees which ones Remedy can refund on a photo.",
+    technical: "POST /api/v1/scan: the recall search finds candidates per row; a stated model or UPC in the recall's own list settles it; otherwise a keyword score, and Claude Opus 5.5 reads only the ambiguous rows in batches of 20, inside the daily AI budget.",
+    learnMore: { label: "The scan API", href: "/developers/docs#scan" },
+  },
 } satisfies Record<string, InfoEntry>;
 
 export type FirmInfoId = keyof typeof FIRM_INFO;

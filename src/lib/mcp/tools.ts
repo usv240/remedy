@@ -5,6 +5,7 @@ import { actionLabel, remedyLabel, ruleChips } from "@/lib/api/rule-chips";
 import { VERIFY_LIMITS } from "@/lib/api/v1-schemas";
 import { VerifyInputError, sha256, verifyBody, verifyForApi, verifyMode } from "@/lib/api/verify-service";
 import { extractBaseline } from "@/lib/recall/proof-rule";
+import { SCAN_LIMITS, scanCatalog } from "@/lib/recall/scan";
 import { isFetchableUrl, normalizeImageUrl } from "@/lib/verify/official";
 
 /**
@@ -100,6 +101,28 @@ export const TOOLS = [
         return `${n + 1}. Recall ${h.number}, ${h.date}: ${h.title}. ${h.photo_refund ? `Photo refund: ${chips}.` : `Remedy: ${h.remedies.join(", ") || "see the recall"}.`} ${ctx.origin}${h.page}`;
       });
       return { text: `${r.hits.length} recalls for "${i.query}" (${r.mode} search):\n${lines.join("\n")}`, data: { query: i.query, mode: r.mode, hits: r.hits } };
+    },
+  }),
+
+  tool({
+    name: "scan_catalog",
+    title: "Scan a catalog",
+    description:
+      "Checks a list of products (name, with model, SKU or brand when known) against every CPSC recall since 2024 at once. Each row comes back photo_refund (a recall pays for a photo of it made safe, with the claim link), recalled (a recall with another remedy), clear or unknown. Changes nothing.",
+    input: z.object({
+      items: z
+        .array(z.object({ name: z.string().min(1).max(200), model: z.string().max(80).optional(), sku: z.string().max(80).optional(), brand: z.string().max(80).optional() }))
+        .min(1)
+        .max(SCAN_LIMITS.freeItems)
+        .describe(`The products, up to ${SCAN_LIMITS.freeItems} at a time.`),
+    }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    run: async (i, ctx) => {
+      const r = await scanCatalog(i.items);
+      const s = r.summary;
+      const lines = r.results.map((x) => `${x.row}. ${x.item.name}: ${x.status.replace("_", " ")}${x.recall ? ` (recall ${x.recall.number}, ${x.recall.remedy_summary}${x.claim_url ? `; claim at ${ctx.origin}${x.claim_url}` : ""})` : ""}. ${x.reason}`);
+      const results = r.results.map((x) => ({ ...x, claim_url: x.claim_url ? `${ctx.origin}${x.claim_url}` : null }));
+      return { text: `${s.total} rows: ${s.photo_refund} photo refund, ${s.recalled} recalled, ${s.clear} clear, ${s.unknown} unknown. ${r.ai.note}\n${lines.join("\n")}`, data: { summary: s, results, ai: r.ai } };
     },
   }),
 
@@ -207,4 +230,4 @@ export const TOOLS = [
 
 export const SERVER_INFO = { name: "remedy", title: "Remedy", version: "2026.11.5" };
 export const INSTRUCTIONS =
-  "Remedy pays recall refunds the moment a photo of the product made safe is verified, through PayPal. It reads public CPSC recall data since 2024. Use search_recalls to find a recall by product, get_proof_rule to see what the owner must do and photograph, verify_photo to check a photo, and open_claim to start a claim (with only a recall number it returns the owner's own claim link). The owner always chooses where the refund goes. Sandbox only: no real money moves. Remedy is independent and not affiliated with the CPSC or any recalling firm.";
+  "Remedy pays recall refunds the moment a photo of the product made safe is verified, through PayPal. It reads public CPSC recall data since 2024. Use search_recalls to find a recall by product, scan_catalog to check a whole list of products at once, get_proof_rule to see what the owner must do and photograph, verify_photo to check a photo, and open_claim to start a claim (with only a recall number it returns the owner's own claim link). The owner always chooses where the refund goes. Sandbox only: no real money moves. Remedy is independent and not affiliated with the CPSC or any recalling firm.";

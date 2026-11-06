@@ -275,6 +275,23 @@ export async function buildIndex(recalls: Recall[], log: (s: string) => void = (
   return { docs: count.body.count ?? 0, semantic: model !== null, model };
 }
 
+/**
+ * Add or replace a few recalls in the index without rebuilding it (the daily ingest). Returns how many were sent.
+ * Throws when Elastic is not connected or refuses the rows.
+ */
+export async function upsertIndex(recalls: Recall[]): Promise<number> {
+  if (!elasticConfigured()) throw new Error("Elastic is not connected (ELASTIC_URL and ELASTIC_API_KEY).");
+  if (!recalls.length) return 0;
+  const lines = recalls.map(recallDoc).flatMap((d) => [JSON.stringify({ index: { _index: INDEX, _id: d.number } }), JSON.stringify(d)]);
+  const bulk = await es<{ errors?: boolean; items?: { index?: { error?: { reason?: string } } }[] }>(`/_bulk`, { method: "POST", body: lines.join("\n") + "\n" }, 120_000);
+  if (bulk.status >= 300 || bulk.body.errors) {
+    const reason = bulk.body.items?.find((x) => x.index?.error)?.index?.error?.reason;
+    throw new Error(`Elastic could not index ${recalls.length} recalls (${bulk.status}${reason ? `: ${reason}` : ""})`);
+  }
+  await es(`/${INDEX}/_refresh`, { method: "POST" });
+  return recalls.length;
+}
+
 let semantic: Promise<string | null> | null = null;
 /** The index's semantic model, read from its mapping once per process; null when the index has none. */
 function semanticModel() {

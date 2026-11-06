@@ -47,7 +47,7 @@ Reads need no key. A free sandbox key (Authorization: Bearer rm_test_...) raises
 - [Recalls](${o}/recalls): every recall since 2024, with its proof rule
 - [How recalls work](${o}/learn): the glossary and how every number was counted
 - [Developers](${o}/developers): keys, a live playground and docs
-- [For judges](${o}/judges): the five-minute path and the results
+- [Evidence](${o}/evidence): every number, its source, and the five-minute path
 `;
   return new Response(text, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });
 }

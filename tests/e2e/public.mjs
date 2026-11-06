@@ -117,12 +117,52 @@ for (const t of QUERIES) {
   check("GET /api/v1/claims/{id} for a claim that does not exist is a 404", none.r.status === 404 && none.j?.error?.code === "not_found");
 }
 
+// 3b. Three agencies: when the CPSC has no good hit, the FDA and NHTSA answer, labelled, each with a link to the agency.
+// content/recalls/agency-check.json holds the recorded answers (scripts/recalls/agencies.ts); the live call must agree on the agency.
+{
+  const recorded = JSON.parse(readFileSync("content/recalls/agency-check.json", "utf8"));
+  for (const [q, agency] of [
+    ["infant formula", "FDA"],
+    ["airbag", "NHTSA"],
+  ]) {
+    const rec = recorded.queries?.[q];
+    check(`recorded: "${q}" found at the ${agency}`, rec?.agencies?.includes(agency) && rec.hits.every((h) => h.note.startsWith("Remedy automates photo refunds for CPSC recalls")), `${rec?.hits?.length} hits recorded ${recorded.checkedAt}`);
+    const { r, j } = await json(`/api/v1/recalls?query=${encodeURIComponent(q)}&limit=3`);
+    const a = j?.data?.agencies;
+    const ok = r.status === 200 && a?.checked === true && a.hits.some((h) => h.agency === agency && h.url.startsWith("https://") && h.note.includes("handled by the agency and the firm"));
+    check(`live: "${q}" asks the agencies and the ${agency} answers`, ok, a ? `${a.agencies.join(",") || "none"} in ${a.ms} ms` : `${r.status}`);
+  }
+  const { j } = await json("/api/v1/recalls?query=power%20bank&limit=3");
+  check("a product the CPSC search finds never goes to the other agencies", j?.data?.agencies?.checked === false);
+  const find = await json("/api/try/recalls?photo=1&q=infant%20formula", {}, { anon: true });
+  check("Find your recall: the CPSC search says it has no good hit for infant formula", find.j?.data?.cpsc_good === false, `${find.j?.data?.hits?.length} CPSC hits`);
+  const tier = await json("/api/try/agencies?q=infant%20formula", {}, { anon: true });
+  check("Find your recall: the second tier answers from the FDA, labelled, with the agency link", tier.j?.data?.checked === true && tier.j.data.hits.some((h) => h.agency === "FDA" && h.url.startsWith("https://")), `${tier.j?.data?.hits?.length} hits in ${tier.j?.data?.ms} ms`);
+}
+
+// 3c. Catalog scan: the sample catalog, the clear items, a model code, and the MCP tool.
+{
+  const sample = await json("/api/v1/scan/sample");
+  const items = sample.j?.data?.items ?? [];
+  const scan = await json("/api/v1/scan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items }) });
+  const rows = scan.j?.data?.results ?? [];
+  check("scan: the sample's demo recalls are photo refunds with claim links", ["27056", "26754", "27045"].every((n) => rows.some((r) => r.status === "photo_refund" && r.recall?.number === n && r.claim_url?.endsWith(`/claim/${n}`))), `${JSON.stringify(scan.j?.data?.summary)} ai: ${scan.j?.data?.ai?.note}`);
+  check("scan: the everyday items are clear", rows.filter((r) => /cutting board|bath towel|coffee mug/i.test(r.item.name)).every((r) => r.status === "clear"));
+  check("scan: a stated model settles a row without AI", rows.some((r) => r.matched_by === "model"), rows.filter((r) => r.matched_by === "model").map((r) => r.item.model).join(" "));
+  const rpc = (method, params = {}) => json("/api/mcp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) }).then((x) => x.j);
+  const m = await rpc("tools/call", { name: "scan_catalog", arguments: { items: [{ name: "HAIARA power bank" }, { name: "Stoneware coffee mug, 12 oz", brand: "Harbor Pottery" }] } });
+  check("MCP scan_catalog: one photo refund, one clear", !m?.result?.isError && m?.result?.structuredContent?.summary?.photo_refund === 1 && m.result.structuredContent.summary.clear === 1);
+}
+
 // 4. OpenAPI, docs and discovery.
 {
   const { j } = await json("/openapi.json");
-  check("openapi.json describes the v1 endpoints", ["/api/v1/recalls", "/api/v1/recalls/{number}", "/api/v1/proof-rule", "/api/v1/verify"].every((p) => j?.paths?.[p]));
+  check("openapi.json describes the v1 endpoints", ["/api/v1/recalls", "/api/v1/recalls/{number}", "/api/v1/proof-rule", "/api/v1/verify", "/api/v1/scan", "/api/v1/scan/sample", "/api/embed/badge"].every((p) => j?.paths?.[p]));
   const docs = await (await fetch(`${B}/developers/docs`)).text();
   check("docs: fields, recorded responses and the MCP section", docs.includes("Recorded response") && docs.includes('id="mcp"') && docs.includes("recall_number"));
+  check("docs: the scan and the badge, each with a recorded example", docs.includes('id="scan"') && docs.includes('id="badge"') && docs.includes("GET /api/v1/scan/sample") && docs.includes("scan_catalog"));
+  const dev = await (await fetch(`${B}/developers`)).text();
+  check("developers: two live badge previews and the snippets", (dev.match(/\/api\/embed\/badge\?recall=(27056|BH-2026-01)/g) ?? []).length >= 4 && dev.includes("/api/embed/badge.js"));
   const llms = await (await fetch(`${B}/llms.txt`)).text();
   check("llms.txt lists the tools and the API", ["search_recalls", "get_proof_rule", "verify_photo", "open_claim", "claim_status", "/api/v1/verify"].every((s) => llms.includes(s)));
 }
@@ -132,7 +172,7 @@ for (const t of QUERIES) {
   const rpc = (method, params = {}) => json("/api/mcp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) }).then((x) => x.j);
   const list = await rpc("tools/list");
   const names = (list?.result?.tools ?? []).map((t) => t.name);
-  check("MCP tools/list: the five tools and ping", ["search_recalls", "get_proof_rule", "verify_photo", "open_claim", "claim_status", "ping"].every((n) => names.includes(n)), names.join(" "));
+  check("MCP tools/list: the six tools and ping", ["search_recalls", "scan_catalog", "get_proof_rule", "verify_photo", "open_claim", "claim_status", "ping"].every((n) => names.includes(n)), names.join(" "));
   const s = await rpc("tools/call", { name: "search_recalls", arguments: { query: "space heater", limit: 3 } });
   check("MCP search_recalls answers", !s?.result?.isError && s?.result?.structuredContent?.hits?.length === 3);
   const g = await rpc("tools/call", { name: "get_proof_rule", arguments: { recall_number: "27045" } });

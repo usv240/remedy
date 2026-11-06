@@ -1,7 +1,7 @@
 /**
  * The sample shop's catalog, safe to import from client components (no server code here). Brightline Home is a
  * fictional sample firm; the charger is its sample product, sold only in the PayPal sandbox and recalled in its own
- * fictional sample recall BH-2026-01, so a judge can buy it, claim it, and see the refund go back to that purchase.
+ * fictional sample recall BH-2026-01, so a visitor can buy it, claim it, and see the refund go back to that purchase.
  */
 export const SHOP = {
   firmName: "Brightline Home (sample)",

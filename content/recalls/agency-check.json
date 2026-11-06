@@ -1,0 +1,285 @@
+{
+ "checkedAt": "2026-11-06T14:40:45.378Z",
+ "note": "Recorded by scripts/recalls/agencies.ts: the second-tier FDA and NHTSA lookup for each check query, live. Remedy automates photo refunds for CPSC recalls only.",
+ "queries": {
+  "infant formula": {
+   "cpsc": {
+    "mode": "elastic",
+    "top": [
+     {
+      "number": "26455",
+      "title": "Bayer Recalls 6 mL Size Afrin Original Nasal Spray Bottles Due to Risk of Seriou",
+      "score": 0.953
+     },
+     {
+      "number": "26530",
+      "title": "TOMY Recalls Boon NURSH 8 oz Reusable Baby Bottles Due to Choking Hazard; Sold a",
+      "score": 0.95
+     },
+     {
+      "number": "25290",
+      "title": "Nezmdi Infant Swings Recalled Due to Risk of Serious Injury or Death from Suffoc",
+      "score": 0.945
+     }
+    ]
+   },
+   "checked": true,
+   "hits": [
+    {
+     "agency": "FDA",
+     "agency_name": "US Food and Drug Administration",
+     "ref": "FDA-H-1137-2026",
+     "title": "a.) nara organics brand; Whole Milk Organic Infant Formula; Milk-based Powder with Iron; 0-12 months; NET WT 24.7 OZ (700 G); UPC: 860013251",
+     "hazard": "Product may be contaminated with Clostridium botulinum.",
+     "remedy": "Class I, recall ongoing, by NARA ORGANICS INC",
+     "date": "2026-06-13",
+     "url": "https://www.accessdata.fda.gov/scripts/ires/index.cfm?Event=99242",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "FDA",
+     "agency_name": "US Food and Drug Administration",
+     "ref": "FDA-H-0891-2026",
+     "title": "a2 Platinum Premium infant formula Milk-based Powder with Iron 31.7oz (900g) Intended use: infant formula (0 12 months). Condition: shelf st",
+     "hazard": "Possible contamination with Cereulide toxin.",
+     "remedy": "Class I, recall terminated, by The a2 Milk Company",
+     "date": "2026-05-01",
+     "url": "https://www.accessdata.fda.gov/scripts/ires/index.cfm?Event=98887",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "FDA",
+     "agency_name": "US Food and Drug Administration",
+     "ref": "FDA-H-0534-2026",
+     "title": "Valley Springs 100% Natural Bottled Water packaged in the following size plastic jug with plastic caps: 1. 1 Gal Net 128 Fl oz. UPC 0 31193-",
+     "hazard": "Water was bottled under insanitary conditions.",
+     "remedy": "Class II, recall ongoing, by Valley Springs Artesian Gold, LLC",
+     "date": "2026-02-06",
+     "url": "https://www.accessdata.fda.gov/scripts/ires/index.cfm?Event=98410",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    }
+   ],
+   "agencies": [
+    "FDA"
+   ],
+   "ms": 499,
+   "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+  },
+  "airbag": {
+   "cpsc": {
+    "mode": "elastic",
+    "top": [
+     {
+      "number": "26568",
+      "title": "Joolz Recalls Aer2 Car Seat Adapters for Strollers Due to Risk of Serious Injury",
+      "score": 1.02
+     },
+     {
+      "number": "25476",
+      "title": "AMTRADING Recalls Hoovy Cooling Gel Insert Pads for Car Seats and Strollers Due ",
+      "score": 0.96
+     },
+     {
+      "number": "25256",
+      "title": "Deuter Recalls Kid Comfort, Kid Comfort Pro and Kid Comfort Active Child Carrier",
+      "score": 0.953
+     }
+    ]
+   },
+   "checked": true,
+   "hits": [
+    {
+     "agency": "NHTSA",
+     "agency_name": "National Highway Traffic Safety Administration",
+     "ref": "NHTSA-24V960000",
+     "title": "Mercedes-Benz USA, LLC: Mounting Brackets May Damage Air Bag FMVSS/214/226",
+     "hazard": "An air bag that is damaged during deployment can increase the risk of injury in a crash.",
+     "remedy": "Dealers will inspect and if necessary, replace the window airbags, and mounting brackets, free of charge. Owner notification letters were mailed February 7, 2025. Owners may contact MBUSA customer service at 1-800-367-6372. MBUSA's number for this recall is 2025010005.",
+     "date": "2024-12-20",
+     "url": "https://www.nhtsa.gov/recalls?nhtsaId=24V960000",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "NHTSA",
+     "agency_name": "National Highway Traffic Safety Administration",
+     "ref": "NHTSA-24V173000",
+     "title": "Faraday Future Eco Sales Co. LLC: Air Bag Malfunction Warning Light Failure",
+     "hazard": "A warning light that fails to indicate a problem with air bag deployment can increase the risk of injury during a crash.",
+     "remedy": "FF will deploy an over-the-air (OTA) iHUB module software update, free of charge. Owner notification letters were mailed March 27, 2024. Owners may contact Faraday customer service at 1-800-228-7702. FF's number for this recall is 24-90-32-01.",
+     "date": "2024-03-01",
+     "url": "https://www.nhtsa.gov/recalls?nhtsaId=24V173000",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "NHTSA",
+     "agency_name": "National Highway Traffic Safety Administration",
+     "ref": "NHTSA-23V152000",
+     "title": "Bentley Motors, Inc.: Seat Air Bag May Tear/FMVSS 214 & 208",
+     "hazard": "A torn air bag may not adequately protect an occupant in a crash, increasing the risk of injury.",
+     "remedy": "Dealers will inspect the affected front seats and, if necessary, remove the sharp edge on the airbag deflector bracket rivet, free of charge. Owner notification letters were mailed April 17, 2023. Owners may contact Bentley customer service at 1-800-77-6923. Bentley's number for this recall is RE23/",
+     "date": "2023-03-08",
+     "url": "https://www.nhtsa.gov/recalls?nhtsaId=23V152000",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    }
+   ],
+   "agencies": [
+    "NHTSA"
+   ],
+   "ms": 166,
+   "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+  },
+  "Honda Civic 2018": {
+   "cpsc": {
+    "mode": "elastic",
+    "top": [
+     {
+      "number": "25207",
+      "title": "Honda Recalls Accessory Heaters for Side-by-Side Vehicles Due to Fire and Burn H",
+      "score": 1.168
+     },
+     {
+      "number": "26692",
+      "title": "COMMOWNER Pressure Washers Recalled Due to Serious Risk of Injury or Death from ",
+      "score": 0.957
+     },
+     {
+      "number": "24220",
+      "title": "American Honda Motor Expands Recall of Lawnmowers and Pressure Washer Engines to",
+      "score": 0.952
+     }
+    ]
+   },
+   "checked": true,
+   "hits": [
+    {
+     "agency": "NHTSA",
+     "agency_name": "National Highway Traffic Safety Administration",
+     "ref": "NHTSA-20V314000",
+     "title": "2018 Honda Civic: FUEL SYSTEM, GASOLINE:DELIVERY:FUEL PUMP",
+     "hazard": "Honda (American Honda Motor Co.) is recalling certain 2018-2019 Acura NSX, 2019 Acura RDX, RLX and RLX Sport Hybrid, 2018-2019 Honda Accord, Civic Hatchback, Civic Type R and HR-V, 2019-2020 Insight and 2019 Fit vehicles. The low-pressure fuel pump inside the fuel tank may fail.",
+     "remedy": "Honda will notify owners and dealers will replace the fuel pump assembly, free of charge. The recall began July 22, 2020. Owners may contact Honda customer service at 1-888-234-2138.",
+     "date": "2020-05-28",
+     "url": "https://www.nhtsa.gov/recalls?nhtsaId=20V314000",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "NHTSA",
+     "agency_name": "National Highway Traffic Safety Administration",
+     "ref": "NHTSA-18V421000",
+     "title": "2018 Honda Civic: EQUIPMENT:OTHER:LABELS",
+     "hazard": "Honda (American Honda Motor Co.) is recalling certain 2018 Honda Civic vehicles. The manufacturing date area of the certification labels may have random characters which can affect the owner's ability to determine if a safety recall includes their vehicle.",
+     "remedy": "Honda will notify owners, and dealers will replace the certification label, free of charge. The recall began August 7, 2018. Owners may contact Honda customer service at 1-888-234-2138. Honda's number for this recall is U23.",
+     "date": "2018-06-20",
+     "url": "https://www.nhtsa.gov/recalls?nhtsaId=18V421000",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "NHTSA",
+     "agency_name": "National Highway Traffic Safety Administration",
+     "ref": "NHTSA-18V663000",
+     "title": "2018 Honda Civic: STEERING:ELECTRIC POWER ASSIST SYSTEM",
+     "hazard": "Honda (American Honda Motor Co.) is recalling certain 2017-2018 Honda Civic and CR-V vehicles. The magnet that controls the torque sensor output signal for the electronic power steering system may not be properly secured, allowing the magnet to become dislodged. During a full lock turn, the dislodge",
+     "remedy": "Honda will notify owners, and dealers will replace the steering gearbox assembly, free of charge. The recall began November 9, 2018. Owners may contact Honda customer service at 1-888-234-2138. Honda's numbers for this recall are C2N, P2O.",
+     "date": "2018-09-27",
+     "url": "https://www.nhtsa.gov/recalls?nhtsaId=18V663000",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    }
+   ],
+   "agencies": [
+    "NHTSA"
+   ],
+   "ms": 241,
+   "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+  },
+  "eye drops": {
+   "cpsc": {
+    "mode": "elastic",
+    "top": [
+     {
+      "number": "24224",
+      "title": "Bausch + Lomb Recalls Project Watson Eyelid Wipes for Dogs Due to Risk of Exposu",
+      "score": 1.025
+     },
+     {
+      "number": "24318",
+      "title": "Toy Guns Recalled Due to Eye Injury Hazard; Failure to Meet Federal Safety Regul",
+      "score": 0.949
+     },
+     {
+      "number": "24281",
+      "title": "MGA Entertainment Recalls Miniverse Make It Mini Sets with Unused Liquid Resins ",
+      "score": 0.944
+     }
+    ]
+   },
+   "checked": true,
+   "hits": [
+    {
+     "agency": "FDA",
+     "agency_name": "US Food and Drug Administration",
+     "ref": "FDA-D-0871-2026",
+     "title": "Clear Eyes Redness Relief, Lubricant/Redness Reliever Eye Drops (glycerin 0.25%, naphazoline hydrochloride 0.012%) with Hang Tag, 0.5 fl oz ",
+     "hazard": "Lack of Assurance of Sterility",
+     "remedy": "Class II, recall ongoing, by Insight Pharmaceuticals LLC, a Prestige Consumer Healthcare company",
+     "date": "2026-09-15",
+     "url": "https://www.accessdata.fda.gov/scripts/ires/index.cfm?Event=99909",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "FDA",
+     "agency_name": "US Food and Drug Administration",
+     "ref": "FDA-D-0870-2026",
+     "title": "Clear Eyes Redness Relief, Lubricant/Redness Reliever Eye Drops (glycerin 0.25%, naphazoline hydrochloride 0.012%) , 0.5 fl oz (15mL) per dr",
+     "hazard": "Lack of Assurance of Sterility",
+     "remedy": "Class II, recall ongoing, by Insight Pharmaceuticals LLC, a Prestige Consumer Healthcare company",
+     "date": "2026-09-15",
+     "url": "https://www.accessdata.fda.gov/scripts/ires/index.cfm?Event=99909",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    },
+    {
+     "agency": "FDA",
+     "agency_name": "US Food and Drug Administration",
+     "ref": "FDA-D-0006-2027",
+     "title": "Sterile Lubricant Dry Eye Relief Eye Drops, 0.5 FL OZ (15 mL); a) LEADER, DISTRIBUTED BY CARDINAL HEALTH, DUBLIN, OHIO 43017, www.myleader.c",
+     "hazard": "Lack of Assurance of Sterility",
+     "remedy": "Class II, recall ongoing, by K.C. Pharmaceuticals, Inc.",
+     "date": "2026-09-11",
+     "url": "https://www.accessdata.fda.gov/scripts/ires/index.cfm?Event=99880",
+     "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+    }
+   ],
+   "agencies": [
+    "FDA"
+   ],
+   "ms": 265,
+   "note": "Remedy automates photo refunds for CPSC recalls; this one is handled by the agency and the firm."
+  },
+  "power bank": {
+   "cpsc": {
+    "mode": "elastic",
+    "top": [
+     {
+      "number": "27056",
+      "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and",
+      "score": 1.06
+     },
+     {
+      "number": "26090",
+      "title": "Belkin Recalls Portable Power Banks and Wireless Charging Stands Due to Fire and",
+      "score": 1.057
+     },
+     {
+      "number": "26740",
+      "title": "Truststone Group Recalls XO Poppy Power Trip Magnetic Wireless Power Banks Due t",
+      "score": 1.05
+     }
+    ]
+   },
+   "checked": false,
+   "hits": [],
+   "agencies": [],
+   "ms": 0,
+   "note": "The CPSC search found the product, so the other agencies were not asked."
+  }
+ }
+}

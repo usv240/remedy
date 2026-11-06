@@ -369,7 +369,7 @@
   .fc-year {
     padding-bottom: 0;
   }
-  /* 10vw keeps "github.com/usv240" inside the margins at 390px (11vw ran 7px past them). */
+  /* 10vw keeps ".onrender.com" inside the margins at 390px (11vw ran the longer line 7px past them). */
   .fc-display {
     flex-direction: column;
     font-size: clamp(2.25rem, 10vw, 5rem);

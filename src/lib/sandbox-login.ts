@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
- * The PayPal sandbox buyer login that TESTING.md publishes for judges, read from that file so the page and the file can
+ * The PayPal sandbox buyer login that TESTING.md publishes for testers, read from that file so the page and the file can
  * never disagree. It is a sandbox test account: it works only in PayPal's sandbox checkout window and moves no money.
  * Returns null when the file or its rows are missing.
  */

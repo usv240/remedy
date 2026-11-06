@@ -1069,6 +1069,50 @@ span.cl-mark[data-s="pending"] {
   color: var(--muted);
 }
 
+/* Second tier: hits from the FDA or NHTSA, labelled; Remedy automates photo refunds for CPSC recalls only. */
+.fr-agencies {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+.fr-ag-title {
+  font: inherit;
+  font-weight: 500;
+  margin: 0;
+}
+.fr-ag {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 10px 12px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.fr-ag-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  background: var(--pill-info);
+  color: var(--pill-info-ink);
+  margin-top: 2px;
+}
+.fr-ag .fr-meta {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fr-ag .fr-meta.tabular {
+  display: block;
+}
+
 .cl-note-foot {
   margin-top: 1.5rem;
 }

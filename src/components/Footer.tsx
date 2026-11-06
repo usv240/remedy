@@ -4,14 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 
-const REPO = "https://github.com/usv240/remedy";
-
 const LINKS = [
   { href: "/try", label: "Try a photo" },
   { href: "/recalls", label: "Recalls" },
   { href: "/learn", label: "Learn" },
   { href: "/developers", label: "Developers" },
-  { href: "/judges", label: "For judges" },
+  { href: "/evidence", label: "Evidence" },
   { href: "/stack", label: "How it is built" },
   { href: "/status", label: "Status" },
   { href: "/about", label: "About" },
@@ -22,7 +20,7 @@ const QUIET = /^\/(claim|firm)(\/|$)/;
 
 /**
  * "Contact as the headline" from the direction sheet: a saturated field (lime in light, the second tone step in dark),
- * three short notes on top, and the way to reach the project set at display size. Work screens get a short footer.
+ * three short notes on top, and the product's own address set at display size. Work screens get a short footer.
  */
 export function Footer() {
   return (
@@ -44,7 +42,7 @@ function QuietFooter() {
         <Link href="/" className="text-link">
           Remedy
         </Link>
-        . Built for the PayPal AI Hackathon, November 2026. Demonstration in PayPal sandbox.
+        . Recall refunds on a verified photo, paid through PayPal. Demonstration in PayPal sandbox.
       </p>
       <p className="footer-credit">Recall data and images: U.S. Consumer Product Safety Commission</p>
     </footer>
@@ -57,17 +55,17 @@ function ContactFooter({ home }: { home: boolean }) {
       <div className="fc-top">
         <ul className="fc-notes">
           <li className="fc-wordmark">Remedy</li>
-          <li>Built for the PayPal AI Hackathon, November 2026</li>
           <li>Recall refunds on a verified photo, paid through PayPal</li>
+          <li>Demonstration in PayPal sandbox</li>
         </ul>
         <a className="fc-top-link" href="#main">
           Back to top
         </a>
       </div>
-      <a className="fc-display" href={REPO}>
-        <span>github.com/usv240</span>
-        <span>/remedy</span>
-      </a>
+      <Link className="fc-display" href="/">
+        <span>remedy-y0ym</span>
+        <span>.onrender.com</span>
+      </Link>
       <div className="fc-meta">
         <nav aria-label="Footer">
           <ul className="fc-links">

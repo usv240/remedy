@@ -1,11 +1,11 @@
 {
  "note": "Real responses from a local Remedy, recorded by scripts/public/api-examples.mjs. Long strings are shortened with ...",
- "recordedAt": "2026-11-05T20:42:53.794Z",
+ "recordedAt": "2026-11-06T14:47:12.030Z",
  "examples": {
   "recalls": {
    "request": "GET /api/v1/recalls?query=power%20bank&photo_refund=true&limit=2",
    "status": 200,
-   "ms": 1322,
+   "ms": 668,
    "response": {
     "data": {
      "query": "power bank",
@@ -54,7 +54,8 @@
          "Email the photo to Mitrytech at HAIARArecall@outlook.com.",
          "Dispose of the power bank following local laws."
         ]
-       }
+       },
+       "sample": false
       },
       {
        "number": "26090",
@@ -93,18 +94,27 @@
          "Send the photos with the online recall submission form.",
          "Ask your hazardous waste center before dropping off the device."
         ]
-       }
+       },
+       "sample": false
       }
-     ]
+     ],
+     "agencies": {
+      "checked": false,
+      "hits": [],
+      "agencies": [],
+      "ms": 0,
+      "note": "The CPSC search found the product, so the other agencies were not asked."
+     }
     },
     "meta": {
-     "request_id": "req_f3f7d41e227e42f5a6f0",
+     "request_id": "req_2a6934ba527b4836abcb",
      "version": "2026-11-05",
-     "latency_ms": 741,
+     "latency_ms": 526,
      "search": {
       "mode": "elastic",
       "model": ".jina-embeddings-v3",
-      "reranker": ".jina-reranker-v3"
+      "reranker": ".jina-reranker-v3",
+      "agencies": []
      }
     },
     "error": null
@@ -113,7 +123,7 @@
   "recall": {
    "request": "GET /api/v1/recalls/27056",
    "status": 200,
-   "ms": 184,
+   "ms": 19,
    "response": {
     "data": {
      "number": "27056",
@@ -194,10 +204,12 @@
       "source": "selfcheck",
       "model": "claude-opus-5-5",
       "extracted_at": "2026-11-05T19:11:05.337Z"
-     }
+     },
+     "sample": false,
+     "sample_note": null
     },
     "meta": {
-     "request_id": "req_7e0b141912b742a98618",
+     "request_id": "req_803d910f558040aaac54",
      "version": "2026-11-05",
      "latency_ms": 0
     },
@@ -207,7 +219,7 @@
   "proof-rule": {
    "request": "POST /api/v1/proof-rule {\"recall_number\":\"27056\"}",
    "status": 200,
-   "ms": 235,
+   "ms": 19,
    "response": {
     "data": {
      "recall": {
@@ -251,9 +263,138 @@
      "lint": []
     },
     "meta": {
-     "request_id": "req_10682549a89e413b8422",
+     "request_id": "req_371b35846ea646cbaeaf",
      "version": "2026-11-05",
-     "latency_ms": 11
+     "latency_ms": 2
+    },
+    "error": null
+   }
+  },
+  "scan-sample": {
+   "request": "GET /api/v1/scan/sample",
+   "status": 200,
+   "ms": 13,
+   "response": {
+    "data": {
+     "note": "A sample catalog: real CPSC recalls from Remedy's data (public domain) and three everyday items no recall covers. Send it to POST /api/v1/scan as { items }.",
+     "items": [
+      {
+       "name": "HAIARA power banks"
+      },
+      {
+       "name": "Wantefully Hair Dryer Brushes"
+      },
+      {
+       "name": "QZH.DUAO Children’s Pajama Sets"
+      },
+      {
+       "name": "X-VESOLJE Nursing Pillows"
+      }
+     ]
+    },
+    "meta": {
+     "request_id": "req_9fcfec9d371d4169ac0b",
+     "version": "2026-11-05",
+     "latency_ms": 1
+    },
+    "error": null
+   }
+  },
+  "scan": {
+   "request": "POST /api/v1/scan {\"items\": the sample catalog, 9 rows}",
+   "status": 200,
+   "ms": 1334,
+   "response": {
+    "data": {
+     "summary": {
+      "total": 9,
+      "photo_refund": 5,
+      "recalled": 1,
+      "clear": 3,
+      "unknown": 0
+     },
+     "results": [
+      {
+       "row": 1,
+       "item": {
+        "name": "HAIARA power banks",
+        "model": null,
+        "sku": null,
+        "brand": null
+       },
+       "status": "photo_refund",
+       "confidence": 1,
+       "matched_by": "keywords",
+       "reason": "The recall's product and firm cover 100% of the row's words.",
+       "recall": {
+        "number": "27056",
+        "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and...",
+        "date": "2026-10-29",
+        "photo_refund": true,
+        "remedy_summary": "Write RECALLED, Full refund",
+        "refund_amount": null,
+        "refund_amount_text": "full refund",
+        "cpsc_url": "https://cpsc.gov/Recalls/2027/HAIARA-Power-Banks-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Fire-and-Burn-Hazards-Sold-on-Amazon-com-by-Mitrytech",
+        "page": "http://localhost:3400/recalls/27056"
+       },
+       "claim_url": "http://localhost:3400/claim/27056"
+      },
+      {
+       "row": 2,
+       "item": {
+        "name": "Wantefully Hair Dryer Brushes",
+        "model": null,
+        "sku": null,
+        "brand": null
+       },
+       "status": "photo_refund",
+       "confidence": 1,
+       "matched_by": "keywords",
+       "reason": "The recall's product and firm cover 100% of the row's words.",
+       "recall": {
+        "number": "26754",
+        "title": "Guang Zhou Recalls Wantefully Hair Dryer Brushes Due to Risk of Serious Injury o...",
+        "date": "2026-09-10",
+        "photo_refund": true,
+        "remedy_summary": "Cut the cord, Full refund",
+        "refund_amount": null,
+        "refund_amount_text": "full refund",
+        "cpsc_url": "https://cpsc.gov/Recalls/2026/Guang-Zhou-Recalls-Wantefully-Hair-Dryer-Brushes-Due-to-Risk-of-Serious-Injury-or-Death-from-Electrocution-Shock-and-Burn-Hazards-Violate-Federal-Regulations",
+        "page": "http://localhost:3400/recalls/26754"
+       },
+       "claim_url": "http://localhost:3400/claim/26754"
+      },
+      {
+       "row": 7,
+       "item": {
+        "name": "Bamboo cutting board, 18 by 12 inch",
+        "model": null,
+        "sku": "GK-CB-1812",
+        "brand": "Greenfield Kitchen"
+       },
+       "status": "clear",
+       "confidence": 0.89,
+       "matched_by": null,
+       "reason": "No recall since 2024 covers these words; the nearest, recall 26658, shares too little.",
+       "recall": null,
+       "claim_url": null
+      }
+     ],
+     "ai": {
+      "used": false,
+      "rows": 0,
+      "note": "No row needed the AI reader."
+     }
+    },
+    "meta": {
+     "request_id": "req_e05bd566185047b78fc7",
+     "version": "2026-11-05",
+     "latency_ms": 1310,
+     "search": {
+      "mode": "elastic",
+      "model": ".jina-embeddings-v3"
+     },
+     "scan_ms": 1310
     },
     "error": null
    }
@@ -261,7 +402,7 @@
   "verify": {
    "request": "POST /api/v1/verify (photo: the recall's own official picture, recall_number=27056, no key)",
    "status": 200,
-   "ms": 196,
+   "ms": 41,
    "response": {
     "data": {
      "decision": "retake",
@@ -366,18 +507,18 @@
      "review": null,
      "model": null,
      "timings": {
-      "decode_ms": 17,
-      "official_ms": 2,
+      "decode_ms": 22,
+      "official_ms": 1,
       "vision_ms": 0,
       "checks_ms": 0,
       "reviewers_ms": 0,
-      "total_ms": 18
+      "total_ms": 23
      },
      "payment": null,
      "note": "No claim was stored and nothing was paid. To open a claim and pay the refund, use POST /api/claims."
     },
     "meta": {
-     "request_id": "req_9228545f7d124a9c88c1",
+     "request_id": "req_7375568d77304461b6a3",
      "version": "2026-11-05",
      "latency_ms": 28
     },

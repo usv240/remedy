@@ -25,6 +25,13 @@ await rec("proof-rule", 'POST /api/v1/proof-rule {"recall_number":"27056"}', "/a
   ...j,
   data: { ...j.data, method: clip(j.data.method, 90), rule: { ...j.data.rule, explanation: { plain: j.data.rule.explanation.plain, technical: clip(j.data.rule.explanation.technical, 120) } } },
 }));
+await rec("scan-sample", "GET /api/v1/scan/sample", "/api/v1/scan/sample", undefined, (j) => ({ ...j, data: { ...j.data, items: j.data.items.slice(0, 4) } }));
+const sample = await (await fetch(`${B}/api/v1/scan/sample`)).json();
+const scanItems = sample.data.items;
+await rec("scan", `POST /api/v1/scan {"items": the sample catalog, ${scanItems.length} rows}`, "/api/v1/scan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: scanItems }) }, (j) => ({
+  ...j,
+  data: { ...j.data, results: j.data.results.filter((r, i) => i < 2 || r.status === "clear").slice(0, 3).map((r) => ({ ...r, recall: r.recall && { ...r.recall, title: clip(r.recall.title, 80) } })) },
+}));
 const form = new FormData();
 form.append("photo", new Blob([readFileSync("content/verify/fixtures/official/27056-haiara-1.jpg")], { type: "image/jpeg" }), "photo.jpg");
 form.append("recall_number", "27056");

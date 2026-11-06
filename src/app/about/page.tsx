@@ -12,7 +12,7 @@ const IS = [
   "A way to pay recall refunds the moment a photo of the product made safe is verified, through PayPal.",
   "Built on the CPSC's public recall data: every US consumer product recall since January 2024.",
   "A tool a recalling firm runs to pay its refunds through PayPal. The refund comes from the firm; Remedy never holds the money. Next: each firm connecting its own PayPal account.",
-  "Open source under the MIT license, built for the PayPal AI Hackathon, November 2026.",
+  "Open source under the MIT license.",
 ];
 
 const IS_NOT = [
@@ -85,10 +85,10 @@ export default function AboutPage() {
             <span className="muted"> and how every number was counted</span>
           </li>
           <li>
-            <Link className="text-link" href="/judges">
-              For judges
+            <Link className="text-link" href="/evidence">
+              Evidence
             </Link>
-            <span className="muted"> the five-minute path and the results</span>
+            <span className="muted"> every number, its source, and the five-minute path</span>
           </li>
           <li>
             <Link className="text-link" href="/stack">
@@ -116,7 +116,7 @@ export default function AboutPage() {
           <li>The made-safe example photos on the home page: CPSC, recalls 26125 (a hair dryer with its cord cut) and 25007 (a helmet with its straps cut off).</li>
           <li>Sentient by Indian Type Foundry, under the ITF Free Font License.</li>
           <li>IBM Plex Sans by IBM, under the SIL Open Font License.</li>
-          <li>Built for the PayPal AI Hackathon, November 2026. Open source under the MIT license.</li>
+          <li>Remedy is open source under the MIT license.</li>
         </ul>
         </details>
       </section>

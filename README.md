@@ -3,7 +3,7 @@
 Recall refunds in seconds. The owner of a recalled product makes it safe as the recall asks (cuts the cord, cuts it in half, or writes "RECALLED" on it), snaps one photo, and Remedy checks that photo against the official recall. Once it is verified, PayPal pays the refund, so recalled products leave homes faster.
 
 - **Live demo:** [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com) (PayPal sandbox; no Remedy login needed)
-- **For judges:** start at [`/judges`](https://remedy-y0ym.onrender.com/judges). The sandbox buyer login and step-by-step checks are in [TESTING.md](TESTING.md).
+- **Start here:** open [`/evidence`](https://remedy-y0ym.onrender.com/evidence). The sandbox buyer login and step-by-step checks are in [TESTING.md](TESTING.md).
 - **Demo video:** [youtu.be/VIDEO_ID](https://youtu.be/VIDEO_ID)
 
 Every payment runs in the PayPal sandbox. Brightline Home, the firm in the console, is a fictional sample firm. Real CPSC recalls appear with their real data and credited images; Remedy is not affiliated with the CPSC or any recalling firm.
@@ -33,7 +33,7 @@ The same classifier, run on the earlier snapshot behind our research note (1,227
   - about 60 ms to answer a photo that is the recall's own official picture, with no model call;
   - a sample-shop purchase refunded to its original PayPal capture at once, and a second claim on that purchase declined.
 
-All of these are on [`/judges`](https://remedy-y0ym.onrender.com/judges), each with its source file.
+All of these are on [`/evidence`](https://remedy-y0ym.onrender.com/evidence), each with its source file.
 
 ## See it
 
@@ -88,7 +88,8 @@ Each tool has one job. [`/stack`](https://remedy-y0ym.onrender.com/stack) lists 
 - **AG Grid** runs the firm's claims queue at `/firm/claims`: a photo column, masked claimants, the six checks, quick views (Needs review, Ready to pay, Paid today, Waiting to be accepted) and bulk Approve and pay. Each row opens a drawer with the six checks, and the two reviewers' notes when they ran.
 - **APIMatic** generated the PayPal Server SDK (`@paypal/paypal-server-sdk`) that carries every Orders and Payments call: the sample shop's checkout and capture, replacement orders, reading captures, and refunds to the original purchase, each with its `PayPal-Request-Id` ([`src/lib/paypal/sdk-rest.ts`](src/lib/paypal/sdk-rest.ts)). Payouts, Transaction Search and Disputes are outside the SDK and use PayPal's REST API.
 - **Render** hosts it: [`render.yaml`](render.yaml) is a Blueprint for the web service and Postgres 17, applies the reviewed schema, loads the recall data and seeds the sample firm before each release.
-- **MCP server** at `/api/mcp` (streamable HTTP) with six tools: `search_recalls`, `get_proof_rule`, `verify_photo`, `open_claim`, `claim_status` and `ping`. Found by agents through an MCP Server Card (`/api/mcp/server-card`), an AI Catalog (`/.well-known/ai-catalog.json`), `/llms.txt` and [`server.json`](server.json).
+- **MCP server** at `/api/mcp` (streamable HTTP) with seven tools: `search_recalls`, `scan_catalog`, `get_proof_rule`, `verify_photo`, `open_claim`, `claim_status` and `ping`. Found by agents through an MCP Server Card (`/api/mcp/server-card`), an AI Catalog (`/.well-known/ai-catalog.json`), `/llms.txt` and [`server.json`](server.json).
+- **For marketplaces and retailers:** `POST /api/v1/scan` checks a whole catalog at once (paste or upload a CSV on `/firm/scan`) and returns, per item, whether an active photo-refund recall covers it and the claim link; `GET /api/embed/badge?recall=` is a one-iframe "Get your refund" badge for any product page. "Find your recall" also asks the FDA and NHTSA when the CPSC has no match, labelled by agency. A daily job pulls each day's new CPSC recalls, reads their proof rules and refreshes search.
 - **Public API:** free sandbox keys, OpenAPI 3.1 at `/openapi.json`, docs with recorded responses at `/developers/docs`, and a live playground at `/developers`.
 
 Built with Next.js 16, React 19, TypeScript, Postgres 17, Drizzle, Zod and sharp.

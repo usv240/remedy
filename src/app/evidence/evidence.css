@@ -1,11 +1,11 @@
-/* For judges: the results first, then the path and the criteria, then each piece of evidence with its full table or
-   account one press away. */
+/* Evidence: the results first, then the path and where to see each part, then each piece of evidence with its full
+   table or account one press away. */
 
-.judges .page-section {
+.evidence .page-section {
   margin-top: clamp(2.5rem, 1.75rem + 2vw, 3.75rem);
   max-width: 86rem;
 }
-.judges [id] {
+.evidence [id] {
   scroll-margin-top: 16px;
 }
 .jp-intro {
@@ -215,43 +215,43 @@
 }
 
 /* Criteria: one line and its links in view, the full account one press away. */
-.jp-criteria {
+.jp-parts {
   margin: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0 40px;
 }
 @media (max-width: 1100px) {
-  .jp-criteria {
+  .jp-parts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 720px) {
-  .jp-criteria {
+  .jp-parts {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-.jp-criterion {
+.jp-part {
   display: grid;
   align-content: start;
   gap: 6px;
   padding: 16px 0 6px;
   border-top: 1px solid var(--edge);
 }
-.jp-criterion dt {
+.jp-part dt {
   font-size: 1.125rem;
   font-weight: 500;
 }
-.jp-criterion dd {
+.jp-part dd {
   margin: 0;
   display: grid;
   gap: 8px;
   max-width: 68ch;
 }
-.judges .jp-criterion dd > * {
+.evidence .jp-part dd > * {
   margin: 0;
 }
-.jp-crit-line {
+.jp-part-line {
   font-size: 1rem;
 }
 .jp-links {
@@ -315,7 +315,7 @@
   min-width: 0;
   font-size: 0.9375rem;
 }
-.judges .jx-body > * {
+.evidence .jx-body > * {
   margin: 0;
 }
 @keyframes jx-open {
@@ -579,18 +579,18 @@
 }
 
 /* The section rhythm, a step tighter on a wide screen so the evidence reads as one page, not a stack of posters. */
-.judges .page-section {
+.evidence .page-section {
   margin-top: clamp(2.25rem, 1.75rem + 1.4vw, 3.25rem);
 }
 .jm-note {
   font-size: 0.9375rem;
   max-width: 76ch;
 }
-.judges .lede {
+.evidence .lede {
   max-width: 44rem;
 }
-.judges .page-note,
-.judges .jx-body > p {
+.evidence .page-note,
+.evidence .jx-body > p {
   max-width: 76ch;
 }
 .jb th,
@@ -674,7 +674,7 @@
     gap: 6px;
   }
   .ja-text,
-  .judges .jp-step p:not(.jp-head) {
+  .evidence .jp-step p:not(.jp-head) {
     font-size: 0.875rem;
   }
   /* The four results as a 2-up grid of figures, the way a phone shows key numbers. */
@@ -700,7 +700,7 @@
     padding: 10px 0;
     gap: 3px;
   }
-  .judges .page-section {
+  .evidence .page-section {
     margin-top: 2rem;
   }
   .jp-tour .muted {
@@ -718,8 +718,8 @@
   .cmp {
     min-width: 60rem;
   }
-  /* The criteria's "more" opens from a plain row, not a second card under each one. */
-  .jp-criterion .jx-disc > summary {
+  /* Each part's "more" opens from a plain row, not a second card under each one. */
+  .jp-part .jx-disc > summary {
     min-height: 44px;
     padding: 8px 14px;
   }

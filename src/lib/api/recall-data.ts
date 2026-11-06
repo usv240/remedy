@@ -6,6 +6,9 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { desc, inArray, isNotNull } from "drizzle-orm";
+import { db, dbConfigured, schema } from "@/lib/db";
+import { normalizeRecall } from "@/lib/recall/ingest";
 import { loadAllRecalls, loadRecalls, loadSamplesFile, searchRecalls, type SearchFilters } from "@/lib/recall/search";
 import type { ProofRule } from "@/lib/recall/proof-rule";
 import type { RawCpscRecall, Recall } from "@/lib/recall/types";
@@ -37,9 +40,54 @@ let extract: { plain: ExtractFile | null; selfcheck: ExtractFile | null } | null
 export const rules = () => (rulesFile ??= readJson<RulesFile>("proof-rules.json"));
 const imageRows = () => (images ??= readJson<Record<string, ImageRow[]>>("image-hashes.json"));
 
+// ---------------------------------------------------------------- Rows added since the release
+
+/**
+ * Recalls the daily ingest stored after this release (src/lib/recall/daily.ts): rows in the recall table that are not
+ * in the committed file, read back from the raw CPSC record they carry, with their proof rules. Refreshed every five
+ * minutes by the async entry points (search, one recall, the scan, the badge), so a sync lookup sees them too.
+ */
+type Overlay = { at: number; recalls: Map<string, Recall>; rules: Map<string, { rule: ProofRule; source: string; model: string | null }> };
+let overlay: Overlay | null = null;
+let overlayLoading: Promise<void> | null = null;
+const OVERLAY_TTL_MS = 5 * 60_000;
+
+export async function refreshOverlay(): Promise<void> {
+  if (!dbConfigured()) return;
+  if (overlay && Date.now() - overlay.at < OVERLAY_TTL_MS) return;
+  overlayLoading ??= (async () => {
+    try {
+      const inFile = new Set(loadAllRecalls().map((r) => r.number));
+      const rows = await db().select({ number: schema.recalls.number, raw: schema.recalls.raw }).from(schema.recalls).where(isNotNull(schema.recalls.raw));
+      const fresh = rows.filter((r) => !inFile.has(r.number) && r.raw && typeof r.raw === "object").map((r) => normalizeRecall(r.raw as RawCpscRecall)).filter((r) => r.number);
+      const rules = new Map<string, { rule: ProofRule; source: string; model: string | null }>();
+      if (fresh.length) {
+        const list = await db()
+          .select({ n: schema.proofRules.recallNumber, rule: schema.proofRules.rule, source: schema.proofRules.source, model: schema.proofRules.model })
+          .from(schema.proofRules)
+          .where(inArray(schema.proofRules.recallNumber, fresh.map((r) => r.number)))
+          .orderBy(desc(schema.proofRules.version));
+        for (const r of list) if (!rules.has(r.n)) rules.set(r.n, { rule: r.rule as ProofRule, source: r.source, model: r.model });
+      }
+      const changed = !overlay || fresh.length !== overlay.recalls.size || fresh.some((r) => !overlay!.recalls.has(r.number));
+      overlay = { at: Date.now(), recalls: new Map(fresh.map((r) => [r.number, r])), rules };
+      if (changed) byNumber = null;
+    } catch {
+      // Without the table (an empty database) the committed file is the whole list; try again after the usual wait.
+      overlay = { at: Date.now(), recalls: new Map(), rules: new Map() };
+    } finally {
+      overlayLoading = null;
+    }
+  })();
+  await overlayLoading;
+}
+
+/** How many recalls the overlay holds, for tests and the status page. */
+export const overlaySize = () => overlay?.recalls.size ?? 0;
+
 /** A CPSC recall, or one of the fictional sample firm's recalls (marked sample: true). */
 export function recallByNumber(n: string): Recall | null {
-  byNumber ??= new Map(loadAllRecalls().map((r) => [r.number, r]));
+  byNumber ??= new Map([...loadAllRecalls(), ...(overlay?.recalls.values() ?? [])].map((r) => [r.number, r]));
   return byNumber.get(normalizeNumber(n)) ?? null;
 }
 
@@ -69,7 +117,15 @@ export function storedRule(n: string): { rule: ProofRule; source: string; model:
   if (own) return { rule: own, source: "firm", model: "none (written by the sample firm)", extractedAt: "", method: "Written by hand by Brightline Home, a fictional sample firm. No model call." };
   const f = rules();
   const rule = f.rules[num];
-  return rule ? { rule, source: f.sources[num] ?? "selfcheck", model: f.model, extractedAt: f.extractedAt, method: f.method } : null;
+  if (rule) return { rule, source: f.sources[num] ?? "selfcheck", model: f.model, extractedAt: f.extractedAt, method: f.method };
+  // A recall the daily ingest stored after this release: its rule is in the database.
+  const fresh = overlay?.rules.get(num);
+  if (fresh) {
+    return fresh.source === "ai"
+      ? { rule: fresh.rule, source: "selfcheck", model: fresh.model ?? "claude-opus-5-5", extractedAt: "", method: "Read by the daily recall ingest: Claude Opus 5.5 with structured output at medium effort, then a self-check pass." }
+      : { rule: fresh.rule, source: "baseline", model: "none (quick read)", extractedAt: "", method: "Read by the daily recall ingest with the deterministic quick read: keyword rules over the remedy text, no model call." };
+  }
+  return null;
 }
 
 export const summarize = (r: ProofRule): RuleSummary => ({
@@ -214,6 +270,7 @@ export type FindResult = { mode: "elastic" | "local" | "list"; model: string | n
  *  - Without words: every recall that fits the filters, newest first.
  */
 export async function findRecalls(o: { query?: string; filters?: ExplorerFilters; limit?: number; offset?: number }): Promise<FindResult> {
+  await refreshOverlay();
   const f = o.filters ?? {};
   const limit = Math.max(1, Math.min(o.limit ?? 20, 100));
   const offset = Math.max(0, o.offset ?? 0);

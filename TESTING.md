@@ -3,7 +3,7 @@
 Remedy runs on PayPal's sandbox, a practice version of PayPal where no real money moves. You do not need a Remedy account.
 
 - **Hosted demo:** [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com), hosted on Render.
-- **Start here:** [`/judges`](https://remedy-y0ym.onrender.com/judges) has the five-minute path, the results with their sources, and a guided tour (**Take the 2-minute tour**, six stops in one tab; Escape ends it).
+- **Start here:** [`/evidence`](https://remedy-y0ym.onrender.com/evidence) has the five-minute path, the results with their sources, and a guided tour (**Take the 2-minute tour**, six stops in one tab; Escape ends it).
 
 Brightline Home, the firm in the console, is a fictional sample firm. Real CPSC recalls appear with their real data and credited images. Every payout reads "Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm."
 
@@ -22,7 +22,7 @@ Use this login in the PayPal window that opens from the sample shop's PayPal but
 
 ## The five-minute path
 
-The same steps are on `/judges`, with a link to each page.
+The same steps are on `/evidence`, with a link to each page.
 
 | # | Page | Time | What to look at |
 |---|---|---|---|
@@ -31,7 +31,7 @@ The same steps are on `/judges`, with a link to each page.
 | 3 | [`/try`](https://remedy-y0ym.onrender.com/try) | 90 s | Run an example through the six checks, or buy in the sample shop, claim, and watch the refund go back to the original PayPal purchase. |
 | 4 | [`/firm`](https://remedy-y0ym.onrender.com/firm) | 60 s | The firm's side: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report. |
 | 5 | [`/developers`](https://remedy-y0ym.onrender.com/developers) | 40 s | A free key and a live playground. The same search, proof rules and photo checks are tools on the MCP server. |
-| 6 | [`/judges#results`](https://remedy-y0ym.onrender.com/judges#results) | 30 s | The CPSC count, the extraction benchmark (draft labels) and the recorded photo checks, each with its source file. |
+| 6 | [`/evidence#results`](https://remedy-y0ym.onrender.com/evidence#results) | 30 s | The CPSC count, the extraction benchmark (draft labels) and the recorded photo checks, each with its source file. |
 
 ## Try an example
 
@@ -116,6 +116,8 @@ curl -X POST https://remedy-y0ym.onrender.com/api/v1/verify \
   -H "Authorization: Bearer rm_test_..." -F photo=@official.jpg -F recall_number=27056
 ```
 
+A whole catalog goes in one call: `curl -s .../api/v1/scan/sample | curl -s -X POST .../api/v1/scan -H "content-type: application/json" -d @-` returns each row as `photo_refund`, `recalled`, `clear` or `unknown` with the recall and the claim link (50 rows without a key, 500 with one; `?format=csv` for a file). A product page can show a recall badge with one iframe, `<iframe src=".../api/embed/badge?recall=27056">`, or `?q=power%20bank` for the best-matching recall; `/api/embed/badge.js` with `data-recall="27056"` inserts the same iframe. "Find your recall" and `GET /api/v1/recalls?query=` ask the FDA and NHTSA as a second tier when the CPSC search has no good hit (try `infant formula` and `airbag`); those hits are labelled and link to the agency, since Remedy automates photo refunds for CPSC recalls only.
+
 The verify answer has `"decision": "retake"` and `"decided_by": "own_photo"`: the recall's own picture is found in code before any AI call. Without a key, `/api/v1/verify` runs only the free checks; with one, the full checks run, up to 25 a day per key. Nothing is stored or paid by this endpoint. Every endpoint, field and error is on [`/developers/docs`](https://remedy-y0ym.onrender.com/developers/docs), and `/openapi.json` has the same description for Postman and code generators.
 
 ## MCP
@@ -131,6 +133,7 @@ Add `--header "Authorization: Bearer rm_test_..."` for full photo checks in `ver
 | Tool | What it does |
 |---|---|
 | `search_recalls` | Finds recalls since 2024 from plain words, each with what to cut or mark and the refund |
+| `scan_catalog` | Checks a list of products at once: photo_refund, recalled, clear or unknown per row, with the claim link |
 | `get_proof_rule` | One recall's proof rule, with the official remedy text it came from |
 | `verify_photo` | Checks a photo (URL or base64) against a recall; stores and pays nothing |
 | `open_claim` | The owner's claim link and checklist, or, with a photo, opens a claim; never pays |

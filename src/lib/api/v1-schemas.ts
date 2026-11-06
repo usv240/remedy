@@ -31,3 +31,15 @@ export const VERIFY_LIMITS = {
   claudeRulesPerKeyPerDay: 20,
   types: ["image/jpeg", "image/png", "image/webp"],
 } as const;
+
+/** POST /api/v1/scan: a catalog to check against every recall since 2024. */
+export const ScanItemRequest = z.object({
+  name: z.string().min(1).max(200).describe('The product as listed, for example "HAIARA 10000mAh power bank".'),
+  model: z.string().max(80).nullish().describe("The model number, when known. A model in the recall's own list settles the row."),
+  sku: z.string().max(80).nullish().describe("Your SKU or the UPC. A UPC in the recall's list settles the row."),
+  brand: z.string().max(80).nullish().describe("The brand or maker, when it is not in the name."),
+});
+export const ScanRequest = z.object({
+  items: z.array(ScanItemRequest).min(1).max(500).describe("Up to 500 rows (50 without an API key)."),
+  ai: z.boolean().default(true).describe("False skips Claude for the ambiguous rows, which then come back unknown. Default true."),
+});

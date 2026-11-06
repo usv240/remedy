@@ -23,7 +23,7 @@ const write = (i: number | null) => {
 };
 
 /**
- * The guided tour's card. It follows the judge from page to page in one tab: the step lives in sessionStorage,
+ * The guided tour's card. It follows the visitor from page to page in one tab: the step lives in sessionStorage,
  * the card names what to look at, and the element it describes gets a ring. Escape ends it.
  */
 export function Tour() {
@@ -151,7 +151,7 @@ export function Tour() {
   );
 }
 
-/** The button on /judges and the home page that starts the tour from the first stop. Hidden until the tour has stops. */
+/** The button on /evidence and the home page that starts the tour from the first stop. Hidden until the tour has stops. */
 export function TourStart({ label = "Take the 2-minute tour" }: { label?: string }) {
   const router = useRouter();
   if (TOUR.length === 0) return null;

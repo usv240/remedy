@@ -181,7 +181,7 @@ export default function LearnPage() {
                 </p>
                 <p>
                   On {bench.sample.items} real remedies, every field was right in {pct(bench.variants.claude_selfcheck.allFieldsCorrect.rate)} with the self-check and {pct(bench.variants.baseline.allFieldsCorrect.rate)} with keyword rules alone, scored against draft labels that are being checked by hand.{" "}
-                  <Link className="text-link" href="/judges#benchmark">
+                  <Link className="text-link" href="/evidence#benchmark">
                     The benchmark
                   </Link>
                 </p>

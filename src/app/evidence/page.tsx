@@ -14,9 +14,9 @@ import { TOUR } from "@/components/tour/steps";
 import { fmtDate, fmtInt } from "@/lib/api/format";
 import "../pages.css";
 import "../landing-shared.css";
-import "./judges.css";
+import "./evidence.css";
 
-export const metadata: Metadata = { title: "For judges", description: "The five-minute path through Remedy, the numbers behind it, and how to check each one yourself." };
+export const metadata: Metadata = { title: "Evidence", description: "Every number on this site, where it comes from, and a five-minute path through the product." };
 
 /** The five-minute path: six stops, in the order the story runs. */
 const PATH = [
@@ -28,11 +28,12 @@ const PATH = [
   { href: "#results", label: "The numbers, and where they come from", time: "30 s", look: "The CPSC count, the extraction benchmark and the recorded photo checks, each with its source file." },
 ];
 
-type Criterion = { name: string; line: string; more?: string; where?: string; links: [string, string][] };
+type Part = { name: string; line: string; more?: string; where?: string; links: [string, string][] };
 
-const CRITERIA: Criterion[] = [
+/** Each part of the product, one line on what it does, and where on the site to see it. */
+const PARTS: Part[] = [
   {
-    name: "Technological implementation",
+    name: "Technology",
     line: "Claude Opus 5.5 reads every remedy into a structured proof rule and checks photos against it; plain code makes the decision and PayPal pays.",
     more: "Every part, from the batch to the payout",
     where: `${fmtInt(extraction().counts.recalls)} proof rules extracted with the Message Batches API and a self-check pass; photo checks that start with a free perceptual-hash match against official images and earlier claims; Elastic hybrid search with a reranker; PayPal Payouts, refunds to the original capture inside 180 days, Orders v2 and signature-checked webhooks; a public API with keys and limits, OpenAPI 3.1, and an MCP server.`,
@@ -56,7 +57,7 @@ const CRITERIA: Criterion[] = [
     ],
   },
   {
-    name: "Potential impact",
+    name: "Impact",
     line: `${fmtInt(S.all.photoRefund.count)} recalls since 2024 already pay on a photo, a growing share, and full remedies raise recall effectiveness.`,
     more: "The numbers and the research",
     where: `${S.byYear["2024"].photoRefund} photo-refund recalls in 2024, ${S.byYear["2025"].photoRefund} in 2025 and ${S.byYear["2026"].photoRefund} in 2026 so far (CPSC Recalls API). Recall effectiveness improves by 11.4% on average when firms offer a full remedy instead of a partial one (Raithel, Hock and Mafael, Journal of the Academy of Marketing Science, 2024). The CPSC's January 2025 order on Amazon called for direct notice and full refunds on proof of destruction.`,
@@ -67,7 +68,7 @@ const CRITERIA: Criterion[] = [
     ],
   },
   {
-    name: "Innovation",
+    name: "What is new",
     line: "A recall refund paid the moment the photo checks out, with PayPal's 180-day refund window used as a routing rule.",
     more: "What is new here",
     where: "No recall remedy in the CPSC data mentions PayPal or Venmo. Remedy turns free-text remedies into rules a program can check, keeps the refund pool for real owners with checks that need no AI, and lets AI assistants help an owner through the same tools over MCP.",
@@ -76,7 +77,7 @@ const CRITERIA: Criterion[] = [
       ["/developers", "For AI agents"],
     ],
   },
-  { name: "Presentation", line: "This page and its guided tour, the demo video, and every figure linked to its source.", links: [["/about", "About"]] },
+  { name: "Openness", line: "This page and its guided tour, every figure linked to its source file, and what is real and what is a sample, labeled.", links: [["/about", "About"]] },
 ];
 
 const COST = [
@@ -89,7 +90,7 @@ const COST = [
 
 const TOC: [string, string][] = [
   ["#path", "Five-minute path"],
-  ["#criteria", "Criteria"],
+  ["#parts", "Each part"],
   ["#benchmark", "Benchmark"],
   ["#photo-checks", "Photo checks"],
   ["#measured", "Measured"],
@@ -99,17 +100,17 @@ const TOC: [string, string][] = [
   ["#adoption", "Who runs it first"],
 ];
 
-export default function JudgesPage() {
+export default function EvidencePage() {
   const ex = extraction();
   return (
-    <div className="page frame judges">
+    <div className="page frame evidence">
       <OpenOnHash />
       <header className="page-head">
         <div className="title-row">
-          <h1 className="page-title">For judges</h1>
-          <Info id="page.judges" />
+          <h1 className="page-title">Evidence</h1>
+          <Info id="page.evidence" />
         </div>
-        <p className="lede">The five-minute path through Remedy, from a recall to a paid refund, and the numbers behind it.</p>
+        <p className="lede">Every number on this site, where it comes from, and a five-minute path through the product.</p>
         <p className="jp-tour">
           <TourStart /> <span className="muted">{TOUR.length} stops in this tab, about two minutes. Escape ends it.</span>
         </p>
@@ -117,7 +118,7 @@ export default function JudgesPage() {
 
       <div className="jr-head">
         <h2 className="sr-only">Results</h2>
-        <Info id="judges.results" label="" topic="The results" />
+        <Info id="evidence.results" label="" topic="The results" />
       </div>
       <Results />
 
@@ -156,14 +157,14 @@ export default function JudgesPage() {
         <p className="page-note">Every payout runs in the PayPal sandbox. Brightline Home is a fictional sample firm. Remedy is not affiliated with the CPSC or any recalling firm.</p>
       </section>
 
-      <section id="criteria" className="page-section" aria-labelledby="crit-h">
-        <h2 id="crit-h">Where each criterion shows</h2>
-        <dl className="jp-criteria">
-          {CRITERIA.map((c) => (
-            <div key={c.name} className="jp-criterion">
+      <section id="parts" className="page-section" aria-labelledby="parts-h">
+        <h2 id="parts-h">Where to see each part</h2>
+        <dl className="jp-parts">
+          {PARTS.map((c) => (
+            <div key={c.name} className="jp-part">
               <dt>{c.name}</dt>
               <dd>
-                <p className="jp-crit-line">{c.line}</p>
+                <p className="jp-part-line">{c.line}</p>
                 <p className="jp-links">
                   {c.links.map(([href, label]) => (
                     <Link key={href + label} className="text-link" href={href}>
@@ -188,7 +189,7 @@ export default function JudgesPage() {
       <section id="benchmark" className="page-section" aria-labelledby="bench-h">
         <div className="title-row">
           <h2 id="bench-h">Reading the remedy, measured</h2>
-          <Info id="judges.benchmark" label="" topic="The extraction benchmark" />
+          <Info id="evidence.benchmark" label="" topic="The extraction benchmark" />
         </div>
         <p className="page-prose jp-intro">Every check depends on reading the remedy right. Three readers took the same 130 real CPSC remedies, and each field was scored.</p>
         <Benchmark />
@@ -197,7 +198,7 @@ export default function JudgesPage() {
       <section id="photo-checks" className="page-section" aria-labelledby="photo-h">
         <div className="title-row">
           <h2 id="photo-h">The photo checks, recorded</h2>
-          <Info id="judges.fixtures" label="" topic="The photo checks" />
+          <Info id="evidence.fixtures" label="" topic="The photo checks" />
         </div>
         <p className="page-prose jp-intro">Each case is a real recall photo or a copy made from one. The checks keep the refund pool for real owners: a picture that is not the owner&rsquo;s own is asked to be retaken, kindly.</p>
         <PhotoChecks />
@@ -255,7 +256,7 @@ export default function JudgesPage() {
       <section id="compare" className="page-section" aria-labelledby="cmp-h">
         <div className="title-row">
           <h2 id="cmp-h">How it compares</h2>
-          <Info id="judges.compare" label="" topic="How it compares" />
+          <Info id="evidence.compare" label="" topic="How it compares" />
         </div>
         <p className="page-prose jp-intro">Each of these does its job. Remedy adds the instant check and the PayPal payout to what firms already do.</p>
         <Compare />
@@ -264,7 +265,7 @@ export default function JudgesPage() {
       <section id="adoption" className="page-section" aria-labelledby="ad-h">
         <div className="title-row">
           <h2 id="ad-h">Who runs it first</h2>
-          <Info id="judges.adoption" label="" topic="Who runs it first" />
+          <Info id="evidence.adoption" label="" topic="Who runs it first" />
         </div>
         <p className="page-prose jp-intro">Three groups already handle recall claims. Each can run Remedy as it is today.</p>
         <Adoption />

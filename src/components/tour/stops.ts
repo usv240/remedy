@@ -1,5 +1,5 @@
 /**
- * The guided tour's stops, in the order a judge walks them (about two minutes). Each names a page, a CSS selector for
+ * The guided tour's stops, in the order a visitor walks them (about two minutes). Each names a page, a CSS selector for
  * the element it describes, and one sentence. Stops on other builders' pages point at their h1 until those pages pick
  * a stable target. Read by src/components/tour/steps.ts.
  */
@@ -37,9 +37,9 @@ export const STOPS: Stop[] = [
     text: "A free key and a live playground. The same search, proof rules and photo checks are tools on the MCP server.",
   },
   {
-    path: "/judges",
+    path: "/evidence",
     target: "#results",
-    title: "The numbers, and where they come from",
+    title: "Evidence: the numbers, and where they come from",
     text: "The CPSC data behind every figure, the extraction benchmark, and the recorded photo checks. That is the tour.",
   },
 ];

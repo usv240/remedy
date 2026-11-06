@@ -9,6 +9,7 @@ export const FIRM_LINKS = [
   { href: "/firm/plan", label: "Recall plan" },
   { href: "/firm/reports", label: "CPSC report" },
   { href: "/firm/buyers", label: "Buyers" },
+  { href: "/firm/scan", label: "Scan a catalog" },
 ] as const;
 
 const isCurrent = (path: string | null, href: string) => path !== null && (href === "/firm" ? path === "/firm" : path === href || path.startsWith(`${href}/`));

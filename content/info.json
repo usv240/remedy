@@ -2,7 +2,7 @@
   "view.mode": {
     "title": "Plain or Technical",
     "what": "Plain shows short explanations in everyday words. Technical adds the API calls, the checks behind each decision and the tools used.",
-    "why": "Owners, firms and judges can read the same page at the level that suits them."
+    "why": "Owners, firms and developers can read the same page at the level that suits them."
   },
   "view.labels": {
     "title": "Info labels",
@@ -63,11 +63,11 @@
       "Elastic"
     ]
   },
-  "page.judges": {
+  "page.evidence": {
     "title": "About this page",
-    "what": "The five-minute path through Remedy, with the test results and how to check each one yourself.",
+    "what": "Every number on this site, where it comes from, and a five-minute path through the product.",
     "why": "So you can see the whole loop, from a recall to a paid refund, without hunting for it.",
-    "technical": "Every payout and refund runs in the PayPal sandbox. The test commands and their results are listed in TESTING.md in the repository."
+    "technical": "Every payout and refund runs in the PayPal sandbox. The test commands and their results are listed in the project's TESTING.md."
   },
   "page.learn": {
     "title": "About this page",
@@ -304,30 +304,30 @@
     "why": "So a reviewer can trace every field of the rule back to the source.",
     "technical": "Drafts and checks come from content/recalls/extract (Message Batches, with their batch ids and token counts). The raw record is from the CPSC Recalls API pull."
   },
-  "judges.results": {
+  "evidence.results": {
     "title": "The results",
     "what": "The four numbers to know, each with where it comes from. Open any section below for the full detail.",
     "why": "Five minutes is enough to see the loop and to check the data behind it.",
     "technical": "Read from content/recalls/stats.json, content/recalls/benchmark/results.json and content/public/verify-runs.json."
   },
-  "judges.benchmark": {
+  "evidence.benchmark": {
     "title": "The extraction benchmark",
     "what": "130 real CPSC remedies, read by three systems, scored field by field against labels.",
     "why": "Every check depends on reading the remedy right, so we measured it on public data we did not write.",
     "technical": "A stratified random sample of 100 photo-refund remedies and 30 others. Systems: a regular-expression reader, Claude Opus 5.5, and Claude with a self-check. Exact match per field; actions and must_show also as precision and recall. The labels are a draft and are being checked by hand."
   },
-  "judges.fixtures": {
+  "evidence.fixtures": {
     "title": "The photo checks, recorded",
     "what": "Each photo case the verifier was run on, and what it decided.",
     "why": "The checks keep the refund pool for real owners: the recall's own pictures, copies of them, and photos already used are each caught.",
     "technical": "verifyPhoto on content/verify/fixtures. Cases with no vision need no AI; two vision cases are recorded live runs of Claude Opus 5.5. Written by scripts/public/record-runs.ts."
   },
-  "judges.compare": {
+  "evidence.compare": {
     "title": "How it compares",
     "what": "How a photo-refund claim works today by email, through a recall vendor's portal, and on Remedy.",
     "why": "Each of these does its job well. Remedy adds the instant check and the PayPal payout to what firms already do."
   },
-  "judges.adoption": {
+  "evidence.adoption": {
     "title": "Who runs it first",
     "what": "The groups that could use Remedy as it is today, with the numbers behind each.",
     "why": "Most recalls are small, and small firms handle claims by hand."
@@ -355,5 +355,17 @@
     "what": "Generated the PayPal Server SDK that Remedy uses for every order, capture and refund.",
     "why": "A typed SDK catches mistakes in PayPal requests before they reach PayPal.",
     "technical": "@paypal/paypal-server-sdk (APIMatic): OrdersController for create, get and capture; PaymentsController for captures and refunds, each with PayPal-Request-Id. Payouts, Transaction Search and Disputes use REST, which the SDK does not cover."
+  },
+  "stack.recall-ingest": {
+    "title": "Daily recall ingest",
+    "what": "Once a day Remedy pulls every new CPSC recall, reads its remedy into a proof rule, hashes its official images and adds it to search.",
+    "why": "New photo-refund recalls appear in 2026 at about one a day, so owners of the newest ones can claim without waiting for a release.",
+    "technical": "A Render cron job calls POST /api/ops/recalls/daily with CHECKS_SECRET. New rows go to recall, proof_rule and image_hash in Postgres and to the Elastic index; the committed JSON files are never written. Claude Opus 5.5 reads each new photo-refund rule with a self-check, inside the daily AI budget."
+  },
+  "dev.embed": {
+    "title": "The recall badge",
+    "what": "A small page our server renders for an iframe: the recall, its one-line remedy and refund, and a link to the owner's claim page.",
+    "why": "A product page or a listing can show the remedy where the owner is, with nothing to build and nothing else loaded on the page.",
+    "technical": "GET /api/embed/badge?recall= or ?q= (the best-matching recall). Inputs are escaped; the page sets frame-ancestors * and a strict CSP of its own, and follows prefers-color-scheme. /api/embed/badge.js inserts the iframe where the script tag sits."
   }
 }
