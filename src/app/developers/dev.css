@@ -1,0 +1,725 @@
+/* Developers: uses, key request and reveal, playground, docs and usage. Also used by /agents, /stack, /judges,
+   /manage, /organizations and the report check page for .doc-table and .dev-pre. */
+.dev-hero {
+  display: grid;
+  gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  max-width: 80rem;
+}
+/* From 1040px the first call sits beside the lede, so the first screen already shows code. */
+@media (min-width: 1040px) {
+  .dev-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    column-gap: clamp(2rem, 4vw, 4rem);
+  }
+}
+.dev-first {
+  margin: 0;
+  max-width: 40rem;
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.dev-first-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 4px;
+}
+.dev-first figcaption {
+  font-size: var(--step-small);
+  font-weight: 500;
+}
+.dev-first .dev-pre {
+  max-height: none;
+}
+.dev-first-note {
+  padding: 0 4px 2px;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.dev-first-note code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  color: var(--ink);
+}
+.dev-uses {
+  list-style: none;
+  margin: clamp(2rem, 1.5rem + 2vw, 3rem) 0 0;
+  padding: 0;
+  max-width: 68rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 8px;
+}
+.dev-use {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 18px 20px;
+  font-size: 1rem;
+}
+.dev-use-who {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.dev-use-link {
+  margin-top: 8px;
+}
+.dev-limits {
+  background: var(--surface-2);
+}
+.dev-intro {
+  margin-bottom: 1.25rem;
+}
+
+/* Key form and reveal */
+.dev-form {
+  max-width: 44rem;
+  background: var(--surface);
+  border-radius: 20px;
+  padding: clamp(18px, 3vw, 28px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 14px 16px;
+}
+.dev-wide {
+  grid-column: 1 / -1;
+}
+.dev-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.dev-field input,
+.dev-field textarea {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  border-radius: 10px;
+  padding: 0 12px;
+  min-height: 2.875rem;
+  width: 100%;
+  min-width: 0;
+}
+.dev-field input[type="file"] {
+  padding: 10px 12px;
+}
+.dev-field textarea {
+  padding: 10px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+.dev-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+}
+.dev-check input {
+  margin-top: 3px;
+  inline-size: 18px;
+  block-size: 18px;
+  accent-color: var(--accent-text);
+}
+.dev-form-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+.dev-note {
+  color: var(--attention);
+  font-size: 0.9375rem;
+}
+.dev-reveal {
+  max-width: 44rem;
+  background: var(--surface);
+  border-radius: 20px;
+  padding: clamp(18px, 3vw, 28px);
+  display: grid;
+  gap: 10px;
+}
+.dev-reveal-k {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.dev-key {
+  display: block;
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+.dev-reveal-note {
+  font-size: 0.9375rem;
+}
+.dev-reveal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Playground */
+.dev-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 12px;
+  align-items: start;
+  max-width: 80rem;
+}
+@media (max-width: 960px) {
+  .dev-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.dev-pane {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: clamp(16px, 2.5vw, 24px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+/* Endpoints in three labeled rows: Check, Read, Create. */
+.dev-eps {
+  display: grid;
+  gap: 8px;
+}
+.dev-ep-row {
+  display: grid;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+}
+.dev-ep-k {
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.dev-ep-chips,
+.dev-langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.dev-ep,
+.dev-lang {
+  font: inherit;
+  font-size: 0.875rem;
+  min-height: 2.25rem;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--surface-2);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+.dev-ep:active,
+.dev-lang:active {
+  transform: scale(0.97);
+}
+.dev-ep[aria-checked="true"],
+.dev-lang[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--bg);
+}
+.dev-route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+.dev-method {
+  font-weight: 600;
+  color: var(--link);
+}
+.dev-tag {
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.dev-summary {
+  font-size: 0.9375rem;
+}
+.dev-send {
+  justify-self: start;
+}
+.dev-out {
+  min-height: 12rem;
+}
+.dev-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: 0.875rem;
+}
+.dev-code-badge {
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+}
+.dev-code-badge[data-ok] {
+  background: var(--pill-positive);
+  color: var(--pill-positive-ink);
+}
+/* Code keeps its lines: long ones scroll sideways inside the block instead of breaking mid-word. */
+.dev-pre {
+  margin: 0;
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre;
+  overflow-wrap: normal;
+  max-height: 28rem;
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink) 28%, transparent) transparent;
+}
+.dev-snip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--surface-2);
+}
+.dev-copy {
+  margin-inline-start: auto;
+  min-height: 2.25rem;
+  padding: 0 12px;
+  font-size: 0.875rem;
+}
+.dev-more {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+@media (pointer: coarse) {
+  .dev-ep,
+  .dev-lang,
+  .dev-copy,
+  .dev-ep-k {
+    min-height: 44px;
+  }
+  /* Links that stand alone as the next step get a full-size touch target; links inside sentences keep the text's height. */
+  .dev-use-link .text-link,
+  .dev-more .text-link,
+  .doc-ep-body > p > .text-link:only-child,
+  .dev-docs .page-prose > p > .text-link:only-child {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* Docs */
+.dev-docs .page-head .lede + .page-prose {
+  margin-top: 1rem;
+}
+.doc-body {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+}
+.doc-main > .page-section:first-child {
+  margin-top: 0;
+}
+.doc-sec,
+.doc-error {
+  scroll-margin-top: 1.5rem;
+}
+@media (max-width: 900px) {
+  /* A block, not a grid, so the Contents menu can stay at the top of the screen through every endpoint. */
+  .doc-body {
+    display: block;
+  }
+  .doc-sec,
+  .doc-error {
+    scroll-margin-top: 4.5rem;
+  }
+}
+/* Endpoints: one row each, closed by default. The row gives the title, the route and what it does; it opens to the
+   fields, the example request and the response. "Open all" opens every row for a reader who wants the whole reference. */
+.doc-eps-head {
+  max-width: 68rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.doc-eps-head h2 {
+  margin-bottom: 0;
+}
+.doc-eps-head + .page-prose {
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+.open-all {
+  min-height: 2.25rem;
+  padding: 0 14px;
+  font-size: 0.875rem;
+}
+.doc-ep-list {
+  margin-top: 1rem;
+  max-width: 68rem;
+  border-bottom: 1px solid var(--surface-2);
+}
+.doc-ep {
+  border-top: 1px solid var(--surface-2);
+}
+.dsc.doc-ep > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12px;
+  grid-template-areas:
+    "title icon"
+    "route icon"
+    "line icon";
+  align-items: center;
+  gap: 4px 20px;
+  padding: 14px 0;
+  font-weight: 400;
+}
+/* The plus sits on the title's line, where the eye starts reading the row. */
+.dsc.doc-ep > summary::after {
+  grid-area: icon;
+  align-self: start;
+  margin-top: 0.4em;
+}
+.dsc.doc-ep > summary h3 {
+  grid-area: title;
+  font-size: var(--step-body);
+  font-weight: 500;
+  letter-spacing: normal;
+}
+.dsc.doc-ep > summary .dev-route {
+  grid-area: route;
+  font-size: 0.875rem;
+}
+.doc-ep-line {
+  grid-area: line;
+  max-width: 40rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+/* Wide screens: title and route on the left, what it does beside them, so most closed rows are two lines tall. */
+@media (min-width: 1040px) {
+  .dsc.doc-ep > summary {
+    grid-template-columns: minmax(0, 21rem) minmax(0, 1fr) 12px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "title line icon"
+      "route line icon";
+    align-items: start;
+    column-gap: 24px;
+  }
+  .doc-ep-line {
+    padding-top: 0.15em;
+  }
+}
+.doc-ep-body {
+  padding: 0.25rem 0 1.75rem;
+}
+.doc-ep-body > :first-child {
+  margin-top: 0;
+}
+@media (pointer: coarse) {
+  .open-all {
+    min-height: 44px;
+  }
+}
+/* Tables that are wider than the screen scroll inside their panel; a soft shade on an edge shows there is more. */
+.doc-table-wrap {
+  margin-top: 1rem;
+  max-width: 68rem;
+  overflow-x: auto;
+  border-radius: 14px;
+  background:
+    linear-gradient(to right, var(--surface) 40%, transparent) left center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--surface) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, color-mix(in srgb, var(--ink) 16%, transparent), transparent) left center / 0.75rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, color-mix(in srgb, var(--ink) 16%, transparent), transparent) right center / 0.75rem 100% no-repeat scroll,
+    var(--surface);
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink) 28%, transparent) transparent;
+}
+.doc-table {
+  border-collapse: collapse;
+  inline-size: 100%;
+  font-size: 0.9375rem;
+}
+.doc-table th,
+.doc-table td {
+  text-align: start;
+  vertical-align: top;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--surface-2);
+}
+.doc-table th {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+/* Money and counts line up on the right. */
+.doc-table .num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+/* The last row closes on the panel's edge: no rule under its row heading either. */
+.doc-table > :last-child > tr:last-child > :is(td, th) {
+  border-bottom: 0;
+}
+.doc-req {
+  font-size: 0.8125rem;
+  color: var(--link);
+}
+.doc-type {
+  color: var(--muted);
+  overflow-wrap: break-word;
+}
+/* Field names stay whole; types wrap between their values, never inside a word. */
+.doc-fields td code {
+  overflow-wrap: break-word;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.doc-fields .doc-name code {
+  color: var(--ink);
+  white-space: nowrap;
+}
+.doc-fields .doc-type {
+  width: 26%;
+}
+/* On a phone each field is one block: its name, its type, then what it does. */
+@media (max-width: 720px) {
+  .doc-fields thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .doc-fields tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--surface-2);
+  }
+  .doc-fields tbody > tr:last-child {
+    border-bottom: 0;
+  }
+  .doc-fields td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+  .doc-fields .doc-type {
+    width: auto;
+    font-size: 0.875rem;
+  }
+  .doc-fields .doc-name code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+.doc-examples {
+  margin-top: 1.25rem;
+  max-width: 52rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+.doc-example {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.4rem;
+}
+.doc-cap {
+  font-size: var(--step-small);
+  font-weight: 500;
+}
+.doc-cap .muted {
+  font-weight: 400;
+}
+.doc-response {
+  max-height: 24rem;
+}
+/* From 1040px the request and its response sit side by side: captions on one line, the code blocks level below them. */
+@media (min-width: 1040px) {
+  .doc-ep .doc-examples {
+    max-width: 68rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 0.4rem 1rem;
+  }
+  .doc-ep .doc-example {
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    gap: 0;
+  }
+  .doc-ep .doc-example .dev-pre {
+    align-self: start;
+  }
+}
+.doc-ep-body > p + p,
+.doc-ep-body pre + p,
+.doc-ep-body .doc-table-wrap + p {
+  margin-top: 0.75rem;
+}
+.doc-ep-body .doc-examples + p {
+  margin-top: 1rem;
+}
+.dev-docs code,
+.page-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+/* The method and path are code, set as the route line, not as a chip. */
+.dev-route code {
+  font: inherit;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+.doc-errors {
+  margin: 1rem 0 0;
+  max-width: 68rem;
+}
+.doc-error {
+  display: grid;
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+  gap: 6px 24px;
+  padding: 14px 0;
+  border-top: 1px solid var(--surface-2);
+}
+@media (max-width: 720px) {
+  .doc-error {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.doc-error dt {
+  font-weight: 500;
+}
+.doc-error dd {
+  margin: 0;
+}
+
+/* Usage */
+/* No keys yet: the panel sits where the keys will appear, with the one action that fills it. */
+.usage-empty {
+  max-width: 68rem;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+.usage-keys {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-width: 68rem;
+}
+.usage-key {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px 20px;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .usage-key {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.usage-key[data-revoked] {
+  background: var(--surface-2);
+}
+.usage-prefix {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 500;
+}
+.usage-calls,
+.usage-state {
+  font-size: 0.9375rem;
+}
+.usage-actions {
+  display: flex;
+  gap: 8px;
+}
+.usage-days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  max-width: 44rem;
+}
+.usage-days li {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 3rem;
+  gap: 12px;
+  align-items: center;
+  font-size: 0.9375rem;
+}
+.usage-bar {
+  display: block;
+  block-size: 14px;
+  min-inline-size: 4px;
+  border-radius: 3px;
+  background: var(--chart-1);
+}
+.usage-days li > :last-child {
+  text-align: end;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dev-ep,
+  .dev-lang {
+    transition: none;
+  }
+}

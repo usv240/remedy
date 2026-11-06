@@ -1,0 +1,73 @@
+# Render Blueprint: the Remedy web service and its Postgres database.
+# In the Render Dashboard choose New > Blueprint, pick this repository, and fill in the values marked sync: false.
+#
+#   remedy      the web app (Next.js), its API and MCP server
+#   remedy-db   Postgres 17; tables come from the reviewed SQL in db/schema.sql
+services:
+  - type: web
+    name: remedy
+    runtime: node
+    plan: starter # 0.5 CPU, 512 MB, always on
+    region: oregon
+    buildCommand: npm ci && npm run build
+    # Apply the reviewed schema (idempotent), seed the sample firm, and load the recall data before each release.
+    preDeployCommand: node scripts/migrate.mjs && npx tsx scripts/load-recalls.ts && npx tsx scripts/seed.ts
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: remedy-db
+          property: connectionString
+      - key: AUDIT_SALT
+        generateValue: true
+      - key: DATA_KEY # encrypts contact details at rest (src/lib/secure.ts)
+        generateValue: true
+      - key: CHECKS_SECRET
+        generateValue: true
+      - key: REMEDY_SECRET_KEY # encrypts where each payout goes, inside its payment plan (src/lib/payments/seal.ts)
+        generateValue: true
+      - key: AI_DAILY_USD # daily cap on Claude spend; past it, photos go to a person at the firm
+        value: "2"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_WEBHOOK_ID # from a sandbox webhook pointed at https://<service>/api/webhooks/paypal
+        sync: false
+      - key: NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY
+        sync: false
+      # Optional: each has a working fallback until it is set.
+      - key: ELASTIC_URL
+        sync: false
+      - key: ELASTIC_API_KEY
+        sync: false
+      - key: CHANNEL3_API_KEY
+        sync: false
+      - key: KERNEL_API_KEY
+        sync: false
+      - key: ZAPIER_MCP_URL
+        sync: false
+      - key: ASTROPODS_AGENT_URL
+        sync: false
+      - key: ASTROPODS_API_KEY
+        sync: false
+      - key: RENDER_API_KEY
+        sync: false
+
+databases:
+  - name: remedy-db
+    plan: basic-256mb # 0.1 CPU, 256 MB
+    databaseName: remedy
+    user: remedy
+    postgresMajorVersion: "17"
+    diskSizeGB: 1
+    region: oregon
+    ipAllowList: [] # reachable only from services in this Render workspace

@@ -1,0 +1,90 @@
+# Every push and pull request: the dependency audit, types, lint and unit tests, then a production build served
+# against an empty Postgres with no service keys, where every page must answer and pass axe (WCAG 2.2 AA) on desktop
+# and phone, in light and dark.
+#
+# The checks that move sandbox money (payouts, refunds, the sample shop) need keys and run from a machine that has
+# them; see TESTING.md.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Audit, types, lint, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Dependency audit (high and critical)
+        run: npm audit --audit-level=high
+      - run: npm run typecheck
+      - run: npm run lint
+      - name: Unit tests
+        run: npm test
+
+  app:
+    name: Build, serve, smoke and accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: remedy
+          POSTGRES_PASSWORD: remedy
+          POSTGRES_DB: remedy
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U remedy"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgres://remedy:remedy@localhost:5432/remedy
+      PORT: "3400"
+      BASE_URL: http://localhost:3400
+      CHROME_PATH: /usr/bin/google-chrome
+      # CI holds no secrets; the dev data key stands in so the seed can run.
+      REMEDY_ALLOW_DEV_KEY: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Create the tables from the reviewed SQL, load the recalls, seed the sample firm
+        run: |
+          node scripts/migrate.mjs
+          npx tsx scripts/load-recalls.ts
+          npx tsx scripts/seed.ts
+      - name: Start the app
+        run: |
+          npm start > server.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf "$BASE_URL/api/health" -o /dev/null && exit 0; sleep 1; done
+          echo "The app did not start"; cat server.log; exit 1
+      - name: Every page and public endpoint answers, each integration on its fallback
+        run: npm run e2e:smoke
+      - name: axe (WCAG 2.2 AA) and sideways scroll on every page, desktop and phone, light and dark
+        run: npm run e2e:a11y
+      - name: Server log
+        if: failure()
+        run: cat server.log

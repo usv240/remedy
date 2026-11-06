@@ -1,0 +1,23 @@
+/* Status: one line that sums up the checks, then a row per service (rows are styled in pages.css). */
+.status-sum {
+  margin-top: 2.5rem;
+  max-width: 68rem;
+}
+.status-sum + .status-list {
+  margin-top: 1rem;
+}
+
+/* AI spend today: Technical view only (the View menu sets html[data-mode]). */
+.status-ai {
+  margin-top: 2.5rem;
+  max-width: 68rem;
+}
+:root:not([data-mode="technical"]) .status-ai {
+  display: none;
+}
+.status-ai h2 {
+  font-size: 1.125rem;
+}
+.status-ai .status-list {
+  margin-top: 0.75rem;
+}

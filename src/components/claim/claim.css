@@ -1,0 +1,1177 @@
+/* The owner's path: /claim, /claim/[recall], the receipt at /r/[claimId], and the result views /try shares.
+   "Framed sheet" (.taste-skill/remedy-app.txt) on Remedy's tokens: the pale ground is the frame, the work sits on white
+   sheets with a 1px edge and soft corners, no shadow. Phone first: one column of steps; from 1000px the recall sits in
+   a sticky left column beside the steps. Type in rem; every control at least 44px tall. */
+
+/* Plain and Technical: technical detail is present for everyone and shown in the Technical view. */
+.cl-tech {
+  display: none;
+}
+:root[data-mode="technical"] .cl-tech {
+  display: block;
+}
+:root[data-mode="technical"] span.cl-tech {
+  display: inline;
+}
+
+.cl-page {
+  padding-top: clamp(1.25rem, 0.75rem + 2vw, 3rem);
+  padding-bottom: 1rem;
+}
+.cl-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  min-height: 44px;
+}
+.cl-crumbs .text-link {
+  color: var(--ink);
+}
+.cl-head {
+  margin-top: 0.5rem;
+  max-width: 44rem;
+}
+.cl-title {
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2rem);
+  font-weight: 400;
+}
+.cl-lede {
+  margin-top: 0.625rem;
+  font-size: 1.125rem;
+  line-height: 1.45;
+  max-width: 38rem;
+}
+
+/* The steps: a real ordered list. */
+.cl-steps {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.cl-step {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sheet);
+  padding: 20px;
+  min-width: 0;
+}
+.cl-step-title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 400;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  outline: none;
+}
+.cl-step-title[data-n]::before {
+  content: attr(data-n);
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  min-width: 1.25rem;
+}
+.cl-step-title:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+/* Steps that have not started yet are quieter: a tone step, no edge. */
+.cl-step[data-step="checking"]:not([data-active]),
+.cl-step[data-step="result"]:not([data-active]) {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.cl-step:not([data-active]) .cl-later {
+  margin-top: 0.375rem;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+}
+@media (min-width: 1000px) {
+  .cl-steps {
+    grid-template-columns: minmax(19rem, 23rem) minmax(0, 1fr);
+    gap: 16px 24px;
+    align-items: start;
+  }
+  .cl-step {
+    grid-column: 2;
+    padding: 24px;
+  }
+  .cl-step-recall {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+/* Step 1: the recall */
+.cl-recall {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+.cl-recall-top {
+  display: grid;
+  gap: 14px;
+}
+.cl-recall-img {
+  width: 100%;
+  height: auto;
+  max-height: 15rem;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--edge);
+}
+.cl-recall-cap,
+.cl-example figcaption {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.cl-recall-product {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.cl-recall-number {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 2px;
+  color: var(--muted);
+}
+.cl-recall-hazard {
+  margin-top: 6px;
+}
+/* Picture beside the words: on phones, and in the compact card. */
+.cl-recall[data-compact] .cl-recall-top[data-img] {
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  align-items: start;
+}
+.cl-recall[data-compact] .cl-recall-img {
+  aspect-ratio: 1;
+  max-height: none;
+}
+@media (max-width: 999px) {
+  .cl-recall-top[data-img] {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    align-items: start;
+  }
+  .cl-recall-img {
+    aspect-ratio: 1;
+    max-height: none;
+  }
+}
+.cl-facts {
+  margin: 12px 0 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.9375rem;
+}
+.cl-facts > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 8px;
+}
+.cl-facts dt {
+  color: var(--muted);
+}
+.cl-facts dd {
+  margin: 0;
+}
+.cl-remedy {
+  margin-top: 12px;
+  font-size: 0.9375rem;
+}
+.cl-remedy summary,
+.cl-sale summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+.cl-remedy blockquote {
+  margin: 4px 0 0;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+/* Step 2: make it safe */
+.cl-todo {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 4px;
+}
+.cl-todo-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-height: 64px;
+}
+.cl-art {
+  width: 56px;
+  height: 56px;
+  color: var(--ink);
+}
+.cl-art-soft {
+  opacity: 0.45;
+}
+.cl-todo-text {
+  font-size: 1.0625rem;
+  line-height: 1.4;
+}
+.cl-todo-text .info-trigger {
+  margin-left: 0.125rem;
+}
+.cl-example {
+  margin: 18px 0 0;
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: 12px;
+}
+.cl-example img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #fff;
+}
+.cl-example figcaption {
+  display: grid;
+  gap: 4px;
+}
+.cl-example-k {
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+@media (max-width: 480px) {
+  .cl-example {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cl-example img {
+    max-width: 16rem;
+  }
+}
+.cl-rule {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.cl-rule-k {
+  font-weight: 600;
+}
+.cl-rule-dl {
+  margin: 8px 0;
+  display: grid;
+  gap: 4px;
+}
+.cl-rule-dl > div {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 8px;
+}
+.cl-rule-dl dt {
+  color: var(--muted);
+}
+.cl-rule-dl dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Step 3: the photo */
+.cl-photo {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+.cl-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-width: 30rem;
+  border-radius: 12px;
+  background: var(--surface-2);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.cl-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+.cl-frame-empty {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.cl-corners {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.cl-frame[data-has] .cl-corners {
+  stroke: #fff;
+  opacity: 0.85;
+}
+.cl-tip {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  max-width: 34rem;
+}
+.cl-pick {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 34rem;
+}
+.cl-pick-btn {
+  position: relative;
+  min-height: 48px;
+  font-family: var(--font-ui);
+  border-radius: var(--radius-control);
+  overflow: hidden;
+}
+.cl-pick-btn:focus-within {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.cl-pick-btn:active {
+  transform: scale(0.97);
+}
+.cl-file {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 0;
+}
+.cl-file:disabled {
+  cursor: default;
+}
+.cl-precheck {
+  max-width: 34rem;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+}
+.cl-precheck-lead {
+  font-weight: 600;
+}
+.cl-precheck-ok {
+  color: var(--positive);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+.cl-precheck-ok .cl-tech {
+  color: var(--muted);
+  font-weight: 400;
+}
+.cl-guide {
+  margin: 8px 0 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 4px;
+}
+.cl-check-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 44px;
+  padding-top: 10px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+.cl-check-box input {
+  inline-size: 20px;
+  block-size: 20px;
+  margin-top: 1px;
+  flex: none;
+}
+.cl-sale {
+  max-width: 34rem;
+  padding-top: 4px;
+}
+.cl-sale-why {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+}
+.cl-field {
+  display: grid;
+  gap: 6px;
+  margin-top: 4px;
+}
+.cl-field label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+.cl-field input {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-radius: var(--radius-control);
+  padding: 0 12px;
+  min-height: 48px;
+  width: 100%;
+  max-width: 26rem;
+}
+.cl-field input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+  border-color: var(--ink);
+}
+.cl-field input[aria-invalid] {
+  border-color: var(--attention);
+}
+.cl-hint {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.cl-note {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.cl-error {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+  font-size: 0.9375rem;
+  max-width: 34rem;
+}
+.cl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 4px;
+}
+.cl-send {
+  min-width: 14rem;
+  min-height: 52px;
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  border-radius: var(--radius-control);
+}
+.cl-send:disabled {
+  opacity: 0.55;
+}
+@media (max-width: 560px) {
+  .cl-send {
+    width: 100%;
+  }
+}
+.cl-textbtn {
+  background: none;
+  border: 0;
+  padding: 0 0 0 0.25rem;
+  min-height: 44px;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+/* Step 4: checking */
+.cl-checking {
+  margin-top: 12px;
+}
+.cl-checking-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.cl-stage {
+  flex: 1;
+  font-weight: 500;
+}
+.cl-dots::after {
+  content: "...";
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: cl-dots 1.2s steps(4, end) infinite;
+  overflow: hidden;
+  vertical-align: bottom;
+  clip-path: inset(0 100% 0 0);
+}
+@keyframes cl-dots {
+  to {
+    clip-path: inset(0 -10% 0 0);
+  }
+}
+.cl-elapsed {
+  font-size: 1.25rem;
+  font-weight: 500;
+  min-width: 4.5ch;
+  text-align: right;
+}
+.cl-checks {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: grid;
+}
+.cl-check {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 7%, transparent); /* row rule in a list of rows (data-ui) taste-skill-ignore */
+  min-height: 48px;
+}
+.cl-check:first-child {
+  border-top: 0;
+}
+.cl-check:not([data-s="pending"]) {
+  animation: cl-in 240ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+@keyframes cl-in {
+  from {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+}
+.cl-check-name {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  font-weight: 500;
+}
+.cl-check-word {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.cl-check-word[data-tone="positive"] {
+  color: var(--positive);
+}
+.cl-check-word[data-tone="attention"] {
+  color: var(--attention);
+}
+.cl-check-word[data-tone="info"] {
+  color: var(--link);
+}
+.cl-check-why {
+  margin-top: 2px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.cl-check-tech,
+.cl-timings,
+.cl-result-tech,
+.cl-product-tech {
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.cl-mark {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cl-mark circle {
+  stroke: currentColor;
+}
+.cl-mark[data-s="pass"] {
+  color: var(--positive);
+}
+.cl-mark[data-s="pass"] circle {
+  fill: var(--positive);
+}
+.cl-mark[data-s="pass"] path {
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.cl-mark[data-s="fail"] {
+  color: var(--attention);
+}
+.cl-mark[data-s="fail"] path {
+  stroke: var(--attention);
+  stroke-width: 2;
+}
+.cl-mark[data-s="unclear"],
+.cl-mark[data-s="unavailable"] {
+  color: var(--link);
+}
+.cl-mark[data-s="unclear"] path,
+.cl-mark[data-s="unavailable"] path {
+  stroke: var(--link);
+}
+.cl-mark[data-s="skipped"] {
+  color: var(--control);
+}
+.cl-mark[data-s="skipped"] path {
+  stroke: var(--control);
+}
+span.cl-mark[data-s="pending"] {
+  display: block;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  border-top-color: var(--ink);
+  animation: cl-spin 700ms linear infinite;
+}
+@keyframes cl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Step 5: the result */
+.cl-result {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+.cl-result-k {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.cl-result-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+.cl-lead {
+  font-size: 1.0625rem;
+}
+.cl-amount {
+  font-size: 1.125rem;
+}
+.cl-amount .tabular {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.cl-retake-art {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+.cl-payout {
+  display: grid;
+  gap: 14px;
+  margin-top: 4px;
+}
+.cl-choices {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.cl-legend {
+  font-weight: 600;
+  font-size: 1.0625rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+.cl-choice,
+.cl-product {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 12px 14px;
+  min-height: 56px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    transform var(--dur-press) var(--ease-out);
+}
+.cl-choice:active,
+.cl-product:active {
+  transform: scale(0.99);
+}
+/* Selected: a 2px ink edge, padding trimmed by the extra pixel so nothing moves. */
+.cl-choice[data-on],
+.cl-product[data-on] {
+  border: 2px solid var(--ink);
+  padding: 11px 13px;
+}
+.cl-choice:has(input:focus-visible),
+.cl-product:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cl-choice:hover,
+  .cl-product:hover {
+    background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
+  }
+}
+.cl-choice input,
+.cl-product input {
+  inline-size: 20px;
+  block-size: 20px;
+  margin: 1px 0 0;
+}
+.cl-choice-text,
+.cl-product-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.cl-choice-title,
+.cl-product-title {
+  font-weight: 500;
+}
+.cl-choice-sub,
+.cl-product-sub {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.cl-product {
+  grid-template-columns: 22px 64px minmax(0, 1fr);
+}
+.cl-product img,
+.cl-product-noimg {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid var(--edge);
+}
+.cl-product-sub .pill {
+  margin-left: 4px;
+}
+.cl-replace {
+  display: grid;
+  gap: 10px;
+}
+.cl-replace-k {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.cl-replace-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.cl-replace-skel {
+  height: 90px;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.cl-fine {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  max-width: 40rem;
+}
+
+/* The Two reviewers, Technical view */
+.cl-reviewers {
+  margin-top: 6px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  display: grid;
+  gap: 10px;
+}
+.cl-reviewers-k {
+  font-weight: 600;
+}
+.cl-reviewer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.cl-reviewer {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+}
+.cl-reviewer-name {
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.cl-reviewer-reads,
+.cl-set-aside {
+  font-size: 0.875rem;
+}
+.cl-evidence {
+  margin: 2px 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.9375rem;
+}
+.cl-set-aside {
+  color: var(--attention);
+}
+
+/* On phones the shared app sheet keeps its edge and corners here, matching the step cards. */
+@media (max-width: 640px) {
+  .cl-page .app-sheet,
+  .rc-page .app-sheet,
+  .tr-page .app-sheet,
+  .tr-shop .app-sheet,
+  .tr-preset-page .app-sheet {
+    border: 1px solid var(--edge);
+    border-radius: 12px;
+  }
+}
+
+/* Find your recall */
+.cl-find {
+  margin-top: 1.5rem;
+  max-width: 46rem;
+  display: grid;
+  gap: 12px;
+}
+.fr {
+  display: grid;
+  gap: 10px;
+}
+.fr-form {
+  display: grid;
+  gap: 6px;
+}
+.fr-label {
+  font-weight: 500;
+}
+.fr-row {
+  display: flex;
+  gap: 8px;
+}
+.fr-row input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-radius: var(--radius-control);
+  padding: 0 12px;
+  min-height: 48px;
+}
+.fr-row input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.fr-row .btn {
+  min-height: 48px;
+  border-radius: var(--radius-control);
+  font-family: var(--font-ui);
+}
+.fr-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.fr-hit {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 8px 10px;
+  min-height: 64px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    transform var(--dur-press) var(--ease-out);
+}
+.fr-hit:active {
+  transform: scale(0.99);
+}
+@media (hover: hover) and (pointer: fine) {
+  .fr-hit:hover {
+    background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
+  }
+}
+.fr-hit img,
+.fr-noimg {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+}
+.fr-noimg {
+  background: var(--surface-2);
+}
+.fr-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.fr-product {
+  font-weight: 500;
+}
+.fr-meta {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.cl-note-foot {
+  margin-top: 1.5rem;
+}
+
+/* The receipt */
+.rc-page {
+  padding-top: clamp(1.5rem, 1rem + 2vw, 3rem);
+  max-width: 60rem;
+}
+.rc-head {
+  max-width: 44rem;
+}
+.rc-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rc-pill .pill {
+  font-size: 0.875rem;
+  min-height: 28px;
+  padding: 3px 10px;
+}
+.rc-title {
+  margin-top: 12px;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2rem);
+  font-weight: 400;
+}
+.rc-sub {
+  margin-top: 10px;
+  font-size: 1.125rem;
+}
+.rc-id {
+  margin-top: 10px;
+  font-size: 0.9375rem;
+  user-select: all;
+  overflow-wrap: anywhere;
+}
+.rc-thanks {
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+.rc-fresh {
+  margin-top: 10px;
+  font-size: 0.875rem;
+  min-height: 1.5rem;
+}
+.rc-head[data-paid] .rc-title {
+  animation: rc-land 360ms var(--ease-out) both;
+}
+@keyframes rc-land {
+  from {
+    opacity: 0.4;
+    transform: translateY(4px);
+  }
+}
+.rc-body {
+  margin-top: 1.75rem;
+  display: grid;
+  gap: 12px;
+}
+.rc-h {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+.rc-facts {
+  margin: 12px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.rc-facts > div {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 12px;
+}
+.rc-facts dt {
+  color: var(--muted);
+}
+.rc-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 480px) {
+  .rc-facts > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}
+.rc-why {
+  margin-top: 12px;
+  color: var(--muted);
+}
+.rc-checks-wrap {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 560px) {
+  .rc-checks-wrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.rc-photo {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.rc-checks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+}
+.rc-checks li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 7%, transparent); /* row rule in a list of rows (data-ui) taste-skill-ignore */
+}
+.rc-checks li:first-child {
+  border-top: 0;
+}
+.rc-mono {
+  font-family: var(--font-code);
+  font-size: 0.875rem;
+}
+.rc-events {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 4px;
+  font-size: 0.875rem;
+}
+.rc-events li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+}
+.rc-hash {
+  font-family: var(--font-code);
+  color: var(--muted);
+}
+@media (max-width: 560px) {
+  .rc-events li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .rc-hash {
+    display: none;
+  }
+}
+.rc-next {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  min-height: 44px;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  span.cl-mark[data-s="pending"] {
+    animation: cl-pulse 1.6s ease-in-out infinite;
+    border-top-color: color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+  .cl-check:not([data-s="pending"]),
+  .rc-head[data-paid] .rc-title {
+    animation: none;
+  }
+  .cl-dots::after {
+    animation: none;
+    clip-path: none;
+  }
+  .cl-choice,
+  .cl-product,
+  .fr-hit {
+    transition: none;
+  }
+}
+@keyframes cl-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}

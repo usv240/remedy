@@ -1,0 +1,426 @@
+/* Site chrome: header, Display menu, stack strip, footer. Geometry follows .taste-skill/remedy-sheet.txt. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Header: a small navigation line. Wordmark, five links, Display, one action. */
+.site-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 72px;
+  background: var(--bg);
+  z-index: 40;
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.site-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: 1.25rem;
+}
+.nav-link {
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 0.5rem 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+/* The section you are in carries a 2px underline in ink; hover shows a quieter one. */
+.nav-link[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav-link:not([aria-current]):hover {
+    text-decoration: underline;
+    text-underline-offset: 0.4em;
+    text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  }
+}
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.view-btn,
+.menu-btn,
+.header-cta {
+  min-height: 44px;
+  padding: 0.5rem 0.95rem;
+  font-size: 1rem;
+}
+.menu-btn {
+  display: none;
+}
+/* The phone menu is a full sheet under the header: nothing from the page shows through, and the page behind it
+   does not scroll. It enters with a short fade and drop, once, from where the Menu button is. */
+.mobile-menu {
+  position: fixed;
+  inset: 72px 0 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  padding: 1rem var(--margin) 2rem;
+  z-index: 50;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--dur-menu) var(--ease-out),
+    transform var(--dur-menu) var(--ease-out);
+}
+@starting-style {
+  .mobile-menu {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+:root[data-menu="open"] body {
+  overflow: hidden;
+}
+.mobile-menu nav {
+  display: grid;
+  gap: 0.25rem;
+}
+.mobile-link {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 2rem;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  padding: 0.4rem 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.mobile-link[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+.mobile-link:active {
+  opacity: 0.6;
+}
+.mobile-cta {
+  margin-top: 1.25rem;
+  justify-self: stretch;
+  min-height: 56px;
+}
+@media (max-width: 1040px) {
+  .site-nav {
+    display: none;
+  }
+  .menu-btn {
+    display: inline-flex;
+  }
+}
+@media (max-width: 560px) {
+  .header-cta {
+    display: none;
+  }
+}
+
+/* Display settings popover (floats, so it may cast a shadow). */
+.view-pop {
+  z-index: 70;
+  width: min(340px, calc(100vw - 24px));
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--edge);
+  padding: 16px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.16);
+  display: grid;
+  gap: 14px;
+  font-family: var(--font-ui);
+  transform-origin: top right;
+  animation: info-in var(--dur-menu) var(--ease-out);
+}
+.view-row {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.view-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.seg {
+  display: flex;
+  background: var(--surface-2);
+  border-radius: var(--radius-control);
+  padding: 3px;
+  gap: 3px;
+}
+.seg-opt {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  font-size: 0.875rem;
+  padding: 0.55rem 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.seg-opt:active {
+  transform: scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  .seg-opt:not([data-on]):hover {
+    color: var(--ink);
+  }
+}
+.seg-opt[data-on] {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+}
+.seg-opt input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.seg-opt:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+/* Stack strip: one sentence of names, above the footer on every page. */
+.stack-strip {
+  padding-top: clamp(4rem, 3rem + 3vw, 6rem);
+  padding-bottom: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+}
+.stack-sentence {
+  font-size: var(--step-lead);
+  line-height: 1.45;
+  max-width: 54ch;
+  letter-spacing: -0.005em;
+}
+.stack-item {
+  white-space: nowrap;
+}
+
+/* Footer: "Contact as the headline". A saturated field (lime with ink in light, the second tone step in dark),
+   three notes and Back to top on the top row, the project's address at display size in the lower half, and one
+   row of small text. On the home page it is a full screen; elsewhere it keeps its proportions, shorter. */
+.footer-contact {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
+  /* Kept short so it never adds a screen of scrolling: the field ends where its content ends. */
+  min-height: 0;
+  padding-top: 32px;
+  padding-bottom: 24px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+:root[data-theme="dark"] .footer-contact {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .footer-contact {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+}
+.footer-contact[data-home] {
+  min-height: 48svh;
+}
+/* On a phone the notes stack and Back to top sits on its own line, inside the page margin. */
+@media (max-width: 640px) {
+  .fc-top {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .fc-notes {
+    max-width: none;
+    flex-direction: column;
+  }
+}
+.footer-contact a {
+  color: inherit;
+}
+.fc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+.fc-notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 2.5rem;
+  max-width: 58%;
+  font-size: 0.9375rem;
+}
+.fc-wordmark {
+  font-weight: 500;
+}
+.fc-top-link {
+  font-size: 0.9375rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: flex-start;
+  text-underline-offset: 0.25em;
+}
+.fc-display {
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-weight: 300;
+  /* The longer half fills at least 80% of the width. */
+  font-size: clamp(2.75rem, 8.4vw, 9rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.fc-display span {
+  white-space: nowrap;
+}
+@media (hover: hover) and (pointer: fine) {
+  .fc-display:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.12em;
+  }
+}
+.fc-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.75rem 2.5rem;
+  align-items: end;
+  font-size: 0.875rem;
+}
+.fc-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+}
+.fc-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-underline-offset: 0.25em;
+}
+.fc-credit,
+.fc-year {
+  padding-bottom: 0.7rem;
+}
+@media (max-width: 900px) {
+  .fc-notes {
+    max-width: none;
+    flex-direction: column;
+  }
+  .fc-meta {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+  }
+  .fc-credit,
+  .fc-year {
+    padding-bottom: 0;
+  }
+  .fc-display {
+    flex-direction: column;
+    font-size: clamp(2.5rem, 11vw, 5rem);
+  }
+}
+
+/* The short footer on the screens people work in. */
+.footer-quiet {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 1.75rem;
+  padding-bottom: 1.5rem;
+  margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  background: var(--surface-2);
+  font-size: 0.9375rem;
+}
+.stack-strip + .footer-quiet {
+  margin-top: 0;
+}
+.footer-credit {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+@media print {
+  .footer-quiet,
+  .footer-contact,
+  .stack-strip {
+    display: none;
+  }
+}
+
+/* Section scaffolding */
+.section {
+  margin-top: var(--section-gap);
+}
+.section-title {
+  font-size: var(--step-head);
+}
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Page titles wrap on narrow screens. Set inline, the Info dot follows the last word instead of being stranded at
+   the far edge of the row. */
+.title-row:has(> :is(h1, .section-title):first-child) {
+  display: block;
+}
+.title-row > :is(h1, .section-title):first-child {
+  display: inline;
+}
+.title-row > :is(h1, .section-title):first-child + .info-trigger {
+  margin-left: 0.35rem;
+  vertical-align: calc(clamp(0.5625rem, 0.375rem + 0.6vw, 0.9375rem) - 4.5px);
+}
+.lede {
+  font-size: var(--step-lead);
+  line-height: 1.4;
+  max-width: 38ch;
+}
+.muted {
+  color: var(--muted);
+}

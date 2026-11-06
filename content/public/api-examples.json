@@ -1,0 +1,388 @@
+{
+ "note": "Real responses from a local Remedy, recorded by scripts/public/api-examples.mjs. Long strings are shortened with ...",
+ "recordedAt": "2026-11-05T20:42:53.794Z",
+ "examples": {
+  "recalls": {
+   "request": "GET /api/v1/recalls?query=power%20bank&photo_refund=true&limit=2",
+   "status": 200,
+   "ms": 1322,
+   "response": {
+    "data": {
+     "query": "power bank",
+     "filters": {
+      "photoRefund": true
+     },
+     "total": 30,
+     "hits": [
+      {
+       "number": "27056",
+       "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech",
+       "date": "2026-10-29",
+       "category": "Batteries and chargers",
+       "product_names": [
+        "HAIARA power banks"
+       ],
+       "photo_refund": true,
+       "units": 11000,
+       "remedies": [
+        "Refund"
+       ],
+       "image": {
+        "url": "https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW",
+        "thumb": "/recalls/27056/1.webp",
+        "caption": "HAIARA power bank, model W5 PRO (front)"
+       },
+       "cpsc_url": "https://cpsc.gov/Recalls/2027/HAIARA-Power-Banks-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Fire-and-Burn-Hazards-Sold-on-Amazon-com-by-Mitrytech",
+       "page": "/recalls/27056",
+       "score": 1.295,
+       "proof_rule": {
+        "photo_required": true,
+        "actions": [
+         "write_recalled"
+        ],
+        "marker_text": "recalled",
+        "must_show": [
+         "whole_product",
+         "marking"
+        ],
+        "remedy": "full_refund",
+        "refund_amount": null,
+        "refund_amount_text": "full refund",
+        "steps": [
+         "Write recalled on the power bank in permanent marker.",
+         "Take a photo of the power bank showing the writing.",
+         "Email the photo to Mitrytech at HAIARArecall@outlook.com.",
+         "Dispose of the power bank following local laws."
+        ]
+       }
+      },
+      {
+       "number": "26090",
+       "title": "Belkin Recalls Portable Power Banks and Wireless Charging Stands Due to Fire and Burn Hazards",
+       "date": "2025-11-13",
+       "category": "Batteries and chargers",
+       "product_names": [
+        "Portable Power Banks and Wireless Charging Stands"
+       ],
+       "photo_refund": true,
+       "units": 83500,
+       "remedies": [
+        "Refund"
+       ],
+       "image": {
+        "url": "https://www.cpsc.gov/s3fs-public/belkin-01.jpg",
+        "thumb": "/recalls/26090/1.webp",
+        "caption": "Recalled MMA008 Portable Wireless Charging Stand"
+       },
+       "cpsc_url": "https://www.cpsc.gov/Recalls/2026/Belkin-Recalls-Portable-Power-Banks-and-Wireless-Charging-Stands-Due-to-Fire-and-Burn-Hazards",
+       "page": "/recalls/26090",
+       "score": 1.203,
+       "proof_rule": {
+        "photo_required": true,
+        "actions": [],
+        "marker_text": null,
+        "must_show": [
+         "whole_product"
+        ],
+        "remedy": "full_refund",
+        "refund_amount": null,
+        "refund_amount_text": "a full refund",
+        "steps": [
+         "Stop using the power bank or charging stand.",
+         "Take photos of the front and back of the product.",
+         "Send the photos with the online recall submission form.",
+         "Ask your hazardous waste center before dropping off the device."
+        ]
+       }
+      }
+     ]
+    },
+    "meta": {
+     "request_id": "req_f3f7d41e227e42f5a6f0",
+     "version": "2026-11-05",
+     "latency_ms": 741,
+     "search": {
+      "mode": "elastic",
+      "model": ".jina-embeddings-v3",
+      "reranker": ".jina-reranker-v3"
+     }
+    },
+    "error": null
+   }
+  },
+  "recall": {
+   "request": "GET /api/v1/recalls/27056",
+   "status": 200,
+   "ms": 184,
+   "response": {
+    "data": {
+     "number": "27056",
+     "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech",
+     "date": "2026-10-29",
+     "category": "Batteries and chargers",
+     "units": 11000,
+     "units_text": "About 11,000",
+     "hazard": "The power bank’s lithium battery can explode and ignite, posing fire and burn hazards to consumers.",
+     "remedy_text": "Consumers should stop using the recalled power banks immediately. Consumers who purchased their power banks on Amazon.com from Mitrytech should contact Mitrytech for instructions on how to receive a full refund. To recei...",
+     "remedies": [
+      "Refund"
+     ],
+     "photo_refund": true,
+     "flags": {
+      "photo": true,
+      "refund": true,
+      "marker": true,
+      "cut": false,
+      "email": true,
+      "webmail": true
+     },
+     "products": [
+      {
+       "name": "HAIARA power banks",
+       "model": "",
+       "type": "Battery Chargers",
+       "units_text": "About 11,000"
+      }
+     ],
+     "firms": [],
+     "retailers": [
+      "Sold At: Amazon.com from May 2025 through September 2026 for between $18 to $22.",
+      "Huizhou Yancheng Trading Co., Ltd. d/b/a Mitrytech, of China"
+     ],
+     "consumer_contact": "Email at HAIARArecall@outlook.com or online at www.haiara.net/recalls.html or www.haiara.net and click on “Recalls” for ...",
+     "images": [
+      {
+       "url": "https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW",
+       "caption": "HAIARA power bank, model W5 PRO (front)",
+       "thumb": "/recalls/27056/1.webp",
+       "width": 217,
+       "height": 322
+      }
+     ],
+     "cpsc_url": "https://cpsc.gov/Recalls/2027/HAIARA-Power-Banks-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Fire-and-Burn-Hazards-Sold-on-Amazon-com-by-Mitrytech",
+     "page": "/recalls/27056",
+     "claim_page": "/claim/27056",
+     "proof_rule": {
+      "photo_required": true,
+      "actions": [
+       "write_recalled"
+      ],
+      "marker_text": "recalled",
+      "must_show": [
+       "whole_product",
+       "marking"
+      ],
+      "remedy": "full_refund",
+      "refund_amount_text": "full refund",
+      "refund_amount": null,
+      "contact_channel": "email",
+      "steps": [
+       "Write recalled on the power bank in permanent marker.",
+       "Take a photo of the power bank showing the writing.",
+       "Email the photo to Mitrytech at HAIARArecall@outlook.com.",
+       "Dispose of the power bank following local laws."
+      ],
+      "explanation": {
+       "plain": "Stop using the power bank. Write recalled on it in permanent marker, send a photo, and throw it away safely to get your money back.",
+       "technical": "\"submit a photo of their recalled power bank with the word recalled written on it in permanent marker\" sets photo_requir..."
+      },
+      "confidence": {
+       "actions": 0.95,
+       "must_show": 0.93,
+       "remedy": 0.97
+      },
+      "source": "selfcheck",
+      "model": "claude-opus-5-5",
+      "extracted_at": "2026-11-05T19:11:05.337Z"
+     }
+    },
+    "meta": {
+     "request_id": "req_7e0b141912b742a98618",
+     "version": "2026-11-05",
+     "latency_ms": 0
+    },
+    "error": null
+   }
+  },
+  "proof-rule": {
+   "request": "POST /api/v1/proof-rule {\"recall_number\":\"27056\"}",
+   "status": 200,
+   "ms": 235,
+   "response": {
+    "data": {
+     "recall": {
+      "number": "27056",
+      "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech"
+     },
+     "rule": {
+      "photo_required": true,
+      "actions": [
+       "write_recalled"
+      ],
+      "marker_text": "recalled",
+      "must_show": [
+       "whole_product",
+       "marking"
+      ],
+      "remedy": "full_refund",
+      "refund_amount_text": "full refund",
+      "refund_amount": null,
+      "contact_channel": "email",
+      "steps": [
+       "Write recalled on the power bank in permanent marker.",
+       "Take a photo of the power bank showing the writing.",
+       "Email the photo to Mitrytech at HAIARArecall@outlook.com.",
+       "Dispose of the power bank following local laws."
+      ],
+      "explanation": {
+       "plain": "Stop using the power bank. Write recalled on it in permanent marker, send a photo, and throw it away safely to get your money back.",
+       "technical": "\"submit a photo of their recalled power bank with the word recalled written on it in permanent marker\" sets photo_requir..."
+      },
+      "confidence": {
+       "actions": 0.95,
+       "must_show": 0.93,
+       "remedy": 0.97
+      }
+     },
+     "source": "stored",
+     "model": "claude-opus-5-5",
+     "extracted_at": "2026-11-05T19:11:05.337Z",
+     "method": "Claude Opus 5.5, structured output at medium effort, then a self-check pass against the re...",
+     "lint": []
+    },
+    "meta": {
+     "request_id": "req_10682549a89e413b8422",
+     "version": "2026-11-05",
+     "latency_ms": 11
+    },
+    "error": null
+   }
+  },
+  "verify": {
+   "request": "POST /api/v1/verify (photo: the recall's own official picture, recall_number=27056, no key)",
+   "status": 200,
+   "ms": 196,
+   "response": {
+    "data": {
+     "decision": "retake",
+     "decided_by": "own_photo",
+     "mode": "free",
+     "mode_note": "Without an API key only the free checks run: photo quality and the own-photo match. Add a key for the full checks.",
+     "summary": {
+      "plain": "Please send a photo of your own product.",
+      "technical": "Retake (own_photo). Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"..."
+     },
+     "guidance": {
+      "plain": "Please send a photo of your own product.",
+      "steps": [
+       "Take a new photo of the product with your phone camera.",
+       "Show the product itself, not a screen, a printout or the recall picture.",
+       "We ask for your own photo so the refund goes to the person who has the product."
+      ],
+      "technical": "Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 0 bits (upright). dHash e48280e0c0c1c9e0; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "checks": {
+      "C1": {
+       "name": "Right product",
+       "status": "skipped",
+       "pass": false,
+       "score": null,
+       "reason": "Not checked yet.",
+       "technical": "The photo matches one of this recall's official images."
+      },
+      "C2": {
+       "name": "Made safe",
+       "status": "skipped",
+       "pass": false,
+       "score": null,
+       "reason": "Not checked yet.",
+       "technical": "The photo matches one of this recall's official images."
+      },
+      "C3": {
+       "name": "Your own photo",
+       "status": "fail",
+       "pass": false,
+       "score": null,
+       "reason": "This is the official recall picture. Please send a photo of your own product.",
+       "technical": "Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqS..."
+      },
+      "C4": {
+       "name": "Within the recall",
+       "status": "skipped",
+       "pass": false,
+       "score": null,
+       "reason": "Not checked yet.",
+       "technical": "The photo matches one of this recall's official images."
+      },
+      "C5": {
+       "name": "Claim limits",
+       "status": "pass",
+       "pass": true,
+       "score": null,
+       "reason": "This claim is within the limit for one purchase.",
+       "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 11000 units."
+      },
+      "C6": {
+       "name": "Not already refunded",
+       "status": "pass",
+       "pass": true,
+       "score": null,
+       "reason": "No PayPal purchase linked.",
+       "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+      }
+     },
+     "amount": null,
+     "recall": {
+      "number": "27056",
+      "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech"
+     },
+     "proof_rule": {
+      "photo_required": true,
+      "actions": [
+       "write_recalled"
+      ],
+      "marker_text": "recalled",
+      "must_show": [
+       "whole_product",
+       "marking"
+      ],
+      "remedy": "full_refund",
+      "refund_amount": null,
+      "refund_amount_text": "full refund",
+      "steps": [
+       "Write recalled on the power bank in permanent marker.",
+       "Take a photo of the power bank showing the writing.",
+       "Email the photo to Mitrytech at HAIARArecall@outlook.com.",
+       "Dispose of the power bank following local laws."
+      ]
+     },
+     "photo": {
+      "sha256": "a58b28b7cd859a6c481d4901c2326f0419cb8b10cf2ada2f49a9f0fa934da0c7",
+      "dhash": "e48280e0c0c1c9e0",
+      "width": 217,
+      "height": 322,
+      "mime": "image/jpeg"
+     },
+     "review": null,
+     "model": null,
+     "timings": {
+      "decode_ms": 17,
+      "official_ms": 2,
+      "vision_ms": 0,
+      "checks_ms": 0,
+      "reviewers_ms": 0,
+      "total_ms": 18
+     },
+     "payment": null,
+     "note": "No claim was stored and nothing was paid. To open a claim and pay the refund, use POST /api/claims."
+    },
+    "meta": {
+     "request_id": "req_9228545f7d124a9c88c1",
+     "version": "2026-11-05",
+     "latency_ms": 28
+    },
+    "error": null
+   }
+  }
+ }
+}

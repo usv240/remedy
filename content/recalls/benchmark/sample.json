@@ -1,0 +1,1104 @@
+{
+ "createdAt": "2026-11-05T19:00:57.160Z",
+ "recallsPulledAt": "2026-11-05T18:56:05.863Z",
+ "seed": 20261105,
+ "method": "Seeded (mulberry32) stratified random sample with proportional allocation (largest remainder, at least one per stratum). Photo-refund recalls (flags.photo and flags.refund) are stratified by year and proof kind (marker, else cut, else other). Non-photo recalls (no photo, picture or image in the remedy) are stratified by year and remedy option (refund, else replace, else repair, else other).",
+ "strata": {
+  "photoRefund": {
+   "sizes": {
+    "2026|cut": 74,
+    "2026|marker": 118,
+    "2026|other": 90,
+    "2025|other": 65,
+    "2025|marker": 35,
+    "2025|cut": 72,
+    "2024|other": 24,
+    "2024|marker": 7,
+    "2024|cut": 40
+   },
+   "allocation": {
+    "2024|cut": 8,
+    "2024|marker": 1,
+    "2024|other": 5,
+    "2025|cut": 14,
+    "2025|marker": 7,
+    "2025|other": 12,
+    "2026|cut": 14,
+    "2026|marker": 22,
+    "2026|other": 17
+   }
+  },
+  "nonPhoto": {
+   "sizes": {
+    "2026|refund": 80,
+    "2026|repair": 78,
+    "2026|replace": 34,
+    "2026|other": 1,
+    "2025|refund": 80,
+    "2025|repair": 86,
+    "2025|replace": 48,
+    "2025|other": 2,
+    "2024|repair": 78,
+    "2024|refund": 96,
+    "2024|replace": 32,
+    "2024|other": 6
+   },
+   "allocation": {
+    "2024|other": 1,
+    "2024|refund": 4,
+    "2024|repair": 4,
+    "2024|replace": 1,
+    "2025|other": 1,
+    "2025|refund": 4,
+    "2025|repair": 4,
+    "2025|replace": 2,
+    "2026|other": 1,
+    "2026|refund": 4,
+    "2026|repair": 3,
+    "2026|replace": 1
+   }
+  }
+ },
+ "items": [
+  {
+   "number": "24298",
+   "kind": "photo_refund",
+   "date": "2024-07-11",
+   "title": "Atomi Recalls Smart Heaters Due to Fire and Burn Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled heaters, unplug the units, and follow the instructions online at www.atomiheaterrecall.com to receive a full refund. Consumers will be asked to cut the unplugged unit's power cord and upload a photograph of the cut cord, as well as a photograph of the manufacturer's label on the underside of their units during the registration process.",
+   "consumerContact": "Atomi toll-free at 888-770-7140 from 7:30 a.m. to 5 p.m. CT Monday through Friday, or online at www.atomiheaterrecall.com or www.atomismart.com and click on \"Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "24289",
+   "kind": "photo_refund",
+   "date": "2024-07-03",
+   "title": "SWOMOG Children's Pajamas Recalled Due to Burn Hazard; Violation of Federal Flammability Regulations; Sold Exclusively on Amazon.com by SWOMOG",
+   "remedyText": "Consumers should immediately take the recalled pajamas away from children, stop using them and contact SWOMOG to receive a full refund. Consumers should destroy the garments by cutting the top and bottom in half, and disposing of them in accordance with local and state recycling laws. Consumers should email the recalling firm a photo of the destroyed garment at swomogservice@163.com to receive a refund. SWOMOG is contacting all known purchasers directly.",
+   "consumerContact": "SWOMOG by email at swomogservice@163.com, or online at www.swomog.top/refund/."
+  },
+  {
+   "number": "24207",
+   "kind": "photo_refund",
+   "date": "2024-04-24",
+   "title": "Sant and Abel Recalls Children's Pajamas Due to Burn Hazards",
+   "remedyText": "Consumers should immediately take the recalled pajamas away from children, stop using them, and contact Sant and Abel for a full refund. Consumers should destroy the garments by cutting them in half and disposing of them in accordance with local and state recycling laws. Consumers should send the recalling firm a photo of the destroyed garment at returns@santandabel.com to receive a refund. Sant and Abel is contacting all known purchasers directly.",
+   "consumerContact": "Sant and Abel collect at 213-328-2448 from 9 a.m. to 5 p.m. PT Monday to Friday, email at returns@santandabel.com, online at www.santandabel.com/pages/us-product-recall or at www.santandabel.com and click \"Recall\" at the bottom of the page for more information."
+  },
+  {
+   "number": "24211",
+   "kind": "photo_refund",
+   "date": "2024-04-25",
+   "title": "Multi-Purpose Kids' Bike Helmets Recalled Due to Risk of Head Injury; Violation of Federal Safety Regulation for Bicycle Helmets; Sold Exclusively on Temu.com; Imported by Chau River Sports Outdoors",
+   "remedyText": "Consumers should immediately stop using the recalled helmets and contact Chau River Sports Outdoors for a full refund. To receive a refund, consumers should destroy the helmet by cutting off the straps, and send photos of the helmet with the straps cut through the onsite messaging system by clicking on the \"message\" icon on Temu.com at Chau River Sports Outdoors store page as proof of destruction, then dispose of the recalled helmet.",
+   "consumerContact": "Chau River Sports Outdoors via email at lexi_kuyou@163.com or send an onsite message by clicking on the \"message\" icon on Temu at Chau River Sports Outdoors store page for more information."
+  },
+  {
+   "number": "24341",
+   "kind": "photo_refund",
+   "date": "2024-08-15",
+   "title": "ALDI Recalls Ambiano Single Serve Coffee Makers Due to Burn Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled coffee makers. Consumers may return the unit to an ALDI store for a full cash refund of $49.99, plus applicable sales tax. Alternatively, consumers may receive a $75 ALDI electronic gift card when they visit www.recallrtr.com/aldicoffeemaker, register the recalled coffee maker, and receive instructions on how to cut the unplugged cord, dispose of the product, and upload photos of the coffee maker showing the model number, registration number, and cut cord.",
+   "consumerContact": "ALDI toll-free at 888-770-7124 from 8:30 a.m. to 6 p.m. ET Monday through Friday, or online at www.recallrtr.com/aldicoffeemaker or corporate.aldi.us and click on \"Newsroom\" and then \"Product Recalls\" for more information."
+  },
+  {
+   "number": "24318",
+   "kind": "photo_refund",
+   "date": "2024-07-25",
+   "title": "Toy Guns Recalled Due to Eye Injury Hazard; Failure to Meet Federal Safety Regulations for Projectile Toys; Sold Exclusively on Temu.com by Youjiu",
+   "remedyText": "Consumers should stop using the recalled toy guns immediately and contact Youjiu for a full refund. To receive a refund, consumers should remove the magazine and the battery, cut the black and red wires linked to the battery, take a photo of the destroyed toy gun, and send the photo to Youjiu's store through Temu's onsite messaging system at https://www.temu.com/fr-en/office-king-m-55622325238.html.",
+   "consumerContact": "Youjiu by email at 99452925@qq.com, or send a message to Youjiu's store on Temu."
+  },
+  {
+   "number": "24233",
+   "kind": "photo_refund",
+   "date": "2024-05-09",
+   "title": "Children's Robes Recall Expansion Announced Due to Burn Hazard and Violation of Federal Flammability Standards; Imported by SIORO; Sold Exclusively on Amazon.com; Additional Units Added",
+   "remedyText": "Consumers should immediately take the recalled robes away from children, stop using them, and contact SIORO for a full refund. Consumers should destroy the garments by cutting them in half, and send a photo of the destroyed garment to amazonus@sioro.com. Upon receipt of the photo, SIORO will refund consumers the purchase price. Afterwards, consumers should dispose of the destroyed garments in accordance with local and state recycling laws.",
+   "consumerContact": "Email at amazonus@sioro.com or visit the SIORO amazon store link https://www.amazon.com/sp?ie=UTF8&seller=AUPGGE9NR4SBV and click \"Ask a question\" for more information."
+  },
+  {
+   "number": "24114",
+   "kind": "photo_refund",
+   "date": "2024-02-08",
+   "title": "Children's Bathrobes Recalled Due to Burn Hazard and Violation of Flammability Regulations; Sold by Nanchang Zhongcangjishi E-commerce",
+   "remedyText": "Consumers should immediately take the recalled bathrobes away from children, stop using them and contact Nanchang Zhongcangjishi E-commerce for a full refund. Consumers should destroy the garments by cutting them in half and email a photo of the destroyed garment to business@lolanta.com. Upon receipt of the photo, consumers will be issued a full refund of the purchase price.",
+   "consumerContact": "Contact Nanchang Zhongcangjishi E-commerce by email at business@lolanta.com or online at https://lolanta.com/pages/recall or https://lolanta.com/ and click on \"Product Recalls\" at the top of the page for more information."
+  },
+  {
+   "number": "24287",
+   "kind": "photo_refund",
+   "date": "2024-06-27",
+   "title": "Baseus Magnetic Wireless Charging Power Banks Recalled Due to Fire Hazard; Imported by Shenzhen Baseus Technology",
+   "remedyText": "Consumers should immediately stop using the recalled Baseus power bank models, and contact Baseus for a full refund with proof of purchase, or a $36 cash refund without proof of purchase. Consumers will need to submit a photo of the recalled power bank showing the model number to the firm's recall registration page. Consumers without an order number will need to submit a photo of the power bank with their name and the date written in permanent marker. Baseus and Amazon are notifying all known purchasers directly. Consumers should dispose of the battery in accordance with local and state regulations.",
+   "consumerContact": "Baseus toll-free at 855-215-5824 from 8 a.m. to 5 p.m. ET, Monday through Friday, email at care@baseus.com, online at https://baseuspowerbankrecall.expertinquiry.com, or www.baseus.com and click on \"Product Recall Information\" at the bottom of the page for more information."
+  },
+  {
+   "number": "24370",
+   "kind": "photo_refund",
+   "date": "2024-09-19",
+   "title": "Ceither Adult Portable Bed Rails Recalled Due to Serious Entrapment and Asphyxia Hazards; Violation of Federal Regulations for Adult Portable Bed Rails; Sold Exclusively on Amazon.com by Inforce",
+   "remedyText": "Consumers should immediately stop using the recalled adult portable bed rails. To receive a refund, consumers should send a photo of the disposed bed rail, along with a statement that they bought the product on or after August 21, 2023 or an Amazon purchase receipt, to the recalling firm by email at xchan524@outlook.com. The company will only provide refunds for bed rails purchased on or after August 21, 2023.",
+   "consumerContact": "Inforce at xchan524@outlook.com or online at the Inforce Storefront page on Amazon.com for more information."
+  },
+  {
+   "number": "24321",
+   "kind": "photo_refund",
+   "date": "2024-07-25",
+   "title": "DGL Group Recalls Hover-1 Dynamo E-Scooters Due to Risk of Serious Injury and Crash Hazard; Sold Exclusively at Walmart.com",
+   "remedyText": "Consumers should stop using the recalled e-scooters immediately and contact DGL Group for instructions on how to receive a full refund. To receive a refund, consumers will be required to provide photographs of their e-scooter's serial number and severed motor cable.",
+   "consumerContact": "DGL Group toll-free at 844-451-7300 from 11 a.m. to 4 p.m. ET Monday through Friday, or online at www.hover-1.com/pages/dynamo_recall or www.hover-1.com and click on \"Important Recall Information\" at the top of the page."
+  },
+  {
+   "number": "25054",
+   "kind": "photo_refund",
+   "date": "2024-11-21",
+   "title": "South Shore Cribs Recalled Due to Entrapment Hazard; Violation of Federal Regulation for Full Sized Cribs; Imported by South Shore Industries",
+   "remedyText": "Consumers should immediately stop using the recalled cribs and contact South Shore for information on how to disassemble the product. To receive a full refund, take a photo of the disassembled crib in an outdoor waste container and email the photo to service@southshorefurniture.com. South Shore, Amazon.com and Walmart.com are contacting all known purchasers directly.",
+   "consumerContact": "South Shore at 800-290-0465 from 8:30 a.m. to 5 p.m. ET Monday through Friday, email at service@southshorefurniture.com, or online at www.southshorefurniture.com/us-en/recall or www.southshorefurniture.com/us-en and click \"Recall information\" at the top of the page for more information."
+  },
+  {
+   "number": "24361",
+   "kind": "photo_refund",
+   "date": "2024-09-12",
+   "title": "GOETAS Pool Drain Covers Recalled Due to Entrapment Hazard; Violation of the Virginia Graeme Baker Pool and Spa Safety Act; Sold Exclusively on Amazon.com by GOETAS",
+   "remedyText": "Pool owners/operators and consumers should immediately stop using pools with the recalled pool drain cover; and remove, replace and dispose of the recalled drain covers. Take a photo of the recalled cover and send it to the recalling firm by email at Atlaspool@163.com to receive a full refund. Ensure all pools and spas have Virginia Graeme Baker Pool and Spa Safety Act (VGBA) compliant drain covers and teach children to stay away from drains. Amazon is contacting all known purchasers directly.",
+   "consumerContact": "GOETAS via email at Atlaspool@163.com for more information."
+  },
+  {
+   "number": "24237",
+   "kind": "photo_refund",
+   "date": "2024-05-16",
+   "title": "Kano Laboratories Recalls Super Lube® Products Due to Risk of Poisoning; Violation of the Poison Prevention Packaging Act",
+   "remedyText": "Consumers should immediately secure the recalled Super Lube® products out of the sight and reach of children, and contact Kano Laboratories for a full refund. Consumers will need to provide proof of possession by emailing a photo of their product to info@super-lube.com to receive their full refund.",
+   "consumerContact": "Kano Laboratories at 800-253-5823 from 8:30 a.m. to 5 p.m. ET Monday through Friday, via email at info@super-lube.com, or online at www.super-lube.com/recall or www.super-lube.com and click on Technical Resources and select \"Recall\" from the menu for more information."
+  },
+  {
+   "number": "25425",
+   "kind": "photo_refund",
+   "date": "2025-08-07",
+   "title": "AliExpress Recalls LeymanKids Children's Pajama Sets Due to Risk of Injury or Death from Burns; Violates Mandatory Standards for Children's Sleepwear",
+   "remedyText": "Consumers should stop using the recalled pajamas immediately and contact AliExpress to receive a full refund. Consumers should destroy the pajamas by cutting them in half, then take a photo and dispose of them. Consumers must send the photo of the destroyed pajamas to us_product_recall@aliexpress.com or by replying to the recall email sent by AliExpress.",
+   "consumerContact": "AliExpress online service at https://helpcenter.aliexpress.com/s/BuyerHelp/, email at us_product_recall@aliexpress.com, or at www.aliexpress.com and click on \"Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25204",
+   "kind": "photo_refund",
+   "date": "2025-04-03",
+   "title": "Five Below Recalls Room2Room LED Iridescent Bear Lights Due to Fire and Burn Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled lights and either return them to any Five Below store or contact Five Below customer service for a full refund. Consumers can receive a refund to the original credit card used for purchase, cash, or store credit when they return the lights to the store where purchased, or a check or store credit from Five Below customer service when they submit a photo of the light with the cord cut. Consumers should then dispose of the light in their household trash. Proof of purchase (receipt) is not required to receive a full refund.",
+   "consumerContact": "Five Below toll-free at 844-452-3569 from 9 a.m. to 9 p.m. ET Monday through Friday, by email at Recalls@FiveBelow.com, or online at https://www.fivebelow.com/info/five-below-recalls-led-iridescent-bear-light or at https://www.fivebelow.com/ and click on \"Product Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25473",
+   "kind": "photo_refund",
+   "date": "2025-09-18",
+   "title": "LXDHSTRA Baby Loungers and Crib Bumpers Recalled Due to Risk of Serious Injury or Death from Suffocation and Fall Hazards; Violates Federal Standard for Infant Sleep Products and Federal Crib Bumper Ban; Sold on Amazon",
+   "remedyText": "Consumers should immediately stop using the recalled baby loungers and crib bumpers and contact LXDHSTRA for a full refund. Consumers should remove the foam and pads from the baby lounger's cover and cut the cover, foam, pad, and crib bumper in half. Consumers should email photos of the destroyed baby lounger and crib bumper to lxdhstrarecall@gmail.com to obtain a full refund.",
+   "consumerContact": "LXDHSTRA by email at lxdhstrarecall@gmail.com."
+  },
+  {
+   "number": "25359",
+   "kind": "photo_refund",
+   "date": "2025-06-26",
+   "title": "Bell Sports Recalls Bicycle Helmets Due to Risk of Head Injury; Violation of Federal Standard for Bicycle Helmets",
+   "remedyText": "Consumers should stop using the recalled helmets immediately and contact Bell Sports for a full refund. Consumers should destroy the recalled helmet by cutting the straps off the helmet. Consumers can upload photos of the helmet with the straps cut off to consumersupport-bell@bellhelmets.com to obtain a refund. Bell Sports is contacting all known purchasers directly.",
+   "consumerContact": "Bell Sports toll-free at 800-456-2355 from 8 a.m. to 5 p.m. CT Monday through Friday, email at consumersupport-bell@bellhelmets.com, or online at https://www.thebellgarage.com/bell-sports-helmet-recall-notice-axle-cadence-rev-passage-and-frenzy-models/ or www.thebellgarage.com and click on the \"Recall\" banner at the top of the page for more information."
+  },
+  {
+   "number": "26140",
+   "kind": "photo_refund",
+   "date": "2025-12-11",
+   "title": "SKCAIHT Children's Costumes Recalled Due to Risk of Injury from Phthalate Exposure; Violates Federal Phthalates Ban; Sold on Amazon by SKCAIHT Direct",
+   "remedyText": "Consumers should immediately stop using the recalled costumes and take them away from children. Contact SKCAIHT Direct for a full refund. Consumers should cut the dress and submit a photo of the destroyed costume to pafiney@outlook.com.",
+   "consumerContact": "SKCAIHT Direct by email at pafiney@outlook.com."
+  },
+  {
+   "number": "25113",
+   "kind": "photo_refund",
+   "date": "2025-01-30",
+   "title": "Cozchique Tebbis, and Beeziac Girls Pajamas Recalled Due to Burn Hazard; Violation of Federal Flammability Regulations; Sold Exclusively on Amazon by Tupop",
+   "remedyText": "Consumers should immediately take the recalled pajamas away from children, stop using them, and contact Tupop to receive a full refund. Consumers should destroy the garments by cutting the top and bottom in half and dispose of them. Consumers should send the recalling firm a photo of the destroyed garments by email at bzzservice@hotmail.com to receive a full refund. Tupop and Amazon are contacting all known purchasers directly.",
+   "consumerContact": "Tupop by email at bzzservice@hotmail.com for more information."
+  },
+  {
+   "number": "25232",
+   "kind": "photo_refund",
+   "date": "2025-04-24",
+   "title": "AliExpress Recalls LED Strip Lights Due to Risk of Serious Injury or Death from Ingestion Hazard; Violations of Reese's Law Federal Safety Regulations for Consumer Products with Coin Batteries; Sold on AliExpress.com",
+   "remedyText": "Consumers should stop using the recalled LED strip lights immediately and contact AliExpress to receive a full refund. Consumers should destroy the lights by cutting them in half and disposing of them. Consumers must send a photo of the destroyed lights to us_product_recall@aliexpress.com or by replying to the recall email sent by AliExpress. AliExpress is contacting all known purchasers directly. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "AliExpress online service at https://helpcenter.aliexpress.com/s/BuyerHelp/home?language=en_US&m_station=BuyerHelp and click on \"Online Services\" at the bottom of the page, email at us_product_recall@aliexpress.com, or online at https://helpcenter.aliexpress.com/s/BuyerHelp/knowledge?categoryId=1000110454&language=en_US&m_station=BuyerHelp&questionId=1061297473&regulation=US-product-recall or www.aliexpress.com and click on \"Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25316",
+   "kind": "photo_refund",
+   "date": "2025-06-05",
+   "title": "Portable Hook-On Chairs Recalled Due to Risk of Serious Injury or Death from Fall Hazard; Violation of the Federal Standard for Portable Hook-On Chairs; Sold Exclusively on Amazon.com by Ravmix",
+   "remedyText": "Consumers should stop using the hook-on chair immediately and contact Ravmix for information on how to receive a refund. Consumers will be instructed on how to disassemble the product, cut the restraint straps and cloth seat, and email photos of the disassembled product and parts to Ravmix. Upon receipt of the photos, Ravmix will issue a full refund. Ravmix is contacting all known purchasers directly.",
+   "consumerContact": "Email Ravmix at ravmix@outlook.com."
+  },
+  {
+   "number": "26032",
+   "kind": "photo_refund",
+   "date": "2025-10-16",
+   "title": "Belivium Baby Loungers Recalled Due to Risk of Serious Injury or Death from Suffocation and Entrapment Hazards; Violates Mandatory Standard for Infant Sleep Products; Sold on Amazon by Belivium",
+   "remedyText": "Consumers should stop using the baby loungers immediately and contact Belivium for a full refund. Consumers should remove the sleeping pad, cut up the sides of the baby loungers and the sleeping pad and email a photo of the destroyed lounger to BeliviumRecall@163.com to obtain a full refund.",
+   "consumerContact": "Belivium via email at BeliviumRecall@163.com."
+  },
+  {
+   "number": "25427",
+   "kind": "photo_refund",
+   "date": "2025-08-07",
+   "title": "La Ligne Recalls Enfant Bonne Nuit Pajamas Due to Burn Hazard; Violates Mandatory Flammability Standards",
+   "remedyText": "Consumers should immediately take the recalled children's pajamas away from children, stop using them and contact La Ligne for a full refund. Consumers will be asked to destroy the garments by cutting them in half and disposing them. Consumers should send a photo of the destroyed garment by email to lou@lalignenyc.com to receive a refund of $75 or store credit of $100.",
+   "consumerContact": "La Ligne by email at lou@lalignenyc.com, or online at https://lalignenyc.com/pages/enfant-bonne-nuit-pajamas-recall or https://lalignenyc.com/ and click \"Recall\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25114",
+   "kind": "photo_refund",
+   "date": "2025-01-30",
+   "title": "AMX Global Recalls Portable Folding Stadium Seats Due to Fall and Injury Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled seats. Consumers are directed to destroy the recalled seat by cutting through the fabric of the seat and backrest. Consumers are further directed to take a photo of the destroyed recalled seat, including the consumer's initials and the date in the photo, and send the photo to AMX Global at support@stadiumseatrecall.com to receive a full refund.",
+   "consumerContact": "AMX Global toll-free at 888-439-5139 from 9 a.m. to 4:30 p.m. ET Monday through Friday, or email at support@stadiumseatrecall.com or online at https://stadiumseatrecall.com/or go to www.amxglobalinc.com and click on \"RECALL INFORMATION\" at the top of the page for more information."
+  },
+  {
+   "number": "25389",
+   "kind": "photo_refund",
+   "date": "2025-07-17",
+   "title": "Deale International Recalls CasaClean Handheld Steamers Due to Risk of Serious Burn Injury; Sold on HSN",
+   "remedyText": "Consumers should immediately stop using the recalled handheld steamers and contact Deale for instructions on how to safely cut the cord near the base of the machine, to provide proof of destruction, and to receive a refund. Consumers must take a photo of the cord that is cut near the base of the machine and upload the photo, along with their contact information, to the Recall Request form at www.thedeale.com/pages/casaclean-safety-recall to receive the refund.",
+   "consumerContact": "Deale International toll-free at 877-880-6137 from 9 a.m. to 5 p.m. ET, by email at casacleanrecall@thedeale.com, or online at www.thedeale.com/pages/casaclean-safety-recall or www.thedeale.com and click on \"RECALL INFORMATION\" at the top of the page for more information."
+  },
+  {
+   "number": "25230",
+   "kind": "photo_refund",
+   "date": "2025-04-17",
+   "title": "Joydeco Roller Window Shades Recalled Due to Strangulation and Entanglement Hazards and Risk of Serious Injury or Death; Violation of Federal Regulations for Window Coverings; Sold on Amazon.com by Shanghai Chushuo Electronic Commerce Co.",
+   "remedyText": "Consumers should immediately put the window shade's cords up and away from children and contact Shanghai Chushuo Electronic Commerce Co. Ltd to receive a full refund or free replacement operating cord wand. Consumers must send a photo of the recalled product with the operating cord cut to amazonservice@joydeco.com. Once the firm receives the photo, consumers will receive a repair kit with installation instructions through Shunfeng Express or UPS. The firm is contacting all known purchasers directly.",
+   "consumerContact": "Shanghai Chushuo Electronic Commerce Co. Ltd by email at amazonservice@joydeco.com or online at https://recall-joydeco.com or www.joydeco.com and click on “Recall Notice” at the bottom of the page under “Help & Support” for more information."
+  },
+  {
+   "number": "25088",
+   "kind": "photo_refund",
+   "date": "2025-01-08",
+   "title": "Multi-Purpose Children's Helmets Recalled Due to Risk of Head Injury; Violation of Federal Regulations for Bicycle Helmets; Sold Exclusively on Amazon.com; Imported by Wemfg",
+   "remedyText": "Consumers should immediately stop using the recalled helmets and contact Wemfg for a full refund. To receive a refund, consumers should destroy the helmet by cutting off the straps, take a photo of the detached straps, and send it with their Amazon order number to the recalling firm by email at 961837339@qq.com. After submitting proof of destruction, consumers should dispose of the recalled helmet. Wemfg and Amazon are contacting all known purchasers directly.",
+   "consumerContact": "Wemfg via email at 961837339@qq.com, or online at the Wemfg Storefront page on Amazon.com, or Amazon.com Seller Profile: Wemfg for more information."
+  },
+  {
+   "number": "26063",
+   "kind": "photo_refund",
+   "date": "2025-10-30",
+   "title": "DINBooonLUX 12-Inch Full Size Mattresses Recalled Due to Risk of Serious Injury or Death from Fire; Violates Mandatory Standard for Mattress Flammability; Sold on Amazon by DINBooonLUX",
+   "remedyText": "Consumers should immediately stop using the recalled mattress and contact DINBooonLUX for a full refund. Consumers should write \"Recalled\" on the mattress with a permanent marker, email a photo of the marked mattress to Dingbangrecall2025@outlook.com and certify disposal. Upon receipt of the photo and certification of disposal, consumers will be issued a full refund.",
+   "consumerContact": "DINBooonLUX by email at Dingbangrecall2025@outlook.com."
+  },
+  {
+   "number": "25367",
+   "kind": "photo_refund",
+   "date": "2025-07-03",
+   "title": "DEWALT Recalls Grinder Flap Discs Due to Laceration and Injury Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled flap discs and go to the DEWALT website at https://www.dewalt.com/support/safety-notices-and-recalls/flap-disc-recall to participate in the recall. Consumers will be asked to write \"Recall\" on the disc and upload a photograph to the firm's website. Consumers will then be asked to certify that they disposed of it in the trash to receive a refund.",
+   "consumerContact": "DEWALT online at https://www.dewalt.com/support/safety-notices-and-recalls/flap-disc-recall, toll-free at 800-990-6421 from 8 a.m. to 6 p.m. ET Monday through Friday, email at recall@sbdinc.com, or online at https://www.dewalt.com/support/safety-notices-and-recalls or www.dewalt.com and click on \"Safety Notices and Recalls\" for more information."
+  },
+  {
+   "number": "25403",
+   "kind": "photo_refund",
+   "date": "2025-07-24",
+   "title": "FENGQS Electric Bikes Recalled Due to Fire and Burn Hazards; Risk of Serious Injury or Death; Sold on Amazon",
+   "remedyText": "Consumers should stop using the recalled e-bikes immediately and contact FENGQS for a full refund. Consumers will be asked to write their name, the word \"recalled,\" and the current date next to the battery's production date, with a permanent marker. Consumers must then submit a photo clearly showing this information and confirm disposal of the battery in accordance with applicable laws and regulations. Consumers should submit the photo to recall@fengqs.work. Note: Do not throw this recalled lithium-ion battery or device in the trash, the general recycling stream (e.g., street-level or curbside recycling bins), or used battery recycling boxes found at various retail and home improvement stores. Recalled lithium-ion batteries must be disposed of differently than other batteries, because they present a greater risk of fire. Your municipal household hazardous waste (HHW) collection center may accept this recalled lithium-ion battery or device for disposal. Before taking your battery or device to a HHW collection center, contact that office ahead of time and ask whether it accepts recalled lithium-ion batteries. If it does not, contact your municipality for further guidance.",
+   "consumerContact": "FENGQS at 607-307-2127 from 9 a.m. to 5 p.m. ET Monday through Friday, email at recall@fengqs.work, or visit www.fengqs.com/pages/recalls or www.fengqs.com and click on \"Recalls\" at the top of the page."
+  },
+  {
+   "number": "25478",
+   "kind": "photo_refund",
+   "date": "2025-09-25",
+   "title": "Autoez Brand Bamboo Shades Recalled Due to Strangulation and Entanglement Hazards and Risk of Serious Injury or Death; Violates Federal Rule for Window Coverings; Sold on Walmart.com",
+   "remedyText": "Consumers should immediately stop using the recalled shades and contact Autoez for a full refund. Consumers should remove the shades, cut the operating cord, write the word \"Recalled\" on the shades and dispose of the product in the garbage. Consumers should send a photograph of the destroyed window shades in the garbage to Autoez_recall@163.com.",
+   "consumerContact": "Autoez by email at Autoez_recall@163.com or online at https://sites.google.com/view/recall-autoez."
+  },
+  {
+   "number": "25417",
+   "kind": "photo_refund",
+   "date": "2025-07-31",
+   "title": "Amazon Recalls Amazon Basics Premium Foam Eurotop Mattresses Due to Fire Hazard; Violates Federal Standard for Mattress Flammability; Sold on Amazon",
+   "remedyText": "Consumers should stop using the recalled mattress immediately and follow Amazon's instructions for a full refund. Consumers will be asked to write \"Recalled\" on the mattress with a permanent marker, submit a photo of the marked mattress to http://amazoneurotoprecall.expertinquiry.com and certify disposal. Upon receipt of the photo and certification of disposal, consumers will be issued a full refund to a valid payment method in the consumer's Amazon wallet or in the form of an Amazon gift card. The recalled mattresses should be disposed of in accordance with local laws. Amazon is contacting all known purchasers directly.",
+   "consumerContact": "Amazon toll-free at 800-913-4350 from 8 a.m. to 5 p.m. ET Monday through Friday, or online at http://amazoneurotoprecall.expertinquiry.com/ or www.Amazon.com and click on \"Recalls and Product Safety Alerts\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25189",
+   "kind": "photo_refund",
+   "date": "2025-03-20",
+   "title": "Woolite Delicates Detergent Recalled by Reckitt Due to Risk of Exposure to Bacteria; Sold Exclusively on Amazon.com",
+   "remedyText": "Consumers should immediately stop using the recalled Woolite Delicates detergent with lot codes S24364, S24365 and S24366 and contact Reckitt for a full refund. To receive a refund, consumers should write their name and \"Recalled\" in permanent marker on the back of the product, then take a photo with the UPC and lot code visible, and email the photo to ConsumerCare_USA@reckitt.com. Once consumers receive their refund, they should dispose of the product by closing the bottle tightly and placing it in household trash. Do not empty the product prior to disposal. Do not attempt to recycle the product bottle.",
+   "consumerContact": "Reckitt at 800-228-4722 from 9 a.m. to 5 p.m. ET Monday through Friday, by email at ConsumerCare_USA@reckitt.com, or online at https://www.woolite.us/Voluntary-Recall/ or at https://www.woolite.us/ and click on “Voluntary Recall” at the top of the page for more information."
+  },
+  {
+   "number": "26114",
+   "kind": "photo_refund",
+   "date": "2025-11-26",
+   "title": "Ikuso Safety Gates Recalled Due to Risk of Serious Injury or Death to Children from Entrapment; Violates Mandatory Standard for Gates and Enclosures; Sold on Amazon by Ikuso",
+   "remedyText": "Consumers should immediately stop using the recalled safety gates and contact Ikuso to request a full refund. Consumers should send a photo of the recalled safety gates, with \"Recalled\" written on the front in permanent marker, to Ikuso at ikuso_door_gate@163.com. Consumers should dispose of the recalled safety gates in accordance with state and local waste disposal procedures.",
+   "consumerContact": "Ikuso by email at ikuso_door_gate@163.com."
+  },
+  {
+   "number": "25192",
+   "kind": "photo_refund",
+   "date": "2025-03-20",
+   "title": "GIKPAL Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violations of Federal Regulation for Clothing Storage Units; Sold Exclusively on Walmart.com by ONME Direct",
+   "remedyText": "Consumers should immediately stop using the recalled dressers if they are not properly anchored to a wall and place them in an area that children cannot access. Contact ONME Direct for instructions to receive a full refund and submit a photo of the consumer disposing of the product to onmeus@outlook.com. ONME Direct and Walmart are contacting all known purchasers directly.",
+   "consumerContact": "ONME Direct toll-free at 833-449-5777 from 9 a.m. to 6 p.m. PT Monday through Friday, email at onmeus@outlook.com, or online at https://onmeus.com/pages/recall-1 or https://onmeus.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "25387",
+   "kind": "photo_refund",
+   "date": "2025-07-17",
+   "title": "Tractor Supply Recalls Traveller Aluminum Loading Ramps Due to Fall Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled ramps. Consumers will be asked to return the ramps to any Tractor Supply store or call the firm for instructions on how to send a photo of the product with the word \"Recalled\" using permanent paint to customersolutions@tractorsupply.com for a full refund.",
+   "consumerContact": "Tractor Supply Company toll-free at 877-718-6750 from 7 a.m. to 9 p.m. CT Monday through Saturday or from 8 a.m. to 8 p.m. CT on Sunday, or online at https://www.tractorsupply.com/tsc/cms/policies-information/customer-solutions/recall-notices or www.tractorsupply.com and click on \"Recall Notices\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26154",
+   "kind": "photo_refund",
+   "date": "2025-12-18",
+   "title": "TopHomer Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violation of the Virginia Graeme Baker Pool and Spa Safety Act; Sold on Amazon by TopHomerUS",
+   "remedyText": "Pool owners, pool operators and consumers should immediately stop using pools with the recalled pool drain covers. To receive a refund, consumers should remove the drain cover from the pool, take a photo of the removed cover, and send it to the recalling firm by email at Tophomer.recall@outlook.com. Ensure all pools and spas have VGBA-compliant drain covers and teach children to stay away from drains.",
+   "consumerContact": "TopHomerUS by email at Tophomer.recall@outlook.com or online at the TopHomerUS Amazon Seller Profile page"
+  },
+  {
+   "number": "25282",
+   "kind": "photo_refund",
+   "date": "2025-05-15",
+   "title": "LivingCaring Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation Hazards; Violation of Federal Regulations for Adult Portable Bed Rails; Imported by Shanghai Kai Rong Xin Xi Ke Ji",
+   "remedyText": "Consumers should immediately stop using the recalled adult portable bed rails. To receive a refund, consumers should send a photo of the disposed bed rail or an Amazon purchase receipt to the recalling firm by email at Jerryhe@sourcing-cn.com. Shanghai Kai Rong Xin Xi Ke Ji Co. Ltd. and Amazon are contacting all known purchasers directly.",
+   "consumerContact": "Shanghai Kai Rong Xin Xi Ke Ji via email at Jerryhe@sourcing-cn.com."
+  },
+  {
+   "number": "25368",
+   "kind": "photo_refund",
+   "date": "2025-07-03",
+   "title": "Jeriflyer Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment Hazard; Violation of the Virginia Graeme Baker Pool and Spa Safety Act; Sold on Amazon by Junjuanshop",
+   "remedyText": "Pool owners/operators and consumers should immediately stop using pools with the recalled pool drain covers. To receive a refund, consumers should remove the drain cover from the pool, take a photo of the removed cover, and send it to the recalling firm by email at Junjuanshop2025@outlook.com. Ensure all pools and spas have VGBA compliant drain covers and teach children to stay away from drains. Junjuanshop and Amazon are contacting all known purchasers directly.",
+   "consumerContact": "Jeriflyer by email at Junjuanshop2025@outlook.com, or online at Amazon.com: Jerliflyer: Recall or Amazon.com: Jerliflyer and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "25306",
+   "kind": "photo_refund",
+   "date": "2025-05-29",
+   "title": "KICIMPRO Brand Kitchen Faucets Recalled Due to Dangerous Lead Exposure for Young Children; Sold on Amazon.com by Kicimpro",
+   "remedyText": "Consumers should immediately stop using these faucets and contact Kicimpro about disposal and a refund. Consumers will need to provide a photograph of disposal and their order number to receive the refund. Kicimpro is contacting all known purchasers directly. Until these faucets can be replaced, consumers should only consume water from the faucets after running the water for 15 seconds.",
+   "consumerContact": "Kicimpro by email at support@kicimprohome.com."
+  },
+  {
+   "number": "25447",
+   "kind": "photo_refund",
+   "date": "2025-08-28",
+   "title": "Lulive Recalls Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment; Violates Mandatory Standard for Clothing Storage Units; Sold on Amazon by Lulive",
+   "remedyText": "Consumers should stop using the recalled dressers immediately if they are not anchored to the wall and place them in an area that children cannot access. Consumers can contact Lulive for instructions on how to dispose of the dressers to receive a full refund. Consumers must submit a photo to lulive12recall@sina.com of the product demonstrating disposal.",
+   "consumerContact": "Lulive toll-free at 866-610-4348 from 9 a.m. to 4:30 p.m. PT Monday through Friday, email at lulive12recall@sina.com or online www.lulive.com/recalls or at https://lulive.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "25135",
+   "kind": "photo_refund",
+   "date": "2025-02-13",
+   "title": "AFTCO Recalls Youth Solitude Jackets with Drawstrings Due to Strangulation Hazard",
+   "remedyText": "Consumers should immediately take the recalled jackets away from children and remove the drawstrings to eliminate the strangulation hazard. Consumers can either return the jacket to AFTCO for a full refund or upload a photo of the jacket without the drawstring and receive a $25 gift card. Consumers should go to www.aftco.com/recall to participate in the recall. AFTCO is contacting all known purchasers.",
+   "consumerContact": "AFTCO toll-free 877-489-4278 from 7 a.m. to 3:30 p.m. PT Monday through Friday, via email at recall@aftco.com, or online at www.aftco.com/recall or www.aftco.com and click on \"Recall\" for more information."
+  },
+  {
+   "number": "26159",
+   "kind": "photo_refund",
+   "date": "2025-12-18",
+   "title": "KKL Fabric 9-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units; Sold on Amazon by HK Brilliant",
+   "remedyText": "Consumers should stop using the recalled dressers immediately if they are not anchored to the wall and place them in an area that children cannot access. Contact HK Brilliant for instructions on how to dispose of the dressers to receive a full refund. Consumers must submit a photo to support-us@kkl-home.com demonstrating disposal of the product.",
+   "consumerContact": "HK Brilliant via email at support-us@kkl-home.com, or online at https://kkl-home.com/ and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26107",
+   "kind": "photo_refund",
+   "date": "2025-11-26",
+   "title": "Ebern Designs Ojaswi 12-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment; Violates Mandatory Standard for Clothing Storage Units; Manufactured and Sold by Ebern Designs",
+   "remedyText": "Consumers should immediately stop using the recalled dressers if they are not anchored to the wall and place them in an area that children cannot access. Contact Ebern Designs for instructions on how to dispose of the dressers to receive a full refund. Consumers must submit a photo to Ojaswi12Drecall@outlook.com demonstrating disposal of the product.",
+   "consumerContact": "Ebern Designs via email at Ojaswi12Drecall@outlook.com."
+  },
+  {
+   "number": "25307",
+   "kind": "photo_refund",
+   "date": "2025-05-29",
+   "title": "VFAUOSIT Brand Kitchen Faucets Recalled Due to Dangerous Lead Exposure for Young Children; Sold on Amazon.com by Whisper08",
+   "remedyText": "Consumers should immediately stop using these faucets and contact Whisper08 about disposal and a refund. Consumers will need to provide a photograph of disposal and their order number to receive the refund. Whisper08 is contacting all known purchasers directly. Until these faucets can be replaced, consumers should only consume water from the faucets after running the water for 15 seconds.",
+   "consumerContact": "Whisper08 by email at customerservice@vfauosit.com."
+  },
+  {
+   "number": "25130",
+   "kind": "photo_refund",
+   "date": "2025-02-13",
+   "title": "Setsmart Recalls LoGest Climbing Ropes Due to Fall Hazard",
+   "remedyText": "Consumers should immediately stop using the climbing ropes, uninstall them, and register for a full refund at www.LoGestRopeRecall.com. Consumers will receive a form to sign as part of the disposal of the climbing ropes. Consumers must follow the disposal directions on the form and email a photo of the disposed rope to LoGestRecall@gmail.com to receive their refund. Full refunds will be issued via Amazon to the original form of payment associated with the order. Amazon is contacting all known purchasers directly.",
+   "consumerContact": "Setsmart by email at LoGestRecall@gmail.com or at www.LoGestRopeRecall.com."
+  },
+  {
+   "number": "26208",
+   "kind": "photo_refund",
+   "date": "2026-01-22",
+   "title": "Vndueey Magnetic Men Toy Sets Recalled Due to Risk of Serious Injury or Death from Magnet Ingestion; Violates Mandatory Standard for Toys",
+   "remedyText": "Consumers should immediately stop using the recalled magnetic toy sets, keep them away from children and contact Vndueey for a full refund. Consumers will be asked to cut all the magnetic stick figures in half and send a photo of the destroyed toy set to vndueeyrecall@outlook.com. Consumers should then dispose of the destroyed toy set.",
+   "consumerContact": "Vndueey by email at vndueeyrecall@outlook.com."
+  },
+  {
+   "number": "26782",
+   "kind": "photo_refund",
+   "date": "2026-09-17",
+   "title": "SHEIN Distribution Corporation Recalls Pull and Chew Montessori Teething Toys Due to Risk of Serious Injury or Death from Choking Hazard; Violate Mandatory Standard for Toys",
+   "remedyText": "Consumers should stop using the recalled teething toys immediately, take them away from children, and contact SHEIN for a refund. Consumers will be asked to cut the teething toy’s silicone strings and send a photo of the destroyed toy to productrecall@shein.com. Consumers should then dispose of the destroyed product.",
+   "consumerContact": "SHEIN toll-free at 833-853-8668 from 9 a.m. to 6 p.m. PT Monday through Friday, by email at productrecall@shein.com, or online at https://us.shein.com/product-recalls/list or https://us.shein.com and click on \"Product Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "27007",
+   "kind": "photo_refund",
+   "date": "2026-10-01",
+   "title": "Designs Direct Recalls Cupcakes and Cashmere Brand Three-Light Floor Lamps, Due to Risk of Serious Injury from Fire and Burn Hazards",
+   "remedyText": "Consumers should stop using the recalled lamp immediately, turn it off, and unplug it. Consumers will be asked to cut the cord and provide a photograph of the destroyed lamp, following the instructions at https://www.designsdirectllc.com/recalls/. Designs Direct will issue a full refund to consumers within 15 days of receipt of the photo proof of destruction.",
+   "consumerContact": "Designs Direct toll-free at 888-425-9692 between 9 a.m. and 5 p.m. ET, Monday through Friday, or by email at recall@designsdirectllc.com, or online at https://www.designsdirectllc.com/recalls/ or https://www.designsdirectllc.com and click on \"Recalls\" at the top of the page for more information."
+  },
+  {
+   "number": "26414",
+   "kind": "photo_refund",
+   "date": "2026-04-16",
+   "title": "Mini Round Toddler Trampolines Recalled Due to Strangulation Hazard; Risk of Serious Injury or Death; Manufactured by SEGMART",
+   "remedyText": "Consumers should remove the hammock, punching bag, hand ring and basketball board accessories immediately before continuing to use the trampoline. SEGMART will provide a $30 refund to consumers who remove and destroy the hammock, punching bag, hand ring and basketball board accessories. Consumers will be asked to cut the straps on the accessories and submit photos of the cut accessories to the firm. Instructions can be found at www.segmart.com.",
+   "consumerContact": "SEGMART by email at segmartservice@outlook.com, online at segmart.com and click \"RECALL INFORMATION\" for more information."
+  },
+  {
+   "number": "26525",
+   "kind": "photo_refund",
+   "date": "2026-06-04",
+   "title": "Little Grape Land Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions",
+   "remedyText": "Consumers should stop using the recalled nursing pillows immediately and contact Little Grape Land for a full refund. Consumers will be asked to cut the pillow in half and send a photo of the destroyed pillow to recall@evermorepartner.com.",
+   "consumerContact": "Little Grape Land by email at recall@evermorepartner.com, or online at https://littlegrapeland.com/recall or https://littlegrapeland.com/ and click \"Recall\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26512",
+   "kind": "photo_refund",
+   "date": "2026-05-28",
+   "title": "Giantex Recalls Lounge Chairs Due to Amputation Hazard",
+   "remedyText": "Consumers should stop using the recalled lounge chairs immediately and contact Giantex for a full refund. Consumers will be instructed to either request a prepaid return package or will be asked to destroy the recalled lounge chair by detaching the headrest pillow, cutting the fabric, and providing photographic proof of destruction.",
+   "consumerContact": "Giantex toll-free at 844-242-1885 anytime, email at support@giantex.com, or online at https://www.giantex.com/pages/product-recall-notice, or https://www.giantex.com/ and click on \"RECALL INFORMATION\" at the top of the page for more information."
+  },
+  {
+   "number": "26320",
+   "kind": "photo_refund",
+   "date": "2026-03-12",
+   "title": "ProRider Recalls Bicycle Helmets Due to Risk of Serious Injury or Death from Head Injury; Violates Mandatory Standard for Bicycle Helmets",
+   "remedyText": "Consumers should immediately stop using the recalled helmets and contact ProRider for a full refund. Consumers should destroy the helmet by cutting the straps and sending a photo of the destroyed helmet to org@prorider.com to obtain a refund.",
+   "consumerContact": "ProRider at 800-642-3123 from 8 a.m. to 1 p.m. PT Monday through Friday, email at org@prorider.com, or online at www.prorider.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26564",
+   "kind": "photo_refund",
+   "date": "2026-06-18",
+   "title": "Veseacky Pajama Sets Recalled Due to Risk of Serious Injury Death from Burn Hazard; Violate Mandatory Standards for Children's Sleepwear",
+   "remedyText": "Consumers should stop using the recalled pajama sets immediately and contact Veseacky for a full refund. Consumers will be asked to destroy the pajamas by cutting them in half and send a photo of the destroyed pajama set to Veseackypajamarecall@outlook.com. Consumers should then dispose of the destroyed product.",
+   "consumerContact": "Veseacky by email at Veseackypajamarecall@outlook.com."
+  },
+  {
+   "number": "26438",
+   "kind": "photo_refund",
+   "date": "2026-04-23",
+   "title": "Cpzzkq Baby Loungers Recalled Due to Risk of Serious Injury or Death from Suffocation Hazard; Violates Mandatory Standard for Infant Support Cushions; Sold on Amazon by CetoPMax",
+   "remedyText": "Consumers should stop using the baby loungers immediately and contact CetoPMax for a refund. Consumers will be asked to remove the foam and pad from the baby lounger's cover and cut the cover, foam and pad in half. Consumers will then email photos of the destroyed pieces to?CetoPMaxRecall@outlook.com?to receive a refund.",
+   "consumerContact": "CetoPMax via email at CetoPMaxRecall@outlook.com."
+  },
+  {
+   "number": "26591",
+   "kind": "photo_refund",
+   "date": "2026-07-02",
+   "title": "Vevor Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violate Mandatory Standard for Infant Sleep Products",
+   "remedyText": "Consumers should stop using the recalled baby loungers immediately and contact Vevor for a full refund. Consumers will be asked to remove the foam and pad from the baby lounger's cover and cut the cover, foam and pad in half. Consumers will email photos of the destroyed pieces to?recalling@vevor.com to receive a full refund.",
+   "consumerContact": "Vevor toll-free at?855-599-6320?from 9 a.m. to 5 p.m. PT Monday through Friday, email at?recalling@vevor.com, or online at vevor.com/pages/vevor-baby-loungers or at?www.vevor.com?and click \"Product Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26420",
+   "kind": "photo_refund",
+   "date": "2026-04-16",
+   "title": "Agiiman Recalls Pressure Washers Due to Serious Risk of Injury or Death from Shock and Electrocution Hazards",
+   "remedyText": "Consumers should stop using the recalled pressure washers immediately and contact Agiiman for a full refund. Consumers will be asked to cut the power cord in half to destroy the pressure washer and send a photo of the destroyed pressure washer to agiimanservice@163.com. Consumers should then dispose of the destroyed recalled product.",
+   "consumerContact": "Agiiman via email at agiimanservice@163.com."
+  },
+  {
+   "number": "26779",
+   "kind": "photo_refund",
+   "date": "2026-09-17",
+   "title": "LANCHEZ Pressure Washers Recalled Due to Serious Risk of Injury or Death from Shock and Electrocution Hazards",
+   "remedyText": "Consumers should stop using the recalled pressure washers immediately and contact LANCHEZ for a full refund. Consumers will be asked to unplug the pressure washer, destroy it by cutting the power cord in half and send a photo of the destroyed power washer, showing the model number, to service@lanchezpumps.com. Consumers should then dispose of the destroyed recalled product.",
+   "consumerContact": "LANCHEZ by email at service@lanchezpumps.com or online at https://www.amazon.com/lanchez and click on \"Product Recalls\" at the top of the page for more information."
+  },
+  {
+   "number": "26785",
+   "kind": "photo_refund",
+   "date": "2026-09-17",
+   "title": "Tongyang Cycling Recalls Basecamp Bicycle Helmets Due to Risk of Serious Injury or Death from Head Injury; Violate Mandatory Standard for Bicycle Helmets",
+   "remedyText": "Consumers should stop using the helmets immediately and contact Tongyang Cycling for a full refund. Consumers will be asked to destroy the recalled helmet by cutting the straps and send a photo of the destroyed helmet to tongyangshangwuus@hotmail.com. Consumers should then dispose of the recalled product. Note: Button cell batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Tongyang Cycling via email at tongyangshangwuus@hotmail.com or online at http://www.basecampbike.com/index.php?main_page=page&id=15 or www.basecampbike.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26380",
+   "kind": "photo_refund",
+   "date": "2026-04-02",
+   "title": "Sam's Club Recalls Member's Mark Children's Pajama Sets Due to Burn Hazard; Violates Mandatory Flammability Standards for Children's Sleepwear",
+   "remedyText": "Consumers should immediately stop using the recalled pajama sets, take them away from children and contact Sam's Club for information on how to receive a full refund. Consumers will be asked to return the product to their local store or to destroy the pajamas by cutting them in half and send a photo of the destroyed pajamas to Supersam@Samsclub.com then dispose of the product.",
+   "consumerContact": "Sam's Club's Member Services toll-free at 888-746-7726 from 7 a.m. to 11 p.m. CT Monday through Sunday, email us at Supersam@Samsclub.com, or online at https://corporate.walmart.com/recalls?or Samsclub.com?and click on \"Product Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26690",
+   "kind": "photo_refund",
+   "date": "2026-08-13",
+   "title": "DUMOS Nine-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should immediately stop using the recalled dressers if they are not anchored to the wall and place them in an area that children cannot access. Consumers should contact DUMOS for a full refund. Consumers will be asked to destroy the dressers by cutting the drawers in half and writing in permanent marker \"RECALLED\", and to send a photo of the destroyed dressers to dumosdresserrecall@dumos.com. Consumers should then dispose of the recalled products.",
+   "consumerContact": "DUMOS toll-free at 877-820-7778 from 9 a.m. to 4 p.m. PT Monday through Friday, email at dumosdresserrecall@dumos.com or online at https://dumos.ehengjian.com/sys/recall or https://dumos.ehengjian.com/sys/home and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26636",
+   "kind": "photo_refund",
+   "date": "2026-07-23",
+   "title": "Sviyatp Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violate Virginia Graeme Baker Pool & Spa Safety Act",
+   "remedyText": "Pool owners, pool operators and consumers should stop using pools with the recalled pool drain covers immediately and contact Sviyatp for a full refund. To receive a refund, consumers will be asked to remove the drain cover from the pool, write \"RECALL\" with a marker on the cover, take a photo, then dispose of it. If feasible, disable the drain cover by cutting the perimeter structure to prevent reinstallation or further functional use. Send the photo to Sviyatp by email at SviyatpRecall@qq.com. Ensure all pools and spas have VGBA-compliant drain covers and teach children to stay away from drains.",
+   "consumerContact": "Sviyatp by email at SviyatpRecall@qq.com."
+  },
+  {
+   "number": "26753",
+   "kind": "photo_refund",
+   "date": "2026-09-10",
+   "title": "SQT Recalls Lontcs Busy Boards Due to Risk of Serious Injury from Lead Poisoning; Violate Federal Lead Paint Ban",
+   "remedyText": "Consumers should stop using the busy boards immediately and contact SQT for a full refund. Consumers will be asked to destroy the toys by unscrewing its components, write in permanent marker “RECALLED” on the board, and send a photo of the destroyed toy to Lontcs@163.com. Consumers should then dispose of the destroyed product.",
+   "consumerContact": "SQT by email at Lontcs@163.com"
+  },
+  {
+   "number": "26701",
+   "kind": "photo_refund",
+   "date": "2026-08-13",
+   "title": "Sunnyside Corporation Recalls 1-K Kerosene Heater and Appliance Fuel Containers Due to Risk of Serious Injury or Death from Flash Fire and Burn Hazard; Violates Mandatory Standards for Portable Fuel Containers",
+   "remedyText": "Consumers should stop using the recalled fuel bottles immediately, place them out of reach of children, and contact Sunnyside for a full refund. Consumers will be asked to write \"RECALLED\" with permanent marker on the bottle; and submit a photo of it to info@sunnysidecorp.com. Consumers should dispose of the fuel bottles in accordance with local and state regulations. Note: Kerosene fuel is hazardous. Fuel containers should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Sunnyside Corporation toll-free at 800-323-8611 from 8 a.m. to 4:30 p.m. CT Monday through Friday, email at info@sunnysidecorp.com, or online at https://www.sunnysidecorp.com/accessibility or https://www.sunnysidecorp.com and click \"Accessibility & Recall Information\" under the menu icon at the top of the page for more information."
+  },
+  {
+   "number": "26288",
+   "kind": "photo_refund",
+   "date": "2026-02-26",
+   "title": "Trankerloop Baby Bath Seats Recalled Due to Risk of Serious Injury or Death to Children from Drowning; Violates Mandatory Standard for Infant Bath Seats",
+   "remedyText": "Consumers should immediately stop using the recalled bath seats and contact Trankerloop for a full refund. Consumers will be asked to write \"Recalled\" on the front of the bath seat in permanent marker, disassemble the bath seat by removing the back rest and arm restraints, cut the four suction cups on the bottom and email a photo of the disassembled recalled bath seat showing the marked front of the seat to hkkll147@outlook.com.",
+   "consumerContact": "Trankerloop at 405-204-8540 from 9 a.m. to 3:30 p.m. CT Monday through Friday or by email at hkkll147@outlook.com."
+  },
+  {
+   "number": "27009",
+   "kind": "photo_refund",
+   "date": "2026-10-01",
+   "title": "Gobi Heat Recalls Rechargeable Hand Warmers Due to Risk of Serious Injury from Fire and Burn Hazards",
+   "remedyText": "Consumers should stop using the recalled hand warmers immediately and contact Gobi Heat for a full refund or store credit, equal to full refund of the purchase price plus 20% of that amount. Consumers will be asked to go to https://gobiheat.com/pages/handwarmer-recall to obtain a claim number and instructions to destroy the hand warmers by writing in permanent marker \"Recalled\" on the product and send a photo, showing the marked hand warmer and the product's model, to recall@gobiheat.com. Consumers should then dispose of the recalled product with the lithium-ion battery, in accordance with applicable local and state hazardous waste regulations. Note: Do not throw this recalled lithium-ion battery or device in the trash, the general recycling stream (e.g., street-level or curbside recycling bins), or used battery recycling boxes found at various retail and home improvement stores. Recalled lithium-ion batteries must be disposed of differently than other batteries, because they present a greater risk of fire. Your municipal household hazardous waste (HHW) collection center may accept this recalled lithium-ion battery or device for disposal. Before taking your battery or device to a HHW collection center, contact that office ahead of time and ask whether it accepts recalled lithium-ion batteries. If it does not, contact your municipality for further guidance.",
+   "consumerContact": "Gobi Heat at 888-462-4743 from 9 a.m. to 5 p.m. ET Monday through Friday, email at recall@gobiheat.com or online at https://gobiheat.com/pages/handwarmer-recall or www.gobiheat.com and click on \"RECALL INFORMATION\" at the top of the page for more information."
+  },
+  {
+   "number": "26241",
+   "kind": "photo_refund",
+   "date": "2026-02-05",
+   "title": "Little Cow Company Recalls 9 oz Candles in Glass Jars Due to Fire, Burn and Laceration Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled candles and contact Little Cow Company to receive a full refund. Consumers will be asked to use a permanent marker to draw an 'X\" on the glass container, cut the wicks and email a photo of the marked jar can and cut wicks to Little Cow Company.",
+   "consumerContact": "Little Cow Company by email at info@littlecowco.com or visit the firm's website at https://littlecowco.com/pages/recall and click on \"Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26201",
+   "kind": "photo_refund",
+   "date": "2026-01-22",
+   "title": "Thrasio Recalls Angry Orange Enzyme Stain Removers Due to Risk of Exposure to Bacteria",
+   "remedyText": "Consumers should immediately stop using the recalled Angry Orange Enzyme Stain Remover products and contact Thrasio for a full refund. To receive a refund, consumers should take a picture of the product with \"recalled\" and their initials written on it in marker and email the photo to productrecall@angryorange.com. Consumers should then dispose of the product in its container with household trash. Do not empty the product prior to disposal. Do not attempt to recycle the product bottle.",
+   "consumerContact": "Angry Orange toll-free at 877-873-5402 from 8 a.m. to 5 p.m. ET Monday through Friday, via email at productrecall@angryorange.com, or online at https://angryorange.com/productrecall or at https://angryorange.com/ and click on \"Product Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26266",
+   "kind": "photo_refund",
+   "date": "2026-02-12",
+   "title": "CheerKid Baby Bath Seats Recalled Due to Risk of Serious Injury or Death to Children from Drowning; Violates Mandatory Standard for Infant Bath Seats; Sold on Amazon by Babibaby and Woot",
+   "remedyText": "Consumers should immediately stop using the recalled bath seats and contact Babibaby for a full refund. Consumers should write \"Recalled\" on the front of the bath seat in permanent marker, disassemble the bath seat by removing the back rest and arm restraints, discard the screws, cut the five suction cups on the bottom and send a photo of the disassembled recalled bath seat showing the marked front of the seat to CheerKid-Recall@outlook.com.",
+   "consumerContact": "Babibaby by email at CheerKid-Recall@outlook.com."
+  },
+  {
+   "number": "26378",
+   "kind": "photo_refund",
+   "date": "2026-04-02",
+   "title": "Sangohe Reannounces and Expands Adult Portable Bed Rails Recall Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violates Mandatory Standard for Adult Portable Bed Rails",
+   "remedyText": "Consumers should immediately stop using the recalled adult portable bed rails and contact Sangohe for a full refund. Consumers should destroy the bed rails by cutting the handrails' foam padding and writing \"RECALLED\" on the upper and lower rails with permanent marker, take a photo of the destroyed rails and email the photo to SGHproductrecall@163.com.",
+   "consumerContact": "Sangohe by email at SGHproductrecall@163.com, or online at https://www.kdbhealth.com/ and click \"Recall\" at the top of the page or https://www.kdbhealth.com/Recall for more information."
+  },
+  {
+   "number": "26736",
+   "kind": "photo_refund",
+   "date": "2026-09-03",
+   "title": "Gizoon Direct Recalls Six-Drawer Double Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should stop using the recalled dressers immediately if they are not anchored to the wall, place them in an area that children cannot access and contact Gizoon Direct for a full refund. Consumers will be asked to write in permanent marker \"RECALLED\" on the top and all sides of the dresser send a photo of the marked dresser to office@gizoon.com. Consumers should then dispose of the recalled product.",
+   "consumerContact": "Gizoon Direct by email at office@gizoon.com, or online at https://gizoon.com/pages/gizoon-recall or https://gizoon.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26176",
+   "kind": "photo_refund",
+   "date": "2026-01-08",
+   "title": "Pounding Toys Recalled Due to Risk of Serious Injury or Death from Magnet Ingestion Hazard; Violate Mandatory Standard for Toys; Sold on Amazon by Findriver and Weeksome",
+   "remedyText": "Consumers should immediately stop using the recalled pounding toys and contact Findriver to receive a full refund. Consumers should write \"RECALLED\" on the base of the product with permanent marker, throw the product away, and send a photo of the disposed product to Findriverpoundingtoysrecall@outlook.com.",
+   "consumerContact": "Email at Findriverpoundingtoysrecall@outlook.com."
+  },
+  {
+   "number": "26563",
+   "kind": "photo_refund",
+   "date": "2026-06-18",
+   "title": "Spa Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violate Virginia Graeme Baker Pool & Spa Safety Act; Sold on Amazon by Arrogantf",
+   "remedyText": "Spa owners, spa operators and consumers should stop using spa/hot tubs with the recalled pool drain covers immediately. To receive a refund, consumers should remove the drain cover from the spa/hot tub, write \"RECALL\" with a marker on the cover, take a photo, then dispose it. If feasible, disable the drain cover by cutting the perimeter structure to prevent reinstallation or further functional use. Send the photo to Arrogantf by email at lufen1624@outlook.com. Ensure all pools and spas have VGBA-compliant drain covers and teach children to stay away from drains.",
+   "consumerContact": "Arrogantf by email at lufen1624@outlook.com."
+  },
+  {
+   "number": "26676",
+   "kind": "photo_refund",
+   "date": "2026-08-06",
+   "title": "Fitueyes Recalls Laziza Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should stop using the recalled dressers immediately if they are not anchored to the wall and place them in an area that children cannot access. Contact Fitueyes for a full refund. Consumers will be asked to write the word \"recalled\" on the top and all sides of the dresser with a permanent marker and to submit a photo to lazizadresserrecall@s-homooi.com. Consumers should then dispose of the recalled product.",
+   "consumerContact": "Fitueyes by email at lazizadresserrecall@s-homooi.com."
+  },
+  {
+   "number": "26555",
+   "kind": "photo_refund",
+   "date": "2026-06-11",
+   "title": "Houoto 642-2150V Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violate Virginia Graeme Baker Pool & Spa Safety Act; Sold on Amazon by Prosperity goes straight up",
+   "remedyText": "Pool owners, pool operators and consumers should stop using pools with the recalled pool drain covers immediately. To receive a refund, consumers will be asked to remove the drain cover from the pool, destroy or otherwise render the drain cover unusable, write in permanent maker \"Recalled\" on the removed cover, and send a photo of the marked cover to houoto@163.com. Ensure all pools and spas have VGBA-compliant drain covers and teach children to stay away from drains.",
+   "consumerContact": "Prosperity goes straight up email at houoto@163.com."
+  },
+  {
+   "number": "26780",
+   "kind": "photo_refund",
+   "date": "2026-09-17",
+   "title": "Melissa & Doug Recalls Fire Truck Activity Board Toys Due to Risk of Serious Injury from Choking Hazard; Sold Exclusively at Target",
+   "remedyText": "Consumers should stop using the fire truck activity board immediately and register at www.melissaanddoug.com/recall for instructions on how to receive a free replacement fire truck activity board, register for a full refund of $30 in the form of a check or receive a $40 melissaanddoug.com store credit. Consumers will be asked to remove the batteries, write in permanent marker the word “RECALL” on the front of the product along with a unique code provided during the online registration process, and to cut the black hose off from the toy. Consumers will then be directed to upload a photograph of the destroyed product to the registration page. Once their registration has been successfully confirmed, consumers should dispose of the product in their ordinary household trash.",
+   "consumerContact": "Melissa & Doug toll-free at 800-718-5365 from 9 a.m. to 5 p.m. ET Monday through Friday or online at www.melissaanddoug.com/recall or at www.melissaanddoug.com and click on \"Recall\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26261",
+   "kind": "photo_refund",
+   "date": "2026-02-12",
+   "title": "SOOWERY 6-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should immediately stop using the recalled dressers if they are not anchored to the wall and place them in an area that children cannot access. With a permanent marker, write the word \"recalled\" on the top and all sides of the dresser. Contact SOOWERY for instructions on how to dispose of the dressers to receive a full refund. Consumers must submit a photo to SOOWERYrecall@outlook.com showing disposal of the product.",
+   "consumerContact": "Email at SOOWERYrecall@outlook.com"
+  },
+  {
+   "number": "27038",
+   "kind": "photo_refund",
+   "date": "2026-10-22",
+   "title": "FoShanShiNanHaiQuNuoAiTongZhuangShangHang Recalls CIYTI Light-Up Princess Costumes Due to Risk of Serious Injury or Death from Battery Ingestion; Violate Mandatory Standard for Toys",
+   "remedyText": "Consumers should take the princess costumes away from children immediately, stop using them and contact FoShanShiNanHaiQuNuoAiTongZhuangShangHang for a full refund. Consumers will be asked to write \"RECALLED\" with permanent marker on the dress, crown, wand, and remote, then throw away the toys and submit a photo of the disposed toys to Norakid2026@outlook.com. Note: Button cell batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Email at Norakid2026@outlook.com"
+  },
+  {
+   "number": "26663",
+   "kind": "photo_refund",
+   "date": "2026-08-06",
+   "title": "Winston Porter and Seeday 3-Drawer, 4-Drawer, and 5-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should stop using the recalled dressers immediately if they are not anchored to the wall and place them in an area that children cannot access. Consumers should contact Linyi Lingmoxuan and Seeday for instructions on how to identify affected units and dispose of the dressers to receive a full refund. Consumers will be asked to write the word \"recalled\" on the top and all sides of the dresser with a permanent marker and email a photo demonstrating disposal of the product to Winstonporterseedayrecall@outlook.com.",
+   "consumerContact": "Linyi Lingmoxuan and Seeday by email at Winstonporterseedayrecall@outlook.com."
+  },
+  {
+   "number": "27003",
+   "kind": "photo_refund",
+   "date": "2026-10-01",
+   "title": "ABC Trading Recalls Squishy Toys Due to Risk of Serious Injury or Death from Water Bead Ingestion; Violate Mandatory Standard for Toys",
+   "remedyText": "Consumers should stop using the squishy toys immediately and contact ABC Trading for a full refund. Consumers will be asked to write \"RECALLED\" in permanent marker on the squishy toys, throw the toy away and email a photo of the disposed toy to recallabc@gmail.com.",
+   "consumerContact": "Email ABC Trading at recallabc@gmail.com"
+  },
+  {
+   "number": "26578",
+   "kind": "photo_refund",
+   "date": "2026-06-25",
+   "title": "Raychy Children's Light Sneakers Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violate Mandatory Standard for Consumer Products with Coin Batteries; Imported by Carina and Rambo",
+   "remedyText": "Consumers should stop using the sneakers immediately and contact Carina and Rambo for a refund. Consumers will be asked to cut the shoe tongue, write \"RECALLED\" on both sides of the sneakers using a permanent marker, and provide a photo of disposal to raychyrecall@outlook.com in order to receive the refund. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Carina and Rambo by email at raychyrecall@outlook.com."
+  },
+  {
+   "number": "26608",
+   "kind": "photo_refund",
+   "date": "2026-07-09",
+   "title": "Moodooy Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails; Sold on Amazon by Yuezhang",
+   "remedyText": "Consumers should stop using the recalled adult portable bed rails immediately and contact YUEZHANG for a full refund. Consumers will be asked to cut the black safety strap in half, write \"RECALLED\" on the upper and lower bed rails with a permanent marker, take a photo of the marked bed rail with the buyer's name on a piece of paper, and email the photo to Moodooy-recall@outlook.com.",
+   "consumerContact": "YUEZHANG by email at Moodooy-recall@outlook.com."
+  },
+  {
+   "number": "26446",
+   "kind": "photo_refund",
+   "date": "2026-04-30",
+   "title": "Segmart 4-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment; Violate Mandatory Standard for Clothing Storage Units; Sold on Walmart.com by SOFT",
+   "remedyText": "Consumers should immediately stop using the recalled dressers if they are not anchored to the wall and place them in an area that children cannot access. Contact SOFT for instructions on how to identify affected units and dispose of the dressers to receive a full refund. Consumers will be asked to submit a photo to segmartdresserecall@outlook.com demonstrating disposal of the product.",
+   "consumerContact": "SOFT by email at segmartdresserecall@outlook.com, or online at Segmart.com/recall-dresser or Segmart.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26305",
+   "kind": "photo_refund",
+   "date": "2026-02-26",
+   "title": "SumDirect LED Mini Lights Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violates Mandatory Standard for Consumer Products with Button Cell Batteries",
+   "remedyText": "Consumers should immediately stop using the recalled LED lights, place them in an area that children cannot access and properly dispose of the batteries. Contact SumDirect for a full refund. Consumers will be asked to send a photo of the product in the trash to recall@dgfuxin.cn. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "SumDirect by email at recall@dgfuxin.cn or online at www.SumDirect.cn and click on Refund & Exchange for more information."
+  },
+  {
+   "number": "26206",
+   "kind": "photo_refund",
+   "date": "2026-01-22",
+   "title": "Topkay Lighters Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Violates Mandatory Standard for Multipurpose Lighters; Sold on Amazon by Xiyude",
+   "remedyText": "Consumers should immediately stop using the recalled lighters and contact Xiyude for a full refund. Consumers should destroy the lighters by pulling out the black adjuster knob on the top of the product, then contact BCLighterService@outlook.com and submit a photo of proof of destruction to receive a full refund. Consumers should dispose of the recalled lighters in accordance with state and local waste disposal procedures.",
+   "consumerContact": "Contact Xiyude at BCLighterService@outlook.com."
+  },
+  {
+   "number": "26634",
+   "kind": "photo_refund",
+   "date": "2026-07-23",
+   "title": "12-Drawer Fabric Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units; Sold on Amazon by Romorgniz",
+   "remedyText": "Consumers should stop using the recalled dressers if they are not anchored to the wall immediately and place them in an area that children cannot access. Contact Romorgniz for instructions on how to identify affected units and dispose of the dressers to receive a full refund. Consumers will be asked to submit a photo to Romorgnizrecall@outlook.com demonstrating disposal of the product.",
+   "consumerContact": "Romorgniz by email at Romorgnizrecall@outlook.com, or online at https://www.romorgniz.store/recall.html or https://www.romorgniz.store/ and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26274",
+   "kind": "photo_refund",
+   "date": "2026-02-19",
+   "title": "JJGoo LED Balloon Lights Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violates Mandatory Standard for Consumer Products with Button Cell Batteries",
+   "remedyText": "Consumers should stop using the recalled LED lights immediately, place them in an area that children cannot access and properly dispose of the batteries. Contact JJGoo for a full refund. Consumers should throw the balloon lights away and send a photo of the product in the trash to JJGooLEDBalloonLightsrecall@outlook.com. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "JJGoo by email at JJGooLEDBalloonLightsrecall@outlook.com."
+  },
+  {
+   "number": "26255",
+   "kind": "photo_refund",
+   "date": "2026-02-05",
+   "title": "EnHomee 10-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should immediately stop using the recalled dressers, if they are not anchored to the wall, and place them in an area that children cannot access. Contact EnHomee for instructions on how to identify affected units and dispose of the dressers to receive a full refund. Consumers must submit a photo to enhomeestore@gmail.com showing disposal of the product.",
+   "consumerContact": "EnHomee toll-free at 833-668-8899 from 9 a.m. to 5 p.m. PT Monday through Friday, or email at enhomeestore@gmail.com, or online at https://enhomee.store/recall.html or at https://enhomee.store/ and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26317",
+   "kind": "photo_refund",
+   "date": "2026-03-05",
+   "title": "Cubimana Island Storm 3 In 1 Building Sets Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violates Mandatory Standard for Toys; Sold on Amazon by RBS Toys",
+   "remedyText": "Consumers should take the Island Storm 3 In 1 Building Sets away from children immediately, stop using the recalled toys and remove and properly dispose of the batteries. Consumers will be asked to throw the product away and send a photo of the disposed product to productrecall@cubimanatoys.com to receive a full refund. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "RBS Toys by email at productrecall@cubimanatoys.com."
+  },
+  {
+   "number": "26234",
+   "kind": "photo_refund",
+   "date": "2026-01-29",
+   "title": "Bazic Products Recalls Bazic Silicone Glue Due to Risk of Serious Injury or Death from Child Poisoning; Violates Mandatory Standard for Child Resistant Packaging and FHSA Labeling Requirements",
+   "remedyText": "Consumers should stop using the recalled Bazic Silicone Glue immediately and contact Bazic Products for instructions on how to submit a photo of the product to receive a full refund. Note: The recalled glue should be disposed of in accordance with any local and state regulations, contact your local hazardous waste treatment center. Do not dispose of methanol in sewers, rainwater pipes or ordinary garbage cans to avoid causing fires or environmental pollution.",
+   "consumerContact": "Bazic Products toll-free at 877-772-2942 from 8 a.m. to 5 p.m. PT Monday through Friday or email at compliance@bazic.com."
+  },
+  {
+   "number": "26397",
+   "kind": "photo_refund",
+   "date": "2026-04-09",
+   "title": "Yeeluzan Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violates Virginia Graeme Baker Pool & Spa Safety Act; Sold on Amazon by Yeeluzan",
+   "remedyText": "Pool owners, pool operators and consumers should immediately stop using pools with the recalled pool drain covers. To receive a full refund to their original payment method, consumers should destroy the removed drain cover, take a clear photograph/video of the destroyed product as proof of destruction, and send the proof to the recalling firm by email at yeeluzanrecall@163.com. Ensure all pools and spas are fitted with VGBA-compliant drain covers and teach children to stay away from drains.",
+   "consumerContact": "Yeeluzan by email at yeeluzanrecall@163.com."
+  },
+  {
+   "number": "26272",
+   "kind": "photo_refund",
+   "date": "2026-02-19",
+   "title": "Huaker Magnetic Balls and Rods Sets Recalled Due to Risk of Serious Injury or Death from Choking; Violates the Small Ball Ban",
+   "remedyText": "Consumers should stop using the recalled magnetic balls and rods sets immediately, take them away from children and contact Huaker to receive a full refund. Consumers will be asked to throw the magnetic toy sets away and email a photo of the disposed product to Huaker-magnetic-balls@outlook.com.",
+   "consumerContact": "Huaker at Huaker-magnetic-balls@outlook.com."
+  },
+  {
+   "number": "27015",
+   "kind": "photo_refund",
+   "date": "2026-10-08",
+   "title": "Giant Bicycle Recalls LED-Light Keys Included with SureLock Bike Lock Sets Due to Risk of Serious Injury or Death from Battery Ingestion; Violates Mandatory Standard for Consumer Products with Button Cell Batteries",
+   "remedyText": "Consumers should stop using the recalled LED-light key that was included with certain SureLock Bicycle Lock sets immediately and contact Giant Bicycle for a $5 refund. Consumers will be asked to bring the LED key to an authorized Giant retailer to participate in the recall and receive the refund. When returning the LED-light key to a retailer, consumers will be required to bring either the complete bicycle lock purchase or a picture of the serial number on the bicycle lock in order to verify the serial number is in the scope of the recall. Consumers may continue to use the bicycle lock and non-LED-light keys included with the SureLock Bicycle Lock sets. Note: Button and Coin cell batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Giant Bicycle at 866 458-2555 from 8 a.m. to 5 p.m. PT Monday through Friday, email at Recall@GiantBicycle.com, or online at https://www.giant-bicycles.com/us/recall-information or https://www.giant-bicycles.com/ and click \"Recall Information\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26182",
+   "kind": "photo_refund",
+   "date": "2026-01-15",
+   "title": "Ruahouine Hair Growth Serum Bottles Recalled Due to Risk of Serious Injury or Death from Child Poisoning; Violates Mandatory Standard for Child-Resistant Packaging; Sold on Amazon by Ruahouine",
+   "remedyText": "Consumers should immediately secure the recalled serum bottles and place them out of sight and reach of children. Contact Ruahouine for instructions on how to destroy the recalled bottles and how to receive a refund or replacement bottle. Consumers will be asked to pour the contents of the bottle into the trash and take a photo of the bottle in the trash and email it to ruahouine@gmail.com.",
+   "consumerContact": "mail Ruahouine at ruahouine@gmail.com."
+  },
+  {
+   "number": "26432",
+   "kind": "photo_refund",
+   "date": "2026-04-23",
+   "title": "Children's Tower Stools Recalled Due to Risk of Serious Injury and Death from Entrapment and Fall Hazards; Imported by TOETOL HOME",
+   "remedyText": "Consumers should immediately stop using the recalled tower stools and contact TOETOL HOME for a full refund. Consumers will be asked to destroy the stool by disassembling it and send a photo of the destroyed stool to TOETOLHOMEStepStoolsrecall@outlook.com. Consumers should then dispose of the destroyed product.",
+   "consumerContact": "TOETOL HOME via email at TOETOLHOMEStepStoolsrecall@outlook.com."
+  },
+  {
+   "number": "26697",
+   "kind": "photo_refund",
+   "date": "2026-08-13",
+   "title": "Shengsen Prank Sound Makers Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violate Mandatory Standard for Consumer Products with Coin Batteries; Imported by Shengsen Toys",
+   "remedyText": "Consumers should stop using the sound maker immediately and contact Shengsen Toys for a full refund. Consumers will be asked to properly dispose of the sound maker into the trash and send a photo of the disposed product to ywpower@outlook.com. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Shengsen Toys by email at ywpower@outlook.com."
+  },
+  {
+   "number": "26240",
+   "kind": "photo_refund",
+   "date": "2026-02-05",
+   "title": "Lola Plus The Boys Recalls Youth Clothing with Drawstrings Due to Risk of Serious Injury or Death from Strangulation Hazard; Violates Federal Rule for Children's Upper Outerwear",
+   "remedyText": "Consumers should immediately take the recalled clothing away from children, remove the drawstrings to eliminate the hazard and contact Lola Plus The Boys for a full refund. Consumers should send a photo of the clothing without a drawstring, along with their name and the date, to customerservice@lolaandtheboys.com.",
+   "consumerContact": "Lola Plus The Boys collect at 312-285-6053 from 10 a.m. to 5 p.m. CT Monday through Friday, email at customerservice@lolaandtheboys.com or online at https://lolaandtheboys.com/pages/recall or https://lolaandtheboys.com/ and click on \"Recall Policy\" at the bottom of the homepage for more information."
+  },
+  {
+   "number": "26645",
+   "kind": "photo_refund",
+   "date": "2026-07-30",
+   "title": "15-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units; Sold on Amazon by Enhomee-Direct",
+   "remedyText": "Consumers should stop using the recalled dressers immediately if they are not anchored to the wall and place them in an area that children cannot access. Contact EnHomee-Direct for instructions on how to identify affected units and dispose of the dressers to receive a full refund. Consumers will be asked to submit a photo to enhomeestore@gmail.com demonstrating disposal of the product.",
+   "consumerContact": "Contact EnHomee-Direct by email at enhomeestore@gmail.com, or https://www.enhomee.store/recall.html or https://www.enhomee.store/ and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26369",
+   "kind": "photo_refund",
+   "date": "2026-04-02",
+   "title": "Coluans Christmas Light-Up Rings Recalled Due to Risk of Serious Injury or Death from Battery Ingestion Hazard; Violates Mandatory Standard for Toys; Sold on Amazon by BUDI Official",
+   "remedyText": "Consumers should take the recalled light-up rings away from children, stop using them immediately and remove and properly dispose of the batteries. Consumers will be asked to throw away the light-up rings and send a photo of the disposed product to BUDIrecall@outlook.com for a full refund. Note: Button cell batteries are hazardous. Batteries should be disposed of or recycled by following local hazardous waste procedures.",
+   "consumerContact": "Budi Official by email at BUDIrecall@outlook.com."
+  },
+  {
+   "number": "24249",
+   "kind": "non_photo",
+   "date": "2024-05-30",
+   "title": "Black & Decker Recalls CRAFTSMAN V20 Cordless Tillers/Cultivators Due to Laceration Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled tillers/cultivators and contact CRAFTSMAN for new assembly instructions illustrating how to properly attach the bottom portion of the tillers/cultivators. The updated assembly instructions are also available on CRAFTSMAN's website at https://www.craftsman.com/pages/safety-notices-and-recalls-cmctl320b. CRAFTSMAN and sellers of the recalled tillers/cultivators are sending updated assembly instructions to known purchasers.",
+   "consumerContact": "CRAFTSMAN toll-free at 855-237-6848 from 8 a.m. to 6 p.m. ET Monday through Friday, email CRAFTSMAN at recall@sbdinc.com to obtain a copy of the updated assembly instructions, or view/download the updated assembly instructions online at https://www.craftsman.com/pages/safety-notices-and-recalls-cmctl320b or at www.craftsman.com and click on \"Safety Notices and Recalls\" for more information."
+  },
+  {
+   "number": "24153",
+   "kind": "non_photo",
+   "date": "2024-03-07",
+   "title": "SINGES 3-in-1 High Chair and Booster Seats Recalled Due to Fall Hazard; Violations of the Federal Safety Regulations for High Chairs and Booster Seats; Sold Exclusively at Walmart.com; Imported and Sold by Shenzhen Yingjieshang Trade",
+   "remedyText": "Consumers should immediately stop using the recalled high chairs and return them to Walmart for a full refund. Shenzhen Yingjieshang Trade and Walmart are contacting all known purchasers directly.",
+   "consumerContact": "Shenzhen Yingjieshang Trade collect at 206-458-7003 from 9 a.m. to 5 p.m. ET Monday through Friday, email at szyjsmygswfs@outlook.com, or online at www.singes-online.com/faq-75.html or www.singes-online.com and click on \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "24192",
+   "kind": "non_photo",
+   "date": "2024-04-11",
+   "title": "BRS Liquid Fuel Bottles Recalled Due to Risk of Poisoning and Burn Hazard; Violation of the Children's Gasoline Burn Prevention Act; Sold Exclusively on Amazon.com by Huenco",
+   "remedyText": "Consumers should immediately stop using the recalled fuel bottles, place them out of reach of children, and contact Huenco for instructions on how to dispose of the product to receive a full refund.",
+   "consumerContact": "Email at chencaiyu1994@hotmail.com, or online at their Amazon seller profile Amazon.com Seller Profile: Huenco."
+  },
+  {
+   "number": "25067",
+   "kind": "non_photo",
+   "date": "2024-12-12",
+   "title": "Mr. Christmas Recalls Wireless Decorative Tree Light Controllers Due to Fire Hazard",
+   "remedyText": "Consumers should immediately stop using this product and return it to their place of purchase to receive a full refund.",
+   "consumerContact": "Mr. Christmas at 800-489-6328 any day of the week from 9 a.m. to 5 p.m. MT, email at recall@mrchristmas.com or online at www.mrchristmas.com/recall or www.mrchristmas.com and click on the \"Recall\" hyperlink on the bottom of the webpage for more information."
+  },
+  {
+   "number": "24181",
+   "kind": "non_photo",
+   "date": "2024-04-04",
+   "title": "Two Million Black+Decker® Garment Steamers Recalled by Empower Brands in Major Recall Expansion Due to Burn Hazard; Refund Now Offered",
+   "remedyText": "Consumers should immediately stop using the recalled BLACK+DECKER Model HGS011 Easy Garment Steamers, and contact Empower Brands to receive a full refund. There have been continued reports of burn injuries involving units that were repaired as part of the previous recall in November 2022. The remedy has now been changed to a refund for all units. Consumers, including those who received a replacement upper assembly as part of the November 2022 recall, should contact Empower Brands for a full refund.",
+   "consumerContact": "Empower Brands at 800-990-5298 from 8 a.m. to 4:30 p.m. CT, Monday through Friday, email at hgsrecall@brandprotectplus.com or online at www.prodprotect.com/recall or www.blackanddeckerappliances.com and click on \"Safety Notices\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25020",
+   "kind": "non_photo",
+   "date": "2024-10-24",
+   "title": "PowerBlock Recalls Commercial Pro 100 Weight Sets Sold with 5 lb Grip Handles Due to Impact Injury Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled handles and contact PowerBlock for instructions on receiving free replacement 5 lb grip handles. PowerBlock is contacting all known purchasers directly.",
+   "consumerContact": "PowerBlock at 800-997-3999 from 8:30 a.m. to 5 p.m. CT Monday through Friday, or online at www.powerblock.com/pages/product-recalls, or visit www.powerblock.com and click on \"Voluntary Recall\" at the bottom of the page for more information."
+  },
+  {
+   "number": "24307",
+   "kind": "non_photo",
+   "date": "2024-07-18",
+   "title": "CFMOTO Recalls ZFORCE 950 Recreational Off-Highway Vehicles (ROVs) Due to Crash and Tip-Over Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled ROVs, and contact an authorized CFMOTO dealer to schedule an appointment to bring the recalled vehicle into the dealer for a free repair. CFMOTO has issued a Stop Ride notice to consumers, and is contacting all registered owners and dealers directly to provide more details about the repair.",
+   "consumerContact": "CFMOTO toll-free 888-823-6686 from 8 a.m. to 5 p.m. CT, Monday through Friday, email at info@cfmotousa.com, or online at https://www.cfmotousa.com/vehicle-recall or www.cfmotousa.com and go to \"Vehicle Recall\" under the \"Customer Care\" column for more information."
+  },
+  {
+   "number": "24228",
+   "kind": "non_photo",
+   "date": "2024-05-09",
+   "title": "Textron Specialized Vehicles Recalls Arctic Cat Model Year 2024 Catalyst Snowmobiles Due to Crash Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled Arctic Cat 2024 Catalyst 600 snowmobiles, and contact the local authorized Arctic Cat dealer to schedule a free repair of the steering caps.",
+   "consumerContact": "Textron Specialized Vehicles at 800-279-2281 from 8 a.m. to 5 p.m. CT, Monday through Friday, email at arcticcatwarranty@textron.com, or online at https://arcticcat.txtsv.com/owners/recalls or https://arcticcat.txtsv.com/ and select \"Recall\" for more information."
+  },
+  {
+   "number": "24113",
+   "kind": "non_photo",
+   "date": "2024-02-08",
+   "title": "Husqvarna Recalls Grass Trimmers Due to Fire Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled grass trimmers and contact an authorized Husqvarna dealer to receive a free repair. The dealer locator is available at https://locations.husqvarna.com/us/.",
+   "consumerContact": "Husqvarna toll-free at 877-257-6921 from 8 a.m. to 7 p.m. ET, Monday through Friday, email at recalls@husqvarnagroup.com or online at www.husqvarna.com/us/recall or https://www.husqvarna.com/us/support/ and click on \"Important Grass Trimmer Recall\" located on the side of the homepage near the bottom for more information."
+  },
+  {
+   "number": "25011",
+   "kind": "non_photo",
+   "date": "2024-10-17",
+   "title": "Anker Power Banks Recalled Due to Fire and Burn Hazards; Manufactured by Anker Innovations",
+   "remedyText": "Consumers should immediately stop using the recalled power banks and contact Anker Innovations for instructions on receiving a free replacement power bank. Visit https://www.anker.com/product-recalls to register for the recall. Consumers should dispose of the lithium-ion batteries in accordance with local and state regulations.",
+   "consumerContact": "Anker at 800-988-7973 from 9 a.m. to 5 p.m. PT Monday through Friday, email at support@anker.com, or online at https://support.anker.com/s/emailcontactus. A LiveChat function is also available at https://support.anker.com/s/contact-us, or go to https://www.anker.com/product-recalls or at www.anker.com and click on \"Product Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25326",
+   "kind": "non_photo",
+   "date": "2025-06-05",
+   "title": "NTI Brand Boilers Recalled Due to Fire and Carbon Monoxide (CO) Poisoning Hazards and Risk of Serious Injury or Death; Made by NTI Boilers",
+   "remedyText": "The boiler door can fail to seal properly, due to incorrect burner door studs, allowing flames and gases to escape, posing fire and carbon monoxide (CO) poisoning hazards that can result in death or serious injury.",
+   "consumerContact": "NTI Boilers toll-free at 800-688-2575 from 7 a.m. to 8 p.m. ET Monday through Friday, email at recall@ntiboilers.com, or online at http://www.ntiboilers.com/trx-safety-recall or at www.ntiboilers.com and click on \"Urgent Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26124",
+   "kind": "non_photo",
+   "date": "2025-12-04",
+   "title": "Primark US Recalls Primark Water Balloon Pumps Due to Injury Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled water balloon pumps and return them to a Primark store for a full refund in the form of the original payment.",
+   "consumerContact": "Primark at 617-946-3236 from 8 a.m. to 5 p.m. ET Monday through Friday, or go online to www.primark.com/recall, or www.primark.com and click \"Recall\" at the bottom of the page or fill out the Primark Contact Us form to receive answers to your questions or request a call from Primark Customer Service for more information."
+  },
+  {
+   "number": "25436",
+   "kind": "non_photo",
+   "date": "2025-08-14",
+   "title": "Viewrail Recalls Electronic LED Modules used with Floating Stairs and Rails Due to Fire Hazard",
+   "remedyText": "Consumers should contact Viewrail to schedule an appointment for a technician to come to their residence and replace the module free of charge. Alternatively, consumers can request a refund for the module only in the form of a refund check. Consumers will receive the amount on the purchase receipt, or the sales price for the module, if no receipt is provided.",
+   "consumerContact": "Viewrail toll-free at (888) 500-2151 from 9 a.m. to 5 p.m. ET Monday through Friday, by email at info@viewrail.com, or online at https://www.viewrail.com/recall or https://www.viewrail.com/support and click on \"Product Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25281",
+   "kind": "non_photo",
+   "date": "2025-05-15",
+   "title": "Fat Brain Recalls Rollers Tile Toys Used in PlayTab Modular Activity Boards Due to Magnet Ingestion Hazard; Risk of Serious Injury or Death; Violation of Federal Regulations for Toy Magnets",
+   "remedyText": "Consumers should stop using the rollers tile toys immediately and contact the firm for instructions on how to dispose of the product to obtain a $10 credit for use at fatbraintoys.com, or a replacement PlayTab tile. Fat Brain Toy Co. is contacting all known purchasers directly.",
+   "consumerContact": "Fat Brain Toy Co. at 800-590-5987 from 8 a.m. to 5 p.m. CT Monday through Friday, email at recall@fatbraintoys.com, or online at https://fatbraintoys.com/info/toy_safety/play_tab_roller_tile_recall.cfm or fatbraintoys.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "25179",
+   "kind": "non_photo",
+   "date": "2025-03-13",
+   "title": "Meijer Recalls Konwin Desktop Heaters Due to Fire and Burn Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled desktop heaters and return them to any Meijer store for a full refund through the original form of payment.",
+   "consumerContact": "Meijer at 800-927-8699, via contact form at Web Form, or online at https://help.meijer.com/csp?id=m_kb_recall or https://www.meijer.com/ and click on \"Product Recalls\" at the bottom of the page for more information."
+  },
+  {
+   "number": "25180",
+   "kind": "non_photo",
+   "date": "2025-03-13",
+   "title": "Chews Life Recalls Silicone Rosary and Decade Teethers Due to Choking Hazard",
+   "remedyText": "Consumers should immediately stop using the recalled teethers and contact Chews Life to receive a free repair. Consumers will be provided with a prepaid shipping label to return the recalled teethers to Chews Life. Chews Life will mail consumers the repaired teethers at no charge.",
+   "consumerContact": "Chews Life toll-free at 888-742-2276 from 9 a.m. to 7 p.m. ET Monday through Friday, email at sandy@chewslife.com, or online at https://chewslife.com/pages/clasp-recall or www.chewslife.com and click on \"Recall Notices\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26067",
+   "kind": "non_photo",
+   "date": "2025-11-06",
+   "title": "Peloton Recalls Original Series Bike+ Exercise Bikes Due to Fall and Injury Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled exercise bikes and contact Peloton for a free repair. Peloton is offering consumers a free seat post that can be self-installed.",
+   "consumerContact": "Contact Peloton toll-free at 866-679-9129 from 6 a.m. to 12 a.m. ET Monday through Friday, or online at https://support.onepeloton.com/s/article/Peloton-Recall-Information?language=en_US or at www.onepeloton.com and click on \"Product Recalls\" at the bottom of the page for information on how to request the free seat post and instructions for installation."
+  },
+  {
+   "number": "25434",
+   "kind": "non_photo",
+   "date": "2025-08-14",
+   "title": "Firefly Fuel Recalls Firefly Safe & Green 32 oz. Fuel Bottles Due to Risk of Serious Injury or Death from Poisoning to Young Children; Violates Multiple Mandatory Standards",
+   "remedyText": "Consumers should immediately remove the nozzle applicator from the recalled Safe & Green 32 oz. Fuel bottle and reinstall the child-resistant closure that was included with the product's original packaging. If the child-resistant closure is not readily available, consumers should immediately secure the recalled Safe & Green 32 oz. fuel bottle out of the sight and reach of children. Consumers should contact Firefly Fuel for a free corrected label to put on the bottle and a free replacement child-resistant lid, if the original is missing.",
+   "consumerContact": "Firefly Fuel Inc. toll-free at 888-472-6740 8 a.m. to 4:30 p.m. ET Monday through Friday, email Firefly Fuel at support@fireflyfuel.com, or online at www.fireflyfuel.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "25149",
+   "kind": "non_photo",
+   "date": "2025-02-20",
+   "title": "Super73 Recalls Z Miami SE and Z Adventure Core Electric Bicycles Due to Crash and Injury Hazards",
+   "remedyText": "Consumers should immediately stop using the recalled e-bikes and contact the firm for a free repair kit. Consumers will receive a new retaining pin and up to $50 toward the cost of the professional installation of the new pin. Consumers will be asked to send a copy of their installation receipt to Super73 for reimbursement of the installation cost. Super73 and its retailers are contacting all purchasers directly.",
+   "consumerContact": "Super73 toll-free at 888-841-3584 from 9 a.m. to 5 p.m. PT Monday through Friday, email at safety@super73.com, or online at https://super73.com/pages/product-recall or https://super73.com and click on \"Product Safety Advisory\" link at the bottom of the homepage for more information."
+  },
+  {
+   "number": "25143",
+   "kind": "non_photo",
+   "date": "2025-02-20",
+   "title": "Holosun Technologies Recalls Two Firearm Dot Sights Due to Battery Ingestion Hazard; Violations of Reese's Law Federal Safety Regulations for Consumer Products with Coin Batteries and Child Resistant Coin Battery Packaging",
+   "remedyText": "Consumers should immediately stop using the recalled Firearm Dot Sights and place them in an area that children cannot access. Contact Holosun Technologies for instructions on receiving a free recall kit which includes a battery compartment enclosure with the required labeling and an updated instruction manual for HS503G-ACSS models. For HE512C-GD models, Holosun Technologies will provide free return shipping to install a compliant battery compartment tray and include a compliant instruction manual and new packaging. Holosun Technologies is contacting all known purchasers directly. Note: Button cell and coin batteries are hazardous. Batteries should be disposed of or recycled by following local procedures for hazardous household waste, not in the trash.",
+   "consumerContact": "Holosun Technologies toll-free at 888-869-1180 from 8:30 a.m. to 5 p.m. PT Monday through Friday, email at cpscinquiries@holosun.com, or online at https://holosun.com/media/news-events-171.html or www.holosun.com and click \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "25254",
+   "kind": "non_photo",
+   "date": "2025-05-08",
+   "title": "Yamaha Corporation of America Recalls Power Adaptors for Digital Pianos and Music Workstations Due to Burn and Fire Hazards",
+   "remedyText": "Consumers should immediately stop using and unplug the recalled PA-300C AC Power Adaptor and contact Yamaha Corporation of America for a free replacement adaptor. Visit www.yamaha.com/us/support/pa300crecall/ for instructions to participate in the recall. Consumers will need to submit their information through an online form or by email, and will need to submit evidence of product destruction with their claim. Consumers should not damage their recalled adaptor until they have read the recall instructions online. Consumers who own a Yamaha-brand Clavinova® digital piano with a recalled adaptor should unplug the piano and contact Yamaha. Yamaha will provide piano technician services to perform an on-site inspection of the piano and provide a free replacement adaptor.",
+   "consumerContact": "Yamaha toll-free at 844-703-5446 from 9 a.m. to 5 p.m. PT Monday through Friday, email at PA300CRECALL@yamaha.com, or online at www.yamaha.com/us/support/pa300crecall/ or at www.usa.yamaha.com and click on \"Product Safety Information\" at the bottom of the page for more information."
+  },
+  {
+   "number": "26509",
+   "kind": "non_photo",
+   "date": "2026-05-28",
+   "title": "Daoen Recalls Zen Magnetic Promotional Ball Sets Due to Risk of Serious Injury or Death from Magnet Ingestion; Violate Mandatory Standard for Toys",
+   "remedyText": "Consumers should stop using the recalled magnet ball toys immediately, take them away from children and dispose of them.",
+   "consumerContact": "Daoen by email at randyyangyy@gmail.com."
+  },
+  {
+   "number": "26522",
+   "kind": "non_photo",
+   "date": "2026-05-28",
+   "title": "Walmart Recalls Mainstays 9-Drawer Fabric Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units",
+   "remedyText": "Consumers should stop using the recalled dressers if they are not anchored to the wall immediately, place them in an area that children cannot access and contact Walmart for a full refund. Consumers will be asked to return the dressers' drawers to any Walmart store and dispose of the dressers' frame according to local and state regulations.",
+   "consumerContact": "Walmart at 800-925-6278 from 7 a.m. to 9 p.m. CT Monday through Friday, or online at www.walmart.com/help or https://corporate.walmart.com/recalls for more information."
+  },
+  {
+   "number": "26602",
+   "kind": "non_photo",
+   "date": "2026-07-02",
+   "title": "Winco Fireworks International Recalls Unity 7 Shot 200 Gram Aerial Cake Fireworks Due to Risk of Serious Injury from Explosion and Burn Hazards",
+   "remedyText": "Consumers should stop using the recalled fireworks immediately and return the fireworks to the store where they were purchased for a full refund. Consumers will receive the refund in the form of cash or a refund to their original form of payment.",
+   "consumerContact": "Winco Fireworks International by email at cade@wincofireworks.com or online at https://www.wincofireworks.com/wp-content/uploads/2026/06/Unity-Recall.pdf or wincofireworks.com and click on \"Product Safety Recall\" for more information."
+  },
+  {
+   "number": "27014",
+   "kind": "non_photo",
+   "date": "2026-10-01",
+   "title": "Agrish Reannounces and Expands Recall of Adult Portable Bed Rails Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails; Additional Units Added",
+   "remedyText": "Consumers should immediately stop using the recalled adult portable bed rails and contact Agrish Direct for a full refund. Consumers will be asked to go to http://www.agrish.online/recall to register for the recall and receive instructions on how to dispose of the recalled bed rail.",
+   "consumerContact": "Agrish Direct at email at agrish.us@outlook.com, or online at http://www.agrish.online/recall or www.agrish.online and click \"More\" then \"Recall\" at the top of the page for more information."
+  },
+  {
+   "number": "26686",
+   "kind": "non_photo",
+   "date": "2026-08-13",
+   "title": "Goody King Magnetic Building Cubes and Blocks Recalled Due to Risk of Serious Injury or Death from Magnetic Ingestion Hazard; Imported by Yi Suen Commerce",
+   "remedyText": "Consumers should stop using the recalled magnetic building cubes immediately and contact Yi Suen Commerce for a full refund. Consumers will be provided with a pre-paid label to return the recalled magnetic cubes to receive a refund.",
+   "consumerContact": "Yi Suen Commerce by email at safety@goodyking.com or online at recall.goodyking.com."
+  },
+  {
+   "number": "27017",
+   "kind": "non_photo",
+   "date": "2026-10-08",
+   "title": "Decathlon America Recalls Van Rysel GRVL AF Bicycles Due to Risk of Serious Injury or Death from Crash Hazard",
+   "remedyText": "Consumers should stop using the recalled bicycles immediately and take them to the nearest Recreational Equipment (REI Co-op) location for a free inspection and repair service of the front fork assembly. Anyone unable to visit an REI Co-op location can contact Decathlon Customer Service directly for assistance. Recalled models can be identified by the Van Rysel Product ID on the top right of the product label under the frame, beginning with the number 5.",
+   "consumerContact": "Decathlon America at 415-408-5494 from 9 a.m. to 5 p.m. PT Monday through Friday, email at support.america@decathlon.com or online at https://www.decathlon.com/pages/product-safety-recalls or https://www.decathlon.com/ and click \"Recalls\" in the footer at the bottom of the page."
+  },
+  {
+   "number": "26482",
+   "kind": "non_photo",
+   "date": "2026-05-14",
+   "title": "BRP Recalls Can-Am All-Terrain Vehicles (ATVs) Due to Risk of Serious Injury and Death from Crash Hazard",
+   "remedyText": "Consumers should stop using the Speed Limiter Mode immediately and contact an authorized Can-Am Off-Road dealer to schedule a free repair at the dealership, involving a software update that will take less than one hour. To find an authorized dealer visit https://can-am.brp.com/off-road/us/en/find-a-dealer.html#/search.",
+   "consumerContact": "BRP toll-free at 888-272-9222 from 8 a.m. to 8 p.m. ET Monday through Sunday, online at https://can-am.brp.com/off-road/us/en/owners/safety/safety-recalls.html or https://can-am.brp.com/off-road/us/en/ and click on \"Safety Recalls\" at the bottom of the page."
+  },
+  {
+   "number": "26493",
+   "kind": "non_photo",
+   "date": "2026-05-14",
+   "title": "Cosyland Children's Tower Stools Recalled Due to Risk of Serious Injury and Death from Entrapment and Fall Hazards; Imported by Cosyland Official",
+   "remedyText": "Consumers should stop using the recalled tower stools immediately and store them away from children until repaired. Contact Cosyland Official for repair parts, which include protective nets, stabilizing feet, and installation instructions. The firm will mail the repair parts directly to consumers free of charge.",
+   "consumerContact": "Cosyland toll free at 866-677-3889 between 9 a.m. and 5 p.m. PT, Monday through Friday, or by email at customerservice@cosyland.com, online at www.cosyland.com/pages/recall, or www.cosyland.com and click on \"Product Recalls\" at the top of the page for more information."
+  },
+  {
+   "number": "26399",
+   "kind": "non_photo",
+   "date": "2026-04-09",
+   "title": "Shenzhen Baihang Recalls VEEKTOMX Mini Power Banks, Due to Fire and Burn Hazards; Sold on Amazon",
+   "remedyText": "Consumers should immediately stop using the recalled power banks and contact Shenzhen Baihang to verify power bank is part of the recall and receive a free replacement power bank.",
+   "consumerContact": "Veektomx at recall@veektomx.com or online at veektomx.com and click on \"Important Recall Information\" to learn more."
+  }
+ ]
+}

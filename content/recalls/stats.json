@@ -1,0 +1,549 @@
+{
+ "generatedAt": "2026-11-05T18:57:06.435Z",
+ "source": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2024-01-01 (US Consumer Product Safety Commission, public domain)",
+ "note": "Counts from the deterministic classifier in src/lib/recall/classify.ts. 'validation' re-runs it on the 2026-11-01 snapshot behind research/validation_recalls.md; 'current' is today's pull and is the set to publish.",
+ "current": {
+  "pulledAt": "2026-11-05T18:56:05.863Z",
+  "range": {
+   "from": "2024-01-04",
+   "to": "2026-11-05"
+  },
+  "recalls": {
+   "count": 1239,
+   "share": null,
+   "of": "",
+   "definition": "Every CPSC recall the Recalls API returns with RecallDate on or after the start date, de-duplicated by RecallNumber."
+  },
+  "all": {
+   "photo": {
+    "count": 618,
+    "share": 49.9,
+    "of": "all recalls",
+    "definition": "Remedy text (all Remedies[].Name joined) matches /photo|picture|image/i (case-insensitive)."
+   },
+   "refund": {
+    "count": 777,
+    "share": 62.7,
+    "of": "all recalls",
+    "definition": "Remedy text matches /refund/i."
+   },
+   "photoRefund": {
+    "count": 525,
+    "share": 42.4,
+    "of": "all recalls",
+    "definition": "Both photo and refund."
+   },
+   "marker": {
+    "count": 203,
+    "share": 16.4,
+    "of": "all recalls",
+    "definition": "Remedy text matches \\bmarkers?\\b|\\bpermanent\\s+maker\\b|\\b(?:write|writes|writing|written|wrote|mark|marks|marking)\\b[^.]{0,60}?[\"“”'‘’]\\s*(?:recall(?:ed)?|do not use|destroyed|void)\\b (a marker, or write or mark followed by quoted words such as \"RECALLED\")."
+   },
+   "cut": {
+    "count": 286,
+    "share": 23.1,
+    "of": "all recalls",
+    "definition": "Remedy text matches \\bcut(?:s|ting)?\\b."
+   },
+   "email": {
+    "count": 1087,
+    "share": 87.7,
+    "of": "all recalls",
+    "definition": "Remedy text or ConsumerContact contains an email address ([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})."
+   },
+   "webmail": {
+    "count": 361,
+    "share": 29.1,
+    "of": "all recalls",
+    "definition": "At least one of those addresses is on one of these domains, exact match: outlook.com, 163.com, gmail.com, hotmail.com, 126.com, qq.com, yeah.net, sina.com, yahoo.com, foxmail.com, aol.com, icloud.com."
+   },
+   "paypalOrVenmo": {
+    "count": 0,
+    "share": 0,
+    "of": "all recalls",
+    "definition": "Remedy text or ConsumerContact matches /paypal|venmo/i."
+   },
+   "soldOnline": {
+    "count": 991,
+    "share": 80,
+    "of": "all recalls",
+    "definition": "Retailers[].Name joined matches /online|\\.com\\b/i."
+   },
+   "madeInChina": {
+    "count": 892,
+    "share": 72,
+    "of": "all recalls",
+    "definition": "ManufacturerCountries includes exactly \"China\"."
+   },
+   "recallVendor": {
+    "count": 46,
+    "share": 3.7,
+    "of": "all recalls",
+    "definition": "ConsumerContact matches /sedgwick|expertinquiry|stericycle|recallrtr/i (professional recall vendors)."
+   },
+   "under50k": {
+    "count": 1002,
+    "share": 80.9,
+    "of": "all recalls",
+    "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added. Units under 50,000."
+   },
+   "under10k": {
+    "count": 726,
+    "share": 58.6,
+    "of": "all recalls",
+    "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added. Units under 10,000."
+   }
+  },
+  "photoRefund": {
+   "email": {
+    "count": 498,
+    "share": 94.9,
+    "of": "photo-refund recalls",
+    "definition": "Remedy text or ConsumerContact contains an email address ([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})."
+   },
+   "webmail": {
+    "count": 270,
+    "share": 51.4,
+    "of": "photo-refund recalls",
+    "definition": "At least one of those addresses is on one of these domains, exact match: outlook.com, 163.com, gmail.com, hotmail.com, 126.com, qq.com, yeah.net, sina.com, yahoo.com, foxmail.com, aol.com, icloud.com."
+   },
+   "marker": {
+    "count": 160,
+    "share": 30.5,
+    "of": "photo-refund recalls",
+    "definition": "Remedy text matches \\bmarkers?\\b|\\bpermanent\\s+maker\\b|\\b(?:write|writes|writing|written|wrote|mark|marks|marking)\\b[^.]{0,60}?[\"“”'‘’]\\s*(?:recall(?:ed)?|do not use|destroyed|void)\\b (a marker, or write or mark followed by quoted words such as \"RECALLED\")."
+   },
+   "cut": {
+    "count": 245,
+    "share": 46.7,
+    "of": "photo-refund recalls",
+    "definition": "Remedy text matches \\bcut(?:s|ting)?\\b."
+   },
+   "markerOrCut": {
+    "count": 346,
+    "share": 65.9,
+    "of": "photo-refund recalls",
+    "definition": "Marker or cut."
+   },
+   "under50k": {
+    "count": 465,
+    "share": 88.6,
+    "of": "photo-refund recalls",
+    "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added. Units under 50,000."
+   }
+  },
+  "byYear": {
+   "2024": {
+    "recalls": 305,
+    "photo": 93,
+    "photoRefund": 71,
+    "webmail": 22
+   },
+   "2025": {
+    "recalls": 420,
+    "photo": 204,
+    "photoRefund": 172,
+    "webmail": 79
+   },
+   "2026": {
+    "recalls": 514,
+    "photo": 321,
+    "photoRefund": 282,
+    "webmail": 169
+   }
+  },
+  "unitsBuckets": {
+   "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added.",
+   "all": {
+    "under 1,000": 308,
+    "1,000 to 9,999": 418,
+    "10,000 to 49,999": 276,
+    "50,000 to 999,999": 202,
+    "1 million or more": 34,
+    "not given": 1
+   },
+   "photoRefund": {
+    "under 1,000": 188,
+    "1,000 to 9,999": 177,
+    "10,000 to 49,999": 100,
+    "50,000 to 999,999": 50,
+    "1 million or more": 10,
+    "not given": 0
+   }
+  }
+ },
+ "validation": {
+  "pulledAt": "2026-11-01",
+  "range": {
+   "from": "2024-01-04",
+   "to": "2026-10-29"
+  },
+  "recalls": {
+   "count": 1227,
+   "share": null,
+   "of": "",
+   "definition": "Every CPSC recall the Recalls API returns with RecallDate on or after the start date, de-duplicated by RecallNumber."
+  },
+  "all": {
+   "photo": {
+    "count": 614,
+    "share": 50,
+    "of": "all recalls",
+    "definition": "Remedy text (all Remedies[].Name joined) matches /photo|picture|image/i (case-insensitive)."
+   },
+   "refund": {
+    "count": 772,
+    "share": 62.9,
+    "of": "all recalls",
+    "definition": "Remedy text matches /refund/i."
+   },
+   "photoRefund": {
+    "count": 523,
+    "share": 42.6,
+    "of": "all recalls",
+    "definition": "Both photo and refund."
+   },
+   "marker": {
+    "count": 201,
+    "share": 16.4,
+    "of": "all recalls",
+    "definition": "Remedy text matches \\bmarkers?\\b|\\bpermanent\\s+maker\\b|\\b(?:write|writes|writing|written|wrote|mark|marks|marking)\\b[^.]{0,60}?[\"“”'‘’]\\s*(?:recall(?:ed)?|do not use|destroyed|void)\\b (a marker, or write or mark followed by quoted words such as \"RECALLED\")."
+   },
+   "cut": {
+    "count": 284,
+    "share": 23.1,
+    "of": "all recalls",
+    "definition": "Remedy text matches \\bcut(?:s|ting)?\\b."
+   },
+   "email": {
+    "count": 1078,
+    "share": 87.9,
+    "of": "all recalls",
+    "definition": "Remedy text or ConsumerContact contains an email address ([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})."
+   },
+   "webmail": {
+    "count": 358,
+    "share": 29.2,
+    "of": "all recalls",
+    "definition": "At least one of those addresses is on one of these domains, exact match: outlook.com, 163.com, gmail.com, hotmail.com, 126.com, qq.com, yeah.net, sina.com, yahoo.com, foxmail.com, aol.com, icloud.com."
+   },
+   "paypalOrVenmo": {
+    "count": 0,
+    "share": 0,
+    "of": "all recalls",
+    "definition": "Remedy text or ConsumerContact matches /paypal|venmo/i."
+   },
+   "soldOnline": {
+    "count": 980,
+    "share": 79.9,
+    "of": "all recalls",
+    "definition": "Retailers[].Name joined matches /online|\\.com\\b/i."
+   },
+   "madeInChina": {
+    "count": 883,
+    "share": 72,
+    "of": "all recalls",
+    "definition": "ManufacturerCountries includes exactly \"China\"."
+   },
+   "recallVendor": {
+    "count": 46,
+    "share": 3.7,
+    "of": "all recalls",
+    "definition": "ConsumerContact matches /sedgwick|expertinquiry|stericycle|recallrtr/i (professional recall vendors)."
+   },
+   "under50k": {
+    "count": 993,
+    "share": 80.9,
+    "of": "all recalls",
+    "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added. Units under 50,000."
+   },
+   "under10k": {
+    "count": 720,
+    "share": 58.7,
+    "of": "all recalls",
+    "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added. Units under 10,000."
+   }
+  },
+  "photoRefund": {
+   "email": {
+    "count": 496,
+    "share": 94.8,
+    "of": "photo-refund recalls",
+    "definition": "Remedy text or ConsumerContact contains an email address ([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})."
+   },
+   "webmail": {
+    "count": 269,
+    "share": 51.4,
+    "of": "photo-refund recalls",
+    "definition": "At least one of those addresses is on one of these domains, exact match: outlook.com, 163.com, gmail.com, hotmail.com, 126.com, qq.com, yeah.net, sina.com, yahoo.com, foxmail.com, aol.com, icloud.com."
+   },
+   "marker": {
+    "count": 159,
+    "share": 30.4,
+    "of": "photo-refund recalls",
+    "definition": "Remedy text matches \\bmarkers?\\b|\\bpermanent\\s+maker\\b|\\b(?:write|writes|writing|written|wrote|mark|marks|marking)\\b[^.]{0,60}?[\"“”'‘’]\\s*(?:recall(?:ed)?|do not use|destroyed|void)\\b (a marker, or write or mark followed by quoted words such as \"RECALLED\")."
+   },
+   "cut": {
+    "count": 244,
+    "share": 46.7,
+    "of": "photo-refund recalls",
+    "definition": "Remedy text matches \\bcut(?:s|ting)?\\b."
+   },
+   "markerOrCut": {
+    "count": 344,
+    "share": 65.8,
+    "of": "photo-refund recalls",
+    "definition": "Marker or cut."
+   },
+   "under50k": {
+    "count": 463,
+    "share": 88.5,
+    "of": "photo-refund recalls",
+    "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added. Units under 50,000."
+   }
+  },
+  "byYear": {
+   "2024": {
+    "recalls": 305,
+    "photo": 93,
+    "photoRefund": 71,
+    "webmail": 22
+   },
+   "2025": {
+    "recalls": 420,
+    "photo": 204,
+    "photoRefund": 172,
+    "webmail": 79
+   },
+   "2026": {
+    "recalls": 502,
+    "photo": 317,
+    "photoRefund": 280,
+    "webmail": 168
+   }
+  },
+  "unitsBuckets": {
+   "definition": "First number in Products[0].NumberOfUnits, times one million when followed by \"million\". US units as CPSC states them; Canada and Mexico counts in parentheses are not added.",
+   "all": {
+    "under 1,000": 306,
+    "1,000 to 9,999": 414,
+    "10,000 to 49,999": 273,
+    "50,000 to 999,999": 200,
+    "1 million or more": 33,
+    "not given": 1
+   },
+   "photoRefund": {
+    "under 1,000": 188,
+    "1,000 to 9,999": 176,
+    "10,000 to 49,999": 99,
+    "50,000 to 999,999": 50,
+    "1 million or more": 10,
+    "not given": 0
+   }
+  }
+ },
+ "comparison": [
+  {
+   "measure": "recalls",
+   "published": 1227,
+   "reproduced": 1227,
+   "matches": true,
+   "current": 1239,
+   "currentSameWindow": 1227
+  },
+  {
+   "measure": "under50k",
+   "published": 994,
+   "reproduced": 993,
+   "matches": false,
+   "current": 1002,
+   "currentSameWindow": 993,
+   "explained": "Recall 24078 (Alliance4Safety and 31 furniture companies, 2024-01-11) gives its units as \"Millions\", with no number. The 2026-11-01 scan read that as 0 units and counted it under 10,000 and under 50,000; this classifier reads it as not given and leaves it out. The shares do not change when rounded: 993 of 1,227 is 81% and 720 of 1,227 is 59%."
+  },
+  {
+   "measure": "under10k",
+   "published": 721,
+   "reproduced": 720,
+   "matches": false,
+   "current": 726,
+   "currentSameWindow": 720,
+   "explained": "Recall 24078 (Alliance4Safety and 31 furniture companies, 2024-01-11) gives its units as \"Millions\", with no number. The 2026-11-01 scan read that as 0 units and counted it under 10,000 and under 50,000; this classifier reads it as not given and leaves it out. The shares do not change when rounded: 993 of 1,227 is 81% and 720 of 1,227 is 59%."
+  },
+  {
+   "measure": "soldOnline",
+   "published": 980,
+   "reproduced": 980,
+   "matches": true,
+   "current": 991,
+   "currentSameWindow": 980
+  },
+  {
+   "measure": "refund",
+   "published": 772,
+   "reproduced": 772,
+   "matches": true,
+   "current": 777,
+   "currentSameWindow": 772
+  },
+  {
+   "measure": "recallVendor",
+   "published": 46,
+   "reproduced": 46,
+   "matches": true,
+   "current": 46,
+   "currentSameWindow": 46
+  },
+  {
+   "measure": "madeInChina",
+   "published": 883,
+   "reproduced": 883,
+   "matches": true,
+   "current": 892,
+   "currentSameWindow": 883
+  },
+  {
+   "measure": "photo",
+   "published": 614,
+   "reproduced": 614,
+   "matches": true,
+   "current": 618,
+   "currentSameWindow": 614
+  },
+  {
+   "measure": "photoRefund",
+   "published": 523,
+   "reproduced": 523,
+   "matches": true,
+   "current": 525,
+   "currentSameWindow": 523
+  },
+  {
+   "measure": "photoRefundEmail",
+   "published": 496,
+   "reproduced": 496,
+   "matches": true,
+   "current": 498,
+   "currentSameWindow": 496
+  },
+  {
+   "measure": "photoRefundWebmail",
+   "published": 269,
+   "reproduced": 269,
+   "matches": true,
+   "current": 270,
+   "currentSameWindow": 269
+  },
+  {
+   "measure": "photoRefund2024",
+   "published": 71,
+   "reproduced": 71,
+   "matches": true,
+   "current": 71,
+   "currentSameWindow": 71
+  },
+  {
+   "measure": "photoRefund2025",
+   "published": 172,
+   "reproduced": 172,
+   "matches": true,
+   "current": 172,
+   "currentSameWindow": 172
+  },
+  {
+   "measure": "photoRefund2026",
+   "published": 280,
+   "reproduced": 280,
+   "matches": true,
+   "current": 282,
+   "currentSameWindow": 280
+  },
+  {
+   "measure": "paypalOrVenmo",
+   "published": 0,
+   "reproduced": 0,
+   "matches": true,
+   "current": 0,
+   "currentSameWindow": 0
+  }
+ ],
+ "difference": {
+  "added": [
+   {
+    "number": "27076",
+    "date": "2026-11-05",
+    "title": "Magnetopia Recalls Magnetic Building Cubes and Blocks Due to Risk of Serious Injury or Death from Magnet Ingestion Hazard",
+    "photoRefund": false
+   },
+   {
+    "number": "27074",
+    "date": "2026-11-05",
+    "title": "U.S. Titan Recalls X-Pro Youth All-Terrain Vehicles (ATVs) Due to Risk of Serious Injury or Death from Crash Hazard; Violate Mandatory Standard for ATVs",
+    "photoRefund": false
+   },
+   {
+    "number": "27073",
+    "date": "2026-11-05",
+    "title": "Sanven Technology Recalls Vevor BMX Bicycles Due to Risk of Serious Injury or Death from Crash Hazard; Violate Federal Requirements for Bicycles",
+    "photoRefund": false
+   },
+   {
+    "number": "27072",
+    "date": "2026-11-05",
+    "title": "Baby Brezza Enterprises Recalls SuperFast Sterilizer Dryers Due to Overheating and Burn Hazards",
+    "photoRefund": false
+   },
+   {
+    "number": "27071",
+    "date": "2026-11-05",
+    "title": "Kikea Store Recalls X-VESOLJE Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows",
+    "photoRefund": true
+   },
+   {
+    "number": "27070",
+    "date": "2026-11-05",
+    "title": "C.A.M.P. Recalls Mountain Ice Axes Due to Risk of Serious Injury or Death from Fall Hazard",
+    "photoRefund": false
+   },
+   {
+    "number": "27069",
+    "date": "2026-11-05",
+    "title": "Gourmia Recalls 9-Slice Digital Air Fryer Ovens Due to Burn Hazard",
+    "photoRefund": false
+   },
+   {
+    "number": "27068",
+    "date": "2026-11-05",
+    "title": "Jiastfeng Recalls HAUOMS Eight-drawer Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units",
+    "photoRefund": true
+   },
+   {
+    "number": "27067",
+    "date": "2026-11-05",
+    "title": "Little Giant Recalls Ladders with Rapid Locks Due to Risk of Serious Injury from Fall Hazard",
+    "photoRefund": false
+   },
+   {
+    "number": "27066",
+    "date": "2026-11-05",
+    "title": "Arlopu Recalls Slide Playsets Due to Risk of Serious Injury and Death from Head and Neck Entrapment Hazards",
+    "photoRefund": false
+   },
+   {
+    "number": "27065",
+    "date": "2026-11-05",
+    "title": "Bose Recalls Lithium-Ion Battery Packs for S1 Pro and S1 Pro+ Bluetooth Speaker Systems Due to Risk of Injury from Fire and Overheating Hazards",
+    "photoRefund": false
+   },
+   {
+    "number": "27064",
+    "date": "2026-11-05",
+    "title": "Vanderhall North America Recalls All Model Year 2024-2026 Brawley Electric Recreational Off-road Vehicles Due to Injury and Crash Hazards",
+    "photoRefund": false
+   }
+  ],
+  "removed": [],
+  "reclassified": [],
+  "units": "Recall 24078 (Alliance4Safety and 31 furniture companies, 2024-01-11) gives its units as \"Millions\", with no number. The 2026-11-01 scan read that as 0 units and counted it under 10,000 and under 50,000; this classifier reads it as not given and leaves it out. The shares do not change when rounded: 993 of 1,227 is 81% and 720 of 1,227 is 59%.",
+  "explanation": "The current pull has 12 recall(s) not in the 2026-11-01 snapshot (dated 2026-11-05), 0 removed, and 0 whose counted fields changed. Inside the validation window (to 2026-10-29) the current pull gives the same numbers as the snapshot: yes."
+ }
+}

@@ -1,0 +1,324 @@
+{
+  "recordedAt": "2026-11-05T20:46:07.755Z",
+  "recall": "26754",
+  "photo": "official/26125-hair-dryer-cord-cut.png",
+  "credit": "Photo: US Consumer Product Safety Commission, recall 26125 (public domain)",
+  "ms": 25402,
+  "result": {
+    "decision": "firm_review",
+    "decided_by": "reviewers",
+    "checks": {
+      "C1": {
+        "id": "C1",
+        "name": "Right product",
+        "pass": false,
+        "status": "fail",
+        "reason_plain": "This does not look like the recalled product.",
+        "reason_technical": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), brand text MY ONLY STYLER, and narrow brush head vs oval paddle all conflict with the official images and description; only the general product category matches.",
+        "score": 0.15,
+        "evidence": {
+          "matching": [
+            "Center of photo: a handheld hot air brush with bristles and a cord, the same general kind of product as the recall",
+            "Right end of the handle: a vented air outlet, as on a hot air styler"
+          ],
+          "differing": [
+            "Body is white, not black with a striped pink design as in the official images",
+            "Printed brand on the handle reads MY ONLY STYLER, not Wantefully or XRUI",
+            "Brush head is a narrow straight bristle comb, not the wide oval paddle brush shown in the official images",
+            "Control area shows small slide buttons and a 5 symbol, unlike the recalled product's controls",
+            "No model number XR-8801 is visible anywhere"
+          ],
+          "model_reason": "No. This is a white MY ONLY STYLER brush, not the black and pink Wantefully paddle brush that was recalled."
+        }
+      },
+      "C2": {
+        "id": "C2",
+        "name": "Made safe",
+        "pass": true,
+        "status": "pass",
+        "reason_plain": "The photo shows the product made safe.",
+        "reason_technical": "cut_cord: confirmed, confidence 0.85. In the center of the photo the black cord ends in a cleanly cut end with exposed wire, and the plug at the top is on a separate length of cord, showing the cord is cut through.",
+        "evidence": {
+          "findings": [
+            {
+              "action": "cut_cord",
+              "done": true,
+              "confidence": 0.85,
+              "evidence": "In the center of the photo the black cord ends in a cleanly cut end with exposed wire, and the plug at the top is on a separate length of cord, showing the cord is cut through."
+            }
+          ],
+          "marker": "RECALLED"
+        }
+      },
+      "C3": {
+        "id": "C3",
+        "name": "Your own photo",
+        "pass": true,
+        "status": "pass",
+        "reason_plain": "This is a new photo of the product.",
+        "reason_technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and wood grain texture with normal camera detail; no screen, printout or digital image signs. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none (reused at 10 or less).",
+        "evidence": {
+          "dhash": "e0808ed69ce174f8",
+          "nearest": {
+            "official": {
+              "ref": "https://www.cpsc.gov/s3fs-public/guang2.gif",
+              "distance": 19
+            },
+            "prior": null
+          },
+          "exif_present": false,
+          "photo_source": {
+            "kind": "camera_photo",
+            "signs": [
+              "none"
+            ],
+            "confidence": 0.9,
+            "reason": "Natural lighting, shadows and wood grain texture with normal camera detail; no screen, printout or digital image signs."
+          }
+        },
+        "score": 0.9
+      },
+      "C4": {
+        "id": "C4",
+        "name": "Within the recall",
+        "pass": true,
+        "status": "pass",
+        "reason_plain": "No model or lot number is needed for this recall.",
+        "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall.",
+        "evidence": {
+          "required": {
+            "model": false,
+            "lot": false,
+            "date_code": false
+          },
+          "models": [
+            "XR-8801"
+          ],
+          "ranges": [],
+          "read": {
+            "model_text": null,
+            "lot_text": null,
+            "date_code_text": null,
+            "label_visible": false,
+            "where": "Small printed text runs along the cord near the lower left but is too small to read; no product label is visible."
+          }
+        }
+      },
+      "C5": {
+        "id": "C5",
+        "name": "Claim limits",
+        "pass": true,
+        "status": "pass",
+        "reason_plain": "This claim is within the limit for one purchase.",
+        "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 2295 units.",
+        "evidence": {
+          "payee_claim": 1,
+          "units_purchased": 1,
+          "recall_claim": 1,
+          "recall_units": 2295
+        }
+      },
+      "C6": {
+        "id": "C6",
+        "name": "Not already refunded",
+        "pass": true,
+        "status": "pass",
+        "reason_plain": "No PayPal purchase linked.",
+        "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+      }
+    },
+    "summary": {
+      "plain": "A person at Brightline Home will take a look.",
+      "technical": "Firm review: C1 fail. firm amount 1.00; no linked capture; refund 1.00 USD (firm, the lower); auto cap 50.00 USD. Reviewers: Product reviewer: does_not_meet, confidence 0.95; evidence: [right_product] The text MY ONLY STYLER is printed in black on the white body. This is a different brand name from the recalled Wantefully/XRUI product. (Lower center right, on the white handle just right of the bristles); [right_product] The body is white with a white perforated grille at the cord end. The recalled dryer is black with a pink stripe. (Lower center to lower right, the whole device body); [right_product] The brush head is a narrow straight bar of black bristles. The recalled product has a wide oval paddle brush head. (Lower center, left end of the device); [right_product] The control panel has a slide switch with small markings, not the recalled model's layout on a black handle. (Lower center right, on the handle between the label and the grille); [made_safe] The power cord is cut through, leaving a loose severed end. (Center of photo, cord end lying near the middle); [own_photo] The device and cord lie on a wood-grain floor with natural shadows and a hook-and-loop cord strap. This looks like a camera photo of a real object. (Whole background; strap at upper left on the cord) | Remedy reviewer: meets, confidence 0.75; evidence: [made_safe] A loose cord end with a blunt, open cut tip that is not attached to anything, showing the cord has been severed (Center top of the photo, just right of the velcro strap, where a cord end curls up and stops); [made_safe] A second free cord end hanging loose, matching the other side of the cut (Left of center, below the velcro strap, a cord end pointing down and to the right); [made_safe] The plug end of the cord runs separately from the cut ends, so the plug is no longer connected through to the dryer (Top center, two prong plug lying on the board); [own_photo] The whole hair dryer brush is in the frame with its bristle head, buttons, vent end and the cord strain relief (Lower half of the photo, white body labeled MY ONLY STYLER); [right_product] A hot air brush style hair dryer, matching the hair dryer brush named in the owner's steps (Lower center of the photo)"
+    },
+    "amount": {
+      "value": "1.00",
+      "currency": "USD",
+      "cents": 100,
+      "source": "firm"
+    },
+    "quality": {
+      "ok": true,
+      "issues": [],
+      "metrics": {
+        "width": 682,
+        "height": 436,
+        "sharpness": 3172.3,
+        "laplacianVariance": 1718,
+        "meanLuma": 144.3,
+        "p95Luma": 205,
+        "p05Luma": 27
+      }
+    },
+    "photo": {
+      "dhash": "e0808ed69ce174f8",
+      "dhash_variants": [
+        "e0808ed69ce174f8",
+        "fafe8e944678d1e0",
+        "8cc8c8cacab4b0e4",
+        "ceececacbcd2f2f8",
+        "e0d17846948efefa",
+        "f874e19dd68e80e0",
+        "f8f2d2bcacececce",
+        "e4b0b4cacac8c88c"
+      ],
+      "width": 682,
+      "height": 436,
+      "exif": false,
+      "mime": "image/png",
+      "sha256": "356e41e3eed200aca19406acd9dfff89d75b89b54d4cfbb19db687aeb233815b"
+    },
+    "review": {
+      "reviews": [
+        {
+          "reviewer": "product",
+          "name": "Product reviewer",
+          "reads": "the official CPSC images and product data",
+          "answer": "does_not_meet",
+          "evidence": [
+            {
+              "check": "right_product",
+              "seen": "The text MY ONLY STYLER is printed in black on the white body. This is a different brand name from the recalled Wantefully/XRUI product.",
+              "where": "Lower center right, on the white handle just right of the bristles"
+            },
+            {
+              "check": "right_product",
+              "seen": "The body is white with a white perforated grille at the cord end. The recalled dryer is black with a pink stripe.",
+              "where": "Lower center to lower right, the whole device body"
+            },
+            {
+              "check": "right_product",
+              "seen": "The brush head is a narrow straight bar of black bristles. The recalled product has a wide oval paddle brush head.",
+              "where": "Lower center, left end of the device"
+            },
+            {
+              "check": "right_product",
+              "seen": "The control panel has a slide switch with small markings, not the recalled model's layout on a black handle.",
+              "where": "Lower center right, on the handle between the label and the grille"
+            },
+            {
+              "check": "made_safe",
+              "seen": "The power cord is cut through, leaving a loose severed end.",
+              "where": "Center of photo, cord end lying near the middle"
+            },
+            {
+              "check": "own_photo",
+              "seen": "The device and cord lie on a wood-grain floor with natural shadows and a hook-and-loop cord strap. This looks like a camera photo of a real object.",
+              "where": "Whole background; strap at upper left on the cord"
+            }
+          ],
+          "model_read": null,
+          "marker_text_read": null,
+          "reason": {
+            "plain": "Does not meet. This is a white MY ONLY STYLER brush, not the recalled black and pink Wantefully paddle dryer brush. It is a different brand and design.",
+            "technical": "The recall covers model XR-8801, a black paddle hot air brush with a pink stripe and an oval bristle pad. The owner's photo shows a white slim styler branded MY ONLY STYLER, with a narrow bar brush head and a perforated grille. Color, shape and branding all differ. The cord is cut and the photo appears genuine, but the product does not match the recall."
+          },
+          "confidence": 0.95,
+          "counted": true,
+          "set_aside_reason": null
+        },
+        {
+          "reviewer": "remedy",
+          "name": "Remedy reviewer",
+          "reads": "the recall's remedy text and proof rule",
+          "answer": "meets",
+          "evidence": [
+            {
+              "check": "made_safe",
+              "seen": "A loose cord end with a blunt, open cut tip that is not attached to anything, showing the cord has been severed",
+              "where": "Center top of the photo, just right of the velcro strap, where a cord end curls up and stops"
+            },
+            {
+              "check": "made_safe",
+              "seen": "A second free cord end hanging loose, matching the other side of the cut",
+              "where": "Left of center, below the velcro strap, a cord end pointing down and to the right"
+            },
+            {
+              "check": "made_safe",
+              "seen": "The plug end of the cord runs separately from the cut ends, so the plug is no longer connected through to the dryer",
+              "where": "Top center, two prong plug lying on the board"
+            },
+            {
+              "check": "own_photo",
+              "seen": "The whole hair dryer brush is in the frame with its bristle head, buttons, vent end and the cord strain relief",
+              "where": "Lower half of the photo, white body labeled MY ONLY STYLER"
+            },
+            {
+              "check": "right_product",
+              "seen": "A hot air brush style hair dryer, matching the hair dryer brush named in the owner's steps",
+              "where": "Lower center of the photo"
+            }
+          ],
+          "model_read": null,
+          "marker_text_read": null,
+          "reason": {
+            "plain": "Meets. The whole hair dryer brush is shown and the power cord has been cut, with two loose cut ends visible near the top center.",
+            "technical": "Proof rule requires cut_cord with whole_product and cut_or_damage visible. The full device is in frame. The cord shows two unterminated free ends near the top center and left of center, consistent with a severed cord separating the plug from the device. No model number is legible; branding reads MY ONLY STYLER. The cut ends are small in the image, so confidence is moderate."
+          },
+          "confidence": 0.75,
+          "counted": true,
+          "set_aside_reason": null
+        }
+      ],
+      "referee": {
+        "decision": "person",
+        "agreed": false,
+        "summary": {
+          "plain": "The reviewers read the photo differently, so a person at the firm will look.",
+          "technical": "Product reviewer: does_not_meet, confidence 0.95; evidence: [right_product] The text MY ONLY STYLER is printed in black on the white body. This is a different brand name from the recalled Wantefully/XRUI product. (Lower center right, on the white handle just right of the bristles); [right_product] The body is white with a white perforated grille at the cord end. The recalled dryer is black with a pink stripe. (Lower center to lower right, the whole device body); [right_product] The brush head is a narrow straight bar of black bristles. The recalled product has a wide oval paddle brush head. (Lower center, left end of the device); [right_product] The control panel has a slide switch with small markings, not the recalled model's layout on a black handle. (Lower center right, on the handle between the label and the grille); [made_safe] The power cord is cut through, leaving a loose severed end. (Center of photo, cord end lying near the middle); [own_photo] The device and cord lie on a wood-grain floor with natural shadows and a hook-and-loop cord strap. This looks like a camera photo of a real object. (Whole background; strap at upper left on the cord) | Remedy reviewer: meets, confidence 0.75; evidence: [made_safe] A loose cord end with a blunt, open cut tip that is not attached to anything, showing the cord has been severed (Center top of the photo, just right of the velcro strap, where a cord end curls up and stops); [made_safe] A second free cord end hanging loose, matching the other side of the cut (Left of center, below the velcro strap, a cord end pointing down and to the right); [made_safe] The plug end of the cord runs separately from the cut ends, so the plug is no longer connected through to the dryer (Top center, two prong plug lying on the board); [own_photo] The whole hair dryer brush is in the frame with its bristle head, buttons, vent end and the cord strain relief (Lower half of the photo, white body labeled MY ONLY STYLER); [right_product] A hot air brush style hair dryer, matching the hair dryer brush named in the owner's steps (Lower center of the photo)"
+        }
+      },
+      "model": "claude-opus-5-5",
+      "ms": 12477
+    },
+    "blockers": [
+      {
+        "id": "C1",
+        "soft": false,
+        "why": "C1 fail"
+      }
+    ],
+    "model": "claude-opus-5-5",
+    "usage": {
+      "vision": {
+        "input_tokens": 448,
+        "output_tokens": 991,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 4244
+      },
+      "reviewers": [
+        {
+          "input_tokens": 443,
+          "output_tokens": 846,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 2142
+        },
+        {
+          "input_tokens": 442,
+          "output_tokens": 788,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 1664
+        }
+      ]
+    },
+    "cache": {
+      "key": "2dca44387c3e485866b4c7fea618377a10a6bd1fde2a04d4212d4d4676fc9c59",
+      "vision": "live",
+      "reviewers": "live",
+      "stored": true
+    },
+    "official": {
+      "loaded": 2,
+      "failed": [],
+      "sent": 2
+    },
+    "timings": {
+      "decode_ms": 85,
+      "official_ms": 59,
+      "vision_ms": 12808,
+      "checks_ms": 2,
+      "reviewers_ms": 12477,
+      "total_ms": 25399
+    }
+  }
+}

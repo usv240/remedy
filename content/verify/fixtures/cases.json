@@ -1,0 +1,23 @@
+{
+  "note": "Fixture cases for verifyPhoto, each with a known answer. Paths are relative to this folder; recalls come from recalls.json with their official images loaded from disk. `prior_from` hashes those files as earlier claim photos. `official_hash_check: false` sets aside the comparison with the recall's own official images, to judge C1 and C2 on CPSC's published made-safe examples. `needs_vision` cases call Claude: tests/verify.live.test.ts and scripts/verify/sweep.ts run them; the unit tests run the rest.",
+  "cases": [
+    { "id": "official-image-heater", "photo": "official/27054-dreo-1.png", "recall": "27054", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" } } },
+    { "id": "official-image-power-bank", "photo": "official/27056-haiara-1.jpg", "recall": "27056", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" } } },
+    { "id": "duplicate-rotated-official", "photo": "derived/27056-haiara-1.rotated90-q55.jpg", "recall": "27056", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" } } },
+    { "id": "duplicate-tilted-official", "photo": "derived/27054-dreo-2.tilt4-crop-q60.jpg", "recall": "27054", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" } } },
+    { "id": "duplicate-earlier-claim", "photo": "derived/27056-haiara-1.rotated90-q55.jpg", "recall": "27045", "prior_from": ["official/27056-haiara-1.jpg"], "expect": { "not_decision": "verified", "checks": { "C3": "fail" } } },
+    { "id": "blurry", "photo": "derived/commons-coffee-in-a-mug.blur8.jpg", "recall": "27056", "expect": { "decision": "retake", "decided_by": "quality" } },
+    { "id": "cpsc-example-hair-dryer", "photo": "official/26125-hair-dryer-cord-cut.png", "recall": "26125", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" }, "c3_plain": "This is the example photo from the recall notice. Please send a photo of your own product." } },
+    { "id": "cpsc-example-helmet-straps", "photo": "official/25007-droyd-4-straps-cut.jpg", "recall": "25007", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" }, "c3_plain": "This is the example photo from the recall notice. Please send a photo of your own product." } },
+    { "id": "cpsc-example-helmet-trash", "photo": "official/25007-droyd-5-in-trash.jpg", "recall": "25007", "expect": { "decision": "retake", "decided_by": "own_photo", "checks": { "C3": "fail" }, "c3_plain": "This is the example photo from the recall notice. Please send a photo of your own product." } },
+
+    { "id": "unrelated-object", "photo": "other/commons-coffee-in-a-mug.jpg", "recall": "27056", "needs_vision": true, "expect": { "not_decision": "verified", "checks": { "C1": "fail" } } },
+    { "id": "made-safe-hair-dryer-cord-cut", "photo": "official/26125-hair-dryer-cord-cut.png", "recall": "26125", "official_hash_check": false, "needs_vision": true, "expect": { "checks": { "C1": "pass", "C2": "pass" } } },
+    { "id": "made-safe-helmet-straps-cut", "photo": "official/25007-droyd-4-straps-cut.jpg", "recall": "25007", "official_hash_check": false, "needs_vision": true, "expect": { "checks": { "C1": "pass", "C2": "pass" } } },
+    { "id": "made-safe-helmet-in-trash", "photo": "official/25007-droyd-5-in-trash.jpg", "recall": "25007", "official_hash_check": false, "needs_vision": true, "expect": { "checks": { "C1": "pass", "C2": "pass" } } },
+    { "id": "look-alike-hair-dryer", "photo": "official/26125-hair-dryer-cord-cut.png", "recall": "26754", "needs_vision": true, "expect": { "decision": "firm_review" } },
+    { "id": "not-yet-safe-power-bank", "photo": "official/27056-haiara-1.jpg", "recall": "27056", "official_hash_check": false, "needs_vision": true, "expect": { "decision": "retake" } },
+    { "id": "not-yet-safe-heater", "photo": "official/27054-dreo-1.png", "recall": "27054", "official_hash_check": false, "needs_vision": true, "expect": { "decision": "retake" } },
+    { "id": "not-yet-safe-pajamas", "photo": "official/27045-qzhduao-1.png", "recall": "27045", "official_hash_check": false, "needs_vision": true, "expect": { "decision": "retake" } }
+  ]
+}

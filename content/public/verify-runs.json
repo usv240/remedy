@@ -1,0 +1,705 @@
+{
+ "note": "Recorded runs of verifyPhoto (src/lib/verify) on the fixture photos in content/verify/fixtures. Free cases need no model. Vision cases are live Claude Opus 5.5 calls, recorded once; the pages never call Claude. Written by scripts/public/record-runs.ts.",
+ "recordedAt": "2026-11-05T20:08:14.693Z",
+ "totalUsd": 0.0598,
+ "runs": [
+  {
+   "id": "official-image-heater",
+   "title": "The recall's own picture, heater",
+   "about": "The CPSC's official photo of the DREO space heater.",
+   "expect": "Asks for the owner's own photo",
+   "photo": "official/27054-dreo-1.png",
+   "recall": "27054",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "own_photo",
+    "summary": {
+     "plain": "Please send a photo of your own product.",
+     "technical": "Retake (own_photo). Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/DREO1.png?VersionId=37rR7xQxj_D2T3WYYPVS6bf6pWt6LZqC (\"Recalled DREO Space Heater - model DR-HSH015\") at 0 bits (upright). dHash 3878686ef8a63c38; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "guidance": {
+     "plain": "Please send a photo of your own product.",
+     "steps": [
+      "Take a new photo of the product with your phone camera.",
+      "Show the product itself, not a screen, a printout or the recall picture.",
+      "We ask for your own photo so the refund goes to the person who has the product."
+     ],
+     "technical": "Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/DREO1.png?VersionId=37rR7xQxj_D2T3WYYPVS6bf6pWt6LZqC (\"Recalled DREO Space Heater - model DR-HSH015\") at 0 bits (upright). dHash 3878686ef8a63c38; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 74,
+     "official_ms": 56,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 96
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "This is the official recall picture. Please send a photo of your own product.",
+      "technical": "Matches this recall's official image https://cpsc.gov/s3fs-public/DREO1.png?VersionId=37rR7xQxj_D2T3WYYPVS6bf6pWt6LZqC (\"Recalled DREO Space Heater - model DR-HSH015\") at 0 bits (upright). dHash 3878686ef8a63c38; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 338800 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "official-image-power-bank",
+   "title": "The recall's own picture",
+   "about": "The CPSC's official photo of the HAIARA power bank, sent as if it were the owner's.",
+   "expect": "Asks for the owner's own photo",
+   "photo": "official/27056-haiara-1.jpg",
+   "recall": "27056",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "own_photo",
+    "summary": {
+     "plain": "Please send a photo of your own product.",
+     "technical": "Retake (own_photo). Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 0 bits (upright). dHash e48280e0c0c1c9e0; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "guidance": {
+     "plain": "Please send a photo of your own product.",
+     "steps": [
+      "Take a new photo of the product with your phone camera.",
+      "Show the product itself, not a screen, a printout or the recall picture.",
+      "We ask for your own photo so the refund goes to the person who has the product."
+     ],
+     "technical": "Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 0 bits (upright). dHash e48280e0c0c1c9e0; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 32,
+     "official_ms": 21,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 33
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "This is the official recall picture. Please send a photo of your own product.",
+      "technical": "Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 0 bits (upright). dHash e48280e0c0c1c9e0; nearest official 0 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 11000 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "duplicate-rotated-official",
+   "title": "Rotated and recompressed copy",
+   "about": "The official power bank photo turned 90 degrees, shrunk and saved again at low quality.",
+   "expect": "Still matched to the official picture",
+   "photo": "derived/27056-haiara-1.rotated90-q55.jpg",
+   "recall": "27056",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "own_photo",
+    "summary": {
+     "plain": "Please send a photo of your own product.",
+     "technical": "Retake (own_photo). Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 1 bits (turned 270). dHash bcbebe78783a7e38; nearest official 1 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "guidance": {
+     "plain": "Please send a photo of your own product.",
+     "steps": [
+      "Take a new photo of the product with your phone camera.",
+      "Show the product itself, not a screen, a printout or the recall picture.",
+      "We ask for your own photo so the refund goes to the person who has the product."
+     ],
+     "technical": "Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 1 bits (turned 270). dHash bcbebe78783a7e38; nearest official 1 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 31,
+     "official_ms": 24,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 32
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "This is the official recall picture. Please send a photo of your own product.",
+      "technical": "Matches this recall's official image https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW (\"HAIARA power bank, model W5 PRO (front)\") at 1 bits (turned 270). dHash bcbebe78783a7e38; nearest official 1 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 11000 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "duplicate-tilted-official",
+   "title": "Tilted and cropped copy",
+   "about": "The heater's label photo tilted 4 degrees and cropped 6 percent on each side.",
+   "expect": "Still matched to the official picture",
+   "photo": "derived/27054-dreo-2.tilt4-crop-q60.jpg",
+   "recall": "27054",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "own_photo",
+    "summary": {
+     "plain": "Please send a photo of your own product.",
+     "technical": "Retake (own_photo). Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/DREO2.jpg?VersionId=XQ9PGzTKG443Y4cwtuigpQ93h0DOrv6B (\"The manufacture date, in YYYY/MM format, and model “DR-HSH015” are printed on a label on the underside of the recalled DREO space heaters.\") at 10 bits (upright). dHash d01607070f0d07b4; nearest official 10 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "guidance": {
+     "plain": "Please send a photo of your own product.",
+     "steps": [
+      "Take a new photo of the product with your phone camera.",
+      "Show the product itself, not a screen, a printout or the recall picture.",
+      "We ask for your own photo so the refund goes to the person who has the product."
+     ],
+     "technical": "Own-photo check: Matches this recall's official image https://cpsc.gov/s3fs-public/DREO2.jpg?VersionId=XQ9PGzTKG443Y4cwtuigpQ93h0DOrv6B (\"The manufacture date, in YYYY/MM format, and model “DR-HSH015” are printed on a label on the underside of the recalled DREO space heaters.\") at 10 bits (upright). dHash d01607070f0d07b4; nearest official 10 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 40,
+     "official_ms": 31,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 42
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "This is the official recall picture. Please send a photo of your own product.",
+      "technical": "Matches this recall's official image https://cpsc.gov/s3fs-public/DREO2.jpg?VersionId=XQ9PGzTKG443Y4cwtuigpQ93h0DOrv6B (\"The manufacture date, in YYYY/MM format, and model “DR-HSH015” are printed on a label on the underside of the recalled DREO space heaters.\") at 10 bits (upright). dHash d01607070f0d07b4; nearest official 10 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches one of this recall's official images."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 338800 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "duplicate-earlier-claim",
+   "title": "A photo already used",
+   "about": "A copy of a photo that an earlier claim on this recall already sent.",
+   "expect": "Not verified: the photo was used before",
+   "photo": "derived/27056-haiara-1.rotated90-q55.jpg",
+   "recall": "27045",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "quality",
+    "summary": {
+     "plain": "The photo is too small to check. Please take it again.",
+     "technical": "Retake (quality). Quality precheck: sharpness 493.3 (min 35), mean luma 99.3, p95 208, p05 41, size 274x185 (min side 240). Issues: small."
+    },
+    "guidance": {
+     "plain": "The photo is too small to check. Please take it again.",
+     "steps": [
+      "Move closer so the product fills most of the photo."
+     ],
+     "technical": "Quality precheck: sharpness 493.3 (min 35), mean luma 99.3, p95 208, p05 41, size 274x185 (min side 240). Issues: small."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 30,
+     "official_ms": 45,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 46
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "This photo matches one sent with an earlier claim, so a person at the firm will take a look.",
+      "technical": "Matches earlier claim photo official/27056-haiara-1.jpg at 1 bits (turned 270). dHash bcbebe78783a7e38; nearest official 17 bits, nearest earlier claim 1 bits (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 300 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "blurry",
+   "title": "A blurry photo",
+   "about": "A photo with heavy blur, the way a shaky hand takes it.",
+   "expect": "Retake, with what to change",
+   "photo": "derived/commons-coffee-in-a-mug.blur8.jpg",
+   "recall": "27056",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "quality",
+    "summary": {
+     "plain": "The photo is a bit blurry. Please take it again.",
+     "technical": "Retake (quality). Quality precheck: sharpness 4.9 (min 35), mean luma 124, p95 199, p05 58, size 1280x960 (min side 240). Issues: blurry."
+    },
+    "guidance": {
+     "plain": "The photo is a bit blurry. Please take it again.",
+     "steps": [
+      "Hold the phone still and tap the screen on the product to focus."
+     ],
+     "technical": "Quality precheck: sharpness 4.9 (min 35), mean luma 124, p95 199, p05 58, size 1280x960 (min side 240). Issues: blurry."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 71,
+     "official_ms": 24,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 72
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo did not pass the quality precheck."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 11000 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "cord-cut-example",
+   "title": "Cord cut in half",
+   "about": "The photo the CPSC published with recall 26125 to show the hair dryer made safe: its power cord cut in half.",
+   "photo": "official/26125-hair-dryer-cord-cut.png",
+   "recall": "26125",
+   "expect": "Right product, made safe",
+   "needs_vision": true,
+   "settings": "Own-photo match against the CPSC's picture turned off for this run, reviewers off, sample refund amount of $34.99.",
+   "result": {
+    "decision": "firm_review",
+    "decided_by": "checks",
+    "summary": {
+     "plain": "A person at the firm will take a look.",
+     "technical": "Firm review: C1 unclear. firm amount 34.99; no linked capture; refund 34.99 USD (firm, the lower); auto cap 50.00 USD."
+    },
+    "amount": {
+     "value": "34.99",
+     "currency": "USD",
+     "cents": 3499,
+     "source": "firm"
+    },
+    "model": "claude-opus-5-5",
+    "timings": {
+     "decode_ms": 40,
+     "official_ms": 1,
+     "vision_ms": 14771,
+     "checks_ms": 2,
+     "reviewers_ms": 0,
+     "total_ms": 14827
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "unclear",
+      "pass": false,
+      "score": 0.82,
+      "reason": "We could not confirm this is the exact recalled product.",
+      "technical": "Claude vision match score 0.82 (pass at 0.85, unclear from 0.5). Brand print, white and black color scheme and brush dryer form all match the recall text. No official image was available and the MOS-22 model number on the back of the handle is not shown, so the score is capped below 0.85."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "The photo shows the product made safe.",
+      "technical": "cut_cord: confirmed, confidence 0.85. Near the top center of the photo the black cord ends in a free cut end with small exposed wire tips, and a second loose cord end curls nearby just right of the velcro strap. The plug end and the dryer end are on separate pieces of cord."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "pass",
+      "pass": true,
+      "score": 0.9,
+      "reason": "This is a new photo of the product.",
+      "technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and real wood-grain floor texture with no screen, print or studio signs. dHash e0808ed69ce174f8; nearest official none, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No model or lot number is needed for this recall.",
+      "technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 740 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0.038297,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  },
+  {
+   "id": "unrelated-object",
+   "title": "Something else entirely",
+   "about": "A photo of a coffee mug (Kurt Kaiser, CC0, Wikimedia Commons) sent for the power bank recall.",
+   "photo": "other/commons-coffee-in-a-mug.jpg",
+   "recall": "27056",
+   "expect": "Not the recalled product",
+   "needs_vision": true,
+   "settings": "Reviewers off.",
+   "result": {
+    "decision": "retake",
+    "decided_by": "made_safe",
+    "summary": {
+     "plain": "Please write RECALLED on the product first, then take a new photo.",
+     "technical": "Retake (made_safe). Retake: write_recalled (missing): No handwriting found on the product.. Model tip: Please take a photo of the whole black power bank with the word recalled written on it in permanent marker."
+    },
+    "guidance": {
+     "plain": "Please write RECALLED on the product first, then take a new photo.",
+     "steps": [
+      "Write RECALLED on the product in permanent marker, in big letters.",
+      "Make sure the photo shows the recalled product: HAIARA power banks.",
+      "Take the photo in good light, with the whole product in view."
+     ],
+     "technical": "Retake: write_recalled (missing): No handwriting found on the product.. Model tip: Please take a photo of the whole black power bank with the word recalled written on it in permanent marker."
+    },
+    "amount": null,
+    "model": "claude-opus-5-5",
+    "timings": {
+     "decode_ms": 88,
+     "official_ms": 19,
+     "vision_ms": 6352,
+     "checks_ms": 1,
+     "reviewers_ms": 0,
+     "total_ms": 6454
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "fail",
+      "pass": false,
+      "score": 0.02,
+      "reason": "This does not look like the recalled product.",
+      "technical": "Claude vision match score 0.02 (pass at 0.85, unclear from 0.5). The object is a white ceramic mug with a handle holding liquid. The recalled product is a flat black rectangular power bank with \"20W\" or a ring printed on the front. This is a different kind of product with no matching shape, color, text, or ports."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "The photo does not show the product made safe yet.",
+      "technical": "write_recalled: not confirmed (missing). No handwriting found on the product."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "pass",
+      "pass": true,
+      "score": 0.9,
+      "reason": "This is a new photo of the product.",
+      "technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, reflections, shadows, and depth of field on a real table suggest a normal camera photo. No screen or print signs are visible. dHash 22626e3a339458d1; nearest official 26 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No model or lot number is needed for this recall.",
+      "technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 11000 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0.021541,
+   "ran_at": "2026-11-05T20:08:14.693Z"
+  }
+ ]
+}

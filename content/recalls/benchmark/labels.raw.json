@@ -1,0 +1,2602 @@
+{
+ "24113": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact an authorized Husqvarna dealer to receive a free repair\",\"refund_amount\":\"\",\"contact_channel\":\"Husqvarna toll-free at 877-257-6921\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy sends owners to an authorized dealer, found through an online dealer locator, rather than naming email, web form, phone or mail. So contact_channel falls back to the first channel in the consumer contact (phone), though it could also be read as other or web_form.\"}",
+  "usage": {
+   "input_tokens": 3188,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 635,
+   "output_tokens_details": {
+    "thinking_tokens": 379
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24114": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the destroyed garment to business@lolanta.com\",\"actions\":\"destroy the garments by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed garment\",\"remedy\":\"consumers will be issued a full refund of the purchase price\",\"refund_amount\":\"a full refund of the purchase price\",\"contact_channel\":\"email a photo of the destroyed garment to business@lolanta.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3227,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 243,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24153": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"return them to Walmart for a full refund\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"Shenzhen Yingjieshang Trade collect at 206-458-7003\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy is a return to Walmart rather than a photo or claim sent through a channel, so contact_channel could be read as other. Phone is used because it is the first way listed in the consumer contact.\"}",
+  "usage": {
+   "input_tokens": 3258,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 368,
+   "output_tokens_details": {
+    "thinking_tokens": 127
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24181": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Empower Brands to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Empower Brands at 800-990-5298\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3298,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 284,
+   "output_tokens_details": {
+    "thinking_tokens": 124
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24192": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Email at chencaiyu1994@hotmail.com\"},\"ambiguous\":[\"photo_required\",\"actions\"],\"notes\":\"The remedy says only to contact Huenco for disposal instructions, so it does not state any photo or destruction step, though the firm may require proof once contacted. The contact channel comes from the first method in the consumer contact because the remedy names none.\"}",
+  "usage": {
+   "input_tokens": 3149,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 365,
+   "output_tokens_details": {
+    "thinking_tokens": 128
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24207": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should send the recalling firm a photo of the destroyed garment at returns@santandabel.com to receive a refund.\",\"actions\":\"Consumers should destroy the garments by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed garment\",\"remedy\":\"contact Sant and Abel for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send the recalling firm a photo of the destroyed garment at returns@santandabel.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3240,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 261,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24211": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"send photos of the helmet with the straps cut through the onsite messaging system\",\"actions\":\"destroy the helmet by cutting off the straps\",\"marker_text\":\"\",\"must_show\":\"send photos of the helmet with the straps cut\",\"remedy\":\"contact Chau River Sports Outdoors for a full refund\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"through the onsite messaging system by clicking on the \\\"message\\\" icon on Temu.com at Chau River Sports Outdoors store page\"},\"ambiguous\":[\"actions\",\"contact_channel\"],\"notes\":\"Cutting off the straps fits the guide's 'other' (cutting a smaller part such as straps), but it could also be read as remove_part. The Temu onsite messaging system is a website channel and was labelled web_form, though it could be read as other.\"}",
+  "usage": {
+   "input_tokens": 3257,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 563,
+   "output_tokens_details": {
+    "thinking_tokens": 211
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24228": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact the local authorized Arctic Cat dealer to schedule a free repair of the steering caps\",\"refund_amount\":\"\",\"contact_channel\":\"Textron Specialized Vehicles at 800-279-2281\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy says to contact the local dealer but names no channel, so phone is taken as the first way listed in the consumer contact. 'Other' (dealer visit) is also a reasonable reading.\"}",
+  "usage": {
+   "input_tokens": 3216,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 420,
+   "output_tokens_details": {
+    "thinking_tokens": 173
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24233": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed garment to amazonus@sioro.com\",\"actions\":\"destroy the garments by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed garment\",\"remedy\":\"contact SIORO for a full refund\",\"refund_amount\":\"SIORO will refund consumers the purchase price\",\"contact_channel\":\"send a photo of the destroyed garment to amazonus@sioro.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3246,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 247,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24237": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will need to provide proof of possession by emailing a photo of their product to info@super-lube.com to receive their full refund.\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"emailing a photo of their product\",\"remedy\":\"contact Kano Laboratories for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"emailing a photo of their product to info@super-lube.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3272,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 218,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24249": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"other\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact CRAFTSMAN for new assembly instructions illustrating how to properly attach the bottom portion of the tillers/cultivators\",\"refund_amount\":\"\",\"contact_channel\":\"CRAFTSMAN toll-free at 855-237-6848 from 8 a.m. to 6 p.m. ET Monday through Friday\"},\"ambiguous\":[\"remedy\",\"contact_channel\"],\"notes\":\"The remedy is updated assembly instructions, which could be read as a repair rather than other. The remedy says only to contact CRAFTSMAN but also points to the website for the instructions, so the channel could be web_form instead of the first listed phone contact.\"}",
+  "usage": {
+   "input_tokens": 3353,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 539,
+   "output_tokens_details": {
+    "thinking_tokens": 231
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24287": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"model_number\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":36,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"Consumers will need to submit a photo of the recalled power bank showing the model number to the firm's recall registration page.\",\"actions\":\"Consumers without an order number will need to submit a photo of the power bank with their name and the date written in permanent marker.\",\"marker_text\":\"with their name and the date written in permanent marker\",\"must_show\":\"a photo of the recalled power bank showing the model number\",\"remedy\":\"contact Baseus for a full refund with proof of purchase, or a $36 cash refund without proof of purchase\",\"refund_amount\":\"a $36 cash refund without proof of purchase\",\"contact_channel\":\"submit a photo of the recalled power bank showing the model number to the firm's recall registration page\"},\"ambiguous\":[\"actions\",\"marker_text\",\"must_show\",\"remedy\",\"refund_amount\"],\"notes\":\"Writing the owner's name and date applies only to consumers without an order number, and no literal word is quoted, so marker_text is left null. The remedy is a full refund with proof of purchase or a fixed $36 refund without it, so remedy could be read as full_refund or partial_refund, and refund_amount as 36 or null.\"}",
+  "usage": {
+   "input_tokens": 3306,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 953,
+   "output_tokens_details": {
+    "thinking_tokens": 501
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24289": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should email the recalling firm a photo of the destroyed garment at swomogservice@163.com to receive a refund.\",\"actions\":\"Consumers should destroy the garments by cutting the top and bottom in half\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed garment\",\"remedy\":\"contact SWOMOG to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Consumers should email the recalling firm a photo of the destroyed garment at swomogservice@163.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3211,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 272,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24298": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\",\"label\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"upload a photograph of the cut cord, as well as a photograph of the manufacturer's label on the underside of their units\",\"actions\":\"Consumers will be asked to cut the unplugged unit's power cord\",\"marker_text\":\"\",\"must_show\":\"a photograph of the cut cord, as well as a photograph of the manufacturer's label on the underside of their units\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"follow the instructions online at www.atomiheaterrecall.com to receive a full refund. Consumers will be asked to cut the unplugged unit's power cord and upload a photograph\"},\"ambiguous\":[\"must_show\"],\"notes\":\"The photos show the cut cord and the underside label rather than explicitly the whole heater, so including whole_product rests on the guide's rule that a photo of the product counts.\"}",
+  "usage": {
+   "input_tokens": 3194,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 524,
+   "output_tokens_details": {
+    "thinking_tokens": 158
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24307": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"bring the recalled vehicle into the dealer for a free repair\",\"refund_amount\":\"\",\"contact_channel\":\"CFMOTO toll-free 888-823-6686\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy says to contact an authorized CFMOTO dealer but names no channel, so phone is taken as the first way listed in the consumer contact; a reader could instead label the dealer visit as other.\"}",
+  "usage": {
+   "input_tokens": 3272,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 390,
+   "output_tokens_details": {
+    "thinking_tokens": 155
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24318": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"take a photo of the destroyed toy gun, and send the photo to Youjiu's store\",\"actions\":\"remove the magazine and the battery, cut the black and red wires linked to the battery\",\"marker_text\":\"\",\"must_show\":\"take a photo of the destroyed toy gun\",\"remedy\":\"contact Youjiu for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send the photo to Youjiu's store through Temu's onsite messaging system at https://www.temu.com/fr-en/office-king-m-55622325238.html\"},\"ambiguous\":[\"actions\",\"contact_channel\"],\"notes\":\"Cutting the internal battery wires could be read as cut_cord or as other (cutting a smaller part). Temu's onsite messaging system is a website channel but not strictly a form, so it could be read as web_form or other.\"}",
+  "usage": {
+   "input_tokens": 3208,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 611,
+   "output_tokens_details": {
+    "thinking_tokens": 247
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24321": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"serial_or_lot\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"consumers will be required to provide photographs of their e-scooter's serial number and severed motor cable\",\"actions\":\"severed motor cable\",\"marker_text\":\"\",\"must_show\":\"photographs of their e-scooter's serial number and severed motor cable\",\"remedy\":\"receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"DGL Group toll-free at 844-451-7300\"},\"ambiguous\":[\"actions\",\"must_show\",\"contact_channel\"],\"notes\":\"A severed motor cable could be read as cut_cord or as other (cutting a smaller part). The remedy does not say how to send the photos, so the channel falls back to phone, the first contact listed, though an online recall page is also given.\"}",
+  "usage": {
+   "input_tokens": 3196,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 597,
+   "output_tokens_details": {
+    "thinking_tokens": 275
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24341": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"model_number\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":49.99,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"upload photos of the coffee maker showing the model number, registration number, and cut cord\",\"actions\":\"cut the unplugged cord\",\"marker_text\":\"\",\"must_show\":\"photos of the coffee maker showing the model number, registration number, and cut cord\",\"remedy\":\"Consumers may return the unit to an ALDI store for a full cash refund of $49.99, plus applicable sales tax. Alternatively, consumers may receive a $75 ALDI electronic gift card\",\"refund_amount\":\"a full cash refund of $49.99, plus applicable sales tax\",\"contact_channel\":\"visit www.recallrtr.com/aldicoffeemaker, register the recalled coffee maker\"},\"ambiguous\":[\"photo_required\",\"remedy\",\"refund_amount\",\"must_show\",\"actions\"],\"notes\":\"There are two paths: an in-store return for a $49.99 refund with no photo, or a $75 gift card that requires cutting the cord and uploading photos. The remedy could be read as full_refund or as other (gift card), and the refund amount as 49.99 or null. The required registration number has no matching must_show category, and the remedy mentions disposing of the product before the upload.\"}",
+  "usage": {
+   "input_tokens": 3271,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 893,
+   "output_tokens_details": {
+    "thinking_tokens": 420
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24361": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Take a photo of the recalled cover and send it to the recalling firm by email at Atlaspool@163.com to receive a full refund.\",\"actions\":\"remove, replace and dispose of the recalled drain covers\",\"marker_text\":\"\",\"must_show\":\"Take a photo of the recalled cover\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"to receive a full refund\",\"contact_channel\":\"send it to the recalling firm by email at Atlaspool@163.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Removing the drain cover from the pool matches the guide's remove_part example, but the photo need only show the removed cover, so cut_or_damage is included only because the guide ties it to remove_part. Disposal is listed before the photo in the text but is treated as a later step.\"}",
+  "usage": {
+   "input_tokens": 3232,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 608,
+   "output_tokens_details": {
+    "thinking_tokens": 260
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "24370": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"consumers should send a photo of the disposed bed rail\",\"actions\":\"a photo of the disposed bed rail\",\"marker_text\":\"\",\"must_show\":\"a photo of the disposed bed rail\",\"remedy\":\"To receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"to the recalling firm by email at xchan524@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The photo must show the bed rail already 'disposed', but no method of disabling it is given. Disposal could be read as an unspecified 'destroy' step (other, with cut_or_damage shown) rather than simply throwing it away.\"}",
+  "usage": {
+   "input_tokens": 3219,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 556,
+   "output_tokens_details": {
+    "thinking_tokens": 274
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25011": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"replacement\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"receiving a free replacement power bank\",\"refund_amount\":\"\",\"contact_channel\":\"Visit https://www.anker.com/product-recalls to register for the recall.\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3234,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 251,
+   "output_tokens_details": {
+    "thinking_tokens": 86
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25020": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"replacement\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"receiving free replacement 5 lb grip handles\",\"refund_amount\":\"\",\"contact_channel\":\"PowerBlock at 800-997-3999 from 8:30 a.m. to 5 p.m. CT Monday through Friday\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3186,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 322,
+   "output_tokens_details": {
+    "thinking_tokens": 134
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25054": {
+  "text": "{\"photo_required\":true,\"actions\":[\"disassemble\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the disassembled crib in an outdoor waste container and email the photo to service@southshorefurniture.com\",\"actions\":\"contact South Shore for information on how to disassemble the product\",\"marker_text\":\"\",\"must_show\":\"take a photo of the disassembled crib in an outdoor waste container\",\"remedy\":\"To receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email the photo to service@southshorefurniture.com\"},\"ambiguous\":[\"must_show\"],\"notes\":\"The photo must also show the disassembled crib inside an outdoor waste container, which no must_show category covers. The disassembly method is not given in the remedy and comes from South Shore.\"}",
+  "usage": {
+   "input_tokens": 3234,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 427,
+   "output_tokens_details": {
+    "thinking_tokens": 120
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25067": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"return it to their place of purchase to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Mr. Christmas at 800-489-6328\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy says to return the product to the place of purchase, which could be read as 'other'. Because the remedy names no email, web, phone or mail channel, the first way in the consumer contact (phone) was used.\"}",
+  "usage": {
+   "input_tokens": 3139,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 393,
+   "output_tokens_details": {
+    "thinking_tokens": 160
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25088": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the detached straps, and send it with their Amazon order number to the recalling firm\",\"actions\":\"destroy the helmet by cutting off the straps\",\"marker_text\":\"\",\"must_show\":\"take a photo of the detached straps\",\"remedy\":\"contact Wemfg for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"by email at 961837339@qq.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Cutting off the straps fits 'other' (cutting a smaller part such as straps) but could also be read as remove_part, since a strap is listed there. The photo shows only the detached straps, so whole_product may or may not apply.\"}",
+  "usage": {
+   "input_tokens": 3259,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 563,
+   "output_tokens_details": {
+    "thinking_tokens": 266
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25113": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should send the recalling firm a photo of the destroyed garments by email at bzzservice@hotmail.com to receive a full refund.\",\"actions\":\"Consumers should destroy the garments by cutting the top and bottom in half and dispose of them.\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed garments\",\"remedy\":\"contact Tupop to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"by email at bzzservice@hotmail.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3204,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 265,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25114": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the destroyed recalled seat\",\"actions\":\"destroy the recalled seat by cutting through the fabric of the seat and backrest\",\"marker_text\":\"including the consumer's initials and the date in the photo\",\"must_show\":\"take a photo of the destroyed recalled seat, including the consumer's initials and the date in the photo\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send the photo to AMX Global at support@stadiumseatrecall.com\"},\"ambiguous\":[\"actions\",\"marker_text\",\"must_show\"],\"notes\":\"The photo must include the owner's initials and the date, but the remedy does not say to write them on the seat, so no write_recalled action or marker_text is labelled. A reader could treat the initials and date as a marking that the photo must show.\"}",
+  "usage": {
+   "input_tokens": 3242,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 548,
+   "output_tokens_details": {
+    "thinking_tokens": 197
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25130": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the disposed rope to LoGestRecall@gmail.com to receive their refund\",\"actions\":\"Consumers must follow the disposal directions on the form\",\"marker_text\":\"\",\"must_show\":\"a photo of the disposed rope\",\"remedy\":\"register for a full refund at www.LoGestRopeRecall.com\",\"refund_amount\":\"Full refunds will be issued via Amazon to the original form of payment associated with the order\",\"contact_channel\":\"email a photo of the disposed rope to LoGestRecall@gmail.com\"},\"ambiguous\":[\"actions\",\"must_show\",\"contact_channel\"],\"notes\":\"The disposal method is on a separate form and is not given in the remedy, so actions is read as an unspecified destroy step (other), and must_show follows from that. Registration happens on the website but the photo is emailed, so contact_channel is email.\"}",
+  "usage": {
+   "input_tokens": 3228,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 561,
+   "output_tokens_details": {
+    "thinking_tokens": 200
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25135": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"other\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"upload a photo of the jacket without the drawstring and receive a $25 gift card\",\"actions\":\"remove the drawstrings\",\"marker_text\":\"\",\"must_show\":\"a photo of the jacket without the drawstring\",\"remedy\":\"Consumers can either return the jacket to AFTCO for a full refund or upload a photo of the jacket without the drawstring and receive a $25 gift card.\",\"refund_amount\":\"receive a $25 gift card\",\"contact_channel\":\"Consumers should go to www.aftco.com/recall to participate in the recall.\"},\"ambiguous\":[\"photo_required\",\"remedy\",\"refund_amount\"],\"notes\":\"The photo is required only on the $25 gift card path, while returning the jacket gives a full refund with no photo. Remedy is labelled other for the gift card tied to the photo, and the $25 is left null because it is a gift card, not a refund.\"}",
+  "usage": {
+   "input_tokens": 3216,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 821,
+   "output_tokens_details": {
+    "thinking_tokens": 452
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25143": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"receiving a free recall kit which includes a battery compartment enclosure with the required labeling and an updated instruction manual for HS503G-ACSS models. For HE512C-GD models, Holosun Technologies will provide free return shipping to install a compliant battery compartment tray\",\"refund_amount\":\"\",\"contact_channel\":\"Holosun Technologies toll-free at 888-869-1180\"},\"ambiguous\":[\"remedy\"],\"notes\":\"The remedy is a free recall kit for one model and a return-for-installation of a compliant battery tray for the other, labelled repair. The remedy names no channel, so the first one in the consumer contact (phone) is used.\"}",
+  "usage": {
+   "input_tokens": 3393,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 499,
+   "output_tokens_details": {
+    "thinking_tokens": 190
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25149": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact the firm for a free repair kit\",\"refund_amount\":\"up to $50 toward the cost of the professional installation of the new pin\",\"contact_channel\":\"Super73 toll-free at 888-841-3584\"},\"ambiguous\":[\"refund_amount\",\"contact_channel\"],\"notes\":\"The $50 is a capped reimbursement for installation, not a refund of the product price, so refund_amount is left null. The remedy names no channel for sending the installation receipt, so the first listed contact (phone) is used.\"}",
+  "usage": {
+   "input_tokens": 3257,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 416,
+   "output_tokens_details": {
+    "thinking_tokens": 158
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25179": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"return them to any Meijer store for a full refund through the original form of payment\",\"refund_amount\":\"\",\"contact_channel\":\"Meijer at 800-927-8699\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy is an in-store return with no named channel, so contact_channel follows the first way in the consumer contact (phone). A reader could instead label the in-store return as other.\"}",
+  "usage": {
+   "input_tokens": 3116,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 381,
+   "output_tokens_details": {
+    "thinking_tokens": 158
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25180": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Chews Life to receive a free repair\",\"refund_amount\":\"\",\"contact_channel\":\"Chews Life toll-free at 888-742-2276\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy does not say how to contact the firm, so the first channel in the consumer contact (phone) is used. The teethers themselves are returned by mail with a prepaid label, so mail is another possible reading.\"}",
+  "usage": {
+   "input_tokens": 3194,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 409,
+   "output_tokens_details": {
+    "thinking_tokens": 178
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25189": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"marking\",\"label\",\"serial_or_lot\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo with the UPC and lot code visible, and email the photo to ConsumerCare_USA@reckitt.com\",\"actions\":\"write their name and \\\"Recalled\\\" in permanent marker on the back of the product\",\"marker_text\":\"write their name and \\\"Recalled\\\" in permanent marker\",\"must_show\":\"take a photo with the UPC and lot code visible\",\"remedy\":\"contact Reckitt for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email the photo to ConsumerCare_USA@reckitt.com\"},\"ambiguous\":[\"must_show\",\"marker_text\"],\"notes\":\"The UPC is not a listed category, so it is mapped to label, and the lot code to serial_or_lot. The owner must also write their name, but only the quoted word Recalled is used as marker_text.\"}",
+  "usage": {
+   "input_tokens": 3345,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 506,
+   "output_tokens_details": {
+    "thinking_tokens": 148
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25192": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit a photo of the consumer disposing of the product to onmeus@outlook.com\",\"actions\":\"submit a photo of the consumer disposing of the product\",\"marker_text\":\"\",\"must_show\":\"a photo of the consumer disposing of the product\",\"remedy\":\"receive a full refund\",\"refund_amount\":\"receive a full refund\",\"contact_channel\":\"submit a photo of the consumer disposing of the product to onmeus@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The photo must show the owner disposing of the dresser. The guide excludes disposal steps that come after the photo, but here disposal is what the photo shows, so a reader could list it under other or add cut_or_damage. The firm's further instructions are not given.\"}",
+  "usage": {
+   "input_tokens": 3273,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 519,
+   "output_tokens_details": {
+    "thinking_tokens": 202
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25204": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"a check or store credit from Five Below customer service when they submit a photo of the light with the cord cut\",\"actions\":\"with the cord cut\",\"marker_text\":\"\",\"must_show\":\"a photo of the light with the cord cut\",\"remedy\":\"contact Five Below customer service for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Five Below toll-free at 844-452-3569\"},\"ambiguous\":[\"photo_required\",\"contact_channel\",\"remedy\"],\"notes\":\"A photo is needed only on the customer service route, since owners can instead return the lights to a store without one. The remedy does not say how to send the photo, so phone (first in the consumer contact) is used, though email is a plausible channel for a photo; the refund may also be given as store credit.\"}",
+  "usage": {
+   "input_tokens": 3295,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 591,
+   "output_tokens_details": {
+    "thinking_tokens": 262
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25230": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"refund_or_replacement\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must send a photo of the recalled product with the operating cord cut to amazonservice@joydeco.com.\",\"actions\":\"with the operating cord cut\",\"marker_text\":\"\",\"must_show\":\"a photo of the recalled product with the operating cord cut\",\"remedy\":\"to receive a full refund or free replacement operating cord wand\",\"refund_amount\":\"to receive a full refund\",\"contact_channel\":\"send a photo of the recalled product with the operating cord cut to amazonservice@joydeco.com\"},\"ambiguous\":[\"remedy\",\"actions\"],\"notes\":\"The remedy offers a full refund or a free replacement cord wand, but then says that a repair kit will be sent once the photo is received, so it could be read as repair only. The operating cord is a shade pull cord rather than a power cord, so it could be labelled other instead of cut_cord.\"}",
+  "usage": {
+   "input_tokens": 3314,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 594,
+   "output_tokens_details": {
+    "thinking_tokens": 227
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25232": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must send a photo of the destroyed lights\",\"actions\":\"Consumers should destroy the lights by cutting them in half and disposing of them.\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed lights\",\"remedy\":\"contact AliExpress to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"to us_product_recall@aliexpress.com or by replying to the recall email sent by AliExpress\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3418,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 250,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25254": {
+  "text": "{\"photo_required\":false,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[],\"remedy\":\"replacement\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"will need to submit evidence of product destruction with their claim\",\"actions\":\"will need to submit evidence of product destruction with their claim. Consumers should not damage their recalled adaptor until they have read the recall instructions online.\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Yamaha Corporation of America for a free replacement adaptor\",\"refund_amount\":\"\",\"contact_channel\":\"Consumers will need to submit their information through an online form or by email\"},\"ambiguous\":[\"photo_required\",\"must_show\",\"contact_channel\",\"actions\"],\"notes\":\"The remedy asks for evidence of product destruction but never says it must be a photo, and it gives the destruction method only in online instructions, so actions is labelled other. Claims can go through an online form or by email; the online form is named first.\"}",
+  "usage": {
+   "input_tokens": 3387,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 583,
+   "output_tokens_details": {
+    "thinking_tokens": 258
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25281": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"replacement\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"to obtain a $10 credit for use at fatbraintoys.com, or a replacement PlayTab tile\",\"refund_amount\":\"a $10 credit for use at fatbraintoys.com\",\"contact_channel\":\"Fat Brain Toy Co. at 800-590-5987\"},\"ambiguous\":[\"remedy\",\"refund_amount\",\"actions\"],\"notes\":\"The owner may choose a $10 store credit (which the guide calls other, not a refund) or a replacement tile, so remedy could be read as replacement or other, and the $10 could be taken as refund_amount. Disposal instructions come from the firm and are not stated, so no actions are listed.\"}",
+  "usage": {
+   "input_tokens": 3273,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 831,
+   "output_tokens_details": {
+    "thinking_tokens": 524
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25282": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the disposed bed rail or an Amazon purchase receipt\",\"actions\":\"a photo of the disposed bed rail\",\"marker_text\":\"\",\"must_show\":\"a photo of the disposed bed rail\",\"remedy\":\"To receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"to the recalling firm by email at Jerryhe@sourcing-cn.com\"},\"ambiguous\":[\"photo_required\",\"actions\",\"must_show\"],\"notes\":\"The owner may send either a photo of the disposed bed rail or an Amazon receipt, so the photo is one option rather than strictly required. The remedy says the rail is disposed but gives no method for making it unusable, so this could be read as throwing it away (not listed) or as an unspecified destroy step (other).\"}",
+  "usage": {
+   "input_tokens": 3249,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 848,
+   "output_tokens_details": {
+    "thinking_tokens": 522
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25306": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will need to provide a photograph of disposal and their order number to receive the refund.\",\"actions\":\"contact Kicimpro about disposal and a refund\",\"marker_text\":\"\",\"must_show\":\"provide a photograph of disposal\",\"remedy\":\"contact Kicimpro about disposal and a refund\",\"refund_amount\":\"\",\"contact_channel\":\"Kicimpro by email at support@kicimprohome.com.\"},\"ambiguous\":[\"actions\",\"must_show\",\"remedy\"],\"notes\":\"The photo must show disposal, but no method is given, so it is unclear whether disposal is a destruction step (other) or merely throwing away. The remedy names a refund, yet it also says until these faucets can be replaced, which hints at a replacement.\"}",
+  "usage": {
+   "input_tokens": 3169,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 486,
+   "output_tokens_details": {
+    "thinking_tokens": 174
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25307": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will need to provide a photograph of disposal and their order number to receive the refund.\",\"actions\":\"contact Whisper08 about disposal and a refund\",\"marker_text\":\"\",\"must_show\":\"provide a photograph of disposal\",\"remedy\":\"contact Whisper08 about disposal and a refund\",\"refund_amount\":\"\",\"contact_channel\":\"Whisper08 by email at customerservice@vfauosit.com.\"},\"ambiguous\":[\"actions\",\"must_show\",\"remedy\"],\"notes\":\"The photo is of disposal, with no disabling method given, so it is unclear whether disposal counts as an action (other) or as a post-photo step, and what the photo must show beyond the product. The line 'Until these faucets can be replaced' hints at a replacement, but the remedy itself only offers a refund.\"}",
+  "usage": {
+   "input_tokens": 3168,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 576,
+   "output_tokens_details": {
+    "thinking_tokens": 243
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25316": {
+  "text": "{\"photo_required\":true,\"actions\":[\"disassemble\",\"other\",\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email photos of the disassembled product and parts to Ravmix\",\"actions\":\"disassemble the product, cut the restraint straps and cloth seat\",\"marker_text\":\"\",\"must_show\":\"photos of the disassembled product and parts\",\"remedy\":\"Upon receipt of the photos, Ravmix will issue a full refund.\",\"refund_amount\":\"Ravmix will issue a full refund\",\"contact_channel\":\"email photos of the disassembled product and parts to Ravmix\"},\"ambiguous\":[\"actions\"],\"notes\":\"Cutting the restraint straps is labelled other (a smaller part) and cutting the cloth seat is labelled cut_in_half (fabric seat); a reader could merge both cuts into one action.\"}",
+  "usage": {
+   "input_tokens": 3195,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 543,
+   "output_tokens_details": {
+    "thinking_tokens": 213
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25326": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"other\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"\",\"refund_amount\":\"\",\"contact_channel\":\"NTI Boilers toll-free at 800-688-2575\"},\"ambiguous\":[\"remedy\"],\"notes\":\"The remedy field holds only the hazard description and states no remedy, so remedy is labelled other. The actual remedy for a boiler is likely a free repair, but the text does not say so.\"}",
+  "usage": {
+   "input_tokens": 3211,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 413,
+   "output_tokens_details": {
+    "thinking_tokens": 205
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25359": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers can upload photos of the helmet with the straps cut off to consumersupport-bell@bellhelmets.com to obtain a refund.\",\"actions\":\"Consumers should destroy the recalled helmet by cutting the straps off the helmet.\",\"marker_text\":\"\",\"must_show\":\"photos of the helmet with the straps cut off\",\"remedy\":\"contact Bell Sports for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"upload photos of the helmet with the straps cut off to consumersupport-bell@bellhelmets.com\"},\"ambiguous\":[\"actions\",\"contact_channel\",\"photo_required\"],\"notes\":\"Cutting the straps off is labelled other (the guide counts cutting straps as other), though it could be read as remove_part. The photo goes to an email address but is described as an upload, and \\\"can upload\\\" is permissive wording, although the refund is tied to it.\"}",
+  "usage": {
+   "input_tokens": 3289,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 649,
+   "output_tokens_details": {
+    "thinking_tokens": 274
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25367": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recall\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"upload a photograph to the firm's website\",\"actions\":\"write \\\"Recall\\\" on the disc\",\"marker_text\":\"write \\\"Recall\\\" on the disc\",\"must_show\":\"write \\\"Recall\\\" on the disc and upload a photograph\",\"remedy\":\"to receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"upload a photograph to the firm's website\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3276,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 423,
+   "output_tokens_details": {
+    "thinking_tokens": 202
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25368": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the removed cover, and send it to the recalling firm by email\",\"actions\":\"remove the drain cover from the pool\",\"marker_text\":\"\",\"must_show\":\"take a photo of the removed cover\",\"remedy\":\"To receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"send it to the recalling firm by email at Junjuanshop2025@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Removing the drain cover from the pool takes it out of service rather than detaching a part of the cover itself, but the guide lists a drain cover under remove_part. The photo shows the removed cover, so cut_or_damage follows from the remove_part rule even though the cover is not damaged.\"}",
+  "usage": {
+   "input_tokens": 3287,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 488,
+   "output_tokens_details": {
+    "thinking_tokens": 166
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25387": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"call the firm for instructions on how to send a photo of the product\",\"actions\":\"with the word \\\"Recalled\\\" using permanent paint\",\"marker_text\":\"the word \\\"Recalled\\\"\",\"must_show\":\"send a photo of the product with the word \\\"Recalled\\\" using permanent paint\",\"remedy\":\"for a full refund\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"send a photo of the product with the word \\\"Recalled\\\" using permanent paint to customersolutions@tractorsupply.com\"},\"ambiguous\":[\"photo_required\",\"contact_channel\"],\"notes\":\"The photo is one of two options; owners may instead return the ramps to a Tractor Supply store, so a photo is not strictly required. Owners first call the firm for instructions, but the photo itself is sent by email.\"}",
+  "usage": {
+   "input_tokens": 3241,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 478,
+   "output_tokens_details": {
+    "thinking_tokens": 136
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25389": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"Consumers must take a photo of the cord that is cut near the base of the machine and upload the photo\",\"actions\":\"safely cut the cord near the base of the machine\",\"marker_text\":\"\",\"must_show\":\"take a photo of the cord that is cut near the base of the machine\",\"remedy\":\"to receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"upload the photo, along with their contact information, to the Recall Request form at www.thedeale.com/pages/casaclean-safety-recall\"},\"ambiguous\":[\"must_show\"],\"notes\":\"The photo is of the cut cord near the base, so it may not need to show the whole steamer. The guide's rule to include whole_product whenever the photo is of the product was applied.\"}",
+  "usage": {
+   "input_tokens": 3257,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 515,
+   "output_tokens_details": {
+    "thinking_tokens": 193
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25403": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"recalled\",\"must_show\":[\"whole_product\",\"marking\",\"date_code\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must then submit a photo clearly showing this information\",\"actions\":\"Consumers will be asked to write their name, the word \\\"recalled,\\\" and the current date next to the battery's production date, with a permanent marker.\",\"marker_text\":\"the word \\\"recalled,\\\"\",\"must_show\":\"write their name, the word \\\"recalled,\\\" and the current date next to the battery's production date, with a permanent marker. Consumers must then submit a photo clearly showing this information\",\"remedy\":\"contact FENGQS for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Consumers should submit the photo to recall@fengqs.work.\"},\"ambiguous\":[\"must_show\",\"marker_text\"],\"notes\":\"The photo is of the battery rather than the whole e-bike, and it is unclear whether the battery's production date must be visible, though the writing goes next to it. The remedy gives the marker word in lowercase (\\\"recalled\\\") along with a name and date.\"}",
+  "usage": {
+   "input_tokens": 3469,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 612,
+   "output_tokens_details": {
+    "thinking_tokens": 218
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25417": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"submit a photo of the marked mattress to http://amazoneurotoprecall.expertinquiry.com\",\"actions\":\"write \\\"Recalled\\\" on the mattress with a permanent marker\",\"marker_text\":\"write \\\"Recalled\\\" on the mattress\",\"must_show\":\"a photo of the marked mattress\",\"remedy\":\"consumers will be issued a full refund to a valid payment method in the consumer's Amazon wallet or in the form of an Amazon gift card\",\"refund_amount\":\"a full refund\",\"contact_channel\":\"submit a photo of the marked mattress to http://amazoneurotoprecall.expertinquiry.com\"},\"ambiguous\":[\"remedy\"],\"notes\":\"The full refund may be paid as an Amazon gift card, which the guide classes as other, but the remedy calls it a full refund and also allows a valid payment method.\"}",
+  "usage": {
+   "input_tokens": 3352,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 453,
+   "output_tokens_details": {
+    "thinking_tokens": 89
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25425": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must send the photo of the destroyed pajamas to us_product_recall@aliexpress.com\",\"actions\":\"destroy the pajamas by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"the photo of the destroyed pajamas\",\"remedy\":\"contact AliExpress to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send the photo of the destroyed pajamas to us_product_recall@aliexpress.com or by replying to the recall email sent by AliExpress\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3227,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 272,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25427": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":75,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should send a photo of the destroyed garment by email to lou@lalignenyc.com\",\"actions\":\"destroy the garments by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed garment\",\"remedy\":\"contact La Ligne for a full refund\",\"refund_amount\":\"to receive a refund of $75 or store credit of $100\",\"contact_channel\":\"send a photo of the destroyed garment by email to lou@lalignenyc.com\"},\"ambiguous\":[\"remedy\",\"refund_amount\"],\"notes\":\"The remedy promises a full refund but then offers a choice between a $75 refund and $100 store credit. It does not say whether $75 is the full price, so a reader could label the remedy partial_refund or other, and the amount null or 75.\"}",
+  "usage": {
+   "input_tokens": 3223,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 608,
+   "output_tokens_details": {
+    "thinking_tokens": 265
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25434": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"Consumers should immediately remove the nozzle applicator from the recalled Safe & Green 32 oz. Fuel bottle and reinstall the child-resistant closure\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"Consumers should contact Firefly Fuel for a free corrected label to put on the bottle and a free replacement child-resistant lid, if the original is missing.\",\"refund_amount\":\"\",\"contact_channel\":\"Firefly Fuel Inc. toll-free at 888-472-6740\"},\"ambiguous\":[\"actions\",\"remedy\"],\"notes\":\"Removing the nozzle applicator fixes the bottle rather than making it unusable, and no photo is involved, so actions is left empty. The free corrected label and replacement lid read as a repair kit, but a reader could call this a replacement.\"}",
+  "usage": {
+   "input_tokens": 3324,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 604,
+   "output_tokens_details": {
+    "thinking_tokens": 264
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25436": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"refund_or_replacement\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"replace the module free of charge. Alternatively, consumers can request a refund for the module only in the form of a refund check\",\"refund_amount\":\"Consumers will receive the amount on the purchase receipt, or the sales price for the module, if no receipt is provided.\",\"contact_channel\":\"Viewrail toll-free at (888) 500-2151\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3218,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 510,
+   "output_tokens_details": {
+    "thinking_tokens": 285
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25447": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must submit a photo to lulive12recall@sina.com of the product demonstrating disposal.\",\"actions\":\"Consumers can contact Lulive for instructions on how to dispose of the dressers\",\"marker_text\":\"\",\"must_show\":\"a photo to lulive12recall@sina.com of the product demonstrating disposal\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo to lulive12recall@sina.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy does not say how to dispose of the dresser; the firm supplies those instructions separately. It is labelled as other, since disposal is treated like destroying with no method given, but a reader could leave actions empty and must_show as only the whole product.\"}",
+  "usage": {
+   "input_tokens": 3242,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 598,
+   "output_tokens_details": {
+    "thinking_tokens": 259
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25473": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should email photos of the destroyed baby lounger and crib bumper to lxdhstrarecall@gmail.com to obtain a full refund.\",\"actions\":\"Consumers should remove the foam and pads from the baby lounger's cover and cut the cover, foam, pad, and crib bumper in half.\",\"marker_text\":\"\",\"must_show\":\"email photos of the destroyed baby lounger and crib bumper\",\"remedy\":\"contact LXDHSTRA for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email photos of the destroyed baby lounger and crib bumper to lxdhstrarecall@gmail.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Removing the foam and pads from the cover may be read as a preparatory step rather than remove_part. Cutting the foam could also be read as other, but the cover and bumper are cut in half, which fits cut_in_half.\"}",
+  "usage": {
+   "input_tokens": 3225,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 624,
+   "output_tokens_details": {
+    "thinking_tokens": 231
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "25478": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\",\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should send a photograph of the destroyed window shades in the garbage to Autoez_recall@163.com.\",\"actions\":\"cut the operating cord, write the word \\\"Recalled\\\" on the shades\",\"marker_text\":\"write the word \\\"Recalled\\\" on the shades\",\"must_show\":\"a photograph of the destroyed window shades in the garbage\",\"remedy\":\"contact Autoez for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photograph of the destroyed window shades in the garbage to Autoez_recall@163.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"\\\"Remove the shades\\\" most likely means taking them down from the window, not removing a part, so it is not listed as remove_part. The photo is of the \\\"destroyed\\\" shades in the garbage and does not explicitly require the cut cord or the marking to be visible, though both are implied.\"}",
+  "usage": {
+   "input_tokens": 3185,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 598,
+   "output_tokens_details": {
+    "thinking_tokens": 206
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26032": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the destroyed lounger to BeliviumRecall@163.com to obtain a full refund\",\"actions\":\"remove the sleeping pad, cut up the sides of the baby loungers and the sleeping pad\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed lounger\",\"remedy\":\"contact Belivium for a full refund\",\"refund_amount\":\"full refund\",\"contact_channel\":\"email a photo of the destroyed lounger to BeliviumRecall@163.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Removing the sleeping pad may be a preparation step for cutting rather than a disabling removal. Cutting up the sides and pad is read as cutting the main fabric into pieces (cut_in_half), though it could be seen as other.\"}",
+  "usage": {
+   "input_tokens": 3159,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 560,
+   "output_tokens_details": {
+    "thinking_tokens": 211
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26063": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the marked mattress to Dingbangrecall2025@outlook.com\",\"actions\":\"write \\\"Recalled\\\" on the mattress with a permanent marker\",\"marker_text\":\"write \\\"Recalled\\\" on the mattress\",\"must_show\":\"a photo of the marked mattress\",\"remedy\":\"consumers will be issued a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email a photo of the marked mattress to Dingbangrecall2025@outlook.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3210,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 259,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26067": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Peloton for a free repair. Peloton is offering consumers a free seat post that can be self-installed.\",\"refund_amount\":\"\",\"contact_channel\":\"Contact Peloton toll-free at 866-679-9129\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy names no channel, so the first one in the consumer contact (toll-free phone) is used. The consumer contact also lists an online page for requesting the seat post, so web_form is a plausible reading.\"}",
+  "usage": {
+   "input_tokens": 3188,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 413,
+   "output_tokens_details": {
+    "thinking_tokens": 160
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26107": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must submit a photo to Ojaswi12Drecall@outlook.com demonstrating disposal of the product.\",\"actions\":\"Contact Ebern Designs for instructions on how to dispose of the dressers\",\"marker_text\":\"\",\"must_show\":\"demonstrating disposal of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo to Ojaswi12Drecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy says only that the photo must show disposal and does not say how to dispose of the dressers. I labelled the unspecified disposal as other, with cut_or_damage, but some readers may treat disposal as a post-photo step and leave actions empty.\"}",
+  "usage": {
+   "input_tokens": 3207,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 608,
+   "output_tokens_details": {
+    "thinking_tokens": 271
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26114": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should send a photo of the recalled safety gates\",\"actions\":\"with \\\"Recalled\\\" written on the front in permanent marker\",\"marker_text\":\"\\\"Recalled\\\" written on the front in permanent marker\",\"must_show\":\"a photo of the recalled safety gates, with \\\"Recalled\\\" written on the front in permanent marker\",\"remedy\":\"contact Ikuso to request a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"to Ikuso at ikuso_door_gate@163.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3179,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 267,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26124": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"return them to a Primark store for a full refund in the form of the original payment\",\"refund_amount\":\"\",\"contact_channel\":\"Primark at 617-946-3236 from 8 a.m. to 5 p.m. ET Monday through Friday\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy is an in-store return, which names none of the listed channels, so the first channel in the consumer contact (phone) was used. A reader could instead label the store return as other.\"}",
+  "usage": {
+   "input_tokens": 3145,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 452,
+   "output_tokens_details": {
+    "thinking_tokens": 204
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26140": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit a photo of the destroyed costume to pafiney@outlook.com\",\"actions\":\"Consumers should cut the dress\",\"marker_text\":\"\",\"must_show\":\"submit a photo of the destroyed costume\",\"remedy\":\"Contact SKCAIHT Direct for a full refund.\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"submit a photo of the destroyed costume to pafiney@outlook.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"The remedy says only \\\"cut the dress\\\" without saying in half or into pieces. Because the dress is the product's main body, this is labelled cut_in_half, but it could also be read as other.\"}",
+  "usage": {
+   "input_tokens": 3141,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 440,
+   "output_tokens_details": {
+    "thinking_tokens": 133
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26154": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the removed cover, and send it to the recalling firm\",\"actions\":\"remove the drain cover from the pool\",\"marker_text\":\"\",\"must_show\":\"take a photo of the removed cover\",\"remedy\":\"To receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"send it to the recalling firm by email at Tophomer.recall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The drain cover is the product itself, removed from the pool rather than a part removed from the product, though the guide lists a drain cover under remove_part. Under that reading the guide adds cut_or_damage to must_show, but the photo only needs to show the removed cover.\"}",
+  "usage": {
+   "input_tokens": 3230,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 502,
+   "output_tokens_details": {
+    "thinking_tokens": 191
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26159": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must submit a photo to support-us@kkl-home.com demonstrating disposal of the product.\",\"actions\":\"Contact HK Brilliant for instructions on how to dispose of the dressers\",\"marker_text\":\"\",\"must_show\":\"demonstrating disposal of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"to receive a full refund\",\"contact_channel\":\"submit a photo to support-us@kkl-home.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy says the photo must show disposal but leaves the disposal method to the firm's instructions. It could be read as an unstated destroy step (other), which would add cut_or_damage to must_show.\"}",
+  "usage": {
+   "input_tokens": 3217,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 635,
+   "output_tokens_details": {
+    "thinking_tokens": 330
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26176": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the disposed product to Findriverpoundingtoysrecall@outlook.com\",\"actions\":\"write \\\"RECALLED\\\" on the base of the product with permanent marker\",\"marker_text\":\"write \\\"RECALLED\\\" on the base of the product\",\"must_show\":\"send a photo of the disposed product\",\"remedy\":\"contact Findriver to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the disposed product to Findriverpoundingtoysrecall@outlook.com\"},\"ambiguous\":[\"must_show\"],\"notes\":\"The photo is described only as showing the disposed product, so it does not explicitly say it must show the RECALLED marking. The marking is included because the guide adds it whenever the product is marked.\"}",
+  "usage": {
+   "input_tokens": 3160,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 511,
+   "output_tokens_details": {
+    "thinking_tokens": 179
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26182": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"refund_or_replacement\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the bottle in the trash and email it to ruahouine@gmail.com\",\"actions\":\"pour the contents of the bottle into the trash\",\"marker_text\":\"\",\"must_show\":\"take a photo of the bottle in the trash\",\"remedy\":\"how to receive a refund or replacement bottle\",\"refund_amount\":\"\",\"contact_channel\":\"email it to ruahouine@gmail.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Pouring the contents into the trash is the only disabling step named, so it is labelled other. The photo is of the bottle in the trash, so including cut_or_damage follows the guide's rule rather than an explicit request in the remedy.\"}",
+  "usage": {
+   "input_tokens": 3197,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 573,
+   "output_tokens_details": {
+    "thinking_tokens": 261
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26201": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"To receive a refund, consumers should take a picture of the product\",\"actions\":\"with \\\"recalled\\\" and their initials written on it in marker\",\"marker_text\":\"with \\\"recalled\\\" and their initials written on it in marker\",\"must_show\":\"take a picture of the product with \\\"recalled\\\" and their initials written on it in marker\",\"remedy\":\"contact Thrasio for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email the photo to productrecall@angryorange.com\"},\"ambiguous\":[\"marker_text\"],\"notes\":\"The remedy also asks for the owner's initials. Following the guide, only the quoted word recalled is kept as marker_text, in its original lowercase.\"}",
+  "usage": {
+   "input_tokens": 3260,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 429,
+   "output_tokens_details": {
+    "thinking_tokens": 124
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26206": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit a photo of proof of destruction to receive a full refund\",\"actions\":\"destroy the lighters by pulling out the black adjuster knob on the top of the product\",\"marker_text\":\"\",\"must_show\":\"submit a photo of proof of destruction\",\"remedy\":\"contact Xiyude for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"contact BCLighterService@outlook.com and submit a photo of proof of destruction\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3187,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 409,
+   "output_tokens_details": {
+    "thinking_tokens": 165
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26208": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed toy set to vndueeyrecall@outlook.com\",\"actions\":\"cut all the magnetic stick figures in half\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed toy set\",\"remedy\":\"contact Vndueey for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the destroyed toy set to vndueeyrecall@outlook.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3164,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 245,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26234": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"contact Bazic Products for instructions on how to submit a photo of the product to receive a full refund\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"submit a photo of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Bazic Products toll-free at 877-772-2942\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy does not say how to send the photo; it only says to contact the firm for instructions. Phone is listed first in the consumer contact, but the photo itself would likely be emailed.\"}",
+  "usage": {
+   "input_tokens": 3241,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 403,
+   "output_tokens_details": {
+    "thinking_tokens": 141
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26240": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers should send a photo of the clothing without a drawstring\",\"actions\":\"remove the drawstrings to eliminate the hazard\",\"marker_text\":\"\",\"must_show\":\"a photo of the clothing without a drawstring\",\"remedy\":\"contact Lola Plus The Boys for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"to customerservice@lolaandtheboys.com\"},\"ambiguous\":[\"actions\",\"marker_text\"],\"notes\":\"The name and date are to be sent along with the photo, most naturally in the email, not written on the clothing, so no write_recalled action or marker text was labelled; a reader could take them as markings on the garment.\"}",
+  "usage": {
+   "input_tokens": 3268,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 538,
+   "output_tokens_details": {
+    "thinking_tokens": 236
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26241": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\",\"other\"],\"marker_text\":\"X\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the marked jar can and cut wicks to Little Cow Company\",\"actions\":\"use a permanent marker to draw an 'X\\\" on the glass container, cut the wicks\",\"marker_text\":\"draw an 'X\\\" on the glass container\",\"must_show\":\"a photo of the marked jar can and cut wicks\",\"remedy\":\"contact Little Cow Company to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email a photo\"},\"ambiguous\":[\"actions\",\"marker_text\"],\"notes\":\"Cutting the wicks is labelled other as a smaller part, though some readers could treat a wick as a cord. The mark is an X symbol shown with mismatched quote marks, so the marker_text is taken as X.\"}",
+  "usage": {
+   "input_tokens": 3170,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 569,
+   "output_tokens_details": {
+    "thinking_tokens": 237
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26255": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must submit a photo to enhomeestore@gmail.com showing disposal of the product.\",\"actions\":\"Contact EnHomee for instructions on how to identify affected units and dispose of the dressers\",\"marker_text\":\"\",\"must_show\":\"showing disposal of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"to receive a full refund\",\"contact_channel\":\"submit a photo to enhomeestore@gmail.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy asks for a photo showing disposal but gives no method; the firm supplies disposal instructions separately. Disposal could be read as an 'other' destroy step rather than a post-photo throw-away step, which would add cut_or_damage to must_show.\"}",
+  "usage": {
+   "input_tokens": 3252,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 729,
+   "output_tokens_details": {
+    "thinking_tokens": 404
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26261": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers must submit a photo to SOOWERYrecall@outlook.com showing disposal of the product.\",\"actions\":\"With a permanent marker, write the word \\\"recalled\\\" on the top and all sides of the dresser.\",\"marker_text\":\"write the word \\\"recalled\\\"\",\"must_show\":\"showing disposal of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo to SOOWERYrecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The photo must show disposal of the product, but the disposal method comes from the firm's later instructions. It is unclear whether disposal counts as an extra 'other' action, or whether the photo must also show the written marking.\"}",
+  "usage": {
+   "input_tokens": 3192,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 655,
+   "output_tokens_details": {
+    "thinking_tokens": 324
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26266": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\",\"disassemble\",\"remove_part\",\"other\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the disassembled recalled bath seat showing the marked front of the seat to CheerKid-Recall@outlook.com\",\"actions\":\"write \\\"Recalled\\\" on the front of the bath seat in permanent marker, disassemble the bath seat by removing the back rest and arm restraints, discard the screws, cut the five suction cups on the bottom\",\"marker_text\":\"write \\\"Recalled\\\" on the front of the bath seat in permanent marker\",\"must_show\":\"a photo of the disassembled recalled bath seat showing the marked front of the seat\",\"remedy\":\"contact Babibaby for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the disassembled recalled bath seat showing the marked front of the seat to CheerKid-Recall@outlook.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Disassembly is done by removing the back rest and arm restraints, so remove_part may or may not be listed separately from disassemble. Cutting the suction cups is cutting a smaller part, so it is labelled other.\"}",
+  "usage": {
+   "input_tokens": 3212,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 744,
+   "output_tokens_details": {
+    "thinking_tokens": 291
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26272": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the disposed product to Huaker-magnetic-balls@outlook.com\",\"actions\":\"Consumers will be asked to throw the magnetic toy sets away\",\"marker_text\":\"\",\"must_show\":\"a photo of the disposed product\",\"remedy\":\"contact Huaker to receive a full refund\",\"refund_amount\":\"receive a full refund\",\"contact_channel\":\"email a photo of the disposed product to Huaker-magnetic-balls@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Throwing the sets away comes before the photo here, so it could be read as an 'other' disabling step. It is left out because the guide treats throwing away as disposal rather than a way to make the product unusable. The photo shows the disposed product, so whole_product could also be read as cut_or_damage.\"}",
+  "usage": {
+   "input_tokens": 3141,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 546,
+   "output_tokens_details": {
+    "thinking_tokens": 205
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26274": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the product in the trash to JJGooLEDBalloonLightsrecall@outlook.com\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"send a photo of the product in the trash\",\"remedy\":\"Contact JJGoo for a full refund.\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the product in the trash to JJGooLEDBalloonLightsrecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy asks owners to dispose of the batteries and throw the lights away before the photo, which some readers could label as remove_part or other. It never says to remove, cut or destroy the product, so actions is left empty and the photo only needs to show the product in the trash.\"}",
+  "usage": {
+   "input_tokens": 3215,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 588,
+   "output_tokens_details": {
+    "thinking_tokens": 269
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26288": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\",\"disassemble\",\"other\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the disassembled recalled bath seat showing the marked front of the seat\",\"actions\":\"write \\\"Recalled\\\" on the front of the bath seat in permanent marker, disassemble the bath seat by removing the back rest and arm restraints, cut the four suction cups on the bottom\",\"marker_text\":\"write \\\"Recalled\\\" on the front of the bath seat\",\"must_show\":\"a photo of the disassembled recalled bath seat showing the marked front of the seat\",\"remedy\":\"contact Trankerloop for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email a photo of the disassembled recalled bath seat showing the marked front of the seat to hkkll147@outlook.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Disassembly is done by removing the back rest and arm restraints, so remove_part could also be listed. Cutting the suction cups is cutting a smaller part, so it is labelled as other rather than cut_in_half.\"}",
+  "usage": {
+   "input_tokens": 3224,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 635,
+   "output_tokens_details": {
+    "thinking_tokens": 217
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26305": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will be asked to send a photo of the product in the trash to recall@dgfuxin.cn.\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"send a photo of the product in the trash\",\"remedy\":\"Contact SumDirect for a full refund.\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the product in the trash to recall@dgfuxin.cn\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy says to properly dispose of the batteries, which could be read as removing the batteries (remove_part, and then cut_or_damage in must_show). The photo shows the product in the trash, and the guide excludes throwing the product away as an action.\"}",
+  "usage": {
+   "input_tokens": 3212,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 672,
+   "output_tokens_details": {
+    "thinking_tokens": 370
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26317": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the disposed product to productrecall@cubimanatoys.com\",\"actions\":\"remove and properly dispose of the batteries\",\"marker_text\":\"\",\"must_show\":\"send a photo of the disposed product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the disposed product to productrecall@cubimanatoys.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Battery removal is a safety step and may not be part of the proof, and the photo is of the product after it is thrown away. Whether the photo must show the removed batteries or only the disposed product is unclear.\"}",
+  "usage": {
+   "input_tokens": 3227,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 522,
+   "output_tokens_details": {
+    "thinking_tokens": 225
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26320": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"sending a photo of the destroyed helmet to org@prorider.com to obtain a refund\",\"actions\":\"destroy the helmet by cutting the straps\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed helmet\",\"remedy\":\"contact ProRider for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"sending a photo of the destroyed helmet to org@prorider.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3174,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 430,
+   "output_tokens_details": {
+    "thinking_tokens": 197
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26369": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the disposed product to BUDIrecall@outlook.com for a full refund\",\"actions\":\"remove and properly dispose of the batteries\",\"marker_text\":\"\",\"must_show\":\"send a photo of the disposed product\",\"remedy\":\"for a full refund\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"send a photo of the disposed product to BUDIrecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The photo is of the 'disposed product' after throwing it away, which some might label as an 'other' action, and it is unclear whether the photo must show the removed batteries. Battery removal is labelled remove_part, so cut_or_damage is included under the guide.\"}",
+  "usage": {
+   "input_tokens": 3200,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 590,
+   "output_tokens_details": {
+    "thinking_tokens": 268
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26378": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\",\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the destroyed rails and email the photo to SGHproductrecall@163.com\",\"actions\":\"destroy the bed rails by cutting the handrails' foam padding and writing \\\"RECALLED\\\" on the upper and lower rails with permanent marker\",\"marker_text\":\"writing \\\"RECALLED\\\" on the upper and lower rails with permanent marker\",\"must_show\":\"take a photo of the destroyed rails\",\"remedy\":\"contact Sangohe for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email the photo to SGHproductrecall@163.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Cutting the handrails' foam padding is cutting a smaller part (foam), so it is labelled other rather than cut_in_half.\"}",
+  "usage": {
+   "input_tokens": 3236,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 493,
+   "output_tokens_details": {
+    "thinking_tokens": 144
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26380": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed pajamas to Supersam@Samsclub.com\",\"actions\":\"destroy the pajamas by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed pajamas\",\"remedy\":\"contact Sam's Club for information on how to receive a full refund\",\"refund_amount\":\"receive a full refund\",\"contact_channel\":\"send a photo of the destroyed pajamas to Supersam@Samsclub.com\"},\"ambiguous\":[\"photo_required\"],\"notes\":\"The photo is one of two options, since owners may instead return the pajamas to their local store. It is labelled true for the destroy-and-photo path.\"}",
+  "usage": {
+   "input_tokens": 3267,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 472,
+   "output_tokens_details": {
+    "thinking_tokens": 166
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26397": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a clear photograph/video of the destroyed product as proof of destruction, and send the proof to the recalling firm\",\"actions\":\"consumers should destroy the removed drain cover\",\"marker_text\":\"\",\"must_show\":\"take a clear photograph/video of the destroyed product as proof of destruction\",\"remedy\":\"To receive a full refund to their original payment method\",\"refund_amount\":\"\",\"contact_channel\":\"send the proof to the recalling firm by email at yeeluzanrecall@163.com\"},\"ambiguous\":[\"actions\",\"photo_required\"],\"notes\":\"The remedy says to destroy the drain cover with no method, so this is labelled other. The words removed drain cover could also be read as remove_part. A video is accepted in place of a photo, but a photo still satisfies the rule.\"}",
+  "usage": {
+   "input_tokens": 3234,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 597,
+   "output_tokens_details": {
+    "thinking_tokens": 261
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26399": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"replacement\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"receive a free replacement power bank\",\"refund_amount\":\"\",\"contact_channel\":\"Veektomx at recall@veektomx.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3115,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 266,
+   "output_tokens_details": {
+    "thinking_tokens": 112
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26414": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"partial_refund\",\"refund_amount\":30,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit photos of the cut accessories to the firm\",\"actions\":\"remove and destroy the hammock, punching bag, hand ring and basketball board accessories. Consumers will be asked to cut the straps on the accessories\",\"marker_text\":\"\",\"must_show\":\"submit photos of the cut accessories\",\"remedy\":\"SEGMART will provide a $30 refund to consumers who remove and destroy the hammock, punching bag, hand ring and basketball board accessories.\",\"refund_amount\":\"a $30 refund\",\"contact_channel\":\"SEGMART by email at segmartservice@outlook.com\"},\"ambiguous\":[\"remedy\",\"contact_channel\",\"must_show\"],\"notes\":\"The fixed $30 refund covers only the removed accessories while the trampoline is kept, so it reads as partial, though the guide could also be read as full_refund. The remedy points to www.segmart.com for instructions but names no channel for sending photos, so email, the first channel in the consumer contact, was used; whole_product is included because the photo shows the cut accessories rather than the whole trampoline.\"}",
+  "usage": {
+   "input_tokens": 3237,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 918,
+   "output_tokens_details": {
+    "thinking_tokens": 481
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26420": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed pressure washer to agiimanservice@163.com\",\"actions\":\"cut the power cord in half to destroy the pressure washer\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed pressure washer\",\"remedy\":\"contact Agiiman for a full refund\",\"refund_amount\":\"contact Agiiman for a full refund\",\"contact_channel\":\"send a photo of the destroyed pressure washer to agiimanservice@163.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3132,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 408,
+   "output_tokens_details": {
+    "thinking_tokens": 150
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26432": {
+  "text": "{\"photo_required\":true,\"actions\":[\"disassemble\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed stool to TOETOLHOMEStepStoolsrecall@outlook.com\",\"actions\":\"destroy the stool by disassembling it\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed stool\",\"remedy\":\"contact TOETOL HOME for a full refund\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"send a photo of the destroyed stool to TOETOLHOMEStepStoolsrecall@outlook.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3159,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 460,
+   "output_tokens_details": {
+    "thinking_tokens": 194
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26438": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will then email photos of the destroyed pieces\",\"actions\":\"remove the foam and pad from the baby lounger's cover and cut the cover, foam and pad in half\",\"marker_text\":\"\",\"must_show\":\"email photos of the destroyed pieces\",\"remedy\":\"contact CetoPMax for a refund\",\"refund_amount\":\"\",\"contact_channel\":\"email photos of the destroyed pieces to\"},\"ambiguous\":[\"actions\"],\"notes\":\"Removing the foam and pad from the cover may be a preparatory step for cutting rather than a separate remove_part action.\"}",
+  "usage": {
+   "input_tokens": 3182,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 540,
+   "output_tokens_details": {
+    "thinking_tokens": 258
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26446": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will be asked to submit a photo to segmartdresserecall@outlook.com demonstrating disposal of the product.\",\"actions\":\"dispose of the dressers\",\"marker_text\":\"\",\"must_show\":\"demonstrating disposal of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"to receive a full refund\",\"contact_channel\":\"submit a photo to segmartdresserecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy asks owners to dispose of the dressers and photograph proof of disposal without naming a method. It could be read as an unspecified destroy step (other) or as a post-photo discard step that needs no action.\"}",
+  "usage": {
+   "input_tokens": 3225,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 543,
+   "output_tokens_details": {
+    "thinking_tokens": 231
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26482": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"schedule a free repair at the dealership, involving a software update\",\"refund_amount\":\"\",\"contact_channel\":\"BRP toll-free at 888-272-9222\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy tells owners to contact an authorized dealer, and its website is only a dealer locator, so it names no listed channel. I used the first consumer contact, phone, but other or web_form are possible readings.\"}",
+  "usage": {
+   "input_tokens": 3258,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 555,
+   "output_tokens_details": {
+    "thinking_tokens": 322
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26493": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"Contact Cosyland Official for repair parts, which include protective nets, stabilizing feet, and installation instructions.\",\"refund_amount\":\"\",\"contact_channel\":\"Cosyland toll free at 866-677-3889\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3214,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 183,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26509": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"other\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"Consumers should stop using the recalled magnet ball toys immediately, take them away from children and dispose of them.\",\"refund_amount\":\"\",\"contact_channel\":\"Daoen by email at randyyangyy@gmail.com.\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3084,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 571,
+   "output_tokens_details": {
+    "thinking_tokens": 390
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26512": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"providing photographic proof of destruction\",\"actions\":\"destroy the recalled lounge chair by detaching the headrest pillow, cutting the fabric\",\"marker_text\":\"\",\"must_show\":\"providing photographic proof of destruction\",\"remedy\":\"contact Giantex for a full refund\",\"refund_amount\":\"full refund\",\"contact_channel\":\"Giantex toll-free at 844-242-1885 anytime\"},\"ambiguous\":[\"photo_required\",\"contact_channel\",\"must_show\"],\"notes\":\"The photo is required only if the owner is told to destroy the chair rather than use a prepaid return package. No channel is named for sending the photo, so phone is used because it is listed first in the consumer contact.\"}",
+  "usage": {
+   "input_tokens": 3180,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 552,
+   "output_tokens_details": {
+    "thinking_tokens": 232
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26522": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Walmart for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Walmart at 800-925-6278\"},\"ambiguous\":[\"actions\",\"contact_channel\"],\"notes\":\"No photo is required. Instead, the drawers go back to a Walmart store and the frame is thrown away, so returning the drawers could be read as remove_part. The remedy names no contact channel, so phone comes from the first contact listed, though the in-store return could be read as other.\"}",
+  "usage": {
+   "input_tokens": 3217,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 483,
+   "output_tokens_details": {
+    "thinking_tokens": 235
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26525": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed pillow to recall@evermorepartner.com\",\"actions\":\"cut the pillow in half\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed pillow\",\"remedy\":\"contact Little Grape Land for a full refund\",\"refund_amount\":\"for a full refund\",\"contact_channel\":\"send a photo of the destroyed pillow to recall@evermorepartner.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3183,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 240,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26555": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"other\",\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the marked cover to houoto@163.com\",\"actions\":\"remove the drain cover from the pool, destroy or otherwise render the drain cover unusable, write in permanent maker \\\"Recalled\\\" on the removed cover\",\"marker_text\":\"write in permanent maker \\\"Recalled\\\" on the removed cover\",\"must_show\":\"send a photo of the marked cover\",\"remedy\":\"To receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the marked cover to houoto@163.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Removing the drain cover from the pool takes the product itself out, not a part of it, but the guide lists a drain cover under remove_part. The photo only says 'the marked cover', so whether it must show the destruction is inferred from the guide's rule.\"}",
+  "usage": {
+   "input_tokens": 3238,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 640,
+   "output_tokens_details": {
+    "thinking_tokens": 269
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26563": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"write_recalled\"],\"marker_text\":\"RECALL\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo, then dispose it\",\"actions\":\"remove the drain cover from the spa/hot tub, write \\\"RECALL\\\" with a marker on the cover\",\"marker_text\":\"write \\\"RECALL\\\" with a marker on the cover\",\"must_show\":\"remove the drain cover from the spa/hot tub, write \\\"RECALL\\\" with a marker on the cover, take a photo\",\"remedy\":\"To receive a refund\",\"refund_amount\":\"\",\"contact_channel\":\"Send the photo to Arrogantf by email at lufen1624@outlook.com.\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy also says to cut the perimeter structure \\\"if feasible\\\", without saying whether this comes before the photo, so it could be listed as other. Removing the cover from the spa is mainly how the owner gets to the cover, which makes cut_or_damage in the photo uncertain.\"}",
+  "usage": {
+   "input_tokens": 3262,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 765,
+   "output_tokens_details": {
+    "thinking_tokens": 376
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26564": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed pajama set to Veseackypajamarecall@outlook.com\",\"actions\":\"destroy the pajamas by cutting them in half\",\"marker_text\":\"\",\"must_show\":\"a photo of the destroyed pajama set\",\"remedy\":\"contact Veseacky for a full refund\",\"refund_amount\":\"full refund\",\"contact_channel\":\"send a photo of the destroyed pajama set to Veseackypajamarecall@outlook.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3149,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 255,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26578": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\",\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"provide a photo of disposal to raychyrecall@outlook.com in order to receive the refund\",\"actions\":\"cut the shoe tongue, write \\\"RECALLED\\\" on both sides of the sneakers using a permanent marker\",\"marker_text\":\"write \\\"RECALLED\\\" on both sides of the sneakers\",\"must_show\":\"provide a photo of disposal\",\"remedy\":\"contact Carina and Rambo for a refund\",\"refund_amount\":\"\",\"contact_channel\":\"provide a photo of disposal to raychyrecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Cutting the shoe tongue is a cut to a smaller part, so it is labelled other, but a reader could treat it as cutting the product (cut_in_half). The remedy asks for a \\\"photo of disposal\\\" without saying what it must show, so the cut and the marking are inferred from the actions.\"}",
+  "usage": {
+   "input_tokens": 3223,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 577,
+   "output_tokens_details": {
+    "thinking_tokens": 185
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26591": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"cut_in_half\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will email photos of the destroyed pieces to?recalling@vevor.com to receive a full refund.\",\"actions\":\"remove the foam and pad from the baby lounger's cover and cut the cover, foam and pad in half\",\"marker_text\":\"\",\"must_show\":\"photos of the destroyed pieces\",\"remedy\":\"contact Vevor for a full refund\",\"refund_amount\":\"to receive a full refund\",\"contact_channel\":\"Consumers will email photos of the destroyed pieces to?recalling@vevor.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Removing the foam and pad from the cover could be read as remove_part or as disassemble; it is a preparatory step before cutting everything in half.\"}",
+  "usage": {
+   "input_tokens": 3239,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 673,
+   "output_tokens_details": {
+    "thinking_tokens": 345
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26602": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"return the fireworks to the store where they were purchased for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Winco Fireworks International by email at cade@wincofireworks.com\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The claim is made by returning the fireworks to the store, which could be labelled other. Because the remedy names no email, web, phone or mail channel, the first contact method listed, email, was used.\"}",
+  "usage": {
+   "input_tokens": 3196,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 423,
+   "output_tokens_details": {
+    "thinking_tokens": 186
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26608": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\",\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"take a photo of the marked bed rail with the buyer's name on a piece of paper, and email the photo to Moodooy-recall@outlook.com\",\"actions\":\"cut the black safety strap in half, write \\\"RECALLED\\\" on the upper and lower bed rails with a permanent marker\",\"marker_text\":\"write \\\"RECALLED\\\" on the upper and lower bed rails\",\"must_show\":\"take a photo of the marked bed rail with the buyer's name on a piece of paper\",\"remedy\":\"contact YUEZHANG for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email the photo to Moodooy-recall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Cutting the safety strap in half is cutting a smaller part, so it is labelled other rather than cut_in_half, though the words 'in half' allow the other reading. The photo is described only as showing the marked bed rail, so whether the cut strap must appear in it is unclear. The guide's rule still puts cut_or_damage in must_show.\"}",
+  "usage": {
+   "input_tokens": 3205,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 669,
+   "output_tokens_details": {
+    "thinking_tokens": 229
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26634": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will be asked to submit a photo to Romorgnizrecall@outlook.com demonstrating disposal of the product.\",\"actions\":\"dispose of the dressers to receive a full refund\",\"marker_text\":\"\",\"must_show\":\"a photo to Romorgnizrecall@outlook.com demonstrating disposal of the product\",\"remedy\":\"to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo to Romorgnizrecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy asks for a photo demonstrating disposal but gives no method, so it could be read as an unspecified destroy step (other) or as a post-photo throw-away step with no action. What the photo must show beyond the product itself is not stated.\"}",
+  "usage": {
+   "input_tokens": 3250,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 620,
+   "output_tokens_details": {
+    "thinking_tokens": 277
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26636": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"write_recalled\"],\"marker_text\":\"RECALL\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"To receive a refund, consumers will be asked to remove the drain cover from the pool, write \\\"RECALL\\\" with a marker on the cover, take a photo, then dispose of it.\",\"actions\":\"remove the drain cover from the pool, write \\\"RECALL\\\" with a marker on the cover, take a photo\",\"marker_text\":\"write \\\"RECALL\\\" with a marker on the cover\",\"must_show\":\"write \\\"RECALL\\\" with a marker on the cover, take a photo\",\"remedy\":\"contact Sviyatp for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Send the photo to Sviyatp by email at SviyatpRecall@qq.com.\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The optional step \\\"If feasible, disable the drain cover by cutting the perimeter structure\\\" is conditional and its timing relative to the photo is unclear, so it was left out. Removing the cover from the pool is labelled remove_part following the guide's drain cover example, and that label is what puts cut_or_damage in must_show.\"}",
+  "usage": {
+   "input_tokens": 3264,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 897,
+   "output_tokens_details": {
+    "thinking_tokens": 455
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26645": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"Consumers will be asked to submit a photo to enhomeestore@gmail.com demonstrating disposal of the product.\",\"actions\":\"dispose of the dressers\",\"marker_text\":\"\",\"must_show\":\"submit a photo to enhomeestore@gmail.com demonstrating disposal of the product\",\"remedy\":\"dispose of the dressers to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo to enhomeestore@gmail.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy asks the owner to dispose of the dresser without saying how, and the photo must show that disposal. I read this as an unspecified destruction step (other); it could also be read as plain discarding, which would leave actions empty and change what the photo must show.\"}",
+  "usage": {
+   "input_tokens": 3246,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 610,
+   "output_tokens_details": {
+    "thinking_tokens": 270
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26663": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo demonstrating disposal of the product to Winstonporterseedayrecall@outlook.com\",\"actions\":\"write the word \\\"recalled\\\" on the top and all sides of the dresser with a permanent marker\",\"marker_text\":\"write the word \\\"recalled\\\"\",\"must_show\":\"write the word \\\"recalled\\\" on the top and all sides of the dresser with a permanent marker and email a photo demonstrating disposal of the product\",\"remedy\":\"dispose of the dressers to receive a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email a photo demonstrating disposal of the product to Winstonporterseedayrecall@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The photo must demonstrate disposal of the product. That could mean disposal is itself a step shown in the photo, rather than a step that comes after the photo. The remedy gives no method for disposal, so no other action is listed.\"}",
+  "usage": {
+   "input_tokens": 3285,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 574,
+   "output_tokens_details": {
+    "thinking_tokens": 185
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26676": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"recalled\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit a photo to lazizadresserrecall@s-homooi.com\",\"actions\":\"write the word \\\"recalled\\\" on the top and all sides of the dresser with a permanent marker\",\"marker_text\":\"write the word \\\"recalled\\\"\",\"must_show\":\"write the word \\\"recalled\\\" on the top and all sides of the dresser with a permanent marker and to submit a photo\",\"remedy\":\"Contact Fitueyes for a full refund.\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo to lazizadresserrecall@s-homooi.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3186,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 282,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26686": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Yi Suen Commerce for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Yi Suen Commerce by email at safety@goodyking.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3146,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 169,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26690": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_in_half\",\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed dressers to dumosdresserrecall@dumos.com\",\"actions\":\"destroy the dressers by cutting the drawers in half and writing in permanent marker \\\"RECALLED\\\"\",\"marker_text\":\"writing in permanent marker \\\"RECALLED\\\"\",\"must_show\":\"send a photo of the destroyed dressers\",\"remedy\":\"Consumers should contact DUMOS for a full refund.\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the destroyed dressers to dumosdresserrecall@dumos.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"The remedy asks owners to cut the drawers in half rather than the whole dresser. A reader could treat the drawers as a smaller part (other) instead of the main body (cut_in_half).\"}",
+  "usage": {
+   "input_tokens": 3305,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 557,
+   "output_tokens_details": {
+    "thinking_tokens": 189
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26697": {
+  "text": "{\"photo_required\":true,\"actions\":[],\"marker_text\":null,\"must_show\":[\"whole_product\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the disposed product to ywpower@outlook.com\",\"actions\":\"properly dispose of the sound maker into the trash and send a photo of the disposed product\",\"marker_text\":\"\",\"must_show\":\"send a photo of the disposed product\",\"remedy\":\"contact Shengsen Toys for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the disposed product to ywpower@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"Disposing of the sound maker in the trash comes before the photo, so it could be read as an 'other' step that makes the product unusable. Here it is left out as a plain throw-away step. The photo shows the disposed product, which could also imply showing it in the trash.\"}",
+  "usage": {
+   "input_tokens": 3188,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 592,
+   "output_tokens_details": {
+    "thinking_tokens": 275
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26701": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit a photo of it to info@sunnysidecorp.com\",\"actions\":\"write \\\"RECALLED\\\" with permanent marker on the bottle\",\"marker_text\":\"write \\\"RECALLED\\\" with permanent marker on the bottle\",\"must_show\":\"submit a photo of it\",\"remedy\":\"contact Sunnyside for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo of it to info@sunnysidecorp.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3375,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 250,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26736": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the marked dresser to office@gizoon.com\",\"actions\":\"write in permanent marker \\\"RECALLED\\\" on the top and all sides of the dresser\",\"marker_text\":\"\\\"RECALLED\\\"\",\"must_show\":\"a photo of the marked dresser\",\"remedy\":\"contact Gizoon Direct for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the marked dresser to office@gizoon.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3239,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 250,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26753": {
+  "text": "{\"photo_required\":true,\"actions\":[\"disassemble\",\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed toy to Lontcs@163.com\",\"actions\":\"destroy the toys by unscrewing its components, write in permanent marker “RECALLED” on the board\",\"marker_text\":\"write in permanent marker “RECALLED” on the board\",\"must_show\":\"send a photo of the destroyed toy\",\"remedy\":\"contact SQT for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the destroyed toy to Lontcs@163.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Unscrewing the components could be read as taking the toy apart (disassemble) or as removing parts (remove_part). I chose disassemble.\"}",
+  "usage": {
+   "input_tokens": 3135,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 454,
+   "output_tokens_details": {
+    "thinking_tokens": 130
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26779": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\",\"model_number\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed power washer, showing the model number, to service@lanchezpumps.com\",\"actions\":\"destroy it by cutting the power cord in half\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed power washer, showing the model number\",\"remedy\":\"contact LANCHEZ for a full refund\",\"refund_amount\":\"contact LANCHEZ for a full refund\",\"contact_channel\":\"send a photo of the destroyed power washer, showing the model number, to service@lanchezpumps.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"The remedy says to cut the power cord \\\"in half\\\", which could be misread as cut_in_half. However, only the cord is cut, so it is labelled cut_cord.\"}",
+  "usage": {
+   "input_tokens": 3187,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 492,
+   "output_tokens_details": {
+    "thinking_tokens": 158
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26780": {
+  "text": "{\"photo_required\":true,\"actions\":[\"remove_part\",\"write_recalled\",\"other\"],\"marker_text\":\"RECALL\",\"must_show\":[\"whole_product\",\"cut_or_damage\",\"marking\"],\"remedy\":\"refund_or_replacement\",\"refund_amount\":30,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"Consumers will then be directed to upload a photograph of the destroyed product to the registration page.\",\"actions\":\"remove the batteries, write in permanent marker the word “RECALL” on the front of the product along with a unique code provided during the online registration process, and to cut the black hose off from the toy\",\"marker_text\":\"write in permanent marker the word “RECALL” on the front of the product\",\"must_show\":\"upload a photograph of the destroyed product\",\"remedy\":\"receive a free replacement fire truck activity board, register for a full refund of $30 in the form of a check or receive a $40 melissaanddoug.com store credit\",\"refund_amount\":\"a full refund of $30 in the form of a check\",\"contact_channel\":\"upload a photograph of the destroyed product to the registration page\"},\"ambiguous\":[\"actions\",\"remedy\",\"refund_amount\"],\"notes\":\"Cutting the black hose off could be read as remove_part rather than other (cutting a smaller part). The remedy offers replacement, a $30 refund, or $40 store credit; the $30 is called a full refund but is a stated fixed amount.\"}",
+  "usage": {
+   "input_tokens": 3341,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 708,
+   "output_tokens_details": {
+    "thinking_tokens": 249
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26782": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed toy to productrecall@shein.com\",\"actions\":\"cut the teething toy’s silicone strings\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed toy\",\"remedy\":\"contact SHEIN for a refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the destroyed toy to productrecall@shein.com\"},\"ambiguous\":[\"actions\"],\"notes\":\"Cutting the silicone strings is a cut to a smaller part rather than the main body, so it is labelled other, though some might read it as cut_in_half.\"}",
+  "usage": {
+   "input_tokens": 3245,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 384,
+   "output_tokens_details": {
+    "thinking_tokens": 107
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "26785": {
+  "text": "{\"photo_required\":true,\"actions\":[\"other\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo of the destroyed helmet to tongyangshangwuus@hotmail.com\",\"actions\":\"destroy the recalled helmet by cutting the straps\",\"marker_text\":\"\",\"must_show\":\"send a photo of the destroyed helmet\",\"remedy\":\"contact Tongyang Cycling for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"send a photo of the destroyed helmet to tongyangshangwuus@hotmail.com\"},\"ambiguous\":[],\"notes\":\"\"}",
+  "usage": {
+   "input_tokens": 3260,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 416,
+   "output_tokens_details": {
+    "thinking_tokens": 165
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27003": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"email a photo of the disposed toy to recallabc@gmail.com\",\"actions\":\"write \\\"RECALLED\\\" in permanent marker on the squishy toys\",\"marker_text\":\"write \\\"RECALLED\\\" in permanent marker\",\"must_show\":\"a photo of the disposed toy\",\"remedy\":\"contact ABC Trading for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"email a photo of the disposed toy to recallabc@gmail.com\"},\"ambiguous\":[\"must_show\"],\"notes\":\"The photo is described as being of the disposed toy, so it is not explicitly stated that the RECALLED marking must be visible. Marking is included per the guide because the remedy asks the owner to write RECALLED.\"}",
+  "usage": {
+   "input_tokens": 3141,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 515,
+   "output_tokens_details": {
+    "thinking_tokens": 191
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27007": {
+  "text": "{\"photo_required\":true,\"actions\":[\"cut_cord\"],\"marker_text\":null,\"must_show\":[\"whole_product\",\"cut_or_damage\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"Consumers will be asked to cut the cord and provide a photograph of the destroyed lamp\",\"actions\":\"cut the cord\",\"marker_text\":\"\",\"must_show\":\"provide a photograph of the destroyed lamp\",\"remedy\":\"Designs Direct will issue a full refund to consumers within 15 days of receipt of the photo proof of destruction.\",\"refund_amount\":\"\",\"contact_channel\":\"following the instructions at https://www.designsdirectllc.com/recalls/\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The remedy does not say how the photo is sent. It only points to instructions on the firm's recall web page, so web_form is inferred. The consumer contact also lists phone and email.\"}",
+  "usage": {
+   "input_tokens": 3280,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 491,
+   "output_tokens_details": {
+    "thinking_tokens": 168
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27009": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"Recalled\",\"must_show\":[\"whole_product\",\"marking\",\"model_number\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"send a photo, showing the marked hand warmer and the product's model, to recall@gobiheat.com\",\"actions\":\"instructions to destroy the hand warmers by writing in permanent marker \\\"Recalled\\\" on the product\",\"marker_text\":\"writing in permanent marker \\\"Recalled\\\" on the product\",\"must_show\":\"showing the marked hand warmer and the product's model\",\"remedy\":\"contact Gobi Heat for a full refund or store credit, equal to full refund of the purchase price plus 20% of that amount\",\"refund_amount\":\"full refund of the purchase price\",\"contact_channel\":\"send a photo, showing the marked hand warmer and the product's model, to recall@gobiheat.com\"},\"ambiguous\":[\"remedy\"],\"notes\":\"The owner can choose a full refund or store credit worth the price plus 20%. This was labelled full_refund because the guide's choice category covers only replacement or repair, and store credit alone would be other.\"}",
+  "usage": {
+   "input_tokens": 3562,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 687,
+   "output_tokens_details": {
+    "thinking_tokens": 291
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27014": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"web_form\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"receive instructions on how to dispose of the recalled bed rail\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"contact Agrish Direct for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"Consumers will be asked to go to http://www.agrish.online/recall to register for the recall\"},\"ambiguous\":[\"contact_channel\",\"photo_required\"],\"notes\":\"The remedy sends owners to a recall web page to register, but the consumer contact lists email first. Disposal instructions are not described, so no photo or destruction step is stated.\"}",
+  "usage": {
+   "input_tokens": 3223,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 387,
+   "output_tokens_details": {
+    "thinking_tokens": 128
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27015": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"partial_refund\",\"refund_amount\":5,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"consumers will be required to bring either the complete bicycle lock purchase or a picture of the serial number on the bicycle lock\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"a picture of the serial number on the bicycle lock in order to verify the serial number is in the scope of the recall\",\"remedy\":\"contact Giant Bicycle for a $5 refund\",\"refund_amount\":\"a $5 refund\",\"contact_channel\":\"Giant Bicycle at 866 458-2555 from 8 a.m. to 5 p.m. PT Monday through Friday\"},\"ambiguous\":[\"photo_required\",\"must_show\",\"remedy\",\"contact_channel\"],\"notes\":\"A picture of the serial number is one option, and is brought to a retailer rather than sent, so photo_required could be read as true with must_show serial_or_lot. The fixed $5 refund may be full or partial, and the key is returned in person, so the channel could be other rather than phone.\"}",
+  "usage": {
+   "input_tokens": 3424,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 742,
+   "output_tokens_details": {
+    "thinking_tokens": 366
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27017": {
+  "text": "{\"photo_required\":false,\"actions\":[],\"marker_text\":null,\"must_show\":[],\"remedy\":\"repair\",\"refund_amount\":null,\"contact_channel\":\"phone\",\"evidence\":{\"photo_required\":\"\",\"actions\":\"\",\"marker_text\":\"\",\"must_show\":\"\",\"remedy\":\"take them to the nearest Recreational Equipment (REI Co-op) location for a free inspection and repair service of the front fork assembly\",\"refund_amount\":\"\",\"contact_channel\":\"Decathlon America at 415-408-5494\"},\"ambiguous\":[\"contact_channel\"],\"notes\":\"The main remedy is an in-person repair at an REI Co-op store, which could be read as other. Phone is the first contact method in the consumer contact for owners who cannot visit.\"}",
+  "usage": {
+   "input_tokens": 3266,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 427,
+   "output_tokens_details": {
+    "thinking_tokens": 181
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ },
+ "27038": {
+  "text": "{\"photo_required\":true,\"actions\":[\"write_recalled\"],\"marker_text\":\"RECALLED\",\"must_show\":[\"whole_product\",\"marking\"],\"remedy\":\"full_refund\",\"refund_amount\":null,\"contact_channel\":\"email\",\"evidence\":{\"photo_required\":\"submit a photo of the disposed toys to Norakid2026@outlook.com\",\"actions\":\"write \\\"RECALLED\\\" with permanent marker on the dress, crown, wand, and remote, then throw away the toys\",\"marker_text\":\"write \\\"RECALLED\\\" with permanent marker\",\"must_show\":\"submit a photo of the disposed toys\",\"remedy\":\"contact FoShanShiNanHaiQuNuoAiTongZhuangShangHang for a full refund\",\"refund_amount\":\"\",\"contact_channel\":\"submit a photo of the disposed toys to Norakid2026@outlook.com\"},\"ambiguous\":[\"actions\",\"must_show\"],\"notes\":\"The remedy has owners throw away the toys before the photo, which is a photo \\\"of the disposed toys\\\". This could be read as an extra disposal action (other). The marking on the dress, crown, wand and remote may not be visible once the toys are discarded.\"}",
+  "usage": {
+   "input_tokens": 3240,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 582,
+   "output_tokens_details": {
+    "thinking_tokens": 197
+   },
+   "service_tier": "batch",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "error": null
+ }
+}

@@ -1,0 +1,1468 @@
+{
+ "status": "draft",
+ "note": "DRAFT: scored against draft labels from a second Claude pass (high effort, quoted evidence) with a deterministic cross-check. No label is confirmed by a person yet, so Claude's scores here partly measure agreement between two Claude passes. The baseline and the lint counts do not depend on the labeller.",
+ "scoredAt": "2026-11-05T19:12:30.434Z",
+ "sample": {
+  "items": 130,
+  "photoRefund": 100,
+  "nonPhoto": 30
+ },
+ "fields": [
+  "photo_required",
+  "actions",
+  "marker_text",
+  "must_show",
+  "remedy",
+  "refund_amount",
+  "contact_channel"
+ ],
+ "scoring": "Exact match per field: booleans and enums equal; actions and must_show as sets; marker_text equal ignoring case, quote marks and spacing (null equals null only); refund_amount equal to the cent (null equals null only). allFieldsCorrect needs all seven. Actions and must_show also get micro precision, recall and F1.",
+ "summary": {
+  "baseline": {
+   "allFields": 0.562,
+   "photo_required": 0.992,
+   "actions": 0.792,
+   "marker_text": 0.992,
+   "must_show": 0.885,
+   "remedy": 0.915,
+   "refund_amount": 1,
+   "contact_channel": 0.808,
+   "actionsF1": 0.847,
+   "mustShowF1": 0.96,
+   "lintRules": 1
+  },
+  "claude": {
+   "allFields": 0.846,
+   "photo_required": 0.992,
+   "actions": 0.954,
+   "marker_text": 1,
+   "must_show": 0.954,
+   "remedy": 0.977,
+   "refund_amount": 0.992,
+   "contact_channel": 0.938,
+   "actionsF1": 0.974,
+   "mustShowF1": 0.983,
+   "lintRules": 6
+  },
+  "claude_selfcheck": {
+   "allFields": 0.869,
+   "photo_required": 1,
+   "actions": 0.954,
+   "marker_text": 1,
+   "must_show": 0.969,
+   "remedy": 0.977,
+   "refund_amount": 0.992,
+   "contact_channel": 0.946,
+   "actionsF1": 0.974,
+   "mustShowF1": 0.99,
+   "lintRules": 5
+  }
+ },
+ "variants": {
+  "baseline": {
+   "n": 130,
+   "missing": 0,
+   "allFieldsCorrect": {
+    "count": 73,
+    "rate": 0.562
+   },
+   "fields": {
+    "photo_required": 0.992,
+    "actions": 0.792,
+    "marker_text": 0.992,
+    "must_show": 0.885,
+    "remedy": 0.915,
+    "refund_amount": 1,
+    "contact_channel": 0.808
+   },
+   "actionsPRF": {
+    "precision": 0.901,
+    "recall": 0.798,
+    "f1": 0.847
+   },
+   "mustShowPRF": {
+    "precision": 0.985,
+    "recall": 0.937,
+    "f1": 0.96
+   },
+   "byKind": {
+    "photo_refund": {
+     "n": 100,
+     "missing": 0,
+     "allFieldsCorrect": {
+      "count": 63,
+      "rate": 0.63
+     },
+     "fields": {
+      "photo_required": 0.99,
+      "actions": 0.74,
+      "marker_text": 0.99,
+      "must_show": 0.85,
+      "remedy": 0.92,
+      "refund_amount": 1,
+      "contact_channel": 0.92
+     },
+     "actionsPRF": {
+      "precision": 0.901,
+      "recall": 0.805,
+      "f1": 0.85
+     },
+     "mustShowPRF": {
+      "precision": 0.985,
+      "recall": 0.937,
+      "f1": 0.96
+     }
+    },
+    "non_photo": {
+     "n": 30,
+     "missing": 0,
+     "allFieldsCorrect": {
+      "count": 10,
+      "rate": 0.333
+     },
+     "fields": {
+      "photo_required": 1,
+      "actions": 0.967,
+      "marker_text": 1,
+      "must_show": 1,
+      "remedy": 0.9,
+      "refund_amount": 1,
+      "contact_channel": 0.433
+     },
+     "actionsPRF": {
+      "precision": 1,
+      "recall": 0,
+      "f1": 0
+     },
+     "mustShowPRF": {
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+     }
+    }
+   },
+   "settledLabels": {
+    "photo_required": {
+     "n": 117,
+     "accuracy": 1
+    },
+    "actions": {
+     "n": 66,
+     "accuracy": 0.924
+    },
+    "marker_text": {
+     "n": 123,
+     "accuracy": 0.992
+    },
+    "must_show": {
+     "n": 82,
+     "accuracy": 0.939
+    },
+    "remedy": {
+     "n": 112,
+     "accuracy": 0.982
+    },
+    "refund_amount": {
+     "n": 123,
+     "accuracy": 1
+    },
+    "contact_channel": {
+     "n": 101,
+     "accuracy": 0.931
+    }
+   },
+   "lint": {
+    "rulesWithFindings": 1,
+    "findings": 1
+   },
+   "usdForSample": 0,
+   "errors": [
+    {
+     "number": "24113",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "24153",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    },
+    {
+     "number": "24181",
+     "field": "remedy",
+     "got": "refund_or_replacement",
+     "want": "full_refund"
+    },
+    {
+     "number": "24181",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    },
+    {
+     "number": "24211",
+     "field": "actions",
+     "got": [
+      "cut_in_half"
+     ],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "24211",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "web_form"
+    },
+    {
+     "number": "24228",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    },
+    {
+     "number": "24249",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "24287",
+     "field": "contact_channel",
+     "got": "phone",
+     "want": "web_form"
+    },
+    {
+     "number": "24321",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "cut_cord"
+     ]
+    },
+    {
+     "number": "24321",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "serial_or_lot"
+     ],
+     "want": [
+      "whole_product",
+      "serial_or_lot",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "24341",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "24361",
+     "field": "remedy",
+     "got": "refund_or_replacement",
+     "want": "full_refund"
+    },
+    {
+     "number": "25020",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "25067",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    },
+    {
+     "number": "25088",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "25130",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "25130",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "25130",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "25135",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "remove_part"
+     ]
+    },
+    {
+     "number": "25135",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "25143",
+     "field": "remedy",
+     "got": "other",
+     "want": "repair"
+    },
+    {
+     "number": "25179",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "25180",
+     "field": "contact_channel",
+     "got": "mail",
+     "want": "phone"
+    },
+    {
+     "number": "25189",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "marking",
+      "serial_or_lot"
+     ],
+     "want": [
+      "whole_product",
+      "marking",
+      "label",
+      "serial_or_lot"
+     ]
+    },
+    {
+     "number": "25204",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "25254",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "25281",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    },
+    {
+     "number": "25316",
+     "field": "actions",
+     "got": [
+      "disassemble",
+      "other"
+     ],
+     "want": [
+      "disassemble",
+      "other",
+      "cut_in_half"
+     ]
+    },
+    {
+     "number": "25359",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "25387",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "25387",
+     "field": "marker_text",
+     "got": null,
+     "want": "Recalled"
+    },
+    {
+     "number": "25387",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "marking"
+     ]
+    },
+    {
+     "number": "25387",
+     "field": "contact_channel",
+     "got": "phone",
+     "want": "email"
+    },
+    {
+     "number": "25417",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "25427",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "25434",
+     "field": "remedy",
+     "got": "replacement",
+     "want": "repair"
+    },
+    {
+     "number": "25436",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "25447",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "25447",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "25478",
+     "field": "actions",
+     "got": [
+      "cut_cord",
+      "write_recalled",
+      "remove_part"
+     ],
+     "want": [
+      "cut_cord",
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "26032",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": [
+      "remove_part",
+      "cut_in_half"
+     ]
+    },
+    {
+     "number": "26107",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "26107",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "26124",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "26140",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": [
+      "cut_in_half"
+     ]
+    },
+    {
+     "number": "26206",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": [
+      "remove_part"
+     ]
+    },
+    {
+     "number": "26240",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "remove_part"
+     ]
+    },
+    {
+     "number": "26240",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "26266",
+     "field": "actions",
+     "got": [
+      "write_recalled",
+      "disassemble",
+      "other"
+     ],
+     "want": [
+      "write_recalled",
+      "disassemble",
+      "remove_part",
+      "other"
+     ]
+    },
+    {
+     "number": "26414",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": [
+      "remove_part",
+      "other"
+     ]
+    },
+    {
+     "number": "26414",
+     "field": "remedy",
+     "got": "full_refund",
+     "want": "partial_refund"
+    },
+    {
+     "number": "26414",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "26420",
+     "field": "actions",
+     "got": [
+      "cut_cord",
+      "cut_in_half"
+     ],
+     "want": [
+      "cut_cord"
+     ]
+    },
+    {
+     "number": "26446",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "26446",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "26482",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "26493",
+     "field": "contact_channel",
+     "got": "mail",
+     "want": "phone"
+    },
+    {
+     "number": "26512",
+     "field": "actions",
+     "got": [
+      "cut_in_half"
+     ],
+     "want": [
+      "remove_part",
+      "cut_in_half"
+     ]
+    },
+    {
+     "number": "26522",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "phone"
+    },
+    {
+     "number": "26555",
+     "field": "actions",
+     "got": [
+      "write_recalled",
+      "remove_part"
+     ],
+     "want": [
+      "remove_part",
+      "other",
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "26563",
+     "field": "actions",
+     "got": [
+      "write_recalled",
+      "remove_part",
+      "other"
+     ],
+     "want": [
+      "remove_part",
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "26602",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "26608",
+     "field": "actions",
+     "got": [
+      "cut_in_half",
+      "write_recalled"
+     ],
+     "want": [
+      "other",
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "26634",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "26634",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "26636",
+     "field": "actions",
+     "got": [
+      "write_recalled",
+      "remove_part",
+      "other"
+     ],
+     "want": [
+      "remove_part",
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "26645",
+     "field": "actions",
+     "got": [],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "26645",
+     "field": "must_show",
+     "got": [
+      "whole_product"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "26753",
+     "field": "actions",
+     "got": [
+      "write_recalled"
+     ],
+     "want": [
+      "disassemble",
+      "write_recalled"
+     ]
+    },
+    {
+     "number": "26753",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "marking"
+     ],
+     "want": [
+      "whole_product",
+      "cut_or_damage",
+      "marking"
+     ]
+    },
+    {
+     "number": "26779",
+     "field": "actions",
+     "got": [
+      "cut_cord",
+      "cut_in_half"
+     ],
+     "want": [
+      "cut_cord"
+     ]
+    },
+    {
+     "number": "27009",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "marking"
+     ],
+     "want": [
+      "whole_product",
+      "marking",
+      "model_number"
+     ]
+    },
+    {
+     "number": "27009",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "27009",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "27015",
+     "field": "photo_required",
+     "got": true,
+     "want": false
+    },
+    {
+     "number": "27015",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "serial_or_lot"
+     ],
+     "want": []
+    },
+    {
+     "number": "27015",
+     "field": "remedy",
+     "got": "full_refund",
+     "want": "partial_refund"
+    },
+    {
+     "number": "27015",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    },
+    {
+     "number": "27017",
+     "field": "contact_channel",
+     "got": "email",
+     "want": "phone"
+    }
+   ]
+  },
+  "claude": {
+   "n": 130,
+   "missing": 0,
+   "allFieldsCorrect": {
+    "count": 110,
+    "rate": 0.846
+   },
+   "fields": {
+    "photo_required": 0.992,
+    "actions": 0.954,
+    "marker_text": 1,
+    "must_show": 0.954,
+    "remedy": 0.977,
+    "refund_amount": 0.992,
+    "contact_channel": 0.938
+   },
+   "actionsPRF": {
+    "precision": 0.958,
+    "recall": 0.991,
+    "f1": 0.974
+   },
+   "mustShowPRF": {
+    "precision": 0.967,
+    "recall": 1,
+    "f1": 0.983
+   },
+   "byKind": {
+    "photo_refund": {
+     "n": 100,
+     "missing": 0,
+     "allFieldsCorrect": {
+      "count": 90,
+      "rate": 0.9
+     },
+     "fields": {
+      "photo_required": 1,
+      "actions": 0.94,
+      "marker_text": 1,
+      "must_show": 0.95,
+      "remedy": 0.99,
+      "refund_amount": 1,
+      "contact_channel": 0.98
+     },
+     "actionsPRF": {
+      "precision": 0.957,
+      "recall": 0.991,
+      "f1": 0.974
+     },
+     "mustShowPRF": {
+      "precision": 0.976,
+      "recall": 1,
+      "f1": 0.988
+     }
+    },
+    "non_photo": {
+     "n": 30,
+     "missing": 0,
+     "allFieldsCorrect": {
+      "count": 20,
+      "rate": 0.667
+     },
+     "fields": {
+      "photo_required": 0.967,
+      "actions": 1,
+      "marker_text": 1,
+      "must_show": 0.967,
+      "remedy": 0.933,
+      "refund_amount": 0.967,
+      "contact_channel": 0.8
+     },
+     "actionsPRF": {
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+     },
+     "mustShowPRF": {
+      "precision": 0,
+      "recall": 1,
+      "f1": 0
+     }
+    }
+   },
+   "settledLabels": {
+    "photo_required": {
+     "n": 117,
+     "accuracy": 1
+    },
+    "actions": {
+     "n": 66,
+     "accuracy": 1
+    },
+    "marker_text": {
+     "n": 123,
+     "accuracy": 1
+    },
+    "must_show": {
+     "n": 82,
+     "accuracy": 1
+    },
+    "remedy": {
+     "n": 112,
+     "accuracy": 1
+    },
+    "refund_amount": {
+     "n": 123,
+     "accuracy": 1
+    },
+    "contact_channel": {
+     "n": 101,
+     "accuracy": 1
+    }
+   },
+   "lint": {
+    "rulesWithFindings": 6,
+    "findings": 6
+   },
+   "usdForSample": 1.44,
+   "errors": [
+    {
+     "number": "24113",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "24228",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "24249",
+     "field": "remedy",
+     "got": "repair",
+     "want": "other"
+    },
+    {
+     "number": "24341",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "25067",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "25088",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "cut_or_damage"
+     ]
+    },
+    {
+     "number": "25149",
+     "field": "refund_amount",
+     "got": 50,
+     "want": null
+    },
+    {
+     "number": "25254",
+     "field": "photo_required",
+     "got": true,
+     "want": false
+    },
+    {
+     "number": "25254",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": []
+    },
+    {
+     "number": "25281",
+     "field": "remedy",
+     "got": "other",
+     "want": "replacement"
+    },
+    {
+     "number": "25282",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": []
+    },
+    {
+     "number": "25282",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26124",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "26159",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": []
+    },
+    {
+     "number": "26159",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26255",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": []
+    },
+    {
+     "number": "26255",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26266",
+     "field": "actions",
+     "got": [
+      "write_recalled",
+      "disassemble",
+      "other"
+     ],
+     "want": [
+      "write_recalled",
+      "disassemble",
+      "remove_part",
+      "other"
+     ]
+    },
+    {
+     "number": "26305",
+     "field": "actions",
+     "got": [
+      "remove_part"
+     ],
+     "want": []
+    },
+    {
+     "number": "26305",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26397",
+     "field": "actions",
+     "got": [
+      "remove_part",
+      "other"
+     ],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "26414",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "26602",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "email"
+    },
+    {
+     "number": "27015",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "27017",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    }
+   ]
+  },
+  "claude_selfcheck": {
+   "n": 130,
+   "missing": 0,
+   "allFieldsCorrect": {
+    "count": 113,
+    "rate": 0.869
+   },
+   "fields": {
+    "photo_required": 1,
+    "actions": 0.954,
+    "marker_text": 1,
+    "must_show": 0.969,
+    "remedy": 0.977,
+    "refund_amount": 0.992,
+    "contact_channel": 0.946
+   },
+   "actionsPRF": {
+    "precision": 0.958,
+    "recall": 0.991,
+    "f1": 0.974
+   },
+   "mustShowPRF": {
+    "precision": 0.981,
+    "recall": 1,
+    "f1": 0.99
+   },
+   "byKind": {
+    "photo_refund": {
+     "n": 100,
+     "missing": 0,
+     "allFieldsCorrect": {
+      "count": 91,
+      "rate": 0.91
+     },
+     "fields": {
+      "photo_required": 1,
+      "actions": 0.94,
+      "marker_text": 1,
+      "must_show": 0.96,
+      "remedy": 0.99,
+      "refund_amount": 1,
+      "contact_channel": 0.98
+     },
+     "actionsPRF": {
+      "precision": 0.957,
+      "recall": 0.991,
+      "f1": 0.974
+     },
+     "mustShowPRF": {
+      "precision": 0.981,
+      "recall": 1,
+      "f1": 0.99
+     }
+    },
+    "non_photo": {
+     "n": 30,
+     "missing": 0,
+     "allFieldsCorrect": {
+      "count": 22,
+      "rate": 0.733
+     },
+     "fields": {
+      "photo_required": 1,
+      "actions": 1,
+      "marker_text": 1,
+      "must_show": 1,
+      "remedy": 0.933,
+      "refund_amount": 0.967,
+      "contact_channel": 0.833
+     },
+     "actionsPRF": {
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+     },
+     "mustShowPRF": {
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+     }
+    }
+   },
+   "settledLabels": {
+    "photo_required": {
+     "n": 117,
+     "accuracy": 1
+    },
+    "actions": {
+     "n": 66,
+     "accuracy": 1
+    },
+    "marker_text": {
+     "n": 123,
+     "accuracy": 1
+    },
+    "must_show": {
+     "n": 82,
+     "accuracy": 1
+    },
+    "remedy": {
+     "n": 112,
+     "accuracy": 1
+    },
+    "refund_amount": {
+     "n": 123,
+     "accuracy": 1
+    },
+    "contact_channel": {
+     "n": 101,
+     "accuracy": 1
+    }
+   },
+   "lint": {
+    "rulesWithFindings": 5,
+    "findings": 5
+   },
+   "usdForSample": 1.66,
+   "errors": [
+    {
+     "number": "24113",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "24249",
+     "field": "remedy",
+     "got": "repair",
+     "want": "other"
+    },
+    {
+     "number": "24341",
+     "field": "remedy",
+     "got": "other",
+     "want": "full_refund"
+    },
+    {
+     "number": "25067",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "25149",
+     "field": "refund_amount",
+     "got": 50,
+     "want": null
+    },
+    {
+     "number": "25179",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "25281",
+     "field": "remedy",
+     "got": "other",
+     "want": "replacement"
+    },
+    {
+     "number": "25282",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": []
+    },
+    {
+     "number": "25282",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26124",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    },
+    {
+     "number": "26159",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": []
+    },
+    {
+     "number": "26159",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26255",
+     "field": "actions",
+     "got": [
+      "other"
+     ],
+     "want": []
+    },
+    {
+     "number": "26255",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26266",
+     "field": "actions",
+     "got": [
+      "write_recalled",
+      "disassemble",
+      "other"
+     ],
+     "want": [
+      "write_recalled",
+      "disassemble",
+      "remove_part",
+      "other"
+     ]
+    },
+    {
+     "number": "26305",
+     "field": "actions",
+     "got": [
+      "remove_part"
+     ],
+     "want": []
+    },
+    {
+     "number": "26305",
+     "field": "must_show",
+     "got": [
+      "whole_product",
+      "cut_or_damage"
+     ],
+     "want": [
+      "whole_product"
+     ]
+    },
+    {
+     "number": "26397",
+     "field": "actions",
+     "got": [
+      "remove_part",
+      "other"
+     ],
+     "want": [
+      "other"
+     ]
+    },
+    {
+     "number": "26414",
+     "field": "contact_channel",
+     "got": "web_form",
+     "want": "email"
+    },
+    {
+     "number": "26602",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "email"
+    },
+    {
+     "number": "27015",
+     "field": "contact_channel",
+     "got": "other",
+     "want": "phone"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,237 @@
+/* Shared components used on several routes: status pills, the sandbox login, the guided tour, the PayPal button
+   slot, the app sheet, and the page loading line. */
+
+/* Status pill: one word for where something stands. The tone carries the colour; the word carries the meaning. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  background: var(--pill-neutral);
+  color: var(--pill-neutral-ink);
+}
+.pill[data-tone="positive"] {
+  background: var(--pill-positive);
+  color: var(--pill-positive-ink);
+}
+.pill[data-tone="attention"] {
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+}
+.pill[data-tone="info"] {
+  background: var(--pill-info);
+  color: var(--pill-info-ink);
+}
+/* "Paid": the one moment the accent fills something other than the primary action. */
+.pill[data-tone="paid"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* The app sheet ("Framed sheet", .taste-skill/remedy-app.txt): the page ground is the tinted frame; the work sits
+   on a white sheet with a 1px edge and 16px corners, no shadow. */
+.app-sheet {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sheet);
+  padding: 24px;
+}
+@media (max-width: 640px) {
+  .app-sheet {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    padding: 16px;
+  }
+}
+
+/* The sandbox buyer login, set out so it can be read and copied. */
+.sbl {
+  margin: 8px 0 0;
+  display: grid;
+  gap: 6px;
+  font-family: var(--font-ui);
+}
+.sbl > div {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+.sbl[data-compact] > div {
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+/* On a phone the label sits above its value, so the email address is not broken across three lines. */
+@media (max-width: 480px) {
+  .sbl > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+.sbl dt {
+  color: var(--muted);
+  font-size: var(--step-small);
+}
+.sbl dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.sbl code {
+  font-size: 0.9375rem;
+  user-select: all;
+}
+
+/* The guided tour: a card in the corner that names what to look at, and a ring on the element it describes. */
+.tour {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  width: min(380px, calc(100vw - 32px));
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sheet);
+  padding: 18px 20px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.16);
+  transition:
+    transform 220ms var(--ease-out),
+    opacity 220ms var(--ease-out);
+  @starting-style {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+.tour-k {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tour-title {
+  margin-top: 4px;
+  font-family: var(--font-ui);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  outline: none;
+}
+.tour-text {
+  margin-top: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.tour-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.tour-btn {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--ink);
+  color: var(--surface);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out);
+}
+.tour-btn[data-quiet] {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.tour-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.tour-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.tour-end {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  min-height: 44px;
+}
+.tour-end:active {
+  opacity: 0.6;
+}
+[data-tour-target] {
+  outline: 3px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 14px;
+  scroll-margin: 96px;
+}
+@media (max-width: 560px) {
+  .tour {
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour,
+  .tour-btn {
+    transition: none;
+  }
+}
+@media print {
+  .tour {
+    display: none;
+  }
+}
+
+/* The PayPal button, wherever one is shown (the sample shop, a replacement order). */
+.pp-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+.pp-button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+}
+.pp-note {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.pp-note[data-tone="attention"] {
+  color: var(--attention);
+}
+.pp-slot {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  background: var(--surface-2);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.pp-button[data-disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* A page's loading line holds a screen's height while the page streams in, so the footer starts below the fold and
+   nothing jumps when the content arrives. */
+.page-loading {
+  min-height: 100svh;
+}

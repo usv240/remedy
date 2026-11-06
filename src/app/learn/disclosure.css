@@ -1,0 +1,62 @@
+/* Disclosure rows on the read pages (Learn, API docs, For AI agents, How it is built): a summary that names what opens,
+   with the same plus that folds into a minus as the disclosures in components.css. Markup:
+   <details class="dsc"><summary><span class="dsc-k">What opens</span></summary>…</details>
+   Only the icon moves. The content shows at once, so a row opened from the keyboard, or eleven at once, never waits. */
+.dsc > summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-press) var(--ease-out);
+}
+.dsc > summary::-webkit-details-marker {
+  display: none;
+}
+.dsc > summary::after {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--muted);
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:
+    12px 1.5px,
+    1.5px 12px;
+  transition:
+    transform var(--dur-menu) var(--ease-out),
+    background-size var(--dur-menu) var(--ease-out);
+}
+.dsc[open] > summary::after {
+  background-size:
+    12px 1.5px,
+    1.5px 0;
+  transform: rotate(180deg);
+}
+/* A press is acknowledged in place; nothing moves. */
+.dsc > summary:active {
+  background-color: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.dsc > summary:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dsc > summary:hover .dsc-k {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dsc > summary,
+  .dsc > summary::after {
+    transition: none;
+  }
+}

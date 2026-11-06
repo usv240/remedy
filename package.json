@@ -1,0 +1,79 @@
+{
+  "name": "remedy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3300",
+    "build": "node scripts/build.mjs",
+    "postinstall": "node scripts/vendor-bryntum.mjs",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.mjs",
+    "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "db:load": "tsx --env-file=.env.local scripts/load-recalls.ts",
+    "verify-ledger": "tsx --env-file=.env.local scripts/verify-ledger.ts",
+    "test:ledger-race": "tsx --env-file=.env.local scripts/ledger-race.ts 60",
+    "e2e:smoke": "node tests/e2e/smoke.mjs",
+    "e2e:a11y": "node tests/e2e/pages-a11y.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "@bryntum/gantt": "npm:@bryntum/gantt-trial@7.3.8",
+    "@bryntum/gantt-react": "7.3.8",
+    "@floating-ui/react": "^0.27.20",
+    "@onkernel/sdk": "^0.139.0",
+    "@paypal/mcp": "1.8.1",
+    "@paypal/paypal-server-sdk": "^2.5.0",
+    "@renderinc/sdk": "1.7.0",
+    "ag-grid-community": "36.3.0",
+    "ag-grid-enterprise": "36.3.0",
+    "ag-grid-react": "36.3.0",
+    "ag-studio": "3.0.0",
+    "ag-studio-react": "3.0.0",
+    "drizzle-orm": "^0.45.4",
+    "next": "16.4.3",
+    "papaparse": "^5.7.0",
+    "pg": "^8.23.1",
+    "qrcode": "^1.5.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "sharp": "^0.35.5",
+    "sonner": "^2.0.8",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^24.19.2",
+    "@types/papaparse": "^5.5.2",
+    "@types/pg": "^8.23.1",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "axe-core": "^4.14.0",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "playwright-core": "^1.64.1",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.0.5"
+  },
+  "overrides": {
+    "@paypal/agent-toolkit": {
+      "@langchain/core": "1.3.4",
+      "ai": "7.0.163",
+      "openai": "7.51.0",
+      "mathjs": "15.2.0",
+      "zod": "4.6.7"
+    },
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.25.12"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.4"
+    }
+  }
+}

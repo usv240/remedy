@@ -1,0 +1,579 @@
+/* For judges: the results first, then the path and the criteria, then each piece of evidence with its full table or
+   account one press away. */
+
+.judges .page-section {
+  margin-top: clamp(2.5rem, 1.75rem + 2vw, 3.75rem);
+  max-width: 86rem;
+}
+.judges [id] {
+  scroll-margin-top: 16px;
+}
+.jp-intro {
+  margin-bottom: 1rem;
+}
+.jp-tour {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+/* The results band: four figures, each a link to its section. */
+.jr-head {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: flex-end;
+  max-width: 86rem;
+}
+.jr {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 86rem;
+}
+.jr-link {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  height: 100%;
+  padding: 18px 20px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    border-color 160ms ease;
+}
+.jr-link:active {
+  transform: scale(0.985);
+}
+@media (hover: hover) and (pointer: fine) {
+  .jr-link:hover {
+    border-color: color-mix(in srgb, var(--ink) 35%, var(--edge));
+  }
+}
+.jr-fig {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.jr-what {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.jr-base {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.jr-draft {
+  display: inline-flex;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+  font-weight: 500;
+}
+@media (max-width: 1100px) {
+  .jr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .jr {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Jump links under the results, in page order. */
+.jp-toc {
+  margin-top: 16px;
+  max-width: 86rem;
+}
+.jp-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.jp-toc-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.jp-toc-link:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .jp-toc-link:hover {
+    background: color-mix(in srgb, var(--surface-2) 85%, var(--ink));
+  }
+}
+@media (max-width: 640px) {
+  .jp-toc ul {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding: 2px;
+    margin: -2px;
+  }
+  .jp-toc ul::-webkit-scrollbar {
+    display: none;
+  }
+  .jp-toc li {
+    flex: none;
+  }
+}
+
+/* The five-minute path: three steps a row on a wide screen. */
+.jp-path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 8px;
+}
+@media (min-width: 1000px) {
+  .jp-path {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.jp-step {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 16px 20px 18px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+}
+.jp-n {
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--accent-text);
+  min-width: 1.2em;
+}
+.jp-link {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.jp-step p {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+}
+.jp-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.jp-time {
+  font-size: 0.875rem;
+}
+@media (pointer: coarse) {
+  .jp-link,
+  .jp-links .text-link {
+    display: inline-block;
+    padding-block: 10px;
+    margin-block: -10px;
+  }
+}
+@media (max-width: 600px) {
+  .jp-step {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 10px;
+    padding: 14px 16px 16px;
+  }
+}
+
+/* Criteria: one line and its links in view, the full account one press away. */
+.jp-criteria {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 40px;
+}
+@media (max-width: 1100px) {
+  .jp-criteria {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 720px) {
+  .jp-criteria {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.jp-criterion {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 16px 0 6px;
+  border-top: 1px solid var(--edge);
+}
+.jp-criterion dt {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+.jp-criterion dd {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  max-width: 68ch;
+}
+.judges .jp-criterion dd > * {
+  margin: 0;
+}
+.jp-crit-line {
+  font-size: 1rem;
+}
+.jp-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+/* Disclosures: a plus that folds into a minus, a press acknowledged in place. */
+.jx-disc {
+  margin-top: 12px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+.jx-disc > summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: 52px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-weight: 500;
+  border-radius: 14px;
+  transition: background-color var(--dur-press) var(--ease-out);
+}
+.jx-disc > summary::-webkit-details-marker {
+  display: none;
+}
+/* A plus drawn as an SVG mask in the muted ink; open, it turns a quarter and becomes a minus. */
+.jx-disc > summary::after {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background: var(--muted);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M0 5.25h12v1.5H0zM5.25 0h1.5v12h-1.5z'/%3E%3C/svg%3E") center / 12px no-repeat;
+  transition: transform var(--dur-menu) var(--ease-out);
+}
+.jx-disc[open] > summary::after {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M0 5.25h12v1.5H0z'/%3E%3C/svg%3E");
+  transform: rotate(180deg);
+}
+.jx-disc > summary:active {
+  background: color-mix(in srgb, var(--ink) 6%, var(--surface));
+}
+.jx-disc[open] > summary {
+  border-radius: 14px 14px 0 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .jx-disc > summary:hover {
+    background: color-mix(in srgb, var(--ink) 3%, var(--surface));
+  }
+}
+.jx-body {
+  padding: 4px 20px 22px;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  font-size: 0.9375rem;
+}
+.judges .jx-body > * {
+  margin: 0;
+}
+@keyframes jx-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .jx-disc[open] > .jx-body {
+    animation: jx-open 220ms var(--ease-out);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jx-disc > summary::after {
+    transition: none;
+  }
+}
+
+/* The benchmark and photo-check tables. */
+.jb-draft {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.jb-wrap {
+  /* Positioned, so screen-reader-only text inside is clipped with the table instead of widening the page. */
+  position: relative;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 6px 16px 10px;
+}
+.jb {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.jb th,
+.jb td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--edge);
+  text-align: left;
+  vertical-align: top;
+}
+.jb tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.jb thead th {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.jb tbody th {
+  font-weight: 500;
+}
+.jb-num {
+  text-align: right !important;
+  white-space: nowrap;
+}
+.jb [data-ours] {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.jb thead [data-ours] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.jb-total > * {
+  font-weight: 600 !important;
+}
+.jb-variants {
+  margin: 0;
+  padding-left: 1.2rem;
+  list-style: disc;
+  display: grid;
+  gap: 4px;
+}
+.jf th[scope="row"] {
+  min-width: 15rem;
+}
+.jf-title {
+  display: block;
+  font-weight: 600;
+}
+.jf-about {
+  display: block;
+  margin-top: 2px;
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.jf-ai {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.jf-tech {
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+:root[data-mode="technical"] .jf-tech {
+  display: block;
+}
+
+/* Measured in the sandbox: a figure, what it measures, where it came from. */
+.jm {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 8px;
+}
+.jm li {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.jm-fig {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.jm-what {
+  font-size: 0.9375rem;
+}
+.jm-src {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.jm-note {
+  margin-top: 12px;
+}
+
+/* AI cost: five measures. */
+.jc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 8px;
+}
+.jc li {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.jc-what {
+  font-weight: 600;
+}
+.jc-how {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+}
+
+/* How it compares */
+.cmp-wrap {
+  /* Positioned, so screen-reader-only text inside is clipped with the table instead of widening the page. */
+  position: relative;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 6px 16px 10px;
+}
+.cmp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  min-width: 40rem;
+}
+.cmp th,
+.cmp td {
+  padding: 10px;
+  border-bottom: 1px solid var(--edge);
+  text-align: left;
+  vertical-align: top;
+}
+.cmp tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.cmp thead th {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.cmp tbody th {
+  font-weight: 500;
+  color: var(--muted);
+  width: 12rem;
+}
+.cmp [data-rm] {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.cmp-none {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: var(--control);
+  vertical-align: middle;
+}
+
+/* Who runs it first */
+.ja {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.ja-item {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.ja-who {
+  font-weight: 600;
+  font-size: 1.0625rem;
+}
+.ja-fig {
+  font-size: 0.9375rem;
+}
+.ja-fig .tabular {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-right: 4px;
+}
+.ja-text {
+  font-size: 0.9375rem;
+}
+@media (max-width: 900px) {
+  .ja {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

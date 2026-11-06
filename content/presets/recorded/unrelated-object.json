@@ -1,0 +1,60 @@
+{
+  "recorded_at": "2026-11-05T20:13:32.067Z",
+  "preset": "unrelated-object",
+  "recall": "27056",
+  "options": {},
+  "vision": {
+    "report": {
+      "scene": "A white ceramic mug of coffee with milk sits on a wooden table next to a plate with leftover food.",
+      "product": {
+        "match_score": 0.02,
+        "matching_details": [],
+        "differing_details": [
+          "The main object in the center of the photo is a white ceramic coffee mug, not a black rectangular power bank.",
+          "No 20W print, wireless charging ring, ports or Model: W5 PRO text is visible anywhere in the photo.",
+          "The background shows a plate with food remains in the upper right, with no electronic device in view."
+        ],
+        "reason_plain": "No. The photo shows a coffee mug, not the recalled HAIARA power bank.",
+        "reason_technical": "The object is a white ceramic mug with a handle holding coffee. It shares no shape, color, printed text or features with the black W5 PRO power bank, which is a different kind of product."
+      },
+      "actions": [
+        {
+          "action": "write_recalled",
+          "done": false,
+          "confidence": 0.98,
+          "evidence": "No power bank is in the photo, and no handwritten word appears on the mug or anywhere else. The only mark is a brown drip stain below the mug rim."
+        }
+      ],
+      "handwritten_text": [],
+      "identifiers": {
+        "model_text": null,
+        "lot_text": null,
+        "date_code_text": null,
+        "label_visible": false,
+        "where": null
+      },
+      "photo_source": {
+        "kind": "camera_photo",
+        "signs": [
+          "none"
+        ],
+        "confidence": 0.9,
+        "reason": "Natural lighting, real reflections in the coffee, shallow depth of field and camera noise point to a normal camera photo of a real scene. No screen or print signs are visible."
+      },
+      "retake_tip": "Please take a photo of the black power bank itself with the word recalled written on it in permanent marker."
+    },
+    "model": "claude-opus-5-5",
+    "ms": 8897,
+    "usage": {
+      "input_tokens": 1658,
+      "output_tokens": 548,
+      "cache_read_input_tokens": 3370,
+      "cache_creation_input_tokens": 743
+    },
+    "replayed": false
+  },
+  "reviews": null,
+  "cost_usd": 0.022,
+  "decision": "retake",
+  "decided_by": "made_safe"
+}

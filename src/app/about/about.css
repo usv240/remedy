@@ -1,0 +1,24 @@
+/* About: what is real and what is a sample, as label and line. */
+.about-labels {
+  margin: 0;
+  display: grid;
+  max-width: 48rem;
+}
+.about-labels > div {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 4px 20px;
+  padding: 12px 0;
+  border-top: 1px solid var(--edge);
+}
+.about-labels dt {
+  font-weight: 500;
+}
+.about-labels dd {
+  margin: 0;
+}
+@media (max-width: 560px) {
+  .about-labels > div {
+    grid-template-columns: 1fr;
+  }
+}

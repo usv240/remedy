@@ -1,0 +1,133 @@
+/* How it is built: a jump line to each tool, readable line lengths, and one style for every file link.
+   The rows themselves are styled in pages.css; here each one becomes a card with its name, its job, and one row that
+   opens to how it works and its files. */
+.stack .page-prose,
+.stack-job {
+  max-width: 36rem;
+}
+/* Smaller text, so a narrower column for the same 70 or so characters a line. */
+.stack-how {
+  max-width: 28rem;
+}
+.stack-jump {
+  margin-top: 1.25rem;
+}
+.stack-jump ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 1.1rem;
+  font-size: var(--step-small);
+}
+.stack-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+/* File links: mono, ink, underlined, the same in the tool rows and in the PayPal table. */
+:is(.stack-files, .pp-apis-table) a.stack-file {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(.stack-files, .pp-apis-table) a.stack-file:hover {
+    text-decoration-color: var(--ink);
+  }
+}
+@media (pointer: coarse) {
+  .stack-jump a,
+  :is(.stack-files, .pp-apis-table) a.stack-file {
+    min-height: 44px;
+  }
+}
+.stack-list > .stack-row {
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 6px;
+  padding-bottom: 6px;
+}
+/* From 900px the cards sit two to a row. A card that opens grows on its own; its neighbour keeps its height. */
+@media (min-width: 900px) {
+  .stack-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+.stack-more {
+  margin-top: 4px;
+  border-top: 1px solid var(--surface-2);
+}
+.dsc.stack-more > summary {
+  justify-content: space-between;
+  font-size: 0.9375rem;
+}
+.stack-more[open] {
+  padding-bottom: 12px;
+}
+.stack-more .stack-how {
+  margin-top: 2px;
+}
+
+/* Every PayPal API: one row that opens to the table. On a phone each call is a short block instead of a wide row. */
+.pp-apis {
+  margin-top: 1rem;
+  max-width: 68rem;
+  border-block: 1px solid var(--surface-2);
+}
+.pp-apis[open] {
+  padding-bottom: 1rem;
+}
+.pp-apis .doc-table-wrap {
+  margin-top: 0.5rem;
+}
+@media (max-width: 760px) {
+  .stack .pp-apis-table {
+    min-inline-size: 0;
+  }
+  .pp-apis-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .pp-apis-table tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--surface-2);
+  }
+  .pp-apis-table tbody > tr:last-child {
+    border-bottom: 0;
+  }
+  .pp-apis-table td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+  .pp-apis-table td:first-child {
+    font-weight: 500;
+  }
+  .pp-apis-table code {
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.stack-files, .pp-apis-table) a.stack-file {
+    transition: none;
+  }
+}

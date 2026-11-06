@@ -1,0 +1,354 @@
+/* /try: three tabs (ready-made examples, your photo, any recall), the preset pages and the sample shop. The active tab
+   is a 2px ink underline, as the app sheet sets; the panels sit on white sheets. */
+
+.tr-page {
+  max-width: 78rem;
+}
+.tr-title {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+}
+.tr-shop-line {
+  margin-top: 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.tr-shop-line .text-link {
+  color: var(--ink);
+}
+
+.tr-tabs {
+  margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+.tr-tablist {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tr-tab {
+  flex: none;
+  min-height: 48px;
+  padding: 0 14px;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font: inherit;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease;
+}
+.tr-tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+.tr-tab:active {
+  opacity: 0.7;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tr-tab:hover {
+    color: var(--ink);
+  }
+}
+.tr-tab:focus-visible {
+  outline-offset: -4px;
+}
+.tr-panel {
+  padding-top: 20px;
+  outline: none;
+}
+.tr-panel:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.tr-intro {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  max-width: 44rem;
+}
+.tr-sub {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.375rem;
+  margin-top: 28px;
+  outline: none;
+}
+
+/* Ready-made examples */
+.tr-preset-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.tr-preset {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sheet);
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  min-width: 0;
+}
+.tr-preset-top {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.tr-preset-img {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.tr-preset-title {
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+.tr-preset-sum {
+  margin-top: 4px;
+}
+.tr-preset-expect {
+  margin-top: 8px;
+  color: var(--muted);
+}
+.tr-preset-expect .pill {
+  margin-right: 4px;
+}
+.tr-credit {
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tr-preset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 18px;
+}
+.tr-preset-actions .text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.tr-run {
+  min-height: 44px;
+  font-family: var(--font-ui);
+  border-radius: var(--radius-control);
+}
+.tr-out {
+  outline: none;
+}
+.tr-out:empty {
+  display: none;
+}
+.tr-out .cl-checking {
+  margin-top: 4px;
+}
+.tr-techrun {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+:root[data-mode="technical"] .tr-techrun {
+  display: grid;
+  gap: 10px;
+}
+.tr-more {
+  margin-top: 8px;
+  max-width: 40rem;
+}
+@media (max-width: 480px) {
+  .tr-preset-top {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+  .tr-preset-img {
+    width: 84px;
+    height: 84px;
+  }
+}
+
+/* Your photo */
+.tr-yours {
+  display: grid;
+  gap: 14px;
+  max-width: 52rem;
+}
+.tr-picked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+}
+.tr-picked .tr-sub {
+  margin-top: 0;
+}
+.tr-steps {
+  margin-top: 0;
+}
+@media (min-width: 1000px) {
+  .tr-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tr-steps .cl-step {
+    grid-column: auto;
+  }
+}
+
+/* Any recall */
+.tr-any {
+  display: grid;
+  gap: 14px;
+  max-width: 52rem;
+}
+.tr-any-out {
+  display: grid;
+  gap: 18px;
+  outline: none;
+}
+.tr-rule {
+  display: grid;
+  gap: 8px;
+}
+.tr-rule-k {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.tr-rule-plain {
+  font-size: 1rem;
+}
+.tr-fields {
+  margin: 8px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.tr-fields > div {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 12px;
+}
+.tr-fields dt {
+  color: var(--muted);
+}
+.tr-fields dd {
+  margin: 0;
+}
+.tr-conf {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .tr-fields > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}
+
+.tr-json {
+  margin: 6px 0 0;
+  padding: 12px;
+  max-height: 24rem;
+  overflow: auto;
+  background: var(--surface-2);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* A preset's own page */
+.tr-preset-page {
+  max-width: 60rem;
+}
+.tr-preset-page .tr-preset {
+  margin-top: 1.5rem;
+}
+
+/* The sample shop */
+.tr-shop {
+  max-width: 60rem;
+}
+.tr-shop-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .tr-shop-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.tr-product,
+.tr-buy {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.tr-product {
+  display: grid;
+  gap: 12px;
+  font-family: var(--font-ui);
+}
+.tr-product-art {
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+.tr-product-art svg {
+  width: 60%;
+  height: auto;
+}
+.tr-product-name {
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+.tr-price {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+.tr-buy {
+  display: grid;
+  gap: 14px;
+  font-family: var(--font-ui);
+}
+.tr-bought {
+  display: grid;
+  gap: 10px;
+}
+.tr-bought-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+}

@@ -1,0 +1,29 @@
+// Web copies of the pictures the public pages show, in public/landing/. All but one are CPSC recall images (US
+// government works, public domain), credited on the page; the blurred mug is derived from a CC0 photo by Kurt Kaiser.
+// Usage: node scripts/public/landing-images.mjs
+import { mkdirSync } from "node:fs";
+import path from "node:path";
+import sharp from "sharp";
+
+const F = "content/verify/fixtures";
+const OUT = "public/landing";
+mkdirSync(OUT, { recursive: true });
+
+const jobs = [
+  // Recall 26125: the CPSC's example of the hair dryer made safe, its power cord cut in half. Native 682 x 436.
+  { from: `${F}/official/26125-hair-dryer-cord-cut.png`, to: "cord-cut-26125.webp", width: 682 },
+  { from: `${F}/official/26125-hair-dryer-cord-cut.png`, to: "cord-cut-26125-sm.webp", width: 360 },
+  // Recall 25007: the CPSC's example photos of the helmet made safe, straps cut off.
+  { from: `${F}/official/25007-droyd-4-straps-cut.jpg`, to: "helmet-straps-25007.webp", width: 1100 },
+  { from: `${F}/official/25007-droyd-4-straps-cut.jpg`, to: "helmet-straps-25007-sm.webp", width: 600 },
+  { from: `${F}/official/25007-droyd-5-in-trash.jpg`, to: "helmet-trash-25007.webp", width: 720 },
+  // Try-panel thumbnails.
+  { from: `${F}/official/27056-haiara-1.jpg`, to: "power-bank-27056.webp", width: 360 },
+  { from: `${F}/derived/commons-coffee-in-a-mug.blur8.jpg`, to: "blurry-mug.webp", width: 360 },
+  { from: `${F}/other/commons-coffee-in-a-mug.jpg`, to: "mug.webp", width: 360 },
+];
+
+for (const j of jobs) {
+  const info = await sharp(j.from).resize({ width: j.width, withoutEnlargement: true }).webp({ quality: 82 }).toFile(path.join(OUT, j.to));
+  console.log(`${j.to} ${info.width}x${info.height} ${Math.round(info.size / 1024)} KB`);
+}

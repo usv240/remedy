@@ -1,0 +1,181 @@
+/* Learn: a long read with its contents beside it; each section leads with its answer in one sentence. */
+.ln-body {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+}
+.ln-main > .page-section:first-child {
+  margin-top: 0;
+}
+.ln-sec {
+  scroll-margin-top: 1.5rem;
+  max-width: 52rem;
+}
+.ln-sec h2 {
+  font-size: var(--step-lead);
+}
+.ln-answer {
+  font-size: var(--step-lead);
+  line-height: 1.4;
+  max-width: 40rem;
+  margin-bottom: 1rem;
+}
+.ln-fig {
+  margin: 1.25rem 0;
+  max-width: 20rem;
+}
+.ln-fig img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-2);
+}
+.ln-fig figcaption {
+  margin-top: 0.5rem;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.ln-example {
+  margin-top: 1rem;
+  max-width: 40rem;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.ln-ex-k {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.ln-example blockquote {
+  margin: 6px 0 16px;
+  font-size: 0.9375rem;
+}
+.ln-ex-rule {
+  margin: 6px 0 0;
+  display: grid;
+}
+.ln-ex-rule > div {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--edge);
+}
+.ln-ex-rule dt {
+  color: var(--muted);
+}
+.ln-ex-rule dd {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ln-ex-link {
+  margin-top: 10px;
+}
+.ln-ex-link .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.ln-more {
+  margin-top: 1rem;
+  max-width: 40rem;
+}
+.ln-more .page-prose {
+  padding: 4px 0 8px;
+}
+.ln-checks {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  list-style: decimal;
+  display: grid;
+  gap: 8px;
+  max-width: 40rem;
+}
+.ln-gloss {
+  margin: 0;
+  display: grid;
+  max-width: 44rem;
+}
+.ln-gloss > div {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: 4px 20px;
+  padding: 12px 0;
+  border-top: 1px solid var(--edge);
+  scroll-margin-top: 1.5rem;
+}
+.ln-gloss dt {
+  font-weight: 500;
+}
+.ln-gloss dd {
+  margin: 0;
+}
+.ln-table-wrap {
+  margin-top: 1rem;
+  /* Positioned, so screen-reader-only text inside is clipped with the table instead of widening the page. */
+  position: relative;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 6px 14px 10px;
+}
+.ln-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 40rem;
+}
+.ln-table th,
+.ln-table td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--edge);
+  text-align: left;
+  vertical-align: top;
+}
+.ln-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.ln-table thead th {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.ln-table tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ln-num {
+  text-align: right !important;
+  white-space: nowrap;
+}
+.ln-def-text {
+  overflow-wrap: anywhere;
+}
+.ln-years {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+}
+.ln-sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  max-width: 48rem;
+}
+@media (max-width: 900px) {
+  .ln-body {
+    display: block;
+  }
+}
+@media (max-width: 560px) {
+  .ln-gloss > div,
+  .ln-ex-rule > div {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,190 @@
+/* Shared layout for read pages: Status, Stack, About, Judges, Learn and the placeholders. */
+.page {
+  padding-top: clamp(2rem, 1rem + 4vw, 5rem);
+}
+.page-head {
+  max-width: 48rem;
+}
+.page-title {
+  font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.75rem);
+}
+.page-head .lede {
+  margin-top: 1rem;
+}
+.page-loading {
+  margin-top: 2rem;
+}
+.page-section {
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+  max-width: 68rem;
+}
+.page-section h2 {
+  font-size: var(--step-lead);
+  margin-bottom: 1rem;
+}
+.page-section p + p {
+  margin-top: 0.75rem;
+}
+/* About 70 characters a line, in rem so the measure still grows with Large text. */
+.page-prose {
+  max-width: 40rem;
+}
+.page-head .page-prose,
+.page-head .lede + p {
+  margin-top: 1rem;
+}
+
+/* Status */
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 2.5rem 0 0;
+  display: grid;
+  gap: 6px;
+  max-width: 68rem;
+}
+.status-row {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+/* Name and Info dot set inline, so a name that wraps keeps its dot after the last word. */
+.status-name {
+  font-weight: 500;
+}
+.status-detail {
+  color: var(--muted);
+}
+.status-mode {
+  justify-self: end;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 4px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.status-mode[data-mode="live"] {
+  background: var(--pill-positive);
+  color: var(--pill-positive-ink);
+}
+.status-mode[data-mode="fallback"] {
+  background: var(--pill-info);
+  color: var(--pill-info-ink);
+}
+.status-mode[data-mode="not_connected"] {
+  background: var(--pill-neutral);
+  color: var(--pill-neutral-ink);
+}
+@media (max-width: 760px) {
+  .status-row {
+    grid-template-columns: 1fr auto;
+  }
+  .status-detail {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+/* Stack */
+.stack-list {
+  list-style: none;
+  padding: 0;
+  margin: 2.5rem 0 0;
+  display: grid;
+  gap: 10px;
+  max-width: 68rem;
+}
+.stack-row {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 8px 24px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 18px 20px;
+  scroll-margin-top: 1.5rem;
+}
+.stack-row:target {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stack-tool {
+  font-weight: 500;
+  font-size: var(--step-lead);
+  line-height: 1.2;
+  align-self: start;
+}
+.stack-job {
+  font-size: var(--step-body);
+}
+.stack-how {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  margin-top: 6px;
+}
+.stack-files {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.stack-files a {
+  color: var(--link);
+}
+@media (max-width: 760px) {
+  .stack-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* About */
+.about-list {
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 68ch;
+}
+.credits-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  max-width: 80ch;
+}
+
+/* A quiet line under a page head: the sandbox and sample-firm labels, data credits. */
+.page-note {
+  margin-top: 2rem;
+  font-size: var(--step-small);
+  color: var(--muted);
+  max-width: 40rem;
+}
+.page-head .tour-start {
+  margin-top: 1.5rem;
+}
+.page-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 48rem;
+}
+.page-links li {
+  min-height: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
+}
+.about-list {
+  list-style: disc;
+}
+.about-list > li::marker {
+  color: var(--muted);
+}

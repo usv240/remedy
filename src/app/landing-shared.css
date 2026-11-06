@@ -1,0 +1,50 @@
+/* Small pieces shared by the public pages (home, recalls, judges, learn, about): proof-rule chips, Technical-only
+   details, and a button that reads as a link. */
+
+/* Technical-view details: hidden in Plain, shown in Technical (the Display menu). Inline by default. */
+.lp-tech {
+  display: none;
+}
+:root[data-mode="technical"] .lp-tech {
+  display: inline;
+}
+:root[data-mode="technical"] :is(p, div, li, pre, details, section).lp-tech {
+  display: block;
+}
+/* The Plain view's counterpart, hidden in Technical. */
+:root[data-mode="technical"] .lp-plain {
+  display: none;
+}
+
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  min-height: 44px;
+}
+.link-btn:active {
+  opacity: 0.7;
+}
+
+/* A proof-rule chip: what to do or what you get, in a pale positive tone. Quiet chips are for "no photo needed". */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--pill-positive);
+  color: var(--pill-positive-ink);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.chip[data-quiet] {
+  background: var(--pill-neutral);
+  color: var(--pill-neutral-ink);
+}

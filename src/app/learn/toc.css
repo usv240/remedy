@@ -1,0 +1,162 @@
+/* Contents for long read pages (Learn, API docs): a sticky list beside the text on wide screens, and on phones a
+   Contents menu that stays at the top of the screen. Markup: src/components/learn/Toc.tsx. */
+.toc {
+  position: sticky;
+  top: 1.5rem;
+  align-self: start;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink) 25%, transparent) transparent;
+  font-size: var(--step-small);
+}
+.toc-k {
+  color: var(--muted);
+}
+.toc ul,
+.toc-m ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.toc ul {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.15rem;
+}
+.toc a,
+.toc-m a {
+  position: relative;
+  display: block;
+  padding: 0.4rem 0 0.4rem 0.75rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+/* The section being read: a 2px marker that grows in place, so the text never moves. */
+.toc a::before,
+.toc-m a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--ink);
+  transform: scaleY(0);
+  transition: transform 200ms var(--ease-out);
+}
+.toc a[aria-current],
+.toc-m a[aria-current] {
+  font-weight: 500;
+}
+.toc a[aria-current]::before,
+.toc-m a[aria-current]::before {
+  transform: scaleY(1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .toc a:hover,
+  .toc-m a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.toc-m {
+  display: none;
+}
+@media (max-width: 900px) {
+  .toc {
+    display: none;
+  }
+  .toc-m {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: 0 calc(-1 * var(--margin)) 2.5rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--surface-2);
+  }
+  .toc-m summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 48px;
+    padding: 0 var(--margin);
+    font-weight: 500;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 160ms var(--ease-out);
+  }
+  .toc-m summary::-webkit-details-marker {
+    display: none;
+  }
+  .toc-m summary::after {
+    content: "";
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-25%) rotate(45deg);
+    transition: transform 200ms var(--ease-out);
+  }
+  .toc-m[open] summary::after {
+    transform: translateY(25%) rotate(-135deg);
+  }
+  .toc-m summary:active {
+    background: color-mix(in srgb, var(--ink) 6%, var(--bg));
+  }
+  .toc-m summary:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: -2px;
+  }
+  /* The open list drops over the text instead of pushing it down. */
+  .toc-m nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    max-height: min(70vh, 32rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem var(--margin) 0.75rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--surface-2);
+    box-shadow: 0 18px 24px -18px color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+  .toc-m[open] nav {
+    animation: toc-in 180ms var(--ease-out);
+  }
+  .toc-m a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 0.25rem;
+  }
+  .toc-m a::before {
+    top: 0.6rem;
+    bottom: 0.6rem;
+  }
+}
+@keyframes toc-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toc a::before,
+  .toc-m a::before,
+  .toc-m summary,
+  .toc-m summary::after {
+    transition: none;
+  }
+  .toc-m[open] nav {
+    animation: none;
+  }
+}

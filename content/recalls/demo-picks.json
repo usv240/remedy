@@ -1,0 +1,265 @@
+{
+ "chosenAt": "2026-11-05T19:24:42.919Z",
+ "note": "Real CPSC recalls with their real data. Images: US Consumer Product Safety Commission (cpsc.gov), public domain. Any demo payout is a demonstration in PayPal sandbox; Remedy is not affiliated with the recalling firm.",
+ "picks": [
+  {
+   "id": "power-bank-marked",
+   "presets": [
+    "power-bank-marked",
+    "not-yet-safe",
+    "look-alike"
+   ],
+   "number": "27056",
+   "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech",
+   "date": "2026-10-29",
+   "units": 11000,
+   "firm": null,
+   "remedyText": "Consumers should stop using the recalled power banks immediately. Consumers who purchased their power banks on Amazon.com from Mitrytech should contact Mitrytech for instructions on how to receive a full refund. To receive a refund, consumers will be required to submit a photo of their recalled power bank with the word “recalled” written on it in permanent marker and confirm disposal of the power bank in accordance with applicable laws and regulations.",
+   "consumerContact": "Email at HAIARArecall@outlook.com or online at www.haiara.net/recalls.html or www.haiara.net and click on “Recalls” for more information.",
+   "recallUrl": "https://cpsc.gov/Recalls/2027/HAIARA-Power-Banks-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Fire-and-Burn-Hazards-Sold-on-Amazon-com-by-Mitrytech",
+   "imageUrl": "https://cpsc.gov/s3fs-public/HAIARA2.jpg?VersionId=VPakZxtfrYqbRwovKj196Qnyb454KdWE",
+   "imageThumb": "/recalls/27056/2.webp",
+   "imageCaption": "HAIARA power bank, model W5 PRO (front)",
+   "images": [
+    {
+     "url": "https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW",
+     "thumb": "/recalls/27056/1.webp",
+     "caption": "HAIARA power bank, model W5 PRO (front)",
+     "dhash": "c48280c0c0c0c1e0"
+    },
+    {
+     "url": "https://cpsc.gov/s3fs-public/HAIARA2.jpg?VersionId=VPakZxtfrYqbRwovKj196Qnyb454KdWE",
+     "thumb": "/recalls/27056/2.webp",
+     "caption": "HAIARA power bank, model W5 PRO (front)",
+     "dhash": "8ca2e2a2888080c0"
+    },
+    {
+     "url": "https://cpsc.gov/s3fs-public/HAIARA3.jpg?VersionId=INamsxmLp_pmj6BrY8V7xIKnMXTMiqHl",
+     "thumb": "/recalls/27056/3.webp",
+     "caption": "HAIARA power bank, model W5 PRO (side)",
+     "dhash": "8040406020602020"
+    }
+   ],
+   "proofRule": {
+    "photo_required": true,
+    "actions": [
+     "write_recalled"
+    ],
+    "marker_text": "recalled",
+    "must_show": [
+     "whole_product",
+     "marking"
+    ],
+    "remedy": "full_refund",
+    "refund_amount_text": "full refund",
+    "refund_amount": null,
+    "contact_channel": "email",
+    "steps": [
+     "Write recalled on the power bank in permanent marker.",
+     "Take a photo of the power bank showing the writing.",
+     "Email the photo to Mitrytech at HAIARArecall@outlook.com.",
+     "Dispose of the power bank following local laws."
+    ],
+    "explanation": {
+     "plain": "Stop using the power bank. Write recalled on it in permanent marker, send a photo, and throw it away safely to get your money back.",
+     "technical": "\"submit a photo of their recalled power bank with the word recalled written on it in permanent marker\" sets photo_required, write_recalled, marker_text (case kept as given) and must_show; \"full refund\" sets remedy with no fixed amount. No channel is named for the photo, so the first consumer contact (email) is used. Disposal comes after the photo and is not an action."
+    },
+    "confidence": {
+     "actions": 0.95,
+     "must_show": 0.93,
+     "remedy": 0.97
+    }
+   },
+   "why": "A 2026 power bank recall (Oct 29, 2026) whose remedy pays a full refund for a photo of the power bank with the word \"recalled\" written on it in permanent marker. The photo needs only the marked product, so a retake for a missing marking is easy to show. Three official images of model W5 PRO (front and side).",
+   "alternates": [
+    {
+     "number": "26792",
+     "date": "2026-09-24",
+     "title": "NEWDERY Power Banks Recalled Due to Fire and Burn Hazards; Risk of Serious Injury; Sold on Amazon",
+     "images": 2,
+     "url": "https://cpsc.gov/Recalls/2026/NEWDERY-Power-Banks-Recalled-Due-to-Fire-and-Burn-Hazards-Risk-of-Serious-Injury-Sold-on-Amazon"
+    }
+   ]
+  },
+  {
+   "id": "cord-cut",
+   "presets": [
+    "cord-cut",
+    "official-image"
+   ],
+   "number": "26754",
+   "title": "Guang Zhou Recalls Wantefully Hair Dryer Brushes Due to Risk of Serious Injury or Death from Electrocution, Shock and Burn Hazards; Violate Federal Regulations",
+   "date": "2026-09-10",
+   "units": 2295,
+   "firm": "Guang Zhou Shi Wan Te Fu Ke Ji You Xian Gong Si, dba Wantefully, of China",
+   "remedyText": "Consumers should unplug and stop using the recalled hair dryers immediately and contact Guang Zhou to receive a full refund. Consumers will be asked to cut the power cord and provide a photo of the destroyed product to wantefully@163.com.",
+   "consumerContact": "Guang Zhou at wantefully@163.com.",
+   "recallUrl": "https://cpsc.gov/Recalls/2026/Guang-Zhou-Recalls-Wantefully-Hair-Dryer-Brushes-Due-to-Risk-of-Serious-Injury-or-Death-from-Electrocution-Shock-and-Burn-Hazards-Violate-Federal-Regulations",
+   "imageUrl": "https://www.cpsc.gov/s3fs-public/guang2.gif",
+   "imageThumb": "/recalls/26754/2.webp",
+   "imageCaption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush",
+   "images": [
+    {
+     "url": "https://www.cpsc.gov/s3fs-public/guang1.gif",
+     "thumb": "/recalls/26754/1.webp",
+     "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush",
+     "dhash": "d2d2525256d29212"
+    },
+    {
+     "url": "https://www.cpsc.gov/s3fs-public/guang2.gif",
+     "thumb": "/recalls/26754/2.webp",
+     "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush",
+     "dhash": "a3a0a62cd8c2868e"
+    },
+    {
+     "url": "https://www.cpsc.gov/s3fs-public/guang3.gif",
+     "thumb": "/recalls/26754/3.webp",
+     "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush",
+     "dhash": "33b0dcc8818c9c68"
+    },
+    {
+     "url": "https://www.cpsc.gov/s3fs-public/guang4.gif",
+     "thumb": "/recalls/26754/4.webp",
+     "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush – Product Packaging",
+     "dhash": "0f9f8f8f8f8c8ccc"
+    },
+    {
+     "url": "https://www.cpsc.gov/s3fs-public/guang5.gif",
+     "thumb": "/recalls/26754/5.webp",
+     "caption": "Product Packaging Label with Model Number",
+     "dhash": "f7df8e4e4f3f3f3f"
+    }
+   ],
+   "proofRule": {
+    "photo_required": true,
+    "actions": [
+     "cut_cord"
+    ],
+    "marker_text": null,
+    "must_show": [
+     "whole_product",
+     "cut_or_damage"
+    ],
+    "remedy": "full_refund",
+    "refund_amount_text": "full refund",
+    "refund_amount": null,
+    "contact_channel": "email",
+    "steps": [
+     "Unplug the hair dryer brush and stop using it.",
+     "Cut the power cord.",
+     "Take a photo that shows the cut cord.",
+     "Email the photo to wantefully@163.com."
+    ],
+    "explanation": {
+     "plain": "Cut the power cord on your hair dryer brush and email a photo of it to Guang Zhou. You will get a full refund.",
+     "technical": "\"cut the power cord\" sets cut_cord; \"provide a photo of the destroyed product to wantefully@163.com\" sets photo_required, whole_product, cut_or_damage and email; \"full refund\" sets full_refund with no amount."
+    },
+    "confidence": {
+     "actions": 0.95,
+     "must_show": 0.9,
+     "remedy": 0.97
+    }
+   },
+   "why": "The remedy asks the owner to cut the power cord and email a photo of the destroyed product for a full refund. A hair dryer brush is a small appliance that is easy to photograph with its cord cut. Five official images, including the packaging label with the model number, which also gives the official-image preset a clear picture to test the own-photo check.",
+   "alternates": [
+    {
+     "number": "26506",
+     "date": "2026-05-28",
+     "title": "Giantex Recalls Giantex and Costway Portable Steam Saunas Due to Burn Hazard",
+     "images": 11,
+     "url": "https://www.cpsc.gov/Recalls/2026/Giantex-Recalls-Giantex-and-Costway-Portable-Steam-Saunas-Due-to-Burn-Hazard"
+    },
+    {
+     "number": "26147",
+     "date": "2025-12-11",
+     "title": "Sanven Technology Recalls Vevor Ice Crushers Due to Fire Hazard",
+     "images": 7,
+     "url": "https://www.cpsc.gov/Recalls/2026/Sanven-Technology-Recalls-Vevor-Ice-Crushers-Due-to-Fire-Hazard"
+    },
+    {
+     "number": "24166",
+     "date": "2024-03-21",
+     "title": "Culture Kings Recalls Sneaker Basel Magnetic Levitation Displays Due to Laceration and Ingestion Hazards",
+     "images": 7,
+     "url": "https://www.cpsc.gov/Recalls/2024/Culture-Kings-Recalls-Sneaker-Basel-Magnetic-Levitation-Displays-Due-to-Laceration-and-Ingestion-Hazards"
+    },
+    {
+     "number": "26715",
+     "date": "2026-08-20",
+     "title": "Workbless Pressure Washers Recalled Due to Risk of Serious Injury or Death from Shock and Electrocution Hazards",
+     "images": 6,
+     "url": "https://www.cpsc.gov/Recalls/2026/Workbless-Pressure-Washers-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Shock-and-Electrocution-Hazards"
+    }
+   ]
+  },
+  {
+   "id": "pajamas-cut",
+   "presets": [
+    "pajamas-cut"
+   ],
+   "number": "27045",
+   "title": "Fashion Brand Apparel Recalls QZH.DUAO Pajama Sets Due to Risk of Serious Injury or Death from Burn Hazard; Violate Mandatory Standards for Children’s Sleepwear",
+   "date": "2026-10-29",
+   "units": 300,
+   "firm": null,
+   "remedyText": "Consumers should stop using the recalled pajama sets immediately and contact Fashion Brand Apparel for a full refund. Consumers will be asked to cut the pajamas in half and email a photo of the destroyed pajama set to qzh.duaoproductrecall@outlook.com to receive the refund. Consumers should then dispose of the destroyed product.",
+   "consumerContact": "Fashion Brand Apparel at qzh.duaoproductrecall@outlook.com.",
+   "recallUrl": "https://cpsc.gov/Recalls/2027/Fashion-Brand-Apparel-Recalls-QZH-DUAO-Pajama-Sets-Due-to-Risk-of-Serious-Injury-or-Death-from-Burn-Hazard-Violate-Mandatory-Standards-for-Childrens-Sleepwear",
+   "imageUrl": "https://cpsc.gov/s3fs-public/QZHDUAO1.png?VersionId=cppPPnSgj5.BX_N8pR5cBR_w2GWvOyMh",
+   "imageThumb": "/recalls/27045/1.webp",
+   "imageCaption": "Recalled QZH.DUAO Children’s Pajama Sets - Pink Bow",
+   "images": [
+    {
+     "url": "https://cpsc.gov/s3fs-public/QZHDUAO1.png?VersionId=cppPPnSgj5.BX_N8pR5cBR_w2GWvOyMh",
+     "thumb": "/recalls/27045/1.webp",
+     "caption": "Recalled QZH.DUAO Children’s Pajama Sets - Pink Bow",
+     "dhash": "c090acc8ece8d8f0"
+    },
+    {
+     "url": "https://cpsc.gov/s3fs-public/QZHDUAO2.png?VersionId=gtRxFeS7GT.WCl3IJxTh1G0iDUSrZB3B",
+     "thumb": "/recalls/27045/2.webp",
+     "caption": "Recalled QZH.DUAO Children’s Pajama Sets – Mint Green",
+     "dhash": "c0c0cecce8c8d0f0"
+    },
+    {
+     "url": "https://cpsc.gov/s3fs-public/QZHDUAO3.png?VersionId=X22hqj28UWITUVOIrwYIiu0t7R2qq84j",
+     "thumb": "/recalls/27045/3.webp",
+     "caption": "Recalled QZH.DUAO Children’s Pajama Sets - Blue Bowknot",
+     "dhash": "c090dcdcecc8d8f0"
+    }
+   ],
+   "proofRule": {
+    "photo_required": true,
+    "actions": [
+     "cut_in_half"
+    ],
+    "marker_text": null,
+    "must_show": [
+     "whole_product",
+     "cut_or_damage"
+    ],
+    "remedy": "full_refund",
+    "refund_amount_text": "full refund",
+    "refund_amount": null,
+    "contact_channel": "email",
+    "steps": [
+     "Stop using the pajama sets right away.",
+     "Cut the pajamas in half.",
+     "Take a photo of the cut pajama set.",
+     "Email the photo to qzh.duaoproductrecall@outlook.com."
+    ],
+    "explanation": {
+     "plain": "Cut the pajamas in half and email a photo of them to the firm. You will get your money back.",
+     "technical": "\"cut the pajamas in half\" sets cut_in_half; \"email a photo of the destroyed pajama set\" sets photo_required, email, whole_product and cut_or_damage; \"full refund\" sets full_refund with no fixed amount."
+    },
+    "confidence": {
+     "actions": 0.97,
+     "must_show": 0.93,
+     "remedy": 0.98
+    }
+   },
+   "why": "The Oct 29, 2026 children's pajama set recall: the remedy asks owners to cut the pajamas in half and email a photo of the destroyed set to receive the refund. It is the remedy quoted in research/validation_recalls.md. Three official images.",
+   "alternates": []
+  }
+ ]
+}

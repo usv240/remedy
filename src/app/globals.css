@@ -1,0 +1,438 @@
+@import "tailwindcss";
+
+/* Remedy tokens. Palette: "Midnight Electric" (#030407, #1558C9, #D4FF24), plan/01_design_system.md section 4.
+   Light is the default; the plan's dark palette is the dark theme. One accent, electric lime, used as a fill on the
+   primary action and the "Paid" moment only, always with ink text on it. Blue is the link colour inside product
+   fragments. Every pair used for text is checked in tests/tokens.test.ts. */
+:root,
+:root[data-theme="light"] {
+  --bg: #f4f5f0;
+  --surface: #ffffff;
+  --surface-2: #e8eae2;
+  --edge: #e2e4dc;
+  --ink: #030407;
+  --muted: #5b606b;
+  --control: #7c8176;
+  --accent: #d4ff24;
+  --accent-ink: #030407;
+  /* Lime on the pale ground is 1.06:1, so the primary button carries a 1px olive edge (5.37:1) in light. */
+  --accent-edge: #5c7300;
+  --accent-text: #5c7300;
+  --link: #1558c9;
+  --attention: #8a5a00;
+  --positive: #1e7b4f;
+  --pill-positive: #dcfae5;
+  --pill-positive-ink: #04250e;
+  --pill-attention: #fff1d6;
+  --pill-attention-ink: #6b4500;
+  --pill-info: #dce6fa;
+  --pill-info-ink: #0b3a8a;
+  --pill-neutral: #e8eae2;
+  --pill-neutral-ink: #30332b;
+  --chart-1: #5c7300;
+  --chart-2: #1558c9;
+  --chart-3: #a86f0c;
+  /* The closing field: ink becomes the ground. */
+  --invert-bg: #030407;
+  --invert-ink: #f4f5f0;
+  --invert-muted: #9ea3ae;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #030407;
+  --surface: #0d0f14;
+  --surface-2: #161922;
+  --edge: #1e2230;
+  --ink: #f3f4f0;
+  --muted: #9ea3ae;
+  --control: #6a7080;
+  --accent: #d4ff24;
+  --accent-ink: #030407;
+  --accent-edge: #d4ff24;
+  --accent-text: #d4ff24;
+  --link: #6b9bff;
+  --attention: #ffb547;
+  --positive: #5bd69a;
+  --pill-positive: #0f2a1b;
+  --pill-positive-ink: #c9f2d8;
+  --pill-attention: #2e2108;
+  --pill-attention-ink: #ffd89a;
+  --pill-info: #14213d;
+  --pill-info-ink: #c3d5ff;
+  --pill-neutral: #22252f;
+  --pill-neutral-ink: #d5d8cf;
+  --chart-1: #d4ff24;
+  --chart-2: #6b9bff;
+  --chart-3: #ffb547;
+  --invert-bg: #f4f5f0;
+  --invert-ink: #030407;
+  --invert-muted: #5b606b;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --bg: #030407;
+    --surface: #0d0f14;
+    --surface-2: #161922;
+    --edge: #1e2230;
+    --ink: #f3f4f0;
+    --muted: #9ea3ae;
+    --control: #6a7080;
+    --accent: #d4ff24;
+    --accent-ink: #030407;
+    --accent-edge: #d4ff24;
+    --accent-text: #d4ff24;
+    --link: #6b9bff;
+    --attention: #ffb547;
+    --positive: #5bd69a;
+    --pill-positive: #0f2a1b;
+    --pill-positive-ink: #c9f2d8;
+    --pill-attention: #2e2108;
+    --pill-attention-ink: #ffd89a;
+    --pill-info: #14213d;
+    --pill-info-ink: #c3d5ff;
+    --pill-neutral: #22252f;
+    --pill-neutral-ink: #d5d8cf;
+    --chart-1: #d4ff24;
+    --chart-2: #6b9bff;
+    --chart-3: #ffb547;
+    --invert-bg: #f4f5f0;
+    --invert-ink: #030407;
+    --invert-muted: #5b606b;
+    color-scheme: dark;
+  }
+}
+
+:root {
+  /* Five type steps (direction sheet, "Sentient"), all in rem so Large text scales every one. */
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-display: clamp(3.25rem, 1.5rem + 6.2vw, 7rem);
+  --font-display: var(--font-sentient), "Iowan Old Style", Georgia, serif;
+  --font-text: var(--font-sentient), "Iowan Old Style", Georgia, serif;
+  /* App screens, tables and figures: IBM Plex Sans, whose figures are tabular (Sentient's are proportional). */
+  --font-ui: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --margin: clamp(1rem, 0.5rem + 2.2vw, 2rem);
+  --section-gap: clamp(6rem, 4rem + 6vw, 10rem);
+  /* One button shape on the page: a square rectangle. Fragments use the app sheet's radii. */
+  --radius-btn: 0px;
+  --radius-card: 8px;
+  --radius-control: 6px;
+  --radius-sheet: 16px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press: 140ms;
+  --dur-tip: 140ms;
+  --dur-menu: 200ms;
+  --dur-sheet: 320ms;
+}
+
+:root[data-text="large"] {
+  font-size: 118.75%;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-link: var(--link);
+  --color-positive: var(--positive);
+  --color-attention: var(--attention);
+  --font-sans: var(--font-ui);
+  --font-serif: var(--font-text);
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Figures that must line up (amounts, counts, ids) use the UI face, whose figures are tabular. */
+.tabular {
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-code);
+  font-size: 0.875em;
+}
+
+/* The browser's own surfaces carry the palette too: caret, native controls, scrollbars, placeholders. */
+:root {
+  accent-color: var(--accent-text);
+  scrollbar-color: color-mix(in srgb, var(--ink) 30%, transparent) transparent;
+}
+input,
+textarea {
+  caret-color: var(--ink);
+}
+::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+/* Focus ring: 2px, offset 2px, in ink (lime would vanish on the pale ground). */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--margin);
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* Buttons: one shape (a square rectangle), flat, one fill. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-btn);
+  border: 1px solid transparent;
+  /* Sentient on the page, the UI face inside product fragments. */
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background-color 160ms ease;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent-edge);
+}
+.btn-ink {
+  background: var(--ink);
+  color: var(--bg);
+}
+.btn-quiet {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.text-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  transition: text-decoration-color 160ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .text-link:hover {
+    text-decoration-color: var(--ink);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--accent) 86%, var(--ink));
+  }
+  .btn-quiet:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--surface-2) 88%, var(--ink));
+  }
+  .btn-ink:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--ink) 86%, var(--bg));
+  }
+}
+
+/* Page frame: one pair of equal margins everywhere. */
+.frame {
+  padding-left: var(--margin);
+  padding-right: var(--margin);
+}
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(0.75rem, 0.4rem + 1.2vw, 1.5rem);
+}
+
+/* Section entrance: elements are always fully visible in the DOM; Reveal.tsx animates them with the
+   Web Animations API as they scroll into view, so scanners and no-JS readers always see the final state. */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Info labels can be hidden from the Display menu. */
+:root[data-labels="off"] .info-label {
+  display: none;
+}
+
+/* Product fragments (data-ui) are real interface at real size: the UI face and the app sheet's text size. */
+[data-ui] {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+/* Info toggletip (plan/01_design_system.md section 5). */
+.info-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  vertical-align: middle;
+  background: none;
+  border: 0;
+  padding: 5px;
+  margin: -5px 0;
+  min-height: 32px;
+  cursor: pointer;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--step-small);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+}
+@media (pointer: coarse) {
+  .info-trigger {
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
+  }
+}
+.info-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  /* A tint of the ink, not a surface colour, so the dot shows on white sheets and grey panels alike. */
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  display: inline-grid;
+  place-items: center;
+  line-height: 1;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.info-dot::before {
+  content: "i";
+}
+.info-trigger:active .info-dot {
+  transform: scale(0.92);
+}
+@media (hover: hover) and (pointer: fine) {
+  .info-trigger:hover .info-dot {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+}
+.info-pop {
+  z-index: 80;
+  width: max-content;
+  max-width: min(340px, calc(100vw - 24px));
+  background: var(--ink);
+  color: var(--bg);
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.18);
+  /* Info.tsx sets --info-origin from the placement it lands in, so the tip grows from its dot. */
+  transform-origin: var(--info-origin, top left);
+  animation: info-in var(--dur-tip) var(--ease-out);
+}
+.info-pop[data-instant] {
+  animation: none;
+}
+.info-pop p + p {
+  margin-top: 0.5rem;
+}
+.info-pop-title {
+  font-weight: 600;
+}
+.info-pop-why,
+.info-pop-tech,
+.info-pop-sponsor {
+  color: color-mix(in srgb, var(--bg) 82%, var(--ink));
+}
+.info-pop-tech {
+  font-size: 0.875rem;
+}
+.info-pop .text-link {
+  color: var(--bg);
+  text-decoration-color: color-mix(in srgb, var(--bg) 50%, transparent);
+}
+@keyframes info-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}

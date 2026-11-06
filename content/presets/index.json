@@ -1,0 +1,67 @@
+{
+  "note": "Ready-made examples for /try. Every photo is honestly what its name says (content/verify/fixtures/credits.json). None shows a product its owner made safe: those come from the team's own photos, listed in content/verify/fixtures/user/expected.json once they are taken. Runs that need Claude replay one recorded live answer from content/presets/recorded/, so pressing Run costs nothing; every check around that answer runs again in code.",
+  "presets": [
+    {
+      "id": "cpsc-example",
+      "title": "The CPSC's own made-safe photo",
+      "summary": "The photo the CPSC published with recall 26125: a hair dryer with its cord cut in half.",
+      "recall": "26125",
+      "photo": "official/26125-hair-dryer-cord-cut.png",
+      "photo_alt": "A hand-held hair dryer with its power cord cut through, the two cut ends side by side.",
+      "photo_credit": "US Consumer Product Safety Commission (cpsc.gov), recall 26125. Public domain.",
+      "expected": {
+        "decision": "retake",
+        "decided_by": "own_photo",
+        "plain": "Remedy recognizes the recall's own example photo and asks for the owner's photo. No payout."
+      },
+      "technical": {
+        "note": "Run again with the official-image match switched off, so you can see what the photo checks read: C1 and C2 saw the right product with the cord cut.",
+        "options": { "officialHashCheck": false, "reviewers": false },
+        "recorded": "cpsc-example.technical.json"
+      }
+    },
+    {
+      "id": "official-image",
+      "title": "The official recall picture",
+      "summary": "The CPSC's own picture of the HAIARA power bank in recall 27056, sent as if it were a claim photo.",
+      "recall": "27056",
+      "photo": "official/27056-haiara-1.jpg",
+      "photo_alt": "The front of a black HAIARA power bank, model W5 PRO, on a white background.",
+      "photo_credit": "US Consumer Product Safety Commission (cpsc.gov), recall 27056. Public domain.",
+      "expected": {
+        "decision": "retake",
+        "decided_by": "own_photo",
+        "plain": "Send a photo of your own product. No payout, and no model call: the match with the official picture is found in code."
+      }
+    },
+    {
+      "id": "blurry",
+      "title": "A blurry photo",
+      "summary": "A photo blurred on purpose, sent for the power bank recall 27056.",
+      "recall": "27056",
+      "photo": "derived/commons-coffee-in-a-mug.blur8.jpg",
+      "photo_alt": "A very blurred photo of a mug of coffee on a table.",
+      "photo_credit": "Blurred copy of \"Coffee in a mug\" by Kurt Kaiser, via Wikimedia Commons. CC0 1.0.",
+      "expected": {
+        "decision": "retake",
+        "decided_by": "quality",
+        "plain": "A friendly retake: hold still and try again. Found before any model call."
+      }
+    },
+    {
+      "id": "unrelated-object",
+      "title": "Something else entirely",
+      "summary": "A mug of coffee, sent for the HAIARA power bank recall 27056.",
+      "recall": "27056",
+      "photo": "other/commons-coffee-in-a-mug.jpg",
+      "photo_alt": "A white mug of black coffee on a wooden table.",
+      "photo_credit": "\"Coffee in a mug\" by Kurt Kaiser, via Wikimedia Commons. CC0 1.0.",
+      "expected": {
+        "decision": "retake",
+        "checks": { "C1": "fail" },
+        "plain": "The right-product check does not pass, so there is no payout, and the owner hears what to send instead."
+      },
+      "recorded": "unrelated-object.json"
+    }
+  ]
+}

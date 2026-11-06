@@ -1,0 +1,14 @@
+[
+ {
+  "url": "https://www.cpsc.gov/s3fs-public/gikpal-1.png",
+  "error": "HTTP 403"
+ },
+ {
+  "url": "https://www.cpsc.gov/s3fs-public/trader-joes-candle.jpg",
+  "error": "HTTP 403"
+ },
+ {
+  "url": "https://www.cpsc.gov/s3fs-public/super-lube-front.jpg",
+  "error": "HTTP 403"
+ }
+]

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.usv240/remedy",
+  "title": "Remedy",
+  "description": "Recall refunds on a verified photo: read the recall, verify the photo, pay the refund through PayPal.",
+  "version": "0.1.0",
+  "repository": { "url": "https://github.com/usv240/remedy", "source": "github" },
+  "remotes": [{ "type": "streamable-http", "url": "https://remedy.onrender.com/api/mcp" }]
+}

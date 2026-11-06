@@ -1,0 +1,73 @@
+/**
+ * The sample firm's terms for a recall: who pays, how much, and the cap under which a verified claim is paid with no
+ * person. Every demo claim is paid by Brightline Home (fictional) from its PayPal sandbox account, whichever real
+ * recall it is for, and says so.
+ */
+import { and, asc, eq } from "drizzle-orm";
+import { db, dbConfigured, schema } from "@/lib/db";
+
+export const SAMPLE_FIRM = "Brightline Home";
+
+/** The recall the sample shop's power bank stands in for: "Bought it from Brightline with PayPal?" appears on it. */
+export const SHOP_RECALL = "27056";
+
+/**
+ * The refund the sample firm pays in this demonstration when it has set none for a recall (firm_recall.default_refund).
+ * A setting, not a statistic: the real remedies say "a full refund" of what the owner paid, which Remedy cannot know.
+ */
+export const DEMO_REFUND_CENTS = 2000;
+
+export type FirmTerms = {
+  firmId: number | null;
+  firmName: string;
+  /** Verified claims at or under this are paid with no person. */
+  autoCapCents: number;
+  /** The firm's refund for this recall when no PayPal purchase is linked. */
+  refundCents: number;
+  refundSource: "firm" | "demo";
+  /** How long the firm takes to look at a claim, for the owner's "usually within" line. */
+  reviewHours: number;
+  /** The firm runs this recall in Remedy (a firm_recall row), or it is a demo of a recall it does not run. */
+  runsRecall: boolean;
+};
+
+const cents = (v: string | number | null | undefined) => {
+  if (v === null || v === undefined || v === "") return null;
+  const n = Math.round(Number(v) * 100);
+  return Number.isFinite(n) && n >= 0 ? n : null;
+};
+
+export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, autoCapCents: 5000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
+
+export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
+  if (!dbConfigured()) return DEFAULT_TERMS;
+  try {
+    const [firm] = await db().select().from(schema.firms).where(eq(schema.firms.isSample, true)).orderBy(asc(schema.firms.id)).limit(1);
+    if (!firm) return DEFAULT_TERMS;
+    const settings = firm.settings ?? {};
+    const [fr] = await db()
+      .select()
+      .from(schema.firmRecalls)
+      .where(and(eq(schema.firmRecalls.firmId, firm.id), eq(schema.firmRecalls.recallNumber, recallNumber)))
+      .limit(1);
+    const refund = cents(fr?.defaultRefund);
+    return {
+      firmId: firm.id,
+      firmName: firm.name.replace(/\s*\(sample\)\s*$/i, "") || SAMPLE_FIRM,
+      autoCapCents: cents(fr?.autoCap) ?? cents(settings.autoApproveCap) ?? DEFAULT_TERMS.autoCapCents,
+      refundCents: refund ?? DEMO_REFUND_CENTS,
+      refundSource: refund !== null ? "firm" : "demo",
+      reviewHours: settings.reviewHours ?? DEFAULT_TERMS.reviewHours,
+      runsRecall: Boolean(fr),
+    };
+  } catch {
+    return DEFAULT_TERMS;
+  }
+}
+
+/** "usually within 2 days" from the firm's review hours. */
+export function reviewWindow(hours: number): string {
+  if (hours <= 24) return `usually within ${hours} ${hours === 1 ? "hour" : "hours"}`;
+  const days = Math.round(hours / 24);
+  return `usually within ${days} ${days === 1 ? "day" : "days"}`;
+}

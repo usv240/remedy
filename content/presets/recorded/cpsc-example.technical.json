@@ -1,0 +1,66 @@
+{
+  "recorded_at": "2026-11-05T20:12:55.201Z",
+  "preset": "cpsc-example",
+  "recall": "26125",
+  "options": {
+    "officialHashCheck": false,
+    "reviewers": false
+  },
+  "vision": {
+    "report": {
+      "scene": "A white MyOnlyStyler hot air brush with black bristles lies on a gray wood-look floor, with its long black power cord looped around it and cut into two pieces.",
+      "product": {
+        "match_score": 0.95,
+        "matching_details": [
+          "White body with black bristle brush head on the left side of the product, center of photo",
+          "\"MY ONLY STYLER\" printed on the handle next to the bristles",
+          "Round button and slide switch controls on the handle",
+          "Perforated vent grille at the right end of the handle where the cord enters",
+          "Long black cord with a two-prong plug at top center and a black hook-and-loop cord strap at upper left",
+          "Long, slim proportions consistent with 12 by 1.75 inches"
+        ],
+        "differing_details": [],
+        "reason_plain": "Yes, this is the recalled MyOnlyStyler dryer, but the photo appears identical to the official CPSC recall image.",
+        "reason_technical": "Shape, white and black colors, MY ONLY STYLER print, controls, vent grille, and cord all match. Model number MOS-22 on the back of the handle is not visible. The image matches the official CPSC image in every detail, including cord layout, floor grain, and lighting, which suggests it is not the owner's own photo."
+      },
+      "actions": [
+        {
+          "action": "cut_cord",
+          "done": true,
+          "confidence": 0.8,
+          "evidence": "The cord is visibly severed: a cut end with exposed inner material sits near the top center of the photo, and a second loose end lies at upper left near the cord strap, separating the plug section from the dryer section. However, this image appears identical to the official CPSC recall photo, so it may not show the owner's own dryer."
+        }
+      ],
+      "handwritten_text": [],
+      "identifiers": {
+        "model_text": null,
+        "lot_text": null,
+        "date_code_text": null,
+        "label_visible": false,
+        "where": "The back of the handle, where MOS-22 is printed, faces down and is not visible."
+      },
+      "photo_source": {
+        "kind": "digital_image",
+        "signs": [
+          "none"
+        ],
+        "confidence": 0.7,
+        "reason": "The image looks like a real camera photo, but it matches the official CPSC recall image in every detail, including the exact cord loops, strap position, floor grain, and lighting. Two separate photos would not line up this exactly, so it is most likely the downloaded official image."
+      },
+      "retake_tip": "Please take a new photo of your own dryer with its cut cord, and turn it over so the model number on the back of the handle shows."
+    },
+    "model": "claude-opus-5-5",
+    "ms": 15757,
+    "usage": {
+      "input_tokens": 448,
+      "output_tokens": 1150,
+      "cache_read_input_tokens": 3370,
+      "cache_creation_input_tokens": 891
+    },
+    "replayed": false
+  },
+  "reviews": null,
+  "cost_usd": 0.0299,
+  "decision": "firm_review",
+  "decided_by": "checks"
+}

@@ -1,0 +1,598 @@
+{
+ "checkedAt": "2026-11-05T19:10:22.107Z",
+ "elastic": true,
+ "queries": {
+  "space heater": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 1107,
+   "top": [
+    {
+     "number": "25036",
+     "title": "GoveeLife and Govee Smart Electric Space Heaters Recalled Due to Fire and Burn Hazards; Imported by Govee",
+     "photoRefund": true,
+     "score": 1.224
+    },
+    {
+     "number": "27054",
+     "title": "DREO Recalls DR-HSH015 Space Heaters Due to Fire and Burn Hazards",
+     "photoRefund": false,
+     "score": 1.205
+    },
+    {
+     "number": "26532",
+     "title": "Vornado Air Recalls SRTH Small Room Tower Heaters Due to Fire Hazard",
+     "photoRefund": true,
+     "score": 0.944
+    },
+    {
+     "number": "25342",
+     "title": "AstroAI Recalls Minifridges Due to Fire and Burn Hazards; Two Resulted in More Than $360,000 in Reported Property Damages",
+     "photoRefund": false,
+     "score": 0.939
+    },
+    {
+     "number": "27039",
+     "title": "VQQQ Gas Patio Heaters Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards",
+     "photoRefund": true,
+     "score": 0.923
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "25036",
+     "title": "GoveeLife and Govee Smart Electric Space Heaters Recalled Due to Fire and Burn Hazards; Imported by Govee"
+    },
+    {
+     "number": "26532",
+     "title": "Vornado Air Recalls SRTH Small Room Tower Heaters Due to Fire Hazard"
+    },
+    {
+     "number": "24298",
+     "title": "Atomi Recalls Smart Heaters Due to Fire and Burn Hazards"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "27054",
+     "title": "DREO Recalls DR-HSH015 Space Heaters Due to Fire and Burn Hazards"
+    },
+    {
+     "number": "25036",
+     "title": "GoveeLife and Govee Smart Electric Space Heaters Recalled Due to Fire and Burn Hazards; Imported by Govee"
+    },
+    {
+     "number": "24298",
+     "title": "Atomi Recalls Smart Heaters Due to Fire and Burn Hazards"
+    },
+    {
+     "number": "25179",
+     "title": "Meijer Recalls Konwin Desktop Heaters Due to Fire and Burn Hazards"
+    },
+    {
+     "number": "24371",
+     "title": "Caframo Cabinet Heaters Recalled Due to Electrocution Hazard; Manufactured by Caframo Limited"
+    }
+   ]
+  },
+  "power bank": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 878,
+   "top": [
+    {
+     "number": "27056",
+     "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech",
+     "photoRefund": true,
+     "score": 1.06
+    },
+    {
+     "number": "26090",
+     "title": "Belkin Recalls Portable Power Banks and Wireless Charging Stands Due to Fire and Burn Hazards",
+     "photoRefund": true,
+     "score": 1.057
+    },
+    {
+     "number": "26740",
+     "title": "Truststone Group Recalls XO Poppy Power Trip Magnetic Wireless Power Banks Due to Fire and Burn Hazards; Sold Exclusively at TJX and Marshalls Stores",
+     "photoRefund": false,
+     "score": 1.05
+    },
+    {
+     "number": "25011",
+     "title": "Anker Power Banks Recalled Due to Fire and Burn Hazards; Manufactured by Anker Innovations",
+     "photoRefund": false,
+     "score": 1.047
+    },
+    {
+     "number": "25227",
+     "title": "Casely Recalls Wireless Portable Power Banks Due to Fire and Burn Hazards",
+     "photoRefund": false,
+     "score": 1.038
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "27056",
+     "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech"
+    },
+    {
+     "number": "26090",
+     "title": "Belkin Recalls Portable Power Banks and Wireless Charging Stands Due to Fire and Burn Hazards"
+    },
+    {
+     "number": "26792",
+     "title": "NEWDERY Power Banks Recalled Due to Fire and Burn Hazards; Risk of Serious Injury; Sold on Amazon"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "24344",
+     "title": "IKEA Recalls VARMFRONT Power Banks Due to Fire Hazard"
+    },
+    {
+     "number": "25011",
+     "title": "Anker Power Banks Recalled Due to Fire and Burn Hazards; Manufactured by Anker Innovations"
+    },
+    {
+     "number": "25227",
+     "title": "Casely Recalls Wireless Portable Power Banks Due to Fire and Burn Hazards"
+    },
+    {
+     "number": "27056",
+     "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech"
+    },
+    {
+     "number": "26792",
+     "title": "NEWDERY Power Banks Recalled Due to Fire and Burn Hazards; Risk of Serious Injury; Sold on Amazon"
+    }
+   ]
+  },
+  "pajamas": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 846,
+   "top": [
+    {
+     "number": "24135",
+     "title": "Oso & Me Recalls Children's Pajama Sets Due to Burn Hazard; Violation of the Federal Flammability Regulations for Children's Sleepwear",
+     "photoRefund": true,
+     "score": 1.149
+    },
+    {
+     "number": "25158",
+     "title": "Forever 21 Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations; Sold Exclusively by Forever 21",
+     "photoRefund": true,
+     "score": 1.111
+    },
+    {
+     "number": "24296",
+     "title": "Children's Pajama Sets Recalled Due to Burn Hazard and Violation of Federal Flammability Standards; Sold Exclusively on Temu.com by Fashion Online",
+     "photoRefund": true,
+     "score": 1.087
+    },
+    {
+     "number": "27045",
+     "title": "Fashion Brand Apparel Recalls QZH.DUAO Pajama Sets Due to Risk of Serious Injury or Death from Burn Hazard; Violate Mandatory Standards for Children’s Sleepwear",
+     "photoRefund": true,
+     "score": 1.082
+    },
+    {
+     "number": "24183",
+     "title": "Lovey & Grink Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations for Children's Sleepwear",
+     "photoRefund": true,
+     "score": 1.08
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "24135",
+     "title": "Oso & Me Recalls Children's Pajama Sets Due to Burn Hazard; Violation of the Federal Flammability Regulations for Children's Sleepwear"
+    },
+    {
+     "number": "25158",
+     "title": "Forever 21 Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations; Sold Exclusively by Forever 21"
+    },
+    {
+     "number": "24183",
+     "title": "Lovey & Grink Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations for Children's Sleepwear"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "25096",
+     "title": "Ivy City Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations; Sold Exclusively by Ivy City"
+    },
+    {
+     "number": "24207",
+     "title": "Sant and Abel Recalls Children's Pajamas Due to Burn Hazards"
+    },
+    {
+     "number": "25040",
+     "title": "Petidoux Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations for Children's Sleepwear"
+    },
+    {
+     "number": "25291",
+     "title": "Macy's Recalls Holiday Lane Infant Footed Pajamas Due to Injury Hazard; Sold Exclusively by Macy's"
+    },
+    {
+     "number": "24135",
+     "title": "Oso & Me Recalls Children's Pajama Sets Due to Burn Hazard; Violation of the Federal Flammability Regulations for Children's Sleepwear"
+    }
+   ]
+  },
+  "nursing pillow": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 826,
+   "top": [
+    {
+     "number": "27071",
+     "title": "Kikea Store Recalls X-VESOLJE Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows",
+     "photoRefund": true,
+     "score": 1.164
+    },
+    {
+     "number": "27047",
+     "title": "PILLANI Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows",
+     "photoRefund": true,
+     "score": 1.154
+    },
+    {
+     "number": "26596",
+     "title": "AMASKY Nursing Pillows Recalled Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions; Sold on Amazon by Pretty-Life",
+     "photoRefund": true,
+     "score": 1.111
+    },
+    {
+     "number": "26525",
+     "title": "Little Grape Land Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions",
+     "photoRefund": true,
+     "score": 1.109
+    },
+    {
+     "number": "26195",
+     "title": "Greatale Recalls Self-Feeding Pillows Due to Risk of Serious Injury or Death from Aspiration and Suffocation",
+     "photoRefund": true,
+     "score": 0.956
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "27071",
+     "title": "Kikea Store Recalls X-VESOLJE Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows"
+    },
+    {
+     "number": "27047",
+     "title": "PILLANI Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows"
+    },
+    {
+     "number": "26596",
+     "title": "AMASKY Nursing Pillows Recalled Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions; Sold on Amazon by Pretty-Life"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "27047",
+     "title": "PILLANI Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows"
+    },
+    {
+     "number": "27071",
+     "title": "Kikea Store Recalls X-VESOLJE Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows"
+    },
+    {
+     "number": "26596",
+     "title": "AMASKY Nursing Pillows Recalled Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions; Sold on Amazon by Pretty-Life"
+    },
+    {
+     "number": "26525",
+     "title": "Little Grape Land Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions"
+    },
+    {
+     "number": "26195",
+     "title": "Greatale Recalls Self-Feeding Pillows Due to Risk of Serious Injury or Death from Aspiration and Suffocation"
+    }
+   ]
+  },
+  "baby lounger": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 780,
+   "top": [
+    {
+     "number": "26181",
+     "title": "Joyful Journeys Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products",
+     "photoRefund": true,
+     "score": 1.203
+    },
+    {
+     "number": "26591",
+     "title": "Vevor Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violate Mandatory Standard for Infant Sleep Products",
+     "photoRefund": true,
+     "score": 1.193
+    },
+    {
+     "number": "26032",
+     "title": "Belivium Baby Loungers Recalled Due to Risk of Serious Injury or Death from Suffocation and Entrapment Hazards; Violates Mandatory Standard for Infant Sleep Products; Sold on Amazon by Belivium",
+     "photoRefund": true,
+     "score": 1.175
+    },
+    {
+     "number": "26116",
+     "title": "Sofoliana and Glotika Baby Loungers Recalled Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products; Sold on Amazon by Bosen US",
+     "photoRefund": true,
+     "score": 1.168
+    },
+    {
+     "number": "26113",
+     "title": "Macardac Baby Loungers Recalled Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products; Sold on Amazon by Macardac Products",
+     "photoRefund": true,
+     "score": 1.163
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "26181",
+     "title": "Joyful Journeys Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products"
+    },
+    {
+     "number": "26591",
+     "title": "Vevor Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violate Mandatory Standard for Infant Sleep Products"
+    },
+    {
+     "number": "26113",
+     "title": "Macardac Baby Loungers Recalled Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products; Sold on Amazon by Macardac Products"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "26185",
+     "title": "BBWOO Baby Loungers Recalled Due to Risk of Serious Injury or Death from Head Injury; Violates Mandatory Standard for Bicycle Helmets"
+    },
+    {
+     "number": "26095",
+     "title": "Bearlala Baby Loungers Recalled Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products; Sold on Walmart.com by Nuoxuann"
+    },
+    {
+     "number": "26015",
+     "title": "YGJT Baby Loungers Recalled Due to Risk of Serious Injury or Death from Entrapment and Fall; Violates Mandatory Standard for Infant Sleep Products; Sold on SHEIN by YGJT Local Warehouse"
+    },
+    {
+     "number": "26591",
+     "title": "Vevor Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violate Mandatory Standard for Infant Sleep Products"
+    },
+    {
+     "number": "26437",
+     "title": "HappyGira Recalls Sweetie Baby and Style Life Eleven Baby Loungers Due to Risk of Serious Injury or Death from Suffocation and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products"
+    }
+   ]
+  },
+  "bed rail": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 833,
+   "top": [
+    {
+     "number": "26037",
+     "title": "LEACHOI Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violates Mandatory Standard for Adult Portable Bed Rails; Sold on Amazon by LEACHOI",
+     "photoRefund": true,
+     "score": 1.185
+    },
+    {
+     "number": "25046",
+     "title": "Medical King Recalls About 222,000 Adult Portable Bed Rails Due to Serious Entrapment and Asphyxia Hazards; One Death Reported",
+     "photoRefund": false,
+     "score": 1.138
+    },
+    {
+     "number": "26733",
+     "title": "Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails; Sold on Amazon by Loyoda Direct and Loyoda",
+     "photoRefund": true,
+     "score": 1.103
+    },
+    {
+     "number": "24248",
+     "title": "Medline Industries Recalls 1.5 Million Adult Portable Bed Rails Due to Serious Entrapment and Asphyxia Hazards; Two Deaths Reported",
+     "photoRefund": false,
+     "score": 1.086
+    },
+    {
+     "number": "26341",
+     "title": "Vive Health Recalls Adult Portable Bed Rails Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Two Deaths Reported",
+     "photoRefund": true,
+     "score": 1.05
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "26037",
+     "title": "LEACHOI Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violates Mandatory Standard for Adult Portable Bed Rails; Sold on Amazon by LEACHOI"
+    },
+    {
+     "number": "26733",
+     "title": "Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails; Sold on Amazon by Loyoda Direct and Loyoda"
+    },
+    {
+     "number": "26341",
+     "title": "Vive Health Recalls Adult Portable Bed Rails Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Two Deaths Reported"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "26173",
+     "title": "Sangohe Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails"
+    },
+    {
+     "number": "26175",
+     "title": "YOLAAH Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation Hazards; Violate Mandatory Standard for Adult Portable Bed Rails"
+    },
+    {
+     "number": "27029",
+     "title": "usOpal Recalls Xalirium Portable Bed Rails Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails"
+    },
+    {
+     "number": "26630",
+     "title": "MNIENT Adult Portable Bed Rails Recalled Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails"
+    },
+    {
+     "number": "24370",
+     "title": "Ceither Adult Portable Bed Rails Recalled Due to Serious Entrapment and Asphyxia Hazards; Violation of Federal Regulations for Adult Portable Bed Rails; Sold Exclusively on Amazon.com by Inforce"
+    }
+   ]
+  },
+  "dresser that tips over": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 1233,
+   "top": [
+    {
+     "number": "25146",
+     "title": "Sauder Woodworking Recalls Clothing Storage Unit Tip-Over Restraint Straps Due to Tip-Over and Entrapment Hazards to Children",
+     "photoRefund": false,
+     "score": 1.306
+    },
+    {
+     "number": "26251",
+     "title": "YITA Recalls Multiple Brands of Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units",
+     "photoRefund": true,
+     "score": 1.255
+    },
+    {
+     "number": "25447",
+     "title": "Lulive Recalls Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment; Violates Mandatory Standard for Clothing Storage Units; Sold on Amazon by Lulive",
+     "photoRefund": true,
+     "score": 1.238
+    },
+    {
+     "number": "25341",
+     "title": "YaFiti White Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violations of Federal Standard for Clothing Storage Units; Sold on Amazon",
+     "photoRefund": true,
+     "score": 1.235
+    },
+    {
+     "number": "26794",
+     "title": "Yuyitop Recalls Aitjunz 8-Drawer Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units",
+     "photoRefund": false,
+     "score": 1.235
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "26251",
+     "title": "YITA Recalls Multiple Brands of Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units"
+    },
+    {
+     "number": "26736",
+     "title": "Gizoon Direct Recalls Six-Drawer Double Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units"
+    },
+    {
+     "number": "26690",
+     "title": "DUMOS Nine-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "25094",
+     "title": "HallyBee Farmhouse Dressers Recalled Due Tip-Over and Entrapment Hazards; Violation of Federal Regulation for Clothing Storage Units; Sold Exclusively on Amazon.com by YKHallyBee"
+    },
+    {
+     "number": "25146",
+     "title": "Sauder Woodworking Recalls Clothing Storage Unit Tip-Over Restraint Straps Due to Tip-Over and Entrapment Hazards to Children"
+    },
+    {
+     "number": "27059",
+     "title": "Yinklev Recalls Jocoevol 6-Drawer Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units"
+    },
+    {
+     "number": "26676",
+     "title": "Fitueyes Recalls Laziza Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units"
+    },
+    {
+     "number": "27049",
+     "title": "SOOWERY Recalls 8-Drawer Fabric Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units"
+    }
+   ]
+  },
+  "phone charger that overheats": {
+   "mode": "elastic",
+   "model": ".jina-embeddings-v3",
+   "reranker": ".jina-reranker-v3",
+   "ms": 821,
+   "top": [
+    {
+     "number": "26575",
+     "title": "Super Off-Road Solar Power Banks Recalled Due to Overheating; Imported by Spector & Co.",
+     "photoRefund": false,
+     "score": 1.235
+    },
+    {
+     "number": "25061",
+     "title": "Belkin Recalls Portable Wireless Battery Chargers for Smart Watches Due to Fire Hazard",
+     "photoRefund": true,
+     "score": 1.027
+    },
+    {
+     "number": "24125",
+     "title": "IKEA Recalls USB Chargers Due to Burn and Electric Shock Hazards",
+     "photoRefund": false,
+     "score": 1.008
+    },
+    {
+     "number": "25248",
+     "title": "Baseus Portable Chargers Recalled Due to Fire Hazard; Sold on Amazon.com by Shenzhen Baseus Technology",
+     "photoRefund": false,
+     "score": 0.987
+    },
+    {
+     "number": "26670",
+     "title": "A2batt Recalls EEMB Lithium Coin Battery Chargers Due to Risk of Serious Injury or Death from Battery Ingestion; Violate Mandatory Standard for Consumer Products with Coin Batteries",
+     "photoRefund": true,
+     "score": 0.982
+    }
+   ],
+   "photoRefundOnly": [
+    {
+     "number": "25061",
+     "title": "Belkin Recalls Portable Wireless Battery Chargers for Smart Watches Due to Fire Hazard"
+    },
+    {
+     "number": "24287",
+     "title": "Baseus Magnetic Wireless Charging Power Banks Recalled Due to Fire Hazard; Imported by Shenzhen Baseus Technology"
+    },
+    {
+     "number": "26610",
+     "title": "Flaunt Recalls Magsafe Battery Chargers Due to Risk of Serious Injury or Death from Fire and Burn Hazards"
+    }
+   ],
+   "localTop": [
+    {
+     "number": "26164",
+     "title": "Meaicezli Play Purse Sets Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violates Mandatory Standard for Toys; Sold on Amazon by Angeer-US"
+    },
+    {
+     "number": "24271",
+     "title": "myCharge Recalls POWER HUB All-In-One Portable Chargers Due to Fire and Burn Hazards; Sold Exclusively at Costco"
+    },
+    {
+     "number": "26610",
+     "title": "Flaunt Recalls Magsafe Battery Chargers Due to Risk of Serious Injury or Death from Fire and Burn Hazards"
+    },
+    {
+     "number": "25061",
+     "title": "Belkin Recalls Portable Wireless Battery Chargers for Smart Watches Due to Fire Hazard"
+    },
+    {
+     "number": "25248",
+     "title": "Baseus Portable Chargers Recalled Due to Fire Hazard; Sold on Amazon.com by Shenzhen Baseus Technology"
+    }
+   ]
+  }
+ }
+}

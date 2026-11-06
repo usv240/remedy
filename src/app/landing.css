@@ -1,0 +1,1366 @@
+/* The home page. Direction: .taste-skill/remedy-sheet.txt, "The sentence is the layout". One grid of twelve columns on
+   the page's one pair of margins; each section a short statement with its proof beside it. Five type steps only
+   (globals.css). The accent fills the primary action and nothing else. */
+
+:root {
+  --lp-gap: clamp(0.75rem, 0.4rem + 1.2vw, 1.5rem);
+}
+
+/* ------------------------------------------------------------------ Hero: "Title in the sky, line on the horizon" */
+.hero {
+  position: relative;
+  min-height: min(calc(100svh - 72px), 46rem);
+}
+.hero-sky {
+  padding-top: clamp(2.5rem, 1rem + 4vw, 4.5rem);
+  text-align: center;
+}
+.hero-h {
+  font-size: var(--step-display);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  text-wrap: nowrap;
+}
+.hero-line {
+  display: block;
+}
+.hero-sky > .info-trigger {
+  display: inline-flex;
+  margin-top: 1rem;
+}
+
+/* The picture in the sentence: one line tall and 2.6em wide, set in em so it scales with the letters and sits on
+   the baseline. The sheet's one loud move, the shutter, opens it from the left edge over 1.1s while the picture
+   inside settles from 1.12 scale. Reduced motion shows it at rest. */
+.hero-slot {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+  width: 2.6em;
+  height: 0.7em;
+  border-radius: 0.09em;
+  overflow: hidden;
+  background: var(--surface-2);
+  animation: shutter 1.1s var(--ease-in-out) both;
+}
+.hero-slot-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 48% 60%;
+  animation: shutter-settle 1.1s var(--ease-out) both;
+}
+@keyframes shutter {
+  from {
+    clip-path: inset(0 100% 0 0 round 0.09em);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0.09em);
+  }
+}
+@keyframes shutter-settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-slot,
+  .hero-slot-img {
+    animation: none;
+  }
+}
+
+/* The horizon at 52%: the sentence split in two, the first half ending at column 5, the second starting at column 8. */
+.hero-horizon {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  top: 52%;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  font-size: var(--step-lead);
+  line-height: 1.3;
+}
+.hero-half-a {
+  grid-column: 1 / 6;
+  text-align: right;
+}
+.hero-half-b {
+  grid-column: 8 / 13;
+}
+.hero-actions {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  top: calc(52% + 5.5rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+}
+.hero-cta {
+  min-height: 52px;
+  padding-inline: 1.5rem;
+}
+.hero-link {
+  font-size: 1.0625rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.hero-note {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: 1.5rem;
+  text-align: center;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .hero {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1.5rem;
+  }
+  .hero-sky {
+    padding-top: 3rem;
+  }
+  .hero-h {
+    font-size: 11vw;
+    text-wrap: wrap;
+  }
+  /* On a phone the picture drops to its own line between the two halves of the sentence. */
+  .hero-line-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.16em;
+  }
+  .hero-slot {
+    order: -1;
+    width: min(78vw, 20rem);
+    height: auto;
+    aspect-ratio: 2.4;
+    border-radius: 10px;
+    margin-top: 0.2em;
+    font-size: 1rem;
+  }
+  .hero-horizon,
+  .hero-actions,
+  .hero-note {
+    position: static;
+  }
+  .hero-horizon {
+    display: block;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 1.0625rem;
+  }
+  .hero-half {
+    display: block;
+  }
+  .hero-half-a {
+    text-align: center;
+  }
+  .hero-actions {
+    margin-top: 2rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .hero-cta {
+    width: 100%;
+    min-height: 56px;
+  }
+  .hero-note {
+    margin-top: 1.5rem;
+  }
+}
+
+/* ------------------------------------------------------------------ Intro: "Headline crossing onto a photograph" */
+.intro {
+  margin-top: var(--section-gap);
+}
+.intro-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr;
+  column-gap: var(--lp-gap);
+  align-items: start;
+}
+.intro-h {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  z-index: 2;
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: nowrap;
+  pointer-events: none;
+}
+.intro-l1,
+.intro-l2 {
+  display: block;
+}
+/* The second line starts at column 5 and runs onto the photograph, whose left edge is column 7 (50% of the grid plus
+   half a gap). It is set twice: in the page's ink left of that edge, and in a fixed dark ink over the pale photograph,
+   so it reads in both themes. */
+.intro-l2 {
+  position: relative;
+  padding-left: calc(100% / 3 + var(--lp-gap) / 3);
+}
+.intro-ink {
+  display: block;
+  clip-path: inset(-0.2em calc(50% - var(--lp-gap) / 2) -0.3em -1em);
+}
+.intro-ink-on {
+  position: absolute;
+  inset: 0 0 auto 0;
+  padding-left: inherit;
+  color: #030407;
+  clip-path: inset(-0.2em -1em -0.3em calc(50% + var(--lp-gap) / 2));
+}
+.intro-photo {
+  grid-column: 7 / -1;
+  grid-row: 1 / 4;
+  position: relative;
+  z-index: 1;
+  margin: calc(var(--step-head) * 1.04) calc(-1 * var(--margin)) 0 0;
+}
+.intro-photo img,
+.intro-photo-2 img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-2);
+}
+.intro-photo figcaption,
+.intro-photo-2 figcaption {
+  margin-top: 0.6rem;
+  font-size: var(--step-small);
+  color: var(--muted);
+  max-width: 34rem;
+  padding-right: var(--margin);
+}
+.intro-text {
+  grid-column: 1 / 6;
+  grid-row: 2;
+  margin-top: 2.5rem;
+}
+.intro-stat {
+  font-size: var(--step-lead);
+  line-height: 1.4;
+}
+.intro-lead {
+  margin-top: 1rem;
+  font-size: var(--step-lead);
+  line-height: 1.4;
+}
+.intro-quotes {
+  list-style: none;
+  margin: 2.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+  max-width: 34rem;
+}
+.intro-quotes blockquote {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+.intro-q-src {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.intro-photo-2 {
+  grid-column: 1 / 5;
+  grid-row: 3;
+  align-self: end;
+  margin-top: 3rem;
+  max-width: 22.5rem;
+}
+
+@media (max-width: 760px) {
+  .intro-grid {
+    display: block;
+  }
+  .intro-h {
+    font-size: 10vw;
+  }
+  .intro-l2 {
+    padding-left: 0;
+  }
+  .intro-ink {
+    clip-path: inset(-0.2em calc(100% - 25vw + var(--margin)) -0.3em -1em);
+  }
+  .intro-ink-on {
+    clip-path: inset(-0.2em -1em -0.3em calc(25vw - var(--margin)));
+  }
+  /* The photograph is 75% of the width, flush right, and starts under the heading's first line. */
+  .intro-photo {
+    width: 75vw;
+    margin: calc(-10vw * 1.04) calc(-1 * var(--margin)) 0 auto;
+  }
+  .intro-text {
+    margin-top: 2rem;
+  }
+  .intro-stat,
+  .intro-lead {
+    font-size: 1.0625rem;
+  }
+  .intro-photo-2 {
+    width: 50%;
+  }
+}
+
+/* ------------------------------------------------------------------ How it works: "Lines that step across" */
+.how {
+  margin-top: var(--section-gap);
+}
+.how-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  row-gap: 56px;
+}
+.how-step {
+  grid-column-end: 13;
+}
+.how-step:nth-child(1) {
+  grid-column-start: 1;
+}
+.how-step:nth-child(2) {
+  grid-column-start: 3;
+}
+.how-step:nth-child(3) {
+  grid-column-start: 5;
+}
+.how-step:nth-child(4) {
+  grid-column-start: 7;
+}
+.how-line {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--step-head);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+.how-line[data-last] {
+  color: var(--accent-text);
+}
+.how-note {
+  margin-top: 12px;
+  max-width: 34ch;
+  font-size: 1.0625rem;
+  color: var(--muted);
+}
+@media (max-width: 760px) {
+  .how-steps {
+    display: block;
+  }
+  .how-step + .how-step {
+    margin-top: 40px;
+  }
+  .how-step:nth-child(2) {
+    padding-left: 6vw;
+  }
+  .how-step:nth-child(3) {
+    padding-left: 12vw;
+  }
+  .how-step:nth-child(4) {
+    padding-left: 18vw;
+  }
+  .how-line {
+    font-size: 8.4vw;
+  }
+  .how-note {
+    font-size: 1rem;
+  }
+}
+
+/* ------------------------------------------------------------------ Showcase: "Headline you can type" */
+.showcase {
+  position: relative;
+  margin-top: var(--section-gap);
+  min-height: 70svh;
+}
+.showcase-info {
+  position: absolute;
+  right: var(--margin);
+  top: -2.75rem;
+}
+.sc-line {
+  font-family: var(--font-display);
+}
+.sc-input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--step-display);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  caret-color: var(--ink);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.sc-input::-webkit-search-cancel-button,
+.sc-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.sc-input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+.sc-hint {
+  margin-top: 0.5rem;
+  font-size: 1.0625rem;
+  color: var(--muted);
+}
+.sc-results {
+  margin-top: 48px;
+  max-width: 35rem;
+  transition: opacity 160ms ease;
+}
+.sc-results[data-busy] {
+  opacity: 0.55;
+}
+.sc-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.sc-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  text-decoration: none;
+  color: var(--ink);
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    border-color 160ms ease;
+}
+.sc-row:active {
+  transform: scale(0.99);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sc-row:hover {
+    border-color: color-mix(in srgb, var(--ink) 30%, var(--edge));
+  }
+  .sc-row:hover .sc-title {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+.sc-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+}
+/* CPSC product shots are on white, so the picture keeps a white mat; an empty slot takes the tone step. */
+.sc-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+}
+.sc-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.sc-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+.sc-meta {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.sc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+.sc-empty {
+  padding: 12px 0;
+  color: var(--muted);
+}
+.sc-foot {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: center;
+  font-size: 0.9375rem;
+}
+.sc-foot .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.sc-mode {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.sc-examples {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+}
+.sc-example {
+  background: none;
+  border: 0;
+  padding: 0;
+  min-height: 44px;
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  cursor: pointer;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.sc-example:active {
+  transform: scale(0.97);
+}
+.sc-example[aria-pressed="true"] {
+  text-decoration-color: var(--ink);
+  text-decoration-thickness: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sc-example:hover {
+    text-decoration-color: var(--ink);
+  }
+}
+@media (max-width: 760px) {
+  .showcase {
+    min-height: 0;
+  }
+  .showcase-info {
+    position: static;
+    margin-bottom: 0.5rem;
+  }
+  .sc-input {
+    font-size: 11vw;
+  }
+  .sc-results {
+    margin-top: 28px;
+    max-width: none;
+  }
+  .sc-examples {
+    margin-top: 1.25rem;
+    gap: 8px;
+  }
+  .sc-example {
+    min-height: 44px;
+    padding: 0 14px;
+    background: var(--surface-2);
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  .sc-example[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+}
+
+/* ------------------------------------------------------------------ Try a photo: a 5/7 product row */
+.try {
+  margin-top: var(--section-gap);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  align-items: start;
+}
+.try-statement {
+  grid-column: 1 / 6;
+  position: sticky;
+  top: 2rem;
+}
+.try-h {
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 1.02;
+}
+.try-p {
+  margin-top: 1.5rem;
+  font-size: var(--step-lead);
+  line-height: 1.4;
+  max-width: 28rem;
+}
+.try-actions {
+  margin-top: 2rem;
+}
+.try-actions .btn {
+  min-height: 52px;
+  padding-inline: 1.5rem;
+}
+.try-fragment {
+  grid-column: 6 / -1;
+}
+
+/* The fragment is a piece of the product at its real size: app rules inside (radii, a 1px sheet edge, the UI face). */
+.tp {
+  display: grid;
+  gap: 12px;
+}
+.tp-picks {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.tp-pick {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 6px 6px 8px;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 44px;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    border-color 160ms ease;
+}
+.tp-pick img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 7px;
+  background: #fff;
+}
+.tp-pick[aria-checked="true"] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.tp-pick:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tp-pick:not([aria-checked="true"]):hover {
+    border-color: color-mix(in srgb, var(--ink) 35%, var(--edge));
+  }
+}
+.tp-upload {
+  align-content: stretch;
+  grid-template-rows: 1fr auto;
+}
+.tp-plus {
+  position: relative;
+  display: block;
+  border-radius: 7px;
+  background-color: var(--surface-2);
+  min-height: 3rem;
+}
+.tp-plus::before,
+.tp-plus::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  margin: -1px 0 0 -9px;
+  background: var(--ink);
+}
+.tp-plus::after {
+  transform: rotate(90deg);
+}
+.tp-sheet {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 16px;
+  padding: 20px;
+}
+.tp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.tp-recall {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.tp-time {
+  font-size: 1.25rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.tp-about {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.tp-checks {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.tp-check {
+  display: grid;
+  grid-template-columns: 10.5rem auto minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 8px 0;
+  opacity: 0.45;
+  transition: opacity 240ms var(--ease-out);
+}
+.tp-check[data-on] {
+  opacity: 1;
+}
+.tp-name {
+  font-weight: 500;
+}
+.tp-check .pill {
+  justify-self: start;
+}
+.tp-reason {
+  font-size: 0.875rem;
+}
+.tp-tech {
+  grid-column: 1 / -1;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.tp-result {
+  margin-top: 12px;
+  min-height: 5.5rem;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 260ms var(--ease-out),
+    transform 260ms var(--ease-out);
+}
+.tp-result[data-on] {
+  opacity: 1;
+  transform: none;
+}
+.tp-result[data-decision="verified"] {
+  background: var(--pill-positive);
+  color: var(--pill-positive-ink);
+}
+.tp-decision {
+  font-weight: 600;
+  font-size: 1.0625rem;
+}
+.tp-next {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+}
+.tp-settings {
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tp-credit {
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tp-check,
+  .tp-result {
+    transition: none;
+  }
+}
+@media (max-width: 900px) {
+  .try {
+    display: block;
+  }
+  .try-statement {
+    position: static;
+  }
+  .try-fragment {
+    margin-top: 2rem;
+  }
+}
+@media (max-width: 560px) {
+  .tp-picks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tp-check {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .tp-reason {
+    grid-column: 1 / -1;
+  }
+  .tp-sheet {
+    padding: 16px;
+  }
+}
+
+/* ------------------------------------------------------------------ Stats: "Column aligned on the decimal" */
+.stats {
+  margin-top: var(--section-gap);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+}
+.stats-head {
+  grid-column: 1 / 6;
+  align-self: center;
+}
+.stats-h {
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 1.02;
+}
+.stats-h1 {
+  display: block;
+  color: var(--muted);
+}
+.stats-h2 {
+  display: block;
+}
+.stats-src {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 26rem;
+}
+/* One grid for the whole column: the whole numbers share a right-aligned track and the decimals a left-aligned one,
+   so every figure lines up on the point. Rows and figures are display: contents so their parts land in those tracks. */
+.stats-list {
+  grid-column: 7 / -1;
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr);
+  align-items: baseline;
+  row-gap: 20px;
+}
+.stats-row,
+.stats-fig {
+  display: contents;
+}
+.stats-whole,
+.stats-dec {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--step-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.stats-whole {
+  grid-column: 1;
+  text-align: right;
+}
+.stats-dec {
+  grid-column: 2;
+  min-width: 0.9em;
+}
+.stats-cap {
+  grid-column: 3;
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.35;
+  max-width: 19rem;
+}
+@media (max-width: 900px) {
+  .stats {
+    display: block;
+  }
+  .stats-list {
+    margin-top: 2rem;
+    grid-template-columns: 52% minmax(0, 1fr);
+    row-gap: 6px;
+  }
+  .stats-whole,
+  .stats-dec {
+    font-size: 15vw;
+  }
+  .stats-cap {
+    grid-column: 1 / -1;
+    padding-left: 0;
+    margin-bottom: 22px;
+    font-size: 0.9375rem;
+    max-width: none;
+  }
+}
+
+/* ------------------------------------------------------------------ Grounded in research: "Names as one sentence" */
+.research {
+  position: relative;
+  margin-top: var(--section-gap);
+}
+.rs-info {
+  position: absolute;
+  right: var(--margin);
+  top: -2.75rem;
+}
+/* A statement, not a headline: at most 36px on three lines (24px on a phone). */
+.rs-line {
+  font-size: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);
+  font-weight: 300;
+  font-family: var(--font-display);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 76rem;
+}
+.rs-lead {
+  color: var(--ink);
+}
+.rs-name {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 400ms ease;
+}
+.rs-name[data-lit] {
+  color: var(--ink);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rs-name:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+  }
+}
+.rs-name:focus-visible {
+  color: var(--ink);
+}
+.rs-more {
+  margin-top: 2rem;
+  max-width: 48rem;
+}
+.rs-more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.0625rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent);
+}
+.rs-more > summary::-webkit-details-marker {
+  display: none;
+}
+.rs-more > summary:active {
+  opacity: 0.7;
+}
+.rs-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  font-size: 1.0625rem;
+  max-width: 44rem;
+}
+@media (max-width: 760px) {
+  .rs-line {
+    font-size: 1.5rem;
+  }
+}
+
+/* ------------------------------------------------------------------ How it is built: "Statement, table pushed right" */
+.built {
+  margin-top: var(--section-gap);
+}
+.built-h {
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 0.98;
+}
+.built-h span {
+  display: block;
+}
+.built-h span:first-child {
+  padding-left: 3vw;
+}
+.built-body {
+  margin-top: 96px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+}
+.built-k {
+  grid-column: 7;
+  font-size: 0.875rem;
+  color: var(--muted);
+  padding-top: 0.55rem;
+}
+.built-table {
+  grid-column: 8 / -1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.built-row:nth-child(4n + 1):not(:first-child) {
+  margin-top: 44px;
+}
+.built-link {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) 1rem;
+  gap: 0 1rem;
+  align-items: baseline;
+  padding: 13px 0;
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.built-link:active {
+  transform: translateX(2px);
+}
+.built-tool {
+  color: var(--muted);
+}
+.built-arrow {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+  justify-self: end;
+  opacity: 0.6;
+  transition:
+    opacity 160ms ease,
+    transform 200ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .built-link:hover .built-job {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .built-link:hover .built-arrow {
+    opacity: 1;
+    transform: translateX(3px) rotate(45deg);
+  }
+}
+.built-more {
+  grid-column: 8 / -1;
+  margin-top: 1.5rem;
+}
+.built-more .text-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .built-h {
+    font-size: 9.5vw;
+  }
+  .built-h span:first-child {
+    padding-left: 0;
+  }
+  .built-body {
+    display: block;
+    margin-top: 2.5rem;
+  }
+  .built-k {
+    display: none;
+  }
+  .built-link {
+    grid-template-columns: minmax(0, 1fr) 1rem;
+  }
+  .built-tool {
+    grid-column: 1;
+  }
+  .built-job {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .built-arrow {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+}
+
+/* ------------------------------------------------------------------ For developers */
+.devs {
+  margin-top: var(--section-gap);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  align-items: start;
+}
+.devs-statement {
+  grid-column: 1 / 6;
+}
+.devs-h {
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 1.02;
+}
+.devs-p {
+  margin-top: 1.5rem;
+  font-size: var(--step-lead);
+  line-height: 1.4;
+  max-width: 28rem;
+}
+.devs-actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+}
+.devs-actions .btn {
+  min-height: 52px;
+  padding-inline: 1.5rem;
+}
+.devs-actions .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.devs-fragment {
+  grid-column: 7 / -1;
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 16px;
+  padding: 18px 20px;
+  min-width: 0;
+}
+.devs-cap {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.devs-pre {
+  margin: 10px 0 0;
+  overflow-x: auto;
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre;
+}
+.devs-pre code {
+  font-size: inherit;
+}
+@media (max-width: 900px) {
+  .devs {
+    display: block;
+  }
+  .devs-fragment {
+    margin-top: 2rem;
+  }
+}
+
+/* ------------------------------------------------------------------ FAQ: "Wide heading, indented questions" */
+.faq {
+  margin-top: var(--section-gap);
+}
+.faq-h {
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 1;
+}
+.faq-list {
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  row-gap: 12px;
+}
+.faq-item {
+  grid-column: 5 / -1;
+  border-radius: 12px;
+  margin-inline: -24px;
+  padding-inline: 24px;
+  transition: background-color 200ms ease;
+}
+.faq-item[open] {
+  background: var(--surface-2);
+  padding-bottom: 24px;
+}
+.faq-item > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 44px;
+  padding: 16px 0;
+  font-size: var(--step-lead);
+  line-height: 1.25;
+}
+.faq-item > summary::-webkit-details-marker {
+  display: none;
+}
+/* The chevron: two 2px strokes. */
+.faq-item > summary::after {
+  content: "";
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform var(--dur-menu) var(--ease-out);
+}
+.faq-item[open] > summary::after {
+  transform: translateY(15%) rotate(-135deg);
+}
+.faq-item > summary:active {
+  opacity: 0.7;
+}
+@media (hover: hover) and (pointer: fine) {
+  .faq-item:not([open]):hover {
+    background: color-mix(in srgb, var(--surface-2) 60%, transparent);
+  }
+}
+.faq-item p {
+  font-size: 1.0625rem;
+  max-width: 48ch;
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-item,
+  .faq-item > summary::after {
+    transition: none;
+  }
+}
+@media (max-width: 760px) {
+  .faq-h {
+    font-size: 10vw;
+  }
+  .faq-list {
+    display: block;
+    margin-top: 2rem;
+  }
+  .faq-item {
+    margin-inline: calc(-1 * var(--margin));
+    padding-inline: var(--margin);
+    border-radius: 0;
+  }
+  .faq-item > summary {
+    font-size: 1.1875rem;
+  }
+  .faq-item p {
+    font-size: 1rem;
+  }
+}
+
+/* ------------------------------------------------------------------ CTA: "The idea again, inverted" */
+/* The sheet asks for 90svh; with a two-line headline and one sentence that left a void in the middle of the field,
+   so it is held to two thirds of a screen. */
+.cta {
+  margin-top: var(--section-gap);
+  min-height: min(68svh, 46rem);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding-top: clamp(3rem, 2rem + 4vw, 6rem);
+  padding-bottom: 40px;
+  background: var(--invert-bg);
+  color: var(--invert-ink);
+}
+.cta-h {
+  font-size: var(--step-display);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+.cta-h span {
+  display: block;
+}
+.cta-foot {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  align-items: end;
+}
+.cta-p {
+  grid-column: 1 / 6;
+  font-size: var(--step-lead);
+  line-height: 1.35;
+}
+.cta-btn {
+  grid-column: 10 / -1;
+  justify-self: end;
+  min-height: 56px;
+  padding-inline: 1.75rem;
+  border-color: var(--accent);
+}
+.cta :focus-visible {
+  outline-color: var(--invert-ink);
+}
+@media (max-width: 760px) {
+  .cta {
+    min-height: min(70svh, 34rem);
+  }
+  .cta-h {
+    font-size: 15vw;
+  }
+  .cta-foot {
+    display: block;
+  }
+  .cta-p {
+    font-size: 1.0625rem;
+  }
+  .cta-btn {
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "note": "Every fixture is honestly what its name says. Three show a product made safe, and all three were published by the U.S. CPSC with their recalls as the example of the photo the remedy asks for (26125, and 25007 images 4 and 5). Nothing here was drawn on or edited to look made safe; the user's own made-safe photos go in user/ (see user/README.md).",
+  "files": [
+    { "file": "official/26125-hair-dryer-cord-cut.png", "source": "https://www.cpsc.gov/s3fs-public/RecalledMyOnlyStylerRootBoosterHairDryer.png", "caption": "Recalled MyOnlyStyler Root Booster Hair Dryer with the power cord cut in half for disposal", "recall": "26125", "made_safe": "cut_cord, published by CPSC as the example photo", "credit": "U.S. Consumer Product Safety Commission, recall 26125", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/25007-droyd-1.jpg", "source": "https://www.cpsc.gov/s3fs-public/Droyd1.jpg", "caption": "Recalled Droyd helmet, top view", "recall": "25007", "credit": "U.S. Consumer Product Safety Commission, recall 25007", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/25007-droyd-2.jpg", "source": "https://www.cpsc.gov/s3fs-public/droyd2.jpg", "caption": "Recalled Droyd helmet, back view with logo", "recall": "25007", "credit": "U.S. Consumer Product Safety Commission, recall 25007", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/25007-droyd-3.jpg", "source": "https://www.cpsc.gov/s3fs-public/Droyd3.jpg", "caption": "Recalled Droyd helmet, side view", "recall": "25007", "credit": "U.S. Consumer Product Safety Commission, recall 25007", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/25007-droyd-4-straps-cut.jpg", "source": "https://www.cpsc.gov/s3fs-public/Droyd4.jpg", "caption": "Example of photo with straps cut off from recalled helmet, rendering helmet unusable", "recall": "25007", "made_safe": "straps cut off (proof rule action: other), published by CPSC as the example photo", "credit": "U.S. Consumer Product Safety Commission, recall 25007", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/25007-droyd-5-in-trash.jpg", "source": "https://www.cpsc.gov/s3fs-public/Droyd5.jpg", "caption": "Example of photo with straps cut off and recalled helmet inside a trash can, rendering helmet unusable", "recall": "25007", "made_safe": "straps cut off, helmet in a trash can, published by CPSC as the example photo", "credit": "U.S. Consumer Product Safety Commission, recall 25007", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/26754-guang-1.gif", "source": "https://www.cpsc.gov/s3fs-public/guang1.gif", "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush", "recall": "26754", "credit": "U.S. Consumer Product Safety Commission, recall 26754", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/26754-guang-2.gif", "source": "https://www.cpsc.gov/s3fs-public/guang2.gif", "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush", "recall": "26754", "credit": "U.S. Consumer Product Safety Commission, recall 26754", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/27056-haiara-1.jpg", "source": "https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW", "caption": "HAIARA power bank, model W5 PRO (front)", "recall": "27056", "credit": "US Consumer Product Safety Commission", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/27056-haiara-2.jpg", "source": "https://cpsc.gov/s3fs-public/HAIARA2.jpg?VersionId=VPakZxtfrYqbRwovKj196Qnyb454KdWE", "caption": "HAIARA power bank, model W5 PRO (front)", "recall": "27056", "credit": "US Consumer Product Safety Commission", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/27056-haiara-3.jpg", "source": "https://cpsc.gov/s3fs-public/HAIARA3.jpg?VersionId=INamsxmLp_pmj6BrY8V7xIKnMXTMiqHl", "caption": "HAIARA power bank, model W5 PRO (side)", "recall": "27056", "credit": "US Consumer Product Safety Commission", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/27054-dreo-1.png", "source": "https://cpsc.gov/s3fs-public/DREO1.png?VersionId=37rR7xQxj_D2T3WYYPVS6bf6pWt6LZqC", "caption": "Recalled DREO Space Heater, model DR-HSH015", "recall": "27054", "credit": "US Consumer Product Safety Commission", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/27054-dreo-2.jpg", "source": "https://cpsc.gov/s3fs-public/DREO2.jpg?VersionId=XQ9PGzTKG443Y4cwtuigpQ93h0DOrv6B", "caption": "Manufacture date and model label on the heater's underside", "recall": "27054", "credit": "US Consumer Product Safety Commission", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    { "file": "official/27045-qzhduao-1.png", "source": "https://cpsc.gov/s3fs-public/QZHDUAO1.png?VersionId=cppPPnSgj5.BX_N8pR5cBR_w2GWvOyMh", "caption": "Recalled QZH.DUAO Children's Pajama Sets, Pink Bow", "recall": "27045", "credit": "US Consumer Product Safety Commission", "licence": "Public domain (US government work)", "fetched": "2026-11-05" },
+    {
+      "file": "other/commons-coffee-in-a-mug.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Coffee_in_a_mug.jpg",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coffee_in_a_mug.jpg/1280px-Coffee_in_a_mug.jpg",
+      "title": "Coffee in a mug",
+      "author": "Kurt Kaiser",
+      "taken": "2017-07-15",
+      "credit": "Kurt Kaiser, via Wikimedia Commons",
+      "licence": "CC0 1.0 Universal (public domain dedication)",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "use": "Unrelated object for the C1 right-product check",
+      "fetched": "2026-11-05"
+    },
+    { "file": "derived/27056-haiara-1.rotated90-q55.jpg", "from": "official/27056-haiara-1.jpg", "made_with": "sharp: rotate 90 degrees, resize to 85 percent, JPEG quality 55", "licence": "Public domain (derived from a US government work)", "use": "Rotated and recompressed duplicate for C3" },
+    { "file": "derived/27054-dreo-2.tilt4-crop-q60.jpg", "from": "official/27054-dreo-2.jpg", "made_with": "sharp: rotate 4 degrees on white, crop 6 percent from each edge, JPEG quality 60", "licence": "Public domain (derived from a US government work)", "use": "Small tilt and crop duplicate for C3, at the edge of the threshold" },
+    { "file": "derived/commons-coffee-in-a-mug.blur8.jpg", "from": "other/commons-coffee-in-a-mug.jpg", "made_with": "sharp: Gaussian blur, sigma 8, JPEG quality 85", "licence": "CC0 1.0 (derived from a CC0 work)", "use": "Blurred copy for the quality precheck" }
+  ]
+}

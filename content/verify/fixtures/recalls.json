@@ -1,0 +1,364 @@
+{
+  "source": "CPSC Recalls API, https://www.saferproducts.gov/RestWebServices/Recall?format=json, pulled 2026-11-05. US government work, public domain. Text and image URLs are copied as published.",
+  "proof_rule_note": "Recalls 27056, 27054 and 27045 carry proof rules written by hand from each remedy text, in the plan 7.1 schema, so the verifier tests do not depend on the extractor. Recalls 25007, 26125 and 26754 carry the rule Claude extracted at ingest (content/recalls/proof-rules.json), as the live claim path will. 25007 and 26125 are here because CPSC published a real photo of the product made safe with each recall.",
+  "recalls": [
+    {
+      "number": "27056",
+      "date": "2026-10-29",
+      "title": "HAIARA Power Banks Recalled Due to Risk of Serious Injury or Death from Fire and Burn Hazards; Sold on Amazon.com by Mitrytech",
+      "url": "https://cpsc.gov/Recalls/2027/HAIARA-Power-Banks-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Fire-and-Burn-Hazards-Sold-on-Amazon-com-by-Mitrytech",
+      "description": "This recall involves HAIARA power banks, model W5 PRO, sold on Amazon.com by Mitrytech. The power banks are black and have “20W” printed on the front and “Model: W5 PRO” printed on the side. The seller name, Mitrytech, and brand name, HAIARA, are located on the purchase receipt. This warning applies to power banks with no date code (formatted “YYYYMMDD”) printed on the side.",
+      "remedyText": "Consumers should stop using the recalled power banks immediately. Consumers who purchased their power banks on Amazon.com from Mitrytech should contact Mitrytech for instructions on how to receive a full refund. To receive a refund, consumers will be required to submit a photo of their recalled power bank with the word “recalled” written on it in permanent marker and confirm disposal of the power bank in accordance with applicable laws and regulations.",
+      "units": "About 11,000",
+      "products": [
+        {
+          "name": "HAIARA power banks",
+          "model": null,
+          "type": "Battery Chargers",
+          "units": "About 11,000"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://cpsc.gov/s3fs-public/HAIARA1.jpg?VersionId=myWygu.qNAqSjgZDm8rx5DlFPHoyO9tW",
+          "caption": "HAIARA power bank, model W5 PRO (front)",
+          "file": "official/27056-haiara-1.jpg"
+        },
+        {
+          "url": "https://cpsc.gov/s3fs-public/HAIARA2.jpg?VersionId=VPakZxtfrYqbRwovKj196Qnyb454KdWE",
+          "caption": "HAIARA power bank, model W5 PRO (front)",
+          "file": "official/27056-haiara-2.jpg"
+        },
+        {
+          "url": "https://cpsc.gov/s3fs-public/HAIARA3.jpg?VersionId=INamsxmLp_pmj6BrY8V7xIKnMXTMiqHl",
+          "caption": "HAIARA power bank, model W5 PRO (side)",
+          "file": "official/27056-haiara-3.jpg"
+        }
+      ],
+      "proofRule": {
+        "photo_required": true,
+        "actions": [
+          "write_recalled"
+        ],
+        "marker_text": "recalled",
+        "must_show": [
+          "whole_product",
+          "marking"
+        ],
+        "remedy": "full_refund",
+        "refund_amount_text": null,
+        "contact_channel": "other",
+        "explanation": {
+          "plain": "Write the word recalled on the power bank in permanent marker, then send a photo of it.",
+          "technical": "Remedy requires a photo of the power bank with the word \"recalled\" written on it in permanent marker, plus confirmation of disposal."
+        },
+        "confidence": {
+          "actions": 1,
+          "must_show": 0.9,
+          "remedy": 1
+        }
+      }
+    },
+    {
+      "number": "27054",
+      "date": "2026-10-29",
+      "title": "DREO Recalls DR-HSH015 Space Heaters Due to Fire and Burn Hazards",
+      "url": "https://cpsc.gov/Recalls/2027/DREO-Recalls-DR-HSH015-Space-Heaters-Due-to-Fire-and-Burn-Hazards",
+      "description": "This recall involves DREO space heaters, model number DR-HSH015. The ceramic, electric heaters are black and measure about 11.5 inches wide and 13 inches tall and include a remote control. Only units manufactured from April 2025 through January 2026 are included in this recall. The manufacture date, in YYYY/MM format, and the model number are printed on a label on the heater’s underside and “DREO” on the front of the unit. ",
+      "remedyText": "Consumers should stop using the recalled space heaters immediately and contact DREO for a free replacement space heater. Consumers will be asked to unplug the space heater, destroy it by cutting the electrical cord and follow instructions to send a photo of the destroyed heater.",
+      "units": "About 338,800 (In addition, about 36,300 were sold in Canada)",
+      "products": [
+        {
+          "name": "DREO Space Heaters, model DR-HSH015",
+          "model": null,
+          "type": "Electric Space Heaters,not Otherwise Specified",
+          "units": "About 338,800 (In addition, about 36,300 were sold in Canada)"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://cpsc.gov/s3fs-public/DREO1.png?VersionId=37rR7xQxj_D2T3WYYPVS6bf6pWt6LZqC",
+          "caption": "Recalled DREO Space Heater - model DR-HSH015",
+          "file": "official/27054-dreo-1.png"
+        },
+        {
+          "url": "https://cpsc.gov/s3fs-public/DREO2.jpg?VersionId=XQ9PGzTKG443Y4cwtuigpQ93h0DOrv6B",
+          "caption": "The manufacture date, in YYYY/MM format, and model “DR-HSH015” are printed on a label on the underside of the recalled DREO space heaters.",
+          "file": "official/27054-dreo-2.jpg"
+        }
+      ],
+      "proofRule": {
+        "photo_required": true,
+        "actions": [
+          "cut_cord"
+        ],
+        "marker_text": null,
+        "must_show": [
+          "whole_product",
+          "cut_or_damage"
+        ],
+        "remedy": "replacement",
+        "refund_amount_text": null,
+        "contact_channel": "other",
+        "explanation": {
+          "plain": "Unplug the heater, cut the power cord, then send a photo of the heater with the cut cord.",
+          "technical": "Remedy asks the owner to unplug the heater, destroy it by cutting the electrical cord and send a photo of the destroyed heater."
+        },
+        "confidence": {
+          "actions": 1,
+          "must_show": 0.85,
+          "remedy": 1
+        }
+      }
+    },
+    {
+      "number": "27045",
+      "date": "2026-10-29",
+      "title": "Fashion Brand Apparel Recalls QZH.DUAO Pajama Sets Due to Risk of Serious Injury or Death from Burn Hazard; Violate Mandatory Standards for Children’s Sleepwear",
+      "url": "https://cpsc.gov/Recalls/2027/Fashion-Brand-Apparel-Recalls-QZH-DUAO-Pajama-Sets-Due-to-Risk-of-Serious-Injury-or-Death-from-Burn-Hazard-Violate-Mandatory-Standards-for-Childrens-Sleepwear",
+      "description": "This recall involves QZH.DUAO pajama sets. The pajama sets consist of short-sleeve tops and matching pants. They were sold in Pink Bow, Pink, Black, Light Blue, Purple, Mint Green, Hot Pink, Pink Bowknot, Blue Bowknot, Pink Strawberry and Pink Bow Flower and in sizes 4-5T through 13-14 years. ",
+      "remedyText": "Consumers should stop using the recalled pajama sets immediately and contact Fashion Brand Apparel for a full refund. Consumers will be asked to cut the pajamas in half and email a photo of the destroyed pajama set to qzh.duaoproductrecall@outlook.com to receive the refund. Consumers should then dispose of the destroyed product.",
+      "units": "About 300",
+      "products": [
+        {
+          "name": "QZH.DUAO Children’s Pajama Sets",
+          "model": null,
+          "type": "Nightwear",
+          "units": "About 300"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://cpsc.gov/s3fs-public/QZHDUAO1.png?VersionId=cppPPnSgj5.BX_N8pR5cBR_w2GWvOyMh",
+          "caption": "Recalled QZH.DUAO Children’s Pajama Sets, Pink Bow",
+          "file": "official/27045-qzhduao-1.png"
+        }
+      ],
+      "proofRule": {
+        "photo_required": true,
+        "actions": [
+          "cut_in_half"
+        ],
+        "marker_text": null,
+        "must_show": [
+          "whole_product",
+          "cut_or_damage"
+        ],
+        "remedy": "full_refund",
+        "refund_amount_text": null,
+        "contact_channel": "email",
+        "explanation": {
+          "plain": "Cut the pajamas in half, then send a photo of the cut pajama set.",
+          "technical": "Remedy asks the owner to cut the pajamas in half and email a photo of the destroyed set."
+        },
+        "confidence": {
+          "actions": 1,
+          "must_show": 0.85,
+          "remedy": 1
+        }
+      }
+    },
+    {
+      "number": "25007",
+      "date": "2024-10-10",
+      "title": "Reyhee Group Recalls Droyd Multi-Purpose Helmets Due to Risk of Head Injury; Violation of Federal Regulations for Bicycle Helmets",
+      "url": "https://www.cpsc.gov/Recalls/2025/Reyhee-Group-Recalls-Droyd-Multi-Purpose-Helmets-Due-to-Risk-of-Head-Injury-Violation-of-Federal-Regulations-for-Bicycle-Helmets",
+      "description": "This recall involves Droyd multi-purpose helmets for youths. The recalled helmets were sold in sizes medium (M) and large (L). The helmets are black, with black padding, black straps, and a black buckle. \"DROYD\" is printed on the back of the helmet. Model and serial number are located on the serial number label inside the helmet (e.g. \"DHM000001\" or \"DHL000001\").",
+      "remedyText": "Consumers should stop using the recalled Droyd helmets immediately and contact Reyhee for a full refund. To receive a refund, consumers must cut the straps off the helmet and submit two photos: one photo of both straps cut off and one photo of the helmet and cut straps inside of a trash can. Send both photos along with name and address to Reyhee Group at support@droyd.com. Reyhee Group is contacting all purchasers directly.",
+      "units": 400,
+      "products": [
+        {
+          "name": "Droyd multi-purpose helmets",
+          "model": null,
+          "type": null,
+          "units": "About 400"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/Droyd1.jpg",
+          "caption": "Recalled Droyd helmet – top view",
+          "file": "official/25007-droyd-1.jpg"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+          "caption": "Recalled Droyd helmet – back view with logo",
+          "file": "official/25007-droyd-2.jpg"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/Droyd3.jpg",
+          "caption": "Recalled Droyd helmet – side view",
+          "file": "official/25007-droyd-3.jpg"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/Droyd4.jpg",
+          "caption": "Example of photo with straps cut off from recalled helmet, rendering helmet unusable",
+          "file": "official/25007-droyd-4-straps-cut.jpg"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/Droyd5.jpg",
+          "caption": "Example of photo with straps cut off and recalled helmet inside a trash can, rendering helmet unusable",
+          "file": "official/25007-droyd-5-in-trash.jpg"
+        }
+      ],
+      "proofRule": {
+        "photo_required": true,
+        "actions": [
+          "other"
+        ],
+        "marker_text": null,
+        "must_show": [
+          "whole_product",
+          "cut_or_damage"
+        ],
+        "remedy": "full_refund",
+        "refund_amount_text": "full refund",
+        "refund_amount": null,
+        "contact_channel": "email",
+        "steps": [
+          "Cut both straps off the helmet.",
+          "Take a photo of both cut straps.",
+          "Photograph the helmet and cut straps inside a trash can.",
+          "Email both photos with your name and address to support@droyd.com."
+        ],
+        "explanation": {
+          "plain": "Stop using the helmet and cut off both straps. Send two photos with your name and address to Reyhee by email to get your money back.",
+          "technical": "\"cut the straps off the helmet\" is cutting a smaller part such as straps, so the action is other. The photos of the cut straps and of the helmet in a trash can set whole_product and cut_or_damage. \"full refund\" sets the remedy, and \"support@droyd.com\" sets email."
+        },
+        "confidence": {
+          "actions": 0.85,
+          "must_show": 0.9,
+          "remedy": 0.97
+        }
+      },
+      "proofRuleSource": "content/recalls/proof-rules.json (Claude Opus 5.5, extracted by the data builder)"
+    },
+    {
+      "number": "26125",
+      "date": "2025-11-26",
+      "title": "McLee Creations Recalls MyOnlyStyler Root Booster Hair Dryers Due to Risk of Serious Injury or Death from Electrocution and Shock Hazards",
+      "url": "https://www.cpsc.gov/Recalls/2026/McLee-Creations-Recalls-MyOnlyStyler-Root-Booster-Hair-Dryers-Due-to-Risk-of-Serious-Injury-or-Death-from-Electrocution-and-Shock-Hazards",
+      "description": "This recall involves MyOnlyStyler Root Booster Hair Dryers. The hair dryer was sold in white with black bristles and has \"MY ONLY STYLER\" printed on the handle. Model number \"MOS-22\" is printed on the back of the handle. The hair dryer measures 12 inches long by 1.75 inches wide.",
+      "remedyText": "Consumers should immediately unplug and stop using the recalled hair dryers and contact McLee Creations to receive a full refund. Consumers must submit a photo of the hair dryer with its power cord cut in half to the recall registration portal at https://www.myonlystyler.com/product-recall-registration/ and follow the disposal instructions provided on the website https://www.myonlystyler.com/product-recalls.",
+      "units": 740,
+      "products": [
+        {
+          "name": "MyOnlyStyler Root Booster Hair Dryers",
+          "model": null,
+          "type": null,
+          "units": "About 740"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/RecalledMyOnlyStylerRootBoosterHairDryer.png",
+          "caption": "Recalled MyOnlyStyler Root Booster Hair Dryer with the power cord cut in half for disposal",
+          "file": "official/26125-hair-dryer-cord-cut.png"
+        }
+      ],
+      "proofRule": {
+        "photo_required": true,
+        "actions": [
+          "cut_cord"
+        ],
+        "marker_text": null,
+        "must_show": [
+          "whole_product",
+          "cut_or_damage"
+        ],
+        "remedy": "full_refund",
+        "refund_amount_text": "a full refund",
+        "refund_amount": null,
+        "contact_channel": "web_form",
+        "steps": [
+          "Unplug the hair dryer and stop using it.",
+          "Cut the power cord in half.",
+          "Take a photo of the dryer with the cut cord.",
+          "Upload the photo to the recall registration portal online."
+        ],
+        "explanation": {
+          "plain": "Stop using the hair dryer and cut its power cord in half. Upload a photo of the dryer with the cut cord on the company website to get your money back.",
+          "technical": "\"submit a photo of the hair dryer with its power cord cut in half\" sets photo_required, cut_cord (the cord is cut, not the product body), whole_product and cut_or_damage. \"to receive a full refund\" sets full_refund with no fixed amount, and \"recall registration portal at https://www.myonlystyler.com/product-recall-registration/\" sets web_form."
+        },
+        "confidence": {
+          "actions": 0.97,
+          "must_show": 0.95,
+          "remedy": 0.97
+        }
+      },
+      "proofRuleSource": "content/recalls/proof-rules.json (Claude Opus 5.5, extracted by the data builder)"
+    },
+    {
+      "number": "26754",
+      "date": "2026-09-10",
+      "title": "Guang Zhou Recalls Wantefully Hair Dryer Brushes Due to Risk of Serious Injury or Death from Electrocution, Shock and Burn Hazards; Violate Federal Regulations",
+      "url": "https://cpsc.gov/Recalls/2026/Guang-Zhou-Recalls-Wantefully-Hair-Dryer-Brushes-Due-to-Risk-of-Serious-Injury-or-Death-from-Electrocution-Shock-and-Burn-Hazards-Violate-Federal-Regulations",
+      "description": "This recall involves Wantefully 2 in 1 Hair Dryer & Styler, One Step Hair Dryer Brush Straightner, and the Negative Ion Electric Hot Air Blow Dryer Comb, model number XR-8801. The hair dryers are black hot air dryer paddle brushes with a striped pink design and brush bristles. There are three heat settings on the hair dryers. XRUI and the model name XR-8801 are printed on the top of the product packaging.",
+      "remedyText": "Consumers should unplug and stop using the recalled hair dryers immediately and contact Guang Zhou to receive a full refund. Consumers will be asked to cut the power cord and provide a photo of the destroyed product to wantefully@163.com.",
+      "units": 2295,
+      "products": [
+        {
+          "name": "Wantefully Hair Dryer Brushes",
+          "model": null,
+          "type": "Hair Dryers",
+          "units": "About 2,295"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/guang1.gif",
+          "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush",
+          "file": "official/26754-guang-1.gif"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/guang2.gif",
+          "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush",
+          "file": "official/26754-guang-2.gif"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/guang3.gif",
+          "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/guang4.gif",
+          "caption": "Recalled Wantefully Hair Dryer and Blow Dryer Brush – Product Packaging"
+        },
+        {
+          "url": "https://www.cpsc.gov/s3fs-public/guang5.gif",
+          "caption": "Product Packaging Label with Model Number"
+        }
+      ],
+      "proofRule": {
+        "photo_required": true,
+        "actions": [
+          "cut_cord"
+        ],
+        "marker_text": null,
+        "must_show": [
+          "whole_product",
+          "cut_or_damage"
+        ],
+        "remedy": "full_refund",
+        "refund_amount_text": "full refund",
+        "refund_amount": null,
+        "contact_channel": "email",
+        "steps": [
+          "Unplug the hair dryer brush and stop using it.",
+          "Cut the power cord.",
+          "Take a photo that shows the cut cord.",
+          "Email the photo to wantefully@163.com."
+        ],
+        "explanation": {
+          "plain": "Cut the power cord on your hair dryer brush and email a photo of it to Guang Zhou. You will get a full refund.",
+          "technical": "\"cut the power cord\" sets cut_cord; \"provide a photo of the destroyed product to wantefully@163.com\" sets photo_required, whole_product, cut_or_damage and email; \"full refund\" sets full_refund with no amount."
+        },
+        "confidence": {
+          "actions": 0.95,
+          "must_show": 0.9,
+          "remedy": 0.97
+        }
+      },
+      "proofRuleSource": "content/recalls/proof-rules.json (Claude Opus 5.5, extracted by the data builder)"
+    }
+  ]
+}
