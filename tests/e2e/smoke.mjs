@@ -72,7 +72,14 @@ check("MCP: the recall tools are listed", ["search_recalls", "get_proof_rule", "
 
 // The public API: works with no Elastic (the in-app ranking) and no AI key (stored rules, free checks).
 const search = await (await fetch(`${B}/api/v1/recalls?query=power%20bank&limit=3`)).json().catch(() => null);
-check("API: recall search answers, with a proof rule on photo-refund hits", search?.data?.hits?.length > 0 && search.data.hits.some((h) => h.photo_refund && h.proof_rule), search?.meta?.search?.mode);
+check("API: recall search answers", search?.data?.hits?.length > 0, search?.meta?.search?.mode);
+// The photo-refund filter holds in both modes (Elastic, or the in-app ranking without it), and those hits carry their proof rule.
+const photo = await (await fetch(`${B}/api/v1/recalls?query=power%20bank&photo_refund=true&limit=3`)).json().catch(() => null);
+check(
+  "API: photo-refund search returns only photo-refund recalls, each with its proof rule",
+  photo?.data?.hits?.length > 0 && photo.data.hits.every((h) => h.photo_refund && h.proof_rule),
+  `${photo?.meta?.search?.mode} ${photo?.data?.hits?.map((h) => h.number).join(" ")}`,
+);
 const one = await (await fetch(`${B}/api/v1/recalls/27056`)).json().catch(() => null);
 check("API: one recall with its stored rule", one?.data?.proof_rule?.actions?.includes("write_recalled") === true);
 
