@@ -36,6 +36,7 @@ const PAGES = [
   ["/developers/docs", "API docs"],
   ["/developers/keys", "Your keys"],
   ["/status", "Status"],
+  ["/ops", "Operations"],
   ["/stack", "How it is built"],
 ];
 for (const [path, word] of PAGES) {

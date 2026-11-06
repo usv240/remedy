@@ -1,0 +1,403 @@
+/* Operations: the figures first, then each section as rows and small tables. Rows reuse the Status styles
+   (pages.css); the TOC reuses the Evidence one (evidence.css is not loaded here, so the few rules are repeated). */
+.ops .page-section {
+  max-width: 68rem;
+}
+.ops [id] {
+  scroll-margin-top: 16px;
+}
+.ops-proves {
+  margin: -0.25rem 0 1rem;
+  color: var(--muted);
+  max-width: 40rem;
+}
+.ops-sum {
+  margin-top: 1.25rem;
+}
+.ops-sum + .status-list {
+  margin-top: 1rem;
+}
+
+/* On this page */
+.ops-toc {
+  margin-top: 2rem;
+}
+.ops-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ops-toc .jp-toc-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: var(--step-small);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.ops-toc .jp-toc-link:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ops-toc .jp-toc-link:hover {
+    border-color: color-mix(in srgb, var(--ink) 35%, var(--edge));
+  }
+}
+
+/* Right now: four figures */
+.ops-tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.ops-tile {
+  padding: 16px 18px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+.ops-tile-k {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.ops-tile-v {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+.ops-tile-s {
+  font-size: var(--step-small);
+}
+@media (max-width: 720px) {
+  .ops-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.ops-services {
+  margin-top: 1rem;
+}
+
+/* Last 24 hours: blocks of counts and one table */
+.ops-day {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.ops-block {
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--edge);
+  padding: 16px 18px 18px;
+  min-width: 0;
+}
+.ops-block-wide {
+  grid-column: 1 / -1;
+}
+.ops-block h3 {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.ops-block > .muted {
+  font-size: var(--step-small);
+}
+.ops-counts {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.ops-counts li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--edge);
+  font-size: var(--step-small);
+}
+.ops-counts li > span:last-child {
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .ops-day {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ops-table-wrap {
+  margin-top: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+}
+.ops-table-wrap:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+.ops-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step-small);
+}
+.ops-table th,
+.ops-table td {
+  text-align: left;
+  padding: 8px 10px 8px 0;
+  border-top: 1px solid var(--edge);
+  vertical-align: top;
+}
+.ops-table thead th {
+  border-top: 0;
+  color: var(--muted);
+  font-weight: 500;
+}
+.ops-table th[scope="row"] {
+  font-weight: 400;
+  word-break: break-word;
+}
+.ops-table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+.ops-table td[data-attention] {
+  color: var(--attention);
+  font-weight: 500;
+}
+
+/* The "Running it for real" table (Evidence): three prose columns on a wide screen, stacked cards on a phone. */
+.jl-real th[scope="row"] {
+  font-weight: 500;
+  word-break: normal;
+  min-width: 7rem;
+}
+.jl-real td {
+  min-width: 14rem;
+}
+@media (max-width: 640px) {
+  .jl-real thead {
+    display: none;
+  }
+  .jl-real tr {
+    display: block;
+    padding: 12px 0;
+    border-top: 1px solid var(--edge);
+  }
+  .jl-real th,
+  .jl-real td {
+    display: block;
+    border: 0;
+    padding: 2px 0;
+    min-width: 0;
+  }
+  .jl-real td {
+    padding-top: 8px;
+  }
+  .jl-real td::before {
+    content: attr(data-k);
+    display: block;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+}
+
+/* Technical view only (the View menu sets html[data-mode]). */
+:root:not([data-mode="technical"]) .ops-tech {
+  display: none;
+}
+
+/* Live stream */
+.ops-stream-state {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--step-small);
+  color: var(--muted);
+  min-height: 44px;
+}
+.ops-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--positive);
+  display: inline-block;
+}
+.ops-refresh {
+  min-height: 44px;
+}
+.ops-events {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.ops-ev {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: var(--step-small);
+  border-left: 3px solid var(--edge);
+}
+.ops-ev[data-kind="ledger"] {
+  border-left-color: var(--chart-1);
+}
+.ops-ev[data-kind="request"] {
+  border-left-color: var(--chart-2);
+}
+.ops-ev[data-status="error"] {
+  border-left-color: var(--attention);
+}
+.ops-ev-time {
+  color: var(--muted);
+}
+.ops-ev-what {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ops-ev-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-right: 4px;
+}
+.ops-ev-meta {
+  color: var(--muted);
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .ops-ev {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .ops-ev-time {
+    grid-column: 1 / -1;
+  }
+}
+.ops-trace-out > .ops-events + .ops-events {
+  margin-top: 12px;
+}
+
+/* The chart */
+.ops-chart {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 12px 12px 10px;
+}
+.ops-chart svg {
+  display: block;
+  width: 100%;
+  height: clamp(160px, 28vw, 240px);
+}
+.ops-chart-grid {
+  stroke: var(--edge);
+  stroke-width: 1;
+}
+.ops-chart-day {
+  stroke: var(--edge);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+.ops-chart-tick {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: var(--font-ui, inherit);
+}
+.ops-chart-area {
+  fill: var(--chart-2);
+  opacity: 0.14;
+}
+.ops-chart-line {
+  fill: none;
+  stroke: var(--chart-2);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.ops-chart-err {
+  fill: var(--chart-3);
+}
+.ops-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 8px;
+  font-size: var(--step-small);
+}
+.ops-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  vertical-align: -1px;
+  margin-right: 4px;
+}
+.ops-swatch[data-k="req"] {
+  background: var(--chart-2);
+}
+.ops-swatch[data-k="err"] {
+  background: var(--chart-3);
+}
+
+/* Trace */
+.ops-trace {
+  margin-top: 1.25rem;
+}
+.ops-trace-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+  max-width: 40rem;
+}
+.ops-trace-field input {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.ops-trace-error {
+  margin-top: 0.75rem;
+  color: var(--attention);
+}
+.ops-trace-out {
+  margin-top: 1rem;
+}
+@media (max-width: 480px) {
+  .ops-trace-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Alerts */
+.ops-rule {
+  display: block;
+  font-weight: 400;
+  font-size: var(--step-small);
+}
+.status-mode[data-mode="attention"] {
+  background: var(--pill-attention);
+  color: var(--pill-attention-ink);
+}
+.ops-foot {
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+}

@@ -104,6 +104,23 @@ Each photo check is one Claude vision call, made only after the free checks pass
 4. **The recall's part of the prompt is cached.** Instructions, recall data and official images come first, 71% to 75% of a claim's prompt, so repeat checks on one recall read them from Claude's prompt cache.
 5. **A daily spend cap** (`AI_DAILY_USD`, $2 a day on the hosted site). Past it, every free check still runs and a person at the firm looks at the rest. Each call's cost is logged, and today's spend shows on `/status`.
 
+## Running it for real
+
+What the demo runs on today, and what a production deployment changes. Stated as an operating range; live health is on [`/ops`](https://remedy-y0ym.onrender.com/ops) and the load test on [`/evidence#load`](https://remedy-y0ym.onrender.com/evidence#load).
+
+| Part | The demo today | A real deployment |
+|---|---|---|
+| Web service | One Render Starter instance (0.5 CPU, 512 MB), always on, with the API and MCP server in the same process | Two or more instances behind Render's load balancer, autoscaling on CPU, the same code |
+| Checks and payouts | One background worker (`scripts/worker.ts`); a route runs its own job inline if no worker answers in 2 s | Workers scaled with the queue depth shown on `/ops`; the same `job` table |
+| Database | A 256 MB Postgres with a 1 GB disk, reached only from this workspace | A larger Postgres with a connection pooler, point-in-time recovery, and backups restored on a schedule to prove they work |
+| Photos | Stored in Postgres, resized to 1,600 px, the original cleared once checked | Object storage with signed URLs for upload and view, a retention period, the hash kept in Postgres |
+| AI | $2 of Claude a day; past it, photos go to a person at the firm | A budget per firm, the Message Batches API for proof rules, the same cache so a repeat photo costs nothing |
+| Firm console | Open, for the fictional sample firm | Login and roles per firm (reviewer, compliance lead, read only), every action in the ledger under a named person |
+| PayPal | Sandbox, one app, the hosted webhook plus event lookup for local servers | A live app and a registered webhook per environment, the same signature check |
+| Limits | 20 API requests a minute without a key, 300 photo claims a day site-wide, each payment under $50 | Limits per firm and per key, set with the firm, counted in the same table |
+
+**Observability.** Every API request runs inside a request context ([`src/lib/log.ts`](src/lib/log.ts)): one JSON log line with the request id, route, status and duration, a row in `request_log`, and `x-request-id` on the response (an incoming `x-request-id` is honored). Every error message ends with its request id, and [`/ops`](https://remedy-y0ym.onrender.com/ops) traces an id to its log lines and ledger entries. Errors go to Sentry when `SENTRY_DSN` is set, with personal data scrubbed first ([`src/lib/sentry.ts`](src/lib/sentry.ts)); without it, nothing changes. Rate limits live in the `rate_limit` table, so they hold across instances and deploys. Photo checks and payouts run as jobs ([`src/lib/jobs`](src/lib/jobs)): a worker takes each one with `for update skip locked`, retries with exponential backoff up to five times, and leaves a failed job with its error for a person; `/status` and `/ops` show the queue and the worker's heartbeat.
+
 ## Security and privacy
 
 - **Contact details are encrypted at rest** (AES-256-GCM, [`src/lib/secure.ts`](src/lib/secure.ts)), matched by a keyed hash, and shown masked. Where each payout goes is sealed inside its payment plan the same way ([`src/lib/payments/seal.ts`](src/lib/payments/seal.ts)).
@@ -128,9 +145,10 @@ npm run db:load               # loads content/recalls/: recalls, proof rules and
 npm run db:seed               # the sample firm, Brightline Home
 npx tsx --env-file=.env.local scripts/seed-firm.ts   # its sample claims, plan and report history
 npm run dev                   # http://localhost:3300
+npm run worker                # the job worker, in a second terminal (without it, routes run their jobs inline after 2 s)
 ```
 
-For a production build: `npm run build`, then `PORT=3400 npm start`. Every service except Postgres is optional: without its key, each one uses a fallback, and `/status` says which. [TESTING.md](TESTING.md) covers the sandbox accounts and every suite.
+For a production build: `npm run build`, then `PORT=3400 npm start`. On Render, `render.yaml` adds the worker as a background service with the same environment, plus `SENTRY_DSN` for error tracking (optional). Every service except Postgres is optional: without its key, each one uses a fallback, and `/status` says which. [TESTING.md](TESTING.md) covers the sandbox accounts and every suite.
 
 To host your own copy on Render, [`render.yaml`](render.yaml) creates the web service and its database:
 
@@ -142,14 +160,15 @@ Every push to `main` runs [CI](.github/workflows/ci.yml): the dependency audit, 
 
 | Suite | Command | Result |
 |---|---|---|
-| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 308 passed, 27 skipped (the live Claude, live PayPal and Postgres suites, which need keys or a database) |
+| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 363 passed, 37 skipped (the live Claude, live PayPal and Postgres suites, which need keys or a database) |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
-| Accessibility (axe, WCAG 2.2 AA) and sideways scroll, 22 pages at phone and desktop width, light and dark | `npm run e2e:a11y` | 88 of 88 page views |
+| Accessibility (axe, WCAG 2.2 AA) and sideways scroll, 27 pages at phone and desktop width, light and dark | `npm run e2e:a11y` | 108 of 108 page views |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, and the MCP tools | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: presets, a streamed claim, firm review, approval, a real sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
 | Buy in the sample shop, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 10 of 10 |
 | The firm console: queue and drawer, bulk Approve and pay, the report against SQL, and a live Gantt re-notice | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
 | The audit ledger's hash chain | `npm run verify-ledger` | Every hash links to the one before it |
+| 100 visitors at once on the free paths, against the production build | `node --env-file=.env.local scripts/load-test.mjs` | p50, p95, p99 and the error rate per path on `/evidence#load` |
 | 60 ledger appends at once | `npm run test:ledger-race` | Chain verified |
 
 ## Sources and credits

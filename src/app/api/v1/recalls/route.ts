@@ -2,6 +2,7 @@ import { connection } from "next/server";
 import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
 import { filtersFrom, findRecalls } from "@/lib/api/recall-data";
+import { log } from "@/lib/log";
 import { agencyTier, NOT_CHECKED } from "@/lib/recall/agencies";
 
 /**
@@ -26,7 +27,7 @@ export async function GET(req: Request) {
         : NOT_CHECKED;
       return ok({ query, filters, total: r.total, hits: r.hits, agencies }, started, { search: { mode: r.mode, model: r.model, reranker: r.reranker, agencies: agencies.checked ? agencies.agencies : [] } });
     } catch (e) {
-      console.error("v1.recalls failed", e);
+      log.error("v1.recalls failed", { error: e });
       return fail("internal", "The recall search did not finish. Please try again.", 500);
     }
   });

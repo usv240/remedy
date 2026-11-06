@@ -19,7 +19,6 @@ import {
   SANDBOX_LABEL,
   approvePlan,
   maskPayee,
-  payClaim,
   paymentSummary,
   planPayment,
   priorRefundCheck,
@@ -29,15 +28,16 @@ import {
   salesForBuyer,
   toValue,
   type Payee,
-  type PayResult,
   type Replacement,
 } from "@/lib/payments";
 import { candidateFromHit, heuristicMatch } from "@/lib/recall/match";
 import { searchRecalls } from "@/lib/recall/search";
+import { runJob } from "@/lib/jobs";
+import { log } from "@/lib/log";
 import { encrypt, hashContact, maskContact } from "@/lib/secure";
 import { CHECK_IDS, verifyPhoto, type ClaimContext, type VerifyDeps, type VerifyResult } from "@/lib/verify";
 import { defaultVerifyCache } from "@/lib/verify/cache";
-import { allowTryUpload } from "@/lib/verify/ratelimit";
+import { allowUpload } from "@/lib/ratelimit";
 import { runReviewers } from "@/lib/verify/reviewers";
 import { runVision } from "@/lib/verify/vision";
 import { getRecall, productName, ruleFor, verifyRecallFor } from "./recall";
@@ -121,6 +121,11 @@ async function linkSale(recallNumber: string, link: SaleLinkInput | null | undef
   };
 }
 
+/**
+ * Store the photo: the resized JPEG for the receipt and the firm's queue in `bytes`, and the owner's original in
+ * `original` until the checks have run on it (the checks need the untouched bytes: the EXIF flag, the hash, and the
+ * verification cache key). checkClaim clears `original` when it is done.
+ */
 async function storePhoto(bytes: Buffer, mime: string | null, source: "upload" | "preset") {
   let stored: Buffer = bytes;
   let storedMime = mime ?? "application/octet-stream";
@@ -142,7 +147,7 @@ async function storePhoto(bytes: Buffer, mime: string | null, source: "upload" |
   }
   const [row] = await db()
     .insert(schema.photos)
-    .values({ sha256: sha256(bytes), mime: storedMime, size: bytes.byteLength, width, height, bytes: stored, source })
+    .values({ sha256: sha256(bytes), mime: storedMime, size: bytes.byteLength, width, height, bytes: stored, original: bytes, source })
     .returning({ id: schema.photos.id });
   return row.id;
 }
@@ -199,7 +204,14 @@ export type StoredResult = {
   resting: boolean;
 };
 
-export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => void = () => {}): Promise<ClaimView> {
+/** What the verify_claim job needs beside the claim row: the request's own facts, none of them personal. */
+export type CheckOptions = { test: SubmitInput["test"]; source: SubmitInput["source"]; mime: string | null; link: LinkView | null };
+
+/**
+ * Open the claim: store the photo, insert the claim row, mark a personal claim link answered, and write the first
+ * ledger entry. Fast, no model call. The checks run next in checkClaim, as a verify_claim job (src/lib/jobs).
+ */
+export async function openClaim(input: SubmitInput, emit: (e: ClaimEvent) => void = () => {}): Promise<{ claimId: string; options: CheckOptions }> {
   if (!dbConfigured()) throw new ClaimError("upstream_unavailable", "Claims need the database, which is not set up on this server.", 503);
   const recall = getRecall(input.recallNumber);
   if (!recall) throw new ClaimError("not_found", "There is no recall with that number in Remedy's list. Search for it on the Recalls page.", 404);
@@ -207,7 +219,6 @@ export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => v
   if (input.photo.byteLength > MAX_PHOTO_BYTES) throw new ClaimError("invalid_request", "That photo is over 15 MB. Please send a smaller one.", 413);
 
   const now = new Date();
-  const { rule, source: ruleSource } = ruleFor(recall);
   const terms = await firmTerms(recall.number);
   const linked = await linkSale(recall.number, input.link, now);
   const sale = linked && "sale" in linked ? linked.sale : null;
@@ -238,6 +249,40 @@ export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => v
       .where(and(eq(schema.notices.claimLinkTokenHash, hash), eq(schema.notices.recallNumber, recall.number)));
   }
   await audit("person", "claim.submitted", `claim:${claim.id}`, { recall: recall.number, source: input.source, photo: photoId, linked_sale: sale?.id ?? null, test: isTest });
+  log.info("claim opened", { claim_id: claim.id, recall: recall.number, source: input.source, linked_sale: sale?.id ?? null, test: isTest });
+  return { claimId: claim.id, options: { test: input.test ?? null, source: input.source, mime: input.mime, link: linked?.view ?? null } };
+}
+
+/** The claim's original photo bytes, kept until the checks ran. */
+async function originalPhoto(photoId: string): Promise<Buffer | null> {
+  const [p] = await db().select({ original: schema.photos.original, bytes: schema.photos.bytes }).from(schema.photos).where(eq(schema.photos.id, photoId)).limit(1);
+  return p?.original ?? p?.bytes ?? null;
+}
+
+/**
+ * Run the six checks on an open claim and record the decision: the verify_claim job's work. `final` says this is
+ * the job's last try, so a check that still fails hands the claim to a person at the firm instead of leaving it
+ * "checking". Safe to run again: a claim already decided is returned as it is.
+ */
+export async function checkClaim(claimId: string, options: CheckOptions, emit: (e: ClaimEvent) => void = () => {}, o: { final?: boolean } = {}): Promise<ClaimView> {
+  const row = await loadClaim(claimId);
+  if (!row) throw new ClaimError("not_found", "There is no claim with that id.", 404);
+  if (row.decision !== "pending") {
+    const done = (await getClaimView(claimId))!;
+    emit({ type: "result", claim: done });
+    return done;
+  }
+  const recall = getRecall(row.recallNumber);
+  if (!recall) throw new ClaimError("not_found", "The recall for this claim is no longer in Remedy's list.", 404);
+  const photoId = row.photoId;
+  const photo = photoId ? await originalPhoto(photoId) : null;
+  if (!photoId || !photo) throw new ClaimError("internal", "The photo for this claim is missing.", 500);
+  const { rule, source: ruleSource } = ruleFor(recall);
+  const terms = await firmTerms(recall.number);
+  const sale = row.linkedSaleId ? (await db().select().from(schema.sales).where(eq(schema.sales.id, row.linkedSaleId)).limit(1))[0] : undefined;
+  const input: SubmitInput = { recallNumber: recall.number, photo, mime: options.mime, source: options.source, test: options.test };
+  const claim = { id: claimId };
+  const linked = options.link ? { view: options.link } : null;
 
   const [priorRows, [recallCount]] = await Promise.all([
     db()
@@ -274,6 +319,8 @@ export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => v
       deps,
     );
   } catch (e) {
+    log.error("claim check failed", { claim_id: claim.id, final: Boolean(o.final), error: e });
+    if (!o.final) throw e; // the job tries again with backoff
     await db().update(schema.claims).set({ status: "firm_review", decision: "firm_review", decidedAt: new Date(), updatedAt: new Date() }).where(eq(schema.claims.id, claim.id));
     await audit("system", "claim.check_failed", `claim:${claim.id}`, { error: (e as Error).message.slice(0, 300) });
     throw new ClaimError("internal", "Something went wrong while checking the photo. A person at the firm will look at it.", 500);
@@ -297,6 +344,7 @@ export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => v
     link: linked?.view ?? null,
     resting,
   };
+  if (!photoId) throw new ClaimError("internal", "The photo for this claim is missing.", 500);
   await db()
     .update(schema.claims)
     .set({
@@ -325,9 +373,18 @@ export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => v
     model: result.model,
     ms: result.timings.total_ms,
   });
+  // The checks ran: the owner's original bytes are no longer needed; the resized copy stays for the receipt.
+  await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, photoId));
+  log.info("claim decided", { claim_id: claim.id, recall: recall.number, decision: result.decision, decided_by: result.decided_by, model: result.model, ms: result.timings.total_ms });
   const view = await getClaimView(claim.id);
   emit({ type: "result", claim: view! });
   return view!;
+}
+
+/** Open the claim and run its checks in this process (tests and the inline path). The route uses the job queue. */
+export async function submitClaim(input: SubmitInput, emit: (e: ClaimEvent) => void = () => {}): Promise<ClaimView> {
+  const { claimId, options } = await openClaim(input, emit);
+  return checkClaim(claimId, options, emit, { final: true });
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -508,12 +565,16 @@ async function replacementFor(id: string, claimId: string): Promise<Replacement>
   return { productId: p.id, title: p.title, priceCents, retailer: p.domain ?? p.brand ?? "Retailer", url: p.url, noActiveRecall: check.clear };
 }
 
-function payStatusFor(r: PayResult): ClaimStatus | null {
-  if (r.kind === "sent" || r.kind === "already") {
-    const s = r.payment?.status;
-    return s === "paid" ? "paid" : s === "unclaimed" ? "unclaimed" : "approved";
-  }
-  return null;
+/**
+ * Pay an approved plan through a pay_claim job (src/lib/jobs): the worker sends it, retrying on a PayPal hiccup with
+ * backoff, and this call waits for the answer. With no worker running, the job runs inline after 2 s. The job's
+ * handler updates the claim's status; a job that reached its dead letter reads as "retry_later".
+ */
+async function payViaJob(id: string): Promise<{ kind: string; plain: string }> {
+  const job = await runJob("pay_claim", { claimId: id }, { timeoutMs: 120_000 });
+  if (job?.status === "done" && job.result && typeof job.result === "object") return job.result as { kind: string; plain: string };
+  log.warn("pay_claim job did not finish in time", { claim_id: id, job_id: job?.id ?? null, status: job?.status ?? null });
+  return { kind: "retry_later", plain: "The payment could not be sent just now. A person at the firm can try again." };
 }
 
 export async function payForClaim(id: string, input: PayInput): Promise<PayView> {
@@ -528,9 +589,7 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
   const existing = await paymentSummary(id);
   if (existing.plan && existing.plan.status !== "canceled") {
     // Paying twice never pays twice: an existing plan is reported, and paid once if it is approved and not yet sent.
-    const r = existing.plan.status === "approved" ? await payClaim(id) : null;
-    const s = r ? payStatusFor(r) : null;
-    if (s) await db().update(schema.claims).set({ status: s, updatedAt: new Date() }).where(eq(schema.claims.id, id));
+    const r = existing.plan.status === "approved" ? await payViaJob(id) : null;
     const view = (await getClaimView(id))!;
     return { kind: r?.kind ?? "already", plain: r?.plain ?? view.payment?.status_plain ?? "This claim already has a payment plan.", claim: view };
   }
@@ -584,12 +643,11 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
 
   let kind: string = "needs_approval";
   let plain = `A person at ${terms.firmName} will approve this payment.`;
+  log.info("payment planned", { claim_id: id, route: planned.plan.route, plan_status: planned.plan.status, choice: input.choice, over_limit: overLimit });
   if (planned.plan.status === "approved") {
-    const r = await payClaim(id);
+    const r = await payViaJob(id);
     kind = r.kind;
     plain = r.plain;
-    const s = payStatusFor(r);
-    if (s) await db().update(schema.claims).set({ status: s, updatedAt: new Date() }).where(eq(schema.claims.id, id));
   } else if (overLimit) {
     plain = `This email or phone already has a refund for this recall, so a person at ${terms.firmName} will check this one.`;
   }
@@ -632,9 +690,7 @@ export async function approveAndPayForTest(id: string) {
   if (!s.plan) throw new ClaimError("invalid_request", "This claim has no payment plan yet. Choose where the refund goes first.", 409);
   const approved = s.plan.status === "awaiting_approval" ? await approvePlan(s.plan.id, "e2e reviewer") : { ok: true as const, plan: s.plan };
   await db().update(schema.claims).set({ reviewOutcome: "approved", reviewedBy: "e2e reviewer", reviewedAt: new Date(), updatedAt: new Date() }).where(eq(schema.claims.id, id));
-  const r = await payClaim(id);
-  const st = payStatusFor(r);
-  if (st) await db().update(schema.claims).set({ status: st, updatedAt: new Date() }).where(eq(schema.claims.id, id));
+  const r = await payViaJob(id);
   return { approved: approved.ok, kind: r.kind, plain: r.plain, claim: (await getClaimView(id))! };
 }
 
@@ -652,7 +708,7 @@ export const LIVE_LIMITS = { perDay: 300 } as const;
 export async function liveLimit(o: { ip: string; keyed: boolean; test: boolean }): Promise<{ ok: true } | { ok: false; message: string; retryAfter: number }> {
   if (o.test) return { ok: true };
   if (!o.keyed) {
-    const v = allowTryUpload(o.ip);
+    const v = await allowUpload(o.ip);
     if (!v.ok) return { ok: false, message: v.plain, retryAfter: v.retryAfterSec };
   }
   if (!dbConfigured()) return { ok: true };

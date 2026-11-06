@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { Info } from "@/components/Info";
@@ -12,7 +13,7 @@ export const metadata: Metadata = { title: "Status", description: "Every service
 
 const LABEL = { live: "Live", fallback: "Fallback", not_connected: "Not connected" } as const;
 /** The Info entry that explains each service, when it is not stack.<id>. */
-const INFO: Record<string, string> = { database: "postgres", webhooks: "paypal" };
+const INFO: Record<string, string> = { database: "postgres", webhooks: "paypal", "error-tracking": "error-tracking", queue: "queue", worker: "worker" };
 
 async function Rows() {
   await connection();
@@ -92,6 +93,12 @@ export default function StatusPage() {
           <Info id="page.status" />
         </div>
         <p className="lede">Every service Remedy uses, checked when you open this page. When a service is not connected, Remedy uses its fallback so every flow still works.</p>
+        <p className="page-prose">
+          <Link className="text-link" href="/ops">
+            Operations
+          </Link>{" "}
+          shows the same checks live, with request latency, the job queue, payments by status and the event stream.
+        </p>
       </header>
       <Suspense fallback={<p className="page-loading">Checking every service…</p>}>
         <Rows />

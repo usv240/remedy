@@ -1,5 +1,6 @@
 import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
+import { log } from "@/lib/log";
 import { getPreset, runPreset } from "../../../_lib/presets";
 
 /**
@@ -16,7 +17,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     try {
       return ok(await runPreset(p, { technical: body.technical === true }), started);
     } catch (e) {
-      console.error("preset run:", e);
+      log.error("preset run failed", { preset: id, error: e });
       return fail("internal", "This example could not run just now. Please try again.", 500);
     }
   });

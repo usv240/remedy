@@ -5,6 +5,7 @@ import { OpenOnHash } from "@/components/OpenOnHash";
 import { Adoption } from "@/components/judges/Adoption";
 import { Benchmark } from "@/components/judges/Benchmark";
 import { Compare } from "@/components/judges/Compare";
+import { Load, Real } from "@/components/judges/Load";
 import { Measured } from "@/components/judges/Measured";
 import { PhotoChecks } from "@/components/judges/PhotoChecks";
 import { Results } from "@/components/judges/Results";
@@ -14,6 +15,7 @@ import { TOUR } from "@/components/tour/steps";
 import { fmtDate, fmtInt } from "@/lib/api/format";
 import "../pages.css";
 import "../landing-shared.css";
+import "../ops/ops.css";
 import "./evidence.css";
 
 export const metadata: Metadata = { title: "Evidence", description: "Every number on this site, where it comes from, and a five-minute path through the product." };
@@ -42,6 +44,7 @@ const PARTS: Part[] = [
       ["/try/shop", "Refund to the purchase"],
       ["/developers/docs", "API docs"],
       ["/status", "Status"],
+      ["/ops", "Operations"],
       ["/stack", "How it is built"],
     ],
   },
@@ -96,6 +99,8 @@ const TOC: [string, string][] = [
   ["#measured", "Measured"],
   ["#data", "The data"],
   ["#cost", "AI cost"],
+  ["#load", "Under load"],
+  ["#real", "Running it for real"],
   ["#compare", "How it compares"],
   ["#adoption", "Who runs it first"],
 ];
@@ -251,6 +256,30 @@ export default function EvidencePage() {
           </Link>{" "}
           in the Technical view.
         </p>
+      </section>
+
+      <section id="load" className="page-section" aria-labelledby="load-h">
+        <div className="title-row">
+          <h2 id="load-h">Under load</h2>
+          <Info id="evidence.load" label="" topic="Under load" />
+        </div>
+        <p className="page-prose jp-intro">One hundred visitors at once on the free paths, against the production build. The claim uses the recall&rsquo;s own official picture, which the perceptual hash settles before any model call.</p>
+        <Load />
+      </section>
+
+      <section id="real" className="page-section" aria-labelledby="real-h">
+        <div className="title-row">
+          <h2 id="real-h">Running it for real</h2>
+          <Info id="evidence.real" label="" topic="Running it for real" />
+        </div>
+        <p className="page-prose jp-intro">
+          What the demo runs on today, and what a production deployment changes. The operating range, stated plainly; live health is on{" "}
+          <Link className="text-link" href="/ops">
+            Operations
+          </Link>
+          .
+        </p>
+        <Real />
       </section>
 
       <section id="compare" className="page-section" aria-labelledby="cmp-h">

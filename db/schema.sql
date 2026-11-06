@@ -114,11 +114,14 @@ create table if not exists photo (
   height        integer,
   bytes         bytea,
   storage_path  text,
+  original      bytea,
   source        text not null default 'upload' check (source in ('upload', 'preset', 'email')),
   created_at    timestamptz not null default now()
 );
 create index if not exists photo_sha256_idx on photo (sha256);
 create index if not exists photo_dhash_idx on photo (dhash);
+-- The owner's untouched upload, held only until the verify_claim job has run the checks on it, then cleared.
+alter table photo add column if not exists original bytea;
 
 create table if not exists claim (
   id               uuid primary key default gen_random_uuid(),
@@ -377,6 +380,52 @@ create table if not exists webhook_event (
 );
 create unique index if not exists webhook_event_provider_event_idx on webhook_event (provider, event_id);
 create index if not exists webhook_event_resource_idx on webhook_event (resource_id);
+
+-- Operations: rate limits that hold across instances, the request log, and the job queue ------------------------
+
+-- One row per (bucket, fixed window). A bucket is "<limit name>:<hashed client>"; the upsert in src/lib/ratelimit.ts
+-- returns the new count in one statement. Rows older than a day are pruned from the same code path.
+create table if not exists rate_limit (
+  bucket        text not null,
+  window_start  timestamptz not null,
+  count         integer not null default 0,
+  primary key (bucket, window_start)
+);
+create index if not exists rate_limit_window_idx on rate_limit (window_start);
+
+-- One row per API request: the route pattern, status, duration and request id. No addresses, bodies or keys. Kept
+-- 7 days. /ops reads it for latency, error rates and the trace box (src/lib/ops/request-log.ts).
+create table if not exists request_log (
+  id          bigserial primary key,
+  request_id  text not null,
+  route       text not null,
+  status      integer not null,
+  ms          integer not null,
+  created     timestamptz not null default now()
+);
+create index if not exists request_log_created_idx on request_log (created);
+create index if not exists request_log_request_idx on request_log (request_id);
+
+-- The job queue (src/lib/jobs): verification and payouts run off the request path. A worker takes the next queued
+-- row with "for update skip locked", retries with exponential backoff up to 5 attempts, and leaves a failed row with
+-- its error as the dead letter. progress holds the stage events the owner's page streams; result holds the handler's
+-- answer for the route that waited.
+create table if not exists job (
+  id          bigserial primary key,
+  kind        text not null,
+  payload     jsonb not null default '{}',
+  status      text not null default 'queued' check (status in ('queued', 'running', 'done', 'failed')),
+  attempts    integer not null default 0,
+  run_after   timestamptz not null default now(),
+  last_error  text,
+  progress    jsonb not null default '[]',
+  result      jsonb,
+  worker      text,
+  created     timestamptz not null default now(),
+  updated     timestamptz not null default now()
+);
+create index if not exists job_queue_idx on job (status, run_after, id);
+create index if not exists job_created_idx on job (created);
 
 create table if not exists outbound_webhook (
   id                serial primary key,

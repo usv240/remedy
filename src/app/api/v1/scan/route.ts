@@ -3,6 +3,7 @@ import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
 import { ScanRequest } from "@/lib/api/v1-schemas";
 import { keyIdFor } from "@/lib/api/verify-service";
+import { log } from "@/lib/log";
 import { publicOrigin } from "@/lib/origin";
 import { SCAN_LIMITS, scanCatalog, scanCsv } from "@/lib/recall/scan";
 import { parseCatalogCsv } from "@/lib/recall/scan-csv";
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
       }
       return ok({ summary: report.summary, results, ai: report.ai }, started, { search: report.search, scan_ms: report.ms });
     } catch (e) {
-      console.error("v1.scan failed", e);
+      log.error("v1.scan failed", { error: e });
       return fail("internal", "The scan did not finish. Please try again.", 500);
     }
   });

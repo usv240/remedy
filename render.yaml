@@ -2,6 +2,7 @@
 # In the Render Dashboard choose New > Blueprint, pick this repository, and fill in the values marked sync: false.
 #
 #   remedy                 the web app (Next.js), its API and MCP server
+#   remedy-worker          the job worker: photo checks and payouts run here, off the request path (scripts/worker.ts)
 #   remedy-recall-ingest   a daily cron job that asks the web app to pull the day's new recalls
 #   remedy-db              Postgres 17; tables come from the reviewed SQL in db/schema.sql
 services:
@@ -63,6 +64,66 @@ services:
       - key: ASTROPODS_API_KEY
         sync: false
       - key: RENDER_API_KEY
+        sync: false
+      - key: SENTRY_DSN # error tracking; unset, errors stay in the structured log only
+        sync: false
+
+  # The job worker: takes verify_claim and pay_claim jobs off the job table (src/lib/jobs). Same code and env as the
+  # web service; its heartbeat shows on /status and /ops. Without it, each route runs its job inline after 2 s.
+  - type: worker
+    name: remedy-worker
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci
+    startCommand: npx tsx scripts/worker.ts
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: remedy-db
+          property: connectionString
+      - key: AUDIT_SALT
+        fromService:
+          type: web
+          name: remedy
+          envVarKey: AUDIT_SALT
+      - key: DATA_KEY
+        fromService:
+          type: web
+          name: remedy
+          envVarKey: DATA_KEY
+      - key: CHECKS_SECRET
+        fromService:
+          type: web
+          name: remedy
+          envVarKey: CHECKS_SECRET
+      - key: REMEDY_SECRET_KEY
+        fromService:
+          type: web
+          name: remedy
+          envVarKey: REMEDY_SECRET_KEY
+      - key: AI_DAILY_USD
+        value: "2"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: PAYPAL_WEBHOOK_ID
+        sync: false
+      - key: PAYPAL_VENDOR_EMAIL
+        sync: false
+      - key: ELASTIC_URL
+        sync: false
+      - key: ELASTIC_API_KEY
+        sync: false
+      - key: CHANNEL3_API_KEY
+        sync: false
+      - key: SENTRY_DSN
         sync: false
 
   # Once a day: pull every new CPSC recall, read its proof rule, hash its images, and refresh search (scripts/recalls/daily.ts).

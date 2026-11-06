@@ -9,6 +9,7 @@ import { sql } from "drizzle-orm";
 import { overBudget, spendSince } from "@/lib/ai/usage";
 import { db, dbConfigured, schema } from "@/lib/db";
 import { officialHashRows, recallRow } from "@/lib/db/load";
+import { log } from "@/lib/log";
 import { fetchAllCpscRecalls, USER_AGENT } from "./cpsc-client";
 import { dhash } from "./dhash";
 import { normalizeAll } from "./ingest";
@@ -161,7 +162,7 @@ export async function recordRun(o: { ok: boolean; detail: string; ms: number; er
         set: o.ok ? { mode: "live", detail: o.detail, lastOkAt: now, lastMs: o.ms, lastError: null, updatedAt: now } : { mode: "fallback", detail: o.detail, lastErrorAt: now, lastError: o.error ?? null, lastMs: o.ms, updatedAt: now },
       });
   } catch (e) {
-    console.error(`recall-ingest: could not record the run: ${(e as Error).message}`);
+    log.error("recall-ingest: could not record the run", { error: e });
   }
 }
 

@@ -162,6 +162,7 @@ npm run db:load               # recalls, proof rules and official image hashes
 npm run db:seed               # the sample firm
 npx tsx --env-file=.env.local scripts/seed-firm.ts   # its sample claims, plan and report history
 npm run dev                   # http://localhost:3300
+npm run worker                # the job worker, in a second terminal (photo checks and payouts; without it, routes run their jobs inline after 2 s)
 ```
 
 | Variable | What it is |
@@ -183,20 +184,22 @@ npm run dev                   # http://localhost:3300
 
 ## Run the tests
 
-Start the app on port 3300 first (or set `BASE_URL`). The browser suites drive Chrome; if Chrome is not at `C:/Program Files/Google/Chrome/Application/chrome.exe`, set `CHROME_PATH`. The claim and firm suites move small amounts of sandbox money ($1.00 to $1.50 a payment, plus one $34.99 sample-shop purchase), and they remove their own test claims afterwards unless you pass `--keep`.
+Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run worker`) so the claim suites run their checks and payouts through the queue as production does. The browser suites drive Chrome; if Chrome is not at `C:/Program Files/Google/Chrome/Application/chrome.exe`, set `CHROME_PATH`. The claim and firm suites move small amounts of sandbox money ($1.00 to $1.50 a payment, plus one $34.99 sample-shop purchase), and they remove their own test claims afterwards unless you pass `--keep`.
 
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 308 passed, 27 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
+| Unit tests, no network | `npm test` | 363 passed, 37 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
+| The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
-| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 22 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 88 page views pass |
+| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 27 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 108 page views pass |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, docs and the MCP tools (no AI call) | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: examples, a streamed claim, firm review, approval, a $1.25 sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
 | Buy in the sample shop as the sandbox buyer, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 10 of 10 |
 | The firm console: queue and drawer, bulk Approve and pay ($1.00 payouts), the report against SQL, and a live Gantt re-notice (run `scripts/seed-firm.ts` first; `FIRM_E2E_PAY=0` skips the payouts) | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
 | The audit ledger's hash chain, straight from the database | `npm run verify-ledger` | Every hash links to the one before it |
 | 60 ledger appends at once keep one chain | `npm run test:ledger-race` | Chain verified |
+| 100 visitors at once on the free paths (official-picture claim, search, scan sample), against the production build on port 3400 | `BASE_URL=http://localhost:3400 node --env-file=.env.local scripts/load-test.mjs` | Writes `content/public/load-test.json`, shown on `/evidence#load`; 0 errors |
 | Rescore the extraction benchmark from the stored outputs (no AI call) | `npx tsx scripts/recalls/bench.ts` | Writes `content/recalls/benchmark/results.json`, marked draft until every label is confirmed |
 | Recount the CPSC figures | `npx tsx scripts/recalls/stats.ts` | Writes `content/recalls/stats.json`; the 2026-11-01 snapshot gives the published 523 of 1,227 |
 

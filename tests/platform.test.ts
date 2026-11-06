@@ -26,7 +26,10 @@ describe("the API envelope", () => {
     expect(a.meta.request_id).toMatch(/^req_[0-9a-f]{20}$/);
     const r = fail("not_found", "No such recall.", 404);
     expect(r.status).toBe(404);
-    expect(await r.json()).toMatchObject({ data: null, error: { code: "not_found", message: "No such recall.", docs: "/developers/docs#errors-not_found" } });
+    const e = await r.json();
+    expect(e).toMatchObject({ data: null, error: { code: "not_found", docs: "/developers/docs#errors-not_found" } });
+    // Every error message ends with its request id, so anyone can paste it into /ops.
+    expect(e.error.message).toBe(`No such recall. Request id: ${e.meta.request_id}`);
   });
 
   it("describes every endpoint in OpenAPI 3.1 as the Remedy API", () => {
@@ -70,7 +73,7 @@ describe("health checks", () => {
   });
 
   it("report each integration as live, fallback or not connected from its settings", async () => {
-    for (const k of ["DATABASE_URL", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "ANTHROPIC_API_KEY", "ELASTIC_URL", "ELASTIC_API_KEY", "CHANNEL3_API_KEY", "KERNEL_API_KEY", "RENDER_EXTERNAL_URL", "CHECKS_SECRET", "CHECKS_WORKFLOW_SLUG", "PAYPAL_WEBHOOK_ID", "NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY"]) delete process.env[k];
+    for (const k of ["DATABASE_URL", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "ANTHROPIC_API_KEY", "ELASTIC_URL", "ELASTIC_API_KEY", "CHANNEL3_API_KEY", "KERNEL_API_KEY", "RENDER_EXTERNAL_URL", "CHECKS_SECRET", "CHECKS_WORKFLOW_SLUG", "PAYPAL_WEBHOOK_ID", "NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY", "SENTRY_DSN"]) delete process.env[k];
     const none = Object.fromEntries((await runChecks()).map((c) => [c.id, c.mode]));
     expect(none).toEqual({
       paypal: "not_connected",
@@ -83,6 +86,9 @@ describe("health checks", () => {
       apimatic: "live",
       render: "fallback",
       database: "not_connected",
+      queue: "not_connected",
+      worker: "fallback",
+      "error-tracking": "not_connected",
       "recall-ingest": "fallback",
     });
 

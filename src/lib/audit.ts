@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { asc, desc, sql } from "drizzle-orm";
 import { db, schema } from "./db";
+import { currentRequestId } from "./log";
 
 const GENESIS = "0".repeat(64);
 
@@ -27,13 +28,16 @@ const LEDGER_LOCK = 4_147_201;
  * appends broke the chain; scripts/ledger-race.ts checks this.
  */
 export async function audit(actor: "person" | "agent" | "system" | "webhook", action: string, ref: string, detail: Record<string, unknown> = {}) {
+  // The API request this entry belongs to, so /ops can trace a request id to the ledger entries it produced.
+  const requestId = currentRequestId();
+  const full = requestId && !("request_id" in detail) ? { ...detail, request_id: requestId } : detail;
   return db().transaction(async (tx) => {
     await tx.execute(sql`select pg_advisory_xact_lock(${LEDGER_LOCK})`);
     const [last] = await tx.select({ hash: schema.auditEvents.hash }).from(schema.auditEvents).orderBy(desc(schema.auditEvents.id)).limit(1);
     const prevHash = last?.hash ?? GENESIS;
     const at = new Date();
-    const hash = hashEvent(prevHash, { at: at.toISOString(), actor, action, ref, detail });
-    await tx.insert(schema.auditEvents).values({ at, actor, action, ref, detail, prevHash, hash });
+    const hash = hashEvent(prevHash, { at: at.toISOString(), actor, action, ref, detail: full });
+    await tx.insert(schema.auditEvents).values({ at, actor, action, ref, detail: full, prevHash, hash });
     return hash;
   });
 }

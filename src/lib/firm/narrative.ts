@@ -8,6 +8,7 @@ import { createHash } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { aiAvailable, claude } from "@/lib/ai/claude";
 import { logUsage, overBudget } from "@/lib/ai/usage";
+import { log } from "@/lib/log";
 import { dayName } from "./dates";
 import type { Firm, FirmRecall } from "./firm";
 import { strayFigures, templateNarrative, type ReportNumbers } from "./report";
@@ -143,7 +144,7 @@ export async function narrativeFor(firm: Firm, recall: FirmRecall, n: ReportNumb
   if ("error" in r) return template(`${r.error} The plain template is used.`);
   const problems = narrativeProblems(r.text, n);
   if (problems.length) {
-    console.warn(`[firm] narrative from ${r.model} set aside: ${problems.join("; ")}`);
+    log.warn("firm narrative set aside", { model: r.model, problems });
     return template(`Claude's paragraph was set aside (${problems.join("; ")}), so the plain template is used.`);
   }
   await saveNarrative(firm.id, recall.number, n.period.month, n, r.text, r.model);

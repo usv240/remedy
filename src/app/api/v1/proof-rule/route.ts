@@ -4,6 +4,7 @@ import { recallByNumber, storedRule } from "@/lib/api/recall-data";
 import { ProofRuleRequest, VERIFY_LIMITS } from "@/lib/api/v1-schemas";
 import { callsToday, keyIdFor } from "@/lib/api/verify-service";
 import { logUsage, overBudget } from "@/lib/ai/usage";
+import { log } from "@/lib/log";
 import { extractBaseline, extractWithClaude, lintRule } from "@/lib/recall/proof-rule";
 
 /**
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
       await logUsage({ route: "recall.proof_rule.api", model: out.model, effort: "medium", usage: out.usage as never });
       return ok({ rule: out.rule, draft: out.draft ?? null, source: "claude", model: out.model, method: "Claude Opus 5.5, structured output at medium effort, then a self-check pass.", lint: lintRule(out.rule, r) }, started);
     } catch (e) {
-      console.error("v1.proof-rule claude failed", e);
+      log.error("v1.proof-rule claude failed", { error: e });
       const rule = extractBaseline(r);
       return ok({ rule, source: "quick", model: null, note: "Claude did not answer just now, so this is the quick read.", lint: lintRule(rule, r) }, started);
     }

@@ -2,6 +2,7 @@ import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
 import { VERIFY_LIMITS, VerifyFields } from "@/lib/api/v1-schemas";
 import { VerifyInputError, keyIdFor, sha256, verifyBody, verifyForApi, verifyMode } from "@/lib/api/verify-service";
+import { log } from "@/lib/log";
 
 /**
  * POST /api/v1/verify (multipart): photo, recall_number, and optionally amount.
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
       return ok(verifyBody(v, mode, note, sha256(bytes)), started);
     } catch (e) {
       if (e instanceof VerifyInputError) return fail(e.code, e.message, e.status);
-      console.error("v1.verify failed", e);
+      log.error("v1.verify failed", { error: e });
       return fail("internal", "The photo check did not finish. Please try again.", 500);
     }
   });

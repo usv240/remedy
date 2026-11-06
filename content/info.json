@@ -367,5 +367,77 @@
     "what": "A small page our server renders for an iframe: the recall, its one-line remedy and refund, and a link to the owner's claim page.",
     "why": "A product page or a listing can show the remedy where the owner is, with nothing to build and nothing else loaded on the page.",
     "technical": "GET /api/embed/badge?recall= or ?q= (the best-matching recall). Inputs are escaped; the page sets frame-ancestors * and a strict CSP of its own, and follows prefers-color-scheme. /api/embed/badge.js inserts the iframe where the script tag sits."
+  },
+  "stack.queue": {
+    "title": "Job queue",
+    "what": "Photo checks and payouts run as jobs in a queue, not inside the web request. This row shows how many are waiting, the oldest one, and any that stopped after five tries.",
+    "why": "A slow check or a PayPal pause never blocks the page or the next owner; the job is tried again on its own, and a person sees the few that still need help.",
+    "technical": "The job table (db/schema.sql). A worker takes the next row with select ... for update skip locked, retries with exponential backoff (1, 2, 4, 8 s) up to 5 attempts, and leaves a failed row with its error as the dead letter. src/lib/jobs."
+  },
+  "stack.worker": {
+    "title": "Worker",
+    "what": "The separate process that runs the jobs. It reports in every 30 seconds; this row says when it was last seen.",
+    "why": "Checks and payouts keep running when the web service is busy or restarting, and the site keeps answering while a check runs.",
+    "technical": "scripts/worker.ts, a Render background worker (render.yaml) or npm run worker locally. Heartbeat: an integration_status row updated every 30 s. Without a worker for 2 s, the route runs its own job inline and logs that it did."
+  },
+  "stack.error-tracking": {
+    "title": "Error tracking",
+    "what": "Unexpected errors on the server and in the browser are sent to Sentry, with every personal detail removed first, so they can be fixed before anyone reports them.",
+    "why": "A problem an owner hits once at night is seen the same hour, with the request id to trace it.",
+    "technical": "@sentry/nextjs, on only when SENTRY_DSN is set. sendDefaultPii is off and beforeSend masks emails, phone numbers, photo data and keys (src/lib/sentry.ts). Release is the git commit; environment is the Render service."
+  },
+  "page.ops": {
+    "title": "About this page",
+    "what": "Everything Remedy watches about itself, live: each service, the job queue, request latency and errors, payments and webhooks by status, and the event stream. Read only, and nothing on it is private.",
+    "why": "Anyone can see the site is healthy, and a judge can paste a request id and follow it from the API answer to the ledger.",
+    "technical": "Every figure comes from tables the app already writes: request_log, audit_event, api_usage, ai_usage, payment, webhook_event, job and integration_status (src/lib/ops/data.ts). The stream is Server-Sent Events from GET /api/ops/live."
+  },
+  "ops.now": {
+    "title": "Right now",
+    "what": "Each service live or on its fallback, how many jobs are waiting, what today's AI calls have cost against the cap, and requests in the last hour.",
+    "why": "The first thing an operator looks at: is everything up, and is anything piling up.",
+    "technical": "runChecks (src/lib/health.ts), queueStats (src/lib/jobs/queue.ts), spendToday (ai_usage) and a count over request_log for the last hour."
+  },
+  "ops.day": {
+    "title": "Last 24 hours",
+    "what": "Requests by route with their typical and slow latency and error rate; payments, webhooks and photo decisions by status; AI calls and cost by route.",
+    "why": "Counts only, so the day's shape is public while every owner and payee stays private.",
+    "technical": "request_log grouped by route with percentile_cont(0.5) and (0.95) over ms; payment and payment_plan by status; webhook_event by verified; claim by decision; ai_usage by route."
+  },
+  "ops.stream": {
+    "title": "Live stream",
+    "what": "The newest ledger entries and API requests as one feed, newest first, updating every two seconds.",
+    "why": "Shows the site working in real time. Ids are shortened and nothing names a person.",
+    "technical": "GET /api/ops/live streams Server-Sent Events (the same pattern as the firm console). With reduced motion on, the page shows a Refresh button instead and reads ?once=1."
+  },
+  "ops.chart": {
+    "title": "Reliability over time",
+    "what": "Requests and errors per hour over the last seven days.",
+    "why": "A week at a glance: quiet hours, busy hours, and whether errors track load.",
+    "technical": "request_log grouped by date_trunc(hour) for 168 hours, drawn as inline SVG in code with the theme's colors; no chart library."
+  },
+  "ops.trace": {
+    "title": "Trace a request",
+    "what": "Paste the request id from any API answer and see that request's log lines and the ledger entries it wrote.",
+    "why": "Every API error ends with its request id, so anyone can follow one call end to end.",
+    "technical": "GET /api/ops/trace?id= reads request_log by request_id and audit_event where detail->>'request_id' matches. The id is set in src/lib/log.ts (x-request-id is honored when a caller sends one)."
+  },
+  "ops.alerts": {
+    "title": "Alerts",
+    "what": "The conditions Remedy watches, each computed live: fine when so, attention when not.",
+    "why": "No pager is connected to the demo; these are the same checks a pager would get, so the state is visible to anyone.",
+    "technical": "src/lib/ops/data.ts alerts(): 5xx rate over 15 minutes, queue age, worker heartbeat, AI spend against AI_DAILY_USD, unverified webhooks, failed payouts, dead-letter jobs."
+  },
+  "evidence.load": {
+    "title": "Under load",
+    "what": "One hundred visitors at once, each running the free paths: a claim with the official picture, a recall search and the catalog scan sample, against the production build on a laptop.",
+    "why": "Shows what the demo handles as built, measured, not guessed.",
+    "technical": "scripts/load-test.mjs: 100 concurrent virtual users, p50, p95 and p99 per path and the error rate, written to content/public/load-test.json with the machine and method. The official-picture claim is settled by the perceptual hash, so no model call is made."
+  },
+  "evidence.real": {
+    "title": "Running it for real",
+    "what": "What the demo runs on today, and what a production deployment changes.",
+    "why": "Stated as an operating range, so a firm knows what to plan for.",
+    "technical": "render.yaml: one Starter web service, one worker, a 256 MB Postgres. A production copy adds object storage with signed URLs for photos, a larger Postgres with a pooler, autoscaling with the worker, login and roles for firms, a registered webhook per environment, and tested backups."
   }
 }

@@ -5,7 +5,7 @@
  * (`*_hash`), and the claims grid shows a masked form.
  */
 import { sql } from "drizzle-orm";
-import { type AnyPgColumn, boolean, customType, date, index, integer, jsonb, numeric, pgTable, serial, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { type AnyPgColumn, bigserial, boolean, customType, date, index, integer, jsonb, numeric, pgTable, primaryKey, serial, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => "bytea" });
 const money = (name: string) => numeric(name, { precision: 10, scale: 2 });
@@ -174,6 +174,8 @@ export const photos = pgTable(
     height: integer("height"),
     bytes: bytea("bytes"),
     storagePath: text("storage_path"),
+    /** The owner's untouched upload, kept only until the checks ran on it (src/app/api/claims/_lib/claims.ts). */
+    original: bytea("original"),
     /** upload | preset | email */
     source: text("source").notNull().default("upload"),
     createdAt: created(),
@@ -561,3 +563,54 @@ export const outboundWebhooks = pgTable("outbound_webhook", {
   failures: integer("failures").notNull().default(0),
   createdAt: created(),
 });
+
+// ---------------------------------------------------------------------------------------------------------------
+// Operations: rate limits that hold across instances, the request log, the job queue
+// ---------------------------------------------------------------------------------------------------------------
+
+/** One row per (bucket, fixed window); the upsert in src/lib/ratelimit.ts returns the count. Pruned after a day. */
+export const rateLimits = pgTable(
+  "rate_limit",
+  {
+    bucket: text("bucket").notNull(),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.bucket, t.windowStart] }), index("rate_limit_window_idx").on(t.windowStart)],
+);
+
+/** One row per API request: route pattern, status, duration, request id. No addresses, bodies or keys. Kept 7 days. */
+export const requestLog = pgTable(
+  "request_log",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    requestId: text("request_id").notNull(),
+    route: text("route").notNull(),
+    status: integer("status").notNull(),
+    ms: integer("ms").notNull(),
+    created: timestamp("created", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("request_log_created_idx").on(t.created), index("request_log_request_idx").on(t.requestId)],
+);
+
+/** The job queue (src/lib/jobs). status: queued | running | done | failed (the dead letter, with last_error). */
+export const jobs = pgTable(
+  "job",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    kind: text("kind").notNull(),
+    payload: jsonb("payload").notNull().default({}),
+    status: text("status").notNull().default("queued"),
+    attempts: integer("attempts").notNull().default(0),
+    runAfter: timestamp("run_after", { withTimezone: true }).notNull().defaultNow(),
+    lastError: text("last_error"),
+    /** Stage events the owner's page streams while the job runs. */
+    progress: jsonb("progress").notNull().default([]),
+    /** The handler's answer, for a route that waited on the job. */
+    result: jsonb("result"),
+    worker: text("worker"),
+    created: timestamp("created", { withTimezone: true }).notNull().defaultNow(),
+    updated: timestamp("updated", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("job_queue_idx").on(t.status, t.runAfter, t.id), index("job_created_idx").on(t.created)],
+);

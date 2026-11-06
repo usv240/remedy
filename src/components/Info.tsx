@@ -86,10 +86,8 @@ export function Info({ id, label = "info", entry, topic }: { id: string; label?:
   const role = useRole(context, { role: "dialog" });
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, click, dismiss, role]);
 
-  if (!data) {
-    if (process.env.NODE_ENV !== "production") console.warn(`Info entry missing: ${id}`);
-    return null;
-  }
+  // A missing entry renders nothing; tests/info.test.ts fails the build when any id in the code has no entry.
+  if (!data) return null;
 
   return (
     <>

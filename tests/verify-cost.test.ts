@@ -8,7 +8,7 @@ import { cacheKey, engineVersion, memoryVerifyCache, photoSha256, ruleVersion } 
 import { fixtureFile, loadFixtureRecalls } from "@/lib/verify/fixtures";
 import { claimMaxSide, decodeImage, visualTokens } from "@/lib/verify/image";
 import { pickForVision } from "@/lib/verify/official";
-import { allowTryUpload, resetTryLimits } from "@/lib/verify/ratelimit";
+import { allowUpload, resetMemoryLimits } from "@/lib/ratelimit";
 import { verifyPhoto } from "@/lib/verify";
 import type { VisionRun } from "@/lib/verify/vision";
 import type { VisionReport } from "@/lib/verify/vision-schema";
@@ -177,21 +177,21 @@ describe("image sizes sent to Claude", () => {
 });
 
 describe("try upload limits", () => {
-  afterEach(() => resetTryLimits());
+  afterEach(() => resetMemoryLimits());
 
-  it("allows a few uploads per visitor, then asks them to wait", () => {
+  it("allows a few uploads per visitor, then asks them to wait", async () => {
     const now = 1_000_000;
-    for (let i = 0; i < 6; i++) expect(allowTryUpload("203.0.113.9", now + i).ok).toBe(true);
-    const seventh = allowTryUpload("203.0.113.9", now + 10);
+    for (let i = 0; i < 6; i++) expect((await allowUpload("203.0.113.9", now + i)).ok).toBe(true);
+    const seventh = await allowUpload("203.0.113.9", now + 10);
     expect(seventh.ok).toBe(false);
     if (!seventh.ok) expect(seventh.plain).toContain("try one of our sample photos");
-    expect(allowTryUpload("198.51.100.7", now + 10).ok).toBe(true);
-    expect(allowTryUpload("203.0.113.9", now + 11 * 60_000).ok).toBe(true);
+    expect((await allowUpload("198.51.100.7", now + 10)).ok).toBe(true);
+    expect((await allowUpload("203.0.113.9", now + 11 * 60_000)).ok).toBe(true);
   });
 
-  it("caps a visitor at 30 a day", () => {
+  it("caps a visitor at 30 a day", async () => {
     const limits = { perWindow: 100, windowMs: 1000, perDay: 30, dayMs: 86_400_000 };
-    for (let i = 0; i < 30; i++) expect(allowTryUpload("192.0.2.1", i * 2000, limits).ok).toBe(true);
-    expect(allowTryUpload("192.0.2.1", 70_000, limits).ok).toBe(false);
+    for (let i = 0; i < 30; i++) expect((await allowUpload("192.0.2.1", i * 2000, limits)).ok).toBe(true);
+    expect((await allowUpload("192.0.2.1", 70_000, limits)).ok).toBe(false);
   });
 });

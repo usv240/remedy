@@ -1,6 +1,7 @@
 // Run or record a /try preset, from the repo root. `record` makes live Claude calls (about $0.05 each); `run` replays.
 //   npx tsx --env-file=.env.local src/app/api/try/_lib/presets-cli.ts run <id> [--technical]
 //   npx tsx --env-file=.env.local src/app/api/try/_lib/presets-cli.ts record <id> [--technical]
+import { log } from "../../../../lib/log";
 import { getPreset, recordPreset, runPreset } from "./presets";
 
 async function main() {
@@ -8,7 +9,7 @@ async function main() {
   const technical = process.argv.includes("--technical");
   const p = id ? getPreset(id) : null;
   if (!p || (cmd !== "run" && cmd !== "record")) {
-    console.error("usage: presets-cli.ts run|record <preset id> [--technical]");
+    process.stderr.write("usage: presets-cli.ts run|record <preset id> [--technical]\n");
     process.exit(1);
   }
   if (cmd === "record") {
@@ -23,6 +24,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error(e);
+  log.error("presets-cli failed", { error: e });
   process.exit(1);
 });

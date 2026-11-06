@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
+import { log } from "../log";
 import { logUsage } from "./usage";
 
 export const MODEL = "claude-opus-5-5";
@@ -47,7 +48,7 @@ export function aiError(e: unknown): unknown {
   const account = e.status === 401 || e.status === 403 || (e.status === 400 && /credit balance|billing|plans? & billing/i.test(e.message));
   if (account) {
     pausedUntil = Date.now() + PAUSE_MS;
-    console.error(`Claude API turned the account away (${e.status}); AI features use their fallbacks for three minutes.`);
+    log.error("Claude API turned the account away; AI features use their fallbacks for three minutes", { status: e.status });
     return new AiUnavailableError("The AI service is not available on this server just now, so the ready-made examples are shown.");
   }
   if (e.status === 429 || (e.status !== undefined && e.status >= 500)) return new AiUnavailableError("The AI service is busy just now. Please try again in a minute.");

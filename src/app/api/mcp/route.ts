@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { guard } from "@/lib/api/keys";
 import { keyIdFor } from "@/lib/api/verify-service";
+import { log } from "@/lib/log";
 import { INSTRUCTIONS, SERVER_INFO, TOOLS, type Ctx, type ToolResult } from "@/lib/mcp/tools";
 import { publicOrigin } from "@/lib/origin";
 import { SUPPORTED_VERSIONS } from "@/lib/mcp/card";
@@ -59,7 +60,7 @@ async function handle(msg: Rpc, req: Request) {
         const r = await run(parsed.data, { origin: origin(req), keyId: await keyIdFor(req), auth: req.headers.get("authorization") });
         return reply(id, { content: [{ type: "text", text: r.text }], ...(r.data ? { structuredContent: r.data } : {}), isError: Boolean(r.isError) });
       } catch (e) {
-        console.error("mcp tool failed", t.name, e);
+        log.error("mcp tool failed", { tool: t.name, error: e });
         return reply(id, { content: [{ type: "text", text: "Remedy could not complete that just now. Please try again." }], isError: true });
       }
     }

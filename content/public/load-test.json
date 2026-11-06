@@ -1,0 +1,65 @@
+{
+  "measuredAt": "2026-11-06T23:29:00.195Z",
+  "baseUrl": "http://localhost:3400",
+  "users": 100,
+  "method": "100 virtual users started at once, each running the three calls in a row (claim, search, scan sample), 300 requests in all; latency measured in the client from request start to the full JSON body; a run counts as an error when the status is not 200 or the body is not the expected answer. Each user carries its own x-forwarded-for so the per-visitor limits see 100 visitors. The claim uses the recall's own official picture, settled by the perceptual hash with no model call.",
+  "machine": {
+    "platform": "Windows_NT 10.0.26300",
+    "cpu": "Intel(R) Core(TM) Ultra 9 185H",
+    "cores": 22,
+    "memoryGb": 34,
+    "node": "v24.13.1"
+  },
+  "server": {
+    "build": "next start, local production build",
+    "worker": "running",
+    "elastic": "live",
+    "database": "Postgres 17 in Docker on the same machine"
+  },
+  "wallMs": 21780,
+  "requestsPerSecond": 13.8,
+  "results": [
+    {
+      "id": "claim",
+      "name": "POST /api/claims (official picture, no AI)",
+      "requests": 100,
+      "p50_ms": 15706,
+      "p95_ms": 20703,
+      "p99_ms": 21149,
+      "max_ms": 21149,
+      "errors": 0,
+      "error_rate": 0,
+      "statuses": {
+        "200": 100
+      }
+    },
+    {
+      "id": "search",
+      "name": "GET /api/v1/recalls?query=power bank",
+      "requests": 100,
+      "p50_ms": 1079,
+      "p95_ms": 2487,
+      "p99_ms": 2643,
+      "max_ms": 2643,
+      "errors": 0,
+      "error_rate": 0,
+      "statuses": {
+        "200": 100
+      }
+    },
+    {
+      "id": "scan",
+      "name": "GET /api/v1/scan/sample",
+      "requests": 100,
+      "p50_ms": 319,
+      "p95_ms": 909,
+      "p99_ms": 999,
+      "max_ms": 999,
+      "errors": 0,
+      "error_rate": 0,
+      "statuses": {
+        "200": 100
+      }
+    }
+  ]
+}

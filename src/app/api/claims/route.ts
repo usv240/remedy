@@ -1,9 +1,31 @@
 import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
-import { liveLimit, MAX_PHOTO_BYTES, submitClaim, type SubmitInput } from "./_lib/claims";
+import { runJob } from "@/lib/jobs";
+import { log } from "@/lib/log";
+import { ClaimError, getClaimView, liveLimit, MAX_PHOTO_BYTES, openClaim, type SubmitInput } from "./_lib/claims";
 import { failFrom, hasApiKey, isTestRequest } from "./_lib/http";
 import { isRecallNumber } from "./_lib/recall-text";
-import type { ClaimEvent } from "./_lib/types";
+import type { ClaimEvent, ClaimView } from "./_lib/types";
+
+/**
+ * Open the claim, then run its checks as a verify_claim job (src/lib/jobs): the worker runs the six checks off the
+ * request path and this call streams the job's progress events every 500 ms until it is done. With no worker
+ * running, the job runs inline after 2 s. A job that reached its dead letter has already handed the claim to a
+ * person at the firm (checkClaim, final attempt).
+ */
+async function submitViaQueue(input: SubmitInput, emit: (e: ClaimEvent) => void = () => {}): Promise<ClaimView> {
+  const { claimId, options } = await openClaim(input, emit);
+  const job = await runJob("verify_claim", { claimId, options }, { onProgress: (e) => emit(e as ClaimEvent) });
+  const view = await getClaimView(claimId);
+  if (!view) throw new ClaimError("not_found", "There is no claim with that id.", 404);
+  if (view.decision === "pending") {
+    log.warn("claim check did not finish in time", { claim_id: claimId, job_id: job?.id ?? null, status: job?.status ?? null });
+    throw new ClaimError("internal", "The check is taking longer than usual. Your claim is saved; open its link in a moment to see the answer.", 504);
+  }
+  if (job?.status === "failed") throw new ClaimError("internal", "Something went wrong while checking the photo. A person at the firm will look at it.", 500);
+  emit({ type: "result", claim: view });
+  return view;
+}
 
 /**
  * POST /api/claims (documented as /api/v1/claims): a photo of the recalled product made safe, as multipart form data.
@@ -59,7 +81,7 @@ export async function POST(req: Request) {
 
     if (!(req.headers.get("accept") ?? "").includes("text/event-stream")) {
       try {
-        return ok(await submitClaim(input), started);
+        return ok(await submitViaQueue(input), started);
       } catch (e) {
         return failFrom(e);
       }
@@ -82,7 +104,7 @@ export async function POST(req: Request) {
         };
         const send = (e: ClaimEvent) => write(`event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`);
         ping = setInterval(() => write(": still checking\n\n"), 5000);
-        submitClaim(input, send)
+        submitViaQueue(input, send)
           .catch((e: unknown) => {
             const r = failFrom(e);
             return r.json().then((j: { error?: { code?: string; message?: string } }) => send({ type: "error", code: j.error?.code ?? "internal", message: j.error?.message ?? "Something went wrong." }));

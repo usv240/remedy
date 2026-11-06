@@ -1,5 +1,6 @@
 import { and, gte, sql } from "drizzle-orm";
 import { db, dbConfigured, schema } from "@/lib/db";
+import { log } from "@/lib/log";
 
 /**
  * AI spend: what each live Claude call cost, logged per call, and a daily budget that caps the hosted site.
@@ -63,7 +64,7 @@ export async function logUsage(e: { route: string; model: string; effort?: strin
         usd: usd.toFixed(6),
       });
   } catch (err) {
-    console.error(`ai_usage: could not log a ${e.route} call: ${(err as Error).message}`);
+    log.error("ai_usage: could not log a call", { route: e.route, error: err });
   }
   return usd;
 }

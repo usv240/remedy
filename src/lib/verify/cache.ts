@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { eq, sql } from "drizzle-orm";
 import { db, dbConfigured, schema } from "@/lib/db";
 import { MODEL } from "@/lib/ai/claude";
+import { log } from "@/lib/log";
 import { LABEL_MAX_SIDE, OFFICIAL_MAX_SIDE, VISION_MAX_SIDE } from "./image";
 import { VISION_OFFICIAL_IMAGES } from "./official";
 import { REVIEWER_SYSTEM, type Review } from "./reviewers";
@@ -117,7 +118,7 @@ export const dbVerifyCache: VerifyCache = {
         source: row.source as CacheEntry["source"],
       };
     } catch (e) {
-      console.error(`verify_result: read failed: ${(e as Error).message}`);
+      log.error("verify_result: read failed", { error: e });
       return null;
     }
   },
@@ -132,7 +133,7 @@ export const dbVerifyCache: VerifyCache = {
           set: { decision: e.decision, result: e.result, source: sql`case when ${schema.verifyResults.source} = 'precomputed' then 'precomputed' else excluded.source end` },
         });
     } catch (err) {
-      console.error(`verify_result: write failed: ${(err as Error).message}`);
+      log.error("verify_result: write failed", { error: err });
     }
   },
 };

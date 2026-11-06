@@ -1,8 +1,10 @@
 import { sql } from "drizzle-orm";
 import { aiAvailable, aiPaused } from "./ai/claude";
 import { db, dbConfigured } from "./db";
+import { queueStats, WORKER_STALE_MS } from "./jobs/queue";
 import { accessToken, paypalConfigured } from "./paypal/client";
 import { lastRun } from "./recall/daily";
+import { sentryEnvironment, sentryRelease } from "./sentry";
 import pkg from "../../package.json";
 
 /** Versions as the project pins them; "npm:@bryntum/gantt-trial@7.3.8" reads as 7.3.8. */
@@ -29,15 +31,51 @@ async function timed(fn: () => Promise<string>): Promise<{ ok: boolean; detail: 
  * Every integration Remedy uses, each live, on its fallback, or not connected. PayPal and Postgres answer a real call;
  * the others are read from their environment variables, so this stays fast enough for Render's health check.
  */
+/** "12 s ago", "3 min ago", "2 h ago". */
+export function ago(at: Date, now = Date.now()): string {
+  const s = Math.max(0, Math.round((now - at.getTime()) / 1000));
+  if (s < 60) return `${s} s ago`;
+  if (s < 3600) return `${Math.round(s / 60)} min ago`;
+  if (s < 86_400) return `${Math.round(s / 3600)} h ago`;
+  return `${Math.round(s / 86_400)} d ago`;
+}
+
+/** The job queue and worker rows, shared by /status, /ops and /api/health. */
+export async function queueChecks(): Promise<Check[]> {
+  const q = dbConfigured() ? await queueStats().catch(() => null) : null;
+  const now = Date.now();
+  const workerFresh = Boolean(q?.workerSeenAt && now - q.workerSeenAt.getTime() < WORKER_STALE_MS);
+  const waiting = q ? q.queued + q.running : 0;
+  const oldest = q?.oldestWaitingSec ?? null;
+  return [
+    {
+      id: "queue",
+      name: "Job queue",
+      mode: !q ? "not_connected" : q.failed > 0 ? "fallback" : "live",
+      detail: !q
+        ? "DATABASE_URL not set"
+        : `${waiting} ${waiting === 1 ? "job" : "jobs"} waiting${oldest !== null && waiting ? `, oldest ${oldest} s` : ""}; ${q.doneToday} done in the last day${q.failed ? `; ${q.failed} ${q.failed === 1 ? "job needs" : "jobs need"} a person (failed after 5 tries)` : ""}`,
+    },
+    {
+      id: "worker",
+      name: "Worker",
+      mode: workerFresh ? "live" : "fallback",
+      detail: workerFresh ? `Worker ${q!.workerName ?? ""} last seen ${ago(q!.workerSeenAt!, now)}; checks and payouts run off the request path` : q?.workerSeenAt ? `No worker since ${ago(q.workerSeenAt, now)}; each route runs its job inline after 2 s` : "No worker has run on this database yet; each route runs its job inline after 2 s (npm run worker starts one)",
+    },
+  ];
+}
+
 export async function runChecks(): Promise<Check[]> {
-  const [pp, database, ingest] = await Promise.all([
+  const [pp, database, ingest, queue] = await Promise.all([
     paypalConfigured() ? timed(async () => (await accessToken()) && "Sandbox token issued; Payouts, Refunds and Orders v2 use it") : Promise.resolve(null),
     dbConfigured() ? timed(async () => (await db().execute(sql`select 1`)) && "Postgres answered a test query") : Promise.resolve(null),
     lastRun().catch(() => null),
+    queueChecks(),
   ]);
   const ingestFresh = Boolean(ingest?.lastOkAt && Date.now() - new Date(ingest.lastOkAt).getTime() < 48 * 3600_000);
   const elastic = on("ELASTIC_URL", "FALLBACK_ELASTIC") && set("ELASTIC_API_KEY");
   const onRender = set("RENDER_EXTERNAL_URL");
+  const sentry = set("SENTRY_DSN");
   return [
     {
       id: "paypal",
@@ -99,6 +137,13 @@ export async function runChecks(): Promise<Check[]> {
       detail: onRender ? "Hosting and Postgres on Render" : "Running locally, not on Render",
     },
     { id: "database", name: "Postgres", mode: database?.ok ? "live" : "not_connected", detail: database ? database.detail : "DATABASE_URL not set", ms: database?.ms },
+    ...queue,
+    {
+      id: "error-tracking",
+      name: "Error tracking",
+      mode: sentry ? "live" : "not_connected",
+      detail: sentry ? `Sentry receives server, edge and browser errors with personal data scrubbed; release ${sentryRelease()?.slice(0, 7) ?? "unset"}, environment ${sentryEnvironment()}` : "Not connected: SENTRY_DSN is not set, so errors stay in the structured log only",
+    },
     {
       id: "recall-ingest",
       name: "Daily recall ingest: last run",
