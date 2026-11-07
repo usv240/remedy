@@ -20,7 +20,7 @@ import {
   type IRowNode,
   type SelectionChangedEvent,
 } from "ag-grid-community";
-import { ColumnMenuModule, SetFilterModule, StatusBarModule } from "ag-grid-enterprise";
+import { ColumnMenuModule, LicenseManager, SetFilterModule, StatusBarModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
 import { CHECK_LABEL, CHECK_ORDER, TONE, WORD } from "@/lib/firm/checks";
@@ -30,6 +30,10 @@ import { Thumb } from "./Thumb";
 
 // Community modules for the queue, plus three Enterprise ones: set filters on the status columns, the column menu
 // and the status bar with selected and total counts. No licence key is set, so AG Grid shows its trial watermark.
+// AG Grid Enterprise's license, when the deployment has one; without it the grid runs on AG Grid's trial notice.
+const AG_LICENSE = process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY;
+if (AG_LICENSE) LicenseManager.setLicenseKey(AG_LICENSE);
+
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
   RowSelectionModule,

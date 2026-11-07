@@ -1,3 +1,4 @@
+import { recallLabel } from "@/lib/recall/label";
 import { LIMITS, resolveDeps, usd, type PaymentsDeps } from "./deps";
 import { recordStatus } from "./events";
 import { createPayoutBatch, normalizeEmail, normalizeUsPhone, recipientFor, senderBatchIdFor, senderItemIdFor, type PayoutLine } from "./payouts";
@@ -394,7 +395,7 @@ async function finishSingle(
 async function runRefund(plan: PaymentPlan, deps: PaymentsDeps): Promise<PayResult> {
   const { payment: row } = await deps.store.insertPayment(newPayment(plan, deps.now(), {}));
   const r = await refundCapture(
-    { captureId: plan.captureId!, amountCents: plan.amountCents, requestId: requestIdFor(plan), noteToPayer: `Recall refund for ${plan.recallTitle} (CPSC recall ${plan.recallNumber}). Thank you for making it safe.` },
+    { captureId: plan.captureId!, amountCents: plan.amountCents, requestId: requestIdFor(plan), noteToPayer: `Recall refund for ${plan.recallTitle} (${recallLabel(plan.recallNumber)}). Thank you for making it safe.` },
     deps,
   );
   return finishSingle(

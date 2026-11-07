@@ -8,6 +8,7 @@ import { isoDay } from "@/lib/firm/dates";
 import { firmContext } from "@/lib/firm/firm";
 import { toGantt } from "@/lib/firm/plan";
 import { ensureBasePlan, planRows, reviewSchedule } from "@/lib/firm/plan-data";
+import { recallLabel } from "@/lib/recall/label";
 
 export const metadata: Metadata = { title: "Recall plan", description: "Brightline Home's corrective-action plan: notices, payout batches, follow-ups and CPSC reports, updated live from PayPal. A fictional sample firm." };
 
@@ -22,7 +23,7 @@ async function Plan() {
   return (
     <>
       <p className="firm-sub" style={{ marginBottom: 16 }}>
-        {ctx.main.short}, CPSC recall {ctx.main.number}. {rows.length} tasks.
+        {ctx.main.short}, {recallLabel(ctx.main.number)}. {rows.length} tasks.
       </p>
       <PlanLoader data={data} />
     </>

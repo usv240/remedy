@@ -593,6 +593,16 @@
     width: 100%;
   }
 }
+/* The sample shop's recall only: Brightline's published photo, for a visitor with no charger to cut. */
+.cl-sample {
+  display: grid;
+  gap: 6px;
+  max-width: 34rem;
+}
+.cl-sample-btn {
+  justify-self: start;
+  min-height: 44px;
+}
 .cl-textbtn {
   background: none;
   border: 0;

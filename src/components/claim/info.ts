@@ -133,9 +133,9 @@ export const CLAIM_INFO = {
   },
   "try.presets": {
     title: "Ready-made examples",
-    what: "Real photos run through the real checks: the CPSC's own example, an official picture, a blurry photo and an unrelated one.",
+    what: "Real photos run through the real checks: a sample charger with its cord cut and the same charger before, the CPSC's own example, an official picture, a blurry photo, look-alikes, a screen and an unrelated object. Each shows the result it should get.",
     why: "You can see each kind of answer in seconds, without taking a photo.",
-    technical: "Checks that need no model run live. Checks that need Claude replay one recorded live answer, so running an example costs nothing; every check around that answer runs again in code.",
+    technical: "Checks that need no model run live. Checks that need Claude replay one recorded live answer, so running an example costs nothing; every check around that answer runs again in code. The opened-charger photos show their three measured runs from content/verify/sweep-sample.json.",
   },
   "try.yourphoto": {
     title: "Your photo",

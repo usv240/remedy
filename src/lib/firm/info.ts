@@ -9,7 +9,7 @@ export const FIRM_INFO = {
     title: "Completion",
     what: "Units verified made safe, out of every unit the recall covers.",
     why: "It is the share of recalled products the CPSC counts as corrected, so it shows how far the recall has come.",
-    technical: "Sum of claim.units_claimed on claims verified by the checks or approved by a reviewer, over recall.units from the CPSC recall data.",
+    technical: "Sum of claim.units_claimed on claims verified by the checks or approved by a reviewer, over recall.units from the recall's data (the CPSC's for a real recall).",
   },
   "firm.needs-review": {
     title: "Needs review",

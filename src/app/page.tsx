@@ -7,7 +7,13 @@ import { LitNames, type Source } from "@/components/landing/LitNames";
 import { ShowcaseSearch } from "@/components/landing/ShowcaseSearch";
 import { TourButton } from "@/components/landing/TourButton";
 import { TryPanel, type PanelRun } from "@/components/landing/TryPanel";
-import { cpscExampleReplay } from "@/components/judges/data";
+import { cpscExampleDefault, MEASURED } from "@/components/judges/data";
+import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
+import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
+import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
+import { aboutSeconds, RESEARCH } from "@/lib/research";
+import { catalogOfficialHashes } from "@/lib/verify/dhash";
+import { errorRates } from "@/components/judges/errors";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
 import "./landing-shared.css";
@@ -41,8 +47,36 @@ const STEPS = [
   { line: "First the recall is read.", note: "Remedy turns the official remedy into a clear checklist: what to cut or mark, and what the photo must show." },
   { line: "Then you snap a photo.", note: "On your phone, in under a minute. No account needed." },
   { line: "Then the photo is verified.", note: "Right product, made safe, your own photo. Claude reads the photo; plain code decides the payout and the amount. Unclear cases get two AI reviewers and a person at the firm." },
-  { line: "Then PayPal pays you.", note: "To your PayPal or Venmo. Inside 180 days of a PayPal purchase, straight back to how you paid." },
+  { line: "Then PayPal pays you.", note: `To your PayPal or Venmo. Inside ${REFUND_WINDOW_DAYS} days of a PayPal purchase, straight back to how you paid.` },
 ];
+
+/**
+ * The three ideas that open how it works, each with the page that shows it running. Figures are read from the code
+ * and the data: the catalog of distinct published pictures, the measured official-picture answer, the refund window.
+ */
+function ideas() {
+  const official = MEASURED.items.find((i) => i.id === "official")?.figure.toLowerCase() ?? null;
+  return [
+    {
+      line: "Each firm that joins makes every other firm safer.",
+      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} distinct pictures published with every recall, and every photo already claimed at any firm${official ? `, in ${official}` : ""} with no model call. Firms share only hashes, never a photo.`,
+      href: "/evidence#photo-checks",
+      see: "The photo checks",
+    },
+    {
+      line: "The refund goes back the way it was paid.",
+      note: `Inside PayPal's ${REFUND_WINDOW_DAYS}-day refund window, Remedy refunds the original PayPal purchase. After it, a PayPal payout to an email or phone, or Venmo. Plain code picks the route and the amount.`,
+      href: "/try/shop",
+      see: "Buy, claim and get it back",
+    },
+    {
+      line: "A payout nobody accepts becomes a task.",
+      note: "When PayPal's webhook says a payout is waiting to be accepted, a re-notice appears in the firm's recall plan, live and linked to its payout batch, so the refund still reaches its owner.",
+      href: "/firm/plan",
+      see: "The recall plan",
+    },
+  ];
+}
 
 /** Remedy wording, word for word from the CPSC record. A quote that no longer matches the data is left out. */
 const QUOTES = [
@@ -110,48 +144,94 @@ const FIGURES: { whole: string; dec?: string; caption: string }[] = [
   { whole: String(C.all.paypalOrVenmo.count), caption: "recalls mention PayPal or Venmo anywhere in the remedy" },
 ];
 
-type RunFile = { runs: { id: string; title: string; about: string; recall: string; settings?: string; result: { decision: string; decided_by: string; summary: { plain: string }; guidance?: { plain: string } | null; timings: { total_ms: number }; checks: Record<string, { name: string; status: string; score: number | null; reason: string; technical: string }> } }[] };
+type RunFile = { runs: { id: string; title: string; about: string; recall: string; settings?: string; result: { decision: string; decided_by: string; summary: { plain: string }; guidance?: { plain: string } | null; amount?: { value: string } | null; timings: { total_ms: number }; checks: Record<string, { name: string; status: string; score: number | null; reason: string; technical: string }> } }[] };
 
-const PRESETS: { id: string; thumb: string; w: number; h: number; credit: string }[] = [
-  { id: "cord-cut-example", thumb: "/landing/cord-cut-26125-sm.webp", w: 360, h: 230, credit: "Photo: CPSC, recall 26125." },
-  { id: "official-image-power-bank", thumb: "/landing/power-bank-27056.webp", w: 217, h: 322, credit: "Photo: CPSC, recall 27056." },
-  { id: "blurry", thumb: "/landing/blurry-mug.webp", w: 360, h: 270, credit: "Photo: Kurt Kaiser, CC0, via Wikimedia Commons, blurred by us." },
+/**
+ * The panel's tabs, in order. The first is the whole automatic path: Brightline's sample charger with its cord cut,
+ * verified, then the refund. The second is the photo in the headline, answered the way a claim answers it.
+ */
+const PRESETS: { id: string; pick: string; thumb: string; w: number; h: number; credit: string }[] = [
+  { id: "sample-charger-cut", pick: "Charger, cord cut", thumb: "/landing/charger-cord-cut.webp", w: 360, h: 270, credit: `${SAMPLE_PHOTO_CREDIT}. Sample recall; fictional.` },
+  { id: "cpsc-example", pick: "The CPSC's photo", thumb: "/landing/cord-cut-26125-sm.webp", w: 360, h: 230, credit: "Photo: CPSC, recall 26125." },
+  { id: "official-image-power-bank", pick: "Official picture", thumb: "/landing/power-bank-27056.webp", w: 217, h: 322, credit: "Photo: CPSC, recall 27056." },
+  { id: "blurry", pick: "Blurry photo", thumb: "/landing/blurry-mug.webp", w: 360, h: 270, credit: "Photo: Kurt Kaiser, CC0, via Wikimedia Commons, blurred by us." },
 ];
 
-function nextFor(decision: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
-  if (decision === "verified") return "Every check passed. The refund is ready to send through PayPal.";
-  if (decision === "retake" && checks.C1?.status === "pass" && checks.C3?.status === "unclear")
-    return `Right product (${checks.C1.score?.toFixed(2) ?? "passed"}). Claude also saw that this is the CPSC's own published photo, not one the owner took, so it held back on the cut and a new photo of the owner's own product is asked for. With the free picture match on, Remedy asks for the owner's own photo in code.`;
+const measured = (id: string) => MEASURED.items.find((i) => i.id === id)?.figure ?? null;
+/** The recall's short title; the label beside it already says when it is a sample recall. */
+const panelTitle = (title: string) => shortTitle(title).replace(/\s*\(sample recall\)$/i, "");
+
+function nextFor(decision: string, decidedBy: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
+  if (decision === "verified" && decidedBy === "reviewers")
+    return `The product match was ${checks.C1?.score?.toFixed(2) ?? "unclear"}, under the 0.85 bar, so two AI reviewers looked closer: both found the recalled charger with its cord cut, each citing what it saw. Code checked their evidence and the amount, and verified it.`;
+  if (decision === "verified") return "Every check passed. Code checked the amount, and verified it.";
   if (decision === "retake") return guidance ? `${guidance} Nothing is paid until the photo checks out.` : summary;
-  const { C1, C2, C3 } = checks;
-  if (C3?.status === "unclear" && C1?.status === "pass" && C2?.status === "pass")
-    return `Right product (${C1.score?.toFixed(2) ?? "passed"}) and the cut cord are confirmed. Claude also saw that this is the CPSC's own published photo, not one the owner took, so a person at the firm takes a look. With the free picture match on, Remedy asks for the owner's own photo in code.`;
-  if (C1?.status === "unclear" && C1.score !== null) return `The product match is ${C1.score.toFixed(2)}, just under the 0.85 bar, so two AI reviewers and then a person at the firm take a look.`;
   return "Two AI reviewers and then a person at the firm take a look.";
 }
 
-/** The three sample runs. The 26125 photo is told as everywhere else on the site: the owner flow's recorded answer, replayed. */
+/**
+ * The four sample runs. Recorded runs come from content/public/verify-runs.json. The 26125 photo, the one set into the
+ * headline, runs live through the claim path with no model call: the free picture match recognizes the CPSC's own
+ * published photo and asks for the owner's own.
+ */
 async function panelRuns(): Promise<PanelRun[]> {
   const all = (runs as RunFile).runs;
-  const replay = await cpscExampleReplay();
-  return PRESETS.flatMap((p) => {
+  const cpsc = await cpscExampleDefault();
+  return PRESETS.flatMap((p): PanelRun[] => {
+    if (p.id === "cpsc-example") {
+      const rec = recallByNumber("26125");
+      if (!cpsc || !rec) return [];
+      return [
+        {
+          id: p.id,
+          pick: p.pick,
+          title: "The CPSC's own made-safe photo",
+          about: "The photo in the headline: the CPSC published it with recall 26125 to show the hair dryer made safe. Here it is sent as if it were an owner's claim photo.",
+          thumb: p.thumb,
+          thumbW: p.w,
+          thumbH: p.h,
+          credit: p.credit,
+          recall: { label: RecallLabel(rec.number), title: panelTitle(rec.title) },
+          decision: cpsc.decision as PanelRun["decision"],
+          next: "This is the CPSC's own published photo of the cut cord, so the free picture match finds it in code, with no model call, and Remedy asks the owner for a photo of their own hair dryer made safe.",
+          totalMs: cpsc.totalMs,
+          settings: null,
+          checks: cpsc.checks,
+          paid: null,
+        },
+      ];
+    }
     const r = all.find((x) => x.id === p.id);
     const rec = r ? recallByNumber(r.recall) : null;
     if (!r || !rec) return [];
-    const base = { id: r.id, title: r.title, about: r.about, thumb: p.thumb, thumbW: p.w, thumbH: p.h, credit: p.credit, recall: { number: rec.number, title: shortTitle(rec.title) } };
-    if (r.id === "cord-cut-example" && replay) {
-      const byId = Object.fromEntries(replay.checks.map((c) => [c.id, c]));
-      return [{ ...base, decision: replay.decision as PanelRun["decision"], next: nextFor(replay.decision, byId, null, replay.summaryPlain), totalMs: replay.visionMs, settings: replay.settings, checks: replay.checks }];
-    }
     const res = r.result;
+    const verified = res.decision === "verified";
+    const payout = measured("payout");
     return [
       {
-        ...base,
+        id: r.id,
+        pick: p.pick,
+        title: r.title,
+        about: r.about,
+        thumb: p.thumb,
+        thumbW: p.w,
+        thumbH: p.h,
+        credit: p.credit,
+        recall: { label: RecallLabel(rec.number), title: panelTitle(rec.title) },
         decision: res.decision as PanelRun["decision"],
-        next: nextFor(res.decision, res.checks, res.guidance?.plain ?? null, res.summary.plain),
+        next: nextFor(res.decision, res.decided_by, res.checks, res.guidance?.plain ?? null, res.summary.plain),
         totalMs: res.timings.total_ms,
         settings: r.settings ?? null,
         checks: Object.entries(res.checks).map(([id, c]) => ({ id, ...c })),
+        paid:
+          verified && res.amount
+            ? {
+                line: `$${res.amount.value} back through PayPal, at once`,
+                note: `Under Brightline's $${(DEFAULT_TERMS.autoCapCents / 100).toFixed(2)} auto-approve cap, so no person is needed. Bought with PayPal, it goes back to that purchase, which the sandbox did at once; otherwise it is a payout to an email or phone${payout ? `, which reached SUCCESS in ${payout}` : ""}.`,
+                href: "/try/shop",
+                cta: "Buy the charger in the sandbox and claim it",
+              }
+            : null,
       },
     ];
   });
@@ -186,6 +266,14 @@ export default async function Home() {
   const start = await showcaseStart();
   const quotes = QUOTES.filter((q) => recallByNumber(q.n)?.remedyText.includes(q.text));
   const fragment = devFragment();
+  // The two measured results the intro states: the error rate (src/components/judges/errors.ts) and the timings
+  // measured in the sandbox (content/public/measured.json).
+  const rates = errorRates();
+  const proof = {
+    wrongPay: `${rates.wrongPay.count} of ${rates.wrongPay.of}`,
+    check: aboutSeconds(MEASURED.items.find((i) => i.id === "live-check")?.figure),
+    payout: aboutSeconds(MEASURED.items.find((i) => i.id === "payout")?.figure),
+  };
 
   return (
     <>
@@ -248,9 +336,42 @@ export default async function Home() {
           <div className="intro-text">
             <p className="intro-stat">
               Since January 2024, <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> of <span className="tabular">{fmtInt(C.recalls.count)}</span> US product recalls offer a refund once the owner
-              sends a photo of the product made safe. <Info id="intro.stat" label="" topic="How 525 was counted" />
+              sends a photo of the product made safe, and the share grows each year: <span className="tabular">{C.byYear["2024"].photoRefund}</span> in 2024,{" "}
+              <span className="tabular">{C.byYear["2025"].photoRefund}</span> in 2025 and <span className="tabular">{C.byYear["2026"].photoRefund}</span> so far in 2026.{" "}
+              <Info id="intro.stat" label="" topic={`How ${fmtInt(C.all.photoRefund.count)} was counted`} />
+            </p>
+            <p className="intro-why">
+              On average, about {RESEARCH.comeBack.share} recalled products come back. Simpler claiming brings more back: a simpler notice raised claiming from{" "}
+              {RESEARCH.simpler.from} to {RESEARCH.simpler.to}, and to {RESEARCH.simpler.named} with the amount named (
+              <a className="text-link" href={RESEARCH.simpler.url} target="_blank" rel="noreferrer">
+                {RESEARCH.simpler.short}
+              </a>
+              ), and a full refund lifts recall effectiveness by {RESEARCH.fullRemedy.lift} (
+              <a className="text-link" href={RESEARCH.fullRemedy.url} target="_blank" rel="noreferrer">
+                {RESEARCH.fullRemedy.short}
+              </a>
+              ).
             </p>
             <p className="intro-lead">Remedy turns that photo into a refund in seconds.</p>
+            <p className="intro-result">
+              Measured on photos with a known answer, <strong>{proof.wrongPay}</strong> decisions paid a photo that should not have been paid.
+              {proof.check ? (
+                <>
+                  {" "}
+                  The photo check takes about <strong>{proof.check} seconds</strong>
+                  {proof.payout ? (
+                    <>
+                      {" "}
+                      and the PayPal payout about <strong>{proof.payout}</strong>
+                    </>
+                  ) : null}
+                  .
+                </>
+              ) : null}{" "}
+              <Link className="text-link" href="/evidence#errors">
+                How it was measured
+              </Link>
+            </p>
             {quotes.length > 0 && (
               <ul className="intro-quotes" aria-label="In the recalls' own words">
                 <Quote q={quotes[0]} />
@@ -278,7 +399,25 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="how" className="how frame" aria-labelledby="how-h">
+      <section id="how" className="how frame" aria-labelledby="ideas-h">
+        <div className="ideas">
+          <h2 id="ideas-h" className="ideas-h" data-reveal="">
+            Three ideas behind every refund
+          </h2>
+          <ol className="ideas-list">
+            {ideas().map((d, i) => (
+              <li key={d.line} className="ideas-item" data-reveal="" style={{ "--reveal-i": i } as React.CSSProperties}>
+                <p className="ideas-line">{d.line}</p>
+                <p className="ideas-note">
+                  {d.note}{" "}
+                  <Link className="text-link ideas-see" href={d.href}>
+                    {d.see}
+                  </Link>
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
         <ol className="how-steps">
           {STEPS.map((s, i) => (
             <li key={s.line} className="how-step" data-reveal="" style={{ "--reveal-i": i } as React.CSSProperties}>
@@ -313,7 +452,7 @@ export default async function Home() {
             See a photo become a refund
           </h2>
           <p className="try-p">
-            Use one of ours, or your own. These are recorded runs of Remedy&rsquo;s verifier on real recall photos; the live run, with a sandbox payout, is one press away.{" "}
+            Start with Brightline&rsquo;s sample charger: verified, then refunded through PayPal. The other photos show the checks that ask for a new one. These are runs of Remedy&rsquo;s real verifier; the live run, with a sandbox payout, is one press away.{" "}
             <Info id="try.panel" label="" topic="The photo checks" />
           </p>
           <p className="try-actions">

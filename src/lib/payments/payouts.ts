@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { recallLabel } from "@/lib/recall/label";
 import { SANDBOX_LABEL, resolveDeps, toCents, toValue, type PaymentsDeps } from "./deps";
 import { recordStatus, type PaymentEventSource } from "./events";
 import { payoutItemStatus, plainIssue } from "./status";
@@ -53,7 +54,7 @@ export function recipientFor(payee: Payee, opts: { venmoWallet: boolean } = { ve
 }
 
 export function payoutNote(line: Pick<PayoutLine, "recallNumber" | "recallTitle">, firmName: string) {
-  return `Recall refund for ${line.recallTitle} (CPSC recall ${line.recallNumber}) from ${firmName}. Thank you for making it safe. ${SANDBOX_LABEL}`.slice(0, 4000);
+  return `Recall refund for ${line.recallTitle} (${recallLabel(line.recallNumber)}) from ${firmName}. Thank you for making it safe. ${SANDBOX_LABEL}`.slice(0, 4000);
 }
 
 /** sender_item_id is the claim id (PayPal allows 63 characters). */

@@ -9,6 +9,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { aiAvailable, claude } from "@/lib/ai/claude";
 import { logUsage, overBudget } from "@/lib/ai/usage";
 import { log } from "@/lib/log";
+import { recallLabel } from "@/lib/recall/label";
 import { dayName } from "./dates";
 import type { Firm, FirmRecall } from "./firm";
 import { strayFigures, templateNarrative, type ReportNumbers } from "./report";
@@ -60,7 +61,7 @@ export function promptFigures(n: ReportNumbers) {
   return {
     firm: n.firmName,
     product: n.product,
-    cpsc_recall: n.recallNumber,
+    recall: recallLabel(n.recallNumber),
     report_number: n.period.index,
     period: `${dayName(n.period.start)} to ${dayName(n.period.through)}${n.period.inProgress ? " (the month is still running)" : ""}`,
     claims_received: n.claimsReceived,

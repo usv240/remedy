@@ -1,0 +1,53 @@
+{
+  "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
+  "writtenAt": "2026-11-07T21:08:02.561Z",
+  "unitTests": {
+    "passed": 411,
+    "skipped": 44,
+    "failed": 0,
+    "files": 46,
+    "ranAt": "2026-11-07T20:32:46.806Z",
+    "note": "npm test with no keys and no database, as CI runs it: the live Claude, live PayPal and Postgres suites skip."
+  },
+  "a11y": {
+    "pages": 27,
+    "views": 108,
+    "passed": 108,
+    "ranAt": "2026-11-07T21:06:58.024Z"
+  },
+  "mcp": {
+    "tools": 7,
+    "names": [
+      "ping",
+      "search_recalls",
+      "scan_catalog",
+      "get_proof_rule",
+      "verify_photo",
+      "open_claim",
+      "claim_status"
+    ]
+  },
+  "photoChecks": {
+    "freeCaught": 7,
+    "freeTotal": 7
+  },
+  "errors": {
+    "wrongPay": {
+      "count": 0,
+      "of": 36,
+      "photos": 18
+    },
+    "heldBack": {
+      "count": 0,
+      "of": 4,
+      "photos": 1
+    },
+    "decisions": 40,
+    "photos": 19
+  },
+  "catalogPictures": 1777,
+  "measured": {
+    "checkSeconds": 12,
+    "payoutSeconds": 18
+  }
+}

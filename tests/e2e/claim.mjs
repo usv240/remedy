@@ -76,7 +76,7 @@ async function main() {
   const blur = await json("/api/try/presets/blurry/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
   check("preset blurry: a friendly retake from the quality precheck", blur.j?.data?.result?.decision === "retake" && blur.j.data.result.decided_by === "quality", blur.j?.data?.result?.guidance?.plain);
   const list = await json("/api/try/presets");
-  check("presets list: four examples, and the user photos say more are coming when there are none", list.j?.data?.presets?.length >= 4 && (list.j.data.user.length > 0 || list.j.data.more_coming === true));
+  check("presets list: the examples, each with its expected result, and the opened-charger photos with their recorded results", list.j?.data?.presets?.length >= 4 && list.j.data.presets.every((p) => p.expected?.decision) && list.j.data.recorded?.length >= 2 && Array.isArray(list.j.data.user));
   const dl = await fetch(`${B}/api/try/presets/official-image`);
   check("preset download is a JSON file", dl.status === 200 && (dl.headers.get("content-disposition") ?? "").includes("attachment") && Boolean((await dl.json()).preset));
   const photo = await fetch(`${B}/api/try/presets/official-image/photo?download=1`);

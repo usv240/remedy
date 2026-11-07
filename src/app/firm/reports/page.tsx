@@ -9,6 +9,7 @@ import { firmContext } from "@/lib/firm/firm";
 import { narrativeFor } from "@/lib/firm/narrative";
 import { fmtInt, fmtPct, fmtUsd, formRows } from "@/lib/firm/report";
 import { loadReport } from "@/lib/firm/report-data";
+import { recallLabel, RecallLabel } from "@/lib/recall/label";
 
 export const metadata: Metadata = { title: "CPSC monthly report", description: "Brightline Home's CPSC monthly progress report, counted from its claims and PayPal payments. A fictional sample firm." };
 
@@ -61,7 +62,7 @@ async function Report({ searchParams }: { searchParams: Promise<{ month?: string
       <div className="rp-print-only">
         <p>
           <strong>
-            {n.firmName} (fictional sample firm). CPSC recall {n.recallNumber}, {n.product}.
+            {n.firmName} (fictional sample firm). {RecallLabel(n.recallNumber)}, {n.product}.
           </strong>
         </p>
       </div>
@@ -70,7 +71,7 @@ async function Report({ searchParams }: { searchParams: Promise<{ month?: string
         Report {n.period.index}: {dayName(n.period.start)} to {dayName(n.period.end)}
       </h2>
       <p className="muted">
-        Due {dayName(n.period.dueOn)}.{n.period.inProgress ? ` The month is still running, so the figures count through ${dayName(n.period.through)}.` : ""} {n.product}, CPSC recall {n.recallNumber}.
+        Due {dayName(n.period.dueOn)}.{n.period.inProgress ? ` The month is still running, so the figures count through ${dayName(n.period.through)}.` : ""} {n.product}, {recallLabel(n.recallNumber)}.
       </p>
 
       <div className="firm-kpis rp-head-figures" role="group" aria-label="This report's main figures">

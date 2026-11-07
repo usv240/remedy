@@ -1,16 +1,11 @@
 /**
  * Pure helpers for the owner's view of a recall: no file system, no network, so tests and client code can use them.
  */
+import { isSampleNumber } from "@/lib/recall/label";
 import type { ProofRule } from "@/lib/recall/proof-rule";
 
-/**
- * Brightline Home's fictional sample recalls are numbered "BH-2026-01" (content/recalls/samples.json), a form no CPSC
- * recall uses, so a sample can never be mistaken for a real recall number.
- */
-export const SAMPLE_NUMBER = /^BH-\d{4}-\d{2}$/;
-export const isSampleNumber = (s: string) => SAMPLE_NUMBER.test(s);
-/** Who took the sample recall's photos (content/recalls/samples.json, public/samples/charger/CREDITS.json). */
-export const SAMPLE_PHOTO_CREDIT = "Photo: Dmitry G, Wikimedia Commons, public domain; brand marks removed for this sample";
+/** The sample recall's number form, its photo credit and how any recall is named live in src/lib/recall/label.ts. */
+export { isSampleNumber, recallCredit, recallLabel, RecallLabel, SAMPLE_NUMBER, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 
 /** CPSC recall numbers are five digits ("27056"); a few older ones run four to six. Sample numbers are accepted too. */
 export const isRecallNumber = (s: string) => /^\d{4,6}$/.test(s) || isSampleNumber(s);

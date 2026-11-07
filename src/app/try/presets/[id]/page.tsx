@@ -64,7 +64,7 @@ async function Preset({ params }: Params) {
             Download the photo
           </a>
         </div>
-        <Checking checks={run.result.checks} stage="done" elapsedMs={run.result.timings?.total_ms ?? 0} technical={run.result.timings} />
+        <Checking checks={run.result.checks} stage="done" elapsedMs={run.result.timings?.total_ms ?? 0} technical={run.result.timings} reviewersAgreed={run.result.decision === "verified" && run.result.decided_by === "reviewers"} />
         <Result claim={run.result} ctx={{ action: null, word: null, example: null }} preview />
         <p className="cl-hint">
           {run.replay.used

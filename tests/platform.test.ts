@@ -73,7 +73,7 @@ describe("health checks", () => {
   });
 
   it("report each integration as live, fallback or not connected from its settings", async () => {
-    for (const k of ["DATABASE_URL", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "ANTHROPIC_API_KEY", "ELASTIC_URL", "ELASTIC_API_KEY", "CHANNEL3_API_KEY", "KERNEL_API_KEY", "RENDER_EXTERNAL_URL", "CHECKS_SECRET", "CHECKS_WORKFLOW_SLUG", "PAYPAL_WEBHOOK_ID", "NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY", "SENTRY_DSN"]) delete process.env[k];
+    for (const k of ["DATABASE_URL", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "ANTHROPIC_API_KEY", "ELASTIC_URL", "ELASTIC_API_KEY", "CHANNEL3_API_KEY", "KERNEL_API_KEY", "RENDER_EXTERNAL_URL", "CHECKS_SECRET", "CHECKS_WORKFLOW_SLUG", "PAYPAL_WEBHOOK_ID", "NEXT_PUBLIC_AG_GRID_LICENSE_KEY", "SENTRY_DSN"]) delete process.env[k];
     const none = Object.fromEntries((await runChecks()).map((c) => [c.id, c.mode]));
     expect(none).toEqual({
       paypal: "not_connected",

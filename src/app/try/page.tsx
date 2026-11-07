@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { demoPicks } from "@/app/api/claims/_lib/recall";
-import { listPresets, readRecorded } from "@/app/api/try/_lib/presets";
+import { listPresets, readRecorded, recordedSamples } from "@/app/api/try/_lib/presets";
 import { Info } from "@/components/Info";
 import { AnyRecall } from "@/components/try/AnyRecall";
 import { Presets, type PresetCard } from "@/components/try/Presets";
@@ -45,7 +45,7 @@ export default function TryPage() {
       </header>
       <TryTabs
         panels={{
-          examples: <Presets presets={presets.map(card)} user={user.map(card)} />,
+          examples: <Presets madeSafe={presets.filter((p) => p.group === "made-safe").map(card)} recorded={recordedSamples()} others={presets.filter((p) => p.group !== "made-safe").map(card)} user={user.map(card)} />,
           "your-photo": <YourPhoto picks={demoPicks()} />,
           "any-recall": <AnyRecall />,
         }}

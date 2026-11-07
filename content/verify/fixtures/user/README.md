@@ -15,13 +15,13 @@ Remedy's verifier is tested on photos that are honestly what they say. None of t
 
 The known answers are in `../cases.json`; `scripts/verify/sweep.ts` and `tests/verify.live.test.ts` run them against Claude, and the unit tests run the cases that need no model.
 
-## What the set cannot show yet
+## The made-safe path
 
-There is no photo here of a recalled product made safe by its own owner, so the fully verified path (a real owner's power bank marked RECALLED, checked against its own recall) is shown only with the CPSC's published examples, with the official-image match set aside. The screen photo shows a wallpaper, not a recall picture, so it tests the screen check only partly.
+The fully verified path is shown with one real laptop charger, photographed by Dmitry G (Wikimedia Commons, public domain) before and after its cord was cut, for Brightline Home's fictional sample recall BH-2026-01 (`../sample/`): the cut cord is verified and refunded, and the charger opened up with its cord still attached is asked again (`../../sweep-sample.json`, three runs each). The screen photo shows a wallpaper, not a recall picture, so it tests the screen check on its own.
 
-## Adding photos later
+## Adding the team's own photos
 
-If the team photographs products it owns, put them here with an `expected.json` beside them. The live test and `/try` pick up every listed image that exists:
+Photos of products the team owns go here, with an `expected.json` beside them. The live test and `/try` pick up every listed image that exists, under "Photos of products made safe":
 
 ```json
 {

@@ -1,51 +1,55 @@
+import { aboutSeconds, RESEARCH as R } from "@/lib/research";
+import { catalogOfficialHashes } from "@/lib/verify/dhash";
+import measured from "../../../content/public/measured.json";
+
+const seconds = (id: string) => aboutSeconds(measured.items.find((i) => i.id === id)?.figure);
+
 /**
  * Grounded in research: published findings Remedy is built on, each with what Remedy does about it. Every figure was
- * read from the source itself (2026-11-07): the paper, the experiment, the order, the post or the filing linked here.
+ * read from the source itself (2026-11-07) and lives in src/lib/research.ts, which the home page and the README share.
  */
 const FINDINGS: { fig: string; finding: string; source: string; url: string; inRemedy: string }[] = [
   {
-    fig: "11.4%",
-    finding:
-      "A full refund lifts the share of recalled products that come back by 11.4% on average, across 338 CPSC recalls. It works two ways: owners see more benefit, and they feel more able to take part.",
-    source: "Raithel, Hock and Mafael, Journal of the Academy of Marketing Science, 2024",
-    url: "https://link.springer.com/article/10.1007/s11747-023-00967-x",
+    fig: R.fullRemedy.lift,
+    finding: `A full refund lifts the share of recalled products that come back by ${R.fullRemedy.lift} on average, across ${R.fullRemedy.recalls} CPSC recalls. It works two ways: owners see more benefit, and they feel more able to take part.`,
+    source: R.fullRemedy.source,
+    url: R.fullRemedy.url,
     inRemedy: "Each claim names the refund in its first line, and the remedy becomes up to four plain steps with a drawing for each.",
   },
   {
-    fig: "14% to 31%",
-    finding:
-      "In an IRS field experiment with 35,050 tax filers, a simpler notice raised claiming from 14% to 23%, and naming the amount in the headline raised it to 31%.",
-    source: "Bhargava and Manoli, American Economic Review, 2015",
-    url: "https://www.aeaweb.org/articles?id=10.1257/aer.20121493",
+    fig: `${R.simpler.from} to ${R.simpler.named}`,
+    finding: `In an IRS field experiment with ${R.simpler.filers} tax filers, a simpler notice raised claiming from ${R.simpler.from} to ${R.simpler.to}, and naming the amount in the headline raised it to ${R.simpler.named}.`,
+    source: R.simpler.source,
+    url: R.simpler.url,
     inRemedy: "One page on a phone, no account, and one photo. The checks explain each result in plain words.",
   },
   {
-    fig: "6 in 100",
+    fig: R.comeBack.share,
     finding: "Recalled products that come back through a recall, on average, by the CPSC's measure: every finished claim adds to it.",
-    source: "CPSC Recall Effectiveness Workshop, 2017, as cited by Raithel, Hock and Mafael, 2024",
-    url: "https://link.springer.com/article/10.1007/s11747-023-00967-x",
-    inRemedy: "A finished claim takes one photo: the check runs in about 12 seconds and the PayPal payout in about 18, measured in the sandbox.",
+    source: R.comeBack.source,
+    url: R.comeBack.url,
+    inRemedy: `A finished claim takes one photo: the check runs in about ${seconds("live-check")} seconds and the PayPal payout in about ${seconds("payout")}, measured in the sandbox.`,
   },
   {
-    fig: "400,000+",
+    fig: R.amazonOrder.products,
     finding:
       "Products covered by the CPSC's January 2025 order to Amazon: email each buyer directly, and refund the full price to anyone who submits proof the product was destroyed or disposed of.",
-    source: "U.S. Consumer Product Safety Commission, January 17, 2025",
-    url: "https://www.cpsc.gov/Newsroom/News-Releases/2025/CPSC-Issues-Final-Order-to-Amazon-com-Outlining-Remediation-Plans-for-Hazardous-Products",
+    source: R.amazonOrder.source,
+    url: R.amazonOrder.url,
     inRemedy: "The same pattern for any firm: buyers who paid with PayPal are found through Transaction Search, and each proof photo is checked and refunded.",
   },
   {
-    fig: "10 bits",
-    finding: "The difference hash (dHash) treats two pictures more than 10 bits apart as different images, and 1 to 10 bits as variations of one, after tests on over 150,000 images.",
-    source: "Neal Krawetz, The Hacker Factor Blog, 2013",
-    url: "https://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html",
-    inRemedy: "A claim photo is matched within 10 bits to its own recall's pictures, and within 4 bits to the 1,777 distinct pictures of every other recall.",
+    fig: `${R.dhash.bits} bits`,
+    finding: `The difference hash (dHash) treats two pictures more than ${R.dhash.bits} bits apart as different images, and 1 to ${R.dhash.bits} bits as variations of one, after tests on over ${R.dhash.images} images.`,
+    source: R.dhash.source,
+    url: R.dhash.url,
+    inRemedy: `A claim photo is matched within 10 bits to its own recall's pictures, and within 4 bits to the ${catalogOfficialHashes().length.toLocaleString("en-US")} distinct pictures of every other recall.`,
   },
   {
-    fig: "440 million",
+    fig: R.paypal.accounts,
     finding: "Active PayPal accounts at the end of September 2026.",
-    source: "PayPal Holdings, third-quarter 2026 results, October 27, 2026",
-    url: "https://www.sec.gov/Archives/edgar/data/1633917/000163391726000086/pypl3q-26earningsrelease.htm",
+    source: R.paypal.source,
+    url: R.paypal.url,
     inRemedy: "Refunds go back to the original PayPal purchase inside 180 days, or out as a PayPal payout to an email or phone number, with no bank details asked.",
   },
 ];

@@ -25,6 +25,8 @@ export type FlowRecall = {
 
 /** The sample shop's receipt, kept on this device after a purchase so the claim can link it. */
 export const SHOP_SALE_KEY = "remedy-shop-sale";
+/** The published photo of the sample charger with its cord cut (public/samples/charger/CREDITS.json). */
+export const SAMPLE_PHOTO_URL = "/samples/charger/cord-cut.jpg";
 export type StoredSale = { saleId: string; captureId: string; amount: string; paidAt: string };
 
 function readSale(): StoredSale | null {
@@ -94,6 +96,18 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
     });
     setCheck(null);
     setCheck(await checkPhoto(f));
+  }
+
+  /** The shop recall only: Brightline's published photo of this charger with its cord cut, for a visitor with no charger to cut. */
+  async function pickSamplePhoto() {
+    setError("");
+    try {
+      const r = await fetch(SAMPLE_PHOTO_URL);
+      if (!r.ok) throw new Error();
+      await pick(new File([await r.blob()], "brightline-charger-cord-cut.jpg", { type: "image/jpeg" }));
+    } catch {
+      setError("The sample photo could not load just now. Please try again, or choose a photo of your own.");
+    }
   }
 
   async function poll(id: string): Promise<ClaimView | null> {
@@ -225,6 +239,16 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
               Choose a photo
             </label>
           </div>
+          {recall.shop && (
+            <div className="cl-sample">
+              <button type="button" className="btn btn-quiet cl-sample-btn" onClick={() => void pickSamplePhoto()} disabled={phase === "checking"}>
+                Use Brightline&rsquo;s sample photo
+              </button>
+              <p className="cl-hint">
+                No charger to cut? This public-domain photo shows this charger with its cord cut (Dmitry G, Wikimedia Commons). Every visitor can claim with it; any other photo is checked against earlier claims as usual.
+              </p>
+            </div>
+          )}
           <p className="cl-hint cl-privacy">
             <strong>Your photo:</strong> show just the product, with no people in it. It is kept without camera or location data, and deleted 90 days after your claim is decided.
           </p>
@@ -298,7 +322,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
         {phase === "photo" ? (
           <p className="cl-later">Six checks run on your photo, in a few seconds.</p>
         ) : (
-          <Checking checks={claim?.checks ?? null} stage={stage} elapsedMs={elapsed} technical={claim?.timings ?? null} />
+          <Checking checks={claim?.checks ?? null} stage={stage} elapsedMs={elapsed} technical={claim?.timings ?? null} reviewersAgreed={claim?.decision === "verified" && claim?.decided_by === "reviewers"} />
         )}
       </li>
 

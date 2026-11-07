@@ -4,6 +4,7 @@
  * for notices, payouts, follow-up and the CPSC reports. Dependencies are plan_task's own ("finish to start" unless the
  * row says otherwise). Pure and client safe.
  */
+import { isSampleNumber } from "@/lib/recall/label";
 import { addMonths, isoDay, reportMonths } from "./dates";
 
 export type PlanKind = "announcement" | "notice_wave" | "report" | "payout_batch" | "follow_up" | "re_notice" | "milestone" | "other";
@@ -76,7 +77,7 @@ export function noteFor(r: PlanRow): string {
   if (r.kind === "follow_up") return `Thirty days after the batch, check for payouts nobody accepted. ${SOURCE_NOTE[r.source]}.`;
   if (r.kind === "report") return `Prepare and file the CPSC monthly progress report. The CPSC asks for it by the first of each month. ${SOURCE_NOTE[r.source]}.`;
   if (r.kind === "notice_wave") return `Send recall notices with a personal claim link. ${SOURCE_NOTE[r.source]}.`;
-  if (r.kind === "announcement") return "The day the CPSC published the recall.";
+  if (r.kind === "announcement") return isSampleNumber(r.ref?.split(":")[1] ?? "") ? "The day the sample recall was announced. Brightline Home and its recall are fictional." : "The day the CPSC published the recall.";
   return SOURCE_NOTE[r.source];
 }
 
@@ -137,7 +138,7 @@ export function basePlan(recallNumber: string, announced: string) {
   const months = reportMonths(announced, 3);
   const ref = (k: string) => `plan:${recallNumber}:${k}`;
   return [
-    { ref: ref("announcement"), name: "Recall announced by the CPSC", kind: "announcement" as const, start: announced, duration: 0, dependsOn: null },
+    { ref: ref("announcement"), name: isSampleNumber(recallNumber) ? "Sample recall announced" : "Recall announced by the CPSC", kind: "announcement" as const, start: announced, duration: 0, dependsOn: null },
     { ref: ref("notice-1"), name: "Notice wave 1: email buyers in the sales records", kind: "notice_wave" as const, start: announced, duration: 4, dependsOn: ref("announcement") },
     { ref: ref("notice-2"), name: "Notice wave 2: reminder to buyers who have not claimed", kind: "notice_wave" as const, start: day(14), duration: 3, dependsOn: ref("notice-1") },
     ...months.map((m, i) => {

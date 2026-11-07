@@ -38,6 +38,7 @@ import { CHECK_IDS, verifyPhoto, type ClaimContext, type VerifyDeps, type Verify
 import { defaultVerifyCache } from "@/lib/verify/cache";
 import { allowUpload } from "@/lib/ratelimit";
 import { removePhoto, storedCopy } from "@/lib/ops/photos";
+import { isSamplePhoto } from "./sample-photo";
 import { runReviewers } from "@/lib/verify/reviewers";
 import { runVision } from "@/lib/verify/vision";
 import { getRecall, productName, ruleFor, verifyRecallFor } from "./recall";
@@ -354,7 +355,8 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   if (result.photo.dhash) {
     await db().update(schema.photos).set({ dhash: result.photo.dhash }).where(eq(schema.photos.id, photoId));
     // Only photos that could be paid are kept for the earlier-claim check, so an owner's own retake never trips it.
-    if (result.decision !== "retake") {
+    // Brightline's published sample photo stays out of it, so every visitor can claim the sample recall with it.
+    if (result.decision !== "retake" && !isSamplePhoto(recall.number, photo)) {
       await db().insert(schema.imageHashes).values({ source: "claim", ref: photoId, recallNumber: recall.number, dhash: result.photo.dhash }).onConflictDoNothing();
     }
   }

@@ -1,3 +1,4 @@
+import { recallLabel } from "@/lib/recall/label";
 import { SANDBOX_LABEL, resolveDeps, toValue, type PaymentsDeps } from "./deps";
 import { captureStatus, plainIssue } from "./status";
 import type { Replacement } from "./types";
@@ -28,7 +29,7 @@ export function replacementOrderBody(o: { claimId: string; recallNumber: string;
       {
         reference_id: `claim-${o.claimId}`.slice(0, 256),
         custom_id: `remedy-replacement:${o.claimId}`.slice(0, 127),
-        description: `Safe replacement for CPSC recall ${o.recallNumber}. ${SANDBOX_LABEL}`.slice(0, 127),
+        description: `Safe replacement for ${recallLabel(o.recallNumber)}. ${SANDBOX_LABEL}`.slice(0, 127),
         amount: { currency_code: "USD", value, breakdown: { item_total: { currency_code: "USD", value } } },
         items: [{ name: title, sku: o.replacement.productId.slice(0, 127), quantity: "1", unit_amount: { currency_code: "USD", value }, category: "PHYSICAL_GOODS" }],
         payee: { email_address: o.retailerEmail },

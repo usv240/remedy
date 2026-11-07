@@ -9,6 +9,7 @@
  * products remedied, number of consumers notified of the recall, and any post-recall announcement incidents and
  * injuries" (https://www.cpsc.gov/s3fs-public/RecallHandbookFINAL9_2technicalrevision_3052025.pdf).
  */
+import { recallDataSource, recallLabel } from "@/lib/recall/label";
 import { dayName, monthName, type ReportPeriod } from "./dates";
 
 export type ReportCounts = {
@@ -95,8 +96,8 @@ export function formRows(n: ReportNumbers): FormRow[] {
     r("Header", "Case Number", "Add your CPSC case number", "Given by your Compliance Officer"),
     r("Header", "Reporting Dates", `${dayName(p.start)} to ${dayName(p.end)}${p.inProgress ? ` (counted through ${dayName(p.through)})` : ""}`, "Report period"),
     r("Header", "Recalling Firm", n.firmIsSample ? `${n.firmName} (fictional sample firm)` : n.firmName, "firm"),
-    r("Header", "Product", `${n.product} (CPSC recall ${n.recallNumber})`, "recall"),
-    r("I) Products corrected", "With Consumers: Total Products Affected by Recall", n.unitsAffected === null ? n.unitsText || "Not known" : fmtInt(n.unitsAffected), "recall.units (CPSC recall data)"),
+    r("Header", "Product", `${n.product} (${recallLabel(n.recallNumber)})`, "recall"),
+    r("I) Products corrected", "With Consumers: Total Products Affected by Recall", n.unitsAffected === null ? n.unitsText || "Not known" : fmtInt(n.unitsAffected), `recall.units (${recallDataSource(n.recallNumber)})`),
     r("I) Products corrected", "With Consumers: Corrections this Reporting Period", fmtInt(n.correctionsThisPeriod), "Units on claims verified made safe in the period"),
     r("I) Products corrected", "With Consumers: Total Cumulative Corrections for Recall", fmtInt(n.correctionsCumulative), "Units on claims verified made safe since the announcement"),
     r("I) Products corrected", "With Manufacturer, Distributor and Retailers", notTracked, "Not in Remedy"),

@@ -327,6 +327,20 @@
   font-size: var(--step-lead);
   line-height: 1.4;
 }
+/* Why it matters, from the research, and what Remedy measured: quieter than the claim they support. */
+.intro-why,
+.intro-result {
+  margin-top: 1rem;
+  max-width: 34rem;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.intro-why {
+  color: var(--muted);
+}
+.intro-result strong {
+  font-weight: 600;
+}
 .intro-quotes {
   list-style: none;
   margin: 1.75rem 0 0;
@@ -415,6 +429,60 @@
 /* ------------------------------------------------------------------ How it works: "Lines that step across" */
 .how {
   margin-top: var(--lp-section);
+}
+/* The three ideas open it: each a sentence set like the steps below, with its proof and the page that shows it. */
+.ideas {
+  margin-bottom: var(--lp-section);
+}
+.ideas-h {
+  font-size: var(--step-head);
+  font-weight: 300;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.ideas-list {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--edge);
+}
+.ideas-item {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--lp-gap);
+  padding: 1.35rem 0 1.5rem;
+  border-bottom: 1px solid var(--edge);
+}
+.ideas-line {
+  grid-column: 1 / 7;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 1.05rem + 1.5vw, 2.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.ideas-note {
+  grid-column: 8 / -1;
+  padding-top: 0.3rem;
+  max-width: 46ch;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.ideas-see {
+  white-space: nowrap;
+  color: var(--ink);
+}
+@media (max-width: 760px) {
+  .ideas-item {
+    display: block;
+    padding: 1.1rem 0 1.2rem;
+  }
+  .ideas-note {
+    margin-top: 0.5rem;
+    padding-top: 0;
+  }
 }
 .how-steps {
   list-style: none;
@@ -752,7 +820,7 @@
 }
 .tp-picks {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--tp-n, 4), minmax(0, 1fr));
   gap: 8px;
 }
 .tp-pick {
@@ -846,6 +914,10 @@
   color: var(--muted);
   font-size: 0.875rem;
 }
+.tp-title {
+  color: var(--ink);
+  font-weight: 500;
+}
 .tp-checks {
   list-style: none;
   margin: 14px 0 0;
@@ -913,6 +985,40 @@
   font-size: 0.8125rem;
   color: var(--muted);
 }
+/* The refund, one beat after a verified decision: the step the sample charger's run exists to show. */
+.tp-paid {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 320ms var(--ease-out),
+    opacity 260ms var(--ease-out);
+}
+.tp-paid > * {
+  min-height: 0;
+}
+.tp-paid[data-on] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.tp-paid-line {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tp-paid-note {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+  max-width: 60ch;
+}
+.tp-paid-cta {
+  margin-top: 6px;
+  font-size: 0.9375rem;
+}
 .tp-credit {
   margin-top: 12px;
   font-size: 0.8125rem;
@@ -920,7 +1026,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .tp-check,
-  .tp-result {
+  .tp-result,
+  .tp-paid {
     transition: none;
   }
 }
@@ -936,13 +1043,15 @@
   }
 }
 @media (max-width: 560px) {
-  /* Four across on a phone too: square thumbnails, so the run itself starts within the first screen of the panel. */
+  /* Every tab across on a phone too: square thumbnails, so the run itself starts within the first screen of the panel. */
   .tp-picks {
-    gap: 6px;
+    gap: 5px;
   }
   .tp-pick {
     padding: 4px 4px 6px;
     border-radius: 10px;
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
   }
   .tp-pick img {
     aspect-ratio: 1;

@@ -120,7 +120,7 @@ async function Receipt({ params }: Params) {
             <ul className="rc-checks">
               {CHECK_ORDER.map(({ id, name }) => {
                 const k = c.checks.find((x) => x.id === id);
-                const w = checkWord(k?.status ?? "skipped");
+                const w = checkWord(k?.status ?? "skipped", { reviewersAgreed: c.decision === "verified" && c.decided_by === "reviewers" });
                 return (
                   <li key={id}>
                     <span>{name}</span>

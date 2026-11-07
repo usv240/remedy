@@ -128,8 +128,8 @@ export function PlanGantt({ data }: { data: PlanData }) {
 
   const project = useMemo(
     () => ({
-      tasksData: data.tasks,
-      dependenciesData: data.dependencies,
+      tasks: data.tasks,
+      dependencies: data.dependencies,
       startDate: addDays(data.recall.announced, -2),
     }),
     [data],

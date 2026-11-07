@@ -6,6 +6,7 @@ import { Info } from "@/components/Info";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { extractionTrace, rawRecord, recallByNumber, recallDetail } from "@/lib/api/recall-data";
 import { actionLabel, markerWord, percent, remedyLabel, showLabel } from "@/lib/api/rule-chips";
+import { SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 import "../../pages.css";
 import "../../landing-shared.css";
 import "../recalls.css";
@@ -207,7 +208,7 @@ async function Detail({ params }: { params: Promise<{ number: string }> }) {
             <blockquote className="rd-quote" cite={d.cpsc_url}>
               {d.remedy_text || "The CPSC record gives no remedy text."}
             </blockquote>
-            <p className="rd-quote-src">Word for word from the CPSC record.</p>
+            <p className="rd-quote-src">{d.sample ? "Word for word from the sample firm's recall notice. Sample recall; fictional." : "Word for word from the CPSC record."}</p>
             {d.consumer_contact && (
               <>
                 <h3 className="rd-sub">How to reach the firm</h3>
@@ -220,7 +221,7 @@ async function Detail({ params }: { params: Promise<{ number: string }> }) {
         <div>
           <section className="rd-sheet" data-ui aria-labelledby="img-h">
             <h2 id="img-h">
-              Official images <Info id="recall.images" label="" topic="Official images" />
+              {d.sample ? "The recall's photos" : "Official images"} <Info id={d.sample ? "recall.images.sample" : "recall.images"} label="" topic={d.sample ? "The recall's photos" : "Official images"} />
             </h2>
             {d.images.length ? (
               <div className="rd-imgs">
@@ -232,9 +233,9 @@ async function Detail({ params }: { params: Promise<{ number: string }> }) {
                 ))}
               </div>
             ) : (
-              <p className="rd-text">The CPSC published no images with this recall.</p>
+              <p className="rd-text">{d.sample ? "No images were published with this sample recall." : "The CPSC published no images with this recall."}</p>
             )}
-            <p className="rd-note">Images: U.S. Consumer Product Safety Commission.</p>
+            <p className="rd-note">{d.sample ? `${SAMPLE_PHOTO_CREDIT}.` : "Images: U.S. Consumer Product Safety Commission."}</p>
           </section>
 
           <section className="rd-sheet" data-ui aria-labelledby="prod-h">

@@ -288,6 +288,84 @@
   background: var(--pill-positive);
   color: var(--pill-positive-ink);
 }
+/* The recorded MCP session: each step's purpose on the left, the call and the server's answer beside it. */
+.mcp-ask {
+  margin-top: 14px;
+  max-width: 44rem;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.625rem);
+  line-height: 1.25;
+}
+.mcp-k {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.mcp-steps {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  max-width: 68rem;
+  display: grid;
+  gap: 8px;
+  counter-reset: mcp;
+}
+.mcp-step {
+  counter-increment: mcp;
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: 8px 20px;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.mcp-why {
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.mcp-why::before {
+  content: counter(mcp) ". ";
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.mcp-call {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.mcp-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mcp-tool {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.mcp-ms {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.dev-pre.mcp-pre {
+  max-height: 13rem;
+}
+/* The server's answers wrap, so each reads without sideways scrolling; the arguments keep their JSON lines. */
+.dev-pre.mcp-out {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .mcp-step {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Code keeps its lines: long ones scroll sideways inside the block instead of breaking mid-word. */
 .dev-pre {
   margin: 0;

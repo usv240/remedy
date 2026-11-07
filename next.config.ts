@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   poweredByHeader: false,
-  // Headers that hold with PayPal's checkout popup, AG Grid, AG Studio and Bryntum: no framing by other sites, no
+  // Headers that hold with PayPal's checkout popup, AG Grid and Bryntum: no framing by other sites, no
   // plugins, no MIME sniffing, HTTPS remembered for two years, and popups (PayPal's) keep their link back to this page.
   // The camera is allowed for this site only, so an owner can take the photo in the page.
   // The domain's AI Catalog lives at the well-known path (SEP-2127 discovery); the route serves it.

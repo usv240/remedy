@@ -32,7 +32,7 @@ function Mark({ status }: { status: CheckView["status"] | "pending" }) {
  * stage (sending, comparing with the official pictures, the two reviewers). When the answer lands, the checks resolve
  * in order, 70 ms apart, and the timer stops at the real elapsed time.
  */
-export function Checking({ checks, stage, elapsedMs, technical }: { checks: CheckView[] | null; stage: Stage; elapsedMs: number; technical?: Record<string, number> | null }) {
+export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed = false }: { checks: CheckView[] | null; stage: Stage; elapsedMs: number; technical?: Record<string, number> | null; reviewersAgreed?: boolean }) {
   const done = Boolean(checks);
   return (
     <div className="cl-checking" data-ui>
@@ -49,7 +49,7 @@ export function Checking({ checks, stage, elapsedMs, technical }: { checks: Chec
       <ol className="cl-checks">
         {CHECK_ORDER.map(({ id, name }, i) => {
           const c = checks?.find((x) => x.id === id);
-          const w = c ? checkWord(c.status) : null;
+          const w = c ? checkWord(c.status, { reviewersAgreed }) : null;
           return (
             <li key={id} className="cl-check" data-s={c?.status ?? "pending"} style={{ "--i": i } as React.CSSProperties}>
               <Mark status={c?.status ?? "pending"} />

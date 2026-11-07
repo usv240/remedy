@@ -39,6 +39,8 @@ export type Preset = {
   user?: boolean;
   /** Runs against a fictional sample recall (Brightline Home's BH-2026-01): label it "Sample recall; fictional". */
   sample?: boolean;
+  /** "made-safe": a photo of a product made safe, shown first on /try with the photos of the same product before. */
+  group?: "made-safe";
 };
 
 export type Recorded = {
@@ -97,6 +99,80 @@ export function userPresets(): Preset[] {
 export function listPresets(): { note: string; presets: Preset[]; user: Preset[] } {
   const idx = readIndex();
   return { note: idx.note, presets: idx.presets, user: userPresets() };
+}
+
+/**
+ * A photo of the sample charger shown with its recorded results instead of a Run button: the measured sweep at the
+ * claim path's own setting (content/verify/sweep-sample.json), against the known answer in
+ * content/verify/fixtures/cases.json. Nothing runs when the page opens.
+ */
+export type RecordedSample = {
+  id: string;
+  title: string;
+  summary: string;
+  thumb: string;
+  photo_alt: string;
+  photo_credit: string;
+  expected: { decision: string; plain: string };
+  /** matching: the runs whose decision is the expected one. */
+  recorded: { runs: number; matching: number; decision: string; decided_by: string; checks: Record<string, string>; reason_technical: string; model: string; effort: string | null; ran_at: string };
+};
+
+type SweepSample = {
+  ranAt: string;
+  configs: { id: string; model: string; effort?: string }[];
+  cases: { config: string; case: string; decision: string; decided_by: string; ok: boolean; C1_status?: string; C2: string; C3: string; C2_reason?: string }[];
+};
+
+const SAMPLE_PHOTOS: { id: string; title: string; summary: string; thumb: string; photo_alt: string; expected: { decision: string; plain: string } }[] = [
+  {
+    id: "sample-charger-opened-cord-attached",
+    title: "The same charger, opened, cord still attached",
+    summary: "The charger's case opened up, with its cord still running into it, sent for sample recall BH-2026-01, which asks for the cord to be cut.",
+    thumb: "/samples/charger/opened-cord-attached-sm.webp",
+    photo_alt: "A hand holding the opened charger case, its black cord still attached where it enters the case.",
+    expected: { decision: "retake", plain: "Not made safe yet: the cord is still attached, so the owner is asked to cut it first, and nothing is paid." },
+  },
+  {
+    id: "sample-charger-opened-case",
+    title: "The same charger, taken apart",
+    summary: "The charger taken apart on a table, its cord still wired to the board, sent for sample recall BH-2026-01.",
+    thumb: "/samples/charger/opened-case-sm.webp",
+    photo_alt: "The charger taken apart on a white surface, its circuit board and yellow insulating sheets out, the cord still wired to the board.",
+    expected: { decision: "retake", plain: "Taken apart is not the remedy: the cord is still wired in, so the owner is asked to cut the cord, and nothing is paid." },
+  },
+];
+
+/** The two opened-charger photos with their recorded results, or none when the sweep file is not there. */
+export function recordedSamples(): RecordedSample[] {
+  const file = path.join(ROOT, "content", "verify", "sweep-sample.json");
+  if (!existsSync(file)) return [];
+  const sweep = JSON.parse(readFileSync(file, "utf8")) as SweepSample;
+  const config = sweep.configs[0];
+  const credit = "Photo: Dmitry G, Wikimedia Commons, public domain. Sample recall; fictional.";
+  return SAMPLE_PHOTOS.flatMap((s) => {
+    const rows = sweep.cases.filter((c) => c.case === s.id && c.config === config?.id);
+    if (!rows.length) return [];
+    const last = rows[rows.length - 1];
+    const same = rows.filter((r) => r.decision === s.expected.decision);
+    return [
+      {
+        ...s,
+        photo_credit: credit,
+        recorded: {
+          runs: rows.length,
+          matching: same.length,
+          decision: last.decision,
+          decided_by: last.decided_by,
+          checks: { C1: last.C1_status ?? "", C2: last.C2, C3: last.C3 },
+          reason_technical: last.C2_reason ?? "",
+          model: config.model,
+          effort: config.effort ?? null,
+          ran_at: sweep.ranAt,
+        },
+      },
+    ];
+  });
 }
 
 export function getPreset(id: string): Preset | null {

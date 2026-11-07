@@ -16,6 +16,7 @@ import { decrypt } from "@/lib/secure";
 import type { CheckId, Checks } from "@/lib/verify/types";
 import { CHECK_LABEL, CHECK_ORDER, checkWords, confidence } from "./checks";
 import { recallThumb, shortName, type Firm } from "./firm";
+import { ensureReadyClaims } from "./sample-claims";
 import type { ClaimDetail, Decision, PayStatus, QueueRow, Review, Stage } from "./types";
 
 type Raw = {
@@ -160,7 +161,7 @@ async function rawClaim(firmId: number, claimId: string) {
 function noteFor(r: Raw, extra: { recorded: boolean }) {
   if (extra.recorded) return "Sample claim. The photo is the CPSC's own made-safe example for recall 26125 (a different hair dryer), checked live once against this recall by Claude and recorded.";
   if (r.is_sample && r.paypal_status === SAMPLE_PAYPAL_STATUS) return "Sample history (not paid). Seeded so the console is not empty; no money moved for this claim.";
-  if (r.is_sample && r.amount === "1.00") return "Sample claim ready to pay, seeded for the demo at $1.00 so live sandbox payouts stay small. Paying it sends a real PayPal sandbox payout.";
+  if (r.is_sample && r.amount === "1.00") return "Sample claim ready to pay, at $1.00 so live sandbox payouts stay small. Paying it sends a real PayPal sandbox payout to the sandbox buyer, and two new sample claims take its place.";
   if (r.is_sample) return "Sample claim, seeded for the demo. Paying it sends a real PayPal sandbox payout.";
   return null;
 }
@@ -361,6 +362,8 @@ export async function approveAndPay(firm: Firm, claimIds: string[], reviewer: st
       if (ok) await db().execute(sql`update claim set status = 'approved', updated_at = now() where id = ${claimId}::uuid and status in ('verified', 'firm_review', 'approved')`);
     }
     await audit("person", "firm.approve_and_pay", `firm:${firm.id}`, { by: who, claims: toPay.length, sent: out.filter((o) => o.kind === "sent").length });
+    // The sample claims ready to pay were just used: add the next two, so the next visitor can pay too.
+    await ensureReadyClaims(firm.id).catch(() => 0);
   }
   return claimIds.map((id) => out.find((o) => o.claimId === id)!).filter(Boolean);
 }

@@ -240,7 +240,7 @@
     "title": "The photo checks",
     "what": "Each sample photo goes through the same checks a real claim does: right product, made safe, your own photo, within the recall, claim limits, and not already refunded.",
     "why": "A refund should go to someone who has the recalled product and made it safe. The checks keep the refund pool for real owners.",
-    "technical": "These are recorded runs of verifyPhoto (content/public/verify-runs.json). The free checks (quality, and the match against the recall's official images and earlier claims) need no AI. The vision checks use Claude Opus 5.5 with structured output; the decision is plain code.",
+    "technical": "Runs of verifyPhoto: the recorded ones in content/public/verify-runs.json, and the CPSC's 26125 photo run through the claim path when the page is built, where the free picture match answers it. The free checks (quality, and the match against the recall's official images and earlier claims) need no AI. The vision checks use Claude Opus 5.5 with structured output; the decision, the amount and the payment route are plain code.",
     "learnMore": {
       "label": "Run one live",
       "href": "/try"
@@ -291,6 +291,12 @@
     "what": "The pictures the CPSC published with this recall.",
     "why": "They help you check that you have the recalled product. Remedy also uses them to make sure each claim photo is the owner's own.",
     "technical": "Each image's perceptual hash (64-bit dHash) is stored; a claim photo within 10 bits of one is asked to be the owner's own photo."
+  },
+  "recall.images.sample": {
+    "title": "The recall's photos",
+    "what": "Photos of the sample product, published with Brightline Home's fictional sample recall.",
+    "why": "They help you check that you have the recalled charger. Remedy also uses them to make sure each claim photo is the owner's own.",
+    "technical": "Public-domain photos of one real laptop charger by Dmitry G on Wikimedia Commons, brand marks removed (public/samples/charger/CREDITS.json). Each one's perceptual hash (64-bit dHash) is stored, as for a CPSC recall's official images."
   },
   "recall.remedy": {
     "title": "The official remedy",
@@ -348,7 +354,13 @@
     "title": "MCP server",
     "what": "AI assistants can search recalls, read a proof rule, check a photo and open a claim with Remedy's tools.",
     "why": "An assistant helping someone with a recall can give exact steps, and the owner still chooses where the refund goes.",
-    "technical": "Model Context Protocol over streamable HTTP at /api/mcp, stateless JSON-RPC. Tools: search_recalls, get_proof_rule, verify_photo, open_claim, claim_status and ping. Discovery: /api/mcp/server-card and /.well-known/ai-catalog.json."
+    "technical": "Model Context Protocol over streamable HTTP at /api/mcp, stateless JSON-RPC. Seven tools: search_recalls, scan_catalog, get_proof_rule, verify_photo, open_claim, claim_status and ping. Discovery: /api/mcp/server-card and /.well-known/ai-catalog.json."
+  },
+  "dev.mcp-session": {
+    "title": "The recorded session",
+    "what": "The tool calls an AI assistant makes to help an owner: find the recall, read what it asks, give the owner their claim link, open the claim with their photo, and follow it.",
+    "why": "It shows the whole path an assistant can take for an owner, with the owner still choosing where the refund goes.",
+    "technical": "Real JSON-RPC tools/call requests to /api/mcp, recorded by scripts/public/record-mcp-session.mjs into content/public/mcp-session.json. No AI model was called to record them: the photo is Brightline's published sample photo, answered by the verification cache. The claim it opened was removed afterwards."
   },
   "stack.apimatic": {
     "title": "APIMatic",

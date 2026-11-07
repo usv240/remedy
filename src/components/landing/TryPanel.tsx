@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { fmtMs } from "@/lib/api/format";
@@ -7,25 +6,31 @@ import { fmtMs } from "@/lib/api/format";
 export type PanelCheck = { id: string; name: string; status: string; score: number | null; reason: string; technical: string };
 export type PanelRun = {
   id: string;
+  /** The tab's short label. */
+  pick: string;
   title: string;
   about: string;
   thumb: string;
   thumbW: number;
   thumbH: number;
   credit: string;
-  recall: { number: string; title: string };
+  /** "Sample recall BH-2026-01" or "CPSC recall 27056", and the recall's short title. */
+  recall: { label: string; title: string };
   decision: "verified" | "retake" | "firm_review";
   next: string;
   totalMs: number;
   settings: string | null;
   checks: PanelCheck[];
+  /** What PayPal does next, for a verified run. */
+  paid: { line: string; note: string; href: string; cta: string } | null;
 };
 
+/** The same words the owner's claim page uses for each result (src/components/claim/format.ts), with Unclear kept. */
 const STATUS: Record<string, { word: string; tone: string }> = {
   pass: { word: "Passed", tone: "positive" },
-  fail: { word: "Not yet", tone: "attention" },
+  fail: { word: "Needs a change", tone: "attention" },
   unclear: { word: "Unclear", tone: "info" },
-  skipped: { word: "Not needed", tone: "neutral" },
+  skipped: { word: "Not checked", tone: "neutral" },
   unavailable: { word: "For a person", tone: "info" },
 };
 
@@ -35,14 +40,18 @@ const DECISION: Record<PanelRun["decision"], string> = {
   firm_review: "Firm review",
 };
 
+/** After the decision lands, the refund follows: one beat later, as PayPal does. */
+const PAID_DELAY_MS = 520;
+
 /**
- * The "Try a photo" fragment: three recorded runs of the real verifier, replayed check by check. Every reason, score
- * and time shown is the recorded one (content/public/verify-runs.json; the 26125 photo uses the owner flow's recorded
- * answer, as /try and /evidence do). The live run, with a sandbox payout, is on /try.
+ * The "Try a photo" fragment: runs of the real verifier, replayed check by check, then the decision and, for a
+ * verified photo, the refund. Every reason, score and time shown is the recorded one (content/public/verify-runs.json),
+ * and the 26125 photo is answered live by the claim path's free picture match. The live run is on /try.
  */
 export function TryPanel({ runs }: { runs: PanelRun[] }) {
   const [pick, setPick] = useState(0);
   const [shown, setShown] = useState(runs[0]?.checks.length ?? 0);
+  const [paidOn, setPaidOn] = useState(true);
   const root = useRef<HTMLDivElement>(null);
   const started = useRef(false);
   const run = runs[pick];
@@ -51,17 +60,25 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
     setPick(i);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setShown(runs[i].checks.length);
+      setPaidOn(true);
       return;
     }
     setShown(0);
+    setPaidOn(false);
   };
 
-  // Step through the checks, one every 280 ms.
+  // Step through the checks, one every 280 ms, then the refund one beat after the decision.
   useEffect(() => {
-    if (!run || shown >= run.checks.length) return;
-    const t = window.setTimeout(() => setShown((n) => n + 1), shown === 0 ? 200 : 280);
-    return () => window.clearTimeout(t);
-  }, [shown, run]);
+    if (!run) return;
+    if (shown < run.checks.length) {
+      const t = window.setTimeout(() => setShown((n) => n + 1), shown === 0 ? 200 : 280);
+      return () => window.clearTimeout(t);
+    }
+    if (run.paid && !paidOn) {
+      const t = window.setTimeout(() => setPaidOn(true), PAID_DELAY_MS);
+      return () => window.clearTimeout(t);
+    }
+  }, [shown, run, paidOn]);
 
   // The first replay starts when the panel comes into view; before that every check is already shown, so nothing is
   // hidden from readers without script or with reduced motion.
@@ -73,6 +90,7 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
         if (!e.isIntersecting || started.current) return;
         started.current = true;
         setShown(0);
+        setPaidOn(false);
         io.disconnect();
       },
       { threshold: 0.4 },
@@ -87,11 +105,11 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
 
   return (
     <div ref={root} className="tp" data-ui>
-      <div className="tp-picks" role="radiogroup" aria-label="Sample photo">
+      <div className="tp-picks" role="radiogroup" aria-label="Sample photo" style={{ "--tp-n": runs.length + 1 } as React.CSSProperties}>
         {runs.map((r, i) => (
           <button key={r.id} type="button" role="radio" aria-checked={i === pick} className="tp-pick" onClick={() => play(i)}>
             <img src={r.thumb} alt="" width={r.thumbW} height={r.thumbH} loading="lazy" />
-            <span>{r.title}</span>
+            <span>{r.pick}</span>
           </button>
         ))}
         <Link className="tp-pick tp-upload" href="/try">
@@ -103,13 +121,15 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
       <div className="tp-sheet">
         <div className="tp-head">
           <p className="tp-recall">
-            Recall {run.recall.number}: {run.recall.title}
+            {run.recall.label}: {run.recall.title}
           </p>
           <p className="tp-time tabular" aria-label={`Checked in ${fmtMs(run.totalMs)}`}>
             {fmtMs(elapsed)}
           </p>
         </div>
-        <p className="tp-about">{run.about}</p>
+        <p className="tp-about">
+          <span className="tp-title">{run.title}.</span> {run.about}
+        </p>
         <ol className="tp-checks" aria-label="Checks">
           {run.checks.map((c, i) => {
             const st = STATUS[c.status] ?? STATUS.unclear;
@@ -120,7 +140,7 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
                 <span className="pill" data-tone={on ? st.tone : undefined}>
                   {on ? st.word : "Checking"}
                 </span>
-                <span className="tp-reason">{on ? c.reason : " "}</span>
+                <span className="tp-reason">{on && c.status !== "skipped" ? c.reason : " "}</span>
                 {on && (
                   <span className="tp-tech lp-tech">
                     {c.id}
@@ -140,7 +160,27 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
             </>
           )}
         </div>
-        <p className="tp-credit">{run.credit} Recorded run of Remedy&rsquo;s verifier; nothing here calls the AI.</p>
+        {run.paid && (
+          <div className="tp-paid" data-on={done && paidOn ? "" : undefined} aria-live="polite">
+            {done && paidOn && (
+              <>
+                <p className="tp-paid-line">
+                  <span className="pill" data-tone="paid">
+                    Refund
+                  </span>{" "}
+                  {run.paid.line}
+                </p>
+                <p className="tp-paid-note">{run.paid.note}</p>
+                <p className="tp-paid-cta">
+                  <Link className="text-link" href={run.paid.href}>
+                    {run.paid.cta}
+                  </Link>
+                </p>
+              </>
+            )}
+          </div>
+        )}
+        <p className="tp-credit">{run.credit} A run of Remedy&rsquo;s real verifier, replayed; nothing here calls the AI.</p>
       </div>
     </div>
   );

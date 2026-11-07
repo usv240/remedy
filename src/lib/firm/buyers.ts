@@ -6,6 +6,7 @@
 import Papa from "papaparse";
 import { matchItem } from "@/lib/payments/buyers";
 import { refundWindow } from "@/lib/payments/refunds";
+import { recallLabel } from "@/lib/recall/label";
 import { maskContact } from "@/lib/secure";
 
 export const CSV_COLUMNS = ["order_id", "order_date", "buyer_email", "buyer_phone", "item_name", "sku", "quantity", "amount_usd", "paid_with", "paypal_transaction_id"] as const;
@@ -108,7 +109,7 @@ export const publicLine = ({ email: _e, phone: _p, ...rest }: ParsedLine): Buyer
 /** The notice a matched buyer would get, with their personal claim link. */
 export function noticeText(o: { firmName: string; product: string; recallNumber: string; link: string; refundToOriginal: boolean }) {
   return [
-    `Your ${o.product} is part of a safety recall (CPSC recall ${o.recallNumber}). Please stop using it.`,
+    `Your ${o.product} is part of a safety recall (${recallLabel(o.recallNumber)}). Please stop using it.`,
     `Make it safe the way the recall describes, take one photo, and send it with your personal link: ${o.link}`,
     o.refundToOriginal ? "You paid with PayPal, so your refund goes back to that same payment once your photo checks out." : "Your refund is sent to your PayPal or Venmo once your photo checks out.",
     `Thank you for keeping your home safe. The ${o.firmName} recall team.`,

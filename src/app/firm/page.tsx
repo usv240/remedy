@@ -8,7 +8,9 @@ import { dbConfigured } from "@/lib/db";
 import { dayName, monthName, whenWords } from "@/lib/firm/dates";
 import { firmContext } from "@/lib/firm/firm";
 import { homeSummary } from "@/lib/firm/home";
+import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 import { fmtInt, fmtPct, fmtUsd } from "@/lib/firm/report";
+import { isSampleNumber, recallCredit, RecallLabel } from "@/lib/recall/label";
 
 export const metadata: Metadata = { title: "Firm console", description: "Brightline Home's recall console: claims to review, the recall plan and the monthly report. A fictional sample firm." };
 
@@ -18,6 +20,7 @@ async function Home() {
   if (!ctx?.main) {
     return <p className="firm-sub">The sample firm is not set up on this server yet. Run scripts/seed.ts, then scripts/seed-firm.ts.</p>;
   }
+  await ensureReadyClaims(ctx.firm.id, ctx.main.number).catch(() => 0);
   const s = await homeSummary(ctx.firm, ctx.main, ctx.recalls.slice(1));
   const now = new Date();
   return (
@@ -25,17 +28,17 @@ async function Home() {
       <div className="firm-recall">
         {s.recall.image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={s.recall.image} alt={`${s.recall.short}, official CPSC photo`} width={96} height={96} />
+          <img src={s.recall.image} alt={isSampleNumber(s.recall.number) ? `${s.recall.short}, the sample product` : `${s.recall.short}, official CPSC photo`} width={96} height={96} />
         ) : (
           <span aria-hidden="true" />
         )}
         <div>
           <p className="firm-recall-title">{s.recall.short}</p>
           <p className="firm-recall-meta">
-            CPSC recall {s.recall.number}, announced {dayName(s.recall.announced)}. {s.recall.units ? `${fmtInt(s.recall.units)} units` : s.recall.unitsText} in the US.{" "}
-            <Info id="recall.images" label="" topic="the official CPSC photo" />
+            {RecallLabel(s.recall.number)}, announced {dayName(s.recall.announced)}. {s.recall.units ? `${fmtInt(s.recall.units)} units` : s.recall.unitsText} in the US.{" "}
+            <Info id={isSampleNumber(s.recall.number) ? "recall.images.sample" : "recall.images"} label="" topic={isSampleNumber(s.recall.number) ? "the recall's photos" : "the official CPSC photo"} />
           </p>
-          <p className="firm-recall-meta">Photo and recall data: US Consumer Product Safety Commission.</p>
+          <p className="firm-recall-meta">{recallCredit(s.recall.number)}</p>
         </div>
       </div>
 
@@ -148,7 +151,7 @@ async function Home() {
             {s.otherRecalls.map((r) => (
               <li key={r.number}>
                 <span>
-                  {r.short} <span className="muted">(CPSC {r.number})</span>
+                  {r.short} <span className="muted">({isSampleNumber(r.number) ? `sample ${r.number}` : `CPSC ${r.number}`})</span>
                 </span>
                 <span className="tabular muted">
                   {fmtInt(r.claims)} {r.claims === 1 ? "claim" : "claims"}
@@ -161,7 +164,7 @@ async function Home() {
 
       <p className="firm-label">
         {s.sampleClaims > 0 ? `${fmtInt(s.sampleClaims)} of these claims are sample history, seeded so the console is not empty; their payments are marked sample and no money moved. ` : ""}
-        Sample history uses the firm&rsquo;s refund for each recall; the seeded claims ready to pay are $1.00, so live sandbox payouts stay small. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
+        Sample history uses the firm&rsquo;s refund for each recall; the sample claims ready to pay are $1.00 each, so live sandbox payouts stay small, and two more are added when they have been paid. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
       </p>
     </>
   );

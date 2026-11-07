@@ -34,7 +34,7 @@ export const STOPS: Stop[] = [
     path: "/developers",
     target: "#playground",
     title: "For developers and agents",
-    text: "A free key and a live playground. The same search, proof rules and photo checks are tools on the MCP server.",
+    text: "A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim.",
   },
   {
     path: "/evidence",

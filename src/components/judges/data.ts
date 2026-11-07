@@ -117,8 +117,30 @@ export async function cpscExampleReplay(): Promise<CpscReplay | null> {
   }
 }
 
-/** Cases with no AI call where the decision fits what the case expects (a copy or reused photo is never verified). */
-export function freeCaught() {
-  const free = RUNS.runs.filter((r) => !r.needs_vision);
-  return { caught: free.filter((r) => r.result.decision !== "verified").length, total: free.length };
+/**
+ * The 26125 example the way a claim answers it, with every check at its default: the free picture match recognizes
+ * the CPSC's own published photo and asks for the owner's own, with no model call. Run through the real verifier at
+ * build time. Null when the verifier cannot run here.
+ */
+export async function cpscExampleDefault(): Promise<{ decision: string; decidedBy: string; totalMs: number; checks: ReplayCheck[] } | null> {
+  "use cache";
+  cacheLife("days");
+  try {
+    const p = getPreset("cpsc-example");
+    if (!p) return null;
+    const run = await runPreset(p);
+    const r = run.result;
+    if (run.replay.used || run.live_ai || !r.decision || !r.decided_by) return null;
+    return {
+      decision: r.decision,
+      decidedBy: r.decided_by,
+      totalMs: r.timings?.total_ms ?? 0,
+      checks: r.checks.map((c) => ({ id: c.id, name: c.name, status: c.status, score: c.score, reason: c.reason_plain, technical: c.reason_technical })),
+    };
+  } catch {
+    return null;
+  }
 }
+
+/** Cases with no AI call where the decision fits what the case expects; counted in errors.ts, which scripts/facts.ts reads too. */
+export { freeCaught } from "./errors";

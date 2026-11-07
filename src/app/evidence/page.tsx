@@ -12,6 +12,7 @@ import { NeverDecides } from "@/components/judges/NeverDecides";
 import { Research } from "@/components/judges/Research";
 import { PhotoChecks } from "@/components/judges/PhotoChecks";
 import { Results } from "@/components/judges/Results";
+import { Tested } from "@/components/judges/Tested";
 import { S, extraction } from "@/components/judges/data";
 import { TourStart } from "@/components/tour/Tour";
 import { TOUR } from "@/components/tour/steps";
@@ -27,9 +28,9 @@ export const metadata: Metadata = { title: "Evidence", description: "Every numbe
 const PATH = [
   { href: "/#showcase", label: "Every recall, read as a checklist", time: "20 s", look: "On the home page, type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund." },
   { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy (CPSC 27056), word for word, and the checklist Claude read from it, with how sure it is of each field. Switch Display to Technical for the batch trace and the raw CPSC record." },
-  { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Run a preset, or your own photo, through the six checks. In the sample shop, buy Brightline's sample charger, claim it with the cut-cord photo, see it verified, and watch the refund go back to the original PayPal purchase. The receipt follows the payout live." },
+  { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Run Brightline's sample charger with its cord cut through the six checks, or your own photo. In the sample shop, buy the charger, claim it with the sample photo, see it verified, and watch the refund go back to the original PayPal purchase. The receipt follows the refund live." },
   { href: "/firm", label: "The firm's side", time: "60 s", look: "Brightline Home, a fictional sample firm: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report." },
-  { href: "/developers", label: "For developers and AI agents", time: "40 s", look: "A free key and a live playground. The same search, proof rules and photo checks are tools on the MCP server." },
+  { href: "/developers", label: "For developers and AI agents", time: "40 s", look: "A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim." },
   { href: "#results", label: "The numbers, and where they come from", time: "30 s", look: "The CPSC count, the extraction benchmark and the recorded photo checks, each with its source file." },
 ];
 
@@ -75,9 +76,9 @@ const PARTS: Part[] = [
   },
   {
     name: "What is new",
-    line: "A recall refund paid the moment the photo checks out, with PayPal's 180-day refund window used as a routing rule.",
+    line: "Each firm that joins makes the others safer, the refund goes back the way it was paid, and a payout nobody accepts becomes a task in the recall plan.",
     more: "What is new here",
-    where: "No recall remedy in the CPSC data mentions PayPal or Venmo. Remedy turns free-text remedies into rules a program can check, keeps the refund pool for real owners with checks that need no AI, and lets AI assistants help an owner through the same tools over MCP.",
+    where: "Every claim photo is matched by hash alone against the published pictures of every recall and every photo claimed at any firm, so no firm sees another's photo and each one that joins adds to the check. A verified claim is refunded to its original PayPal capture inside PayPal's 180-day window, or paid out after it. When PayPal's webhook says a payout is waiting to be accepted, a re-notice task appears in the open recall plan. No recall remedy in the CPSC data mentions PayPal or Venmo; Remedy turns free-text remedies into rules a program can check, and lets AI assistants help an owner through the same tools over MCP.",
     links: [
       ["#compare", "How it compares"],
       ["/developers", "For AI agents"],
@@ -101,6 +102,7 @@ const TOC: [string, string][] = [
   ["#photo-checks", "Photo checks"],
   ["#never", "What the AI never decides"],
   ["#measured", "Measured"],
+  ["#tested", "Tested"],
   ["#data", "The data"],
   ["#research", "Grounded in research"],
   ["#cost", "AI cost"],
@@ -227,6 +229,12 @@ export default function EvidencePage() {
         <h2 id="measured-h">Measured in the sandbox</h2>
         <p className="page-prose jp-intro">Timings from the owner&rsquo;s claim flow, run end to end against the PayPal sandbox.</p>
         <Measured />
+      </section>
+
+      <section id="tested" className="page-section" aria-labelledby="tested-h">
+        <h2 id="tested-h">How it is tested</h2>
+        <p className="page-prose jp-intro">The suites behind every page, counted when they last ran.</p>
+        <Tested />
       </section>
 
       <section id="data" className="page-section" aria-labelledby="data-h">

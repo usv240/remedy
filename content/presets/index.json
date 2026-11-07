@@ -4,15 +4,16 @@
     {
       "id": "sample-charger-cut",
       "title": "Brightline's sample charger, cord cut",
-      "summary": "A charger with its cord cut where it meets the case, sent for Brightline Home's sample recall BH-2026-01. The full automatic path: verified, then the sandbox refund.",
+      "summary": "A charger with its cord cut where it meets the case, sent for Brightline Home's sample recall BH-2026-01. On a real claim this is the full automatic path: verified, then the refund at once. Buy the charger in the sample shop to see it paid.",
       "recall": "BH-2026-01",
       "photo": "sample/cord-cut.jpg",
       "photo_alt": "A hand holding a laptop charger's cord, cut where it met the charger case, with the bare wires showing; the opened charger case lies behind it.",
       "photo_credit": "Public-domain photos of one charger, before and after its cord was cut (Dmitry G, Wikimedia Commons). Sample recall; fictional.",
       "sample": true,
+      "group": "made-safe",
       "expected": {
         "decision": "verified",
-        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so the sandbox refund goes out at once. Sample recall; fictional."
+        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so on a real claim the sandbox refund goes out at once. Sample recall; fictional."
       },
       "recorded": "sample-charger-cut.json"
     },
@@ -87,7 +88,9 @@
       "photo_alt": "A black Oraimo power bank with a round charge display, standing on a table.",
       "photo_credit": "\"Oraimo\" by Reladex, via Wikimedia Commons. CC BY-SA 4.0.",
       "expected": {
-        "plain": "The right-product check should not pass for a different model, so there is no payout. A test photo, not an owner's claim."
+        "decision": "retake",
+        "checks": { "C1": "fail" },
+        "plain": "A different model: the right-product check does not pass, so there is no payout, and the owner hears what to send instead. A test photo, not an owner's claim."
       },
       "recorded": "look-alike-oraimo.json"
     },
@@ -100,7 +103,9 @@
       "photo_alt": "A hand holding a white Romoss power bank with a charge display and a large 20 printed on the front.",
       "photo_credit": "\"A Romoss power bank-20210312\" by Shwangtianyuan, via Wikimedia Commons. CC BY-SA 4.0.",
       "expected": {
-        "plain": "A similar print is not enough: the right-product check should not pass, so there is no payout. A test photo, not an owner's claim."
+        "decision": "retake",
+        "checks": { "C1": "fail" },
+        "plain": "A similar print is not enough: the right-product check does not pass, so there is no payout, and the owner hears what to send instead. A test photo, not an owner's claim."
       },
       "recorded": "look-alike-romoss.json"
     },
@@ -114,6 +119,8 @@
       "photo_credit": "Cropped from \"Deskck\" by GuitarFreak, via Wikimedia Commons. Public domain.",
       "expected": {
         "decision": "retake",
+        "decided_by": "own_photo",
+        "checks": { "C3": "fail" },
         "plain": "The checker sees a computer monitor, not the recalled power bank, so there is no payout and the owner is asked for a photo of the product itself, made safe. A test photo, not an owner's claim."
       },
       "recorded": "photo-of-a-screen.json"

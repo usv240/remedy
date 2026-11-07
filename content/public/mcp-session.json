@@ -1,0 +1,73 @@
+{
+  "note": "A recorded session of real MCP tool calls against Remedy's own server (/api/mcp, streamable HTTP), written by scripts/public/record-mcp-session.mjs. These are the tool calls an AI assistant makes to help an owner; no AI model was called to record them, and the claim's photo was answered by the verification cache. {origin} is the server's own address. Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.",
+  "recordedAt": "2026-11-07T20:08:48.074Z",
+  "server": {
+    "name": "remedy",
+    "version": "2026.11.5",
+    "protocolVersion": "2025-06-18"
+  },
+  "tools": [
+    "ping",
+    "search_recalls",
+    "scan_catalog",
+    "get_proof_rule",
+    "verify_photo",
+    "open_claim",
+    "claim_status"
+  ],
+  "owner": "I got a recall notice for my Brightline laptop charger. What do I do?",
+  "steps": [
+    {
+      "why": "Find the recall from the owner's own words.",
+      "tool": "search_recalls",
+      "arguments": {
+        "query": "Brightline 65W laptop charger",
+        "limit": 3
+      },
+      "text": "3 recalls for \"Brightline 65W laptop charger\" (elastic search):\n1. Recall BH-2026-01, 2026-10-15: Brightline Home recalls 65W laptop chargers (sample recall). Photo refund: Cut the cord, $34.99 refund. {origin}/recalls/BH-2026-01\n2. Recall 25248, 2025-05-01: Baseus Portable Chargers Recalled Due to Fire Hazard; Sold on Amazon.com by Shenzhen Baseus Technology. Remedy: Replace. {origin}/recalls/25248\n3. Recall 24122, 2024-02-21: Dynabook Americas Recalls 15.5 Million Toshiba Laptop AC Adapters Due to Burn and Fire Hazards. Remedy: Replace. {origin}/recalls/24122",
+      "isError": false,
+      "ms": 790
+    },
+    {
+      "why": "Read what the recall asks the owner to do and photograph.",
+      "tool": "get_proof_rule",
+      "arguments": {
+        "recall_number": "BH-2026-01"
+      },
+      "text": "Recall BH-2026-01: Brightline Home recalls 65W laptop chargers (sample recall).\nIt pays on a photo. First: Cut the cord. Remedy: Full refund of $34.99.\nSteps: Unplug the charger. Cut the cord where it meets the charger case. Take one photo of the cut cord with the charger.\nOfficial remedy: \"Stop using the charger and cut the power cord where it meets the charger case. Send one photo of the cut cord with the charger for a full refund of $34.99.\"\nSource: stored rule, none (written by the sample firm). Details: {origin}/recalls/BH-2026-01",
+      "isError": false,
+      "ms": 17
+    },
+    {
+      "why": "Give the owner their own claim link and checklist. Nothing is opened yet.",
+      "tool": "open_claim",
+      "arguments": {
+        "recall_number": "BH-2026-01"
+      },
+      "text": "To claim the refund for recall BH-2026-01 (Brightline Home recalls 65W laptop chargers (sample recall)), the owner opens {origin}/claim/BH-2026-01, follows these steps: Unplug the charger. Cut the cord where it meets the charger case. Take one photo of the cut cord with the charger., and takes one photo. They choose where the refund goes. Demonstration in PayPal sandbox; Remedy is not affiliated with the recalling firm.",
+      "isError": false,
+      "ms": 18
+    },
+    {
+      "why": "The owner has cut the cord and sends one photo: open the claim, which runs the six checks.",
+      "tool": "open_claim",
+      "arguments": {
+        "recall_number": "BH-2026-01",
+        "image_base64": "<the owner's photo: public/samples/charger/cord-cut.jpg, 271 KB>"
+      },
+      "text": "Claim db4245a5-d59b-4cc0-b8b5-576a7c303b9d opened for recall BH-2026-01. Decision: verified. Your photo checks out. The owner chooses where the refund goes at {origin}/r/db4245a5-d59b-4cc0-b8b5-576a7c303b9d. Follow it with claim_status. Demonstration in PayPal sandbox; Remedy is not affiliated with the recalling firm.",
+      "isError": false,
+      "ms": 4059
+    },
+    {
+      "why": "Follow the claim to its decision and payment.",
+      "tool": "claim_status",
+      "arguments": {
+        "claim_id": "db4245a5-d59b-4cc0-b8b5-576a7c303b9d"
+      },
+      "text": "Claim db4245a5-d59b-4cc0-b8b5-576a7c303b9d: verified. Your photo checks out. Sandbox.",
+      "isError": false,
+      "ms": 98
+    }
+  ]
+}

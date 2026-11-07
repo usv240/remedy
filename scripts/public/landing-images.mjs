@@ -1,5 +1,7 @@
-// Web copies of the pictures the public pages show, in public/landing/. All but one are CPSC recall images (US
-// government works, public domain), credited on the page; the blurred mug is derived from a CC0 photo by Kurt Kaiser.
+// Web copies of the pictures the public pages show, in public/landing/ and public/samples/charger/. Most are CPSC
+// recall images (US government works, public domain), credited on the page; the mug photos are derived from a CC0
+// photo by Kurt Kaiser, and the charger photos (Brightline Home's fictional sample recall) are public-domain photos by
+// Dmitry G on Wikimedia Commons (public/samples/charger/CREDITS.json).
 // Usage: node scripts/public/landing-images.mjs
 import { mkdirSync } from "node:fs";
 import path from "node:path";
@@ -21,6 +23,10 @@ const jobs = [
   { from: `${F}/official/27056-haiara-1.jpg`, to: "power-bank-27056.webp", width: 360 },
   { from: `${F}/derived/commons-coffee-in-a-mug.blur8.jpg`, to: "blurry-mug.webp", width: 360 },
   { from: `${F}/other/commons-coffee-in-a-mug.jpg`, to: "mug.webp", width: 360 },
+  { from: `${F}/sample/cord-cut.jpg`, to: "charger-cord-cut.webp", width: 360 },
+  // /try's photos of the sample charger made safe, and opened up with its cord still attached.
+  { from: `${F}/sample/opened-cord-attached.jpg`, to: "../samples/charger/opened-cord-attached-sm.webp", width: 320 },
+  { from: `${F}/sample/opened-case.jpg`, to: "../samples/charger/opened-case-sm.webp", width: 320 },
 ];
 
 for (const j of jobs) {

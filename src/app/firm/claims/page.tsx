@@ -6,6 +6,7 @@ import { FirmInfo } from "@/components/firm/FirmInfo";
 import { dbConfigured } from "@/lib/db";
 import { firmContext } from "@/lib/firm/firm";
 import { queueRows } from "@/lib/firm/queue";
+import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 
 export const metadata: Metadata = { title: "Claims queue", description: "Every claim for Brightline Home's recalls, with its photo, the six checks, the decision and the payout. A fictional sample firm." };
 
@@ -16,6 +17,8 @@ async function Queue({ searchParams }: { searchParams: Promise<{ view?: string }
   const { view } = await searchParams;
   const ctx = dbConfigured() ? await firmContext().catch(() => null) : null;
   if (!ctx) return <p className="firm-sub">The sample firm is not set up on this server yet.</p>;
+  // Two sample claims stay ready to pay, so Approve and pay always has something to send.
+  await ensureReadyClaims(ctx.firm.id, ctx.main?.number).catch(() => 0);
   const rows = await queueRows(ctx.firm.id);
   return <ClaimsQueue initial={rows} initialView={VIEWS.includes(view as View) ? (view as View) : "all"} />;
 }
@@ -37,7 +40,7 @@ export default function ClaimsPage({ searchParams }: { searchParams: Promise<{ v
           <Queue searchParams={searchParams} />
         </Suspense>
       </div>
-      <p className="firm-label">Sample claims are fictional and marked sample. Paying a claim sends a real PayPal sandbox payout; the seeded claims ready to pay are $1.00. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
+      <p className="firm-label">Sample claims are fictional and marked sample. Paying a claim sends a real PayPal sandbox payout; the sample claims ready to pay are $1.00 each, and two more are added when they have been paid. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
     </>
   );
 }

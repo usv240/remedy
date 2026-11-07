@@ -56,6 +56,16 @@ const TITLES: Record<string, string> = {
   "sample-charger-opened-case": "Brightline's sample charger taken apart, its cord still wired to the board",
 };
 
+/**
+ * The public runs answered with no AI call, and how many asked for a new photo: a copy of the official picture, a
+ * reused photo, a blurry one or another recall's picture is never verified (content/public/verify-runs.json).
+ */
+export function freeCaught() {
+  const runs = read<{ runs: { needs_vision?: boolean; result: { decision: string } }[] }>("content", "public", "verify-runs.json").runs;
+  const free = runs.filter((r) => !r.needs_vision);
+  return { caught: free.filter((r) => r.result.decision !== "verified").length, total: free.length };
+}
+
 /** The sweep configuration that is the claim path's own setting (src/lib/verify/vision.ts: Opus 5.5, medium effort). */
 export const CLAIM_PATH_CONFIG = "opus-medium";
 /** A public run that replays a preset's recording: the same model answer, counted once with the preset. */

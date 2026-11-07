@@ -28,38 +28,46 @@ The same steps are on `/evidence`, with a link to each page.
 |---|---|---|---|
 | 1 | [`/#showcase`](https://remedy-y0ym.onrender.com/#showcase) | 20 s | Type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund. |
 | 2 | [`/recalls/27056`](https://remedy-y0ym.onrender.com/recalls/27056) | 40 s | The power bank recall's official remedy, word for word, and the proof rule Claude read from it, with how sure it is of each field. Set **Display** to Technical for the batch trace and the raw CPSC record. |
-| 3 | [`/try`](https://remedy-y0ym.onrender.com/try) | 90 s | Run an example through the six checks, or buy in the sample shop, claim, and watch the refund go back to the original PayPal purchase. |
+| 3 | [`/try`](https://remedy-y0ym.onrender.com/try) | 90 s | Run Brightline's sample charger with its cord cut through the six checks: verified. Or buy the charger in the sample shop, claim it with the sample photo, and watch the refund go back to the original PayPal purchase. |
 | 4 | [`/firm`](https://remedy-y0ym.onrender.com/firm) | 60 s | The firm's side: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report. |
-| 5 | [`/developers`](https://remedy-y0ym.onrender.com/developers) | 40 s | A free key and a live playground. The same search, proof rules and photo checks are tools on the MCP server. |
+| 5 | [`/developers`](https://remedy-y0ym.onrender.com/developers) | 40 s | A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim. |
 | 6 | [`/evidence#results`](https://remedy-y0ym.onrender.com/evidence#results) | 30 s | The CPSC count, the extraction benchmark (draft labels) and the recorded photo checks, each with its source file. |
 
 ## Try an example
 
-Open `/try`. The **Examples** tab has four ready-made cases. Press **Run it** on any of them; each one can also be opened on its own page and downloaded as JSON with its photo.
+Open `/try`. The **Examples** tab starts with **Photos of products made safe**: one real charger, photographed before and after its cord was cut, for Brightline Home's sample recall BH-2026-01. Below it, **Photos that are asked for again**. Every example shows its expected result; press **Run it** and the run says whether it matched. Each runnable example can also be opened on its own page and downloaded as JSON with its photo.
 
-| Example | Recall | What you should see |
+| Example | Recall | Expected result |
 |---|---|---|
-| The CPSC's own made-safe photo | 26125, hair dryer, cut the cord | A request for the owner's own photo: Remedy recognizes the recall's published example. Press **Run with the official-image match off** to see what the photo checks read: the right product, and Claude noting it is the CPSC's own published picture rather than the owner's photo. No payout either way. |
-| The official recall picture | 27056, HAIARA power bank | "Send a photo of your own product." No payout, and no model call: the match with the official picture is found in code. |
-| A blurry photo | 27056 | A friendly retake ("hold still and try again"), found before any model call. |
-| Something else entirely (a mug) | 27056 | The right-product check does not pass, so there is no payout, and the owner hears what to send instead. |
+| Brightline's sample charger, cord cut | Sample recall BH-2026-01 | **Verified.** The product match is under the bar on the opened case, so two AI reviewers look; both find the charger with its cord cut. $34.99 is under Brightline's $50.00 auto-approve cap, so a real claim is refunded at once. |
+| The same charger, opened, cord still attached | BH-2026-01 | **Retake:** cut the cord first. Shown with its three measured runs (a retake in each), not run again. |
+| The same charger, taken apart | BH-2026-01 | **Retake:** the cord is still wired in. Three measured runs, a retake in each. |
+| The CPSC's own made-safe photo | 26125, hair dryer, cut the cord | **Retake:** Remedy recognizes the recall's published example in code and asks for the owner's own photo. Press **Run with the official-image match off** to see what the photo checks read: the right product, and Claude noting it is the CPSC's own published picture rather than the owner's photo. No payout either way. |
+| The official recall picture | 27056, HAIARA power bank | **Retake:** "Send a photo of your own product." No model call: the match with the official picture is found in code. |
+| A blurry photo | 27056 | **Retake:** "hold still and try again", found before any model call. |
+| Something else entirely (a mug) | 27056 | **Retake:** the right-product check does not pass, and the owner hears what to send instead. |
+| A different power bank (Oraimo) | 27056 | **Retake:** a different model, so the right-product check does not pass. |
+| A look-alike with a 20 on it (Romoss) | 27056 | **Retake:** a similar print is not enough; the right-product check does not pass. |
+| A photo of a screen | 27056 | **Retake:** the own-photo check sees a computer monitor, so the owner is asked for a photo of the product itself. |
 
-Examples that need Claude replay one recorded live answer, so pressing **Run it** costs nothing; every check around that answer runs again in code.
+Examples that need Claude replay one recorded live answer, so pressing **Run it** costs nothing; every check around that answer runs again in code. Photos of products the team owns are added under **Photos of products made safe** when they are in `content/verify/fixtures/user/` with an `expected.json`.
 
 **Your own photo:** the **Your photo** tab, or `/claim/27056` on a phone, runs the same claim flow live: the recall, the steps to make it safe, one photo, the six checks, and your result. Photo checks are limited per visitor (6 in 10 minutes, 30 a day); the examples are not.
 
 ## Buy, claim and refund to the original purchase (about 3 minutes)
 
-1. Open [`/try/shop`](https://remedy-y0ym.onrender.com/try/shop). Press the PayPal button, log in with the sandbox buyer above, and complete the purchase of the Brightline PowerCell 10K power bank (sample), $34.99 in the sandbox.
-2. The page reads **You bought the sample power bank**, with the sandbox capture ID and the date it can be refunded until (PayPal's 180 days). Press **Now claim it**.
-3. The claim page for recall 27056 links that purchase for you. Write RECALLED in marker on a power bank or another small device you have, and take or upload one photo. The checks run in a few seconds.
-   - A product other than the recalled HAIARA model goes to **firm review**, which is the next step you play. Keep **Back to your PayPal payment** and press **Save where to send it**. The receipt reads **Waiting for Brightline Home**.
-   - If the result is a retake, it says exactly what to change; take a new photo.
-4. Open [`/firm/claims`](https://remedy-y0ym.onrender.com/firm/claims), choose **Needs review**, open your claim, and press **Approve and pay**. The payment router sees the linked purchase inside 180 days and refunds it to the original PayPal capture.
-5. Back on your receipt: **Refunded ... to your PayPal payment**, with the sandbox refund ID.
-6. Claim the same purchase again: the second claim is declined, because that purchase is already claimed.
+1. Open [`/try/shop`](https://remedy-y0ym.onrender.com/try/shop): **Buy the sample charger**. The product is the **Brightline 65W laptop charger (sample)**, $34.99, sold by Brightline Home (sample) and recalled in Brightline's own sample recall, BH-2026-01. Press the PayPal button, log in with the sandbox buyer above, and complete the purchase.
+2. The page reads **You bought the sample charger.**, with $34.99, the date, the sandbox capture ID and the date it can be refunded to this payment until (PayPal's 180 days). Press **Now claim it**.
+3. The claim page for recall BH-2026-01 opens: **Get your refund**, "For the recalled Brightline 65W laptop charger. Make it safe, snap one photo, and PayPal pays you a full refund of $34.99." The steps are to unplug the charger, cut the cord where it meets the charger case, and take one photo of the cut cord with the charger.
+4. Under **Bought it from Brightline with PayPal?**, **Use my purchase from** your purchase date, **$34.99, made on this device** is ticked, so the refund goes back to it.
+5. No charger to cut? Press **Use Brightline's sample photo**: the public-domain photo of this charger with its cord cut (Dmitry G, Wikimedia Commons). Or take your own. Press **Check my photo**.
+6. The six checks run and the result reads **Verified**, **Your photo checks out.**, $34.99 refund. Under **Where should it go?**, **Back to your PayPal payment** is chosen. Press **Send my refund**.
+7. $34.99 is under Brightline's $50.00 auto-approve rule, so no person is needed: the payment router sees the purchase inside 180 days and refunds it to the original PayPal capture. The receipt reads **Refunded $34.99 to your PayPal payment.**, with the sandbox refund ID.
+8. Claim the same purchase again: the claim page says that purchase already has a claim, and the new claim is checked on its own, with no second refund to that purchase.
 
-`tests/e2e/claim-shop.mjs` runs this path end to end (10 of 10).
+The sample photo can be used by every visitor: it stays out of the earlier-claims pool. Any other photo is checked against earlier claims as usual, so a photo already used is asked again. With a photo of a product that is not the recalled charger made safe, the result is a friendly retake, or **firm review** when a check is unclear; a firm review claim is approved in [`/firm/claims`](https://remedy-y0ym.onrender.com/firm/claims) (choose **Needs review**, open it, **Approve and pay**), and the refund then goes back to the purchase the same way.
+
+`tests/e2e/claim-shop.mjs` runs this path end to end (11 of 11).
 
 ## The firm console
 
@@ -76,7 +84,7 @@ Open [`/firm`](https://remedy-y0ym.onrender.com/firm): Brightline Home's recall 
 2. Press **Approve and pay**. The status line reads, for example, "2 payouts sent in PayPal batch ...": one PayPal Payouts batch for all of them.
 3. The payout status updates live in the grid ("Live: payout status updates here"). In our runs, a sandbox payout reached SUCCESS 17 to 18 seconds after approval.
 
-The two seeded claims ready to pay are $1.00 each, to the sandbox buyer. If an earlier visitor has paid them, **Ready to pay** is empty; any **Needs review** claim can still be approved and paid from its drawer.
+Two sample claims are always ready to pay, $1.00 each to the sandbox buyer: when a visitor has paid them, the queue adds two more the next time it opens. Any **Needs review** claim can also be approved and paid from its drawer.
 
 ## The recall plan and its re-notice
 
@@ -147,6 +155,8 @@ curl -X POST https://remedy-y0ym.onrender.com/api/mcp \
   -H "content-type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
+A recorded session of these tool calls, from finding the recall to a verified claim, is on [`/developers`](https://remedy-y0ym.onrender.com/developers#mcp-h) (`content/public/mcp-session.json`). To record it again against a running server, with no AI call: `BASE_URL=http://localhost:3300 node --env-file=.env.local scripts/public/record-mcp-session.mjs` (start the server with `ANTHROPIC_API_KEY=` empty to be sure; the claim it opens is removed afterwards).
+
 Agents can also find the server on their own through `/api/mcp/server-card`, `/.well-known/ai-catalog.json` and `/llms.txt`.
 
 ## Run it locally
@@ -176,7 +186,7 @@ npm run worker                # the job worker, in a second terminal (photo chec
 | `AI_DAILY_USD` | Daily Claude budget in US dollars ($2 on the hosted site; no limit locally) |
 | `ELASTIC_URL`, `ELASTIC_API_KEY` | Elastic recall search; without them, the in-app BM25 search |
 | `CHANNEL3_API_KEY` | Safe replacements; without it, owners are offered a refund |
-| `NEXT_PUBLIC_AG_STUDIO_LICENSE_KEY` | Removes the AG Grid enterprise license notice |
+| `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` | AG Grid Enterprise license for the claims queue; without it the grid runs on AG Grid's enterprise trial |
 | `CHECKS_SECRET` | Guards the test-only approval route the claim suites use |
 | `DATA_KEY`, `AUDIT_SALT`, `REMEDY_SECRET_KEY` | Encryption and hashing secrets; set long random values when hosted |
 
@@ -189,19 +199,20 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 370 passed, 39 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
+| Unit tests, no network | `npm test` | 411 passed, 44 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
 | Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 27 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 108 page views pass |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, docs and the MCP tools (no AI call) | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: examples, a streamed claim, firm review, approval, a $1.25 sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
-| Buy in the sample shop as the sandbox buyer, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 10 of 10 |
+| Buy in the sample shop as the sandbox buyer, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11 |
 | The firm console: queue and drawer, bulk Approve and pay ($1.00 payouts), the report against SQL, and a live Gantt re-notice (run `scripts/seed-firm.ts` first; `FIRM_E2E_PAY=0` skips the payouts) | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
 | The audit ledger's hash chain, straight from the database | `npm run verify-ledger` | Every hash links to the one before it |
 | 60 ledger appends at once keep one chain | `npm run test:ledger-race` | Chain verified |
 | 100 visitors at once on the free paths (official-picture claim, search, scan sample), against the production build on port 3400 | `BASE_URL=http://localhost:3400 node --env-file=.env.local scripts/load-test.mjs` | Writes `content/public/load-test.json`, shown on `/evidence#load`; 0 errors |
 | Rescore the extraction benchmark from the stored outputs (no AI call) | `npx tsx scripts/recalls/bench.ts` | Writes `content/recalls/benchmark/results.json`, marked draft until every label is confirmed |
+| The figures the README, TESTING.md and `/evidence` repeat, after the suites above | `npx tsx scripts/facts.ts` | Writes `content/public/facts.json`; `tests/facts.test.ts` fails when a document or the code disagrees with it |
 | Recount the CPSC figures | `npx tsx scripts/recalls/stats.ts` | Writes `content/recalls/stats.json`; the 2026-11-01 snapshot gives the published 523 of 1,227 |
 
 The schema is reviewed SQL in `db/schema.sql`, applied with `npm run db:migrate` (safe to run again); `tests/schema.test.ts` checks that it and the Drizzle schema in `src/lib/db/schema.ts` define the same tables and columns.

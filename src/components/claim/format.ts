@@ -38,7 +38,12 @@ export const when = (iso: string | null | undefined) =>
 export const seconds = (ms: number) => `${(Math.max(0, ms) / 1000).toFixed(1)} s`;
 
 /** The owner's words for a check's status. */
-export function checkWord(status: string): { word: string; tone: "positive" | "attention" | "info" | "neutral" } {
+/**
+ * The word beside each check. `reviewersAgreed`: the claim was verified by the two AI reviewers agreeing, so an unclear
+ * check was settled by them, not left for a person.
+ */
+export function checkWord(status: string, opts: { reviewersAgreed?: boolean } = {}): { word: string; tone: "positive" | "attention" | "info" | "neutral" } {
+  if (status === "unclear" && opts.reviewersAgreed) return { word: "Reviewers agreed", tone: "info" };
   switch (status) {
     case "pass":
       return { word: "Done", tone: "positive" };

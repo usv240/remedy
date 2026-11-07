@@ -1,20 +1,33 @@
 # Remedy
 
-Recall refunds in seconds. The owner of a recalled product makes it safe as the recall asks (cuts the cord, cuts it in half, or writes "RECALLED" on it), snaps one photo, and Remedy checks that photo against the official recall. Once it is verified, PayPal pays the refund, so recalled products leave homes faster.
+Recall refunds in seconds, for the owners of recalled products and the firms that recall them. The owner makes the product safe the way the recall asks (cuts the cord, cuts it in half, or writes "RECALLED" on it) and snaps one photo. Remedy checks that photo against the official recall, and PayPal pays the refund: straight back to the original purchase when it was bought with PayPal, or as a payout to an email, a phone or Venmo.
 
-- **Live demo:** [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com) (PayPal sandbox; no Remedy login needed)
-- **Start here:** open [`/evidence`](https://remedy-y0ym.onrender.com/evidence). The sandbox buyer login and step-by-step checks are in [TESTING.md](TESTING.md).
+- **Live:** [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com) (PayPal sandbox; no Remedy login needed)
+- **Start here:** [`/evidence`](https://remedy-y0ym.onrender.com/evidence) has a five-minute path and every figure with its source file. To watch a photo become a refund, open [`/try`](https://remedy-y0ym.onrender.com/try) and run Brightline's sample charger; to do it end to end with your own sandbox purchase, follow [Buy, claim and refund](TESTING.md#buy-claim-and-refund-to-the-original-purchase-about-3-minutes) in TESTING.md, which also has the sandbox buyer login.
 - **Demo video:** [youtu.be/VIDEO_ID](https://youtu.be/VIDEO_ID)
 
-Every payment runs in the PayPal sandbox. Brightline Home, the firm in the console, is a fictional sample firm. Real CPSC recalls appear with their real data and credited images; Remedy is not affiliated with the CPSC or any recalling firm.
+Every payment runs in the PayPal sandbox. Brightline Home, the firm in the console, is a fictional sample firm, and its sample recall BH-2026-01 is fictional too. Real CPSC recalls appear with their real data and credited images; Remedy is not affiliated with the CPSC or any recalling firm.
 
-## The problem in one number
+## The problem, and the result
 
-**525 of 1,239** US consumer product recalls since January 2024 (42%) already offer a refund once the owner sends a photo showing the product made safe ([CPSC Recalls API](https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2024-01-01), public domain, pulled November 5, 2026; counts and definitions in [`content/recalls/stats.json`](content/recalls/stats.json)).
+**525 of 1,239** US consumer product recalls since January 2024 (42%) already offer a refund once the owner sends a photo showing the product made safe, and the share grows each year: 71 photo-refund recalls in 2024, 172 in 2025 and 282 in 2026 so far ([CPSC Recalls API](https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2024-01-01), public domain, pulled November 5, 2026; counts and definitions in [`content/recalls/stats.json`](content/recalls/stats.json)).
+
+On average, about **6 in 100** recalled products come back through a recall (the CPSC's measure, as cited by Raithel, Hock and Mafael, 2024). Simpler claiming brings more of them back. In an IRS field experiment with 35,050 tax filers, a simpler notice raised claiming from **14% to 23%**, and naming the amount in the headline raised it to **31%** ([Bhargava and Manoli, American Economic Review, 2015](https://www.aeaweb.org/articles?id=10.1257/aer.20121493)). Across 338 CPSC recalls, a full refund lifts the share of recalled products that come back by **11.4%** ([Raithel, Hock and Mafael, Journal of the Academy of Marketing Science, 2024](https://link.springer.com/article/10.1007/s11747-023-00967-x)).
+
+Remedy makes the claim one photo on a phone, with the refund named in its first line. Measured on photos with a known answer: **0 of 36 paid wrongly**, the photo check in **about 12 seconds**, and the PayPal payout in **about 18** ([`content/public/facts.json`](content/public/facts.json), counted from the recorded runs and the sandbox timings).
+
+## Three ideas at its heart
+
+1. **Each firm that joins makes every other firm safer.** Every claim photo is matched by a 64-bit perceptual hash against the 1,777 distinct published pictures of every recall and against every photo already claimed, at any firm, in about 60 ms with no model call. Firms share only the hashes, never a photo, a claimant or a recall ([`src/lib/verify/dhash.ts`](src/lib/verify/dhash.ts)).
+2. **The refund goes back the way it was paid.** Inside PayPal's 180-day window, a verified claim is refunded to its original PayPal capture; after it, the owner gets a PayPal payout to an email or phone, or Venmo. Plain code picks the route and the amount (`planPayment()` in [`src/lib/payments/router.ts`](src/lib/payments/router.ts)).
+3. **A payout nobody accepts becomes a task.** When PayPal's webhook reports a payout waiting to be accepted (`PAYMENT.PAYOUTS-ITEM.UNCLAIMED`), a re-notice task appears in the firm's recall plan, in the open Gantt without a reload, linked to its payout batch ([`src/lib/payments/events.ts`](src/lib/payments/events.ts)).
+
+An AI assistant can take an owner through all of it with Remedy's MCP tools: [`/developers`](https://remedy-y0ym.onrender.com/developers) shows a recorded session of real tool calls, from finding the recall to a verified claim ([`content/public/mcp-session.json`](content/public/mcp-session.json)).
+
+## The data behind it
 
 The CPSC's own wording, from recall 27056: *"submit a photo of their recalled power bank with the word 'recalled' written on it in permanent marker"*.
 
-- The share is growing: 71 photo-refund recalls in 2024, 172 in 2025 and 282 in 2026 so far.
 - 498 of the 525 list an email address for the claim, and 270 of them list a free webmail address.
 - None of the 1,239 recalls mentions PayPal or Venmo.
 - 81% of all recalls (1,002 of 1,239) cover fewer than 50,000 units: mostly small firms, handling each photo by hand.
@@ -27,7 +40,7 @@ The same classifier, run on the earlier snapshot behind our research note (1,227
 - **Every photo-refund remedy, read once.** 583 proof rules (all 525 photo-refund recalls, 30 recent recalls without a photo step and 28 more from the benchmark) in one Message Batches run: 1,166 calls, $14.01 at batch prices, 6.9 minutes ([`content/recalls/proof-rules.json`](content/recalls/proof-rules.json)).
 - **Photos that need a second try are found before any AI call.** The recall's official picture, rotated and cropped copies of it, a photo already used for a claim, a blurry photo, and a picture published with a different recall: **7 of 7** asked for a new photo by code alone, each in under 100 ms. A photo of a mug sent for the power bank recall scored 0.02 on the right-product check and was not paid ([`content/public/verify-runs.json`](content/public/verify-runs.json)).
 - **Two error rates, on photos with a known answer** (counted by [`src/components/judges/errors.ts`](src/components/judges/errors.ts) from the measured sweep, the recorded presets and the public runs, each model answer once):
-  - **paid when it should not have been: 0 of 35** decisions, on 17 photos (copies of the official picture, look-alikes, another product, products not yet made safe, including the sample charger opened up with its cord still attached). Across all four model settings in the sweep: 0 of 72;
+  - **paid when it should not have been: 0 of 36** decisions, on 18 photos (copies of the official picture, look-alikes, another product, products not yet made safe, including the sample charger opened up with its cord still attached). Across all four model settings in the sweep: 0 of 72;
   - **held for a person or a new photo when it could have been paid: 0 of 4**, on the owner-style photo with a known answer to pay (the sample charger with its cord cut: its recorded preset answer and three sweep trials, each paid, the product match confirmed by the two reviewers). The CPSC's own published pictures, run with the official-picture match switched off to measure reading, count in neither rate: there the model alone would have paid for the recall's own picture in 3 of 7 runs, which is why the match runs first on every claim and answers that picture in about 60 ms with no model call. The sweep ran three trials per photo ([`content/verify/sweep-results.json`](content/verify/sweep-results.json), and [`content/verify/sweep-sample.json`](content/verify/sweep-sample.json) for the sample recall's three photos at the claim path's setting, $0.41); known answers are in [`content/verify/fixtures/cases.json`](content/verify/fixtures/cases.json).
 - **A second line of care.** With the official-image match switched off, Claude Opus 5.5 still recognized the CPSC's example photo for recall 26125 as a downloaded picture rather than an owner's own photo ([`content/presets/recorded/cpsc-example.technical.json`](content/presets/recorded/cpsc-example.technical.json)).
 - **Measured in the PayPal sandbox** ([`content/public/measured.json`](content/public/measured.json)):
@@ -203,14 +216,15 @@ Every push to `main` runs [CI](.github/workflows/ci.yml): the dependency audit, 
 
 | Suite | Command | Result |
 |---|---|---|
-| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 370 passed, 39 skipped (the live Claude, live PayPal and Postgres suites, which need keys or a database) |
+| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 411 passed, 44 skipped (the live Claude, live PayPal and Postgres suites, which need keys or a database) |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
 | Accessibility (axe, WCAG 2.2 AA) and sideways scroll, 27 pages at phone and desktop width, light and dark | `npm run e2e:a11y` | 108 of 108 page views |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, and the MCP tools | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: presets, a streamed claim, firm review, approval, a real sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
-| Buy in the sample shop, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 10 of 10 |
+| Buy in the sample shop, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11 |
 | The firm console: queue and drawer, bulk Approve and pay, the report against SQL, and a live Gantt re-notice | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
 | The audit ledger's hash chain | `npm run verify-ledger` | Every hash links to the one before it |
+| The figures this README repeats, counted after the suites run | `npx tsx scripts/facts.ts` | [`content/public/facts.json`](content/public/facts.json); `tests/facts.test.ts` fails when this README or TESTING.md disagree with it |
 | 100 visitors at once on the free paths, against the production build | `node --env-file=.env.local scripts/load-test.mjs` | p50, p95, p99 and the error rate per path on `/evidence#load` |
 | 60 ledger appends at once | `npm run test:ledger-race` | Chain verified |
 

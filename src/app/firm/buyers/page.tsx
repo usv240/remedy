@@ -8,6 +8,7 @@ import { knownSales } from "@/lib/firm/buyers-data";
 import { dayName, isoDay } from "@/lib/firm/dates";
 import { firmContext } from "@/lib/firm/firm";
 import { fmtUsd } from "@/lib/firm/report";
+import { recallLabel } from "@/lib/recall/label";
 
 export const metadata: Metadata = { title: "Buyers", description: "Find the people who bought a recalled product, from a sales file or PayPal, and send each a personal claim link. A fictional sample firm." };
 
@@ -21,7 +22,7 @@ async function Buyers() {
   return (
     <>
       <p className="firm-sub" style={{ marginTop: 8 }}>
-        For {ctx.main.short}, CPSC recall {ctx.main.number}.
+        For {ctx.main.short}, {recallLabel(ctx.main.number)}.
       </p>
       <BuyersImport recall={ctx.main.number} product={ctx.main.short} today={isoDay(new Date())} />
       <section className="firm-section" aria-labelledby="by-known">

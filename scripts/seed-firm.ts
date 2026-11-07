@@ -11,8 +11,9 @@
 //   are "sample history (not paid)": paypal_status SAMPLE, no PayPal batch id, so nothing polls PayPal for them. They
 //   use the firm's refund for the recall: the sample shop's price ($34.99) on BH-2026-01, and a labelled $20.00
 //   sample amount on the real CPSC recalls the console also lists.
-// - two verified claims ready to pay, $1.00 each to the sandbox buyer (SANDBOX_BUYER_EMAIL): paying them sends real
-//   sandbox payouts. tests/e2e/firm.mjs pays them with bulk "Approve and pay".
+// - two verified claims ready to pay, $1.00 each to the sandbox buyer (SANDBOX_BUYER_EMAIL, or the sandbox login in
+//   TESTING.md): paying them sends real sandbox payouts. The console keeps two ready: when a visitor pays them, the
+//   queue adds two more (src/lib/firm/sample-claims.ts). tests/e2e/firm.mjs pays them with bulk "Approve and pay".
 // - one firm-review claim on recall 26754 whose photo, checks and Two reviewers come from a recorded live run, when
 //   src/lib/firm/samples/look-alike.json exists.
 // - the corrective-action plan (announcement, notice waves, reports) with sample payout batches, follow-ups and
@@ -21,6 +22,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { sql } from "drizzle-orm";
+import { samplePhotoSha } from "../src/app/api/claims/_lib/sample-photo";
 import { audit } from "../src/lib/audit";
 import { db, dbConfigured } from "../src/lib/db";
 import { encrypt, hashContact, maskContact } from "../src/lib/secure";
@@ -28,7 +30,8 @@ import { basePlan } from "../src/lib/firm/plan";
 import { SAMPLE_RECALL } from "../src/lib/firm/firm";
 import { SAMPLE_PAYPAL_STATUS } from "../src/lib/firm/queue";
 import { SHOP } from "../src/lib/payments/shop-catalog";
-import type { Checks, CheckId, CheckStatus } from "../src/lib/verify/types";
+import { ensureReadyClaims, READY_AMOUNT, sampleChecks, sampleResult, type SampleKind } from "../src/lib/firm/sample-claims";
+import type { Checks } from "../src/lib/verify/types";
 
 const DAY = 86_400_000;
 /**
@@ -56,7 +59,7 @@ function rng(seed: number) {
 
 const NAMES = ["jordan", "maria", "sam", "lee", "priya", "alex", "dana", "chris", "noor", "taylor", "kim", "jamie", "rosa", "omar", "beth", "luis", "mei", "ravi", "ana", "tom", "ivy", "hugo", "zoe", "ben", "lena", "max", "nia", "eli", "sara", "joe", "ada", "kai", "liz", "raj", "amy", "dev", "fay", "gus", "ines", "ola"];
 
-type Kind = "paid" | "unclaimed" | "review" | "reviewed_paid" | "retake" | "review_retake";
+type Kind = SampleKind;
 /**
  * The history, as fractions of the days since the announcement (0 is the announcement day, 1 is today): paid claims
  * spread over the whole time, three payouts not yet accepted, and the open reviews and retakes in the last days.
@@ -72,49 +75,7 @@ const PLAN: { kind: Kind; at: number[] }[] = [
 /** Fictional US numbers in the 555-0100 to 555-0199 range. */
 const phone = (area: number, k: number) => `(${area}) 555-01${String(k % 100).padStart(2, "0")}`;
 
-function check(id: CheckId, status: CheckStatus, plain: string, score?: number) {
-  const names: Record<CheckId, string> = { C1: "Right product", C2: "Made safe", C3: "Own photo", C4: "Within the recall", C5: "Claim limits", C6: "Not already refunded" };
-  return { id, name: names[id], pass: status === "pass", status, ...(score !== undefined ? { score } : {}), reason_plain: plain, reason_technical: "Sample check result, seeded by scripts/seed-firm.ts. No model call was made." };
-}
-
-/**
- * The words the sample history uses for the main recall's product and its remedy. Brightline's own sample charger
- * recall (cut the cord) is the main recall; the power bank words stay for a database still on 27056.
- */
-type Words = { product: string; done: string; notYet: string; unclear: string; retake: string[] };
-const WORDS: Record<string, Words> = {
-  "BH-2026-01": {
-    product: "Brightline 65W laptop charger",
-    done: "The cord is cut where it meets the charger case.",
-    notYet: "The cord is not cut yet.",
-    unclear: "This looks like the recalled charger, but the case is hard to see in the photo.",
-    retake: ["Cut the cord where it meets the charger case.", "Take one photo that shows the cut cord with the charger."],
-  },
-  "27056": {
-    product: "HAIARA power bank",
-    done: "The word recalled is written on the power bank in marker.",
-    notYet: "The word recalled is not on the power bank yet.",
-    unclear: "The power bank looks like the recalled one, but the model label is not readable in the photo.",
-    retake: ["Write RECALLED on the power bank in permanent marker, in big letters.", "Take one photo that shows the whole power bank and the word."],
-  },
-};
-const words = () => WORDS[SAMPLE_RECALL] ?? WORDS["27056"];
-
-function checksFor(kind: Kind, r: () => number): Checks {
-  const s = (lo: number) => Math.round((lo + r() * (0.99 - lo)) * 100) / 100;
-  const w = words();
-  const base: Checks = {
-    C1: check("C1", "pass", `This is the recalled ${w.product}.`, s(0.86)),
-    C2: check("C2", "pass", w.done, s(0.84)),
-    C3: check("C3", "pass", "This is the owner's own photo, not the recall picture or a screen."),
-    C4: check("C4", "pass", "No model or lot number is needed for this recall."),
-    C5: check("C5", "pass", "One claim for one unit, within the limits."),
-    C6: check("C6", "pass", "No earlier refund for this purchase."),
-  };
-  if (kind === "review" || kind === "reviewed_paid" || kind === "review_retake") base.C1 = check("C1", "unclear", w.unclear, Math.round((0.45 + r() * 0.2) * 100) / 100);
-  if (kind === "retake") base.C2 = check("C2", "fail", w.notYet, Math.round((0.2 + r() * 0.3) * 100) / 100);
-  return base;
-}
+const checksFor = (kind: Kind, r: () => number) => sampleChecks(kind, r);
 
 async function sampleFirm() {
   const [f] = (await db().execute(sql`select id, name from firm where is_sample = true order by id limit 1`)).rows as { id: number; name: string }[];
@@ -171,14 +132,6 @@ async function insertClaim(o: {
     returning id`)
   ).rows as { id: string }[];
   return row.id;
-}
-
-/** claim.result for a seeded claim, in the shape the claim route stores (src/app/api/claims/_lib/claims.ts). */
-function sampleResult(decision: string) {
-  const plain = decision === "verified" ? "All six checks pass." : decision === "retake" ? "The photo needs one more try." : "The checks were unsure, so a person at the firm will look.";
-  const w = words();
-  const guidance = decision === "retake" ? { plain: `${w.retake[0].replace(/\.$/, "")}, then take the photo again.`, steps: w.retake, technical: "Sample guidance." } : null;
-  return { decided_by: decision === "firm_review" ? "reviewers" : "checks", summary: { plain, technical: "Sample result, seeded by scripts/seed-firm.ts. No model call was made." }, guidance, model: null, timings: null, sample: true };
 }
 
 async function samplePayment(o: { amount: string; claimId: string; payee: { type: "email" | "phone" | "venmo"; value: string }; status: "success" | "unclaimed"; at: Date; batch: string; recall: string; title: string; reviewer?: string | null }) {
@@ -240,6 +193,10 @@ async function main() {
     from recall r where r.number = fr.recall_number and fr.firm_id = ${firm.id}`);
 
   const removed = await clearSamples(firm.id);
+  // Brightline's published sample photo never stays in the earlier-claims pool (src/app/api/claims/_lib/sample-photo.ts),
+  // so every visitor can claim the sample recall with it, including after a claim made before this rule.
+  const sampleSha = samplePhotoSha();
+  if (sampleSha) await db().execute(sql`delete from image_hash ih using photo p where ih.source = 'claim' and ih.ref = p.id::text and p.sha256 = ${sampleSha}`);
   const r = rng(26_0101);
   const now = new Date();
   const announced = new Date(`${recall.date}T15:00:00Z`);
@@ -290,21 +247,10 @@ async function main() {
     }
   }
 
-  // Two claims ready to pay, $1.00 each to the sandbox buyer: bulk "Approve and pay" sends real sandbox payouts.
-  const buyer = process.env.SANDBOX_BUYER_EMAIL?.trim();
-  const readyHave = (
-    await db().execute(sql`
-    select count(*)::int as n from claim c where c.firm_id = ${firm.id} and c.is_sample and c.decision = 'verified'
-      and not exists (select 1 from payment p where p.claim_id = c.id) and not exists (select 1 from payment_plan pp where pp.claim_id = c.id)`)
-  ).rows as { n: number }[];
-  let ready = 0;
-  if (buyer) {
-    for (let k = readyHave[0].n; k < 2; k++) {
-      const created = new Date(now.getTime() - (90 - k * 30) * 60_000);
-      await insertClaim({ firmId: firm.id, recall: recall.number, payee: { type: "email", value: buyer }, checks: checksFor("paid", r), decision: "verified", status: "verified", amount: "1.00", channel: k ? "link" : "web", created, decided: new Date(created.getTime() + 22_000) });
-      ready++;
-    }
-  } else console.warn("seed-firm: SANDBOX_BUYER_EMAIL is not set, so no claims ready to pay were added.");
+  // Claims ready to pay, $1.00 each to the sandbox buyer: bulk "Approve and pay" sends real sandbox payouts. The
+  // console tops them up the same way whenever the queue is read with fewer left (src/lib/firm/sample-claims.ts).
+  const ready = await ensureReadyClaims(firm.id, recall.number, now);
+  if (!ready) console.log("seed-firm: the claims ready to pay were already there (or no sandbox buyer is known).");
 
   // The recorded look-alike on recall 26754, if it was recorded.
   let recorded = false;
@@ -367,7 +313,7 @@ async function main() {
   }
 
   await audit("system", "seed.firm_history", `firm:${firm.id}`, { recall: recall.number, claims: kinds.length, ready, recorded, removed });
-  console.log(`seed-firm: ${kinds.length} sample claims on ${recall.number}, ${ready} new claims ready to pay ($1.00 each), ${batches.size} sample payout batches, ${unclaimed.length} waiting to be accepted${recorded ? ", 1 recorded look-alike on 26754" : ""}; removed ${removed} earlier sample claims.`);
+  console.log(`seed-firm: ${kinds.length} sample claims on ${recall.number}, ${ready} new claims ready to pay ($${READY_AMOUNT} each), ${batches.size} sample payout batches, ${unclaimed.length} waiting to be accepted${recorded ? ", 1 recorded look-alike on 26754" : ""}; removed ${removed} earlier sample claims.`);
   process.exit(0);
 }
 

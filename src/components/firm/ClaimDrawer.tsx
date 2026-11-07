@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { TONE, WORD } from "@/lib/firm/checks";
+import { recallLabel } from "@/lib/recall/label";
 import { STAGE_LABEL, STAGE_TONE, type ClaimDetail } from "@/lib/firm/types";
 import { FirmInfo } from "./FirmInfo";
 import { Thumb } from "./Thumb";
@@ -301,7 +302,7 @@ export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { 
               )}
 
               <p className="cq-note">
-                {detail.recall.title} (CPSC {detail.recall.number}). Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
+                {detail.recall.title} ({recallLabel(detail.recall.number)}). Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
               </p>
             </>
           )}

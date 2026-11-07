@@ -175,9 +175,27 @@
   display: grid;
   gap: 10px;
 }
-.tr-more {
-  margin-top: 8px;
-  max-width: 40rem;
+.tr-sub-lede {
+  margin-top: 6px;
+  max-width: 44rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+/* A run set against its expected result, and a photo shown with its recorded runs instead of a Run button. */
+.tr-vs {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.tr-vs[data-ok] {
+  color: var(--pill-positive-ink);
+}
+.tr-recorded {
+  display: grid;
+  gap: 8px;
+}
+.tr-recorded-line {
+  line-height: 1.5;
 }
 @media (max-width: 480px) {
   .tr-preset-top {
