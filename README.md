@@ -87,6 +87,19 @@ Claude reads remedies and photos. The money math, the decision and the payment r
 
 What Claude does instead: it reads each remedy into a proof rule once, ahead of any claim; it describes the photo (how closely it matches, whether each step is done, any writing or label, whether it is a camera photo, whether a person is in it); two reviewers cite what they see when a check is unclear, and a referee in code counts only votes whose evidence checks out; it reads unclear rows in a catalog scan; and Claude Haiku 5.5 writes the monthly report's summary from numbers SQL counted.
 
+## Grounded in research
+
+Published findings Remedy is built on, each read from the source itself. The same list is on [`/evidence#research`](https://remedy-y0ym.onrender.com/evidence#research).
+
+| Finding | In Remedy | Source |
+|---|---|---|
+| A full refund lifts the share of recalled products that come back by **11.4%** on average, across 338 CPSC recalls; owners see more benefit and feel more able to take part | Each claim names the refund in its first line (481 of the 583 proof rules state it plainly), and the remedy becomes up to four plain steps with a drawing for each | Raithel, Hock and Mafael, [Journal of the Academy of Marketing Science](https://link.springer.com/article/10.1007/s11747-023-00967-x), 2024 |
+| In an IRS field experiment with 35,050 tax filers, a simpler notice raised claiming from **14% to 23%**, and naming the amount in the headline raised it to **31%** | One page on a phone, no account, one photo, and the refund named up front | Bhargava and Manoli, [American Economic Review](https://www.aeaweb.org/articles?id=10.1257/aer.20121493), 2015 |
+| On average, about **6 in 100** recalled products come back through a recall, by the CPSC's measure | A finished claim takes one photo: the check runs in about 12 seconds and the PayPal payout in about 18, measured in the sandbox | CPSC Recall Effectiveness Workshop, 2017, as cited by Raithel, Hock and Mafael, 2024 |
+| The CPSC's January 2025 order has Amazon email each buyer directly and refund the full price on proof of destruction or disposal, for **400,000+** products | The same pattern for any firm: buyers who paid with PayPal are found through Transaction Search, and each proof photo is checked and refunded | [CPSC](https://www.cpsc.gov/Newsroom/News-Releases/2025/CPSC-Issues-Final-Order-to-Amazon-com-Outlining-Remediation-Plans-for-Hazardous-Products), January 17, 2025 |
+| The difference hash treats pictures more than **10 bits** apart as different images, and 1 to 10 bits as variations, after tests on over 150,000 images | Matched within 10 bits to the recall's own pictures, and within 4 bits to the 1,777 distinct pictures of every other recall | Neal Krawetz, [Kind of Like That](https://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html), 2013 |
+| **440 million** active PayPal accounts at the end of September 2026 | Refunds go back to the original PayPal purchase inside 180 days, or out as a payout to an email or phone number, with no bank details asked | PayPal Holdings, [third-quarter 2026 results](https://www.sec.gov/Archives/edgar/data/1633917/000163391726000086/pypl3q-26earningsrelease.htm), October 27, 2026 |
+
 ## A 30-day pilot
 
 One small firm with an open photo-refund recall runs every claim on that recall through Remedy for 30 days, from its own claim link, beside its current inbox. Two outcomes, each against the month before:

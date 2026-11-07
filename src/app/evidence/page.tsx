@@ -9,6 +9,7 @@ import { ErrorRates } from "@/components/judges/ErrorRates";
 import { Load, Real } from "@/components/judges/Load";
 import { Measured } from "@/components/judges/Measured";
 import { NeverDecides } from "@/components/judges/NeverDecides";
+import { Research } from "@/components/judges/Research";
 import { PhotoChecks } from "@/components/judges/PhotoChecks";
 import { Results } from "@/components/judges/Results";
 import { S, extraction } from "@/components/judges/data";
@@ -101,6 +102,7 @@ const TOC: [string, string][] = [
   ["#never", "What the AI never decides"],
   ["#measured", "Measured"],
   ["#data", "The data"],
+  ["#research", "Grounded in research"],
   ["#cost", "AI cost"],
   ["#load", "Under load"],
   ["#real", "Running it for real"],
@@ -238,6 +240,15 @@ export default function EvidencePage() {
             The method, with every definition
           </Link>
         </p>
+      </section>
+
+      <section id="research" className="page-section" aria-labelledby="research-h">
+        <div className="title-row">
+          <h2 id="research-h">Grounded in research</h2>
+          <Info id="evidence.research" label="" topic="The research behind Remedy" />
+        </div>
+        <p className="page-prose jp-intro">Published findings Remedy is built on, each with what Remedy does about it.</p>
+        <Research />
       </section>
 
       <section id="cost" className="page-section" aria-labelledby="cost-h">

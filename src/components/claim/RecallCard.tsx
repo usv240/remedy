@@ -1,5 +1,5 @@
 import type { PublicRecall } from "@/app/api/claims/_lib/recall";
-import { SAMPLE_PHOTO_CREDIT } from "@/app/api/claims/_lib/terms";
+import { SAMPLE_PHOTO_CREDIT } from "@/app/api/claims/_lib/recall-text";
 import { ClaimInfo } from "./ClaimInfo";
 import { day } from "./format";
 

@@ -9,9 +9,29 @@ import type { ProofRule } from "@/lib/recall/proof-rule";
  */
 export const SAMPLE_NUMBER = /^BH-\d{4}-\d{2}$/;
 export const isSampleNumber = (s: string) => SAMPLE_NUMBER.test(s);
+/** Who took the sample recall's photos (content/recalls/samples.json, public/samples/charger/CREDITS.json). */
+export const SAMPLE_PHOTO_CREDIT = "Photo: Dmitry G, Wikimedia Commons, public domain; brand marks removed for this sample";
 
 /** CPSC recall numbers are five digits ("27056"); a few older ones run four to six. Sample numbers are accepted too. */
 export const isRecallNumber = (s: string) => /^\d{4,6}$/.test(s) || isSampleNumber(s);
+
+/**
+ * The refund as the claim page's first line names it ("a full refund", "a full refund of $34.99", "a $40 refund"), or
+ * null when the remedy's wording is anything else (store credit, a choice, conditions), so the line never promises
+ * more than the remedy says. Naming the amount up front raised claiming from 23% to 31% in an IRS field experiment
+ * (Bhargava and Manoli, American Economic Review, 2015).
+ */
+export function refundPhrase(text: string | null | undefined): string | null {
+  const t = (text ?? "").trim().replace(/\s+/g, " ").replace(/\.$/, "");
+  if (!t || /credit|gift card|coupon|voucher|\bor\b|proof|including|replace|repair|shipping|partial/i.test(t)) return null;
+  if (/^(a )?full refund$/i.test(t)) return "a full refund";
+  if (/^(a )?full refund of the purchase price$/i.test(t)) return "a full refund of the purchase price";
+  const amount = /^(a )?(full )?(cash )?refund of (\$\d{1,4}(?:\.\d{2})?)$/i.exec(t);
+  if (amount) return `a ${amount[2] ? "full " : ""}refund of ${amount[4]}`;
+  const flat = /^(a )?(\$\d{1,4}(?:\.\d{2})?) (cash )?refund$/i.exec(t);
+  if (flat) return `a ${flat[2]} refund`;
+  return null;
+}
 
 /**
  * A recall number from what an owner pastes: "27056", "Recall 27056", "#27056", or a cpsc.gov recall URL. A URL has no

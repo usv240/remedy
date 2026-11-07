@@ -8,7 +8,6 @@ import { db, dbConfigured, schema } from "@/lib/db";
 
 export const SAMPLE_FIRM = "Brightline Home";
 /** Who took the sample recall's photos (content/recalls/samples.json, public/samples/charger/CREDITS.json). */
-export const SAMPLE_PHOTO_CREDIT = "Photo: Dmitry G, Wikimedia Commons, public domain; brand marks removed for this sample";
 
 /**
  * The recall the sample shop's product belongs to: Brightline Home's own fictional sample recall of its 65W laptop

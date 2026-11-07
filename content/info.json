@@ -457,5 +457,11 @@
     "what": "One firm, one recall, 30 days, and two outcomes measured against the month before: the time from photo to refund, and the share of claims a person had to open.",
     "why": "Both are what a firm feels: owners paid sooner, and fewer photos read by hand.",
     "technical": "Both are already recorded: claim.submitted, claim.decided and claim.paid in the hash-chained audit ledger (GET /api/ledger/verify checks it), the payment's paid_at, and each claim's decision in the claim table, with the firm console's queue views over them."
+  },
+  "evidence.research": {
+    "title": "Grounded in research",
+    "what": "Published findings on recall response, claiming and photo matching, each with what Remedy does about it.",
+    "why": "A full refund and simple steps are what help owners finish a recall; Remedy is built around both.",
+    "technical": "Sources: Raithel, Hock and Mafael (2024), Journal of the Academy of Marketing Science 52:716-735; Bhargava and Manoli (2015), American Economic Review 105(11):3489-3529; CPSC news release, January 17, 2025; Krawetz (2013), dHash; PayPal Holdings 3Q 2026 earnings release. The list is src/components/judges/Research.tsx."
   }
 }

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getRecall, publicRecall } from "@/app/api/claims/_lib/recall";
-import { isRecallNumber } from "@/app/api/claims/_lib/recall-text";
-import { SAMPLE_FIRM, SAMPLE_PHOTO_CREDIT, SHOP_RECALL } from "@/app/api/claims/_lib/terms";
+import { isRecallNumber, refundPhrase, SAMPLE_PHOTO_CREDIT } from "@/app/api/claims/_lib/recall-text";
+import { SAMPLE_FIRM, SHOP_RECALL } from "@/app/api/claims/_lib/terms";
 import { ClaimFlow } from "@/components/claim/ClaimFlow";
 import { ClaimInfo } from "@/components/claim/ClaimInfo";
 import { Example } from "@/components/claim/Example";
@@ -35,6 +35,7 @@ async function Claim({ params }: Params) {
   const word = markerWord(pr.rule);
   const action = pr.rule.actions.includes("write_recalled") ? "write" : pr.rule.actions.includes("cut_cord") ? "cut_cord" : pr.rule.actions.includes("cut_in_half") ? "cut_in_half" : steps.find((s) => !["stop", "photo", "send", "dispose"].includes(s.kind))?.kind ?? null;
   const asksPhoto = pr.rule.photo_required;
+  const refund = refundPhrase(pr.rule.refund_amount_text);
 
   return (
     <>
@@ -48,7 +49,7 @@ async function Claim({ params }: Params) {
       <header className="cl-head">
         <h1 className="cl-title">Get your refund</h1>
         <p className="cl-lede">
-          For the recalled {pr.product}. Make it safe, snap one photo, and PayPal pays you.
+          For the recalled {pr.product}. Make it safe, snap one photo, and PayPal pays you{refund ? ` ${refund}` : ""}.
         </p>
       </header>
 

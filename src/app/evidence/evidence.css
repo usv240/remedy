@@ -974,3 +974,49 @@
     width: 9rem;
   }
 }
+
+/* Grounded in research */
+.jg {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 8px;
+}
+.jg-item {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px 16px 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.jg-fig {
+  font-family: var(--font-ui);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+.jg-finding {
+  font-size: 0.9375rem;
+}
+.jg-in {
+  font-size: 0.9375rem;
+}
+.jg-k {
+  font-weight: 600;
+}
+/* Six findings: two full rows of three on a wide screen. */
+@media (min-width: 900px) {
+  .jg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.jg-src {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
