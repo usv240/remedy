@@ -84,7 +84,7 @@ export type ClaimContext = {
   firmName?: string;
 };
 
-/** A stored perceptual hash: an earlier claim photo or an official image of the claimed recall. */
+/** A stored perceptual hash: an earlier claim photo, or an official image of a recall. */
 export type HashRef = { ref: string; dhash: string; caption?: string | null };
 
 export type CheckId = "C1" | "C2" | "C3" | "C4" | "C5" | "C6";

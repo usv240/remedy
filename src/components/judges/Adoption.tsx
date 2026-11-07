@@ -44,7 +44,7 @@ export function Pilot() {
         ))}
       </ol>
       <p className="jpl-holds">
-        <span className="jpl-k">Why it holds up:</span> an established tool that adds the same model gains a reader of photos; what makes each payout safe to send is the checks in code, the hash-chained evidence behind every payment, and the error rates measured on photos with known answers.
+        <span className="jpl-k">Why it holds up:</span> an established tool that adds the same model gains a reader of photos; what makes each payout safe to send is the checks in code, the hash-chained evidence behind every payment, and the error rates measured on photos with known answers. It also grows with use: every claim photo is checked against the published pictures of every recall and every photo already claimed on any recall, at any firm, by a 64-bit hash alone, so each firm that joins makes every other firm&rsquo;s refunds safer.
       </p>
     </div>
   );

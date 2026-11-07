@@ -16,8 +16,10 @@ import type { HashRef } from "./types";
  * 4 degree tilt with a 6 percent crop) against 2 and 12, and different official images at least 15 bits apart against 13.
  *
  * Scope: most official images are product shots on white, and 447 of 1,821 sit within 10 bits of an image from a
- * different recall with this hash (559 with the earlier one). A claim photo is compared only with the claimed recall's own official images and that recall's
- * earlier claim photos. The screen-or-printout reading in the vision call is the main own-photo signal.
+ * different recall with this hash (559 with the earlier one). So the claimed recall's own official images and its
+ * earlier claim photos are matched at DUPLICATE_MAX_DISTANCE, and every other recall's pictures and earlier claim
+ * photos only at CATALOG_MAX_DISTANCE, and only the pictures distinct enough to tell apart (catalogOfficialHashes).
+ * The screen-or-printout reading in the vision call is the main own-photo signal.
  */
 
 /** Hamming distance at or under this is the same picture. */
@@ -25,6 +27,14 @@ export const DUPLICATE_MAX_DISTANCE = 10;
 export const SAME_PICTURE_MAX_DISTANCE = DUPLICATE_MAX_DISTANCE;
 /** A hash this flat (almost no edges) says nothing about which photo it came from, so it is never matched. */
 const MIN_DETAIL_BITS = 4;
+/**
+ * Against every other recall: the same picture at this distance or under. Measured 2026-11-07 on the fixtures and the
+ * 1,821 stored official hashes: a published picture saved again as JPEG, halved, enlarged as a PNG screenshot, or turned
+ * 90 degrees stays 0 to 2 bits from itself; the twelve photos that are not a published picture (Wikimedia Commons, the
+ * sample charger, the blurred and screen copies) sit 9 to 17 bits from every one of the 1,821. A 3 percent crop moves
+ * a picture 3 to 9 bits, so a cropped copy of another recall's picture is left to the vision check.
+ */
+export const CATALOG_MAX_DISTANCE = 4;
 
 export type DhashInput = Buffer | Uint8Array | ArrayBuffer;
 const toBytes = (input: DhashInput): Uint8Array => (input instanceof ArrayBuffer ? new Uint8Array(input) : input);
@@ -186,6 +196,48 @@ let stored: Record<string, { url: string; dhash: string; caption?: string }[]> |
  * `dhash` above). Empty when the recall is not in the file, for example a recall pasted in by number. Server only.
  */
 export function storedOfficialHashes(recallNumber: string): HashRef[] {
+  loadStored();
+  return (stored?.[recallNumber] ?? []).filter((i) => isHash(i.dhash)).map((i) => ({ ref: i.url, dhash: i.dhash.toLowerCase(), caption: i.caption ?? null }));
+}
+
+export type CatalogRef = HashRef & { recall: string };
+let catalog: CatalogRef[] | null = null;
+
+/**
+ * Every recall's stored official pictures, for the catalog-wide match, leaving out the plain ones: a picture within
+ * CATALOG_MAX_DISTANCE of a picture in a different recall (most often a flat image whose hash rows all repeat) cannot
+ * tell the two recalls apart, so it is matched only within its own recall. Computed once per process. Server only.
+ */
+export function catalogOfficialHashes(): readonly CatalogRef[] {
+  if (catalog) return catalog;
+  loadStored();
+  const all = Object.entries(stored ?? {}).flatMap(([recall, imgs]) =>
+    imgs.filter((i) => isHash(i.dhash) && detailBits(i.dhash) >= MIN_DETAIL_BITS).map((i) => ({ recall, ref: i.url, dhash: i.dhash.toLowerCase(), caption: i.caption ?? null })),
+  );
+  const words = all.map((a) => [parseInt(a.dhash.slice(0, 8), 16) >>> 0, parseInt(a.dhash.slice(8), 16) >>> 0] as const);
+  const plain = new Set<number>();
+  for (let i = 0; i < all.length; i++) {
+    for (let j = i + 1; j < all.length; j++) {
+      if (all[i].recall === all[j].recall) continue;
+      if (popcount32((words[i][0] ^ words[j][0]) >>> 0) + popcount32((words[i][1] ^ words[j][1]) >>> 0) <= CATALOG_MAX_DISTANCE) {
+        plain.add(i);
+        plain.add(j);
+      }
+    }
+  }
+  catalog = all.filter((_, i) => !plain.has(i));
+  return catalog;
+}
+
+/** The closest match among other recalls' distinct official pictures, at CATALOG_MAX_DISTANCE or under. */
+export function otherRecallMatch(variants: string[], recallNumber: string): (HashMatch & { recall: string }) | null {
+  const refs = catalogOfficialHashes().filter((r) => r.recall !== recallNumber);
+  const m = closestMatch(variants, refs, CATALOG_MAX_DISTANCE);
+  if (!m) return null;
+  return { ...m, recall: refs.find((r) => r.ref === m.ref && r.dhash === m.dhash)?.recall ?? "" };
+}
+
+function loadStored() {
   if (!stored) {
     try {
       stored = JSON.parse(readFileSync(path.join(process.cwd(), "content", "recalls", "image-hashes.json"), "utf8"));
@@ -200,5 +252,4 @@ export function storedOfficialHashes(recallNumber: string): HashRef[] {
       /* no samples */
     }
   }
-  return (stored?.[recallNumber] ?? []).filter((i) => isHash(i.dhash)).map((i) => ({ ref: i.url, dhash: i.dhash.toLowerCase(), caption: i.caption ?? null }));
 }

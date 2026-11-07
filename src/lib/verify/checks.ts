@@ -1,4 +1,4 @@
-import { closestMatch, DUPLICATE_MAX_DISTANCE, nearestDistances, type HashMatch } from "./dhash";
+import { closestMatch, DUPLICATE_MAX_DISTANCE, nearestDistances, type HashMatch, CATALOG_MAX_DISTANCE } from "./dhash";
 import { inRange, knownModels, knownRanges, matchModel, parseUnits } from "./identifiers";
 import type { VisionReport } from "./vision-schema";
 import type { Amount, CheckId, CheckResult, CheckStatus, ClaimContext, HashRef, Money, ProofAction, VerifyProofRule, VerifyRecall } from "./types";
@@ -146,6 +146,11 @@ export function evaluateC3(args: {
   source: VisionReport["photo_source"] | null;
   exif: boolean;
   visionAvailable: boolean;
+  /**
+   * Matches against every other recall, at CATALOG_MAX_DISTANCE: a picture published with another recall, and a photo
+   * already sent with a claim on another recall (any firm; only the hash is compared, never the photo).
+   */
+  elsewhere?: { official: (HashMatch & { recall: string }) | null; prior: HashMatch | null };
 }): { check: CheckResult; kind: OwnPhotoKind } {
   const evidence = { dhash: args.dhash, nearest: args.nearest, exif_present: args.exif, photo_source: args.source ?? null };
   const hashNote = `dHash ${args.dhash}; nearest official ${args.nearest.official ? `${args.nearest.official.distance} bits` : "none"}, nearest earlier claim ${args.nearest.prior ? `${args.nearest.prior.distance} bits` : "none"} (reused at ${DUPLICATE_MAX_DISTANCE} or less).`;
@@ -166,6 +171,32 @@ export function evaluateC3(args: {
     return {
       kind: "earlier_claim",
       check: result("C3", "fail", "This photo matches one sent with an earlier claim, so a person at the firm will take a look.", `Matches earlier claim photo ${args.prior.ref} at ${args.prior.distance} bits (${args.prior.orientation}). ${hashNote}`, { evidence }),
+    };
+  }
+  const other = args.elsewhere?.official;
+  if (other) {
+    return {
+      kind: "official",
+      check: result(
+        "C3",
+        "fail",
+        "This picture was published with another recall. Please send a photo of your own product.",
+        `Matches recall ${other.recall}'s official image ${other.ref}${other.caption ? ` ("${other.caption}")` : ""} at ${other.distance} bits (${other.orientation}), in the check against every recall's published pictures at ${CATALOG_MAX_DISTANCE} bits or under. ${hashNote}`,
+        { evidence: { ...evidence, matched: other } },
+      ),
+    };
+  }
+  const usedElsewhere = args.elsewhere?.prior;
+  if (usedElsewhere) {
+    return {
+      kind: "earlier_claim",
+      check: result(
+        "C3",
+        "fail",
+        "This photo matches one sent with a claim on another recall, so a person at the firm will take a look.",
+        `Matches a photo sent with a claim on another recall at ${usedElsewhere.distance} bits (${usedElsewhere.orientation}), in the check against every recall at ${CATALOG_MAX_DISTANCE} bits or under. Only the 64-bit hash is compared across recalls and firms, never the photo. ${hashNote}`,
+        { evidence },
+      ),
     };
   }
   if (!args.visionAvailable || !args.source) {

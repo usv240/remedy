@@ -16,7 +16,7 @@ import {
   type OwnPhotoKind,
 } from "./checks";
 import { decide, guidanceFor, shouldReview, summaryFor, type Blocker, type DecidedBy } from "./decide";
-import { dhashVariants, storedOfficialHashes } from "./dhash";
+import { CATALOG_MAX_DISTANCE, closestMatch, dhashVariants, otherRecallMatch, storedOfficialHashes } from "./dhash";
 import { claimMaxSide, decodeImage, PhotoUnreadableError, sniffMime, type DecodedImage } from "./image";
 import { fetchImageBytes, loadOfficialImages, MAX_OFFICIAL_IMAGES, pickForVision, type FetchImage, type OfficialImage } from "./official";
 import { assessQuality } from "./quality";
@@ -44,9 +44,15 @@ export type VerifyInput = {
   /** Hashes of earlier claim photos for this same recall (image_hash rows with source "claim"). */
   priorHashes?: readonly HashRef[];
   /**
+   * Hashes of earlier claim photos on every other recall, from any firm, matched only at CATALOG_MAX_DISTANCE. Only the
+   * hash crosses between recalls and firms; a match sends the claim to a person, never to a retake.
+   */
+  elsewhereHashes?: readonly HashRef[];
+  /**
    * Hashes of this recall's own official images. Defaults to the stored ones in content/recalls/image-hashes.json;
-   * the images loaded for the vision check are always added. Never pass other recalls' images: product shots on white
-   * look alike, and 447 of 1,821 official images sit within 10 bits of an image from a different recall.
+   * the images loaded for the vision check are always added. Never pass other recalls' images here: product shots on
+   * white look alike, and 447 of 1,821 official images sit within 10 bits of an image from a different recall. Other
+   * recalls' pictures are matched separately, at CATALOG_MAX_DISTANCE (otherRecallMatch in ./dhash).
    */
   officialHashes?: readonly HashRef[];
   claimContext?: ClaimContext;
@@ -202,10 +208,14 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
 
   const official = await officialP;
   const visionImages = pickForVision(official.images);
-  // Only this recall's own pictures, and only this recall's earlier claims.
+  // This recall's own pictures and earlier claims at DUPLICATE_MAX_DISTANCE; every other recall's at CATALOG_MAX_DISTANCE.
   const officialHashes: HashRef[] =
     input.options?.officialHashCheck === false ? [] : dedupeRefs([...storedHashes, ...official.images.map((o) => ({ ref: o.url, dhash: o.dhash, caption: o.caption }))]);
   const hashes = hashMatches(variants, officialHashes, input.priorHashes ?? []);
+  const elsewhere = {
+    official: input.options?.officialHashCheck === false || hashes.official ? null : otherRecallMatch(variants, recall.number),
+    prior: hashes.prior || !input.elsewhereHashes?.length ? null : closestMatch(variants, input.elsewhereHashes, CATALOG_MAX_DISTANCE),
+  };
   const cached = await cachedP;
   let restingToday = false;
 
@@ -282,9 +292,14 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   };
 
   // 2. Not their own photo, or not good enough to check: no model call needed.
-  const c3Hash = evaluateC3({ dhash: variants[0], official: hashes.official, prior: hashes.prior, nearest: hashes.nearest, source: null, exif: img.exif, visionAvailable: false });
+  const c3Hash = evaluateC3({ dhash: variants[0], official: hashes.official, prior: hashes.prior, nearest: hashes.nearest, source: null, exif: img.exif, visionAvailable: false, elsewhere });
   if (c3Hash.kind === "official" || !quality.ok) {
-    const why = c3Hash.kind === "official" ? "The photo matches one of this recall's official images." : "The photo did not pass the quality precheck.";
+    const why =
+      c3Hash.kind === "official"
+        ? elsewhere.official
+          ? "The photo matches a picture published with another recall."
+          : "The photo matches one of this recall's official images."
+        : "The photo did not pass the quality precheck.";
     const checksStarted = performance.now();
     const c6 = await c6P;
     timings.checks_ms = ms(checksStarted);
@@ -324,7 +339,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   const c6 = await c6P;
   if (!vision) {
     const why = `Vision unavailable: ${visionError}`;
-    const c3 = evaluateC3({ dhash: variants[0], official: null, prior: hashes.prior, nearest: hashes.nearest, source: null, exif: img.exif, visionAvailable: false });
+    const c3 = evaluateC3({ dhash: variants[0], official: null, prior: hashes.prior, nearest: hashes.nearest, source: null, exif: img.exif, visionAvailable: false, elsewhere: { official: null, prior: elsewhere.prior } });
     let checks: Checks = { C1: unavailable("C1", why), C2: unavailable("C2", why), C3: c3.check, C4: evaluateC4({ rule, recall, identifiers: null }), C5: c5, C6: c6 };
     if (restingToday) checks = resting(checks);
     timings.checks_ms = ms(checksStarted);
@@ -332,7 +347,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   }
   const r = vision.report;
   const c2 = evaluateC2(r, rule);
-  const c3 = evaluateC3({ dhash: variants[0], official: null, prior: hashes.prior, nearest: hashes.nearest, source: r.photo_source, exif: img.exif, visionAvailable: true });
+  const c3 = evaluateC3({ dhash: variants[0], official: null, prior: hashes.prior, nearest: hashes.nearest, source: r.photo_source, exif: img.exif, visionAvailable: true, elsewhere: { official: null, prior: elsewhere.prior } });
   const { findings, ...c2Check } = c2;
   const checks: Checks = { C1: evaluateC1(r), C2: c2Check, C3: c3.check, C4: evaluateC4({ rule, recall, identifiers: r.identifiers }), C5: c5, C6: c6 };
   timings.checks_ms = ms(checksStarted);

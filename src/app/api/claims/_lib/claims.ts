@@ -267,13 +267,20 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   const claim = { id: claimId };
   const linked = options.link ? { view: options.link } : null;
 
-  const [priorRows, [recallCount]] = await Promise.all([
+  const [priorRows, elsewhereRows, [recallCount]] = await Promise.all([
     db()
       .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash })
       .from(schema.imageHashes)
       .where(and(eq(schema.imageHashes.source, "claim"), eq(schema.imageHashes.recallNumber, recall.number)))
       .orderBy(desc(schema.imageHashes.id))
       .limit(5000),
+    // Earlier claim photos on every other recall, from any firm: only their hashes, matched at CATALOG_MAX_DISTANCE.
+    db()
+      .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash })
+      .from(schema.imageHashes)
+      .where(and(eq(schema.imageHashes.source, "claim"), ne(schema.imageHashes.recallNumber, recall.number)))
+      .orderBy(desc(schema.imageHashes.id))
+      .limit(20000),
     db()
       .select({ n: count() })
       .from(schema.claims)
@@ -298,7 +305,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   let result: VerifyResult;
   try {
     result = await verifyPhoto(
-      { photo: input.photo, mime: input.mime ?? undefined, recall: verifyRecallFor(recall), proofRule: rule, priorHashes: priorRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), claimContext: ctx },
+      { photo: input.photo, mime: input.mime ?? undefined, recall: verifyRecallFor(recall), proofRule: rule, priorHashes: priorRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), elsewhereHashes: elsewhereRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), claimContext: ctx },
       deps,
     );
   } catch (e) {

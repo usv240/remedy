@@ -40,7 +40,7 @@ const PARTS: Part[] = [
     name: "Technology",
     line: "Claude Opus 5.5 reads every remedy into a structured proof rule and checks photos against it; plain code makes the decision and PayPal pays.",
     more: "Every part, from the batch to the payout",
-    where: `${fmtInt(extraction().counts.recalls)} proof rules extracted with the Message Batches API and a self-check pass; photo checks that start with a free perceptual-hash match against official images and earlier claims; Elastic hybrid search with a reranker; PayPal Payouts, refunds to the original capture inside 180 days, Orders v2 and signature-checked webhooks; a public API with keys and limits, OpenAPI 3.1, and an MCP server.`,
+    where: `${fmtInt(extraction().counts.recalls)} proof rules extracted with the Message Batches API and a self-check pass; photo checks that start with a free perceptual-hash match against official images and earlier claims, across every recall and every firm; Elastic hybrid search with a reranker; PayPal Payouts, refunds to the original capture inside 180 days, Orders v2 and signature-checked webhooks; a public API with keys and limits, OpenAPI 3.1, and an MCP server.`,
     links: [
       ["/recalls/27056", "A proof rule"],
       ["/try/shop", "Refund to the purchase"],

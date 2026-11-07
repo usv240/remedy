@@ -76,7 +76,7 @@ export const CLAIM_INFO = {
     title: "The six checks",
     what: "Right product, made safe, your own photo, within the recall, claim limits, and not already refunded.",
     why: "Together they make sure the refund goes to a real owner whose product is now safe, which keeps the refund pool for real owners.",
-    technical: "C1 and C2 come from one Claude vision call with structured output. C3 compares a perceptual hash with the recall's official images and earlier claims. C4 to C6 are code, and C6 asks PayPal about any linked purchase. The decision is made in code, never by the model.",
+    technical: "C1 and C2 come from one Claude vision call with structured output. C3 compares a perceptual hash with the recall's official images and earlier claims, and, within 4 bits, with every other recall's published pictures and earlier claims. C4 to C6 are code, and C6 asks PayPal about any linked purchase. The decision is made in code, never by the model.",
     sponsor: ["Claude", "PayPal"],
   },
   "check.C1": { title: "Right product", what: "The photo shows the recalled product.", why: "The refund is for this recall's product, so the photo is compared with the official CPSC pictures and model details." },

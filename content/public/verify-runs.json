@@ -1,6 +1,6 @@
 {
  "note": "Recorded runs of verifyPhoto (src/lib/verify) on the fixture photos in content/verify/fixtures. Free cases need no model. Vision cases are live Claude Opus 5.5 calls, recorded once; the pages never call Claude. Written by scripts/public/record-runs.ts.",
- "recordedAt": "2026-11-07T06:19:44.615Z",
+ "recordedAt": "2026-11-07T16:30:52.446Z",
  "totalUsd": 0.0216,
  "runs": [
   {
@@ -27,12 +27,12 @@
     },
     "model": "claude-opus-5-5",
     "timings": {
-     "decode_ms": 465,
-     "official_ms": 273,
+     "decode_ms": 171,
+     "official_ms": 172,
      "vision_ms": 13112,
-     "checks_ms": 13,
+     "checks_ms": 3,
      "reviewers_ms": 59,
-     "total_ms": 13660
+     "total_ms": 13358
     },
     "checks": {
      "C1": {
@@ -115,12 +115,12 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 497,
-     "official_ms": 435,
+     "decode_ms": 198,
+     "official_ms": 139,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 790
+     "total_ms": 280
     },
     "checks": {
      "C1": {
@@ -174,7 +174,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:19:44.615Z"
+   "ran_at": "2026-11-07T16:30:52.446Z"
   },
   {
    "id": "official-image-power-bank",
@@ -203,12 +203,12 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 205,
-     "official_ms": 120,
+     "decode_ms": 127,
+     "official_ms": 78,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 211
+     "total_ms": 131
     },
     "checks": {
      "C1": {
@@ -262,7 +262,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:19:44.615Z"
+   "ran_at": "2026-11-07T16:30:52.446Z"
   },
   {
    "id": "duplicate-rotated-official",
@@ -291,12 +291,12 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 171,
-     "official_ms": 102,
+     "decode_ms": 113,
+     "official_ms": 87,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 176
+     "total_ms": 115
     },
     "checks": {
      "C1": {
@@ -350,7 +350,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:19:44.615Z"
+   "ran_at": "2026-11-07T16:30:52.446Z"
   },
   {
    "id": "duplicate-tilted-official",
@@ -379,12 +379,12 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 210,
-     "official_ms": 148,
+     "decode_ms": 167,
+     "official_ms": 118,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 222
+     "total_ms": 169
     },
     "checks": {
      "C1": {
@@ -438,7 +438,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:19:44.615Z"
+   "ran_at": "2026-11-07T16:30:52.446Z"
   },
   {
    "id": "duplicate-earlier-claim",
@@ -465,12 +465,12 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 192,
-     "official_ms": 202,
+     "decode_ms": 64,
+     "official_ms": 112,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 203
+     "total_ms": 223
     },
     "checks": {
      "C1": {
@@ -524,7 +524,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:19:44.615Z"
+   "ran_at": "2026-11-07T16:30:52.446Z"
   },
   {
    "id": "blurry",
@@ -551,12 +551,12 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 379,
-     "official_ms": 148,
+     "decode_ms": 170,
+     "official_ms": 57,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 384
+     "total_ms": 188
     },
     "checks": {
      "C1": {
@@ -610,7 +610,95 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:19:44.615Z"
+   "ran_at": "2026-11-07T16:30:52.446Z"
+  },
+  {
+   "id": "another-recalls-picture",
+   "title": "Another recall's picture",
+   "about": "The CPSC's made-safe photo from hair dryer recall 26125, sent for a different hair dryer recall, 26754.",
+   "expect": "Matched to the other recall's picture",
+   "photo": "official/26125-hair-dryer-cord-cut.png",
+   "recall": "26754",
+   "needs_vision": false,
+   "result": {
+    "decision": "retake",
+    "decided_by": "own_photo",
+    "summary": {
+     "plain": "Please send a photo of your own product.",
+     "technical": "Retake (own_photo). Own-photo check: Matches recall 26125's official image https://www.cpsc.gov/s3fs-public/RecalledMyOnlyStylerRootBoosterHairDryer.png (\"Recalled MyOnlyStyler Root Booster Hair Dryer with the power cord cut in half for disposal\") at 0 bits (upright), in the check against every recall's published pictures at 4 bits or under. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "guidance": {
+     "plain": "Please send a photo of your own product.",
+     "steps": [
+      "Take a new photo of the product with your phone camera.",
+      "Show the product itself, not a screen, a printout or the recall picture.",
+      "We ask for your own photo so the refund goes to the person who has the product."
+     ],
+     "technical": "Own-photo check: Matches recall 26125's official image https://www.cpsc.gov/s3fs-public/RecalledMyOnlyStylerRootBoosterHairDryer.png (\"Recalled MyOnlyStyler Root Booster Hair Dryer with the power cord cut in half for disposal\") at 0 bits (upright), in the check against every recall's published pictures at 4 bits or under. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "amount": null,
+    "model": null,
+    "timings": {
+     "decode_ms": 124,
+     "official_ms": 62,
+     "vision_ms": 0,
+     "checks_ms": 0,
+     "reviewers_ms": 0,
+     "total_ms": 154
+    },
+    "checks": {
+     "C1": {
+      "name": "Right product",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches a picture published with another recall."
+     },
+     "C2": {
+      "name": "Made safe",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches a picture published with another recall."
+     },
+     "C3": {
+      "name": "Your own photo",
+      "status": "fail",
+      "pass": false,
+      "score": null,
+      "reason": "This picture was published with another recall. Please send a photo of your own product.",
+      "technical": "Matches recall 26125's official image https://www.cpsc.gov/s3fs-public/RecalledMyOnlyStylerRootBoosterHairDryer.png (\"Recalled MyOnlyStyler Root Booster Hair Dryer with the power cord cut in half for disposal\") at 0 bits (upright), in the check against every recall's published pictures at 4 bits or under. dHash e0808ed69ce174f8; nearest official 19 bits, nearest earlier claim none (reused at 10 or less)."
+     },
+     "C4": {
+      "name": "Within the recall",
+      "status": "skipped",
+      "pass": false,
+      "score": null,
+      "reason": "Not checked yet.",
+      "technical": "The photo matches a picture published with another recall."
+     },
+     "C5": {
+      "name": "Claim limits",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "This claim is within the limit for one purchase.",
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 2295 units."
+     },
+     "C6": {
+      "name": "Not already refunded",
+      "status": "pass",
+      "pass": true,
+      "score": null,
+      "reason": "No PayPal purchase linked.",
+      "technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+     }
+    }
+   },
+   "usd": 0,
+   "ran_at": "2026-11-07T16:30:52.446Z"
   },
   {
    "id": "cord-cut-example",
