@@ -7,7 +7,7 @@ const CODE: { what: string; where: string }[] = [
   { what: "Every pass mark, such as 0.85 for the right product", where: "src/lib/verify/checks.ts (LIMITS)" },
   { what: "The refund amount: the firm's or the purchase's, whichever is lower", where: "computeAmount in src/lib/verify/checks.ts; src/lib/payments/router.ts" },
   { what: "Which recall and proof rule apply: the claim's recall and its stored rule", where: "ruleFor in src/app/api/claims/_lib/recall.ts" },
-  { what: "The marker word, model and lot ranges, claim limits, and photo matches", where: "src/lib/verify/checks.ts, identifiers.ts, dhash.ts" },
+  { what: "The marker word, model and lot ranges, claim limits, photo matches, and when the screen signs Claude lists outweigh its own label", where: "src/lib/verify/checks.ts (CONTRADICTING_SIGNS), identifiers.ts, dhash.ts" },
   { what: "When money moves and to whom: the auto-approve cap, a refund to the purchase inside 180 days, or a payout", where: "planPayment in src/lib/payments/router.ts" },
   { what: "Deleting a photo that shows a person, and every owner's photo 90 days after the decision", where: "src/lib/ops/photos.ts" },
 ];

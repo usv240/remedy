@@ -117,6 +117,12 @@ export function evaluateC2(v: VisionReport, rule: VerifyProofRule): CheckResult 
 
 export type OwnPhotoKind = "official" | "earlier_claim" | "screen" | "digital" | null;
 
+/** Signs the model can list for a photo of a screen, and for a photo of a printout. */
+const SCREEN_SIGNS = ["moire", "screen_bezel", "screen_glare", "pixel_grid", "app_or_web_ui"] as const;
+const PRINT_SIGNS = ["paper_texture", "halftone_dots", "paper_edge"] as const;
+/** This many of one kind's signs on a photo the model calls a camera photo: code does not take it as the owner's own. */
+export const CONTRADICTING_SIGNS = 2;
+
 /**
  * The hash half of C3, with no model call: matches against the claimed recall's own official images and its earlier
  * claim photos only. The screen-or-printout reading in the vision call is the main own-photo signal.
@@ -178,6 +184,15 @@ export function evaluateC3(args: {
   }
   if ((screenLike && conf >= LIMITS.screenUnclear) || (args.source.kind === "digital_image" && conf >= LIMITS.digitalUnclear)) {
     return { kind: null, check: result("C3", "unclear", "We could not confirm this photo was taken by you.", tech, { evidence, score: conf }) };
+  }
+  // The model's own signs can disagree with its label. Two or more screen signs (or printout signs) on a photo it calls a
+  // camera photo are not taken as the owner's own photo: a person looks instead. A photo of a monitor read on 2026-11-06
+  // as camera_photo 0.75 with screen_bezel, screen_glare and app_or_web_ui is the case this closes.
+  const screenSigns = args.source.signs.filter((s) => (SCREEN_SIGNS as readonly string[]).includes(s)).length;
+  const printSigns = args.source.signs.filter((s) => (PRINT_SIGNS as readonly string[]).includes(s)).length;
+  if (!screenLike && args.source.kind !== "digital_image" && (screenSigns >= CONTRADICTING_SIGNS || printSigns >= CONTRADICTING_SIGNS)) {
+    const what = screenSigns >= CONTRADICTING_SIGNS ? `${screenSigns} screen signs` : `${printSigns} printout signs`;
+    return { kind: null, check: result("C3", "unclear", "We could not confirm this photo was taken by you.", `${tech} Code: ${what} disagree with the label ${args.source.kind}, so the photo is not taken as the owner's own.`, { evidence, score: conf }) };
   }
   return { kind: null, check: result("C3", "pass", "This is a new photo of the product.", tech, { evidence, score: conf }) };
 }

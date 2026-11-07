@@ -6,7 +6,8 @@
  *   npx tsx --env-file=.env.local scripts/verify/sweep.ts --run --yes     spends real money; get approval first
  *   options: --config opus-low,haiku-medium   --trials 3   --max-usd 3   --fresh (ignore AI_CACHE_DIR replays)
  *            --set sample: only the fixture cases marked sweep: "sample" (photos for a sample recall), written to
- *            content/verify/sweep-sample.json, so the four-setting comparison keeps the identical cases in every cell
+ *            content/verify/sweep-sample.json, so the four-setting comparison keeps the identical cases in every cell;
+ *            add --case id,id to run only those, keeping every other row already in the set's file
  *            --cap-usd 4.75 --since <ISO time>: stop before the shared approved budget, read from ai_usage, runs out
  *
  * Cells differ only in model and effort; every cell runs the identical cases in the same order, with the
@@ -16,7 +17,7 @@
  * twice; pass --fresh for repeat trials. Writes content/verify/sweep-results.json.
  */
 import Anthropic from "@anthropic-ai/sdk";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { capFromArgs, costUsd, spendSince } from "../../src/lib/ai/usage";
 import { verifyPhoto, type VerifyResult } from "../../src/lib/verify";
@@ -60,6 +61,8 @@ const mergeWith = arg("--merge-with");
 /** A named case set: the fixture cases with sweep: "<set>", run on their own and written to sweep-<set>.json. */
 const set = arg("--set");
 const OUT = set ? `sweep-${set}.json` : "sweep-results.json";
+/** Only these fixture case ids, for adding photos to a set without running the others again. */
+const onlyCases = arg("--case")?.split(",").filter(Boolean);
 if (process.argv.includes("--fresh")) {
   delete process.env.AI_CACHE_DIR;
   // A local proxy (for example headroom on 127.0.0.1) can answer a repeated identical request from its own cache, which
@@ -77,7 +80,8 @@ const claimContext = { firmAmount: { value: "34.99", currency: "USD" }, autoCap:
 /** Vision cases with a known answer, grouped by recall so the prompt cache is read within a cell. */
 function sweepCases(): FixtureCase[] {
   const vision = [...loadFixtureCases(), ...loadUserCases()].filter((c) => c.needs_vision);
-  return (set ? vision.filter((c) => c.sweep === set) : vision.filter((c) => c.sweep === undefined || c.sweep === true)).sort((a, b) => a.recall.localeCompare(b.recall));
+  const chosen = set ? vision.filter((c) => c.sweep === set) : vision.filter((c) => c.sweep === undefined || c.sweep === true);
+  return chosen.filter((c) => !onlyCases || onlyCases.includes(c.id)).sort((a, b) => a.recall.localeCompare(b.recall));
 }
 
 async function estimate(configs: Config[], cases: FixtureCase[]) {
@@ -134,8 +138,26 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
   const perCase: Record<string, unknown>[] = [];
   let stopped: string | null = null;
   // Trials from an earlier run that this run does not repeat are kept, so repeat trials can be added later.
-  const prior = mergeWith ? (JSON.parse(readFileSync(mergeWith, "utf8")) as { summary: Record<string, unknown>[]; cases: Record<string, unknown>[]; runs?: unknown[] }) : null;
-  const mine = (t: unknown) => typeof t === "number" && t > trialOffset && t <= trialOffset + trials;
+  // A named set adds to its own file: the rows for the cases and settings this run repeats are replaced, all others kept.
+  const setFile = path.join(FIXTURES_DIR, "..", OUT);
+  const priorFile = mergeWith ?? (set && existsSync(setFile) ? setFile : null);
+  const prior = priorFile ? (JSON.parse(readFileSync(priorFile, "utf8")) as { summary: Record<string, unknown>[]; cases: Record<string, unknown>[]; runs?: unknown[]; spentUsd?: number }) : null;
+  const inTrials = (t: unknown) => typeof t === "number" && t > trialOffset && t <= trialOffset + trials;
+  const ranCases = new Set(cases.map((c) => c.id));
+  const ranConfigs = new Set(configs.map((c) => c.id));
+  const mine = (row: Record<string, unknown>) => inTrials(row.trial) && (!set || (ranCases.has(String(row.case)) && ranConfigs.has(String(row.config))));
+  const keptCases = () => prior?.cases.filter((c) => !mine(c)) ?? [];
+  /** For a named set, each setting and trial is scored again over all of its rows, kept and new. */
+  const setSummary = (rows: Record<string, unknown>[]) => {
+    const groups = new Map<string, Record<string, unknown>[]>();
+    for (const r of rows) groups.set(`${r.config}|${r.trial}`, [...(groups.get(`${r.config}|${r.trial}`) ?? []), r]);
+    return [...groups.values()].map((g) => {
+      const pass = g.filter((r) => r.ok).length;
+      const usd = g.reduce((s, r) => s + Number(r.usd ?? 0), 0);
+      const ms = g.map((r) => Number(r.ms ?? 0)).sort((a, b) => a - b);
+      return { config: g[0].config, trial: g[0].trial, pass, of: g.length, "pass %": Math.round((pass / g.length) * 100), usd: Number(usd.toFixed(3)), "usd per case": Number((usd / g.length).toFixed(4)), "median ms": ms[Math.floor((ms.length - 1) / 2)] ?? null };
+    });
+  };
   const save = () =>
     writeFileSync(
       path.join(FIXTURES_DIR, "..", OUT),
@@ -145,10 +167,10 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
           trials: trialOffset + trials,
           configs,
           stopped,
-          runs: [...(prior?.runs ?? (prior ? [{ trials: "earlier", note: "kept from --merge-with" }] : [])), { trials: `${trialOffset + 1} to ${trialOffset + trials}`, direct: !process.env.ANTHROPIC_BASE_URL, spentUsd: Number(spent.toFixed(4)) }],
-          summary: [...(prior?.summary.filter((s) => !mine(s.trial)) ?? []), ...results],
-          cases: [...(prior?.cases.filter((c) => !mine(c.trial)) ?? []), ...perCase],
-          spentUsd: Number(spent.toFixed(4)),
+          runs: [...(prior?.runs ?? (prior ? [{ trials: "earlier", note: "kept from --merge-with" }] : [])), { trials: `${trialOffset + 1} to ${trialOffset + trials}`, ...(set ? { cases: [...ranCases] } : {}), direct: !process.env.ANTHROPIC_BASE_URL, spentUsd: Number(spent.toFixed(4)) }],
+          summary: set ? setSummary([...keptCases(), ...perCase]) : [...(prior?.summary.filter((s) => !inTrials(s.trial)) ?? []), ...results],
+          cases: [...keptCases(), ...perCase],
+          spentUsd: Number((spent + (set ? (prior?.spentUsd ?? 0) : 0)).toFixed(4)),
         },
         null,
         1,
