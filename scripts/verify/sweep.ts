@@ -5,6 +5,8 @@
  *   npx tsx --env-file=.env.local scripts/verify/sweep.ts                 estimate only, free (count_tokens)
  *   npx tsx --env-file=.env.local scripts/verify/sweep.ts --run --yes     spends real money; get approval first
  *   options: --config opus-low,haiku-medium   --trials 3   --max-usd 3   --fresh (ignore AI_CACHE_DIR replays)
+ *            --set sample: only the fixture cases marked sweep: "sample" (photos for a sample recall), written to
+ *            content/verify/sweep-sample.json, so the four-setting comparison keeps the identical cases in every cell
  *            --cap-usd 4.75 --since <ISO time>: stop before the shared approved budget, read from ai_usage, runs out
  *
  * Cells differ only in model and effort; every cell runs the identical cases in the same order, with the
@@ -55,6 +57,9 @@ const MARGIN_USD = 0.25;
 const trialOffset = Number(arg("--trial-offset") ?? 0);
 /** An earlier results file whose other trials are kept in the output. */
 const mergeWith = arg("--merge-with");
+/** A named case set: the fixture cases with sweep: "<set>", run on their own and written to sweep-<set>.json. */
+const set = arg("--set");
+const OUT = set ? `sweep-${set}.json` : "sweep-results.json";
 if (process.argv.includes("--fresh")) {
   delete process.env.AI_CACHE_DIR;
   // A local proxy (for example headroom on 127.0.0.1) can answer a repeated identical request from its own cache, which
@@ -71,7 +76,8 @@ const claimContext = { firmAmount: { value: "34.99", currency: "USD" }, autoCap:
 
 /** Vision cases with a known answer, grouped by recall so the prompt cache is read within a cell. */
 function sweepCases(): FixtureCase[] {
-  return [...loadFixtureCases(), ...loadUserCases()].filter((c) => c.needs_vision && c.sweep !== false).sort((a, b) => a.recall.localeCompare(b.recall));
+  const vision = [...loadFixtureCases(), ...loadUserCases()].filter((c) => c.needs_vision);
+  return (set ? vision.filter((c) => c.sweep === set) : vision.filter((c) => c.sweep === undefined || c.sweep === true)).sort((a, b) => a.recall.localeCompare(b.recall));
 }
 
 async function estimate(configs: Config[], cases: FixtureCase[]) {
@@ -132,7 +138,7 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
   const mine = (t: unknown) => typeof t === "number" && t > trialOffset && t <= trialOffset + trials;
   const save = () =>
     writeFileSync(
-      path.join(FIXTURES_DIR, "..", "sweep-results.json"),
+      path.join(FIXTURES_DIR, "..", OUT),
       JSON.stringify(
         {
           ranAt: new Date().toISOString(),
@@ -208,7 +214,7 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
   if (stopped) console.log(stopped);
   console.table(results);
   save();
-  console.log(`Spent $${spent.toFixed(3)} by this run. Results in content/verify/sweep-results.json.`);
+  console.log(`Spent $${spent.toFixed(3)} by this run. Results in content/verify/${OUT}.`);
 }
 
 (async () => {

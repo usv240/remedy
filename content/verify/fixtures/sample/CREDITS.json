@@ -1,10 +1,33 @@
 {
-  "note": "Photos for Brightline Home's sample recall, which is fictional. They show one real laptop charger, before and after its cord was cut. The charger's maker has not recalled it; its brand marks and label text were removed for this demo. The cut in cord-cut.jpg is exactly as photographed.",
+  "note": "Photos for Brightline Home's sample recall BH-2026-01, which is fictional: one real laptop charger by Dmitry G on Wikimedia Commons (public domain, PD-self). cord-cut.jpg shows its cord cut; the other two show the same charger opened up with its cord still attached, so not yet made safe the way the recall asks. Each is exactly as photographed, saved again as JPEG without camera metadata. The charger's maker has not recalled it.",
   "photographer": "Dmitry G",
   "license": "Public domain (released by the author, PD-self)",
   "files": {
-    "intact.jpg": { "source": "https://commons.wikimedia.org/wiki/File:DELL-DELL_Charger.JPG", "taken": "2010-02-18", "edit": "label and brand marks removed by inpainting" },
-    "cord-detail.jpg": { "source": "https://commons.wikimedia.org/wiki/File:DELL-DELL_Charger.JPG", "edit": "a crop of intact.jpg: where the cord meets the charger" },
-    "cord-cut.jpg": { "source": "https://commons.wikimedia.org/wiki/File:DELL-Dell_charger_cable.JPG", "taken": "2010-02-16", "edit": "none" }
+    "intact.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-DELL_Charger.JPG",
+      "taken": "2010-02-18",
+      "edit": "label and brand marks removed by inpainting"
+    },
+    "cord-detail.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-DELL_Charger.JPG",
+      "edit": "a crop of intact.jpg: where the cord meets the charger"
+    },
+    "cord-cut.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-Dell_charger_cable.JPG",
+      "taken": "2010-02-16",
+      "edit": "none"
+    },
+    "opened-cord-attached.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-Dell_three_wire_in_cable.JPG",
+      "taken": "2010-01-16",
+      "edit": "none",
+      "shows": "the charger's case opened, the cord still attached where it meets the case"
+    },
+    "opened-case.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-Dell_charger_disassemble.JPG",
+      "taken": "2010-02-16",
+      "edit": "none",
+      "shows": "the charger taken apart, the cord still wired to the board"
+    }
   }
 }

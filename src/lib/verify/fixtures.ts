@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { getRecall, ruleFor, verifyRecallFor } from "@/app/api/claims/_lib/recall";
+import { loadSamplesFile } from "@/lib/recall/search";
 import type { VerifyProofRule, VerifyRecall } from "./types";
 
 /**
@@ -14,21 +16,33 @@ export const fixtureFile = (rel: string) => readFileSync(path.join(FIXTURES_DIR,
 
 type RawRecall = Omit<VerifyRecall, "images"> & { images: { url: string; caption: string; file?: string }[]; proofRule: VerifyProofRule };
 
-/** Recalls by number, with official image bytes attached so no download is needed. */
+/**
+ * Recalls by number, with official image bytes attached so no download is needed. Brightline Home's fictional sample
+ * recalls (content/recalls/samples.json) are added in the exact shape a claim sends (verifyRecallFor), with the rule
+ * the sample firm wrote.
+ */
 export function loadFixtureRecalls(): Record<string, { recall: VerifyRecall; rule: VerifyProofRule }> {
   const raw = JSON.parse(readFileSync(path.join(FIXTURES_DIR, "recalls.json"), "utf8")) as { recalls: RawRecall[] };
-  return Object.fromEntries(
+  const out: Record<string, { recall: VerifyRecall; rule: VerifyProofRule }> = Object.fromEntries(
     raw.recalls.map((r) => {
       const { proofRule, images, ...rest } = r;
       const recall: VerifyRecall = { ...rest, images: images.map((i) => ({ url: i.url, caption: i.caption, data: i.file ? fixtureFile(i.file) : undefined })) };
       return [r.number, { recall, rule: proofRule }];
     }),
   );
+  for (const { number } of loadSamplesFile().recalls) {
+    const r = getRecall(number);
+    if (r && !out[number]) out[number] = { recall: verifyRecallFor(r), rule: ruleFor(r).rule };
+  }
+  return out;
 }
 
 export type FixtureExpect = { decision?: string; not_decision?: string; decided_by?: string; checks?: Record<string, string>; not_checks?: Record<string, string>; c3_plain?: string };
-/** `sweep: false`: run once (as a preset), not in the model sweep. */
-export type FixtureCase = { id: string; photo: string; recall: string; prior_from?: string[]; needs_vision?: boolean; official_hash_check?: boolean; sweep?: boolean; expect: FixtureExpect };
+/**
+ * `sweep: false`: run once (as a preset), not in the model sweep. `sweep: "sample"`: a photo for a sample recall, run at
+ * the claim path's own setting only (scripts/verify/sweep.ts --set sample), into content/verify/sweep-sample.json.
+ */
+export type FixtureCase = { id: string; photo: string; recall: string; prior_from?: string[]; needs_vision?: boolean; official_hash_check?: boolean; sweep?: boolean | "sample"; expect: FixtureExpect };
 
 /** Whether a finished verification meets a case's expectation, with the reasons when it does not. */
 export function meetsExpectation(

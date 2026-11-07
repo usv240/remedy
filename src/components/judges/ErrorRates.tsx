@@ -44,7 +44,7 @@ export function ErrorRates() {
         </p>
         <p className="je-what">paid when it should not have been</p>
         <p className="je-def">
-          A decision to pay a photo whose known answer is no payment: a copy, a look-alike, another product, or one not yet made safe. <span className="tabular">{photos(e.wrongPay.cases)}</span>.
+          A decision to pay a photo whose known answer is no payment: a copy, a look-alike, another product, or one not yet made safe, like a charger opened up with its cord still attached. <span className="tabular">{photos(e.wrongPay.cases)}</span>.
         </p>
         {e.wrongPay.count > 0 && <p className="je-def">{happened(e.wrongPay)}</p>}
       </div>
@@ -69,7 +69,13 @@ export function ErrorRates() {
       )}
       <p className="je-src lp-tech tabular">
         Counted by src/components/judges/errors.ts from {src.sweep} ({n("sweep")} decisions: {e.sweep.cases} photos, {e.sweep.trials} trials each, at the claim path&rsquo;s setting, Claude Opus 5.5 at medium effort,
-        run {fmtDate(e.sweep.ranAt.slice(0, 10))}), {src.presets} ({n("preset")}) and {src.runs} ({n("public")}; a run that repeats a preset&rsquo;s model answer is counted once). Known answers: {src.cases} and{" "}
+        run {fmtDate(e.sweep.ranAt.slice(0, 10))}),{" "}
+        {e.sample && (
+          <>
+            {src.sample} ({n("sample")}: Brightline&rsquo;s sample charger, {e.sample.photos} photos, {e.sample.trials} trials each at the same setting, run {fmtDate(e.sample.ranAt.slice(0, 10))}),{" "}
+          </>
+        )}
+        {src.presets} ({n("preset")}) and {src.runs} ({n("public")}; a run that repeats a preset&rsquo;s model answer is counted once). Known answers: {src.cases} and{" "}
         {src.presetIndex}. Across all {e.sweep.configs} model settings in the sweep, paid when it should not have been: {e.sweep.allConfigsWrongPay.count} of {e.sweep.allConfigsWrongPay.of}.
       </p>
     </section>

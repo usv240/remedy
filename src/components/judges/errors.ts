@@ -10,6 +10,8 @@
  * The decisions come from three files:
  *  - content/verify/sweep-results.json: the measured sweep, three trials per case. Only the claim path's own setting
  *    (Claude Opus 5.5 at medium effort) counts toward the two rates; all four configurations are reported beside them.
+ *  - content/verify/sweep-sample.json: the same sweep at the claim path's setting on the photos for Brightline Home's
+ *    fictional sample recall (one real charger: its cord cut, and opened up with its cord still attached).
  *  - content/presets/recorded/*.json: each /try preset's one recorded live answer, with the decision it led to.
  *  - content/public/verify-runs.json: the public recorded runs. A run that replays a preset's recording, or reads the
  *    same model answer back from the verification cache, is counted once, with the preset.
@@ -50,6 +52,8 @@ const TITLES: Record<string, string> = {
   "made-safe-hair-dryer-cord-cut": "the CPSC's own photo of the recall 26125 hair dryer with its cord cut, sent with the official-picture match switched off",
   "made-safe-helmet-straps-cut": "the CPSC's own photo of the recall 25007 helmet with its straps cut, sent with the official-picture match switched off",
   "sample-charger-cut": "Brightline's sample charger with its cord cut",
+  "sample-charger-opened-cord-attached": "Brightline's sample charger opened up, its cord still attached",
+  "sample-charger-opened-case": "Brightline's sample charger taken apart, its cord still wired to the board",
 };
 
 /** The sweep configuration that is the claim path's own setting (src/lib/verify/vision.ts: Opus 5.5, medium effort). */
@@ -60,7 +64,7 @@ const REPLAYS = new Set(["sample-charger-cut"]);
 const PUBLIC_CASE: Record<string, string> = { "cord-cut-example": "made-safe-hair-dryer-cord-cut" };
 
 export type Decided = {
-  source: "sweep" | "preset" | "public";
+  source: "sweep" | "sample" | "preset" | "public";
   caseId: string;
   trial: number | null;
   decision: string;
@@ -76,6 +80,7 @@ type RunsFile = { recordedAt: string; runs: { id: string; recall: string; photo:
 
 export const SOURCES = {
   sweep: "content/verify/sweep-results.json",
+  sample: "content/verify/sweep-sample.json",
   presets: "content/presets/recorded/*.json",
   runs: "content/public/verify-runs.json",
   cases: "content/verify/fixtures/cases.json",
@@ -90,7 +95,7 @@ function caseFor(cases: Case[], recall: string, photo: string, hashOff: boolean)
 /** A reading case on the recall's own published picture (no decision named): outside both money rates, reported beside them. */
 const isOfficialReading = (c: Case | undefined) => Boolean(c && c.photo.startsWith("official/") && !c.expect.decision && !c.expect.not_decision);
 
-export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: SweepFile; allConfigs: Decided[]; officialPicture: { caseId: string; decision: string }[] } {
+export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: SweepFile; sample: SweepFile | null; allConfigs: Decided[]; officialPicture: { caseId: string; decision: string }[] } {
   const cases = read<{ cases: Case[] }>("content", "verify", "fixtures", "cases.json").cases;
   const byId = new Map(cases.map((c) => [c.id, c]));
   const sweep = read<SweepFile>("content", "verify", "sweep-results.json");
@@ -105,6 +110,14 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
     const d: Decided = { source: "sweep", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail" };
     allConfigs.push(d);
     if (row.config === config) out.push(d);
+  }
+
+  // The sample recall's photos, run at the claim path's setting only: in the two rates, not in the four-setting figure.
+  const sample = existsSync(path.join(ROOT, "content", "verify", "sweep-sample.json")) ? read<SweepFile>("content", "verify", "sweep-sample.json") : null;
+  for (const row of sample?.cases ?? []) {
+    if (row.config !== config) continue;
+    const known = knownAnswer(byId.get(row.case)?.expect, byId.get(row.case)?.photo);
+    if (known) out.push({ source: "sample", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail" });
   }
 
   const index = read<PresetIndex>("content", "presets", "index.json");
@@ -138,7 +151,7 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
     const c3 = r.result.checks.C3?.status;
     out.push({ source: "public", caseId: c.id, trial: null, decision: r.result.decision, known, notOwn: c3 === "unclear" || c3 === "fail" });
   }
-  return { all: out, sweep, allConfigs, officialPicture };
+  return { all: out, sweep, sample, allConfigs, officialPicture };
 }
 
 export type ErrorRate = {
@@ -166,7 +179,7 @@ function rate(list: Decided[], miss: (d: Decided) => boolean): ErrorRate {
 
 /** The two rates, the sweep's own figures beside them, and where each number came from. */
 export function errorRates() {
-  const { all, sweep, allConfigs, officialPicture } = decisions();
+  const { all, sweep, sample, allConfigs, officialPicture } = decisions();
   const notPaid = all.filter((d) => d.known === "not_paid");
   const paid = all.filter((d) => d.known === "paid");
   const wrongPay = rate(notPaid, (d) => d.decision === "verified");
@@ -180,7 +193,8 @@ export function errorRates() {
     /** The recall's own published picture sent as a claim photo, with the official-picture match off: never paid is right. */
     officialPicture: { of: officialPicture.length, paid: officialPicture.filter((d) => d.decision === "verified").length, cases: new Set(officialPicture.map((d) => d.caseId)).size },
     photos: new Set(all.map((d) => d.caseId)).size,
-    bySource: (["sweep", "preset", "public"] as const).map((s) => ({ source: s, decisions: all.filter((d) => d.source === s).length })),
+    bySource: (["sweep", "sample", "preset", "public"] as const).map((s) => ({ source: s, decisions: all.filter((d) => d.source === s).length })),
+    sample: sample ? { photos: new Set(all.filter((d) => d.source === "sample").map((d) => d.caseId)).size, trials: sample.trials, ranAt: sample.ranAt } : null,
     sweep: {
       ranAt: sweep.ranAt,
       trials: sweep.trials,
