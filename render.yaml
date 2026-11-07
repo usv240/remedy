@@ -12,8 +12,9 @@ services:
     plan: starter # 0.5 CPU, 512 MB, always on
     region: oregon
     buildCommand: npm ci && npm run build
-    # Apply the reviewed schema (idempotent), load the recall data, and seed the sample firm and its sample claim history.
-    preDeployCommand: node scripts/migrate.mjs && npx tsx scripts/load-recalls.ts && npx tsx scripts/seed.ts && npx tsx scripts/seed-firm.ts
+    # Apply the reviewed schema (idempotent), load the recall data, seed the sample firm and its sample claim history, and
+    # load the recorded photo verdicts for the demo presets (no model call).
+    preDeployCommand: node scripts/migrate.mjs && npx tsx scripts/load-recalls.ts && npx tsx scripts/seed.ts && npx tsx scripts/seed-firm.ts && npx tsx scripts/verify/precompute.ts --run --yes --recorded-only
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeployTrigger: commit

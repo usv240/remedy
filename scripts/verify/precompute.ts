@@ -8,6 +8,8 @@
  *   npx tsx --env-file=.env.local scripts/verify/precompute.ts                  plan and expected cost, free
  *   npx tsx --env-file=.env.local scripts/verify/precompute.ts --run --yes      records what is missing
  *   add --cap-usd 4.75 --since <ISO time> to stop before the approved measurement budget (read from ai_usage) runs out
+ *   npx tsx scripts/verify/precompute.ts --run --yes --recorded-only            seeds recordings only, never calls Claude
+ *                                                                               (Render's pre-deploy runs this)
  *
  * Presets come from content/presets/index.json, plus the team's own photos in content/verify/fixtures/user/expected.json.
  */
@@ -21,6 +23,8 @@ import { loadFixtureCases, meetsExpectation } from "../../src/lib/verify/fixture
 
 const run = process.argv.includes("--run");
 const yes = process.argv.includes("--yes");
+/** Seed only what is already recorded: no model call, so it is safe in a deploy step. */
+const recordedOnly = process.argv.includes("--recorded-only");
 const budget = capFromArgs(process.argv);
 /** One Opus 5.5 vision call, from the measured ones in ai_usage ($0.022 to $0.038); a firm review adds two reviewers. */
 const PER_CALL = costUsd("claude-opus-5-5", { input_tokens: 1700, cache_creation_input_tokens: 900, cache_read_input_tokens: 3400, output_tokens: 1000 });
@@ -81,6 +85,10 @@ async function seed(j: Job, rec: Recorded) {
     let rec = x.recording;
     let fresh = false;
     if (!rec?.vision) {
+      if (recordedOnly) {
+        console.log(`Skipped ${x.j.p.id}: no recording yet, and --recorded-only makes no model call.`);
+        continue;
+      }
       if (budget) {
         const s = await spendSince(budget.since);
         if (s.usd + PER_CALL * 3 > budget.cap) throw new Error(`Stopped before ${x.j.p.id}: $${s.usd.toFixed(3)} spent since ${budget.since.toISOString()}, cap $${budget.cap}.`);
