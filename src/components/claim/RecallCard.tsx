@@ -1,4 +1,5 @@
 import type { PublicRecall } from "@/app/api/claims/_lib/recall";
+import { SAMPLE_PHOTO_CREDIT } from "@/app/api/claims/_lib/terms";
 import { ClaimInfo } from "./ClaimInfo";
 import { day } from "./format";
 
@@ -23,7 +24,8 @@ export function RecallCard({ recall, compact = false }: { recall: PublicRecall; 
       </div>
       {img && !compact && (
         <p className="cl-recall-cap">
-          {img.caption ? `${img.caption}. ` : ""}Image: US Consumer Product Safety Commission.
+          {img.caption ? `${img.caption}. ` : ""}
+          {recall.sample ? `${SAMPLE_PHOTO_CREDIT}.` : "Image: US Consumer Product Safety Commission."}
         </p>
       )}
       {!compact && (
@@ -49,7 +51,7 @@ export function RecallCard({ recall, compact = false }: { recall: PublicRecall; 
       {!compact && (
         <details className="cl-remedy">
           <summary>
-            <span className="cl-remedy-k">The remedy, in the CPSC&rsquo;s words</span>
+            <span className="cl-remedy-k">{recall.sample ? "The remedy, in the sample firm’s words" : "The remedy, in the CPSC’s words"}</span>
             {/* Closed, the first line of the quote shows under the label, so it reads as a quote to open, not a heading. */}
             <span className="cl-remedy-peek" aria-hidden="true">
               &ldquo;{recall.remedyText}&rdquo;
