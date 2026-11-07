@@ -8,8 +8,8 @@ import { VisionReportSchema, type VisionReport } from "./vision-schema";
 import type { VerifyProofRule, VerifyRecall } from "./types";
 
 /**
- * One structured Claude vision call for C1 (right product), C2 (made safe), C3 (photo of a screen or printout) and
- * C4 (identifiers). The fixed instructions are a cached system block; the recall's data and official images are a
+ * One structured Claude vision call for C1 (right product), C2 (made safe), C3 (photo of a screen or printout),
+ * C4 (identifiers) and whether a person is in the photo (code then asks for a photo of the product alone). The fixed instructions are a cached system block; the recall's data and official images are a
  * second cached block, so every later claim on the same recall reads them from the cache.
  */
 
@@ -39,6 +39,8 @@ Handwritten text (handwritten_text): list every piece of handwritten or marker w
 Identifiers: read any model number, lot or batch number, and date code printed on the product or its label, exactly as printed. Use null for anything you cannot read clearly. Never guess characters.
 
 Own photo (photo_source): decide whether this is a camera photo of a physical object (camera_photo), a photo of a screen showing a picture (moire, a screen bezel, glare on glass, a visible pixel grid, an app or web interface), a photo of a printout (paper texture, halftone dots, a paper edge), or a digital image such as a screenshot, a catalog shot or a downloaded picture (a perfectly clean studio background, a watermark, no camera noise). List the signs you see. A plain table, wall or floor behind the product is not a sign on its own.
+
+Person (person): visible is true when a person can be seen in the owner's photo: a face, a body or part of one beyond the hands, or a child. Hands or fingers holding the product, on their own, do not count, and neither does a picture of a person printed on the product or its packaging. List what you see in kinds and say where. This is a separate finding and changes none of the others.
 
 Retake tip: if anything could not be confirmed, write one short sentence telling the owner what to change in the next photo, in plain words at a 6th grade reading level, kind and direct. Otherwise leave it empty.
 

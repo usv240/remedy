@@ -24,9 +24,16 @@ import { z } from "zod";
 
 const sha = (s: string | Buffer) => createHash("sha256").update(s).digest("hex");
 
+/**
+ * Raised by hand when the meaning of a stored answer changes even if the prompt text would not show it.
+ * 2: the vision report gained `person` (a face, a body or a child in the photo), so every earlier answer is stale.
+ */
+export const ENGINE_REVISION = 2;
+
 /** Prompts, schemas and image sizes: a change to any of them is a new engine version. */
 export const ENGINE_HASH = sha(
   JSON.stringify([
+    ENGINE_REVISION,
     VISION_SYSTEM,
     REVIEWER_SYSTEM,
     z.toJSONSchema(VisionReportSchema),

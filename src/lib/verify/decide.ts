@@ -9,13 +9,15 @@ import type { CheckId, Checks, Decision, Guidance, QualityReport, VerifyProofRul
  *    owner's own (the official image, a screen, a printout, a web picture) also gets a retake asking for their own
  *    photo, as acceptance test 2 expects;
  *  - firm_review: anything in between, the Two reviewers disagree, or the amount is over the cap.
+ * A photo where the vision report sees a person (a face, a body or a child) is a retake before anything else: the
+ * owner is asked for a photo of the product alone, and the claim code deletes the stored photo at once.
  * When the only open items are judgement calls (C1, C3 or C4 unclear), two independent reviewers look; if both
  * cite visible evidence and agree it meets the recall, the claim is verified. Anything else goes to a person.
  */
 
 export type Blocker = { id: CheckId | "amount"; soft: boolean; why: string };
 
-export type DecidedBy = "own_photo" | "quality" | "made_safe" | "checks" | "reviewers" | "unreadable";
+export type DecidedBy = "own_photo" | "quality" | "made_safe" | "checks" | "reviewers" | "unreadable" | "person";
 
 /** Every reason the claim is not verified on the checks alone. Soft ones are judgement calls the reviewers may settle. */
 export function blockersOf(checks: Checks, amount: AmountResult): Blocker[] {
@@ -32,12 +34,13 @@ export function blockersOf(checks: Checks, amount: AmountResult): Blocker[] {
 
 export type ReviewVerdict = { decision: "verify" | "person"; agreed: boolean } | null;
 
-export function decide(args: { quality: QualityReport; checks: Checks; ownPhoto: OwnPhotoKind; amount: AmountResult; review?: ReviewVerdict }): {
+export function decide(args: { quality: QualityReport; checks: Checks; ownPhoto: OwnPhotoKind; amount: AmountResult; review?: ReviewVerdict; personVisible?: boolean }): {
   decision: Decision;
   decided_by: DecidedBy;
   blockers: Blocker[];
 } {
   const blockers = blockersOf(args.checks, args.amount);
+  if (args.personVisible) return { decision: "retake", decided_by: "person", blockers };
   if (args.ownPhoto === "official" || args.ownPhoto === "screen" || args.ownPhoto === "digital") return { decision: "retake", decided_by: "own_photo", blockers };
   if (!args.quality.ok) return { decision: "retake", decided_by: "quality", blockers };
   if (args.checks.C2.status === "fail") return { decision: "retake", decided_by: "made_safe", blockers };
@@ -101,7 +104,25 @@ export function madeSafeGuidance(findings: ActionFinding[], rule: VerifyProofRul
   };
 }
 
-export function guidanceFor(by: DecidedBy, args: { quality: QualityReport; checks: Checks; findings: ActionFinding[]; rule: VerifyProofRule; recall: VerifyRecall; tip?: string }): Guidance | undefined {
+export const PERSON_PLAIN = "Please send a photo with only the product in it.";
+const PERSON_STEPS = [
+  "Take a new photo of just the product, with no one else in it.",
+  "Your hand holding it is fine. Leave out faces and bodies.",
+  "A photo that shows a person is deleted at once. Only a fingerprint of it is kept, for the record.",
+];
+
+export function guidanceFor(
+  by: DecidedBy,
+  args: { quality: QualityReport; checks: Checks; findings: ActionFinding[]; rule: VerifyProofRule; recall: VerifyRecall; tip?: string; person?: { kinds: string[]; where: string } | null },
+): Guidance | undefined {
+  if (by === "person") {
+    const p = args.person;
+    return {
+      plain: PERSON_PLAIN,
+      steps: PERSON_STEPS,
+      technical: `Person in the photo (${p?.kinds.length ? p.kinds.join(", ") : "seen"}${p?.where ? `: ${p.where}` : ""}). Retake asked before any other check counts; the claim's stored photo bytes are deleted at once and only its SHA-256 and dHash are kept.`,
+    };
+  }
   if (by === "own_photo") return { plain: "Please send a photo of your own product.", steps: OWN_PHOTO_STEPS, technical: `Own-photo check: ${args.checks.C3.reason_technical}` };
   if (by === "quality") return qualityGuidance(args.quality);
   if (by === "made_safe") return madeSafeGuidance(args.findings, args.rule, args.checks, args.recall, args.tip);

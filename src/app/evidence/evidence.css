@@ -95,6 +95,231 @@
   }
 }
 
+/* The two error rates, right under the results: what each counts, its denominator, and what happened when it is not
+   zero. The lead sits beside the two figures on a wide screen and above them on a narrow one. */
+.je {
+  margin-top: 8px;
+  max-width: 86rem;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) repeat(2, minmax(0, 1.35fr));
+  gap: 8px;
+}
+.evidence .je p {
+  margin: 0;
+}
+.je-lead {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 16px 8px 0 4px;
+}
+.evidence .je-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+.je-scope {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.je-item {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 18px 20px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.je-fig {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.je-of {
+  font-size: 0.6em;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.je-what {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.je-def {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 62ch;
+}
+.je-happened {
+  color: var(--ink);
+}
+.je-src {
+  grid-column: 1 / -1;
+  padding: 2px 4px 0;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  max-width: 120ch;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  .je {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .je-lead {
+    grid-column: 1 / -1;
+    padding: 12px 4px 2px;
+  }
+}
+@media (max-width: 560px) {
+  .je {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .je-item {
+    gap: 4px;
+    padding: 14px 16px 16px;
+  }
+  .je-fig {
+    font-size: 1.75rem;
+  }
+}
+
+/* What the AI never decides: two short lists side by side, the file behind each line in Technical view. */
+.jn {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 8px;
+}
+.jn-col {
+  padding: 16px 20px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.evidence .jn-h {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.jn-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  list-style: disc;
+  display: grid;
+  gap: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.jn-list li::marker {
+  color: var(--muted);
+}
+.jn-where {
+  margin-left: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+:root[data-mode="technical"] .jn-where {
+  display: block;
+  margin-left: 0;
+}
+@media (max-width: 760px) {
+  .jn {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .jn-col {
+    padding: 14px 16px 16px;
+  }
+  .jn-list {
+    font-size: 0.875rem;
+  }
+}
+
+/* The 30-day pilot under the three groups: what runs, the two outcomes with their baselines, and why it holds up. */
+.jpl {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 2fr);
+  gap: 8px 24px;
+  padding: 18px 20px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.evidence .jpl p {
+  margin: 0;
+}
+.jpl-lead {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  font-size: 0.9375rem;
+}
+.jpl-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.evidence .jpl-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.jpl-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 24px;
+  font-size: 0.9375rem;
+}
+.jpl-list li {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+.jpl-what {
+  font-weight: 600;
+}
+.jpl-k {
+  font-weight: 500;
+}
+.jpl-list li p:not(.jpl-what) {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.jpl-list .jpl-k {
+  color: var(--ink);
+}
+.jpl-holds {
+  grid-column: 1 / -1;
+  padding-top: 4px;
+  font-size: 0.9375rem;
+  max-width: 96ch;
+}
+@media (max-width: 900px) {
+  .jpl {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 14px 16px 16px;
+  }
+}
+@media (max-width: 600px) {
+  .jpl-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Jump links under the results, in page order. */
 .jp-toc {
   margin-top: 16px;

@@ -51,7 +51,8 @@ export function Result({ claim, ctx, onRetake, onPaid, preview = false }: { clai
 
   if (d === "retake") {
     const g = claim.guidance;
-    const own = claim.decided_by === "own_photo";
+    // Not their own photo, or a person in it: the drawing of the made-safe step would not help here.
+    const own = claim.decided_by === "own_photo" || claim.decided_by === "person";
     const quality = claim.decided_by === "quality" || claim.decided_by === "unreadable";
     return (
       <div className="cl-result" data-d="retake" data-ui>

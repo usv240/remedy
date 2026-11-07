@@ -24,6 +24,9 @@ type Raw = {
   title: string;
   products: { name?: string }[] | null;
   photo_id: string | null;
+  /** Whether the photo's bytes are still stored, and why they were deleted when not (person | retention). */
+  photo_kept: boolean | null;
+  photo_removed: string | null;
   payee_type: "email" | "phone" | "venmo" | null;
   payee_masked: string | null;
   has_payee: boolean;
@@ -89,13 +92,14 @@ export function stageOf(r: { decision: Decision; reviewOutcome: Raw["review_outc
 }
 
 const QUEUE_SQL = (firmId: number, where = sql`true`) => sql`
-  select c.id, c.recall_number, r.title, r.products, c.photo_id, c.payee_type, c.payee_masked, (c.payee_value_enc is not null) as has_payee,
+  select c.id, c.recall_number, r.title, r.products, c.photo_id, (ph.bytes is not null) as photo_kept, ph.removed_reason as photo_removed, c.payee_type, c.payee_masked, (c.payee_value_enc is not null) as has_payee,
          c.checks, c.decision, c.status, c.review_outcome, c.amount::text as amount, c.channel, c.created_at, c.is_sample,
          pp.id as plan_id, coalesce(pp.detail->>'status', pp.status) as plan_status,
          p.status as pay_status, p.route as pay_route, p.paid_at, p.paypal_batch_id, p.paypal_item_id, p.paypal_status, p.error->>'issue' as issue,
          s.paypal_capture_id as capture_id
   from claim c
   join recall r on r.number = c.recall_number
+  left join photo ph on ph.id = c.photo_id
   left join payment_plan pp on pp.claim_id = c.id
   left join lateral (select * from payment x where x.claim_id = c.id order by x.id desc limit 1) p on true
   left join sale s on s.id = c.linked_sale_id
@@ -114,7 +118,8 @@ function toRow(r: Raw): QueueRow {
     id: r.id,
     recallNumber: r.recall_number,
     recallShort: shortName(r.title, r.products),
-    photoUrl: r.photo_id ? `/api/firm/claims/${r.id}/photo` : null,
+    photoUrl: r.photo_id && r.photo_kept ? `/api/firm/claims/${r.id}/photo` : null,
+    photoRemoved: r.photo_removed === "person" || r.photo_removed === "retention" ? r.photo_removed : null,
     claimant: r.payee_masked ?? "No contact yet",
     payeeType: r.payee_type,
     checks: checkWords(r.checks),

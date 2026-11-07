@@ -22,6 +22,7 @@ import { fetchImageBytes, loadOfficialImages, MAX_OFFICIAL_IMAGES, pickForVision
 import { assessQuality } from "./quality";
 import { debatePayload, referee, runReviewers, type ReviewArgs, type ReviewRun } from "./reviewers";
 import { runVision, type Effort, type VisionArgs, type VisionRun } from "./vision";
+import { personInPhoto } from "./vision-schema";
 import type { Amount, Checks, ClaimContext, Decision, Guidance, HashRef, QualityReport, Timings, VerifyProofRule, VerifyRecall } from "./types";
 
 export * from "./types";
@@ -84,6 +85,8 @@ export type VerifyResult = {
   quality: QualityReport;
   /** `dhash` is the upright hash to store (image_hash, source "claim"); `dhash_variants` are all eight orientations, for matching in SQL. */
   photo: { dhash: string | null; dhash_variants: string[]; width: number; height: number; exif: boolean; mime: string | null; sha256: string };
+  /** A person (a face, a body or a child) seen in the photo by the vision call: the claim deletes the stored photo. */
+  person: { visible: true; kinds: string[] } | null;
   review: ReturnType<typeof debatePayload> | null;
   blockers: Blocker[];
   model: string | null;
@@ -183,6 +186,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       amount: amount.amount,
       quality: emptyQuality(),
       photo: { dhash: null, dhash_variants: [], width: 0, height: 0, exif: false, mime, sha256 },
+      person: null,
       review: null,
       blockers: [],
       model: null,
@@ -206,7 +210,8 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   let restingToday = false;
 
   const finish = async (o: { checks: Checks; ownPhoto: OwnPhotoKind; findings: ActionFinding[]; vision: VisionRun | null; tip?: string; officialImgs: OfficialImage[] }): Promise<VerifyResult> => {
-    const first = decide({ quality, checks: o.checks, ownPhoto: o.ownPhoto, amount });
+    const person = personInPhoto(o.vision?.report);
+    const first = decide({ quality, checks: o.checks, ownPhoto: o.ownPhoto, amount, personVisible: Boolean(person) });
     let verdict = first;
     let reviewRun: ReviewRun | null = null;
     let reviewError: string | null = null;
@@ -228,10 +233,10 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
           }
         }
       }
-      if (reviewRun) verdict = decide({ quality, checks: o.checks, ownPhoto: o.ownPhoto, amount, review: reviewRun });
+      if (reviewRun) verdict = decide({ quality, checks: o.checks, ownPhoto: o.ownPhoto, amount, review: reviewRun, personVisible: Boolean(person) });
       timings.reviewers_ms = ms(started);
     }
-    const guidance = guidanceFor(verdict.decided_by, { quality, checks: o.checks, findings: o.findings, rule, recall, tip: o.tip });
+    const guidance = guidanceFor(verdict.decided_by, { quality, checks: o.checks, findings: o.findings, rule, recall, tip: o.tip, person });
     const summary = summaryFor(verdict.decision, verdict.decided_by, { guidance, firmName: ctx.firmName, blockers: verdict.blockers, amount, checks: o.checks });
     if (restingToday && verdict.decision === "firm_review") summary.plain = RESTING_PLAIN;
     if (reviewRun) summary.technical += ` Reviewers: ${reviewRun.summary.technical}`;
@@ -262,6 +267,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       amount: amount.amount,
       quality,
       photo: { dhash: variants[0], dhash_variants: variants, width: img.width, height: img.height, exif: img.exif, mime, sha256 },
+      person: person ? { visible: true, kinds: person.kinds } : null,
       review: reviewRun ? debatePayload(reviewRun) : null,
       blockers: verdict.blockers,
       model: o.vision?.model ?? reviewRun?.model ?? null,

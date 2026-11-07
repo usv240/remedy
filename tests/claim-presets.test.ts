@@ -35,11 +35,15 @@ describe("ready-made examples", () => {
     expect(run.replay.used).toBe(Boolean(p.recorded));
   }, 60_000);
 
-  it("the CPSC example, with the official-image match off, shows C1 and C2 saw the right product with the cord cut", async () => {
+  it("the CPSC example, with the official-image match off, sees the right product and is never paid", async () => {
+    // How sure the model is of the cut on this exact picture varies between runs (content/verify/fixtures/cases.json,
+    // made-safe-hair-dryer-cord-cut), so only what holds in every recorded run is checked: the right product, a photo
+    // the model does not take for the owner's own, and no payment.
     const p = getPreset("cpsc-example")!;
     const run = await runPreset(p, { technical: true });
     expect(run.result.checks.find((c) => c.id === "C1")?.status).toBe("pass");
-    expect(run.result.checks.find((c) => c.id === "C2")?.status).toBe("pass");
+    expect(run.result.checks.find((c) => c.id === "C3")?.status).not.toBe("pass");
+    expect(run.result.decision).not.toBe("verified");
     expect(run.replay.used).toBe(true);
   }, 60_000);
 });

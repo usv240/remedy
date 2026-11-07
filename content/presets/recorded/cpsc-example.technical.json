@@ -1,5 +1,6 @@
 {
-  "recorded_at": "2026-11-05T20:12:55.201Z",
+  "recorded_at": "2026-11-07T06:15:52.874Z",
+  "engine": "315c1254acbb:claude-opus-5-5:medium",
   "preset": "cpsc-example",
   "recall": "26125",
   "options": {
@@ -8,27 +9,27 @@
   },
   "vision": {
     "report": {
-      "scene": "A white MyOnlyStyler hot air brush with black bristles lies on a gray wood-look floor, with its long black power cord looped around it and cut into two pieces.",
+      "scene": "A white MY ONLY STYLER hot air brush with black bristles lies on a gray wood floor with its black power cord looped around it, and the cord appears cut with two loose ends near the top center.",
       "product": {
         "match_score": 0.95,
         "matching_details": [
-          "White body with black bristle brush head on the left side of the product, center of photo",
-          "\"MY ONLY STYLER\" printed on the handle next to the bristles",
-          "Round button and slide switch controls on the handle",
-          "Perforated vent grille at the right end of the handle where the cord enters",
-          "Long black cord with a two-prong plug at top center and a black hook-and-loop cord strap at upper left",
-          "Long, slim proportions consistent with 12 by 1.75 inches"
+          "White body with black bristle brush head in the lower center of the photo",
+          "\"MY ONLY STYLER\" printed in black on the handle near the center right",
+          "Control buttons and slider on the handle, right of the printed name",
+          "Perforated silver air vent at the right end of the handle",
+          "Black power cord with strain relief at the right end and a two-prong plug at the top center",
+          "Long, narrow shape that fits the 12 by 1.75 inch description"
         ],
         "differing_details": [],
-        "reason_plain": "Yes, this is the recalled MyOnlyStyler dryer, but the photo appears identical to the official CPSC recall image.",
-        "reason_technical": "Shape, white and black colors, MY ONLY STYLER print, controls, vent grille, and cord all match. Model number MOS-22 on the back of the handle is not visible. The image matches the official CPSC image in every detail, including cord layout, floor grain, and lighting, which suggests it is not the owner's own photo."
+        "reason_plain": "Yes, this looks like the recalled MyOnlyStyler dryer, but the photo is the same as the official recall picture.",
+        "reason_technical": "Brand text, white body with black bristles, button layout, vent and cord all match the official image. The model number MOS-22 on the back of the handle is not visible. The owner's photo appears pixel for pixel identical to the official CPSC image, including the cord layout, velcro tie and floor grain."
       },
       "actions": [
         {
           "action": "cut_cord",
           "done": true,
-          "confidence": 0.8,
-          "evidence": "The cord is visibly severed: a cut end with exposed inner material sits near the top center of the photo, and a second loose end lies at upper left near the cord strap, separating the plug section from the dryer section. However, this image appears identical to the official CPSC recall photo, so it may not show the owner's own dryer."
+          "confidence": 0.6,
+          "evidence": "The cord appears cut through, with a cut end showing exposed wire near the top center and a second loose end near the velcro tie on the upper left. However, this image is identical to the official CPSC recall image, so it may not show the owner's own dryer."
         }
       ],
       "handwritten_text": [],
@@ -37,30 +38,35 @@
         "lot_text": null,
         "date_code_text": null,
         "label_visible": false,
-        "where": "The back of the handle, where MOS-22 is printed, faces down and is not visible."
+        "where": "The back of the handle, where the model number is printed, is not shown. Small printed text on the cord is not readable."
       },
       "photo_source": {
         "kind": "digital_image",
         "signs": [
           "none"
         ],
-        "confidence": 0.7,
-        "reason": "The image looks like a real camera photo, but it matches the official CPSC recall image in every detail, including the exact cord loops, strap position, floor grain, and lighting. Two separate photos would not line up this exactly, so it is most likely the downloaded official image."
+        "confidence": 0.8,
+        "reason": "The image looks like a real camera photo, but it is identical to the official CPSC recall image in every detail, including cord placement, the velcro tie, lighting and floor grain, so it was likely downloaded rather than taken by the owner."
       },
-      "retake_tip": "Please take a new photo of your own dryer with its cut cord, and turn it over so the model number on the back of the handle shows."
+      "retake_tip": "Please take your own new photo of your dryer with the cut cord, and turn the handle so the model number on the back shows.",
+      "person": {
+        "visible": false,
+        "kinds": [],
+        "where": ""
+      }
     },
     "model": "claude-opus-5-5",
-    "ms": 15757,
+    "ms": 12333,
     "usage": {
       "input_tokens": 448,
-      "output_tokens": 1150,
-      "cache_read_input_tokens": 3370,
+      "output_tokens": 1130,
+      "cache_read_input_tokens": 3915,
       "cache_creation_input_tokens": 891
     },
     "replayed": false
   },
   "reviews": null,
-  "cost_usd": 0.0299,
-  "decision": "firm_review",
-  "decided_by": "checks"
+  "cost_usd": 0.0296,
+  "decision": "retake",
+  "decided_by": "made_safe"
 }

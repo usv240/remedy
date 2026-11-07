@@ -10,6 +10,8 @@
  *   add --cap-usd 4.75 --since <ISO time> to stop before the approved measurement budget (read from ai_usage) runs out
  *   npx tsx scripts/verify/precompute.ts --run --yes --recorded-only            seeds recordings only, never calls Claude
  *                                                                               (Render's pre-deploy runs this)
+ *   add --rerecord to record again the recordings made on an earlier engine version (a prompt or schema change made
+ *   them stale); a recording that names no engine predates the field and counts as stale. Use it with --cap-usd.
  *
  * Presets come from content/presets/index.json, plus the team's own photos in content/verify/fixtures/user/expected.json.
  */
@@ -25,7 +27,10 @@ const run = process.argv.includes("--run");
 const yes = process.argv.includes("--yes");
 /** Seed only what is already recorded: no model call, so it is safe in a deploy step. */
 const recordedOnly = process.argv.includes("--recorded-only");
+/** Record again what was recorded on another engine version. Never together with --recorded-only. */
+const rerecord = process.argv.includes("--rerecord") && !recordedOnly;
 const budget = capFromArgs(process.argv);
+const stale = (rec: Recorded | null) => Boolean(rec?.vision) && rec!.engine !== engineVersion();
 /** One Opus 5.5 vision call, from the measured ones in ai_usage ($0.022 to $0.038); a firm review adds two reviewers. */
 const PER_CALL = costUsd("claude-opus-5-5", { input_tokens: 1700, cache_creation_input_tokens: 900, cache_read_input_tokens: 3400, output_tokens: 1000 });
 
@@ -72,9 +77,18 @@ async function seed(j: Job, rec: Recorded) {
     const dry = await verifyPhoto({ photo: presetPhoto(j.p).bytes, recall: verifyRecallFor(recall), proofRule: ruleFor(recall).rule, options: { ...options, cache: false } }, { aiAvailable: () => false, cache: null });
     const needs = Object.values(dry.checks).some((c) => c.status === "unavailable");
     const recording = j.recordedName ? readRecorded(j.recordedName) : null;
-    plan.push({ j, needs, recording, usd: needs && !recording?.vision ? PER_CALL : 0 });
+    plan.push({ j, needs, recording, usd: needs && (!recording?.vision || (rerecord && stale(recording))) ? PER_CALL : 0 });
   }
-  console.table(plan.map((x) => ({ preset: `${x.j.p.id}${x.j.technical ? " (technical)" : ""}`, recall: x.j.p.recall, "needs Claude": x.needs, recorded: Boolean(x.recording?.vision), "expected USD": Number(x.usd.toFixed(3)) })));
+  console.table(
+    plan.map((x) => ({
+      preset: `${x.j.p.id}${x.j.technical ? " (technical)" : ""}`,
+      recall: x.j.p.recall,
+      "needs Claude": x.needs,
+      recorded: Boolean(x.recording?.vision),
+      "this engine": x.recording?.vision ? !stale(x.recording) : "-",
+      "expected USD": Number(x.usd.toFixed(3)),
+    })),
+  );
   const total = plan.reduce((s, x) => s + x.usd, 0);
   console.log(`Expected cost: about $${total.toFixed(2)} (one Opus 5.5 vision call per preset still to record; a firm review would add two reviewer calls).`);
   if (!run) return console.log("Nothing was spent. Rerun with --run --yes after approval.");
@@ -84,7 +98,7 @@ async function seed(j: Job, rec: Recorded) {
   for (const x of plan.filter((y) => y.needs)) {
     let rec = x.recording;
     let fresh = false;
-    if (!rec?.vision) {
+    if (!rec?.vision || (rerecord && stale(rec))) {
       if (recordedOnly) {
         console.log(`Skipped ${x.j.p.id}: no recording yet, and --recorded-only makes no model call.`);
         continue;

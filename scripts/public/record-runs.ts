@@ -2,16 +2,17 @@
  * Records verifyPhoto results for the public pages: the home page's "Try a photo" panel and the results band on
  * /judges. Run once; the pages read content/public/verify-runs.json and never call Claude themselves.
  *
- *   AI_CACHE_DIR=<dir> npx tsx --env-file=.env.local scripts/public/record-runs.ts [--vision]
+ *   AI_CACHE_DIR=<dir> npx tsx --env-file=.env.local scripts/public/record-runs.ts [--vision] [--cap-usd 0.50 --since <ISO time>]
  *
  * Without --vision only the cases that need no model run (official images, rotated and cropped copies, an earlier
  * claim, a blurred photo): free and deterministic. --vision adds two live Claude calls (about $0.05 to $0.10 each,
- * reviewers off), replayed from AI_CACHE_DIR when it is set.
+ * reviewers off), replayed from AI_CACHE_DIR when it is set. With --cap-usd and --since, each live call first checks the
+ * spend logged in ai_usage since that time and stops before the cap.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { verifyRecallFor } from "@/app/api/claims/_lib/recall";
-import { costUsd } from "@/lib/ai/usage";
+import { capFromArgs, costUsd, spendSince } from "@/lib/ai/usage";
 import type { ReviewRun } from "@/lib/verify/reviewers";
 import type { VisionRun } from "@/lib/verify/vision";
 import { recallByNumber, storedRule } from "@/lib/api/recall-data";
@@ -19,6 +20,14 @@ import { photoHashes, verifyPhoto, type VerifyRecall, type VerifyResult } from "
 import { FIXTURES_DIR, fixtureFile, loadFixtureCases, loadFixtureRecalls } from "@/lib/verify/fixtures";
 
 const vision = process.argv.includes("--vision");
+const budget = capFromArgs(process.argv);
+/** One vision call, with room to spare (the recorded ones cost $0.02 to $0.04). */
+const PER_CALL_USD = 0.06;
+async function withinCap(what: string) {
+  if (!budget) return;
+  const s = await spendSince(budget.since);
+  if (s.usd + PER_CALL_USD > budget.cap) throw new Error(`Stopped before ${what}: $${s.usd.toFixed(4)} spent since ${budget.since.toISOString()}, cap $${budget.cap}.`);
+}
 const OUT = path.join(process.cwd(), "content", "public", "verify-runs.json");
 
 const recalls = loadFixtureRecalls();
@@ -129,6 +138,7 @@ async function main() {
     //    so the run shows what C1 and C2 read in the photo. With the match on, Remedy asks for the owner's own photo.
     const n = "26125";
     const rule = storedRule(n)!.rule;
+    await withinCap("cord-cut-example");
     const r1 = await verifyPhoto(
       {
         photo: readFileSync(path.join(FIXTURES_DIR, "official", "26125-hair-dryer-cord-cut.png")),
@@ -156,6 +166,7 @@ async function main() {
 
     // 2. An unrelated object against the power bank recall: the right-product check should fail.
     const { recall, rule: pbRule } = recalls["27056"];
+    await withinCap("unrelated-object");
     const r2 = await verifyPhoto({ photo: fixtureFile("other/commons-coffee-in-a-mug.jpg"), recall, proofRule: pbRule, options: { reviewers: false } }, {});
     runs.push({
       id: "unrelated-object",
@@ -195,6 +206,7 @@ async function main() {
     ),
   );
   console.log(`wrote ${OUT}: ${merged.length} runs`);
+  if (budget) console.log(`Spent since ${budget.since.toISOString()}: $${(await spendSince(budget.since)).usd.toFixed(4)} (ai_usage).`);
 }
 
 main().catch((e) => {

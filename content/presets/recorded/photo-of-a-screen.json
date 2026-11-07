@@ -1,28 +1,29 @@
 {
-  "recorded_at": "2026-11-06T03:41:32.865Z",
+  "recorded_at": "2026-11-07T06:16:50.686Z",
+  "engine": "315c1254acbb:claude-opus-5-5:medium",
   "preset": "photo-of-a-screen",
   "recall": "27056",
   "options": {},
   "vision": {
     "report": {
-      "scene": "A computer monitor showing a desktop with a space wallpaper of a planet and bright star, with rows of desktop icons along the top and bottom; no power bank is visible.",
+      "scene": "A camera photo of a computer monitor showing a desktop with a space wallpaper of a planet and a bright star, with rows of icons along the top and bottom.",
       "product": {
         "match_score": 0.02,
         "matching_details": [],
         "differing_details": [
-          "The photo shows a computer monitor, not a black power bank.",
-          "No \"20W\" text, no wireless charging ring, and no \"Model: W5 PRO\" text is visible anywhere in the photo.",
-          "The monitor is a large widescreen display with a glossy black bezel and a stand, unlike the small rectangular power bank in the official images."
+          "The photo shows a computer monitor, not a power bank.",
+          "No black rectangular power bank with 20W printed on the front is visible anywhere in the photo.",
+          "No Model: W5 PRO marking is visible."
         ],
-        "reason_plain": "No. The photo shows a computer monitor with a desktop wallpaper, not the recalled HAIARA power bank.",
-        "reason_technical": "The object is a widescreen computer monitor with an HDMI label on the bezel and a desktop UI on screen. None of the power bank features (black rectangular body, 20W print, circular magnetic ring, W5 PRO side label) are present. Different kind of product."
+        "reason_plain": "No. The photo shows a computer monitor, not the recalled HAIARA power bank.",
+        "reason_technical": "The only object is a widescreen monitor with a glossy black bezel, an HDMI label at the lower left and a desktop with icons. Its shape, size and features do not match the small black rectangular power bank with 20W text or a charging ring shown in the official images. The screen does not show the product either."
       },
       "actions": [
         {
           "action": "write_recalled",
           "done": false,
-          "confidence": 0.98,
-          "evidence": "No power bank appears in the photo and no handwritten word recalled is visible anywhere; the image shows only a monitor displaying a space wallpaper and desktop icons."
+          "confidence": 0.97,
+          "evidence": "No power bank is visible, and no handwritten word recalled appears anywhere in the photo, on the monitor or on its screen."
         }
       ],
       "handwritten_text": [],
@@ -34,29 +35,34 @@
         "where": null
       },
       "photo_source": {
-        "kind": "camera_photo",
+        "kind": "photo_of_screen",
         "signs": [
           "screen_bezel",
           "screen_glare",
           "app_or_web_ui"
         ],
-        "confidence": 0.75,
-        "reason": "This is a camera photo of a physical computer monitor; the bezel, stand, cables and glare are visible, and the screen shows a desktop interface. It does not show the recalled product at all."
+        "confidence": 0.85,
+        "reason": "The photo shows a physical monitor with its bezel, a glossy reflective surface and a computer desktop with icons and a taskbar on the screen. The screen shows a wallpaper, not the product."
       },
-      "retake_tip": "Please take a clear photo of the power bank itself, showing the whole power bank with the word recalled written on it in permanent marker."
+      "retake_tip": "Please take a photo of the power bank itself, in good light, with the word recalled written on it in permanent marker.",
+      "person": {
+        "visible": false,
+        "kinds": [],
+        "where": ""
+      }
     },
     "model": "claude-opus-5-5",
-    "ms": 8424,
+    "ms": 12043,
     "usage": {
       "input_tokens": 252,
-      "output_tokens": 653,
-      "cache_read_input_tokens": 4113,
+      "output_tokens": 873,
+      "cache_read_input_tokens": 4658,
       "cache_creation_input_tokens": 0
     },
     "replayed": false
   },
   "reviews": null,
-  "cost_usd": 0.0149,
+  "cost_usd": 0.0194,
   "decision": "retake",
-  "decided_by": "made_safe"
+  "decided_by": "own_photo"
 }

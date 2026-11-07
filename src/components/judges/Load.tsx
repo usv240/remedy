@@ -96,7 +96,11 @@ export const REAL: { part: string; demo: string; real: string }[] = [
   { part: "Web service", demo: "One Render Starter instance (0.5 CPU, 512 MB), always on, with the API and MCP server in the same process", real: "Two or more instances behind Render's load balancer, autoscaling on CPU, with the same code" },
   { part: "Checks and payouts", demo: "One background worker; a route runs its own job inline if no worker answers in 2 s", real: "Workers scaled with the queue depth shown on Operations; the same job table" },
   { part: "Database", demo: "A 256 MB Postgres with a 1 GB disk, reached only from this workspace", real: "A larger Postgres with a connection pooler, point-in-time recovery, and backups restored on a schedule to prove they work" },
-  { part: "Photos", demo: "Stored in Postgres, resized to 1,600 px, the original cleared once checked", real: "Object storage with signed URLs for upload and view, a retention period, and the hash kept in Postgres" },
+  {
+    part: "Your photo",
+    demo: "Stored in Postgres as a 1,600 px copy with no camera or location (EXIF, GPS) data, the original cleared once checked. A photo that shows a person is deleted at once, and every owner's photo 90 days after the claim is decided; its hash is kept",
+    real: "Object storage with signed URLs for upload and view, the same deletion rules, and the hash kept in Postgres",
+  },
   { part: "AI", demo: "$2 of Claude a day; past it, photos go to a person at the firm", real: "A budget per firm, the Message Batches API for proof rules, and the same cache so a repeat photo costs nothing" },
   { part: "Firm console", demo: "Open, for the fictional sample firm", real: "Login and roles per firm (reviewer, compliance lead, read only), with every action in the ledger under a named person" },
   { part: "PayPal", demo: "Sandbox, one app, the hosted webhook plus event lookup for local servers", real: "A live app and a registered webhook per environment, with the same signature check" },

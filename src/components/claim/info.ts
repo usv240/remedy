@@ -67,9 +67,9 @@ export const CLAIM_INFO = {
   },
   "claim.photo": {
     title: "Your photo",
-    what: "Take the photo with your phone camera, or choose one you already took. JPEG or PNG, up to 15 MB.",
-    why: "A clear photo of your own product is all the firm needs. No account is needed.",
-    technical: "The photo is resized for storage, its 64-bit difference hash is kept for the own-photo check, and it is sent to Claude Opus 5.5 only for the checks. The blur check here runs in your browser before upload.",
+    what: "Take the photo with your phone camera, or choose one you already took. Show just the product, with no people in it. JPEG or PNG, up to 15 MB.",
+    why: "A clear photo of your own product is all the firm needs. No account is needed. The photo is kept without camera or location data and deleted 90 days after your claim is decided; a photo that shows a person is deleted at once.",
+    technical: "The photo is stored as a resized JPEG that sharp re-encodes with no EXIF or GPS metadata; the untouched upload is cleared once the checks have run. Its SHA-256 and 64-bit difference hash stay after the bytes are deleted, so the earlier-claim check still knows a photo that was paid or reviewed (src/lib/ops/photos.ts). It is sent to Claude Opus 5.5 only for the checks. The blur check here runs in your browser before upload.",
     sponsor: ["Claude"],
   },
   "claim.checks": {

@@ -39,7 +39,7 @@ Open `/try`. The **Examples** tab has four ready-made cases. Press **Run it** on
 
 | Example | Recall | What you should see |
 |---|---|---|
-| The CPSC's own made-safe photo | 26125, hair dryer, cut the cord | A request for the owner's own photo: Remedy recognizes the recall's published example. Press **Run with the official-image match off** to see what the photo checks read: the right product, with the cord cut. |
+| The CPSC's own made-safe photo | 26125, hair dryer, cut the cord | A request for the owner's own photo: Remedy recognizes the recall's published example. Press **Run with the official-image match off** to see what the photo checks read: the right product, and Claude noting it is the CPSC's own published picture rather than the owner's photo. No payout either way. |
 | The official recall picture | 27056, HAIARA power bank | "Send a photo of your own product." No payout, and no model call: the match with the official picture is found in code. |
 | A blurry photo | 27056 | A friendly retake ("hold still and try again"), found before any model call. |
 | Something else entirely (a mug) | 27056 | The right-product check does not pass, so there is no payout, and the owner hears what to send instead. |
@@ -189,8 +189,9 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 363 passed, 37 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
+| Unit tests, no network | `npm test` | 370 passed, 39 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
+| A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
 | Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 27 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 108 page views pass |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, docs and the MCP tools (no AI call) | `node tests/e2e/public.mjs` | All pass |

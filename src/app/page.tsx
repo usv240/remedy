@@ -40,7 +40,7 @@ async function showcaseStart() {
 const STEPS = [
   { line: "First the recall is read.", note: "Remedy turns the official remedy into a clear checklist: what to cut or mark, and what the photo must show." },
   { line: "Then you snap a photo.", note: "On your phone, in under a minute. No account needed." },
-  { line: "Then the photo is verified.", note: "Right product, made safe, your own photo. Unclear cases get two AI reviewers and a person at the firm." },
+  { line: "Then the photo is verified.", note: "Right product, made safe, your own photo. Claude reads the photo; plain code decides the payout and the amount. Unclear cases get two AI reviewers and a person at the firm." },
   { line: "Then PayPal pays you.", note: "To your PayPal or Venmo. Inside 180 days of a PayPal purchase, straight back to how you paid." },
 ];
 
@@ -120,6 +120,8 @@ const PRESETS: { id: string; thumb: string; w: number; h: number; credit: string
 
 function nextFor(decision: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
   if (decision === "verified") return "Every check passed. The refund is ready to send through PayPal.";
+  if (decision === "retake" && checks.C1?.status === "pass" && checks.C3?.status === "unclear")
+    return `Right product (${checks.C1.score?.toFixed(2) ?? "passed"}). Claude also saw that this is the CPSC's own published photo, not one the owner took, so it held back on the cut and a new photo of the owner's own product is asked for. With the free picture match on, Remedy asks for the owner's own photo in code.`;
   if (decision === "retake") return guidance ? `${guidance} Nothing is paid until the photo checks out.` : summary;
   const { C1, C2, C3 } = checks;
   if (C3?.status === "unclear" && C1?.status === "pass" && C2?.status === "pass")

@@ -1,34 +1,35 @@
 {
-  "recorded_at": "2026-11-06T03:41:24.252Z",
+  "recorded_at": "2026-11-07T06:16:38.213Z",
+  "engine": "315c1254acbb:claude-opus-5-5:medium",
   "preset": "look-alike-romoss",
   "recall": "27056",
   "options": {},
   "vision": {
     "report": {
-      "scene": "A hand holds a white ROMOSS power bank with a round digital display showing 31% and a large outlined 20+ graphic on the front.",
+      "scene": "A hand holds a white ROMOSS power bank with a round digital display showing 31% and a large outlined 20+ graphic on the front, against a striped fabric background.",
       "product": {
-        "match_score": 0.2,
+        "match_score": 0.1,
         "matching_details": [
-          "It is a rectangular power bank with rounded corners, the same kind of product as the recall",
-          "A large 20 graphic is printed on the lower front, loosely similar to the 20W print on the recalled unit"
+          "It is a power bank, the same kind of product as the recall.",
+          "A large 20 appears on the lower front, loosely like the 20W print on the recalled unit."
         ],
         "differing_details": [
-          "The power bank is white, while the recalled HAIARA W5 PRO is black",
-          "The brand ROMOSS is printed on the front center, not HAIARA",
-          "A round digital display showing 31% sits at the top front; the official images show no display",
-          "The front shows 20 with a plus sign, not 20W",
-          "No magnetic ring graphic like the one in official image 2",
-          "The shape is longer and narrower than the official images"
+          "The body is white, while the recalled power bank is black.",
+          "The brand ROMOSS is printed in the middle of the front; the recall is for HAIARA.",
+          "There is a round black digital display showing 31% near the top; the official images show no display.",
+          "The 20+ graphic is a large outline design in the lower right, not the small 20W text centered at the bottom.",
+          "The shape is longer and narrower than the recalled unit, and there is no magnetic ring marking.",
+          "No Model: W5 PRO text is visible."
         ],
         "reason_plain": "No. This is a white ROMOSS power bank, not the black HAIARA W5 PRO in the recall.",
-        "reason_technical": "Color (white vs black), printed ROMOSS brand, digital percent display, 20+ marking instead of 20W, and different proportions all conflict with the official images; only the product type matches."
+        "reason_technical": "Different brand (ROMOSS logo), different color (white vs black), a digital percentage display, different 20+ graphic and proportions. Same product category only, so the score is well under 0.6."
       },
       "actions": [
         {
           "action": "write_recalled",
           "done": false,
           "confidence": 0.97,
-          "evidence": "No handwritten or marker writing is visible anywhere on the front of the power bank; only printed ROMOSS, 20+ and the lit 31% display are visible."
+          "evidence": "No handwritten or marker writing is visible anywhere on the front of the power bank. Only printed ROMOSS and 20+ graphics and the lit display are seen."
         }
       ],
       "handwritten_text": [],
@@ -44,23 +45,28 @@
         "signs": [
           "none"
         ],
-        "confidence": 0.9,
-        "reason": "Handheld shot with a real hand, natural lighting, a lit display and a fabric background, with no screen or print artifacts."
+        "confidence": 0.93,
+        "reason": "A real hand holds the device with natural lighting, shadows and a fabric background; no screen, printout or digital image signs are visible."
       },
-      "retake_tip": "This looks like a different power bank, so please photograph the black HAIARA W5 PRO with the word recalled written on it in permanent marker."
+      "retake_tip": "This looks like a different power bank, so please check that you have the black HAIARA W5 PRO, write recalled on it in marker, and photograph the whole unit with the side label showing.",
+      "person": {
+        "visible": false,
+        "kinds": [],
+        "where": ""
+      }
     },
     "model": "claude-opus-5-5",
-    "ms": 8459,
+    "ms": 14332,
     "usage": {
       "input_tokens": 1198,
-      "output_tokens": 659,
-      "cache_read_input_tokens": 4113,
+      "output_tokens": 1014,
+      "cache_read_input_tokens": 4658,
       "cache_creation_input_tokens": 0
     },
     "replayed": false
   },
   "reviews": null,
-  "cost_usd": 0.0188,
+  "cost_usd": 0.026,
   "decision": "retake",
   "decided_by": "made_safe"
 }

@@ -27,6 +27,7 @@ const report: VisionReport = {
   identifiers: { model_text: null, lot_text: null, date_code_text: null, label_visible: false, where: null },
   photo_source: { kind: "camera_photo", signs: ["none"], confidence: 0.9, reason: "Camera noise." },
   retake_tip: "",
+  person: { visible: false, kinds: [], where: "" },
 };
 const visionRun: VisionRun = { report, model: "claude-opus-5-5", ms: 1, usage: { input_tokens: 4000, output_tokens: 1500, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } };
 

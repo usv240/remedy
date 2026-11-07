@@ -179,6 +179,10 @@ export const photos = pgTable(
     /** upload | preset | email */
     source: text("source").notNull().default("upload"),
     createdAt: created(),
+    /** When the bytes were deleted: at once for a photo that shows a person, 90 days after the decision otherwise. */
+    removedAt: timestamp("removed_at", { withTimezone: true }),
+    /** person | retention */
+    removedReason: text("removed_reason"),
   },
   (t) => [index("photo_sha256_idx").on(t.sha256), index("photo_dhash_idx").on(t.dhash)],
 );
@@ -225,7 +229,12 @@ export const claims = pgTable(
     createdAt: created(),
     updatedAt: updated(),
   },
-  (t) => [index("claim_recall_idx").on(t.recallNumber), index("claim_firm_status_idx").on(t.firmId, t.status), index("claim_payee_idx").on(t.payeeHash, t.recallNumber)],
+  (t) => [
+    index("claim_recall_idx").on(t.recallNumber),
+    index("claim_firm_status_idx").on(t.firmId, t.status),
+    index("claim_payee_idx").on(t.payeeHash, t.recallNumber),
+    index("claim_decided_idx").on(t.decidedAt),
+  ],
 );
 
 // ---------------------------------------------------------------------------------------------------------------

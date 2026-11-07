@@ -7,8 +7,7 @@
  * what it sees in the photo.
  */
 import { createHash } from "node:crypto";
-import { and, count, desc, eq, gte, inArray, ne } from "drizzle-orm";
-import sharp from "sharp";
+import { and, count, desc, eq, gte, inArray, ne, sql } from "drizzle-orm";
 import { aiAvailable } from "@/lib/ai/claude";
 import { overBudget, RESTING_PLAIN } from "@/lib/ai/usage";
 import { audit } from "@/lib/audit";
@@ -38,6 +37,7 @@ import { encrypt, hashContact, maskContact } from "@/lib/secure";
 import { CHECK_IDS, verifyPhoto, type ClaimContext, type VerifyDeps, type VerifyResult } from "@/lib/verify";
 import { defaultVerifyCache } from "@/lib/verify/cache";
 import { allowUpload } from "@/lib/ratelimit";
+import { removePhoto, storedCopy } from "@/lib/ops/photos";
 import { runReviewers } from "@/lib/verify/reviewers";
 import { runVision } from "@/lib/verify/vision";
 import { getRecall, productName, ruleFor, verifyRecallFor } from "./recall";
@@ -58,9 +58,6 @@ export class ClaimError extends Error {
 
 /** Photos up to 15 MB; a phone's camera JPEG is 2 to 6 MB. */
 export const MAX_PHOTO_BYTES = 15 * 1024 * 1024;
-/** Stored copy for the receipt and the firm's queue: longest side 1600 px. */
-const STORED_MAX_SIDE = 1600;
-
 const DAY = 86_400_000;
 const sha256 = (b: Buffer) => createHash("sha256").update(b).digest("hex");
 const centsOf = (v: string | null | undefined) => (v === null || v === undefined ? null : Math.round(Number(v) * 100));
@@ -122,32 +119,16 @@ async function linkSale(recallNumber: string, link: SaleLinkInput | null | undef
 }
 
 /**
- * Store the photo: the resized JPEG for the receipt and the firm's queue in `bytes`, and the owner's original in
- * `original` until the checks have run on it (the checks need the untouched bytes: the EXIF flag, the hash, and the
- * verification cache key). checkClaim clears `original` when it is done.
+ * Store the photo: the resized copy in `bytes`, and the owner's original in `original` until the checks have run on
+ * it (the checks need the untouched bytes: the EXIF flag, the hash, and the verification cache key). checkClaim clears
+ * `original` when it is done; src/lib/ops/photos.ts deletes the copy 90 days after the decision, or at once when the
+ * photo shows a person.
  */
 async function storePhoto(bytes: Buffer, mime: string | null, source: "upload" | "preset") {
-  let stored: Buffer = bytes;
-  let storedMime = mime ?? "application/octet-stream";
-  let width: number | null = null;
-  let height: number | null = null;
-  try {
-    const out = await sharp(bytes, { failOn: "error", limitInputPixels: 60_000_000 })
-      .rotate()
-      .resize(STORED_MAX_SIDE, STORED_MAX_SIDE, { fit: "inside", withoutEnlargement: true })
-      .flatten({ background: "#ffffff" })
-      .jpeg({ quality: 82 })
-      .toBuffer({ resolveWithObject: true });
-    stored = out.data;
-    storedMime = "image/jpeg";
-    width = out.info.width;
-    height = out.info.height;
-  } catch {
-    /* a format sharp cannot read (HEIC): keep the original bytes; the checks will ask for a JPEG */
-  }
+  const copy = await storedCopy(bytes);
   const [row] = await db()
     .insert(schema.photos)
-    .values({ sha256: sha256(bytes), mime: storedMime, size: bytes.byteLength, width, height, bytes: stored, original: bytes, source })
+    .values({ sha256: sha256(bytes), mime: copy?.mime ?? mime ?? "application/octet-stream", size: bytes.byteLength, width: copy?.width ?? null, height: copy?.height ?? null, bytes: copy?.bytes ?? null, original: bytes, source })
     .returning({ id: schema.photos.id });
   return row.id;
 }
@@ -196,6 +177,8 @@ export type StoredResult = {
   usage: VerifyResult["usage"];
   official: VerifyResult["official"];
   photo: { width: number; height: number; exif: boolean; mime: string | null; dhash: string | null };
+  /** What of a person the vision check saw (face, body, child); the photo itself was deleted at once. */
+  person?: string[] | null;
   amount_source: "firm" | "capture" | "demo" | null;
   /** firm: written by hand by the (sample) firm, no model. */
   rule_source: "ai" | "quick_read" | "firm";
@@ -322,6 +305,8 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     log.error("claim check failed", { claim_id: claim.id, final: Boolean(o.final), error: e });
     if (!o.final) throw e; // the job tries again with backoff
     await db().update(schema.claims).set({ status: "firm_review", decision: "firm_review", decidedAt: new Date(), updatedAt: new Date() }).where(eq(schema.claims.id, claim.id));
+    // The untouched upload is not kept past the last try; the resized copy stays for the person at the firm.
+    await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, photoId));
     await audit("system", "claim.check_failed", `claim:${claim.id}`, { error: (e as Error).message.slice(0, 300) });
     throw new ClaimError("internal", "Something went wrong while checking the photo. A person at the firm will look at it.", 500);
   }
@@ -338,6 +323,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     usage: result.usage,
     official: result.official,
     photo: { width: result.photo.width, height: result.photo.height, exif: result.photo.exif, mime: result.photo.mime, dhash: result.photo.dhash },
+    person: result.person?.kinds ?? null,
     amount_source: result.amount ? amountSource : null,
     rule_source: ruleSource,
     source: input.source,
@@ -372,9 +358,12 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     amount: result.amount?.value ?? null,
     model: result.model,
     ms: result.timings.total_ms,
+    ...(result.person ? { person_in_photo: result.person.kinds } : {}),
   });
-  // The checks ran: the owner's original bytes are no longer needed; the resized copy stays for the receipt.
-  await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, photoId));
+  // The checks ran: the owner's original bytes are no longer needed; the resized copy stays for the receipt. A photo
+  // that shows a person keeps neither: both are deleted now, with only the hashes kept and a ledger line saying why.
+  if (result.person) await removePhoto(photoId, "person", `claim:${claim.id}`);
+  else await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, photoId));
   log.info("claim decided", { claim_id: claim.id, recall: recall.number, decision: result.decision, decided_by: result.decided_by, model: result.model, ms: result.timings.total_ms });
   const view = await getClaimView(claim.id);
   emit({ type: "result", claim: view! });
@@ -458,6 +447,14 @@ export async function getClaimView(id: string, opts: { refresh?: boolean } = {})
 export async function toView(row: ClaimRow, payment: PaymentView | null): Promise<ClaimView> {
   const recall = getRecall(row.recallNumber);
   const terms = await firmTerms(row.recallNumber);
+  // A photo whose bytes were deleted (a person in it, or past the 90 days) has no picture to link to.
+  const [kept] = row.photoId
+    ? await db()
+        .select({ has: sql<boolean>`${schema.photos.bytes} is not null` })
+        .from(schema.photos)
+        .where(eq(schema.photos.id, row.photoId))
+        .limit(1)
+    : [];
   const r = (row.result ?? null) as StoredResult | null;
   const checks = (row.checks ?? {}) as Record<string, { id: CheckView["id"]; name: string; status: CheckView["status"]; pass: boolean; score?: number; reason_plain: string; reason_technical: string }>;
   return {
@@ -488,7 +485,7 @@ export async function toView(row: ClaimRow, payment: PaymentView | null): Promis
     link: r?.link ?? null,
     payment,
     firm: { name: terms.firmName, sample: true, review_hours: terms.reviewHours, refund_source: terms.refundSource },
-    photo_url: row.photoId ? `/api/claims/${row.id}/photo` : null,
+    photo_url: row.photoId && kept?.has ? `/api/claims/${row.id}/photo` : null,
     receipt_url: `/r/${row.id}`,
     sandbox_label: SANDBOX_LABEL,
   };

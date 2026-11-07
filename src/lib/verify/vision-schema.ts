@@ -47,9 +47,22 @@ export const VisionReportSchema = z.object({
     reason: z.string(),
   }),
   retake_tip: z.string().describe("One short plain sentence on what to change in the next photo, or empty."),
+  person: z
+    .object({
+      visible: z.boolean().describe("True when a face, a body or a child can be seen in the owner's photo. Hands or fingers holding the product, on their own, do not count."),
+      kinds: z.array(z.enum(["face", "body", "child"])).describe("What of a person can be seen. Empty when visible is false."),
+      where: z.string().describe("Where in the photo, or empty."),
+    })
+    .describe("Whether a person can be seen in the owner's photo. Code asks for a photo of the product alone and deletes this one."),
 });
 
 export type VisionReport = z.infer<typeof VisionReportSchema>;
+
+/** People seen in the photo. Reports recorded before this field existed carry none, which reads as no person. */
+export function personInPhoto(r: Pick<VisionReport, "person"> | { person?: VisionReport["person"] } | null | undefined): VisionReport["person"] | null {
+  const p = r?.person;
+  return p?.visible ? { visible: true, kinds: [...(p.kinds ?? [])], where: p.where ?? "" } : null;
+}
 
 /** Two reviewers, two evidence bases (plan 7.2). */
 export const REVIEW_CHECKS = ["right_product", "made_safe", "own_photo", "within_recall"] as const;

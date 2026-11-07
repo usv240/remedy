@@ -7,6 +7,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { cacheLife } from "next/cache";
 import { getPreset, runPreset } from "@/app/api/try/_lib/presets";
+import { LIMITS } from "@/lib/verify/checks";
 import stats from "../../../content/recalls/stats.json";
 import runsFile from "../../../content/public/verify-runs.json";
 import bench from "../../../content/recalls/benchmark/results.json";
@@ -74,7 +75,8 @@ export function cpscExampleRun(): { score: number; cut: boolean; ms: number; rec
     const r = f.vision?.report;
     if (!r) return null;
     const cut = (r.actions ?? []).find((a: { action: string }) => a.action === "cut_cord");
-    return { score: r.product.match_score, cut: Boolean(cut?.done), ms: f.vision.ms, recordedAt: f.recorded_at, noticed: r.photo_source?.kind === "digital_image" ? r.photo_source.reason : null };
+    // Confirmed the way C2 counts it: done, and at least as sure as the made-safe pass mark.
+    return { score: r.product.match_score, cut: Boolean(cut?.done && cut.confidence >= LIMITS.actionConfidence), ms: f.vision.ms, recordedAt: f.recorded_at, noticed: r.photo_source?.kind === "digital_image" ? r.photo_source.reason : null };
   } catch {
     return null;
   }

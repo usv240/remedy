@@ -15,7 +15,8 @@ function decidedBy(r: RunRow): string {
   if (c.C3?.status === "unclear") parts.push(`Your own photo unclear: Claude saw the CPSC's published picture`);
   if (c.C1?.status === "pass" && c.C3?.status === "unclear") parts.push(`right product ${c.C1.score?.toFixed(2) ?? ""}`);
   if (c.C2?.status === "pass" && c.C3?.status === "unclear") parts.push("made safe confirmed");
-  if (r.result.decided_by === "made_safe" || c.C2?.status === "fail") parts.push("not yet made safe");
+  if (r.result.decided_by === "made_safe" || c.C2?.status === "fail") parts.push("made safe not confirmed");
+  if (r.result.decided_by === "person") parts.push("A person in the photo: asked for one of the product alone, and the photo deleted");
   if (r.result.decided_by === "reviewers") parts.push("Two reviewers");
   const s = parts.join("; ") || r.result.decided_by;
   return s.charAt(0).toUpperCase() + s.slice(1);

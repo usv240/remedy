@@ -27,6 +27,8 @@ export type QueueRow = {
   recallShort: string;
   /** /api/firm/claims/{id}/photo when a photo is stored. Sample claims have none and show a drawing. */
   photoUrl: string | null;
+  /** Why a real claim has no photo: it showed a person (deleted at once) or its 90 days had passed. */
+  photoRemoved: "person" | "retention" | null;
   /** Masked: "j•••@example.com". */
   claimant: string;
   payeeType: "email" | "phone" | "venmo" | null;

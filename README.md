@@ -26,6 +26,9 @@ The same classifier, run on the earlier snapshot behind our research note (1,227
 - **Reading the remedy, benchmarked (draft labels).** 130 real CPSC remedies (100 photo-refund, 30 not), seven fields each. Claude Opus 5.5 with a self-check got every field right on **113 of 130**; one Claude pass, 110 of 130; keyword rules written the way an engineer would start, 73 of 130. The labels are a draft: a second, more careful Claude pass with a deterministic cross-check, not yet confirmed by a person, so Claude's scores partly measure agreement between two Claude passes ([`content/recalls/benchmark/results.json`](content/recalls/benchmark/results.json)).
 - **Every photo-refund remedy, read once.** 583 proof rules (all 525 photo-refund recalls, 30 recent recalls without a photo step and 28 more from the benchmark) in one Message Batches run: 1,166 calls, $14.01 at batch prices, 6.9 minutes ([`content/recalls/proof-rules.json`](content/recalls/proof-rules.json)).
 - **Photos that need a second try are found before any AI call.** The recall's official picture, rotated and cropped copies of it, a photo already used for a claim, and a blurry photo: **6 of 6** asked for a new photo by code alone, each in under 100 ms. A photo of a mug sent for the power bank recall scored 0.02 on the right-product check and was not paid ([`content/public/verify-runs.json`](content/public/verify-runs.json)).
+- **Two error rates, on photos with a known answer** (counted by [`src/components/judges/errors.ts`](src/components/judges/errors.ts) from the measured sweep, the recorded presets and the public runs, each model answer once):
+  - **paid when it should not have been: 0 of 29** decisions, on 15 photos (copies of the official picture, look-alikes, another product, products not yet made safe). Across all four model settings in the sweep: 0 of 72;
+  - **held for a person or a new photo when it could have been paid: 0 of 1**, on the owner-style photo with a known answer to pay (the sample charger with its cord cut). The CPSC's own published pictures, run with the official-picture match switched off to measure reading, count in neither rate: there the model alone would have paid for the recall's own picture in 3 of 7 runs, which is why the match runs first on every claim and answers that picture in about 60 ms with no model call. The sweep ran three trials per photo ([`content/verify/sweep-results.json`](content/verify/sweep-results.json)); known answers are in [`content/verify/fixtures/cases.json`](content/verify/fixtures/cases.json).
 - **A second line of care.** With the official-image match switched off, Claude Opus 5.5 still recognized the CPSC's example photo for recall 26125 as a downloaded picture rather than an owner's own photo ([`content/presets/recorded/cpsc-example.technical.json`](content/presets/recorded/cpsc-example.technical.json)).
 - **Measured in the PayPal sandbox** ([`content/public/measured.json`](content/public/measured.json)):
   - 17 to 18 seconds from approval to a PayPal payout reaching SUCCESS, in 4 runs;
@@ -64,11 +67,36 @@ All of these are on [`/evidence`](https://remedy-y0ym.onrender.com/evidence), ea
    | C5 Claim limits | Is it within the units bought and the recall's units? | Code, per payee |
    | C6 Not already refunded | Has the linked PayPal purchase been refunded or disputed? | PayPal's capture, its order's refunds and the Disputes API |
 
-4. **Decision, in code.** Verified when all six pass and the amount is at or under the firm's auto-approve cap. Retake, with friendly guidance, when the product is not made safe yet, the photo is blurry, or it is not the owner's own. Otherwise two Claude reviewers look, one seeing only the official images and the other only the remedy text; each must cite what it saw, and a referee in code acts only when both counted votes agree. Anything else goes to a person at the firm.
+4. **Decision, in code.** Verified when all six pass and the amount is at or under the firm's auto-approve cap. Retake, with friendly guidance, when the product is not made safe yet, the photo is blurry, it is not the owner's own, or a person (a face, a body, a child) is in it. Otherwise two Claude reviewers look, one seeing only the official images and the other only the remedy text; each must cite what it saw, and a referee in code acts only when both counted votes agree. Anything else goes to a person at the firm.
 5. **Payment, in code.** A purchase made with PayPal in the last 180 days is refunded to its original capture. Otherwise the owner chooses a PayPal payout by email or phone, Venmo, or a safe replacement. The refund is the firm's amount or the purchase amount, whichever is lower.
 6. **The firm's side.** A claims queue, a corrective-action plan that adds a re-notice when a payout waits to be accepted, and the CPSC monthly progress report.
 
 Claude reads remedies and photos. The money math, the decision and the payment route are plain code, never the model.
+
+## What the AI never decides
+
+| Plain code decides | Where |
+|---|---|
+| Whether a claim is paid, sent to a person, or asked for a new photo | `decide()` in [`src/lib/verify/decide.ts`](src/lib/verify/decide.ts) |
+| Every pass mark (0.85 for the right product, 0.7 for a made-safe step) | `LIMITS` in [`src/lib/verify/checks.ts`](src/lib/verify/checks.ts) |
+| The refund amount: the firm's amount or the purchase amount, whichever is lower | `computeAmount()` in `checks.ts`; [`src/lib/payments/router.ts`](src/lib/payments/router.ts) |
+| Which recall and proof rule a claim is checked against | `ruleFor()` in [`src/app/api/claims/_lib/recall.ts`](src/app/api/claims/_lib/recall.ts) |
+| The marker word, model and lot ranges, claim limits, and the match with official and earlier photos | `checks.ts`, `identifiers.ts`, `dhash.ts` |
+| When money moves and to whom: the auto-approve cap, the refund to the original purchase inside 180 days, or the payout | `planPayment()` in `router.ts` |
+| Deleting a photo that shows a person, and every owner's photo 90 days after the decision | [`src/lib/ops/photos.ts`](src/lib/ops/photos.ts) |
+
+What Claude does instead: it reads each remedy into a proof rule once, ahead of any claim; it describes the photo (how closely it matches, whether each step is done, any writing or label, whether it is a camera photo, whether a person is in it); two reviewers cite what they see when a check is unclear, and a referee in code counts only votes whose evidence checks out; it reads unclear rows in a catalog scan; and Claude Haiku 5.5 writes the monthly report's summary from numbers SQL counted.
+
+## A 30-day pilot
+
+One small firm with an open photo-refund recall runs every claim on that recall through Remedy for 30 days, from its own claim link, beside its current inbox. Two outcomes, each against the month before:
+
+| Outcome | Baseline | Already recorded in |
+|---|---|---|
+| Time from photo to refund | The firm's median days from an emailed photo to its refund, from its own records for the 30 days before | Each claim's `claim.submitted` and `claim.paid` entries in the audit ledger and the payment's `paid_at`, shown in the firm's claims queue |
+| Share of claims a person had to open | Every emailed photo, read by hand today | Each claim's decision in the `claim` table and the ledger's `claim.decided` entries, and the queue's Needs review view |
+
+**Why it holds up:** an established tool that adds the same model gains a reader of photos; what makes each payout safe to send is the checks in code, the hash-chained evidence behind every payment, and the error rates measured on photos with known answers.
 
 ## What is inside
 
@@ -113,7 +141,7 @@ What the demo runs on today, and what a production deployment changes. Stated as
 | Web service | One Render Starter instance (0.5 CPU, 512 MB), always on, with the API and MCP server in the same process | Two or more instances behind Render's load balancer, autoscaling on CPU, the same code |
 | Checks and payouts | One background worker (`scripts/worker.ts`); a route runs its own job inline if no worker answers in 2 s | Workers scaled with the queue depth shown on `/ops`; the same `job` table |
 | Database | A 256 MB Postgres with a 1 GB disk, reached only from this workspace | A larger Postgres with a connection pooler, point-in-time recovery, and backups restored on a schedule to prove they work |
-| Photos | Stored in Postgres, resized to 1,600 px, the original cleared once checked | Object storage with signed URLs for upload and view, a retention period, the hash kept in Postgres |
+| Your photo | Stored in Postgres as a 1,600 px copy with no EXIF or GPS data, the original cleared once checked; a photo that shows a person deleted at once, every owner's photo 90 days after the decision, its hash kept | Object storage with signed URLs for upload and view, the same deletion rules, the hash kept in Postgres |
 | AI | $2 of Claude a day; past it, photos go to a person at the firm | A budget per firm, the Message Batches API for proof rules, the same cache so a repeat photo costs nothing |
 | Firm console | Open, for the fictional sample firm | Login and roles per firm (reviewer, compliance lead, read only), every action in the ledger under a named person |
 | PayPal | Sandbox, one app, the hosted webhook plus event lookup for local servers | A live app and a registered webhook per environment, the same signature check |
@@ -123,6 +151,7 @@ What the demo runs on today, and what a production deployment changes. Stated as
 
 ## Security and privacy
 
+- **Your photo.** The stored copy is re-encoded by sharp at 1,600 px and carries no EXIF or GPS metadata (a unit test checks it); the untouched upload is cleared once the checks have run. When the vision check sees a person (a face, a body, a child), the owner is asked for a photo of the product alone and the photo is deleted at once. Every owner's photo is deleted 90 days after its claim is decided, by the same housekeeping path that prunes the rate-limit and request-log tables. The SHA-256 and perceptual hash stay, so the earlier-claim check still works, and each deletion writes a ledger entry with no image data ([`src/lib/ops/photos.ts`](src/lib/ops/photos.ts)).
 - **Contact details are encrypted at rest** (AES-256-GCM, [`src/lib/secure.ts`](src/lib/secure.ts)), matched by a keyed hash, and shown masked. Where each payout goes is sealed inside its payment plan the same way ([`src/lib/payments/seal.ts`](src/lib/payments/seal.ts)).
 - **Tokens are stored only as hashes.** API keys are shown once and kept as SHA-256; personal claim links keep only a fingerprint; visitor addresses in the request log are hashed with a server secret.
 - **Webhooks are signature-verified** with PayPal before they change a payment; untrusted events are stored and ignored, and each event id is handled once.
@@ -160,7 +189,7 @@ Every push to `main` runs [CI](.github/workflows/ci.yml): the dependency audit, 
 
 | Suite | Command | Result |
 |---|---|---|
-| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 363 passed, 37 skipped (the live Claude, live PayPal and Postgres suites, which need keys or a database) |
+| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 370 passed, 39 skipped (the live Claude, live PayPal and Postgres suites, which need keys or a database) |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
 | Accessibility (axe, WCAG 2.2 AA) and sideways scroll, 27 pages at phone and desktop width, light and dark | `npm run e2e:a11y` | 108 of 108 page views |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, and the MCP tools | `node tests/e2e/public.mjs` | All pass |

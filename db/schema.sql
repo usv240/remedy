@@ -116,12 +116,19 @@ create table if not exists photo (
   storage_path  text,
   original      bytea,
   source        text not null default 'upload' check (source in ('upload', 'preset', 'email')),
-  created_at    timestamptz not null default now()
+  created_at    timestamptz not null default now(),
+  removed_at    timestamptz,
+  removed_reason text
 );
 create index if not exists photo_sha256_idx on photo (sha256);
 create index if not exists photo_dhash_idx on photo (dhash);
 -- The owner's untouched upload, held only until the verify_claim job has run the checks on it, then cleared.
 alter table photo add column if not exists original bytea;
+-- Photo bytes are deleted at once when the photo shows a person (removed_reason 'person'), and 90 days after the
+-- claim is decided otherwise ('retention', src/lib/ops/prune.ts). sha256 and dhash stay, so the own-photo check
+-- still knows the photo. The stored copy is re-encoded by sharp, which keeps no EXIF or GPS metadata.
+alter table photo add column if not exists removed_at timestamptz;
+alter table photo add column if not exists removed_reason text;
 
 create table if not exists claim (
   id               uuid primary key default gen_random_uuid(),
@@ -154,6 +161,8 @@ create table if not exists claim (
 create index if not exists claim_recall_idx on claim (recall_number);
 create index if not exists claim_firm_status_idx on claim (firm_id, status);
 create index if not exists claim_payee_idx on claim (payee_hash, recall_number);
+-- The photo retention prune finds claims decided more than 90 days ago.
+create index if not exists claim_decided_idx on claim (decided_at);
 
 -- Payments --------------------------------------------------------------------------------------------------------
 

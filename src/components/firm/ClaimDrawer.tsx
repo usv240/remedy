@@ -140,7 +140,13 @@ export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { 
               ) : (
                 <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                   <Thumb url={null} made={r.checks.C2 === "pass"} size={64} label="Claim photo" />
-                  <p className="muted">Sample claim: no photo is stored, so a drawing stands in.</p>
+                  <p className="muted">
+                    {r.photoRemoved === "person"
+                      ? "The photo showed a person, so it was deleted at once. Its fingerprint is kept."
+                      : r.photoRemoved === "retention"
+                        ? "The photo was deleted 90 days after the decision, as Remedy keeps photos. Its fingerprint is kept."
+                        : "Sample claim: no photo is stored, so a drawing stands in."}
+                  </p>
                 </div>
               )}
               {detail.note && <p className="cq-photo-credit">{detail.note}</p>}

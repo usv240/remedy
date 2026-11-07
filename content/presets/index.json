@@ -30,7 +30,7 @@
         "plain": "Remedy recognizes the recall's own example photo and asks for the owner's photo. No payout."
       },
       "technical": {
-        "note": "Run again with the official-image match switched off, so you can see what the photo checks read: C1 and C2 saw the right product with the cord cut.",
+        "note": "Run again with the official-image match switched off, so you can see what the photo checks read in this photo when the free picture match is set aside.",
         "options": { "officialHashCheck": false, "reviewers": false },
         "recorded": "cpsc-example.technical.json"
       }

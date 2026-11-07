@@ -11,6 +11,7 @@ import { aiAvailable } from "@/lib/ai/claude";
 import { costUsd, overBudget } from "@/lib/ai/usage";
 import { SANDBOX_LABEL } from "@/lib/payments/deps";
 import { CHECK_IDS, verifyPhoto, type VerifyDeps, type VerifyResult } from "@/lib/verify";
+import { engineVersion } from "@/lib/verify/cache";
 import { runReviewers, type ReviewRun } from "@/lib/verify/reviewers";
 import { runVision, type VisionRun } from "@/lib/verify/vision";
 import { getRecall, productName, ruleFor, verifyRecallFor } from "../../claims/_lib/recall";
@@ -42,6 +43,8 @@ export type Preset = {
 
 export type Recorded = {
   recorded_at: string;
+  /** The verification engine the answer was recorded on (src/lib/verify/cache.ts); a different one makes it stale. */
+  engine?: string;
   preset: string;
   recall: string;
   options: RunOptions;
@@ -220,7 +223,7 @@ export async function recordPreset(p: Preset, opts: { technical?: boolean } = {}
   const v = vision as VisionRun | null;
   const rv = reviews as ReviewRun | null;
   const cost = (v ? costUsd(v.model, v.usage) : 0) + (rv ? rv.reviews.reduce((s, x) => s + costUsd(x.model, x.usage), 0) : 0);
-  const out: Recorded = { recorded_at: new Date().toISOString(), preset: p.id, recall: p.recall, options, vision: v, reviews: rv, cost_usd: Math.round(cost * 10000) / 10000, decision: r.decision, decided_by: r.decided_by };
+  const out: Recorded = { recorded_at: new Date().toISOString(), engine: engineVersion(), preset: p.id, recall: p.recall, options, vision: v, reviews: rv, cost_usd: Math.round(cost * 10000) / 10000, decision: r.decision, decided_by: r.decided_by };
   await mkdir(path.join(PRESETS_DIR, "recorded"), { recursive: true });
   await writeFile(path.join(PRESETS_DIR, "recorded", name), JSON.stringify(out, null, 2) + "\n");
   return out;

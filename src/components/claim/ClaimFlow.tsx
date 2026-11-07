@@ -225,6 +225,9 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
               Choose a photo
             </label>
           </div>
+          <p className="cl-hint cl-privacy">
+            <strong>Your photo:</strong> show just the product, with no people in it. It is kept without camera or location data, and deleted 90 days after your claim is decided.
+          </p>
           {check && !check.ok && (
             <div className="cl-precheck" role="alert">
               <p className="cl-precheck-lead">{check.message}</p>

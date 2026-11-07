@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
-import { Adoption } from "@/components/judges/Adoption";
+import { Adoption, Pilot } from "@/components/judges/Adoption";
 import { Benchmark } from "@/components/judges/Benchmark";
 import { Compare } from "@/components/judges/Compare";
+import { ErrorRates } from "@/components/judges/ErrorRates";
 import { Load, Real } from "@/components/judges/Load";
 import { Measured } from "@/components/judges/Measured";
+import { NeverDecides } from "@/components/judges/NeverDecides";
 import { PhotoChecks } from "@/components/judges/PhotoChecks";
 import { Results } from "@/components/judges/Results";
 import { S, extraction } from "@/components/judges/data";
@@ -96,6 +98,7 @@ const TOC: [string, string][] = [
   ["#parts", "Each part"],
   ["#benchmark", "Benchmark"],
   ["#photo-checks", "Photo checks"],
+  ["#never", "What the AI never decides"],
   ["#measured", "Measured"],
   ["#data", "The data"],
   ["#cost", "AI cost"],
@@ -126,6 +129,7 @@ export default function EvidencePage() {
         <Info id="evidence.results" label="" topic="The results" />
       </div>
       <Results />
+      <ErrorRates />
 
       <nav className="jp-toc" aria-label="On this page">
         <ul>
@@ -207,6 +211,14 @@ export default function EvidencePage() {
         </div>
         <p className="page-prose jp-intro">Each case is a real recall photo or a copy made from one. The checks keep the refund pool for real owners: a picture that is not the owner&rsquo;s own is asked to be retaken, kindly.</p>
         <PhotoChecks />
+      </section>
+
+      <section id="never" className="page-section" aria-labelledby="never-h">
+        <div className="title-row">
+          <h2 id="never-h">What the AI never decides</h2>
+          <Info id="evidence.never" label="" topic="What the AI never decides" />
+        </div>
+        <NeverDecides />
       </section>
 
       <section id="measured" className="page-section" aria-labelledby="measured-h">
@@ -298,6 +310,7 @@ export default function EvidencePage() {
         </div>
         <p className="page-prose jp-intro">Three groups already handle recall claims. Each can run Remedy as it is today.</p>
         <Adoption />
+        <Pilot />
       </section>
     </div>
   );

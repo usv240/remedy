@@ -22,6 +22,7 @@ function report(over: Partial<VisionReport> = {}): VisionReport {
     identifiers: { model_text: null, lot_text: null, date_code_text: null, label_visible: false, where: null },
     photo_source: { kind: "camera_photo", signs: ["none"], confidence: 0.9, reason: "Camera noise and natural light." },
     retake_tip: "",
+    person: { visible: false, kinds: [], where: "" },
     ...over,
   };
 }

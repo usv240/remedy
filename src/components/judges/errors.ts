@@ -1,0 +1,194 @@
+/**
+ * The two errors that matter for money, counted on every recorded decision of the photo engine where the right answer
+ * is known. Server only; computed from files in the repo each time the page is built, never typed in by hand.
+ *
+ *  - Paid when it should not have been: the engine decided "verified" (the code would pay) on a photo whose known
+ *    answer is not to pay.
+ *  - Held back when it could have been paid: the photo's known answer is to pay, and the engine sent it to a person at
+ *    the firm (firm_review) or asked for a new photo (retake).
+ *
+ * The decisions come from three files:
+ *  - content/verify/sweep-results.json: the measured sweep, three trials per case. Only the claim path's own setting
+ *    (Claude Opus 5.5 at medium effort) counts toward the two rates; all four configurations are reported beside them.
+ *  - content/presets/recorded/*.json: each /try preset's one recorded live answer, with the decision it led to.
+ *  - content/public/verify-runs.json: the public recorded runs. A run that replays a preset's recording, or reads the
+ *    same model answer back from the verification cache, is counted once, with the preset.
+ * The known answers come from content/verify/fixtures/cases.json (read by src/lib/verify/fixtures.ts) and the
+ * presets' own expected decision in content/presets/index.json.
+ */
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
+
+const ROOT = process.cwd();
+const read = <T>(...p: string[]): T => JSON.parse(readFileSync(path.join(ROOT, ...p), "utf8")) as T;
+
+type Expect = { decision?: string; not_decision?: string; checks?: Record<string, string> };
+type Case = { id: string; photo: string; recall: string; official_hash_check?: boolean; expect: Expect };
+type Known = "paid" | "not_paid";
+
+/**
+ * A known answer, from a case's expectation: "verified" names a payment; any other named decision, or "anything but
+ * verified", names none; right product and made safe both required (with no decision named) names a payment too.
+ * Anything else is not a known answer for money and is left out.
+ *
+ * A recall's own published picture (content/verify/fixtures/official/) is never an owner's photo, so it is never a
+ * payment: run with the official-picture match switched off, those cases measure reading (right product, made safe),
+ * and asking for the owner's own photo is the right answer for money. They count toward a money rate only where the
+ * case names a decision.
+ */
+export function knownAnswer(e: Expect | undefined, photo?: string): Known | null {
+  if (!e) return null;
+  if (e.decision === "verified") return "paid";
+  if (e.decision || e.not_decision === "verified") return "not_paid";
+  if (photo?.startsWith("official/")) return null;
+  if (e.checks?.C1 === "pass" && e.checks?.C2 === "pass") return "paid";
+  return null;
+}
+
+/** Plain names for the photos that appear in a "what happened" line. Others fall back to their case id. */
+const TITLES: Record<string, string> = {
+  "made-safe-hair-dryer-cord-cut": "the CPSC's own photo of the recall 26125 hair dryer with its cord cut, sent with the official-picture match switched off",
+  "made-safe-helmet-straps-cut": "the CPSC's own photo of the recall 25007 helmet with its straps cut, sent with the official-picture match switched off",
+  "sample-charger-cut": "Brightline's sample charger with its cord cut",
+};
+
+/** The sweep configuration that is the claim path's own setting (src/lib/verify/vision.ts: Opus 5.5, medium effort). */
+export const CLAIM_PATH_CONFIG = "opus-medium";
+/** A public run that replays a preset's recording: the same model answer, counted once with the preset. */
+const REPLAYS = new Set(["sample-charger-cut"]);
+/** A public run recorded under another id than its fixture case. */
+const PUBLIC_CASE: Record<string, string> = { "cord-cut-example": "made-safe-hair-dryer-cord-cut" };
+
+export type Decided = {
+  source: "sweep" | "preset" | "public";
+  caseId: string;
+  trial: number | null;
+  decision: string;
+  known: Known;
+  /** The model said the photo was not the owner's own camera photo (the CPSC's published picture, a screen, a download). */
+  notOwn: boolean;
+};
+
+type SweepFile = { ranAt: string; trials: number; configs: { id: string; model: string; effort?: string }[]; cases: { config: string; trial: number; case: string; decision: string; C3: string }[] };
+type PresetIndex = { presets: { id: string; recall: string; photo: string; expected: Expect; recorded?: string; technical?: { recorded: string; options: { officialHashCheck?: boolean } } }[] };
+type Recording = { recorded_at: string; decision: string; options?: { officialHashCheck?: boolean }; vision: { report: { photo_source?: { kind: string } } } | null };
+type RunsFile = { recordedAt: string; runs: { id: string; recall: string; photo: string; result: { decision: string; summary?: { technical: string }; checks: Record<string, { status: string }> } }[] };
+
+export const SOURCES = {
+  sweep: "content/verify/sweep-results.json",
+  presets: "content/presets/recorded/*.json",
+  runs: "content/public/verify-runs.json",
+  cases: "content/verify/fixtures/cases.json",
+  presetIndex: "content/presets/index.json",
+} as const;
+
+function caseFor(cases: Case[], recall: string, photo: string, hashOff: boolean): Case | undefined {
+  return cases.find((c) => c.recall === recall && c.photo === photo && (c.official_hash_check === false) === hashOff);
+}
+
+/** Every recorded decision with a known answer for money. */
+/** A reading case on the recall's own published picture (no decision named): outside both money rates, reported beside them. */
+const isOfficialReading = (c: Case | undefined) => Boolean(c && c.photo.startsWith("official/") && !c.expect.decision && !c.expect.not_decision);
+
+export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: SweepFile; allConfigs: Decided[]; officialPicture: { caseId: string; decision: string }[] } {
+  const cases = read<{ cases: Case[] }>("content", "verify", "fixtures", "cases.json").cases;
+  const byId = new Map(cases.map((c) => [c.id, c]));
+  const sweep = read<SweepFile>("content", "verify", "sweep-results.json");
+  const out: Decided[] = [];
+  const allConfigs: Decided[] = [];
+  const officialPicture: { caseId: string; decision: string }[] = [];
+
+  for (const row of sweep.cases) {
+    const known = knownAnswer(byId.get(row.case)?.expect, byId.get(row.case)?.photo);
+    if (!known && row.config === config && isOfficialReading(byId.get(row.case))) officialPicture.push({ caseId: row.case, decision: row.decision });
+    if (!known) continue;
+    const d: Decided = { source: "sweep", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail" };
+    allConfigs.push(d);
+    if (row.config === config) out.push(d);
+  }
+
+  const index = read<PresetIndex>("content", "presets", "index.json");
+  const recDir = path.join(ROOT, "content", "presets", "recorded");
+  const recording = (name: string | undefined): Recording | null => (name && existsSync(path.join(recDir, name)) ? read<Recording>("content", "presets", "recorded", name) : null);
+  for (const p of index.presets) {
+    for (const [name, hashOff, own] of [
+      [p.recorded, false, p.expected],
+      [p.technical?.recorded, p.technical?.options.officialHashCheck === false, undefined],
+    ] as const) {
+      const rec = recording(name);
+      if (!rec?.vision) continue;
+      const c = caseFor(cases, p.recall, p.photo, hashOff);
+      const known = knownAnswer(own?.decision ? own : c?.expect, p.photo);
+      if (!known && !own?.decision && isOfficialReading(c)) officialPicture.push({ caseId: c!.id, decision: rec.decision });
+      if (!known) continue;
+      const kind = rec.vision.report.photo_source?.kind;
+      out.push({ source: "preset", caseId: c?.id ?? p.id, trial: null, decision: rec.decision, known, notOwn: Boolean(kind && kind !== "camera_photo") });
+    }
+  }
+
+  const runs = read<RunsFile>("content", "public", "verify-runs.json");
+  for (const r of runs.runs) {
+    // A run that replays a preset's recording, or reads the model's answer back from the verification cache, repeats
+    // a decision already counted: the same model answer, counted once.
+    if (REPLAYS.has(r.id) || /verification cache/.test(r.result.summary?.technical ?? "")) continue;
+    const c = byId.get(PUBLIC_CASE[r.id] ?? r.id);
+    const known = knownAnswer(c?.expect, c?.photo);
+    if (c && !known && isOfficialReading(c)) officialPicture.push({ caseId: c.id, decision: r.result.decision });
+    if (!c || !known) continue;
+    const c3 = r.result.checks.C3?.status;
+    out.push({ source: "public", caseId: c.id, trial: null, decision: r.result.decision, known, notOwn: c3 === "unclear" || c3 === "fail" });
+  }
+  return { all: out, sweep, allConfigs, officialPicture };
+}
+
+export type ErrorRate = {
+  count: number;
+  of: number;
+  /** Distinct photos (fixture cases) behind the decisions. */
+  cases: number;
+  /** The decisions that make up `count`, by photo: how many went to a person, how many asked for a retake. */
+  misses: { caseId: string; title: string; n: number; firmReview: number; retake: number; verified: number; notOwn: number }[];
+};
+
+function rate(list: Decided[], miss: (d: Decided) => boolean): ErrorRate {
+  const misses = new Map<string, ErrorRate["misses"][number]>();
+  for (const d of list.filter(miss)) {
+    const m = misses.get(d.caseId) ?? { caseId: d.caseId, title: TITLES[d.caseId] ?? d.caseId, n: 0, firmReview: 0, retake: 0, verified: 0, notOwn: 0 };
+    m.n++;
+    if (d.decision === "firm_review") m.firmReview++;
+    else if (d.decision === "retake") m.retake++;
+    else if (d.decision === "verified") m.verified++;
+    if (d.notOwn) m.notOwn++;
+    misses.set(d.caseId, m);
+  }
+  return { count: list.filter(miss).length, of: list.length, cases: new Set(list.map((d) => d.caseId)).size, misses: [...misses.values()].sort((a, b) => b.n - a.n) };
+}
+
+/** The two rates, the sweep's own figures beside them, and where each number came from. */
+export function errorRates() {
+  const { all, sweep, allConfigs, officialPicture } = decisions();
+  const notPaid = all.filter((d) => d.known === "not_paid");
+  const paid = all.filter((d) => d.known === "paid");
+  const wrongPay = rate(notPaid, (d) => d.decision === "verified");
+  const heldBack = rate(paid, (d) => d.decision !== "verified");
+  const sweepRows = all.filter((d) => d.source === "sweep");
+  const allNotPaid = allConfigs.filter((d) => d.known === "not_paid");
+  return {
+    wrongPay,
+    heldBack,
+    decisions: all.length,
+    /** The recall's own published picture sent as a claim photo, with the official-picture match off: never paid is right. */
+    officialPicture: { of: officialPicture.length, paid: officialPicture.filter((d) => d.decision === "verified").length, cases: new Set(officialPicture.map((d) => d.caseId)).size },
+    photos: new Set(all.map((d) => d.caseId)).size,
+    bySource: (["sweep", "preset", "public"] as const).map((s) => ({ source: s, decisions: all.filter((d) => d.source === s).length })),
+    sweep: {
+      ranAt: sweep.ranAt,
+      trials: sweep.trials,
+      cases: new Set(sweepRows.map((d) => d.caseId)).size,
+      decisions: sweepRows.length,
+      configs: sweep.configs.length,
+      allConfigsWrongPay: { count: allNotPaid.filter((d) => d.decision === "verified").length, of: allNotPaid.length },
+    },
+    sources: SOURCES,
+  };
+}
