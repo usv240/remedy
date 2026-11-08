@@ -12,7 +12,7 @@ import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
 import { HEADLINE, shareParts } from "@/lib/recall/headline";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
-import { aboutSeconds, RESEARCH } from "@/lib/research";
+import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
 import { checkTimes, errorRates } from "@/components/judges/errors";
 import { Contrast } from "@/components/judges/Contrast";
@@ -107,6 +107,18 @@ const SOURCES: (Source & { full: string; says: string })[] = [
     full: "CPSC Recall Effectiveness Workshop, 2017",
     href: "https://www.cpsc.gov/Recall-Effectiveness",
     says: "The CPSC's workshop and staff report on raising the share of owners who act on a recall: direct notice recalls are the most effective.",
+  },
+  {
+    name: "the CPSC's FY2025 performance report",
+    full: PROBLEM.correctionRate.source,
+    href: PROBLEM.correctionRate.url,
+    says: `The agency's own measure: an average correction rate of ${PROBLEM.correctionRate.rate} across all consumer product recalls in ${PROBLEM.correctionRate.year}, against a ${PROBLEM.correctionRate.target} target.`,
+  },
+  {
+    name: "the CPSC's 2026 request on recall claims that are not genuine",
+    full: PROBLEM.fraudRfi.source,
+    href: PROBLEM.fraudRfi.url,
+    says: "The agency's request for information on claims that are not genuine names coordinated claims through online forms and artificially generated destruction photos, and the cost of heavier verification to real owners.",
   },
   {
     name: "the CPSC Recall Handbook",
@@ -381,6 +393,28 @@ export default async function Home() {
                   {RESEARCH.fullRemedy.short}
                 </a>
                 ).
+              </p>
+              <p className="intro-why">
+                By the CPSC&rsquo;s own measure, an average of {PROBLEM.correctionRate.rate} of recalled products were corrected in {PROBLEM.correctionRate.year}, against its {PROBLEM.correctionRate.target} target (
+                <a className="text-link" href={PROBLEM.correctionRate.url} target="_blank" rel="noreferrer">
+                  {PROBLEM.correctionRate.short}
+                </a>
+                ). In April 2026 the agency asked the public how to catch artificially generated destruction photos and coordinated claims without adding burdens for real owners (
+                <a className="text-link" href={PROBLEM.fraudRfi.url} target="_blank" rel="noreferrer">
+                  {PROBLEM.fraudRfi.short}
+                </a>
+                ). Firms already pay photo-proof refunds by PayPal: a June 2026 recall page offers PayPal or a gift card and calls PayPal fastest (
+                <a className="text-link" href={PROBLEM.paypalPortal.url} target="_blank" rel="noreferrer">
+                  {PROBLEM.paypalPortal.short}
+                </a>
+                ), while a 2025 page asks owners to allow {PROBLEM.weeksPortal.wait} (
+                <a className="text-link" href={PROBLEM.weeksPortal.url} target="_blank" rel="noreferrer">
+                  {PROBLEM.weeksPortal.short}
+                </a>
+                ).{" "}
+                <Link className="text-link" href="/evidence/market#problem">
+                  Every finding, with what Remedy does about it
+                </Link>
               </p>
             </details>
           </div>

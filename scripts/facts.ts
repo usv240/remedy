@@ -61,7 +61,7 @@ type Facts = {
   /** Photo-refund remedies that ask for more than one photo (src/lib/recall/photo-count.ts). */
   multiPhoto: { count: number; of: number; numbers: string[] };
   /** What the photo-refund recalls are worth to their owners (content/recalls/value.json). */
-  value: { covered: number; recalls: number; total: string; unclaimed: string; perPoint: string };
+  value: { covered: number; recalls: number; proRated: number; noPrice: number; total: string; unclaimed: string; perPoint: string };
   /** The headline count, and what the other photo-refund recalls ask for (content/recalls/proof-split.json). */
   headline: { recalls: number; photoRefund: number; madeSafeRefund: number; share: number; byYear: Record<string, number>; madeSafeCredit: number; otherPhoto: number; noPhoto: number };
 };
@@ -152,7 +152,7 @@ export function derived() {
     reading: { right: ra.right, readings: ra.readings, product: ra.product, madeSafe: ra.madeSafe, trials: ra.trials, photos: ra.photos },
     settings: sweepSettings().map((s) => ({ id: s.id, wrongPay: `${s.wrongPay.count} of ${s.wrongPay.of}`, atSweep: `${s.atSweep.count} of ${s.atSweep.of}`, correct: `${s.correct.count} of ${s.correct.of}`, usdPerCase: s.usdPerCase })),
     multiPhoto: { count: multi.length, of: pr.length, numbers: multi },
-    value: { covered: v.covered, recalls: v.recalls, total: moneyWords(v.lowUsd), unclaimed: moneyWords(v.unclaimedLowUsd), perPoint: moneyWords(v.perPointLowUsd) },
+    value: { covered: v.covered, recalls: v.recalls, proRated: v.proRated.count, noPrice: v.noPrice, total: moneyWords(v.lowUsd), unclaimed: moneyWords(v.unclaimedLowUsd), perPoint: moneyWords(v.perPointLowUsd) },
     headline: {
       recalls: split.recalls,
       photoRefund: split.photoRefund,

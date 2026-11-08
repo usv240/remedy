@@ -6,7 +6,8 @@ import { Benchmark } from "@/components/judges/Benchmark";
 import { ErrorRates } from "@/components/judges/ErrorRates";
 import { Measured } from "@/components/judges/Measured";
 import { NeverDecides } from "@/components/judges/NeverDecides";
-import { Research } from "@/components/judges/Research";
+import { FraudDocket, Research } from "@/components/judges/Research";
+import { LANDSCAPE } from "@/components/judges/Compare";
 import { Contrast } from "@/components/judges/Contrast";
 import { Money } from "@/components/judges/Money";
 import { Network } from "@/components/judges/Network";
@@ -84,10 +85,34 @@ const PARTS: Part[] = [
 ];
 
 
+/**
+ * What is first here, each line tied to the rows on /evidence/market#compare that show the nearest existing thing. No
+ * claim beyond what those rows support.
+ */
+const FIRST: { line: string; near: string; rows: string[] }[] = [
+  {
+    line: "A photo of the product made safe, checked against a rule read from the official CPSC remedy text, then paid through PayPal in the same flow.",
+    near: "The nearest product verifies that the capture is real and the serial fits, and leaves the decision to the firm's agents without paying; the one patent application on this flow had a person's review as its primary path and was abandoned in 2018.",
+    rows: ["truepic-vision", "patent-2016", "rtr"],
+  },
+  {
+    line: "A pool of photo hashes shared across firms, so a photo already paid at one firm is held at the next before any model call, with only a 64-bit hash and a row id crossing.",
+    near: "The nearest shared-signal network is built on device and capture signals for lenders and insurers; the nearest recall tool checks one claim live at the moment it is made.",
+    rows: ["truepic-risk-network", "live-capture"],
+  },
+  {
+    line: "The refund goes back to the original PayPal purchase inside PayPal's 180-day window, else out as a payout, and a payout nobody accepts becomes a re-notice task in the firm's plan.",
+    near: "PayPal and Venmo are already reimbursement rails at the largest administrator, so the rail is not new; the step from a verified photo to that money in one flow, and the unclaimed payout turned into a task, are.",
+    rows: ["sedgwick", "insurance"],
+  },
+];
+const landscapeName = (id: string) => LANDSCAPE.find((l) => l.id === id)?.name.replace(/,.*$/, "") ?? id;
+
 const TOC: [string, string][] = [
   ["#path", "Five-minute path"],
   ["#parts", "Each part"],
   ["#network", "Across firms"],
+  ["#first", "What is first here"],
   ["#benchmark", "Benchmark"],
   ["#photo-checks", "Photo checks"],
   ["#never", "What the AI never decides"],
@@ -206,6 +231,46 @@ export default function EvidencePage() {
       <section id="network" className="page-section" aria-labelledby="network-h">
         <h2 id="network-h">One photo, two firms</h2>
         <Network />
+        <FraudDocket />
+      </section>
+
+      <section id="first" className="page-section" aria-labelledby="first-h">
+        <div className="title-row">
+          <h2 id="first-h">What is first here</h2>
+          <Info id="evidence.first" label="" topic="What is first here" />
+        </div>
+        <p className="page-prose jp-intro">Three things, each set beside the nearest existing thing, from its own page.</p>
+        <ol className="ev-first">
+          {FIRST.map((f, i) => (
+            <li key={f.line} className="ev-first-item" data-ui>
+              <span className="ev-first-n tabular" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <p className="ev-first-line">{f.line}</p>
+                <p className="ev-first-near">{f.near}</p>
+                <p className="jp-links">
+                  {f.rows.map((id) => (
+                    <Link key={id} className="text-link" href={`/evidence/market#land-${id}`}>
+                      {landscapeName(id)}
+                    </Link>
+                  ))}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="page-note">
+          Each comparison, with its source and date:{" "}
+          <Link className="text-link" href="/evidence/market#compare">
+            How it compares
+          </Link>
+          . The two-reviewer design and where it comes from:{" "}
+          <Link className="text-link" href="/evidence/photo-checks#lineage">
+            Photo checks
+          </Link>
+          .
+        </p>
       </section>
 
       <section id="benchmark" className="page-section" aria-labelledby="bench-h">

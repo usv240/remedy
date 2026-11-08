@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { answerChanges, checkTimes, errorRates, freeCaught, hashSpeed, sweepSettings } from "@/components/judges/errors";
 import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 import { TOOLS } from "@/lib/mcp/tools";
-import { aboutSeconds, RESEARCH } from "@/lib/research";
+import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
 import { derived, skipNeed, testsHash } from "../scripts/facts";
 
@@ -264,7 +264,11 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(README).toContain(`those ${d.value.recalls} recalls offer **${d.value.total}** in refunds`);
     expect(README).toContain(`**${d.value.unclaimed}** of it stays unclaimed`);
     expect(README).toContain(`sends **${d.value.perPoint}** back to owners`);
-    expect(README).toContain(`(${d.value.covered} of ${d.value.recalls} state units and a price;`);
+    // The arithmetic closes: covered plus the two kinds left out is the whole, and the README says all three.
+    expect(d.value.covered + d.value.proRated + d.value.noPrice).toBe(d.value.recalls);
+    const leftOut = `(${d.value.covered} of ${d.value.recalls} state units and a price; ${d.value.proRated} pro-rated refunds state no share and ${d.value.noPrice} records state no price, so those ${d.value.proRated + d.value.noPrice} are left out)`;
+    expect(README).toContain(leftOut);
+    expect(doc("results.md")).toContain(`${d.value.covered} counted; ${d.value.proRated} pro-rated refunds state no share and ${d.value.noPrice} records state no price, so those ${d.value.proRated + d.value.noPrice} are left out`);
     // The headline count, its share and its years, read through each recall's proof rule (content/recalls/proof-split.json).
     const h = d.headline;
     expect(facts.headline).toEqual(h);
@@ -304,7 +308,41 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
   it("the README stays short: its top screen and the three ideas, with the long sections in docs/*.md", () => {
     const words = README.split(/\s+/).filter(Boolean).length;
     expect(words).toBeLessThan(2000);
-    for (const heading of ["## The problem, and the result", "## Three ideas at its heart", "## Results", "## Read more"]) expect(README).toContain(heading);
+    for (const heading of ["## Run it yourself", "## Results", "## Where to look", "## PayPal, file by file", "## The problem, and the result", "## Three ideas at its heart", "## See it", "## Read more"]) expect(README).toContain(heading);
     for (const name of Object.keys(DOCS)) expect(README).toContain(`docs/${name}`);
+    // The CI badge points at the workflow that exists, and the quickstart states the no-keys test count (checked above).
+    expect(README).toContain("actions/workflows/ci.yml/badge.svg");
+    expect(existsSync(path.join(ROOT, ".github", "workflows", "ci.yml"))).toBe(true);
+    expect(README).toMatch(/npm test\s+# \d+ passed, \d+ skipped without a database or keys/);
+    // Every screenshot the README shows is in docs/img, and the two PayPal ones are among them.
+    const images = all(README, /\]\((docs\/img\/[\w.-]+)\)/g).map(([p]) => p);
+    expect(images).toContain("docs/img/5-refund-to-purchase.png");
+    expect(images).toContain("docs/img/6-two-reviewers.png");
+    for (const img of images) expect(existsSync(path.join(ROOT, img)), img).toBe(true);
+    // Every repo path the README links to exists.
+    for (const [p] of all(README, /\]\(((?:src|content|tests|scripts|docs|public|\.github)\/[\w./\-[\]]+)\)/g)) expect(existsSync(path.join(ROOT, p)), p).toBe(true);
+    // The submission-period sentence names the first and latest commit dates.
+    expect(README).toMatch(/first commit is dated November \d+, 2026 and the latest November \d+, 2026/);
+  });
+
+  it("the problem, measured from primary sources: the README and docs/research.md print the figures src/lib/research.ts holds", () => {
+    const P = PROBLEM;
+    const inReadme = [P.correctionRate.rate, P.correctionRate.target, P.fraudRfi.cite, P.adminComment.oneName, P.truepicComment.claims, P.weeksPortal.wait, P.payoutFee.fee, P.checkCost.cost, P.consumerReports.notHeard];
+    const inDocs = [...inReadme, P.adminComment.products, P.paypalPortal.confirm, P.refundTerms.reach, P.ftcChecks.claimsRate, P.ftcChecks.cashedWeighted, P.ftcChecks.cashedMedian, P.digitalSuccess.digital, P.digitalSuccess.checksWithout, P.consumerReports.responded, P.euSurvey.noReaction, P.euSurvey.reimbursed, P.cpscReview.effort];
+    for (const fig of inReadme) expect(README, fig).toContain(fig);
+    for (const fig of inDocs) expect(doc("research.md"), fig).toContain(fig);
+    // The CPSC listing count is the committed count, never typed in.
+    const listing = JSON.parse(read("content", "recalls", "listing-mentions.json")) as { records: number; terms: Record<string, { count: number }> };
+    expect(P.listing.records).toBe(listing.records);
+    expect([P.listing.paypal, P.listing.venmo]).toEqual([listing.terms.paypal.count, listing.terms.venmo.count]);
+    for (const text of [README, doc("research.md")].map((x) => x.replace(/\*\*/g, ""))) {
+      expect(text).toContain(`${int(P.listing.records)} CPSC recall records since 1973`);
+      expect(text).toMatch(new RegExp(`${P.listing.paypal === 1 ? "one" : P.listing.paypal} names PayPal and ${P.listing.venmo === 0 ? "none" : P.listing.venmo} names Venmo`));
+    }
+    // The FY2025 rate is framed as what it measures, and never set beside the 6 in 100 as the same thing.
+    for (const text of [README, doc("research.md")]) expect(text).toMatch(/not comparable/);
+    // Each primary-source row in docs/research.md carries its URL.
+    for (const row of [P.correctionRate, P.fraudRfi, P.adminComment, P.truepicComment, P.paypalPortal, P.weeksPortal, P.payoutFee, P.payoutTerms, P.refundTerms, P.checkCost, P.ftcChecks, P.digitalSuccess, P.consumerReports, P.euSurvey, P.cpscReview]) expect(doc("research.md"), row.source).toContain(row.url);
+    expect(doc("research.md")).toContain(P.listing.url);
   });
 });

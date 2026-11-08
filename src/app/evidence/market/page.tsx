@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
 import { Adoption, Pilot } from "@/components/judges/Adoption";
-import { Compare } from "@/components/judges/Compare";
+import { Compare, LANDSCAPE, Landscape } from "@/components/judges/Compare";
 import { Money, VALUE } from "@/components/judges/Money";
+import { ProblemResearch } from "@/components/judges/Research";
 import { fmtInt } from "@/lib/api/format";
 import { storedRule } from "@/lib/api/recall-data";
 import { SPLIT } from "@/lib/recall/headline";
@@ -87,6 +88,15 @@ export default function MarketPage() {
         </p>
       </section>
 
+      <section id="problem" className="page-section" aria-labelledby="problem-h">
+        <div className="title-row">
+          <h2 id="problem-h">The problem, measured</h2>
+          <Info id="evidence.problem" label="" topic="The problem, measured" />
+        </div>
+        <p className="page-prose jp-intro">What the regulator, the firms and the payment issuers report, from their own pages and filings, and what Remedy does about each.</p>
+        <ProblemResearch />
+      </section>
+
       <section id="photo-asks" className="page-section" aria-labelledby="asks-h">
         <h2 id="asks-h">What each photo is for</h2>
         <p className="page-prose">
@@ -119,6 +129,19 @@ export default function MarketPage() {
         </div>
         <p className="page-prose jp-intro">Each of these does its job. Remedy adds the instant check and the PayPal payout to what firms already do.</p>
         <Compare />
+        <details className="jx-disc ev-land-disc" id="landscape">
+          <summary>
+            <span>
+              What exists near Remedy, and the one step each leaves to others <span className="muted">({LANDSCAPE.length} products, portals and filings, from their own pages)</span>
+            </span>
+          </summary>
+          <div className="jx-body">
+            <p className="ev-land-intro">
+              Each does its job. Naming them is how the difference is shown rather than claimed. <Info id="evidence.landscape" label="" topic="What exists near Remedy" />
+            </p>
+            <Landscape />
+          </div>
+        </details>
       </section>
 
       <section id="adoption" className="page-section" aria-labelledby="ad-h">

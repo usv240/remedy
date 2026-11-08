@@ -1,0 +1,36 @@
+{
+  "note": "Written by scripts/recalls/listing-mentions.ts from the CPSC's full recall listing CSV (every recall since 1973). The CSV is not committed; a record counts for a term when the term appears in any of its fields. src/lib/research.ts reads this file.",
+  "source": "https://www.cpsc.gov/s3fs-public/recall-data/recalls_recall_listing.csv",
+  "readAt": "2026-11-08",
+  "latestRecallDate": "2026-10-22",
+  "records": 10110,
+  "terms": {
+    "paypal": {
+      "count": 1,
+      "recallNumbers": [
+        "24-002"
+      ]
+    },
+    "venmo": {
+      "count": 0,
+      "recallNumbers": []
+    },
+    "electronicPayment": {
+      "count": 4,
+      "recallNumbers": [
+        "26-798",
+        "26-568",
+        "25-057",
+        "15-156"
+      ]
+    },
+    "virtualCard": {
+      "count": 3,
+      "recallNumbers": [
+        "26-740",
+        "26-568",
+        "23-229"
+      ]
+    }
+  }
+}

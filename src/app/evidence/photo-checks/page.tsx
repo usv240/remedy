@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
+import { Lineage } from "@/components/judges/Lineage";
 import { PhotoChecks } from "@/components/judges/PhotoChecks";
 import { RefPictures } from "@/components/judges/RefPictures";
 import { Reading, Settings } from "@/components/judges/Settings";
@@ -42,6 +43,14 @@ export default function PhotoChecksPage() {
       <section id="reading" className="page-section" aria-labelledby="reading-h">
         <h2 id="reading-h">What the model read on the CPSC&rsquo;s own photos</h2>
         <Reading />
+      </section>
+
+      <section id="lineage" className="page-section" aria-labelledby="lineage-h">
+        <div className="title-row">
+          <h2 id="lineage-h">Where the two-reviewer design comes from</h2>
+          <Info id="evidence.lineage" label="" topic="The two-reviewer design" />
+        </div>
+        <Lineage />
       </section>
 
       <section id="settings" className="page-section" aria-labelledby="settings-h">

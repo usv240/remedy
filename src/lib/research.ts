@@ -1,7 +1,10 @@
+import listing from "../../content/recalls/listing-mentions.json";
+
 /**
  * The published findings Remedy is built on, each figure read from the source itself (2026-11-07): the paper, the
  * experiment, the order, the post or the filing linked here. The one place these figures live: /evidence#research,
- * the home page and the README all read them from here (tests/facts.test.ts checks the README). Pure.
+ * the home page and the README all read them from here (tests/facts.test.ts checks the README). Pure, apart from the
+ * committed count of the CPSC listing it imports.
  */
 export const RESEARCH = {
   /**
@@ -106,6 +109,203 @@ export const RESEARCH = {
     accounts: "440 million",
     source: "PayPal Holdings, third-quarter 2026 results, October 27, 2026",
     url: "https://www.sec.gov/Archives/edgar/data/1633917/000163391726000086/pypl3q-26earningsrelease.htm",
+  },
+} as const;
+
+/** "2026-11-08" as "November 8, 2026". */
+const plainDate = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+
+/** The CPSC's full recall listing, counted by scripts/recalls/listing-mentions.ts (the CSV itself is not committed). */
+const LISTING = listing as { source: string; readAt: string; latestRecallDate: string | null; records: number; terms: Record<string, { count: number; recallNumbers: string[] }> };
+
+/**
+ * The problem, measured from primary sources (each read 2026-11-08): the regulator's own correction rate, its request
+ * for information on recall claims that are not genuine and two comments on that docket, how firms pay photo-proof refunds today, the payment
+ * economics from the issuers, and why owners do not act. Rendered by src/components/judges/Research.tsx (on
+ * /evidence/market), cited in the README and docs/research.md; tests/facts.test.ts checks the README figures.
+ */
+export const PROBLEM = {
+  /**
+   * CPSC Agency Performance Report FY2025 (measure 2025KM2.3.1): 44.55% against a 43% target. Footnote 2: at the
+   * FY2024 midyear review the method became "an average correction rate for all consumer product recalls", so this is
+   * an average across recalls, not the share of recalled units that come back (the "6 in 100" above measures that).
+   */
+  correctionRate: {
+    rate: "44.55%",
+    target: "43%",
+    year: "FY2025",
+    source: "CPSC, Agency Performance Report, Fiscal Year 2025",
+    short: "CPSC performance report, FY2025",
+    date: "April 2026",
+    url: "https://www.cpsc.gov/s3fs-public/FY25-APR.pdf",
+  },
+  /**
+   * Federal Register, Vol. 91, No. 72, pp. 20138-20139: Request for Information Regarding Consumer Product Recall
+   * Fraud, docket CPSC-2026-0067. The notice names organized or coordinated networks that exploit online submission
+   * processes, "artificially generated images" purporting to show product destruction, and the risk that added
+   * verification "may also impose burdens on legitimate consumers and reduce recall participation".
+   */
+  fraudRfi: {
+    cite: "91 FR 20138",
+    docket: "CPSC-2026-0067",
+    source: "Federal Register, Request for Information Regarding Consumer Product Recall Fraud, docket CPSC-2026-0067",
+    short: "CPSC request for information on recall claims, April 2026",
+    date: "April 15, 2026",
+    url: "https://www.govinfo.gov/content/pkg/FR-2026-04-15/pdf/2026-07328.pdf",
+  },
+  /**
+   * A recall administrator's public comment on that docket (CPSC-2026-0067-0013, pp. 1-3): one group registered over
+   * 2,200 recalled products at a refund average of about $100 each; one person submitted 767 registrations under one
+   * name and address; it takes seconds to make many unique photos of destroyed units; the administrator now often
+   * requires live photo capture, especially where the remedy is a refund.
+   */
+  adminComment: {
+    products: "2,200",
+    perUnit: "$100",
+    oneName: "767",
+    source: "Realtime Results LLC (Recall Results), public comment CPSC-2026-0067-0013",
+    short: "a recall administrator's comment, June 2026",
+    date: "June 8, 2026",
+    url: "https://downloads.regulations.gov/CPSC-2026-0067-0013/attachment_1.pdf",
+  },
+  /**
+   * Truepic's public comment on the same docket (CPSC-2026-0067-0010, p. 4): a single device submitted over 400
+   * recall claims, cycling names, emails, phones and addresses; images were captured from identical vantage points
+   * across hundreds of claims; each claim, reviewed in isolation, appeared legitimate.
+   */
+  truepicComment: {
+    claims: "400",
+    source: "Truepic Inc., public comment CPSC-2026-0067-0010",
+    short: "Truepic's comment, May 2026",
+    date: "May 29, 2026",
+    url: "https://downloads.regulations.gov/CPSC-2026-0067-0010/attachment_1.pdf",
+  },
+  /**
+   * A firm's own recall page that already pays by PayPal (CPSC recall 26-539, June 11, 2026): two photos (the fan with
+   * initials, date and RECALLED; the cut cord), no receipt, "Refund Method: PayPal or Gift Card", "You will receive
+   * your refund fastest using PayPal", an email confirmation within 48 to 72 hours, and no refund delivery time stated.
+   */
+  paypalPortal: {
+    photos: "two",
+    confirm: "48 to 72 hours",
+    source: "Merkury Innovations, Hot + Cool fan recall page",
+    short: "a firm's June 2026 recall page",
+    date: "recall dated June 11, 2026; page read November 8, 2026",
+    url: "https://merkuryinnovations.com/pages/fanrecall",
+  },
+  /** A 2025 photo-refund page (steam cleaner, $39.99, cut cord and label photographed): "Please allow 4 to 6 weeks". */
+  weeksPortal: {
+    wait: "4 to 6 weeks",
+    source: "Deale International, CasaClean steam cleaner recall page",
+    short: "a 2025 photo-refund page",
+    date: "July 17, 2025",
+    url: "https://www.thedeale.com/pages/casaclean-safety-recall",
+  },
+  /** The CPSC's full recall listing since 1973, counted by scripts/recalls/listing-mentions.ts. */
+  listing: {
+    records: LISTING.records,
+    paypal: LISTING.terms.paypal.count,
+    venmo: LISTING.terms.venmo.count,
+    electronic: LISTING.terms.electronicPayment.count,
+    paypalRecall: LISTING.terms.paypal.recallNumbers[0] ?? null,
+    source: "CPSC recall listing CSV (every recall since 1973), counted by scripts/recalls/listing-mentions.ts",
+    short: "the CPSC's recall listing",
+    date: `read ${plainDate(LISTING.readAt)}, latest recall ${LISTING.latestRecallDate ? plainDate(LISTING.latestRecallDate) : "n/a"}`,
+    url: LISTING.source,
+  },
+  /** PayPal's US merchant fees: a flat $0.25 per payout through the Payouts API; no fee to make a refund. */
+  payoutFee: {
+    fee: "$0.25",
+    source: "PayPal, Merchant fees (US)",
+    short: "PayPal merchant fees",
+    date: "last updated November 4, 2026",
+    url: "https://www.paypal.com/us/business/paypal-business-fees",
+  },
+  /** Payouts FAQ: recipients pay no fee; an unclaimed payment expires in 30 days and the money returns to the sender. */
+  payoutTerms: {
+    unclaimedDays: 30,
+    source: "PayPal Developer, Payouts frequently asked questions",
+    short: "PayPal Payouts FAQ",
+    date: "last updated October 14, 2026",
+    url: "https://developer.paypal.com/docs/payouts/standard/reference/faq",
+  },
+  /** Refund a payment: within 180 days of the capture; in production, buyers see the refund in 3 to 5 business days. */
+  refundTerms: {
+    days: 180,
+    reach: "3 to 5 business days",
+    source: "PayPal Developer, Refund a payment",
+    short: "PayPal refund documentation",
+    date: "last updated June 4, 2026",
+    url: "https://developer.paypal.com/checkout/refund-payment",
+  },
+  /** AFP 2022 Payments Cost Benchmarking Survey (347 treasury professionals, Sept 2021): issuing a paper check costs $2 to $4. */
+  checkCost: {
+    cost: "$2 to $4",
+    source: "Association for Financial Professionals, 2022 Payments Cost Benchmarking Survey (press release)",
+    short: "AFP, 2022",
+    date: "January 25, 2022",
+    url: "https://www.financialprofessionals.org/about/learn-more/press-releases/Details/survey-73-of-organizations-are-transitioning-their-business-to-business-payments-from-checks-to-digital-payments",
+  },
+  /**
+   * FTC, Consumers and Class Actions (149 settlements, pp. 22-26): median claims rate 9%; in claims-requiring consumer
+   * settlements the median check-cashing rate was 94% and the weighted average 77%.
+   */
+  ftcChecks: {
+    settlements: 149,
+    claimsRate: "9%",
+    cashedWeighted: "77%",
+    cashedMedian: "94%",
+    source: "Federal Trade Commission, Consumers and Class Actions: A Retrospective and Analysis of Settlement Campaigns",
+    short: "FTC, 2019",
+    date: "September 2019",
+    url: "https://www.ftc.gov/system/files/documents/reports/consumers-class-actions-retrospective-analysis-settlement-campaigns/class_action_fairness_report_0.pdf",
+  },
+  /** Digital Disbursements 2024 (nearly 600 cases, p. 13): digital payment success 98%; checks cashed 77% with a claims process, 55% without. */
+  digitalSuccess: {
+    digital: "98%",
+    checksWithClaims: "77%",
+    checksWithout: "55%",
+    source: "Digital Disbursements (Western Alliance Bank), 2024 Annual Report: Digital Payments in Class Actions and Mass Torts",
+    short: "Digital Disbursements, 2024",
+    date: "April 2024",
+    url: "https://www.westernalliancebancorporation.com/sites/default/files/2024-04/2024-digital-payments-research-report.pdf",
+  },
+  /** Consumer Reports survey of 1,010 US adults: almost 70% had not heard of a recall for any product they own in five years; 21% heard and responded. */
+  consumerReports: {
+    notHeard: "70%",
+    responded: "21%",
+    adults: "1,010",
+    source: "Consumer Reports, When Recalls Fail (nationally representative survey of 1,010 adults)",
+    short: "Consumer Reports, 2019",
+    date: "October 31, 2019",
+    url: "https://www.consumerreports.org/recalls/when-recalls-fail/",
+  },
+  /**
+   * Ipsos for the European Commission (24,039 respondents, 2,265 of them owners who saw a recall for their product,
+   * pp. 20-21 and 26): 35.1% of those owners did not react; of those who contacted the firm, 34.3% were offered a
+   * reimbursement, 68.9% a repair, 24.7% nothing.
+   */
+  euSurvey: {
+    noReaction: "35.1%",
+    reimbursed: "34.3%",
+    respondents: "24,039",
+    source: "Ipsos for the European Commission, Survey on consumers' behaviour and perception of product recalls",
+    short: "Ipsos for the European Commission, 2019",
+    date: "April 2019",
+    url: "https://mpo.gov.cz/assets/cz/ochrana-spotrebitele/bezpecnost-vyrobku/2019/4/Product-Recall_study_1.pdf",
+  },
+  /**
+   * The CPSC's 2003 literature review (pp. 24 and 26), reporting a 1980 vehicle recall survey: 23% of non-responders
+   * gave reasons of motivation or effort (no time, inconvenience, not important); about 30% asked for an easier, less
+   * burdensome process. In-home repair raised the average effectiveness rate 14 points over a return to the maker.
+   */
+  cpscReview: {
+    effort: "23%",
+    easier: "30%",
+    source: "XL Associates for the CPSC, Recall Effectiveness Research: A Review and Summary of the Literature on Consumer Motivation and Behavior",
+    short: "CPSC literature review, 2003",
+    date: "July 2003",
+    url: "https://www.cpsc.gov/s3fs-public/RecallEffectiveness.pdf",
   },
 } as const;
 

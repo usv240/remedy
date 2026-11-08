@@ -401,7 +401,7 @@
   "page.ops": {
     "title": "About this page",
     "what": "Everything Remedy watches about itself, live: each service, the job queue, request latency and errors, payments and webhooks by status, and the event stream. Read only, and nothing on it is private.",
-    "why": "Anyone can see the site is healthy, and a judge can paste a request id and follow it from the API answer to the ledger.",
+    "why": "Anyone can see the site is healthy, and anyone can paste a request id and follow it from the API answer to the ledger.",
     "technical": "Every figure comes from tables the app already writes: request_log, audit_event, api_usage, ai_usage, payment, webhook_event, job and integration_status (src/lib/ops/data.ts). The stream is Server-Sent Events from GET /api/ops/live."
   },
   "ops.now": {
@@ -481,5 +481,29 @@
     "what": "What the recalls that refund a photo of the product made safe offer their owners, counted from the CPSC records and the proof rules.",
     "why": "Every point of return that simpler claiming adds sends real money back to owners, and every product made safe is one fewer hazard in a home.",
     "technical": "scripts/recalls/value.ts writes content/recalls/value.json: for each recall whose proof rule asks for a made-safe photo and pays a refund in money, its US units times the lowest price its Sold At field states, or the fixed refund its rule states when that is lower, only where the record states units and a price. Pro-rated refunds state no share and are left out (src/lib/recall/value.ts, tested in tests/recall-value.test.ts). The 6 in 100 is the CPSC measure in src/lib/research.ts."
+  },
+  "evidence.first": {
+    "title": "What is first here",
+    "what": "Three things Remedy does that the nearest existing products and filings, read from their own pages, stop short of: the checked photo paid in the same flow, a hash pool shared across firms, and the refund routed back to the original purchase with an unclaimed payout turned into a task.",
+    "why": "A claim of novelty is only as good as the comparison beside it, so each line links to the row that shows what exists.",
+    "technical": "The comparison rows live in src/components/judges/Compare.tsx (LANDSCAPE), each with its source URL and date; the three statements are in src/app/evidence/page.tsx (FIRST) and point at those rows by id."
+  },
+  "evidence.problem": {
+    "title": "The problem, measured",
+    "what": "The regulator's own correction rate, its 2026 request for information on recall claims that are not genuine and two comments on that docket, how firms pay photo-proof refunds today, the payment issuers' own terms and costs, and surveys of why owners do not act.",
+    "why": "Every figure here is a primary source read on November 8, 2026 and paraphrased, with what Remedy does about it beside it. In Technical view each card also names the code that answers it.",
+    "technical": "The figures live in src/lib/research.ts (PROBLEM) with their URLs and page dates; the cards are src/components/judges/Research.tsx (ProblemResearch). The CPSC listing count is written by scripts/recalls/listing-mentions.ts to content/recalls/listing-mentions.json. The FY2025 correction rate is an average across recalls under a method revised in FY2024, so it is not comparable with the 6 in 100 figure, which is the share of recalled units that come back."
+  },
+  "evidence.landscape": {
+    "title": "What exists near Remedy",
+    "what": "Seven products, portals and one patent application that do part of what Remedy does, each described from its own page or filing, with the one step it leaves to others.",
+    "why": "Each does its job. Naming them is how the difference is shown rather than claimed.",
+    "technical": "src/components/judges/Compare.tsx (LANDSCAPE): Truepic Vision and the Truepic Risk Network, Sedgwick's recall pages, Real Time Results portals, a recall administrator's live photo capture (CPSC docket comment), CCC Estimate-STP and Snapsheet in insurance, and US 2016/0350756 A1 (abandoned 2018). Pages read November 8, 2026."
+  },
+  "evidence.lineage": {
+    "title": "The two-reviewer design",
+    "what": "The published work the design rests on, and the part that is new: two reviewers reading two different rulebooks, with a disagreement sent to a person, in payments.",
+    "why": "A model panel built from different model names shares errors; independence has to come from different inputs, so one reviewer sees only the official pictures and the other only the remedy text.",
+    "technical": "src/lib/verify/reviewers.ts runs the two reviewers and the referee, which counts only votes whose cited evidence checks out; src/lib/verify/decide.ts turns the referee's result into verified, retake or a person's review. Papers: Zheng 2023 (arXiv 2306.05685), Madras 2018 (1711.06664), Jung 2024 (2407.18370), Badshah 2026 (2608.17994), Kohli 2026 (2605.29800)."
   }
 }

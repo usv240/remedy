@@ -1249,3 +1249,139 @@
 .jl-claim + .page-prose {
   margin-top: 12px;
 }
+
+/* What is first here: three numbered statements, each with the nearest existing thing under it and the rows that show it. */
+.ev-first {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 86rem;
+}
+.ev-first-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-content: start;
+  padding: 18px 20px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.ev-first-n {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--muted);
+}
+.ev-first-line {
+  font-weight: 500;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+.ev-first-near {
+  margin-top: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.ev-first-item .jp-links {
+  margin-top: 10px;
+  font-size: 0.875rem;
+}
+@media (max-width: 1100px) {
+  .ev-first {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* What exists near Remedy: one panel per thing, what it does beside the step it leaves to others. */
+.ev-land-head {
+  margin-top: 28px;
+}
+.ev-land-head .ev-sub {
+  margin-top: 0;
+}
+.ev-land {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.ev-land-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px 24px;
+  padding: 16px 20px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  scroll-margin-top: 16px;
+}
+.ev-land-name {
+  grid-column: 1 / -1;
+  font-weight: 600;
+  text-wrap: pretty;
+}
+.ev-land-name .muted {
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+.ev-land-does,
+.ev-land-not {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .ev-land-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Beside the cross-firm run: what the 2026 docket reported, in one paragraph at body size. */
+.evidence .ev-docket {
+  margin-top: 14px;
+  max-width: 78ch;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* Where the two-reviewer design comes from: the intro at the page's lead size, the rest at body size. */
+.ev-lineage-list {
+  max-width: 84ch;
+}
+.evidence .ev-lineage .ev-rules + .page-prose {
+  margin-top: 16px;
+  max-width: 78ch;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.ev-land-disc {
+  margin-top: 20px;
+}
+.ev-land-disc > .jx-body {
+  padding: 4px 20px 20px;
+}
+.ev-land-disc .ev-land-intro {
+  margin: 0 0 4px;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.ev-land-disc .ev-land {
+  margin-top: 10px;
+}
+
+/* The code that answers a finding, in Technical view. */
+.jg-code {
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
