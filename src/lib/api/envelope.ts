@@ -13,7 +13,7 @@ const requestId = () => currentRequestId() ?? newRequestId();
 /** Every success has the same shape: { data, meta, error: null }. */
 export function ok<T>(data: T, started: number, extra: Record<string, unknown> = {}) {
   return Response.json({
-    data,
+    data: redactDeep(data),
     meta: { request_id: requestId(), version: API_VERSION, latency_ms: Date.now() - started, ...extra },
     error: null,
   });

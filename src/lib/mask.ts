@@ -17,9 +17,9 @@ const LONG_BLOB = /[A-Za-z0-9+/=_-]{120,}/g;
  */
 const SECRETS: [RegExp, (m: string) => string][] = [
   [/sk-ant-[A-Za-z0-9_-]+/g, () => "[redacted key]"],
-  [/\b(?:Bearer|Basic|ApiKey)\s+[A-Za-z0-9._~+/=-]{8,}/gi, (m) => `${m.split(/\s+/)[0]} [redacted]`],
+  [/\b(?:Bearer|Basic|ApiKey)\s+(?=[A-Za-z0-9._~+/=-]*\d)[A-Za-z0-9._~+/=-]{16,}/g, (m) => `${m.split(/\s+/)[0]} [redacted]`],
   [/\bA21AA[A-Za-z0-9_-]{16,}/g, () => "[redacted token]"],
-  [/\b([A-Z][A-Z0-9_]{2,})=[^\s"'\,;]{6,}/g, (m) => `${m.slice(0, m.indexOf("="))}=[redacted]`],
+  [/\b([A-Z][A-Z0-9]*_[A-Z0-9_]+)=[^\s"'\,;]{8,}/g, (m) => `${m.slice(0, m.indexOf("="))}=[redacted]`],
 ];
 
 /** The same text with every credential-looking run replaced. Plain words, numbers and ids pass through unchanged. */

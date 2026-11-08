@@ -7,6 +7,7 @@
  * puts every payout into one PayPal Payouts batch. Nothing here moves money on its own.
  */
 import { sql } from "drizzle-orm";
+import { redactDeep } from "@/lib/mask";
 import { audit } from "@/lib/audit";
 import { db } from "@/lib/db";
 import { approvePlan, cancelPlan, describeStatus, payClaims, planPayment, type ClaimForPayment, type PayResult } from "@/lib/payments";
@@ -246,7 +247,7 @@ export async function claimDetail(firm: Firm, claimId: string): Promise<ClaimDet
   }
 
   const pay = row.payout.status;
-  return {
+  return redactDeep({
     row,
     recall: { number: r.recall_number, title: r.title, image: recallThumb(r.recall_number), units: extra?.units ?? null, url: extra?.url ?? "" },
     rule: rule ? { steps: rule.steps ?? [], actions: rule.actions ?? [], mustShow: rule.must_show ?? [], plain: rule.explanation?.plain ?? null, source: extra?.rule_source ?? null } : null,
@@ -269,7 +270,7 @@ export async function claimDetail(firm: Firm, claimId: string): Promise<ClaimDet
     note: noteFor(r, { recorded: extra?.photo_source === "preset" }),
     reviewedBy: extra?.reviewed_by ?? null,
     reviewedAt: extra?.reviewed_at ? new Date(extra.reviewed_at).toISOString() : null,
-  };
+  });
 }
 
 /** The claim as the payments engine takes it, with the payee decrypted only here, on the server. */

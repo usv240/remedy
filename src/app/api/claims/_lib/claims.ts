@@ -33,6 +33,7 @@ import { candidateFromHit, heuristicMatch } from "@/lib/recall/match";
 import { searchRecalls } from "@/lib/recall/search";
 import { runJob } from "@/lib/jobs";
 import { log } from "@/lib/log";
+import { redactDeep } from "@/lib/mask";
 import { encrypt, hashContact, maskContact } from "@/lib/secure";
 import { autoPayVerdict, limitVerdict, type IdentityMatches } from "@/lib/firm/limits";
 import { hashBuyerEmail } from "@/lib/payments/shop";
@@ -470,7 +471,7 @@ export async function getClaimView(id: string, opts: { refresh?: boolean } = {})
     await db().update(schema.claims).set({ status, updatedAt: new Date() }).where(eq(schema.claims.id, id));
     if (status === "paid") await audit("system", "claim.paid", `claim:${id}`, { route: payment?.route, amount: payment?.amount });
   }
-  return toView({ ...row, status }, payment);
+  return redactDeep(toView({ ...row, status }, payment));
 }
 
 export async function toView(row: ClaimRow, payment: PaymentView | null): Promise<ClaimView> {

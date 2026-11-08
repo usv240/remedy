@@ -14,12 +14,13 @@ describe("credentials never reach a visitor", () => {
     const out = redactSecrets(LEAK);
     expect(out).not.toContain("sk-ant");
     expect(out).not.toContain(FAKE_ID);
-    expect(redactSecrets(`ApiKey ${"z".repeat(30)}`)).toBe("ApiKey [redacted]");
+    expect(redactSecrets(`ApiKey ${"z1".repeat(15)}`)).toBe("ApiKey [redacted]");
+    expect(redactSecrets(`Authorization: Bearer ${"b2".repeat(20)}`)).toBe("Authorization: Bearer [redacted]");
     expect(redactSecrets(`token A21AA${"q".repeat(40)}`)).toBe("token [redacted token]");
   });
 
   it("leaves plain words, amounts and ids alone", () => {
-    const plain = "The cord is cut. Refund $34.99 for recall BH-2026-01, payout 5UXD2E8A7EBQJ, check C2 passed.";
+    const plain = "The cord is cut. Refund $34.99 for recall BH-2026-01, payout 5UXD2E8A7EBQJ, check C2 passed. Basic information for owners; set AI_DAILY_USD=5.";
     expect(redactSecrets(plain)).toBe(plain);
   });
 
