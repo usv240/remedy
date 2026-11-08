@@ -19,8 +19,8 @@ const TOOLS: Tool[] = [
     id: "paypal",
     name: "PayPal",
     job: "Pays refunds instantly, and refunds to the original purchase inside 180 days.",
-    how: "Payouts to an email, a phone number or Venmo; a refund to the original capture when the owner bought with PayPal in the last 180 days; Orders v2 for the sample shop and for safe replacements. Every status comes from signature-checked webhooks, and every payment writes to the hash-chained ledger.",
-    files: ["src/lib/paypal/client.ts", "src/lib/audit.ts"],
+    how: "Payouts to an email, a phone number or Venmo; a refund to the original capture when the owner bought with PayPal in the last 180 days; Orders v2 for the sample shop and for safe replacements. A firm can connect its own PayPal REST app, checked with PayPal and stored sealed, and its refunds and payouts then run on it; the sample firm pays from the platform's sandbox account. Every status comes from signature-checked webhooks, and every payment writes to the hash-chained ledger.",
+    files: ["src/lib/paypal/client.ts", "src/lib/paypal/firm-account.ts", "src/lib/payments/router.ts", "src/lib/audit.ts"],
   },
   {
     id: "claude",
@@ -68,8 +68,8 @@ const TOOLS: Tool[] = [
     id: "render",
     name: "Render",
     job: "Hosting and Postgres.",
-    how: "A web service and a managed Postgres database, both described in render.yaml.",
-    files: ["render.yaml", "db/schema.sql"],
+    how: "One Blueprint, render.yaml: the web service, a background worker that takes photo checks and payouts off the request path, a daily cron job that pulls each day's new CPSC recalls, and a managed Postgres database with the reviewed schema applied before each release.",
+    files: ["render.yaml", "scripts/worker.ts", "src/app/api/ops/recalls/daily/route.ts", "db/schema.sql"],
   },
 ];
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { demoPicks } from "@/app/api/claims/_lib/recall";
-import { listPresets, readRecorded, recordedSamples } from "@/app/api/try/_lib/presets";
+import { LIVE_PRESET, listPresets, readRecorded, recordedSamples } from "@/app/api/try/_lib/presets";
 import { Info } from "@/components/Info";
 import { AnyRecall } from "@/components/try/AnyRecall";
 import { Presets, type PresetCard } from "@/components/try/Presets";
@@ -26,15 +26,16 @@ export default function TryPage() {
     expected: p.expected,
     technical: p.technical && readRecorded(p.technical.recorded) ? { note: p.technical.note } : null,
     user: Boolean(p.user),
+    live: p.id === LIVE_PRESET,
   });
   return (
     <div className="page frame tr-page">
       <header className="page-head">
         <div className="title-row">
-          <h1 className="page-title tr-title">Try it with your own photo</h1>
+          <h1 className="page-title tr-title">See a photo become a refund</h1>
           <Info id="page.try" />
         </div>
-        <p className="lede">See a photo become a refund. Run one of ours, your own, or any recall.</p>
+        <p className="lede">Start with one of our examples, then try your own photo or any recall. Brightline&rsquo;s sample charger can also run live.</p>
         <p className="tr-shop-line">
           Want the refund to go back to a PayPal purchase?{" "}
           <Link className="text-link" href="/try/shop">

@@ -1,6 +1,6 @@
 {
  "note": "Recorded runs of verifyPhoto (src/lib/verify) on the fixture photos in content/verify/fixtures. Free cases need no model. Vision cases are live Claude Opus 5.5 calls, recorded once; the pages never call Claude. Written by scripts/public/record-runs.ts.",
- "recordedAt": "2026-11-07T16:30:52.446Z",
+ "recordedAt": "2026-11-07T22:17:12.005Z",
  "totalUsd": 0.0216,
  "runs": [
   {
@@ -27,12 +27,13 @@
     },
     "model": "claude-opus-5-5",
     "timings": {
-     "decode_ms": 171,
-     "official_ms": 172,
+     "decode_ms": 93,
+     "official_ms": 50,
+     "match_ms": 7.3,
      "vision_ms": 13112,
      "checks_ms": 3,
      "reviewers_ms": 59,
-     "total_ms": 13358
+     "total_ms": 13275
     },
     "checks": {
      "C1": {
@@ -115,12 +116,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 198,
-     "official_ms": 139,
+     "decode_ms": 98,
+     "official_ms": 83,
+     "match_ms": 0.4,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 280
+     "total_ms": 141
     },
     "checks": {
      "C1": {
@@ -174,7 +176,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "official-image-power-bank",
@@ -203,12 +205,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 127,
-     "official_ms": 78,
+     "decode_ms": 25,
+     "official_ms": 17,
+     "match_ms": 0.1,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 131
+     "total_ms": 27
     },
     "checks": {
      "C1": {
@@ -262,7 +265,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "duplicate-rotated-official",
@@ -291,12 +294,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 113,
-     "official_ms": 87,
+     "decode_ms": 26,
+     "official_ms": 20,
+     "match_ms": 0.1,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 115
+     "total_ms": 27
     },
     "checks": {
      "C1": {
@@ -350,7 +354,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "duplicate-tilted-official",
@@ -379,12 +383,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 167,
-     "official_ms": 118,
+     "decode_ms": 34,
+     "official_ms": 24,
+     "match_ms": 0.1,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 169
+     "total_ms": 35
     },
     "checks": {
      "C1": {
@@ -438,39 +443,33 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "duplicate-earlier-claim",
    "title": "A photo already used",
-   "about": "A copy of a photo that an earlier claim on this recall already sent.",
-   "expect": "Not verified: the photo was used before",
-   "photo": "derived/27056-haiara-1.rotated90-q55.jpg",
-   "recall": "27045",
+   "about": "A full-size photo of a power bank, turned and saved again, that an earlier claim on this recall already sent.",
+   "expect": "Sent to a person at the firm: the photo was used before",
+   "photo": "derived/commons-powerbank-romoss.rotated90-q70.jpg",
+   "recall": "27056",
    "needs_vision": false,
    "result": {
-    "decision": "retake",
-    "decided_by": "quality",
+    "decision": "firm_review",
+    "decided_by": "checks",
     "summary": {
-     "plain": "The photo is too small to check. Please take it again.",
-     "technical": "Retake (quality). Quality precheck: sharpness 493.3 (min 35), mean luma 99.3, p95 208, p05 41, size 274x185 (min side 240). Issues: small."
-    },
-    "guidance": {
-     "plain": "The photo is too small to check. Please take it again.",
-     "steps": [
-      "Move closer so the product fills most of the photo."
-     ],
-     "technical": "Quality precheck: sharpness 493.3 (min 35), mean luma 99.3, p95 208, p05 41, size 274x185 (min side 240). Issues: small."
+     "plain": "A person at the firm will take a look.",
+     "technical": "Firm review: C1 skipped, C2 skipped, C3 fail, C4 skipped. no firm amount; no linked capture; no refund amount; no auto cap."
     },
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 64,
-     "official_ms": 112,
+     "decode_ms": 54,
+     "official_ms": 20,
+     "match_ms": 38.4,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 223
+     "total_ms": 94
     },
     "checks": {
      "C1": {
@@ -479,7 +478,7 @@
       "pass": false,
       "score": null,
       "reason": "Not checked yet.",
-      "technical": "The photo did not pass the quality precheck."
+      "technical": "The photo matches one sent with an earlier claim, so a person at the firm compares the two."
      },
      "C2": {
       "name": "Made safe",
@@ -487,7 +486,7 @@
       "pass": false,
       "score": null,
       "reason": "Not checked yet.",
-      "technical": "The photo did not pass the quality precheck."
+      "technical": "The photo matches one sent with an earlier claim, so a person at the firm compares the two."
      },
      "C3": {
       "name": "Your own photo",
@@ -495,7 +494,7 @@
       "pass": false,
       "score": null,
       "reason": "This photo matches one sent with an earlier claim, so a person at the firm will take a look.",
-      "technical": "Matches earlier claim photo official/27056-haiara-1.jpg at 1 bits (turned 270). dHash bcbebe78783a7e38; nearest official 17 bits, nearest earlier claim 1 bits (reused at 10 or less)."
+      "technical": "Matches earlier claim photo other/commons-powerbank-romoss.jpg at 0 bits (turned 270). dHash 8109660e06001e68; nearest official 24 bits, nearest earlier claim 0 bits (reused at 10 or less)."
      },
      "C4": {
       "name": "Within the recall",
@@ -503,7 +502,7 @@
       "pass": false,
       "score": null,
       "reason": "Not checked yet.",
-      "technical": "The photo did not pass the quality precheck."
+      "technical": "The photo matches one sent with an earlier claim, so a person at the firm compares the two."
      },
      "C5": {
       "name": "Claim limits",
@@ -511,7 +510,7 @@
       "pass": true,
       "score": null,
       "reason": "This claim is within the limit for one purchase.",
-      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 300 units."
+      "technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 11000 units."
      },
      "C6": {
       "name": "Not already refunded",
@@ -524,7 +523,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "blurry",
@@ -551,12 +550,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 170,
-     "official_ms": 57,
+     "decode_ms": 56,
+     "official_ms": 20,
+     "match_ms": 8.1,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 188
+     "total_ms": 66
     },
     "checks": {
      "C1": {
@@ -610,7 +610,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "another-recalls-picture",
@@ -639,12 +639,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 124,
-     "official_ms": 62,
+     "decode_ms": 66,
+     "official_ms": 52,
+     "match_ms": 11.3,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 154
+     "total_ms": 79
     },
     "checks": {
      "C1": {
@@ -698,7 +699,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T16:30:52.446Z"
+   "ran_at": "2026-11-07T22:17:12.005Z"
   },
   {
    "id": "cord-cut-example",

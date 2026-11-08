@@ -11,7 +11,7 @@
 //   are "sample history (not paid)": paypal_status SAMPLE, no PayPal batch id, so nothing polls PayPal for them. They
 //   use the firm's refund for the recall: the sample shop's price ($34.99) on BH-2026-01, and a labelled $20.00
 //   sample amount on the real CPSC recalls the console also lists.
-// - two verified claims ready to pay, $1.00 each to the sandbox buyer (SANDBOX_BUYER_EMAIL, or the sandbox login in
+// - two verified claims ready to pay, at the recall's $34.99 refund, to the sandbox buyer (SANDBOX_BUYER_EMAIL, or the sandbox login in
 //   TESTING.md): paying them sends real sandbox payouts. The console keeps two ready: when a visitor pays them, the
 //   queue adds two more (src/lib/firm/sample-claims.ts). tests/e2e/firm.mjs pays them with bulk "Approve and pay".
 // - one firm-review claim on recall 26754 whose photo, checks and Two reviewers come from a recorded live run, when
@@ -30,7 +30,7 @@ import { basePlan } from "../src/lib/firm/plan";
 import { SAMPLE_RECALL } from "../src/lib/firm/firm";
 import { SAMPLE_PAYPAL_STATUS } from "../src/lib/firm/queue";
 import { SHOP } from "../src/lib/payments/shop-catalog";
-import { ensureReadyClaims, READY_AMOUNT, sampleChecks, sampleResult, type SampleKind } from "../src/lib/firm/sample-claims";
+import { ensureReadyClaims, READY_AMOUNT, sampleChecks, samplePhotoFor, samplePhotoIds, sampleResult, type SampleKind } from "../src/lib/firm/sample-claims";
 import type { Checks } from "../src/lib/verify/types";
 
 const DAY = 86_400_000;
@@ -205,6 +205,8 @@ async function main() {
   const when = (fraction: number) => new Date(Math.min(latest, announced.getTime() + fraction * span + (r() - 0.5) * 4 * 3_600_000));
 
   const kinds = PLAN.flatMap((p) => p.at.map((f) => ({ kind: p.kind, f })));
+  // Real thumbnails in the queue and the drawer: the sample set's own photos of the charger (public/samples/charger).
+  const photoIds = recall.number === SAMPLE_RECALL ? await samplePhotoIds() : {};
   const channels = ["link", "link", "link", "web", "link", "email", "link", "web", "api", "link"];
   const batches = new Map<string, { claims: string[]; day: Date }>();
   const unclaimed: { claimId: string; batchKey: string }[] = [];
@@ -232,6 +234,7 @@ async function main() {
       decided: new Date(created.getTime() + 25_000),
       review,
       units: i % 11 === 3 ? 2 : 1,
+      photoId: photoIds[samplePhotoFor(kind, i)] ?? null,
     });
     if (kind === "paid" || kind === "unclaimed" || kind === "reviewed_paid") {
       // Paid in the next morning's batch (17:00 UTC, 9 am Pacific), once the claim is verified or approved.
@@ -247,7 +250,7 @@ async function main() {
     }
   }
 
-  // Claims ready to pay, $1.00 each to the sandbox buyer: bulk "Approve and pay" sends real sandbox payouts. The
+  // Claims ready to pay, at the recall's $34.99 refund, to the sandbox buyer: bulk "Approve and pay" sends real sandbox payouts. The
   // console tops them up the same way whenever the queue is read with fewer left (src/lib/firm/sample-claims.ts).
   const ready = await ensureReadyClaims(firm.id, recall.number, now);
   if (!ready) console.log("seed-firm: the claims ready to pay were already there (or no sandbox buyer is known).");

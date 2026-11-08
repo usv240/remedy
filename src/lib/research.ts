@@ -4,6 +4,45 @@
  * the home page and the README all read them from here (tests/facts.test.ts checks the README). Pure.
  */
 export const RESEARCH = {
+  /**
+   * Recall-specific, first. CPSC staff's recall data (Recall Effectiveness Workshop, July 2017), as the OECD reports
+   * it (p. 19): "when consumers are contacted through recalls alerts, the consumer correction rate is at 50%, against
+   * 6% in the case of a press release". A Recall Alert is a recall where the firm can reach its buyers directly.
+   */
+  directNotice: {
+    direct: "50%",
+    press: "6%",
+    source: "CPSC recall data (2017 workshop), as reported by the OECD, Enhancing Product Recall Effectiveness Globally, 2018",
+    short: "OECD, 2018",
+    url: "https://one.oecd.org/document/DSTI/CP/CPS(2018)1/FINAL/en/pdf",
+  },
+  /** The CPSC's own workshop report (p. 5): "Direct notice recalls have proven to be the most effective recalls." */
+  cpscReport: {
+    source: "CPSC Office of Compliance, Recall Effectiveness Workshop Report, February 2018",
+    url: "https://www.cpsc.gov/s3fs-public/Recall_Effectiveness_Workshop_Report-2018.pdf",
+  },
+  /**
+   * A behavioural experiment for the European Commission (p. 31): 72% of people shown a direct recall notice decided
+   * to act on it, against 31% shown a generic one; of those who took no action, 21% named "too much effort/time" (p. 18).
+   */
+  euStudy: {
+    direct: "72%",
+    generic: "31%",
+    effort: "21%",
+    source: "LE Europe, VVA, Ipsos and ConPolicy for the European Commission, Behavioural Study on Strategies to Improve the Effectiveness of Product Recalls, 2021",
+    short: "European Commission study, 2021",
+    url: "https://mpo.gov.cz/assets/cz/ochrana-spotrebitele/bezpecnost-vyrobku/2021/10/Behavioural-study---final-report.pdf",
+  },
+  /**
+   * Vehicle recalls, where the maker mails each registered owner (GAO-11-603, p. 1): "on average only about 70 percent
+   * of vehicles subject to a recall are fixed within the 18-month period".
+   */
+  vehicles: {
+    fixed: "70%",
+    source: "U.S. Government Accountability Office, GAO-11-603, Auto Safety, June 2011",
+    short: "GAO, 2011",
+    url: "https://www.gao.gov/assets/gao-11-603.pdf",
+  },
   fullRemedy: {
     lift: "11.4%",
     recalls: 338,

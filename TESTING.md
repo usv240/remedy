@@ -50,7 +50,11 @@ Open `/try`. The **Examples** tab starts with **Photos of products made safe**: 
 | A look-alike with a 20 on it (Romoss) | 27056 | **Retake:** a similar print is not enough; the right-product check does not pass. |
 | A photo of a screen | 27056 | **Retake:** the own-photo check sees a computer monitor, so the owner is asked for a photo of the product itself. |
 
-Examples that need Claude replay one recorded live answer, so pressing **Run it** costs nothing; every check around that answer runs again in code. Photos of products the team owns are added under **Photos of products made safe** when they are in `content/verify/fixtures/user/` with an `expected.json`.
+Examples that need Claude replay one recorded live answer, so pressing **Run it** costs nothing; every check around that answer runs again in code.
+
+**Run it live:** Brightline's sample charger also has **Run it live**, which sends the photo to Claude Opus 5.5 now, with the verification cache skipped so the answer is new, and labels the result **Live** with what it cost. Each visitor gets one live run a day, paid from the site's daily AI budget (`AI_DAILY_USD`); when the budget is spent, the server has no Claude key, or the visitor has used theirs, it shows the recorded run, labelled **Recorded** with the reason. Nothing is paid from `/try`. Photos of products the team owns are added under **Photos of products made safe** when they are in `content/verify/fixtures/user/` with an `expected.json`.
+
+**A remedy that asks for more than one photo:** 8 of the 525 photo-refund recalls do, and their claim pages take that many. Open [`/claim/25007`](https://remedy-y0ym.onrender.com/claim/25007): **Snap two photos**, the straps cut off, then the helmet in the trash. Each photo gets the free checks, and both go to Claude in one request.
 
 **Your own photo:** the **Your photo** tab, or `/claim/27056` on a phone, runs the same claim flow live: the recall, the steps to make it safe, one photo, the six checks, and your result. Photo checks are limited per visitor (6 in 10 minutes, 30 a day); the examples are not.
 
@@ -62,7 +66,7 @@ Examples that need Claude replay one recorded live answer, so pressing **Run it*
 4. Under **Bought it from Brightline with PayPal?**, **Use my purchase from** your purchase date, **$34.99, made on this device** is ticked, so the refund goes back to it.
 5. No charger to cut? Press **Use Brightline's sample photo**: the public-domain photo of this charger with its cord cut (Dmitry G, Wikimedia Commons). Or take your own. Press **Check my photo**.
 6. The six checks run and the result reads **Verified**, **Your photo checks out.**, $34.99 refund. Under **Where should it go?**, **Back to your PayPal payment** is chosen. Press **Send my refund**.
-7. $34.99 is under Brightline's $50.00 auto-approve rule, so no person is needed: the payment router sees the purchase inside 180 days and refunds it to the original PayPal capture. The receipt reads **Refunded $34.99 to your PayPal payment.**, with the sandbox refund ID.
+7. $34.99 is under Brightline's $50.00 auto-approve rule, and within its auto-pay limit of $350.00 a day for this recall, so no person is needed: the payment router sees the purchase inside 180 days and refunds it to the original PayPal capture. The receipt reads **Refunded $34.99 to your PayPal payment.**, with the sandbox refund ID.
 8. Claim the same purchase again: the claim page says that purchase already has a claim, and the new claim is checked on its own, with no second refund to that purchase.
 
 The sample photo can be used by every visitor: it stays out of the earlier-claims pool. Any other photo is checked against earlier claims as usual, so a photo already used is asked again. With a photo of a product that is not the recalled charger made safe, the result is a friendly retake, or **firm review** when a check is unclear; a firm review claim is approved in [`/firm/claims`](https://remedy-y0ym.onrender.com/firm/claims) (choose **Needs review**, open it, **Approve and pay**), and the refund then goes back to the purchase the same way.
@@ -77,6 +81,8 @@ Open [`/firm`](https://remedy-y0ym.onrender.com/firm): Brightline Home's recall 
 - Open any row: the drawer shows the photo, each check with its reason, and the payment plan. **Ask for a retake** asks the owner, kindly, for a new photo through the same claim link.
 - The look-alike claim on recall 26754 (the CPSC's photo of a different hair dryer) shows the **Two reviewers**: the Product reviewer, who sees only the official images, and the Remedy reviewer, who sees only the remedy text. Each cites what it saw, and the referee in code sends the claim to a person.
 - **Reviewing as** picks a sample reviewer (Ana or Devon); approvals are recorded in that name.
+- **Payments and claim limits**, on [`/firm`](https://remedy-y0ym.onrender.com/firm): the PayPal account the firm pays from, and the claim limits as plain rules. **Connect your PayPal app** takes a sandbox REST app's client ID and secret and checks them with PayPal; a firm's own console stores them sealed and pays its refunds and payouts from them, while this open sample console only checks them and keeps the platform's sandbox account. The limits: one refund per person per recall, where a person is the payee, the PayPal purchase, the PayPal account that paid, or the network and browser (a new email alone does not reset it), and the auto rule pays at most $350.00 a day for each recall, with the rest waiting in **Needs review**.
+- Sample claims show the sample set's own photos of the charger (Dmitry G, Wikimedia Commons, public domain): cut for the paid and reviewed claims, intact or opened for the ones asked for a new photo.
 
 ## Bulk pay
 
@@ -84,7 +90,7 @@ Open [`/firm`](https://remedy-y0ym.onrender.com/firm): Brightline Home's recall 
 2. Press **Approve and pay**. The status line reads, for example, "2 payouts sent in PayPal batch ...": one PayPal Payouts batch for all of them.
 3. The payout status updates live in the grid ("Live: payout status updates here"). In our runs, a sandbox payout reached SUCCESS 17 to 18 seconds after approval.
 
-Two sample claims are always ready to pay, $1.00 each to the sandbox buyer: when a visitor has paid them, the queue adds two more the next time it opens. Any **Needs review** claim can also be approved and paid from its drawer.
+Two sample claims are always ready to pay, at the recall's refund of $34.99, to the sandbox buyer: when a visitor has paid them, the queue adds two more the next time it opens. Any **Needs review** claim can also be approved and paid from its drawer.
 
 ## The recall plan and its re-notice
 
@@ -183,7 +189,7 @@ npm run worker                # the job worker, in a second terminal (photo chec
 | `PAYPAL_VENDOR_EMAIL` | A sandbox business account that stands in for the retailer of a safe replacement |
 | `SANDBOX_BUYER_EMAIL`, `SANDBOX_BUYER_PASSWORD` | The sandbox personal account, for the payment suites and the seeded claims ready to pay |
 | `ANTHROPIC_API_KEY` | Live photo checks, the two reviewers and the report summary |
-| `AI_DAILY_USD` | Daily Claude budget in US dollars ($2 on the hosted site; no limit locally) |
+| `AI_DAILY_USD` | Daily Claude budget in US dollars ($5 on the hosted site; no limit locally) |
 | `ELASTIC_URL`, `ELASTIC_API_KEY` | Elastic recall search; without them, the in-app BM25 search |
 | `CHANNEL3_API_KEY` | Safe replacements; without it, owners are offered a refund |
 | `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` | AG Grid Enterprise license for the claims queue; without it the grid runs on AG Grid's enterprise trial |
@@ -199,18 +205,18 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 411 passed, 44 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
+| Unit tests, no network | `npm test` | 440 passed, 49 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
-| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 27 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 108 page views pass |
+| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 31 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 124 page views pass |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, docs and the MCP tools (no AI call) | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: examples, a streamed claim, firm review, approval, a $1.25 sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
 | Buy in the sample shop as the sandbox buyer, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11 |
-| The firm console: queue and drawer, bulk Approve and pay ($1.00 payouts), the report against SQL, and a live Gantt re-notice (run `scripts/seed-firm.ts` first; `FIRM_E2E_PAY=0` skips the payouts) | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
+| The firm console: queue and drawer, bulk Approve and pay ($34.99 payouts), the report against SQL, and a live Gantt re-notice (run `scripts/seed-firm.ts` first; `FIRM_E2E_PAY=0` skips the payouts) | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
 | The audit ledger's hash chain, straight from the database | `npm run verify-ledger` | Every hash links to the one before it |
 | 60 ledger appends at once keep one chain | `npm run test:ledger-race` | Chain verified |
-| 100 visitors at once on the free paths (official-picture claim, search, scan sample), against the production build on port 3400 | `BASE_URL=http://localhost:3400 node --env-file=.env.local scripts/load-test.mjs` | Writes `content/public/load-test.json`, shown on `/evidence#load`; 0 errors |
+| 100 visitors at once on the free paths (official-picture claim, search, scan sample), against the production build on port 3400 | `BASE_URL=http://localhost:3400 node --env-file=.env.local scripts/load-test.mjs` | Writes `content/public/load-test.json`, shown on `/evidence/operations#load`; 0 errors |
 | Rescore the extraction benchmark from the stored outputs (no AI call) | `npx tsx scripts/recalls/bench.ts` | Writes `content/recalls/benchmark/results.json`, marked draft until every label is confirmed |
 | The figures the README, TESTING.md and `/evidence` repeat, after the suites above | `npx tsx scripts/facts.ts` | Writes `content/public/facts.json`; `tests/facts.test.ts` fails when a document or the code disagrees with it |
 | Recount the CPSC figures | `npx tsx scripts/recalls/stats.ts` | Writes `content/recalls/stats.json`; the 2026-11-01 snapshot gives the published 523 of 1,227 |

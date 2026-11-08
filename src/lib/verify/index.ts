@@ -38,6 +38,11 @@ export { cacheKey, engineVersion, ruleVersion, photoSha256, memoryVerifyCache, d
 
 export type VerifyInput = {
   photo: Buffer | Uint8Array;
+  /**
+   * The further photos a remedy asks for (it asks for two or three: rule.photo_count), in order. Each gets the same
+   * free checks as the first, and all of them go to the model in one request.
+   */
+  morePhotos?: readonly (Buffer | Uint8Array)[];
   mime?: string;
   recall: VerifyRecall;
   proofRule: VerifyProofRule;
@@ -69,7 +74,7 @@ export type VerifyInput = {
   };
 };
 
-/** Seams for tests and for hosting the vision step elsewhere (for example an Astropods agent). */
+/** Seams for tests: the model calls, the image fetch, the cache and the budget check can each be replaced. */
 export type VerifyDeps = {
   vision?: (a: VisionArgs) => Promise<VisionRun>;
   reviewers?: (a: ReviewArgs) => Promise<ReviewRun>;
@@ -91,6 +96,8 @@ export type VerifyResult = {
   quality: QualityReport;
   /** `dhash` is the upright hash to store (image_hash, source "claim"); `dhash_variants` are all eight orientations, for matching in SQL. */
   photo: { dhash: string | null; dhash_variants: string[]; width: number; height: number; exif: boolean; mime: string | null; sha256: string };
+  /** The further photos of a remedy that asks for more than one: each one's upright hash, to store with the claim. */
+  more_photos?: { dhash: string | null; width: number; height: number }[];
   /** A person (a face, a body or a child) seen in the photo by the vision call: the claim deletes the stored photo. */
   person: { visible: true; kinds: string[] } | null;
   review: ReturnType<typeof debatePayload> | null;
@@ -130,7 +137,8 @@ function resting(checks: Checks): Checks {
  * Verify one claim photo against one recall. Never throws for a bad photo or a missing AI service: those become a
  * retake or a firm review. The order is cheap first:
  *  1. decode, quality precheck and dHash, while the official images load (no model call);
- *  2. a match with this recall's official images asks for the owner's own photo; low quality asks for a retake;
+ *  2. a match with this recall's official images asks for the owner's own photo; a match with an earlier claim goes to
+ *     a person at the firm; low quality asks for a retake;
  *  3. the verification cache, then the daily budget, then one structured vision call for C1 to C4, with C5 and C6 alongside;
  *  4. the decision in code; firm-review cases get the Two reviewers and the referee (cached the same way).
  */
@@ -139,7 +147,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   const ctx = input.claimContext ?? {};
   const rule = input.proofRule;
   const recall = input.recall;
-  const timings: Timings = { decode_ms: 0, official_ms: 0, vision_ms: 0, checks_ms: 0, reviewers_ms: 0, total_ms: 0 };
+  const timings: Timings = { decode_ms: 0, official_ms: 0, match_ms: 0, vision_ms: 0, checks_ms: 0, reviewers_ms: 0, total_ms: 0 };
   const ai = deps.aiAvailable ?? aiAvailable;
   const budgetCheck = deps.overBudget ?? overBudget;
   const bytes = input.photo instanceof Buffer ? input.photo : Buffer.from(input.photo);
@@ -147,7 +155,8 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
 
   // The cache: on by default with a database, off when a test seam stands in for the model and no cache is given.
   const cache = input.options?.cache === false ? null : deps.cache !== undefined ? deps.cache : deps.vision || deps.reviewers ? null : defaultVerifyCache();
-  const sha256 = photoSha256(bytes);
+  const moreBytes = (input.morePhotos ?? []).slice(0, 3).map((b) => (b instanceof Buffer ? b : Buffer.from(b)));
+  const sha256 = moreBytes.length ? photoSha256(Buffer.from([photoSha256(bytes), ...moreBytes.map(photoSha256)].join("|"))) : photoSha256(bytes);
   const key = cacheKey({ photoSha256: sha256, recallNumber: recall.number, ruleVersion: ruleVersion(rule), engineVersion: engineVersion(undefined, input.options?.effort) });
   const cacheInfo: VerifyResult["cache"] = { key, vision: "none", reviewers: "none", stored: false };
 
@@ -202,8 +211,21 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       timings,
     };
   }
-  const quality = assessQuality(img.qualityGrey, img);
+  const firstQuality = assessQuality(img.qualityGrey, img);
   const variants = dhashVariants(img.hashGrey);
+  // The further photos: each decoded, quality-checked and hashed the same way. One that cannot be read is a retake.
+  const more: { img: DecodedImage; quality: QualityReport; variants: string[] }[] = [];
+  for (const b of moreBytes) {
+    try {
+      const m = await decodeImage(b, claimMaxSide(rule.must_show));
+      more.push({ img: m, quality: assessQuality(m.qualityGrey, m), variants: dhashVariants(m.hashGrey) });
+    } catch (e) {
+      if (!(e instanceof PhotoUnreadableError)) throw e;
+      more.push({ img, quality: { ...emptyQuality(), issues: ["small"] }, variants: [] });
+    }
+  }
+  // The claim's quality is its weakest photo's.
+  const quality = [firstQuality, ...more.map((m) => m.quality)].find((q) => !q.ok) ?? firstQuality;
   timings.decode_ms = ms(decodeStarted);
 
   const official = await officialP;
@@ -211,11 +233,19 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   // This recall's own pictures and earlier claims at DUPLICATE_MAX_DISTANCE; every other recall's at CATALOG_MAX_DISTANCE.
   const officialHashes: HashRef[] =
     input.options?.officialHashCheck === false ? [] : dedupeRefs([...storedHashes, ...official.images.map((o) => ({ ref: o.url, dhash: o.dhash, caption: o.caption }))]);
-  const hashes = hashMatches(variants, officialHashes, input.priorHashes ?? []);
-  const elsewhere = {
-    official: input.options?.officialHashCheck === false || hashes.official ? null : otherRecallMatch(variants, recall.number),
-    prior: hashes.prior || !input.elsewhereHashes?.length ? null : closestMatch(variants, input.elsewhereHashes, CATALOG_MAX_DISTANCE),
+  const matchStarted = performance.now();
+  const matchOne = (v: string[]) => {
+    const h = hashMatches(v, officialHashes, input.priorHashes ?? []);
+    const e = {
+      official: input.options?.officialHashCheck === false || h.official ? null : otherRecallMatch(v, recall.number),
+      prior: h.prior || !input.elsewhereHashes?.length ? null : closestMatch(v, input.elsewhereHashes, CATALOG_MAX_DISTANCE),
+    };
+    return { hashes: h, elsewhere: e, hit: Boolean(h.official || h.prior || e.official || e.prior) };
   };
+  const first = matchOne(variants);
+  const found = first.hit ? first : (more.map((m) => (m.variants.length ? matchOne(m.variants) : null)).find((m) => m?.hit) ?? first);
+  const { hashes, elsewhere } = found;
+  timings.match_ms = Math.round((performance.now() - matchStarted) * 10) / 10;
   const cached = await cachedP;
   let restingToday = false;
 
@@ -277,6 +307,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       amount: amount.amount,
       quality,
       photo: { dhash: variants[0], dhash_variants: variants, width: img.width, height: img.height, exif: img.exif, mime, sha256 },
+      ...(more.length ? { more_photos: more.map((m) => ({ dhash: m.variants[0] ?? null, width: m.img.width, height: m.img.height })) } : {}),
       person: person ? { visible: true, kinds: person.kinds } : null,
       review: reviewRun ? debatePayload(reviewRun) : null,
       blockers: verdict.blockers,
@@ -291,15 +322,19 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
     };
   };
 
-  // 2. Not their own photo, or not good enough to check: no model call needed.
+  // 2. Not their own photo, already sent with an earlier claim, or not good enough to check: no model call needed.
+  //    A photo already used goes to a person at the firm, who compares it with the earlier claim; reading it again
+  //    would cost a model call and change nothing about that decision.
   const c3Hash = evaluateC3({ dhash: variants[0], official: hashes.official, prior: hashes.prior, nearest: hashes.nearest, source: null, exif: img.exif, visionAvailable: false, elsewhere });
-  if (c3Hash.kind === "official" || !quality.ok) {
+  if (c3Hash.kind === "official" || c3Hash.kind === "earlier_claim" || !quality.ok) {
     const why =
       c3Hash.kind === "official"
         ? elsewhere.official
           ? "The photo matches a picture published with another recall."
           : "The photo matches one of this recall's official images."
-        : "The photo did not pass the quality precheck.";
+        : c3Hash.kind === "earlier_claim"
+          ? "The photo matches one sent with an earlier claim, so a person at the firm compares the two."
+          : "The photo did not pass the quality precheck.";
     const checksStarted = performance.now();
     const c6 = await c6P;
     timings.checks_ms = ms(checksStarted);
@@ -326,7 +361,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       visionError = `The daily AI budget is spent ($${budget.usd.toFixed(2)} of $${budget.budget.toFixed(2)}, AI_DAILY_USD).`;
     } else {
       try {
-        vision = await (deps.vision ?? runVision)({ photo: img.jpeg, recall, rule, official: visionImages, effort: input.options?.effort });
+        vision = await (deps.vision ?? runVision)({ photo: img.jpeg, ...(more.length ? { more: more.map((m) => m.img.jpeg) } : {}), recall, rule, official: visionImages, effort: input.options?.effort });
         cacheInfo.vision = "live";
       } catch (e) {
         visionError = (e as Error).message;

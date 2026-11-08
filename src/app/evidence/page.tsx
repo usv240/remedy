@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
-import { Adoption, Pilot } from "@/components/judges/Adoption";
 import { Benchmark } from "@/components/judges/Benchmark";
-import { Compare } from "@/components/judges/Compare";
 import { ErrorRates } from "@/components/judges/ErrorRates";
-import { Load, Real } from "@/components/judges/Load";
 import { Measured } from "@/components/judges/Measured";
 import { NeverDecides } from "@/components/judges/NeverDecides";
 import { Research } from "@/components/judges/Research";
-import { PhotoChecks } from "@/components/judges/PhotoChecks";
+import { Money } from "@/components/judges/Money";
+import { freeCaught, freeTimings, readingAccuracy } from "@/components/judges/errors";
 import { Results } from "@/components/judges/Results";
 import { Tested } from "@/components/judges/Tested";
-import { S, extraction } from "@/components/judges/data";
+import { S } from "@/components/judges/data";
+import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
+import { limitRules } from "@/lib/firm/limits";
 import { TourStart } from "@/components/tour/Tour";
 import { TOUR } from "@/components/tour/steps";
 import { fmtDate, fmtInt } from "@/lib/api/format";
@@ -34,15 +34,13 @@ const PATH = [
   { href: "#results", label: "The numbers, and where they come from", time: "30 s", look: "The CPSC count, the extraction benchmark and the recorded photo checks, each with its source file." },
 ];
 
-type Part = { name: string; line: string; more?: string; where?: string; links: [string, string][] };
+type Part = { name: string; line: string; links: [string, string][] };
 
 /** Each part of the product, one line on what it does, and where on the site to see it. */
 const PARTS: Part[] = [
   {
     name: "Technology",
     line: "Claude Opus 5.5 reads every remedy into a structured proof rule and checks photos against it; plain code makes the decision and PayPal pays.",
-    more: "Every part, from the batch to the payout",
-    where: `${fmtInt(extraction().counts.recalls)} proof rules extracted with the Message Batches API and a self-check pass; photo checks that start with a free perceptual-hash match against official images and earlier claims, across every recall and every firm; Elastic hybrid search with a reranker; PayPal Payouts, refunds to the original capture inside 180 days, Orders v2 and signature-checked webhooks; a public API with keys and limits, OpenAPI 3.1, and an MCP server.`,
     links: [
       ["/recalls/27056", "A proof rule"],
       ["/try/shop", "Refund to the purchase"],
@@ -55,8 +53,6 @@ const PARTS: Part[] = [
   {
     name: "Design",
     line: "Phone first for owners, every rule and decision with an Info button, Plain and Technical views, and light and dark themes.",
-    more: "The standards it is built to",
-    where: "WCAG 2.2 AA, checked with axe on every page at phone and desktop widths in both themes; 44 pixel touch targets; type in rem so Large text reaches everything; reduced motion respected. The home page follows one art direction, The sentence is the layout: the CPSC's own made-safe photo sits in the headline where a word would.",
     links: [
       ["/", "Home"],
       ["/try", "Try a photo"],
@@ -66,10 +62,8 @@ const PARTS: Part[] = [
   {
     name: "Impact",
     line: `${fmtInt(S.all.photoRefund.count)} recalls since 2024 already pay on a photo, a growing share, and full remedies raise recall effectiveness.`,
-    more: "The numbers and the research",
-    where: `${S.byYear["2024"].photoRefund} photo-refund recalls in 2024, ${S.byYear["2025"].photoRefund} in 2025 and ${S.byYear["2026"].photoRefund} in 2026 so far (CPSC Recalls API). Recall effectiveness improves by 11.4% on average when firms offer a full remedy instead of a partial one (Raithel, Hock and Mafael, Journal of the Academy of Marketing Science, 2024). The CPSC's January 2025 order on Amazon called for direct notice and full refunds on proof of destruction.`,
     links: [
-      ["#adoption", "Who runs it first"],
+      ["/evidence/market#adoption", "Who runs it first"],
       ["/learn#data", "The data method"],
       ["/#research", "The sources"],
     ],
@@ -77,23 +71,14 @@ const PARTS: Part[] = [
   {
     name: "What is new",
     line: "Each firm that joins makes the others safer, the refund goes back the way it was paid, and a payout nobody accepts becomes a task in the recall plan.",
-    more: "What is new here",
-    where: "Every claim photo is matched by hash alone against the published pictures of every recall and every photo claimed at any firm, so no firm sees another's photo and each one that joins adds to the check. A verified claim is refunded to its original PayPal capture inside PayPal's 180-day window, or paid out after it. When PayPal's webhook says a payout is waiting to be accepted, a re-notice task appears in the open recall plan. No recall remedy in the CPSC data mentions PayPal or Venmo; Remedy turns free-text remedies into rules a program can check, and lets AI assistants help an owner through the same tools over MCP.",
     links: [
-      ["#compare", "How it compares"],
+      ["/evidence/market#compare", "How it compares"],
       ["/developers", "For AI agents"],
     ],
   },
   { name: "Openness", line: "This page and its guided tour, every figure linked to its source file, and what is real and what is a sample, labeled.", links: [["/about", "About"]] },
 ];
 
-const COST = [
-  { what: "Identical requests replay", how: "A request that matches one already answered (same model, prompt, images and settings) is read back from a local cache in test runs instead of paid for again." },
-  { what: "An identical photo reuses its result", how: "The same claim photo for the same recall and rule reuses its checked result from the database, with no new AI call." },
-  { what: "Images are downscaled", how: "Photos and official images are shrunk before the vision call: up to 16% fewer input tokens on large photos, measured by the verification builder." },
-  { what: "The recall's part is cached", how: "Each request puts the recall's data and official images first, so repeat checks on one recall read that part from Claude's prompt cache." },
-  { what: "A daily spend cap", how: "The hosted site keeps to a daily AI budget. Past it, every free check still runs and a person at the firm looks at the rest." },
-];
 
 const TOC: [string, string][] = [
   ["#path", "Five-minute path"],
@@ -105,15 +90,21 @@ const TOC: [string, string][] = [
   ["#tested", "Tested"],
   ["#data", "The data"],
   ["#research", "Grounded in research"],
-  ["#cost", "AI cost"],
-  ["#load", "Under load"],
-  ["#real", "Running it for real"],
-  ["#compare", "How it compares"],
-  ["#adoption", "Who runs it first"],
+  ["#more", "More evidence"],
+];
+
+/** The longer tables and lists, each on its own page. */
+const MORE: { href: string; title: string; line: string }[] = [
+  { href: "/evidence/photo-checks", title: "Every photo check, recorded", line: "Each recorded run with its six checks, the model settings compared, and what the model read on the CPSC's own photos." },
+  { href: "/evidence/operations", title: "Cost, load and running it for real", line: "How each check stays cheap, one hundred visitors at once, and what a production deployment changes." },
+  { href: "/evidence/market", title: "What is at stake, and who runs it first", line: "The money method and its largest recalls, how Remedy compares with claim portals, and the 30-day pilot." },
 ];
 
 export default function EvidencePage() {
-  const ex = extraction();
+  const fc = freeCaught();
+  const t = freeTimings();
+  const ra = readingAccuracy();
+  const free = { caught: fc.caught, total: fc.total, retake: t.retake, firmReview: t.firmReview };
   return (
     <div className="page frame evidence">
       <OpenOnHash />
@@ -122,7 +113,9 @@ export default function EvidencePage() {
           <h1 className="page-title">Evidence</h1>
           <Info id="page.evidence" />
         </div>
-        <p className="lede">Every number on this site, where it comes from, and a five-minute path through the product.</p>
+        <p className="lede">
+          {fmtInt(S.all.photoRefund.count)} of {fmtInt(S.recalls.count)} US product recalls since 2024 already refund an owner who sends one photo of the product made safe. Here is what Remedy does with that photo, measured, with the file behind every number.
+        </p>
         <p className="jp-tour">
           <TourStart /> <span className="muted">{TOUR.length} stops in this tab, about two minutes. Escape ends it.</span>
         </p>
@@ -133,6 +126,19 @@ export default function EvidencePage() {
         <Info id="evidence.results" label="" topic="The results" />
       </div>
       <Results />
+      <section id="money" className="page-section ev-stake" aria-labelledby="money-h">
+        <div className="title-row">
+          <h2 id="money-h">What is at stake</h2>
+          <Info id="evidence.money" label="" topic="What is at stake" />
+        </div>
+        <Money />
+        <p className="page-note">
+          Counted from the CPSC records alone; recalls that state no price are left out, not estimated.{" "}
+          <Link className="text-link" href="/evidence/market#money">
+            The method and the largest recalls
+          </Link>
+        </p>
+      </section>
       <ErrorRates />
 
       <nav className="jp-toc" aria-label="On this page">
@@ -185,14 +191,6 @@ export default function EvidencePage() {
                     </Link>
                   ))}
                 </p>
-                {c.where && (
-                  <details className="jx-disc">
-                    <summary>{c.more}</summary>
-                    <div className="jx-body">
-                      <p>{c.where}</p>
-                    </div>
-                  </details>
-                )}
               </dd>
             </div>
           ))}
@@ -213,8 +211,16 @@ export default function EvidencePage() {
           <h2 id="photo-h">The photo checks, recorded</h2>
           <Info id="evidence.fixtures" label="" topic="The photo checks" />
         </div>
-        <p className="page-prose jp-intro">Each case is a real recall photo or a copy made from one. The checks keep the refund pool for real owners: a picture that is not the owner&rsquo;s own is asked to be retaken, kindly.</p>
-        <PhotoChecks />
+        <p className="page-prose jp-intro tabular">
+          Before any AI call, {free.caught} of {free.total} recorded photos that needed a closer look were stopped by code: {free.retake} asked for a new photo (the recall&rsquo;s own pictures, turned and cropped copies, another recall&rsquo;s picture, a blurry
+          photo) and {free.firmReview === 1 ? "one photo already used on an earlier claim went" : `${free.firmReview} photos already used went`} to a person at the firm. Each answered in {t.free.min} to {t.free.max} ms (median {t.free.median} ms) on the machine that
+          recorded them. Reading the CPSC&rsquo;s own photos with that match off, the model was right on {ra.right} of {ra.readings} readings.
+        </p>
+        <p className="page-prose">
+          <Link className="text-link" href="/evidence/photo-checks">
+            Every recorded run, the model settings compared, and what the model read
+          </Link>
+        </p>
       </section>
 
       <section id="never" className="page-section" aria-labelledby="never-h">
@@ -223,6 +229,15 @@ export default function EvidencePage() {
           <Info id="evidence.never" label="" topic="What the AI never decides" />
         </div>
         <NeverDecides />
+        <h3 className="ev-sub">Claim limits, in plain rules</h3>
+        <ul className="ev-rules">
+          {limitRules(DEFAULT_TERMS).map((r) => (
+            <li key={r.title}>
+              <strong>{r.title}.</strong> {r.rule}
+            </li>
+          ))}
+        </ul>
+        <p className="page-note">The sample firm&rsquo;s settings; each firm sets its own. Counted in code by src/lib/firm/limits.ts and checked again when a claim is paid.</p>
       </section>
 
       <section id="measured" className="page-section" aria-labelledby="measured-h">
@@ -259,77 +274,18 @@ export default function EvidencePage() {
         <Research />
       </section>
 
-      <section id="cost" className="page-section" aria-labelledby="cost-h">
-        <div className="title-row">
-          <h2 id="cost-h">AI cost, kept small</h2>
-          <Info id="status.ai_spend" label="" topic="AI spend" />
-        </div>
-        <p className="page-prose jp-intro tabular">
-          Reading all {fmtInt(ex.counts.recalls)} remedies cost ${ex.usage.usd.toFixed(2)} in one batch run. Each photo check is one vision call, and only when the free checks pass.
-        </p>
-        <details className="jx-disc">
-          <summary>The {COST.length} ways each check stays cheap</summary>
-          <div className="jx-body">
-            <ul className="jc">
-              {COST.map((c) => (
-                <li key={c.what}>
-                  <p className="jc-what">{c.what}</p>
-                  <p className="jc-how">{c.how}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </details>
-        <p className="page-note">
-          Today&rsquo;s spend, by route, is on{" "}
-          <Link className="text-link" href="/status?mode=technical">
-            Status
-          </Link>{" "}
-          in the Technical view.
-        </p>
-      </section>
-
-      <section id="load" className="page-section" aria-labelledby="load-h">
-        <div className="title-row">
-          <h2 id="load-h">Under load</h2>
-          <Info id="evidence.load" label="" topic="Under load" />
-        </div>
-        <p className="page-prose jp-intro">One hundred visitors at once on the free paths, against the production build. The claim uses the recall&rsquo;s own official picture, which the perceptual hash settles before any model call.</p>
-        <Load />
-      </section>
-
-      <section id="real" className="page-section" aria-labelledby="real-h">
-        <div className="title-row">
-          <h2 id="real-h">Running it for real</h2>
-          <Info id="evidence.real" label="" topic="Running it for real" />
-        </div>
-        <p className="page-prose jp-intro">
-          What the demo runs on today, and what a production deployment changes. The operating range, stated plainly; live health is on{" "}
-          <Link className="text-link" href="/ops">
-            Operations
-          </Link>
-          .
-        </p>
-        <Real />
-      </section>
-
-      <section id="compare" className="page-section" aria-labelledby="cmp-h">
-        <div className="title-row">
-          <h2 id="cmp-h">How it compares</h2>
-          <Info id="evidence.compare" label="" topic="How it compares" />
-        </div>
-        <p className="page-prose jp-intro">Each of these does its job. Remedy adds the instant check and the PayPal payout to what firms already do.</p>
-        <Compare />
-      </section>
-
-      <section id="adoption" className="page-section" aria-labelledby="ad-h">
-        <div className="title-row">
-          <h2 id="ad-h">Who runs it first</h2>
-          <Info id="evidence.adoption" label="" topic="Who runs it first" />
-        </div>
-        <p className="page-prose jp-intro">Three groups already handle recall claims. Each can run Remedy as it is today.</p>
-        <Adoption />
-        <Pilot />
+      <section id="more" className="page-section" aria-labelledby="more-h">
+        <h2 id="more-h">More evidence</h2>
+        <ul className="ev-more">
+          {MORE.map((m) => (
+            <li key={m.href}>
+              <Link className="text-link ev-more-k" href={m.href}>
+                {m.title}
+              </Link>
+              <span className="muted">{m.line}</span>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );

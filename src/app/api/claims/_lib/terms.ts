@@ -25,6 +25,8 @@ export type FirmTerms = {
   firmName: string;
   /** Verified claims at or under this are paid with no person. */
   autoCapCents: number;
+  /** What the auto rule pays on this recall in a UTC day at most (firm_recall.daily_cap); past it, a person approves. */
+  autoDailyCents: number;
   /** The firm's refund for this recall when no PayPal purchase is linked. */
   refundCents: number;
   refundSource: "firm" | "demo";
@@ -40,7 +42,7 @@ const cents = (v: string | number | null | undefined) => {
   return Number.isFinite(n) && n >= 0 ? n : null;
 };
 
-export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, autoCapCents: 5000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
+export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, autoCapCents: 5000, autoDailyCents: 35_000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
 
 export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
   if (!dbConfigured()) return DEFAULT_TERMS;
@@ -58,6 +60,7 @@ export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
       firmId: firm.id,
       firmName: firm.name.replace(/\s*\(sample\)\s*$/i, "") || SAMPLE_FIRM,
       autoCapCents: cents(fr?.autoCap) ?? cents(settings.autoApproveCap) ?? DEFAULT_TERMS.autoCapCents,
+      autoDailyCents: cents(fr?.dailyCap) ?? cents(settings.dailyPayoutCap) ?? DEFAULT_TERMS.autoDailyCents,
       refundCents: refund ?? DEMO_REFUND_CENTS,
       refundSource: refund !== null ? "firm" : "demo",
       reviewHours: settings.reviewHours ?? DEFAULT_TERMS.reviewHours,

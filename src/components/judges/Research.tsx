@@ -10,6 +10,27 @@ const seconds = (id: string) => aboutSeconds(measured.items.find((i) => i.id ===
  */
 const FINDINGS: { fig: string; finding: string; source: string; url: string; inRemedy: string }[] = [
   {
+    fig: `${R.directNotice.direct} vs ${R.directNotice.press}`,
+    finding: `Recalls where the firm contacts its buyers directly see about ${R.directNotice.direct} of products corrected by consumers, against ${R.directNotice.press} when the recall reaches them through a press release, by CPSC staff's recall data. The CPSC's own workshop report finds direct notice recalls the most effective.`,
+    source: R.directNotice.source,
+    url: R.directNotice.url,
+    inRemedy: "A firm finds the buyers who paid it with PayPal through Transaction Search and sends each one a personal claim link, so the notice reaches the owner directly.",
+  },
+  {
+    fig: `${R.euStudy.direct} vs ${R.euStudy.generic}`,
+    finding: `In a behavioural experiment for the European Commission, ${R.euStudy.direct} of people shown a direct recall notice decided to act on it, against ${R.euStudy.generic} shown a generic one. Of those who took no action, ${R.euStudy.effort} said the recall process was too much effort or time.`,
+    source: R.euStudy.source,
+    url: R.euStudy.url,
+    inRemedy: "The claim is one page on a phone, no account and one photo, with the refund named in its first line.",
+  },
+  {
+    fig: `About ${R.vehicles.fixed}`,
+    finding: `Vehicle recalls, where the maker mails each registered owner, fix about ${R.vehicles.fixed} of vehicles within 18 months, by NHTSA's figures. Consumer products have no owner registry, so the purchase record is the closest thing to one.`,
+    source: R.vehicles.source,
+    url: R.vehicles.url,
+    inRemedy: "PayPal's own record of the purchase stands in for the registry: the buyer is found, and the refund goes back to that same payment inside 180 days.",
+  },
+  {
     fig: R.fullRemedy.lift,
     finding: `A full refund lifts the share of recalled products that come back by ${R.fullRemedy.lift} on average, across ${R.fullRemedy.recalls} CPSC recalls. It works two ways: owners see more benefit, and they feel more able to take part.`,
     source: R.fullRemedy.source,
@@ -18,7 +39,7 @@ const FINDINGS: { fig: string; finding: string; source: string; url: string; inR
   },
   {
     fig: `${R.simpler.from} to ${R.simpler.named}`,
-    finding: `In an IRS field experiment with ${R.simpler.filers} tax filers, a simpler notice raised claiming from ${R.simpler.from} to ${R.simpler.to}, and naming the amount in the headline raised it to ${R.simpler.named}.`,
+    finding: `Evidence from another kind of claim: in an IRS field experiment with ${R.simpler.filers} tax filers, a simpler notice raised claiming from ${R.simpler.from} to ${R.simpler.to}, and naming the amount in the headline raised it to ${R.simpler.named}.`,
     source: R.simpler.source,
     url: R.simpler.url,
     inRemedy: "One page on a phone, no account, and one photo. The checks explain each result in plain words.",

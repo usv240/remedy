@@ -15,7 +15,7 @@ export const SAMPLE_FIRM = {
   name: "Brightline Home",
   isSample: true,
   contactEmail: "recalls@brightline-home.example",
-  settings: { autoApproveCap: 50, dailyPayoutCap: 2500, reviewHours: 48, replyName: "Brightline Home recall team" },
+  settings: { autoApproveCap: 50, dailyPayoutCap: 350, reviewHours: 48, replyName: "Brightline Home recall team" },
 } as const;
 
 /** Recall numbers from demo-picks.json, whatever its exact shape: a list, { picks: [...] }, or an object keyed by id. */
@@ -53,7 +53,7 @@ async function main() {
     await db()
       .insert(schema.firmRecalls)
       .values({ firmId: firm.id, recallNumber, autoCap: String(SAMPLE_FIRM.settings.autoApproveCap.toFixed(2)), dailyCap: String(SAMPLE_FIRM.settings.dailyPayoutCap.toFixed(2)) })
-      .onConflictDoNothing({ target: [schema.firmRecalls.firmId, schema.firmRecalls.recallNumber] });
+      .onConflictDoUpdate({ target: [schema.firmRecalls.firmId, schema.firmRecalls.recallNumber], set: { dailyCap: String(SAMPLE_FIRM.settings.dailyPayoutCap.toFixed(2)) } });
   }
   const [{ links }] = await db().select({ links: sql<number>`count(*)::int` }).from(schema.firmRecalls).where(sql`${schema.firmRecalls.firmId} = ${firm.id}`);
   await audit("system", "seed.firm", `firm:${firm.id}`, { slug: firm.slug, isSample: firm.isSample, recalls: links });

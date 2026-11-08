@@ -85,12 +85,17 @@
 }
 
 /* Ready-made examples */
+.tr-live {
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+}
 .tr-preset-list {
   list-style: none;
   padding: 0;
   margin: 14px 0 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
   gap: 12px;
   align-items: start;
 }

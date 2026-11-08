@@ -25,7 +25,6 @@
     "@bryntum/gantt": "npm:@bryntum/gantt-trial@7.3.8",
     "@bryntum/gantt-react": "7.3.8",
     "@floating-ui/react": "^0.27.20",
-    "@onkernel/sdk": "^0.139.0",
     "@paypal/paypal-server-sdk": "^2.5.0",
     "@sentry/nextjs": "^10.78.0",
     "ag-grid-community": "36.3.0",

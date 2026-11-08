@@ -13,7 +13,8 @@ import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 import { aboutSeconds, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import { errorRates } from "@/components/judges/errors";
+import { errorRates, freeTimings } from "@/components/judges/errors";
+import { moneyHeadline } from "@/components/judges/Money";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
 import "./landing-shared.css";
@@ -55,11 +56,11 @@ const STEPS = [
  * and the data: the catalog of distinct published pictures, the measured official-picture answer, the refund window.
  */
 function ideas() {
-  const official = MEASURED.items.find((i) => i.id === "official")?.figure.toLowerCase() ?? null;
+  const t = freeTimings();
   return [
     {
       line: "Each firm that joins makes every other firm safer.",
-      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} distinct pictures published with every recall, and every photo already claimed at any firm${official ? `, in ${official}` : ""} with no model call. Firms share only hashes, never a photo.`,
+      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} distinct pictures published with every recall, and every photo already claimed at any firm, answered in a median ${t.official.median} ms with no model call. Firms share only hashes, never a photo.`,
       href: "/evidence#photo-checks",
       see: "The photo checks",
     },
@@ -104,7 +105,7 @@ const SOURCES: (Source & { full: string; says: string })[] = [
     name: "the CPSC Recall Effectiveness Workshop",
     full: "CPSC Recall Effectiveness Workshop, 2017",
     href: "https://www.cpsc.gov/Recall-Effectiveness",
-    says: "The CPSC's workshop and staff report on raising the share of owners who act on a recall, which is about 6% on average for consumer products.",
+    says: "The CPSC's workshop and staff report on raising the share of owners who act on a recall: direct notice recalls are the most effective.",
   },
   {
     name: "the CPSC Recall Handbook",
@@ -129,9 +130,8 @@ const FAQ = [
   { q: "Do I need an account?", a: "No. Open the link from your recall notice, follow the checklist, and snap a photo. You only enter where to send the refund." },
   { q: "Where does the money go?", a: "To your PayPal or Venmo, or, if you bought with PayPal in the last 180 days, straight back to how you paid. This demo runs in PayPal's sandbox." },
   { q: "How is the photo checked?", a: "Remedy checks that it shows the recalled product, that it has been made safe as the recall asks, and that it is your own photo. Unclear photos get two AI reviewers and then a person at the firm." },
-  { q: "What if my photo needs another try?", a: "You will see exactly what to change, and you can take a new photo right away." },
   { q: "Who pays the refund?", a: "The recalling company, through PayPal. Remedy never holds the money. In this demo, the sample firm's PayPal sandbox account pays." },
-  { q: "Is this connected to the CPSC?", a: "Remedy uses the CPSC's public recall data and helps firms prepare their monthly progress reports. It is an independent tool, not affiliated with the CPSC or any recalling firm." },
+  { q: "Is this connected to the CPSC?", a: "Remedy uses the CPSC's public recall data. It is an independent tool, not affiliated with the CPSC or any recalling firm." },
 ];
 
 /** The stats column: whole part and decimals in their own tracks, so the figures align on the point. */
@@ -269,6 +269,7 @@ export default async function Home() {
   // The two measured results the intro states: the error rate (src/components/judges/errors.ts) and the timings
   // measured in the sandbox (content/public/measured.json).
   const rates = errorRates();
+  const money = moneyHeadline();
   const proof = {
     wrongPay: `${rates.wrongPay.count} of ${rates.wrongPay.of}`,
     check: aboutSeconds(MEASURED.items.find((i) => i.id === "live-check")?.figure),
@@ -340,11 +341,17 @@ export default async function Home() {
               <span className="tabular">{C.byYear["2025"].photoRefund}</span> in 2025 and <span className="tabular">{C.byYear["2026"].photoRefund}</span> so far in 2026.{" "}
               <Info id="intro.stat" label="" topic={`How ${fmtInt(C.all.photoRefund.count)} was counted`} />
             </p>
+            <p className="intro-money">
+              Those recalls cover <strong className="tabular">{money.total}</strong> of products at their lowest stated price. At the average of about {money.share} that come back, <strong className="tabular">{money.unclaimed}</strong> of those products stays in homes unclaimed, and each
+              extra point of return is worth <strong className="tabular">{money.perPoint}</strong> to their owners in refunds or replacements.{" "}
+              <Link className="text-link" href="/evidence#money">
+                How it was counted
+              </Link>
+            </p>
             <p className="intro-why">
-              On average, about {RESEARCH.comeBack.share} recalled products come back. Simpler claiming brings more back: a simpler notice raised claiming from{" "}
-              {RESEARCH.simpler.from} to {RESEARCH.simpler.to}, and to {RESEARCH.simpler.named} with the amount named (
-              <a className="text-link" href={RESEARCH.simpler.url} target="_blank" rel="noreferrer">
-                {RESEARCH.simpler.short}
+              Reaching owners directly is what works: about {RESEARCH.directNotice.direct} of products are corrected when the firm contacts its buyers, against {RESEARCH.directNotice.press} after a press release (
+              <a className="text-link" href={RESEARCH.directNotice.url} target="_blank" rel="noreferrer">
+                {RESEARCH.directNotice.short}
               </a>
               ), and a full refund lifts recall effectiveness by {RESEARCH.fullRemedy.lift} (
               <a className="text-link" href={RESEARCH.fullRemedy.url} target="_blank" rel="noreferrer">
@@ -375,20 +382,6 @@ export default async function Home() {
             {quotes.length > 0 && (
               <ul className="intro-quotes" aria-label="In the recalls' own words">
                 <Quote q={quotes[0]} />
-                {quotes.length > 1 && (
-                  <li>
-                    <details className="intro-more">
-                      <summary>
-                        {quotes.length - 1} more, in the recalls&rsquo; own words
-                      </summary>
-                      <ul className="intro-quotes">
-                        {quotes.slice(1).map((q) => (
-                          <Quote key={q.n} q={q} />
-                        ))}
-                      </ul>
-                    </details>
-                  </li>
-                )}
               </ul>
             )}
           </div>
@@ -483,19 +476,9 @@ export default async function Home() {
             <h3 className="sr-only">Grounded in research</h3>
             <LitNames lead="Grounded in" sources={SOURCES} />
             <div className="rs-foot">
-              <details className="rs-more">
-                <summary>What each source says</summary>
-                <ul className="rs-list">
-                {SOURCES.map((s) => (
-                  <li key={s.href}>
-                    <a className="text-link" href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
-                      {s.full}
-                    </a>
-                    . {s.says}
-                  </li>
-                ))}
-                </ul>
-              </details>
+              <Link className="text-link" href="/evidence#research">
+                What each source says
+              </Link>
               <Info id="research.row" label="" topic="The sources" />
             </div>
           </div>

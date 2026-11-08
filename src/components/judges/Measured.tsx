@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { fmtMs } from "@/lib/api/format";
 import { MEASURED, cpscExampleRun } from "./data";
+import { freeTimings } from "./errors";
 
 /** What the owner's claim flow measured in the PayPal sandbox, each figure with where it came from. */
 export function Measured() {
   const ex = cpscExampleRun();
+  const t = freeTimings();
   return (
     <>
       <ul className="jm">
@@ -17,6 +19,14 @@ export function Measured() {
             </p>
           </li>
         ))}
+        <li>
+          <p className="jm-fig tabular">{t.official.median} ms</p>
+          <p className="jm-what">
+            median to answer a photo that is a recall&rsquo;s own published picture, with no model call ({t.official.min} to {t.official.max} ms in {t.official.n} recorded runs). The hash comparison itself took {t.match.min} to {t.match.max} ms; the
+            rest is decoding the photo and loading the recall&rsquo;s pictures.
+          </p>
+          <p className="jm-src">On the machine that recorded the runs, content/public/verify-runs.json</p>
+        </li>
         {ex && (
           <li>
             <p className="jm-fig tabular">{ex.score.toFixed(2)}</p>

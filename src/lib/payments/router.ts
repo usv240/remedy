@@ -1,3 +1,4 @@
+import { autoPayVerdict } from "@/lib/firm/limits";
 import { recallLabel } from "@/lib/recall/label";
 import { LIMITS, resolveDeps, usd, type PaymentsDeps } from "./deps";
 import { recordStatus } from "./events";
@@ -81,7 +82,11 @@ export function chooseRoute(f: RouteFacts): RouteChoice {
 export type PlanResult = { ok: true; plan: PaymentPlan; created: boolean } | { ok: false; code: "not_payable" | "invalid_payee" | "no_route" | "over_limit"; plain: string };
 
 /** Build, store and (when the firm's auto rule allows) approve the payment plan for a verified or reviewed claim. */
-export async function planPayment(claim: ClaimForPayment, opts: { autoCapCents?: number } = {}, partial?: Partial<PaymentsDeps>): Promise<PlanResult> {
+export async function planPayment(
+  claim: ClaimForPayment,
+  opts: { autoCapCents?: number; autoDaily?: { capCents: number; paidTodayCents: number } } = {},
+  partial?: Partial<PaymentsDeps>,
+): Promise<PlanResult> {
   const deps = await resolveDeps(partial);
   const existing = await deps.store.getPlanByClaim(claim.claimId);
   if (existing && existing.status !== "canceled") return { ok: true, plan: existing, created: false };
@@ -111,7 +116,9 @@ export async function planPayment(claim: ClaimForPayment, opts: { autoCapCents?:
   const cap = opts.autoCapCents ?? LIMITS.perPaymentCents;
   const capturedConcern = Boolean(capture && (capture.refunded || capture.disputed || !capture.found));
   const replacementOverRefund = choice.route === "replacement" && amountCents > claim.amountCents;
-  const auto = claim.decision === "verified" && amountCents <= cap && !capturedConcern && !replacementOverRefund;
+  // The firm's daily ceiling on what the auto rule pays: past it, a verified claim waits for a person.
+  const daily = opts.autoDaily ? autoPayVerdict({ amountCents, ...opts.autoDaily }) : null;
+  const auto = claim.decision === "verified" && amountCents <= cap && !capturedConcern && !replacementOverRefund && (daily?.ok ?? true);
   const approval: Approval | null = auto ? { by: "auto_rule", who: "auto rule", rule: `verified and ${usd(amountCents)} is at or under ${usd(cap)}`, at: now.toISOString() } : null;
 
   const venmoNote = claim.payee?.type === "venmo" && choice.route === "payout" ? " Venmo payouts need live PayPal; in this sandbox demo the money goes to the PayPal account for that phone number." : "";
@@ -127,7 +134,7 @@ export async function planPayment(claim: ClaimForPayment, opts: { autoCapCents?:
     payee: choice.route === "payout" ? claim.payee : null,
     captureId: choice.route === "refund" ? capture!.id : null,
     replacement: choice.route === "replacement" ? claim.replacement! : null,
-    reasons: { plain: choice.plain + venmoNote, technical: choice.technical },
+    reasons: { plain: choice.plain + venmoNote + (daily && !daily.ok && claim.decision === "verified" ? ` ${daily.plain}` : ""), technical: choice.technical + (daily ? ` ${daily.technical}` : "") },
     approval,
     status: auto ? "approved" : "awaiting_approval",
     attempt: 1,
@@ -245,11 +252,18 @@ async function claimForExecution(planId: string, deps: PaymentsDeps): Promise<{ 
 }
 
 /** Run an approved plan once. A second call, at the same time or later, returns the first call's payment. */
+/** The deps a plan pays with: the firm's own PayPal app when it connected one, else the platform's account. */
+async function depsForFirm(firmId: string | null, deps: PaymentsDeps): Promise<PaymentsDeps> {
+  const own = deps.restFor ? await deps.restFor(firmId).catch(() => null) : null;
+  return own ? { ...deps, rest: own } : deps;
+}
+
 export async function executePlan(planId: string, partial?: Partial<PaymentsDeps>): Promise<PayResult> {
-  const deps = await resolveDeps(partial);
-  const got = await claimForExecution(planId, deps);
+  const base = await resolveDeps(partial);
+  const got = await claimForExecution(planId, base);
   if ("kind" in got) return got;
   const plan = got.plan;
+  const deps = await depsForFirm(plan.firmId, base);
   if (plan.route === "payout") return (await sendPayoutBatch([plan], deps))[0];
   if (plan.route === "refund") return runRefund(plan, deps);
   return runReplacement(plan, deps);
@@ -281,11 +295,16 @@ export async function payClaims(claimIds: string[], partial?: Partial<PaymentsDe
     const got = await claimForExecution(plan.id, deps);
     if ("kind" in got) out.push({ claimId, result: got });
     else if (got.plan.route === "payout") payouts.push(got.plan);
-    else out.push({ claimId, result: got.plan.route === "refund" ? await runRefund(got.plan, deps) : await runReplacement(got.plan, deps) });
+    else {
+      const own = await depsForFirm(got.plan.firmId, deps);
+      out.push({ claimId, result: got.plan.route === "refund" ? await runRefund(got.plan, own) : await runReplacement(got.plan, own) });
+    }
   }
-  if (payouts.length) {
-    const results = await sendPayoutBatch(payouts, deps);
-    payouts.forEach((p, i) => out.push({ claimId: p.claimId, result: results[i] }));
+  // One Payouts batch per firm, each sent from that firm's own PayPal app when it connected one.
+  for (const firmId of [...new Set(payouts.map((p) => p.firmId))]) {
+    const mine = payouts.filter((p) => p.firmId === firmId);
+    const results = await sendPayoutBatch(mine, await depsForFirm(firmId, deps));
+    mine.forEach((p, i) => out.push({ claimId: p.claimId, result: results[i] }));
   }
   return ids.map((id) => out.find((o) => o.claimId === id)!).filter(Boolean);
 }

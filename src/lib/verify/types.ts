@@ -26,6 +26,10 @@ export type VerifyProofRule = {
   explanation?: { plain: string; technical: string };
   /** Short owner steps, when the extractor wrote them. */
   steps?: readonly string[];
+  /** How many photos the remedy asks for (src/lib/recall/photo-count.ts, from the remedy text); 1 when unset. */
+  photo_count?: number;
+  /** What each photo should show, in order, when the remedy says so. */
+  photo_shows?: readonly string[];
 };
 
 /** An official image. `data` skips the download when the bytes are already at hand. */
@@ -125,6 +129,8 @@ export type Amount = { value: string; currency: string; cents: number; source: "
 export type Timings = {
   decode_ms: number;
   official_ms: number;
+  /** Comparing the photo's eight hash orientations with this recall's pictures, earlier claims and every recall's catalog (to 0.1 ms). */
+  match_ms?: number;
   vision_ms: number;
   checks_ms: number;
   reviewers_ms: number;

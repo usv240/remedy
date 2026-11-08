@@ -10,7 +10,7 @@ const check = (name, ok, detail = "") => {
 
 const PAGES = [
   ["/", "Recall refunds"],
-  ["/try", "Try it with your own photo"],
+  ["/try", "See a photo become a refund"],
   ["/try/presets/official-image", "The official recall picture"],
   ["/try/shop", "Buy the sample charger"],
   ["/claim", "Find your recall"],

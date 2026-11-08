@@ -2,14 +2,16 @@ import { describe, expect, it } from "vitest";
 import { READY_AMOUNT, READY_TARGET, readyPayee, sampleChecks, sampleResult } from "@/lib/firm/sample-claims";
 
 /**
- * The sample claims the firm console keeps ready to pay: two at $1.00, to a PayPal sandbox personal account, marked
+ * The sample claims the firm console keeps ready to pay: two at the recall's $34.99 refund, to a PayPal sandbox personal account, marked
  * sample, with no model call. The Postgres part (skipped without DATABASE_URL) tops them up twice at once and checks
  * that the advisory lock keeps it to the target.
  */
 describe("sample claims ready to pay", () => {
   it("are small, verified on every check, and say they are samples", () => {
     expect(READY_TARGET).toBeGreaterThanOrEqual(2);
-    expect(Number(READY_AMOUNT)).toBeLessThanOrEqual(1);
+    // The recall's real refund, inside the demo's $50 payment limit (src/lib/payments/router.ts).
+    expect(READY_AMOUNT).toBe("34.99");
+    expect(Number(READY_AMOUNT)).toBeLessThan(50);
     const checks = sampleChecks("paid", () => 0.5);
     expect(Object.values(checks).every((c) => c.status === "pass")).toBe(true);
     expect(checks.C2.reason_plain).toBe("The cord is cut where it meets the charger case.");

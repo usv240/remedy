@@ -159,9 +159,14 @@ async function rawClaim(firmId: number, claimId: string) {
 
 /** A note on what kind of claim this is, for the drawer. */
 function noteFor(r: Raw, extra: { recorded: boolean }) {
+  const note = noteText(r, extra);
+  return note && r.is_sample && r.photo_id && !extra.recorded ? `${note} Sample photo: Dmitry G, Wikimedia Commons, public domain.` : note;
+}
+
+function noteText(r: Raw, extra: { recorded: boolean }) {
   if (extra.recorded) return "Sample claim. The photo is the CPSC's own made-safe example for recall 26125 (a different hair dryer), checked live once against this recall by Claude and recorded.";
   if (r.is_sample && r.paypal_status === SAMPLE_PAYPAL_STATUS) return "Sample history (not paid). Seeded so the console is not empty; no money moved for this claim.";
-  if (r.is_sample && r.amount === "1.00") return "Sample claim ready to pay, at $1.00 so live sandbox payouts stay small. Paying it sends a real PayPal sandbox payout to the sandbox buyer, and two new sample claims take its place.";
+  if (r.is_sample && r.decision === "verified" && !r.paypal_status) return `Sample claim ready to pay, at the recall's refund of $${r.amount}. Paying it sends a real PayPal sandbox payout to the sandbox buyer, and two new sample claims take its place.`;
   if (r.is_sample) return "Sample claim, seeded for the demo. Paying it sends a real PayPal sandbox payout.";
   return null;
 }

@@ -1,6 +1,7 @@
 import { Info } from "@/components/Info";
 import { fmtDate } from "@/lib/api/format";
-import { errorRates, type ErrorRate } from "./errors";
+import Link from "next/link";
+import { errorRates, freeTimings, readingAccuracy, type ErrorRate } from "./errors";
 
 const photos = (n: number) => (n === 1 ? "1 photo" : `${n} photos`);
 const times = (n: number) => (n === 1 ? "once" : n === 2 ? "twice" : `${n} times`);
@@ -26,6 +27,8 @@ function happened(r: ErrorRate): string {
  */
 export function ErrorRates() {
   const e = errorRates();
+  const t = freeTimings();
+  const ra = readingAccuracy();
   const src = e.sources;
   const n = (s: string) => e.bySource.find((b) => b.source === s)?.decisions ?? 0;
   return (
@@ -58,13 +61,29 @@ export function ErrorRates() {
         </p>
         {e.heldBack.count > 0 && <p className="je-def je-happened">{happened(e.heldBack)}</p>}
       </div>
+      <div className="je-item">
+        <p className="je-fig tabular">
+          {ra.right} <span className="je-of">of {ra.readings}</span>
+        </p>
+        <p className="je-what">readings right on real CPSC recalls</p>
+        <p className="je-def">
+          The CPSC&rsquo;s own photos of {ra.photos} recalled products made safe, from {ra.recalls} recalls, {ra.trials / ra.photos} trials each at the claim path&rsquo;s setting: right product <span className="tabular">{ra.product} of {ra.trials}</span>, made safe{" "}
+          <span className="tabular">
+            {ra.madeSafe} of {ra.trials}
+          </span>
+          .{" "}
+          <Link className="text-link" href="/evidence/photo-checks#reading">
+            What it read
+          </Link>
+        </p>
+      </div>
       {e.officialPicture.of > 0 && (
         <p className="je-def je-code-first">
           Why a code check runs before the model: with the official-picture match switched off, the model alone would have paid for the recall&rsquo;s own published picture in{" "}
           <span className="tabular">
             {e.officialPicture.paid} of {e.officialPicture.of}
           </span>{" "}
-          runs. On every claim the match runs first and answers that picture in about 60 ms, with no model call and no payment, so these runs count in neither rate.
+          runs. On every claim the match runs first and answers that picture in a median of <span className="tabular">{t.official.median} ms</span> ({t.official.min} to {t.official.max} ms recorded), with no model call and no payment, so these runs count in neither rate.
         </p>
       )}
       <p className="je-src lp-tech tabular">

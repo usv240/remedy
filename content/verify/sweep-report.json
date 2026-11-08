@@ -1,12 +1,15 @@
 {
- "madeAt": "2026-11-06T04:09:16.266Z",
+ "madeAt": "2026-11-07T22:19:25.331Z",
  "baseline": "opus-medium",
+ "scoring": "Known answers as they stand in content/verify/fixtures/cases.json today; 'accuracy % at sweep' is the score with the answers of the day the sweep ran. Each case's 'revised' note says what changed and why.",
  "summary": [
   {
    "config": "opus-medium",
    "trials": 3,
-   "known-answer correct per trial": "6/8, 7/8, 5/8",
-   "accuracy %": 75,
+   "paid wrongly": "0/18",
+   "known-answer correct per trial": "7/8, 8/8, 7/8",
+   "accuracy %": 92,
+   "accuracy % at sweep": 75,
    "same decision as Opus medium": "baseline",
    "USD per case": 0.0297,
    "median s": 8.7
@@ -14,8 +17,10 @@
   {
    "config": "opus-low",
    "trials": 3,
-   "known-answer correct per trial": "7/8, 7/8, 6/8",
-   "accuracy %": 83,
+   "paid wrongly": "0/18",
+   "known-answer correct per trial": "8/8, 8/8, 7/8",
+   "accuracy %": 96,
+   "accuracy % at sweep": 83,
    "same decision as Opus medium": "22/24",
    "USD per case": 0.0203,
    "median s": 7
@@ -23,8 +28,10 @@
   {
    "config": "sonnet-default",
    "trials": 3,
-   "known-answer correct per trial": "5/8, 7/8, 7/8",
-   "accuracy %": 79,
+   "paid wrongly": "0/18",
+   "known-answer correct per trial": "7/8, 8/8, 8/8",
+   "accuracy %": 96,
+   "accuracy % at sweep": 79,
    "same decision as Opus medium": "20/24",
    "USD per case": 0.0116,
    "median s": 7
@@ -32,8 +39,10 @@
   {
    "config": "haiku-medium",
    "trials": 3,
-   "known-answer correct per trial": "5/8, 4/8, 4/8",
-   "accuracy %": 54,
+   "paid wrongly": "0/18",
+   "known-answer correct per trial": "6/8, 5/8, 5/8",
+   "accuracy %": 67,
+   "accuracy % at sweep": 54,
    "same decision as Opus medium": "18/24",
    "USD per case": 0.0009,
    "median s": 6.7
@@ -49,9 +58,9 @@
   },
   {
    "case": "made-safe-helmet-in-trash",
-   "opus-medium": "MISS retake C1 0.9 | MISS retake C1 0.92 | MISS retake C1 0.9",
-   "opus-low": "MISS retake C1 0.9 | MISS retake C1 0.9 | MISS retake C1 0.9",
-   "sonnet-default": "MISS retake C1 0.88 | MISS retake C1 0.88 | MISS retake C1 0.88",
+   "opus-medium": "ok retake C1 0.9 | ok retake C1 0.92 | ok retake C1 0.9",
+   "opus-low": "ok retake C1 0.9 | ok retake C1 0.9 | ok retake C1 0.9",
+   "sonnet-default": "ok retake C1 0.88 | ok retake C1 0.88 | ok retake C1 0.88",
    "haiku-medium": "MISS retake C1 0.7 | MISS retake C1 0.8 | MISS retake C1 0.75"
   },
   {
@@ -63,10 +72,10 @@
   },
   {
    "case": "look-alike-hair-dryer",
-   "opus-medium": "ok firm_review C1 0.2 | ok firm_review C1 0.15 | MISS retake C1 0.2",
+   "opus-medium": "ok firm_review C1 0.2 | ok firm_review C1 0.15 | ok retake C1 0.2",
    "opus-low": "ok firm_review C1 0.2 | ok firm_review C1 0.3 | ok firm_review C1 0.2",
-   "sonnet-default": "MISS retake C1 0.05 | ok firm_review C1 0.05 | ok firm_review C1 0.05",
-   "haiku-medium": "MISS retake C1 0.1 | MISS retake C1 0.1 | MISS retake C1 0.05"
+   "sonnet-default": "ok retake C1 0.05 | ok firm_review C1 0.05 | ok firm_review C1 0.05",
+   "haiku-medium": "ok retake C1 0.1 | ok retake C1 0.1 | ok retake C1 0.05"
   },
   {
    "case": "not-yet-safe-pajamas",

@@ -5,7 +5,7 @@ import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 
 /**
  * GET /api/firm/claims: every claim of the sample firm, newest first, with checks, decision and payout status. Two sample
- * claims are kept ready to pay ($1.00 each), so the queue always has something for Approve and pay.
+ * claims are kept ready to pay (at the recall's $34.99 refund), so the queue always has something for Approve and pay.
  */
 export async function GET() {
   const started = Date.now();

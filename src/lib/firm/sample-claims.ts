@@ -4,17 +4,26 @@
  * /firm/claims and watch a real PayPal sandbox payout. Every row is marked sample (claim.is_sample). No model call and
  * no PayPal call happen here. Server only.
  */
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { sql } from "drizzle-orm";
+import { storedCopy } from "@/lib/ops/photos";
 import { audit } from "@/lib/audit";
 import { db } from "@/lib/db";
 import { sandboxBuyerLogin } from "@/lib/sandbox-login";
 import { encrypt, hashContact, maskContact } from "@/lib/secure";
 import type { CheckId, CheckStatus, Checks } from "@/lib/verify/types";
+import { SHOP } from "@/lib/payments/shop-catalog";
 import { SAMPLE_RECALL } from "./firm";
 
-/** How many sample claims are kept ready to pay, and what each pays: small, so live sandbox payouts stay small. */
+/**
+ * How many sample claims are kept ready to pay, and what each pays: the recall's real refund, the sample charger's
+ * $34.99. The sandbox payout balance was $4,261.32 on 2026-11-07 (GET /v1/reporting/balances), about 120 payouts at
+ * that amount, and the demo's payment limit of $500 a day (src/lib/payments/router.ts) holds a day to 14 of them.
+ */
 export const READY_TARGET = 2;
-export const READY_AMOUNT = "1.00";
+export const READY_AMOUNT = (SHOP.product.priceCents / 100).toFixed(2);
 
 export type SampleKind = "paid" | "unclaimed" | "review" | "reviewed_paid" | "retake" | "review_retake";
 
@@ -88,6 +97,48 @@ export async function readyPayee(): Promise<string | null> {
   return process.env.SANDBOX_BUYER_EMAIL?.trim() || (await sandboxBuyerLogin())?.email || null;
 }
 
+/**
+ * The photos the sample claims carry: the sample set's own public-domain photos of one charger (Dmitry G, Wikimedia
+ * Commons; public/samples/charger/CREDITS.json), so the queue and the drawer show real thumbnails. Made safe (its cord
+ * cut) for the claims that were paid or wait for a person; intact or opened, cord still attached, for the ones asked
+ * for a new photo. Each is one photo row (source "preset", never pruned), shared by the sample claims that show it.
+ */
+export type SamplePhotoKind = "made_safe" | "intact" | "opened" | "opened_case";
+const SAMPLE_PHOTO_FILES: Record<SamplePhotoKind, string> = {
+  made_safe: "cord-cut.jpg",
+  intact: "intact.jpg",
+  opened: "opened-cord-attached.jpg",
+  opened_case: "opened-case.jpg",
+};
+export const SAMPLE_PHOTO_CREDIT_LINE = "Sample photo: Dmitry G, Wikimedia Commons, public domain.";
+
+export function samplePhotoFor(kind: SampleKind, i: number): SamplePhotoKind {
+  if (kind === "retake") return i % 2 ? "intact" : "opened";
+  if (kind === "review_retake") return "opened_case";
+  return "made_safe";
+}
+
+/** The photo row for each sample photo, made once and found again by its SHA-256. */
+export async function samplePhotoIds(): Promise<Partial<Record<SamplePhotoKind, string>>> {
+  const out: Partial<Record<SamplePhotoKind, string>> = {};
+  for (const [kind, file] of Object.entries(SAMPLE_PHOTO_FILES) as [SamplePhotoKind, string][]) {
+    const p = [path.join(process.cwd(), "public", "samples", "charger", file), path.join(process.cwd(), "content", "verify", "fixtures", "sample", file)].find(existsSync);
+    if (!p) continue;
+    const bytes = readFileSync(p);
+    const sha = createHash("sha256").update(bytes).digest("hex");
+    const [have] = (await db().execute(sql`select id from photo where sha256 = ${sha} and source = 'preset' and bytes is not null order by created_at limit 1`)).rows as { id: string }[];
+    if (have) {
+      out[kind] = have.id;
+      continue;
+    }
+    const copy = await storedCopy(bytes);
+    if (!copy) continue;
+    const [row] = (await db().execute(sql`insert into photo (sha256, mime, size, width, height, bytes, source) values (${sha}, ${copy.mime}, ${bytes.length}, ${copy.width}, ${copy.height}, ${copy.bytes}, 'preset') returning id`)).rows as { id: string }[];
+    out[kind] = row.id;
+  }
+  return out;
+}
+
 /** Sample claims of the firm that the queue shows as ready to pay: verified, not reviewed away, no plan, no payment. */
 const READY_SQL = (firmId: number) => sql`
   select count(*)::int as n from claim c
@@ -104,6 +155,7 @@ const READY_SQL = (firmId: number) => sql`
 export async function ensureReadyClaims(firmId: number, recall: string = SAMPLE_RECALL, now = new Date()): Promise<number> {
   const payee = await readyPayee();
   if (!payee) return 0;
+  const photo = recall === SAMPLE_RECALL ? ((await samplePhotoIds().catch(() => ({}) as Partial<Record<SamplePhotoKind, string>>)).made_safe ?? null) : null;
   const added = await db().transaction(async (tx) => {
     await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`ready-claims:${firmId}`}))`);
     const [{ n }] = (await tx.execute(READY_SQL(firmId))).rows as { n: number }[];
@@ -115,9 +167,9 @@ export async function ensureReadyClaims(firmId: number, recall: string = SAMPLE_
     for (let k = n; k < READY_TARGET; k++) {
       const created = new Date(now.getTime() - (90 - k * 30) * 60_000);
       await tx.execute(sql`
-        insert into claim (recall_number, firm_id, payee_type, payee_value_enc, payee_hash, payee_masked, units_claimed, checks, decision, status, amount, channel,
+        insert into claim (recall_number, firm_id, photo_id, payee_type, payee_value_enc, payee_hash, payee_masked, units_claimed, checks, decision, status, amount, channel,
                            is_sample, decided_at, created_at, updated_at, result)
-        values (${recall}, ${firmId}, 'email', ${encrypt(payee)}, ${hashContact(payee)}, ${maskContact(payee)}, 1, ${JSON.stringify(sampleChecks("paid", rand, recall))}::jsonb,
+        values (${recall}, ${firmId}, ${photo}::uuid, 'email', ${encrypt(payee)}, ${hashContact(payee)}, ${maskContact(payee)}, 1, ${JSON.stringify(sampleChecks("paid", rand, recall))}::jsonb,
                 'verified', 'verified', ${READY_AMOUNT}, ${k % 2 ? "link" : "web"}, true, ${new Date(created.getTime() + 22_000)}, ${created}, ${created},
                 ${JSON.stringify(sampleResult("verified", recall))}::jsonb)`);
     }

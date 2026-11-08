@@ -66,9 +66,11 @@ type Props = {
   filter: (r: QueueRow) => boolean;
   onOpen: (id: string, from: HTMLElement | null) => void;
   onSelection: (ids: string[]) => void;
+  /** Called once the grid has drawn its first rows, so the server-rendered first rows can step aside. */
+  onReady?: () => void;
 };
 
-export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelection }: Props) {
+export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelection, onReady }: Props) {
   const api = useRef<GridApi<QueueRow> | null>(null);
   const filterRef = useRef(filter);
   useEffect(() => {
@@ -235,6 +237,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
       onGridReady={(e) => {
         api.current = e.api;
       }}
+      onFirstDataRendered={() => onReady?.()}
       onSelectionChanged={onSelectionChanged}
       statusBar={{ statusPanels: [{ statusPanel: "agTotalAndFilteredRowCountComponent", align: "left" }, { statusPanel: "agSelectedRowCountComponent", align: "left" }] }}
       overlayNoRowsTemplate='<span class="muted">No claims in this view.</span>'

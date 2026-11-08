@@ -34,7 +34,7 @@ services:
       - key: REMEDY_SECRET_KEY # encrypts where each payout goes, inside its payment plan (src/lib/payments/seal.ts)
         generateValue: true
       - key: AI_DAILY_USD # daily cap on Claude spend; past it, photos go to a person at the firm
-        value: "2"
+        value: "5"
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: PAYPAL_CLIENT_ID
@@ -55,16 +55,6 @@ services:
       - key: ELASTIC_API_KEY
         sync: false
       - key: CHANNEL3_API_KEY
-        sync: false
-      - key: KERNEL_API_KEY
-        sync: false
-      - key: ZAPIER_MCP_URL
-        sync: false
-      - key: ASTROPODS_AGENT_URL
-        sync: false
-      - key: ASTROPODS_API_KEY
-        sync: false
-      - key: RENDER_API_KEY
         sync: false
       - key: SENTRY_DSN # error tracking; unset, errors stay in the structured log only
         sync: false
@@ -107,7 +97,7 @@ services:
           name: remedy
           envVarKey: REMEDY_SECRET_KEY
       - key: AI_DAILY_USD
-        value: "2"
+        value: "5"
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: PAYPAL_CLIENT_ID

@@ -66,6 +66,37 @@ export function freeCaught() {
   return { caught: free.filter((r) => r.result.decision !== "verified").length, total: free.length };
 }
 
+const median = (xs: number[]) => {
+  const s = [...xs].sort((a, b) => a - b);
+  if (!s.length) return 0;
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : Math.round(((s[m - 1] + s[m]) / 2) * 10) / 10;
+};
+const spread = (xs: number[]) => ({ median: median(xs), min: xs.length ? Math.min(...xs) : 0, max: xs.length ? Math.max(...xs) : 0, n: xs.length });
+
+/**
+ * How long the free answers took, from the recorded runs themselves (content/public/verify-runs.json, timed on the
+ * machine that recorded them): the whole answer (decoding the photo, loading the recall's pictures, the hash match,
+ * the decision), and the hash comparison alone. `official` is the subset answered by a match with a recall's own
+ * published picture; `free` is every run answered with no model call. Also how the free runs ended: a new photo asked
+ * for, or a person at the firm (a photo already used on an earlier claim).
+ */
+export function freeTimings() {
+  type T = { decode_ms: number; official_ms: number; match_ms?: number; total_ms: number };
+  const runs = read<{ recordedAt: string; runs: { id: string; needs_vision?: boolean; result: { decision: string; decided_by: string; timings: T } }[] }>("content", "public", "verify-runs.json");
+  const free = runs.runs.filter((r) => !r.needs_vision);
+  const official = free.filter((r) => r.result.decided_by === "own_photo");
+  const match = free.map((r) => r.result.timings.match_ms).filter((m): m is number => typeof m === "number");
+  return {
+    recordedAt: runs.recordedAt,
+    free: spread(free.map((r) => r.result.timings.total_ms)),
+    official: spread(official.map((r) => r.result.timings.total_ms)),
+    match: spread(match),
+    retake: free.filter((r) => r.result.decision === "retake").length,
+    firmReview: free.filter((r) => r.result.decision === "firm_review").length,
+  };
+}
+
 /** The sweep configuration that is the claim path's own setting (src/lib/verify/vision.ts: Opus 5.5, medium effort). */
 export const CLAIM_PATH_CONFIG = "opus-medium";
 /** A public run that replays a preset's recording: the same model answer, counted once with the preset. */
@@ -216,3 +247,82 @@ export function errorRates() {
     sources: SOURCES,
   };
 }
+
+type SweepRow = SweepFile["cases"][number] & { C1_status?: string; C2?: string; C4?: string; usd?: number; ms?: number; ok?: boolean };
+
+/** Whether a sweep row meets its case's current known answer (the same rules as meetsExpectation in src/lib/verify/fixtures.ts). */
+function meets(e: Expect & { not_checks?: Record<string, string>; decided_by?: string }, r: SweepRow): boolean {
+  const status: Record<string, string | undefined> = { C1: r.C1_status, C2: r.C2, C3: r.C3, C4: r.C4 };
+  if (e.decision && r.decision !== e.decision) return false;
+  if (e.not_decision && r.decision === e.not_decision) return false;
+  if (e.decided_by && (r as { decided_by?: string }).decided_by !== e.decided_by) return false;
+  for (const [id, s] of Object.entries(e.checks ?? {})) if (status[id] !== s) return false;
+  for (const [id, s] of Object.entries(e.not_checks ?? {})) if (status[id] === s) return false;
+  return true;
+}
+
+/**
+ * The four model settings in the sweep, on the measure that matters for money first: paid when it should not have
+ * been, then held back when it could have been paid, then every known answer as it stands today in
+ * content/verify/fixtures/cases.json. `atSweep` is the accuracy the sweep report printed with the known answers of the
+ * day it ran (content/verify/sweep-report.json); two answers were revised after it (see the cases' `revised` notes).
+ */
+export function sweepSettings() {
+  const cases = read<{ cases: (Case & { not_checks?: Record<string, string> })[] }>("content", "verify", "fixtures", "cases.json").cases;
+  const byId = new Map(cases.map((c) => [c.id, c]));
+  const sweep = read<Omit<SweepFile, "cases"> & { cases: SweepRow[] }>("content", "verify", "sweep-results.json");
+  return sweep.configs.map((cfg) => {
+    const rows = sweep.cases.filter((r) => r.config === cfg.id);
+    const known = rows.map((r) => ({ r, c: byId.get(r.case), k: knownAnswer(byId.get(r.case)?.expect, byId.get(r.case)?.photo) }));
+    const notPaid = known.filter((x) => x.k === "not_paid");
+    const paid = known.filter((x) => x.k === "paid");
+    const scored = known.filter((x) => x.c);
+    const usd = rows.reduce((s, r) => s + (r.usd ?? 0), 0);
+    const secs = rows.map((r) => (r.ms ?? 0) / 1000).sort((a, b) => a - b);
+    return {
+      id: cfg.id,
+      model: cfg.model,
+      effort: cfg.effort ?? null,
+      claimPath: cfg.id === CLAIM_PATH_CONFIG,
+      wrongPay: { count: notPaid.filter((x) => x.r.decision === "verified").length, of: notPaid.length },
+      heldBack: { count: paid.filter((x) => x.r.decision !== "verified").length, of: paid.length },
+      correct: { count: scored.filter((x) => meets(x.c!.expect, x.r)).length, of: scored.length },
+      /** The CPSC's own published pictures sent with the official-picture match off: verified here would have paid for a published picture. */
+      officialPaid: { count: known.filter((x) => !x.k && isOfficialReading(x.c) && x.r.decision === "verified").length, of: known.filter((x) => !x.k && isOfficialReading(x.c)).length },
+      atSweep: { count: rows.filter((r) => r.ok).length, of: rows.length },
+      usdPerCase: rows.length ? Math.round((usd / rows.length) * 10000) / 10000 : 0,
+      medianSeconds: secs.length ? Math.round(secs[Math.floor((secs.length - 1) / 2)] * 10) / 10 : 0,
+    };
+  });
+}
+
+/**
+ * Reading accuracy on real CPSC recalls: the CPSC's own published photos of recalled products made safe (recalls 26125
+ * and 25007), sent with the official-picture match off at the claim path's setting, three trials each. Each trial gives
+ * two readings, right product (C1) and made safe (C2), compared with the known reading in cases.json. `asked` lists the
+ * trials that asked for a new photo, by the check that asked and whether the model's own-photo check also came back
+ * unsure (it recognized the CPSC's published picture).
+ */
+export function readingAccuracy(config = CLAIM_PATH_CONFIG) {
+  const cases = read<{ cases: Case[] }>("content", "verify", "fixtures", "cases.json").cases;
+  const reading = cases.filter((c) => c.photo.startsWith("official/") && c.official_hash_check === false && c.expect.checks?.C1 && c.expect.checks?.C2);
+  const sweep = read<Omit<SweepFile, "cases"> & { cases: SweepRow[] }>("content", "verify", "sweep-results.json");
+  const rows = sweep.cases.filter((r) => r.config === config && reading.some((c) => c.id === r.case));
+  const at = (r: SweepRow) => reading.find((c) => c.id === r.case)!.expect.checks!;
+  const product = rows.filter((r) => r.C1_status === at(r).C1).length;
+  const madeSafe = rows.filter((r) => r.C2 === at(r).C2).length;
+  const asked = reading.map((c) => {
+    const mine = rows.filter((r) => r.case === c.id);
+    const retakes = mine.filter((r) => r.decision === "retake");
+    return {
+      caseId: c.id,
+      trials: mine.length,
+      retakes: retakes.length,
+      byMadeSafe: retakes.filter((r) => r.C2 === "fail").length,
+      madeSafeKnown: c.expect.checks!.C2,
+      ownPhotoUnsure: retakes.filter((r) => r.C3 === "unclear" || r.C3 === "fail").length,
+    };
+  });
+  return { photos: reading.length, recalls: new Set(reading.map((c) => c.recall)).size, trials: rows.length, readings: rows.length * 2, right: product + madeSafe, product, madeSafe, asked };
+}
+

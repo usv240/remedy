@@ -21,6 +21,8 @@ export type FlowRecall = {
   example: MadeSafeExample | null;
   /** Show "Bought it from Brightline with PayPal?" (the sample shop's recall). */
   shop: boolean;
+  /** How many photos the remedy asks for, and what each shows when it says (src/lib/recall/photo-count.ts). */
+  photos?: { count: number; shows: string[] };
 };
 
 /** The sample shop's receipt, kept on this device after a purchase so the claim can link it. */
@@ -51,6 +53,9 @@ const FRAME_TIP: Partial<Record<StepKind, string>> = {
 export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: FlowRecall; source?: "web" | "try"; startAt?: number }) {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
+  // The further photos a remedy asks for (it asks for two or three): one slot each, in order.
+  const extraCount = Math.max(0, Math.min(3, (recall.photos?.count ?? 1) - 1));
+  const [extras, setExtras] = useState<(File | null)[]>(() => Array.from({ length: extraCount }, () => null));
   const [preview, setPreview] = useState<string | null>(null);
   const [check, setCheck] = useState<PhotoCheck | null>(null);
   const [override, setOverride] = useState(false);
@@ -132,6 +137,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
     const fd = new FormData();
     fd.set("recall", recall.number);
     fd.set("photo", file);
+    for (const f of extras) if (f) fd.append("photo", f);
     // Arrived from a firm's personal claim link (?n=...): send its token, so the firm sees the notice was answered.
     const notice = new URLSearchParams(window.location.search).get("n");
     fd.set("source", notice ? "link" : source);
@@ -194,6 +200,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
   function retake() {
     setPhase("photo");
     setFile(null);
+    setExtras(Array.from({ length: extraCount }, () => null));
     setPreview(null);
     setCheck(null);
     setClaim(null);
@@ -206,14 +213,21 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
 
   const blocked = check && !check.ok && check.kind !== "quality";
   const soft = check && !check.ok && check.kind === "quality";
-  const canSend = Boolean(file) && !blocked && (!soft || override) && check !== null;
+  const canSend = Boolean(file) && extras.every(Boolean) && !blocked && (!soft || override) && check !== null;
+  const total = extraCount + 1;
+  const shows = recall.photos?.shows ?? [];
 
   return (
     <>
       <li className="cl-step" data-step="photo">
         <h2 className="cl-step-title" data-n={startAt}>
-          Snap a photo <ClaimInfo k="claim.photo" topic="your photo" />
+          {total > 1 ? `Snap ${total === 2 ? "two" : total === 3 ? "three" : total} photos` : "Snap a photo"} <ClaimInfo k="claim.photo" topic="your photo" />
         </h2>
+        {total > 1 && (
+          <p className="cl-hint cl-multi-lead">
+            This recall asks for {total} photos.{shows[0] ? ` Photo 1: ${shows[0]}.` : ""}
+          </p>
+        )}
         <div className="cl-photo" data-ui>
           <div className="cl-frame" data-has={preview ? "" : undefined}>
             {preview ? (
@@ -239,6 +253,28 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
               Choose a photo
             </label>
           </div>
+          {extras.map((f, i) => (
+            <div key={i} className="cl-extra">
+              <p className="cl-extra-k">
+                Photo {i + 2} of {total}
+                {shows[i + 1] ? `: ${shows[i + 1]}` : ""}
+              </p>
+              <label className="btn btn-quiet cl-pick-btn">
+                <input
+                  className="cl-file"
+                  type="file"
+                  accept={ACCEPT}
+                  capture="environment"
+                  onChange={(e) => {
+                    const picked = e.target.files?.[0] ?? null;
+                    setExtras((xs) => xs.map((x, k) => (k === i ? picked : x)));
+                  }}
+                  disabled={phase === "checking"}
+                />
+                {f ? `Photo ${i + 2} added: take it again` : `Add photo ${i + 2}`}
+              </label>
+            </div>
+          ))}
           {recall.shop && (
             <div className="cl-sample">
               <button type="button" className="btn btn-quiet cl-sample-btn" onClick={() => void pickSamplePhoto()} disabled={phase === "checking"}>
@@ -308,9 +344,10 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
           )}
           <div className="cl-actions">
             <button type="button" className="btn btn-primary cl-send" onClick={() => void submit()} disabled={!canSend || phase === "checking"}>
-              {phase === "checking" ? "Checking" : "Check my photo"}
+              {phase === "checking" ? "Checking" : total > 1 ? "Check my photos" : "Check my photo"}
             </button>
             {!file && <span className="cl-hint">Add a photo first.</span>}
+            {file && !extras.every(Boolean) && <span className="cl-hint">Add all {total} photos first.</span>}
           </div>
         </div>
       </li>

@@ -475,5 +475,11 @@
     "what": "Published findings on recall response, claiming and photo matching, each with what Remedy does about it.",
     "why": "A full refund and simple steps are what help owners finish a recall; Remedy is built around both.",
     "technical": "Sources: Raithel, Hock and Mafael (2024), Journal of the Academy of Marketing Science 52:716-735; Bhargava and Manoli (2015), American Economic Review 105(11):3489-3529; CPSC news release, January 17, 2025; Krawetz (2013), dHash; PayPal Holdings 3Q 2026 earnings release. The list is src/components/judges/Research.tsx."
+  },
+  "evidence.money": {
+    "title": "What is at stake",
+    "what": "What the photo-refund recalls are worth to their owners, counted from the CPSC records.",
+    "why": "Every point of return that simpler claiming adds sends real money back to owners, and every product made safe is one fewer hazard in a home.",
+    "technical": "scripts/recalls/value.ts writes content/recalls/value.json: for each photo-refund recall, its US units times the lowest price its Sold At field states, only where the record states both (src/lib/recall/value.ts, tested in tests/recall-value.test.ts). The 6 in 100 is the CPSC measure in src/lib/research.ts."
   }
 }

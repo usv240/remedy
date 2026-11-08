@@ -5,6 +5,7 @@ import { errorRates, freeCaught } from "@/components/judges/errors";
 import { TOOLS } from "@/lib/mcp/tools";
 import { aboutSeconds, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
+import { derived } from "../scripts/facts";
 
 /**
  * One source for each figure the README, TESTING.md and /evidence repeat: content/public/facts.json, written by
@@ -22,7 +23,7 @@ type Facts = {
   errors: { wrongPay: { count: number; of: number; photos: number }; heldBack: { count: number; of: number; photos: number } };
   catalogPictures: number;
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
-};
+} & ReturnType<typeof derived>;
 const facts = JSON.parse(readFileSync(FACTS, "utf8")) as Facts;
 const README = read("README.md");
 const TESTING = read("TESTING.md");
@@ -104,13 +105,45 @@ describe("the README and TESTING.md print the same figures", () => {
 
   it("the photo checks, the error rates and the catalog", () => {
     const f = facts.photoChecks;
-    expect(README).toContain(`**${f.freeCaught} of ${f.freeTotal}** asked for a new photo by code alone`);
+    expect(README).toContain(`**${f.freeCaught} of ${f.freeTotal}** stopped by code alone`);
     const e = facts.errors;
     expect(README).toContain(`**paid when it should not have been: ${e.wrongPay.count} of ${e.wrongPay.of}** decisions, on ${e.wrongPay.photos} photos`);
     expect(README).toContain(`**held for a person or a new photo when it could have been paid: ${e.heldBack.count} of ${e.heldBack.of}**`);
     for (const [n, of] of all(README, /(\d+) of (\d+) paid wrongly/g)) expect([n, of]).toEqual([String(e.wrongPay.count), String(e.wrongPay.of)]);
     for (const [n] of all(README, /the ([\d,]+) distinct published pictures/g)) expect(n).toBe(int(facts.catalogPictures));
     expect(README).toContain(`the ${int(facts.catalogPictures)} distinct published pictures`);
+  });
+
+  it("the free answers' times, from the recorded runs, and no figure they do not support", () => {
+    const d = derived();
+    expect(facts.timings).toEqual(d.timings);
+    const t = d.timings;
+    expect(README).toContain(`Each answered in ${t.free.min} to ${t.free.max} ms (median ${t.free.median} ms)`);
+    expect(README).toContain(`the hash comparison itself took ${t.match.min} to ${t.match.max} ms`);
+    expect(README).toContain(`a median of ${t.official.median} ms`);
+    expect(README).toContain(`${t.official.min} to ${t.official.max} ms`);
+    for (const doc of [README, TESTING, read("content", "info.json")]) {
+      expect(doc).not.toMatch(/about 60 ms|under 100 ms/);
+    }
+  });
+
+  it("the reading accuracy, the model settings, the photo count and the money headline", () => {
+    const d = derived();
+    expect(facts.reading).toEqual(d.reading);
+    expect(facts.settings).toEqual(d.settings);
+    expect(facts.multiPhoto).toEqual(d.multiPhoto);
+    expect(facts.value).toEqual(d.value);
+    const r = d.reading;
+    expect(README).toContain(`**Reading accuracy on real CPSC recalls: ${r.right} of ${r.readings} readings right.**`);
+    expect(README).toContain(`right product ${r.product} of ${r.trials}, made safe ${r.madeSafe} of ${r.trials}`);
+    const claim = d.settings.find((s) => s.id === "opus-medium")!;
+    expect(README).toContain(`right on ${claim.correct.replace(" of ", " of ")}`);
+    expect(README).toContain(`(${claim.wrongPay} each)`);
+    expect(README).toContain(`${d.multiPhoto.count} of the ${d.multiPhoto.of} ask for more than one photo`);
+    expect(README).toContain(`cover **${d.value.total}**`);
+    expect(README).toContain(`**${d.value.unclaimed}** of those products stays in homes unclaimed`);
+    expect(README).toContain(`is worth **${d.value.perPoint}** to their owners in refunds or replacements`);
+    expect(README).toContain(`(${d.value.covered} of ${d.value.recalls} state units and a price)`);
   });
 
   it("the research and the measured timings", () => {

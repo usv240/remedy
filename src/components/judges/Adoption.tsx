@@ -57,7 +57,7 @@ export function Adoption() {
       who: "Small firms",
       fig: pct(S.all.under50k.share / 100),
       figWhat: "of recalls cover fewer than 50,000 units",
-      text: `${fmtInt(S.all.under50k.count)} of ${fmtInt(S.recalls.count)} recalls since 2024, and ${fmtInt(S.photoRefund.under50k.count)} of the ${fmtInt(S.all.photoRefund.count)} photo-refund recalls. A firm works its claims in the console and pays them through PayPal; the monthly report is drafted for it. Next: each firm connecting its own PayPal account.`,
+      text: `${fmtInt(S.all.under50k.count)} of ${fmtInt(S.recalls.count)} recalls since 2024, and ${fmtInt(S.photoRefund.under50k.count)} of the ${fmtInt(S.all.photoRefund.count)} photo-refund recalls. A firm works its claims in the console and pays them through PayPal; the monthly report is drafted for it. Each firm can pay from its own PayPal account.`,
       link: { href: "/firm", label: "The firm console" },
     },
     {

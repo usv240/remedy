@@ -60,7 +60,7 @@ export async function queueChecks(): Promise<Check[]> {
       id: "worker",
       name: "Worker",
       mode: workerFresh ? "live" : "fallback",
-      detail: workerFresh ? `Worker ${q!.workerName ?? ""} last seen ${ago(q!.workerSeenAt!, now)}; checks and payouts run off the request path` : q?.workerSeenAt ? `No worker since ${ago(q.workerSeenAt, now)}; each route runs its job inline after 2 s` : "No worker has run on this database yet; each route runs its job inline after 2 s (npm run worker starts one)",
+      detail: workerFresh ? `Worker ${q!.workerName ?? ""} last seen ${ago(q!.workerSeenAt!, now)}; checks and payouts run off the request path` : q?.workerSeenAt ? `Checks and payouts run inside each request; the worker last reported in ${ago(q.workerSeenAt, now)}` : "Checks and payouts run inside each request, after a 2 s wait for a worker. The worker service in render.yaml (or npm run worker) takes them off the request path",
     },
   ];
 }
@@ -149,10 +149,10 @@ export async function runChecks(): Promise<Check[]> {
       name: "Daily recall ingest: last run",
       mode: ingestFresh ? "live" : "fallback",
       detail: ingest?.lastOkAt
-        ? `${ingest.detail}${ingestFresh ? "" : " No run in the last two days; the stored recall data is served as is."}`
+        ? `${ingest.detail}${ingestFresh ? "" : " Serving the stored recall data until the next daily run."}`
         : ingest?.lastError
-          ? `The last run stopped: ${ingest.lastError}. The stored recall data is served as is.`
-          : "Not run on this server yet; the recall data loaded at deploy is served. Render runs it daily (render.yaml).",
+          ? `Serving the stored recall data; the next daily run tries again (last run: ${ingest.lastError}).`
+          : "Serving the recall data loaded at deploy. The daily job in render.yaml adds each day's new recalls at 14:20 UTC.",
       ms: ingest?.lastMs ?? undefined,
     },
   ];

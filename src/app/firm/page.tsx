@@ -4,6 +4,11 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { Info } from "@/components/Info";
 import { FirmInfo } from "@/components/firm/FirmInfo";
+import { PaypalConnect } from "@/components/firm/PaypalConnect";
+import { autoPaidToday } from "@/app/api/claims/_lib/claims";
+import { firmTerms } from "@/app/api/claims/_lib/terms";
+import { limitRules } from "@/lib/firm/limits";
+import { accountView } from "@/lib/paypal/firm-account";
 import { dbConfigured } from "@/lib/db";
 import { dayName, monthName, whenWords } from "@/lib/firm/dates";
 import { firmContext } from "@/lib/firm/firm";
@@ -22,6 +27,8 @@ async function Home() {
   }
   await ensureReadyClaims(ctx.firm.id, ctx.main.number).catch(() => 0);
   const s = await homeSummary(ctx.firm, ctx.main, ctx.recalls.slice(1));
+  const [terms, account, paidToday] = await Promise.all([firmTerms(ctx.main.number), accountView(ctx.firm.id), autoPaidToday(ctx.firm.id, ctx.main.number).catch(() => 0)]);
+  const rules = limitRules(terms);
   const now = new Date();
   return (
     <>
@@ -144,6 +151,30 @@ async function Home() {
         </section>
       </div>
 
+      <section className="firm-section firm-pay" aria-labelledby="t-pay">
+        <h2 id="t-pay">Payments and claim limits</h2>
+        <div className="firm-pay-grid">
+          <div className="firm-tile">
+            <h3 className="firm-tile-head">PayPal account</h3>
+            <PaypalConnect initial={account} sample={ctx.firm.isSample} />
+          </div>
+          <div className="firm-tile">
+            <h3 className="firm-tile-head">Claim limits</h3>
+            <ul className="firm-rules">
+              {rules.map((r) => (
+                <li key={r.title}>
+                  <p className="firm-rule-title">{r.title}</p>
+                  <p className="muted">{r.rule}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="tabular firm-kpi-sub">
+              Auto-paid today on {s.recall.short}: {fmtUsd(paidToday)} of {fmtUsd(terms.autoDailyCents)}.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {s.otherRecalls.length > 0 && (
         <section className="firm-section" aria-labelledby="t-other">
           <h2 id="t-other">Other recalls in this console</h2>
@@ -164,7 +195,7 @@ async function Home() {
 
       <p className="firm-label">
         {s.sampleClaims > 0 ? `${fmtInt(s.sampleClaims)} of these claims are sample history, seeded so the console is not empty; their payments are marked sample and no money moved. ` : ""}
-        Sample history uses the firm&rsquo;s refund for each recall; the sample claims ready to pay are $1.00 each, so live sandbox payouts stay small, and two more are added when they have been paid. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
+        Sample history uses the firm&rsquo;s refund for each recall; the sample claims ready to pay are at the recall&rsquo;s refund of $34.99, and two more are added when they have been paid. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
       </p>
     </>
   );

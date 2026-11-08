@@ -78,7 +78,7 @@ const TITLES: Record<string, { title: string; about: string; expect: string }> =
   "official-image-heater": { title: "The recall's own picture, heater", about: "The CPSC's official photo of the DREO space heater.", expect: "Asks for the owner's own photo" },
   "duplicate-rotated-official": { title: "Rotated and recompressed copy", about: "The official power bank photo turned 90 degrees, shrunk and saved again at low quality.", expect: "Still matched to the official picture" },
   "duplicate-tilted-official": { title: "Tilted and cropped copy", about: "The heater's label photo tilted 4 degrees and cropped 6 percent on each side.", expect: "Still matched to the official picture" },
-  "duplicate-earlier-claim": { title: "A photo already used", about: "A copy of a photo that an earlier claim on this recall already sent.", expect: "Not verified: the photo was used before" },
+  "duplicate-earlier-claim": { title: "A photo already used", about: "A full-size photo of a power bank, turned and saved again, that an earlier claim on this recall already sent.", expect: "Sent to a person at the firm: the photo was used before" },
   blurry: { title: "A blurry photo", about: "A photo with heavy blur, the way a shaky hand takes it.", expect: "Retake, with what to change" },
   "another-recalls-picture": { title: "Another recall's picture", about: "The CPSC's made-safe photo from hair dryer recall 26125, sent for a different hair dryer recall, 26754.", expect: "Matched to the other recall's picture" },
 };

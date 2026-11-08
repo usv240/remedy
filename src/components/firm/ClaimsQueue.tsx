@@ -11,7 +11,7 @@ import { Thumb } from "./Thumb";
 
 const ClaimsGrid = dynamic(() => import("./ClaimsGrid").then((m) => m.ClaimsGrid), {
   ssr: false,
-  loading: () => <div className="cq-grid-loading">Loading the claims grid…</div>,
+  loading: () => null,
 });
 
 export type View = "all" | "review" | "ready" | "paid_today" | "unclaimed";
@@ -36,8 +36,58 @@ const REVIEWERS = ["Ana", "Devon"] as const;
 const usd = (c: number | null) => (c === null ? "" : `$${(c / 100).toFixed(2)}`);
 const TIME = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
+const DAY_UTC = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+
+/** The first rows of the queue, rendered on the server so the page shows claims at once, in the grid's own columns. */
+function FirstRows({ rows, total }: { rows: QueueRow[]; total: number }) {
+  return (
+    <div className="cq-first" aria-hidden="true">
+      <table>
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Claimant and recall</th>
+            <th>Checks</th>
+            <th>Decision</th>
+            <th className="num">Amount</th>
+            <th>Submitted</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id}>
+              <td>
+                <Thumb url={r.photoUrl} made={r.checks.C2 === "pass"} size={36} label="" />
+              </td>
+              <td>
+                <span className="cq-first-who">{r.claimant}</span>
+                <span className="muted">
+                  {" "}
+                  {r.recallShort}
+                  {r.sample ? ", sample" : ""}
+                </span>
+              </td>
+              <td className="tabular">{passCount(r.checks)} of 6</td>
+              <td>
+                <span className="pill" data-tone={STAGE_TONE[r.stage]}>
+                  {STAGE_LABEL[r.stage]}
+                </span>
+              </td>
+              <td className="num tabular">{usd(r.amountCents)}</td>
+              <td className="tabular muted">{DAY_UTC.format(new Date(r.submittedAt))}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {total > rows.length && <p className="muted cq-first-more">{total - rows.length} more</p>}
+    </div>
+  );
+}
+
 export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; initialView: View }) {
   const [rows, setRows] = useState(initial);
+  // The server renders the first rows as a plain table; AG Grid takes over once it has drawn its own.
+  const [gridReady, setGridReady] = useState(false);
   const [view, setView] = useState<View>(initialView);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
@@ -283,8 +333,9 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
           {visible.length === 0 && <li className="muted">No claims in this view.</li>}
         </ul>
       ) : (
-        <div className="cq-grid">
-          <ClaimsGrid handleRef={grid} rows={rows} search={search} filter={filter} onOpen={onOpen} onSelection={setSelected} />
+        <div className="cq-grid" data-ready={gridReady ? "" : undefined}>
+          {!gridReady && <FirstRows rows={visible.slice(0, 14)} total={visible.length} />}
+          <ClaimsGrid handleRef={grid} rows={rows} search={search} filter={filter} onOpen={onOpen} onSelection={setSelected} onReady={() => setGridReady(true)} />
         </div>
       )}
 

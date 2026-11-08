@@ -209,6 +209,8 @@ export const claims = pgTable(
     /** For the claims grid: "j•••@example.com". */
     payeeMasked: text("payee_masked"),
     linkedSaleId: integer("linked_sale_id").references(() => sales.id),
+    /** Keyed hash of the claimant's network address and browser, one of the identities the claim limit counts. */
+    visitorHash: text("visitor_hash"),
     unitsClaimed: integer("units_claimed").notNull().default(1),
     checks: jsonb("checks").notNull().default({}),
     decision: text("decision").notNull().default("pending"),

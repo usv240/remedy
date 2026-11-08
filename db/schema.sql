@@ -140,6 +140,7 @@ create table if not exists claim (
   payee_hash       text,
   payee_masked     text,
   linked_sale_id   integer references sale (id),
+  visitor_hash     text,
   units_claimed    integer not null default 1 check (units_claimed > 0),
   checks           jsonb not null default '{}',
   decision         text not null default 'pending' check (decision in ('pending', 'verified', 'retake', 'firm_review')),
@@ -161,6 +162,10 @@ create table if not exists claim (
 create index if not exists claim_recall_idx on claim (recall_number);
 create index if not exists claim_firm_status_idx on claim (firm_id, status);
 create index if not exists claim_payee_idx on claim (payee_hash, recall_number);
+-- The claim limit (C5) counts every identity a claim carries: the payee, the linked PayPal purchase and its payer,
+-- and this hashed network and device signal (HMAC of the address and browser, never the raw values).
+alter table claim add column if not exists visitor_hash text;
+create index if not exists claim_visitor_idx on claim (visitor_hash, recall_number);
 -- The photo retention prune finds claims decided more than 90 days ago.
 create index if not exists claim_decided_idx on claim (decided_at);
 

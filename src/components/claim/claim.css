@@ -1321,3 +1321,19 @@ span.cl-mark[data-s="pending"] {
     opacity: 0.4;
   }
 }
+
+/* A remedy that asks for two or three photos: one slot for each further photo, under the first. */
+.cl-multi-lead {
+  margin: 0 0 8px;
+}
+.cl-extra {
+  margin-top: 12px;
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+.cl-extra-k {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}

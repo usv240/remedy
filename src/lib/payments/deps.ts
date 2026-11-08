@@ -13,6 +13,11 @@ export type PaymentsDeps = {
   now: () => Date;
   /** The firm the money comes from. In this build, the sample firm's sandbox account. */
   firm: { id: string | null; name: string };
+  /**
+   * A firm's own PayPal app, when it has connected one (src/lib/paypal/firm-account.ts): refunds and payouts for its
+   * claims run on it. Null or absent pays from `rest`, the platform's sandbox account.
+   */
+  restFor?: (firmId: string | null) => Promise<Rest | null>;
 };
 
 export const SAMPLE_FIRM_NAME = "Brightline Home (sample)";
@@ -27,15 +32,15 @@ let defaults: Promise<PaymentsDeps> | null = null;
 
 async function loadDefaults(): Promise<PaymentsDeps> {
   // Orders and Payments go through the APIMatic-generated PayPal Server SDK; Payouts and Transaction Search use REST.
-  const [{ PgStore }, { audit }, { sdkRest }] = await Promise.all([import("./pg-store"), import("@/lib/audit"), import("@/lib/paypal/sdk-rest")]);
+  const [{ PgStore }, { audit }, { sdkRest }, { restForFirm }] = await Promise.all([import("./pg-store"), import("@/lib/audit"), import("@/lib/paypal/sdk-rest"), import("@/lib/paypal/firm-account")]);
   const store = new PgStore();
   const firmId = await store.sampleFirmId().catch(() => null);
-  return { store, ledger: audit as Ledger, rest: sdkRest as Rest, now: () => new Date(), firm: { id: firmId, name: SAMPLE_FIRM_NAME } };
+  return { store, ledger: audit as Ledger, rest: sdkRest as Rest, now: () => new Date(), firm: { id: firmId, name: SAMPLE_FIRM_NAME }, restFor: (id) => restForFirm(id) };
 }
 
 export async function resolveDeps(partial: Partial<PaymentsDeps> = {}): Promise<PaymentsDeps> {
   if (partial.store && partial.ledger && partial.rest) {
-    return { store: partial.store, ledger: partial.ledger, rest: partial.rest, now: partial.now ?? (() => new Date()), firm: partial.firm ?? { id: null, name: SAMPLE_FIRM_NAME } };
+    return { store: partial.store, ledger: partial.ledger, rest: partial.rest, now: partial.now ?? (() => new Date()), firm: partial.firm ?? { id: null, name: SAMPLE_FIRM_NAME }, restFor: partial.restFor };
   }
   defaults ??= loadDefaults();
   const d = await defaults;

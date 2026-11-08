@@ -3,6 +3,7 @@
  * reads. Server only (it reads content/ from disk). Pure helpers live in `./recall-text` so tests and client code can
  * use them without the file system.
  */
+import { photoAsk } from "@/lib/recall/photo-count";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { extractBaseline, type ProofRule } from "@/lib/recall/proof-rule";
@@ -39,8 +40,17 @@ export function ruleFor(r: Recall): RuleFor {
   if (own) return { rule: own, source: "firm", model: null };
   const f = rulesFile();
   const stored = f.rules[r.number];
-  if (stored) return { rule: stored, source: "ai", model: f.model ?? "claude-opus-5-5" };
-  return { rule: extractBaseline(r), source: "quick_read", model: null };
+  if (stored) return { rule: withPhotoCount(stored, r.remedyText), source: "ai", model: f.model ?? "claude-opus-5-5" };
+  return { rule: withPhotoCount(extractBaseline(r), r.remedyText), source: "quick_read", model: null };
+}
+
+/**
+ * The number of photos the remedy asks for, read from its own text in code (src/lib/recall/photo-count.ts). Only a
+ * remedy that asks for more than one gets the fields, so every one-photo rule, and its cache key, stays as it was.
+ */
+export function withPhotoCount<T extends object>(rule: T, remedyText: string | null | undefined): T & { photo_count?: number; photo_shows?: string[] } {
+  const a = photoAsk(remedyText);
+  return a.count > 1 ? { ...rule, photo_count: a.count, ...(a.shows.length ? { photo_shows: a.shows } : {}) } : rule;
 }
 
 /** The CPSC thumbnail saved for an image (public/recalls/<number>/<n>.webp), or null. */

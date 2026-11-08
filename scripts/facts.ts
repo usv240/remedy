@@ -14,7 +14,9 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { errorRates, freeCaught } from "../src/components/judges/errors";
+import { errorRates, freeCaught, freeTimings, readingAccuracy, sweepSettings } from "../src/components/judges/errors";
+import { photoAsk } from "../src/lib/recall/photo-count";
+import { moneyWords, recallValue, type ValueRecall } from "../src/lib/recall/value";
 import { TOOLS } from "../src/lib/mcp/tools";
 import { aboutSeconds } from "../src/lib/research";
 import { catalogOfficialHashes } from "../src/lib/verify/dhash";
@@ -34,7 +36,18 @@ type Facts = {
   errors: { wrongPay: { count: number; of: number; photos: number }; heldBack: { count: number; of: number; photos: number }; decisions: number; photos: number };
   catalogPictures: number;
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
+  /** The free answers' times, from the recorded runs (content/public/verify-runs.json). */
+  timings: { free: Spread; official: Spread; match: Spread; recordedAt: string };
+  /** What the model read on the CPSC's own made-safe photos, at the claim path's setting. */
+  reading: { right: number; readings: number; product: number; madeSafe: number; trials: number; photos: number };
+  /** The sweep's four settings, money first. */
+  settings: { id: string; wrongPay: string; correct: string; atSweep: string; usdPerCase: number }[];
+  /** Photo-refund remedies that ask for more than one photo (src/lib/recall/photo-count.ts). */
+  multiPhoto: { count: number; of: number; numbers: string[] };
+  /** What the photo-refund recalls are worth to their owners (content/recalls/value.json). */
+  value: { covered: number; recalls: number; total: string; unclaimed: string; perPoint: string };
 };
+type Spread = { median: number; min: number; max: number; n: number };
 
 function unitTests(): UnitTests {
   const dir = mkdtempSync(path.join(tmpdir(), "remedy-facts-"));
@@ -57,6 +70,23 @@ function unitTests(): UnitTests {
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+}
+
+/** The figures counted from the recorded runs, the sweep and the CPSC data: no tests, no network. Shared with tests/facts.test.ts. */
+export function derived() {
+  const t = freeTimings();
+  const ra = readingAccuracy();
+  const recalls = read<{ recalls: (ValueRecall & { remedyText: string })[] }>(path.join(ROOT, "content", "recalls", "recalls.json")).recalls;
+  const pr = recalls.filter((r) => r.photoRefund);
+  const multi = pr.filter((r) => photoAsk(r.remedyText).count > 1).map((r) => r.number);
+  const v = recallValue(recalls);
+  return {
+    timings: { free: t.free, official: t.official, match: t.match, recordedAt: t.recordedAt },
+    reading: { right: ra.right, readings: ra.readings, product: ra.product, madeSafe: ra.madeSafe, trials: ra.trials, photos: ra.photos },
+    settings: sweepSettings().map((s) => ({ id: s.id, wrongPay: `${s.wrongPay.count} of ${s.wrongPay.of}`, correct: `${s.correct.count} of ${s.correct.of}`, atSweep: `${s.atSweep.count} of ${s.atSweep.of}`, usdPerCase: s.usdPerCase })),
+    multiPhoto: { count: multi.length, of: pr.length, numbers: multi },
+    value: { covered: v.covered, recalls: v.recalls, total: moneyWords(v.lowUsd), unclaimed: moneyWords(v.unclaimedLowUsd), perPoint: moneyWords(v.perPointLowUsd) },
+  };
 }
 
 function main() {
@@ -82,6 +112,7 @@ function main() {
     },
     catalogPictures: catalogOfficialHashes().length,
     measured: { checkSeconds: aboutSeconds(measured.find((m) => m.id === "live-check")?.figure), payoutSeconds: aboutSeconds(measured.find((m) => m.id === "payout")?.figure) },
+    ...derived(),
   };
   writeFileSync(OUT, JSON.stringify(facts, null, 2) + "\n");
   console.log(
@@ -90,4 +121,4 @@ function main() {
   if (tests.failed) process.exitCode = 1;
 }
 
-main();
+if (process.argv[1] && /facts\.ts$/.test(process.argv[1])) main();

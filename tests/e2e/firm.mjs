@@ -1,6 +1,6 @@
 // The firm console end to end, in a real browser against a running Remedy with a database:
 //   1. the claims queue loads (API and AG Grid), and a claim's drawer opens with its six checks;
-//   2. bulk "Approve and pay" on the two seeded claims ready to pay sends real $1.00 PayPal sandbox payouts
+//   2. bulk "Approve and pay" on the two seeded claims ready to pay sends real $34.99 PayPal sandbox payouts
 //      (skip with FIRM_E2E_PAY=0; then step 4 uses a sample claim instead);
 //   3. the monthly report's numbers match the same counts made directly in SQL;
 //   4. the Gantt shows a "Re-notice" task, without a reload, after a seeded UNCLAIMED event
@@ -31,8 +31,8 @@ page.on("pageerror", (e) => errors.push(String(e)));
 const api = await (await fetch(`${B}/api/firm/claims`)).json();
 const claims = api.data?.claims ?? [];
 check("queue API lists the firm's claims", claims.length >= 30, `${claims.length} claims`);
-const ready = claims.filter((c) => c.payable && c.sample && c.amountCents === 100);
-check("two seeded claims are ready to pay at $1.00", ready.length >= 2, `${ready.length} ready`);
+const ready = claims.filter((c) => c.payable && c.sample && c.amountCents === 3499);
+check("two seeded claims are ready to pay at $34.99", ready.length >= 2, `${ready.length} ready`);
 
 await page.goto(`${B}/firm/claims`, { waitUntil: "networkidle" });
 await page.waitForSelector(".ag-row", { timeout: 60_000 });
@@ -59,7 +59,7 @@ if (look) {
   await page.keyboard.press("Escape");
 }
 
-// 2. Bulk approve and pay the two ready claims (real $1.00 sandbox payouts)
+// 2. Bulk approve and pay the two ready claims (real $34.99 sandbox payouts)
 let paidClaim = null;
 if (PAY && ready.length >= 2) {
   const ids = ready.slice(0, 2).map((c) => c.id);

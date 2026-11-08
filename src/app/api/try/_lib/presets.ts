@@ -236,13 +236,34 @@ export type PresetRun = {
   /** Whether a recorded Claude answer was replayed, and when it was recorded. */
   replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null };
   live_ai: boolean;
+  /** A "Run it live" request: whether the model ran just now, what it cost, or why the recorded run is shown instead. */
+  live?: { ran: boolean; note: string | null; usd: number | null; model: string | null } | null;
 };
+
+/** The one example a visitor may run live against the model: Brightline's sample charger with its cord cut. */
+export const LIVE_PRESET = "sample-charger-cut";
+
+/** Why a live run was not made, in plain words; the recorded run is shown instead. */
+export type LiveGate = { ok: true } | { ok: false; why: "no_key" | "budget" | "used"; plain: string };
+
+/**
+ * Whether a live run may go ahead: a Claude key, today's AI budget (AI_DAILY_USD, the same budget every claim spends
+ * from) not spent, and this visitor's one live run of the day not used yet (`allowVisitor`).
+ */
+export async function liveGate(allowVisitor: () => Promise<boolean>, deps: { ai?: () => boolean; budget?: () => Promise<{ over: boolean }> } = {}): Promise<LiveGate> {
+  if (!(deps.ai ?? aiAvailable)()) return { ok: false, why: "no_key", plain: "This server has no Claude key, so this is the recorded run." };
+  if ((await (deps.budget ?? overBudget)().catch(() => ({ over: true }))).over) return { ok: false, why: "budget", plain: "Today's AI budget is spent, so this is the recorded run. Live runs open again tomorrow (UTC)." };
+  if (!(await allowVisitor())) return { ok: false, why: "used", plain: "You have used today's live run, so this is the recorded run. Every visitor gets one live run a day." };
+  return { ok: true };
+}
 
 /**
  * Run a preset. `technical` runs its second configuration (the CPSC example with the official-image match off).
  * With a recording, the model's answer is replayed; without one, a user photo may run live within the AI budget.
+ * `live` (only for LIVE_PRESET) calls the model for real when `live` allows it, with the verification cache off so the
+ * answer is new; otherwise it shows the recorded run with the reason.
  */
-export async function runPreset(p: Preset, opts: { technical?: boolean } = {}): Promise<PresetRun> {
+export async function runPreset(p: Preset, opts: { technical?: boolean; live?: LiveGate; deps?: VerifyDeps } = {}): Promise<PresetRun> {
   const recall = getRecall(p.recall);
   if (!recall) throw new Error(`Preset ${p.id} names recall ${p.recall}, which is not in recalls.json.`);
   const options = opts.technical && p.technical ? p.technical.options : {};
@@ -252,7 +273,13 @@ export async function runPreset(p: Preset, opts: { technical?: boolean } = {}): 
 
   let deps: VerifyDeps = { aiAvailable: () => false };
   let liveAi = false;
-  if (recorded?.vision) {
+  let liveNote: string | null = null;
+  const live = p.id === LIVE_PRESET && !opts.technical ? opts.live : undefined;
+  if (live?.ok) {
+    deps = opts.deps ?? {};
+    liveAi = true;
+  } else if (recorded?.vision) {
+    if (live && !live.ok) liveNote = live.plain;
     deps = { aiAvailable: () => false, vision: async () => ({ ...recorded.vision!, replayed: true }), reviewers: recorded.reviews ? async () => recorded.reviews! : undefined };
   } else if (p.user && aiAvailable() && !(await overBudget().catch(() => ({ over: true }))).over) {
     // A user photo with no recording runs live; the verification cache answers repeats for free.
@@ -265,15 +292,18 @@ export async function runPreset(p: Preset, opts: { technical?: boolean } = {}): 
       recall: verifyRecallFor(recall),
       proofRule: ruleFor(recall).rule,
       claimContext: { firmAmount: { value: (terms.refundCents / 100).toFixed(2), currency: "USD" }, autoCap: { value: (terms.autoCapCents / 100).toFixed(2), currency: "USD" }, firmName: terms.firmName },
-      options,
+      options: liveAi && live ? { ...options, cache: false } : options,
     },
     deps,
   );
+  const ranLive = liveAi && r.cache.vision === "live";
+  const usd = ranLive ? (r.usage.vision ? costUsd(r.model ?? "claude-opus-5-5", r.usage.vision) : 0) + r.usage.reviewers.reduce((s, u) => s + (u ? costUsd(r.model ?? "claude-opus-5-5", u) : 0), 0) : null;
   return {
     preset: p,
     result: viewFromResult(r, p, { name: terms.firmName, reviewHours: terms.reviewHours }),
-    replay: { used: Boolean(recorded?.vision), recorded_at: recorded?.recorded_at ?? null, model: recorded?.vision?.model ?? null, cost_usd_when_recorded: recorded?.cost_usd ?? null },
+    replay: { used: !liveAi && Boolean(recorded?.vision), recorded_at: recorded?.recorded_at ?? null, model: recorded?.vision?.model ?? null, cost_usd_when_recorded: recorded?.cost_usd ?? null },
     live_ai: liveAi,
+    live: live ? { ran: ranLive, note: ranLive ? null : (liveNote ?? (liveAi ? "The model could not be reached just now, so a person at the firm would look at this claim." : null)), usd: usd === null ? null : Math.round(usd * 10000) / 10000, model: ranLive ? r.model : null } : null,
   };
 }
 

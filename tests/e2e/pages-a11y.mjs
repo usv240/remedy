@@ -6,7 +6,7 @@ import { chromium } from "playwright-core";
 const B = process.env.BASE_URL ?? "http://localhost:3300";
 const AXE = readFileSync("node_modules/axe-core/axe.min.js", "utf8");
 
-const routes = ["/", "/try", "/try/presets/cpsc-example", "/try/shop", "/claim", "/claim/27056", "/claim/BH-2026-01", "/try/presets/sample-charger-cut", "/recalls", "/recalls?query=space%20heater", "/recalls/27056", "/recalls/BH-2026-01", "/evidence", "/learn", "/about", "/firm", "/firm/claims", "/firm/plan", "/firm/reports", "/firm/buyers", "/firm/scan", "/developers", "/developers/docs", "/developers/keys", "/status", "/ops", "/stack"];
+const routes = ["/", "/try", "/evidence/photo-checks", "/evidence/operations", "/evidence/market", "/claim/25007", "/try/presets/cpsc-example", "/try/shop", "/claim", "/claim/27056", "/claim/BH-2026-01", "/try/presets/sample-charger-cut", "/recalls", "/recalls?query=space%20heater", "/recalls/27056", "/recalls/BH-2026-01", "/evidence", "/learn", "/about", "/firm", "/firm/claims", "/firm/plan", "/firm/reports", "/firm/buyers", "/firm/scan", "/developers", "/developers/docs", "/developers/keys", "/status", "/ops", "/stack"];
 const WIDTHS = [1440, 390];
 const THEMES = ["light", "dark"];
 

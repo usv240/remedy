@@ -74,7 +74,7 @@ export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed 
       </ol>
       {technical && (
         <p className="cl-tech cl-timings tabular">
-          Decode {technical.decode_ms} ms, official images {technical.official_ms} ms, vision {technical.vision_ms} ms, checks {technical.checks_ms} ms, reviewers {technical.reviewers_ms} ms, total {technical.total_ms} ms on the server.
+          Decode {technical.decode_ms} ms, official images {technical.official_ms} ms{technical.match_ms !== undefined ? `, hash match ${technical.match_ms} ms` : ""}, vision {technical.vision_ms} ms, checks {technical.checks_ms} ms, reviewers {technical.reviewers_ms} ms, total {technical.total_ms} ms on the server.
         </p>
       )}
     </div>

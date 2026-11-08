@@ -18,9 +18,15 @@ export type PresetCard = {
   expected: { decision?: string; decided_by?: string; checks?: Record<string, string>; plain: string };
   technical: { note: string } | null;
   user: boolean;
+  /** This example can also run live against the model, once a day per visitor (Brightline's sample charger). */
+  live?: boolean;
 };
 
-type Run = { result: ClaimView; replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null } };
+type Run = {
+  result: ClaimView;
+  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null };
+  live?: { ran: boolean; note: string | null; usd: number | null; model: string | null } | null;
+};
 
 const EXPECT: Record<string, string> = { verified: "Verified", retake: "Retake", firm_review: "Firm review" };
 const toneOf = (d: string) => (d === "verified" ? "positive" : d === "retake" ? "attention" : "info");
@@ -66,11 +72,11 @@ function PresetRow({ p }: { p: PresetCard }) {
   const [elapsed, setElapsed] = useState(0);
   const out = useRef<HTMLDivElement>(null);
 
-  async function go(technical = false) {
+  async function go(technical = false, live = false) {
     setState("running");
     const t0 = performance.now();
     try {
-      const r = await fetch(`/api/try/presets/${p.id}/run`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ technical }) });
+      const r = await fetch(`/api/try/presets/${p.id}/run`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ technical, live }) });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error?.message);
       setElapsed(performance.now() - t0);
@@ -100,6 +106,11 @@ function PresetRow({ p }: { p: PresetCard }) {
         <button type="button" className="btn btn-ink tr-run" onClick={() => void go(false)} disabled={state === "running"}>
           {state === "running" ? "Running" : run ? "Run it again" : "Run it"}
         </button>
+        {p.live && (
+          <button type="button" className="btn btn-quiet tr-run-live" onClick={() => void go(false, true)} disabled={state === "running"}>
+            Run it live
+          </button>
+        )}
         <Link className="text-link" href={`/try/presets/${p.id}`}>
           Full result
         </Link>
@@ -126,8 +137,29 @@ function PresetRow({ p }: { p: PresetCard }) {
                 {vs.line}
               </p>
             )}
+            {run.live && (
+              <p className="tr-live" data-ran={run.live.ran ? "" : undefined}>
+                {run.live.ran ? (
+                  <>
+                    <span className="pill" data-tone="positive">
+                      Live
+                    </span>{" "}
+                    {run.live.model ?? "Claude"} read this photo just now{run.live.usd !== null ? `, for $${run.live.usd.toFixed(4)} from today's AI budget` : ""}. Nothing is paid from this page.
+                  </>
+                ) : (
+                  <>
+                    <span className="pill" data-tone="info">
+                      Recorded
+                    </span>{" "}
+                    {run.live.note}
+                  </>
+                )}
+              </p>
+            )}
             <p className="cl-tech cl-hint">
-              {run.replay.used
+              {run.live?.ran
+                ? "The model's answer is new: the verification cache was skipped for this run, and every check around it ran in code."
+                : run.replay.used
                 ? `The model's answer is replayed from one live run of ${run.replay.model} on ${run.replay.recorded_at?.slice(0, 10)} (it cost $${run.replay.cost_usd_when_recorded}); every check around it ran again in code just now.`
                 : "No model call was needed: this answer was found in code, live, just now."}
             </p>

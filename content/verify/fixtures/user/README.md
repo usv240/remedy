@@ -12,6 +12,7 @@ Remedy's verifier is tested on photos that are honestly what they say. None of t
 | A photo of a computer screen | `derived/commons-deskck-lower-monitor.crop.jpg`, a crop of `other/commons-deskck-monitors.jpg` | Wikimedia Commons, public domain (GuitarFreak) | The screen-or-printout part of C3 |
 | An unrelated object, and a blurred copy | `other/commons-coffee-in-a-mug.jpg`, `derived/commons-coffee-in-a-mug.blur8.jpg` | Wikimedia Commons, CC0 (Kurt Kaiser) | C1 mismatch; the blur precheck |
 | Copies of official images | `derived/27056-haiara-1.rotated90-q55.jpg`, `derived/27054-dreo-2.tilt4-crop-q60.jpg` | Made with sharp from CPSC images, public domain | A turned or cropped copy is still caught by the hash |
+| A photo already used | `derived/commons-powerbank-romoss.rotated90-q70.jpg`, a full-size turned and recompressed copy of `other/commons-powerbank-romoss.jpg` | Made with sharp from a Wikimedia Commons photo, CC BY-SA 4.0 (Shwangtianyuan) | The earlier-claims match in C3: a person at the firm compares it with the earlier claim, no model call |
 
 The known answers are in `../cases.json`; `scripts/verify/sweep.ts` and `tests/verify.live.test.ts` run them against Claude, and the unit tests run the cases that need no model.
 

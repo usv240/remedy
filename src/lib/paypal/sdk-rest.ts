@@ -1,4 +1,4 @@
-import { ApiError } from "@paypal/paypal-server-sdk";
+import { ApiError, type OrdersController, type PaymentsController } from "@paypal/paypal-server-sdk";
 import { orders, paypalRest, payments } from "./client";
 
 /**
@@ -61,9 +61,25 @@ export function sdkRoute(path: string, method: string): { op: string; id?: strin
   return null;
 }
 
+type Controllers = { orders: () => OrdersController; payments: () => PaymentsController };
+type RawRest = <T>(path: string, init?: RequestInit & { requestId?: string }) => Promise<Out<T>>;
+
+/** The platform account: the SDK on Remedy's own sandbox credentials, REST for the rest. */
 export async function sdkRest<T>(path: string, init: RequestInit & { requestId?: string } = {}): Promise<Out<T>> {
+  return platform<T>(path, init);
+}
+
+/** The same adapter on any account's controllers and REST client (a firm's own PayPal app: src/lib/paypal/firm-account.ts). */
+export function makeSdkRest(ctrl: Controllers, rest: RawRest) {
+  return <T>(path: string, init: RequestInit & { requestId?: string } = {}) => dispatch<T>(ctrl, rest, path, init);
+}
+
+const platform = makeSdkRest({ orders, payments }, paypalRest);
+
+async function dispatch<T>(ctrl: Controllers, rest: RawRest, path: string, init: RequestInit & { requestId?: string }): Promise<Out<T>> {
+  const { orders, payments } = ctrl;
   const route = sdkRoute(path, init.method ?? "GET");
-  if (!route) return paypalRest<T>(path, init);
+  if (!route) return rest<T>(path, init);
   const requestId = init.requestId;
   const mock = headerFromInit(init, "PayPal-Mock-Response");
   const body = init.body ? parse(String(init.body)) : undefined;

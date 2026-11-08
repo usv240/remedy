@@ -138,7 +138,7 @@ export async function spendByRouteToday(): Promise<{ route: string; calls: numbe
 }
 
 /**
- * The daily AI budget in US dollars: AI_DAILY_USD when set; otherwise 2 when hosted (Render sets RENDER) and
+ * The daily AI budget in US dollars: AI_DAILY_USD when set; otherwise 5 when hosted (Render sets RENDER) and
  * unlimited on a local machine.
  */
 export function dailyBudgetUsd(env: Record<string, string | undefined> = process.env): number {
@@ -147,7 +147,7 @@ export function dailyBudgetUsd(env: Record<string, string | undefined> = process
     const v = Number(raw);
     if (Number.isFinite(v) && v >= 0) return v;
   }
-  return env.RENDER ? 2 : Number.POSITIVE_INFINITY;
+  return env.RENDER ? 5 : Number.POSITIVE_INFINITY;
 }
 
 export const RESTING_PLAIN = "Our photo checker is resting for today; a person at the firm will look.";

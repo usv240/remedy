@@ -1,9 +1,8 @@
 {
-  "note": "Figures measured on the owner's claim flow in the PayPal sandbox on 2026-11-05, reported by the owner builder from its e2e runs (tests/e2e/claim.mjs and tests/e2e/claim-shop.mjs). The 26125 product match is read from content/presets/recorded/cpsc-example.technical.json by the page itself. Update this file when the runs are repeated.",
+  "note": "Figures measured on the owner's claim flow in the PayPal sandbox on 2026-11-05, reported by the owner builder from its e2e runs (tests/e2e/claim.mjs and tests/e2e/claim-shop.mjs). The 26125 product match is read from content/presets/recorded/cpsc-example.technical.json, and the time to answer an official picture from content/public/verify-runs.json (freeTimings in src/components/judges/errors.ts), by the page itself. Update this file when the runs are repeated.",
   "measuredAt": "2026-11-05",
   "environment": "PayPal sandbox",
   "items": [
-    { "id": "official", "figure": "About 60 ms", "what": "to answer a photo that is the recall's own official picture, with no model call", "source": "tests/e2e/claim.mjs" },
     { "id": "live-check", "figure": "12.3 s", "what": "for one live photo check by Claude Opus 5.5", "source": "tests/e2e/claim.mjs" },
     { "id": "payout", "figure": "17 to 18 s", "what": "from approval to a PayPal payout reaching SUCCESS, in 4 sandbox runs", "source": "tests/e2e/claim.mjs" },
     { "id": "refund", "figure": "At once", "what": "a sample-shop purchase refunded to its original PayPal capture after the photo checked out; a second claim on that purchase was refused", "source": "tests/e2e/claim-shop.mjs" }

@@ -39,7 +39,7 @@ export function Results() {
           <span className="jr-fig tabular">
             {free.caught} of {free.total}
           </span>
-          <span className="jr-what">reused, copied or unclear photos asked for a new one, with no AI call.</span>
+          <span className="jr-what">reused, copied or unclear photos stopped before any AI call: a new photo asked for, or a person at the firm.</span>
           <span className="jr-base">
             {unrelated ? (
               <>

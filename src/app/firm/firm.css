@@ -433,9 +433,47 @@
   font-variant-numeric: tabular-nums;
 }
 .cq-grid {
+  position: relative;
   margin-top: 12px;
   height: min(72svh, 760px);
   min-height: 420px;
+}
+/* The first rows, rendered on the server, over the grid's place until AG Grid has drawn its own. */
+.cq-first {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--surface);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+}
+.cq-first table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.cq-first th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--edge);
+}
+.cq-first td {
+  padding: 6px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--edge) 60%, transparent);
+  vertical-align: middle;
+}
+.cq-first .num {
+  text-align: right;
+}
+.cq-first-who {
+  font-weight: 500;
+}
+.cq-first-more {
+  padding: 8px 12px;
 }
 .cq-grid-loading {
   display: grid;
@@ -1288,4 +1326,41 @@
 }
 .by-table-wrap + .by-drop {
   margin-top: 12px;
+}
+
+/* Payments and claim limits, on the firm home */
+.firm-pay-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.firm-pay h3.firm-tile-head {
+  font-size: 1rem;
+}
+.firm-rules {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.firm-rule-title {
+  font-weight: 500;
+}
+.pp-connect {
+  display: grid;
+  gap: 8px;
+}
+.pp-actions {
+  display: flex;
+  gap: 8px;
+}
+.pp-note {
+  flex-basis: 100%;
+  font-size: 0.8125rem;
+}
+@media (max-width: 760px) {
+  .firm-pay-grid {
+    grid-template-columns: 1fr;
+  }
 }

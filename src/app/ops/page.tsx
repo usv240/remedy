@@ -257,7 +257,7 @@ export default function OpsPage() {
             Status
           </Link>
           ; the load test and what a real deployment changes are on{" "}
-          <Link className="text-link" href="/evidence#load">
+          <Link className="text-link" href="/evidence/operations#load">
             Evidence
           </Link>
           .

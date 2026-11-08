@@ -34,6 +34,9 @@ import { searchRecalls } from "@/lib/recall/search";
 import { runJob } from "@/lib/jobs";
 import { log } from "@/lib/log";
 import { encrypt, hashContact, maskContact } from "@/lib/secure";
+import { autoPayVerdict, limitVerdict, type IdentityMatches } from "@/lib/firm/limits";
+import { hashBuyerEmail } from "@/lib/payments/shop";
+import { sandboxBuyerLogin } from "@/lib/sandbox-login";
 import { CHECK_IDS, verifyPhoto, type ClaimContext, type VerifyDeps, type VerifyResult } from "@/lib/verify";
 import { defaultVerifyCache } from "@/lib/verify/cache";
 import { allowUpload } from "@/lib/ratelimit";
@@ -72,6 +75,8 @@ export type SaleLinkInput = { saleId?: number | null; captureId?: string | null;
 export type SubmitInput = {
   recallNumber: string;
   photo: Buffer;
+  /** The further photos, in order, when the remedy asks for two or three (rule.photo_count). */
+  morePhotos?: Buffer[];
   mime: string | null;
   /** web: the claim page; try: the Try page's "Your photo"; api: a call with a key; link: a personal claim link. */
   source: "web" | "try" | "api" | "link";
@@ -80,6 +85,8 @@ export type SubmitInput = {
   test?: { noAi?: boolean; amountCents?: number } | null;
   /** The token from a firm's personal claim link (`?n=`), so the firm can see which notice led to this claim. */
   noticeToken?: string | null;
+  /** Keyed hash of the caller's network address and browser (src/lib/firm/limits.ts), for the claim limit. */
+  visitorHash?: string | null;
 };
 
 type SaleRow = typeof schema.sales.$inferSelect;
@@ -189,7 +196,7 @@ export type StoredResult = {
 };
 
 /** What the verify_claim job needs beside the claim row: the request's own facts, none of them personal. */
-export type CheckOptions = { test: SubmitInput["test"]; source: SubmitInput["source"]; mime: string | null; link: LinkView | null };
+export type CheckOptions = { test: SubmitInput["test"]; source: SubmitInput["source"]; mime: string | null; link: LinkView | null; /** The further photos the remedy asks for, stored in order. */ morePhotoIds?: string[] };
 
 /**
  * Open the claim: store the photo, insert the claim row, mark a personal claim link answered, and write the first
@@ -208,6 +215,9 @@ export async function openClaim(input: SubmitInput, emit: (e: ClaimEvent) => voi
   const sale = linked && "sale" in linked ? linked.sale : null;
 
   const photoId = await storePhoto(input.photo, input.mime, "upload");
+  // The further photos a remedy asks for are stored the same way, re-encoded with no camera or location data.
+  const morePhotoIds: string[] = [];
+  for (const b of input.morePhotos ?? []) morePhotoIds.push((await storePhoto(b, null, "upload"))!);
   const isTest = Boolean(input.test);
   const [claim] = await db()
     .insert(schema.claims)
@@ -216,6 +226,7 @@ export async function openClaim(input: SubmitInput, emit: (e: ClaimEvent) => voi
       firmId: terms.firmId,
       photoId,
       linkedSaleId: sale?.id ?? null,
+      visitorHash: input.visitorHash ?? null,
       channel: input.source === "api" ? "api" : input.source === "link" ? "link" : "web",
       status: "checking",
       decision: "pending",
@@ -234,7 +245,7 @@ export async function openClaim(input: SubmitInput, emit: (e: ClaimEvent) => voi
   }
   await audit("person", "claim.submitted", `claim:${claim.id}`, { recall: recall.number, source: input.source, photo: photoId, linked_sale: sale?.id ?? null, test: isTest });
   log.info("claim opened", { claim_id: claim.id, recall: recall.number, source: input.source, linked_sale: sale?.id ?? null, test: isTest });
-  return { claimId: claim.id, options: { test: input.test ?? null, source: input.source, mime: input.mime, link: linked?.view ?? null } };
+  return { claimId: claim.id, options: { test: input.test ?? null, source: input.source, mime: input.mime, link: linked?.view ?? null, ...(morePhotoIds.length ? { morePhotoIds } : {}) } };
 }
 
 /** The claim's original photo bytes, kept until the checks ran. */
@@ -261,6 +272,8 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   const photoId = row.photoId;
   const photo = photoId ? await originalPhoto(photoId) : null;
   if (!photoId || !photo) throw new ClaimError("internal", "The photo for this claim is missing.", 500);
+  const morePhotoIds = options.morePhotoIds ?? [];
+  const morePhotos = (await Promise.all(morePhotoIds.map(originalPhoto))).filter((b): b is Buffer => Boolean(b));
   const { rule, source: ruleSource } = ruleFor(recall);
   const terms = await firmTerms(recall.number);
   const sale = row.linkedSaleId ? (await db().select().from(schema.sales).where(eq(schema.sales.id, row.linkedSaleId)).limit(1))[0] : undefined;
@@ -306,7 +319,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   let result: VerifyResult;
   try {
     result = await verifyPhoto(
-      { photo: input.photo, mime: input.mime ?? undefined, recall: verifyRecallFor(recall), proofRule: rule, priorHashes: priorRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), elsewhereHashes: elsewhereRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), claimContext: ctx },
+      { photo: input.photo, morePhotos: morePhotos.length ? morePhotos : undefined, mime: input.mime ?? undefined, recall: verifyRecallFor(recall), proofRule: rule, priorHashes: priorRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), elsewhereHashes: elsewhereRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), claimContext: ctx },
       deps,
     );
   } catch (e) {
@@ -314,7 +327,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     if (!o.final) throw e; // the job tries again with backoff
     await db().update(schema.claims).set({ status: "firm_review", decision: "firm_review", decidedAt: new Date(), updatedAt: new Date() }).where(eq(schema.claims.id, claim.id));
     // The untouched upload is not kept past the last try; the resized copy stays for the person at the firm.
-    await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, photoId));
+    for (const id of [photoId, ...morePhotoIds]) await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, id));
     await audit("system", "claim.check_failed", `claim:${claim.id}`, { error: (e as Error).message.slice(0, 300) });
     throw new ClaimError("internal", "Something went wrong while checking the photo. A person at the firm will look at it.", 500);
   }
@@ -331,6 +344,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     usage: result.usage,
     official: result.official,
     photo: { width: result.photo.width, height: result.photo.height, exif: result.photo.exif, mime: result.photo.mime, dhash: result.photo.dhash },
+    ...(morePhotoIds.length ? { more_photos: morePhotoIds.map((id, i) => ({ id, dhash: result.more_photos?.[i]?.dhash ?? null })) } : {}),
     person: result.person?.kinds ?? null,
     amount_source: result.amount ? amountSource : null,
     rule_source: ruleSource,
@@ -358,6 +372,10 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     // Brightline's published sample photo stays out of it, so every visitor can claim the sample recall with it.
     if (result.decision !== "retake" && !isSamplePhoto(recall.number, photo)) {
       await db().insert(schema.imageHashes).values({ source: "claim", ref: photoId, recallNumber: recall.number, dhash: result.photo.dhash }).onConflictDoNothing();
+      for (const [i, id] of morePhotoIds.entries()) {
+        const d = result.more_photos?.[i]?.dhash;
+        if (d) await db().insert(schema.imageHashes).values({ source: "claim", ref: id, recallNumber: recall.number, dhash: d }).onConflictDoNothing();
+      }
     }
   }
   await audit("system", "claim.decided", `claim:${claim.id}`, {
@@ -371,8 +389,10 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   });
   // The checks ran: the owner's original bytes are no longer needed; the resized copy stays for the receipt. A photo
   // that shows a person keeps neither: both are deleted now, with only the hashes kept and a ledger line saying why.
-  if (result.person) await removePhoto(photoId, "person", `claim:${claim.id}`);
-  else await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, photoId));
+  for (const id of [photoId, ...morePhotoIds]) {
+    if (result.person) await removePhoto(id, "person", `claim:${claim.id}`);
+    else await db().update(schema.photos).set({ original: null }).where(eq(schema.photos.id, id));
+  }
   log.info("claim decided", { claim_id: claim.id, recall: recall.number, decision: result.decision, decided_by: result.decided_by, model: result.model, ms: result.timings.total_ms });
   const view = await getClaimView(claim.id);
   emit({ type: "result", claim: view! });
@@ -523,20 +543,43 @@ export type PayInput = {
  * Claims on this recall by the same payee that can be paid (C5 at payment time: one refund per unit bought). The
  * firm console's seeded sample history and test claims (is_sample) are not anyone's real claim, so they do not count.
  */
-async function payeeClaims(recallNumber: string, payeeHash: string, except: string) {
-  const [r] = await db()
-    .select({ n: count() })
-    .from(schema.claims)
-    .where(
-      and(
-        eq(schema.claims.recallNumber, recallNumber),
-        eq(schema.claims.payeeHash, payeeHash),
-        ne(schema.claims.id, except),
-        eq(schema.claims.isSample, false),
-        inArray(schema.claims.status, ["approved", "paid", "unclaimed", "verified", "firm_review"]),
-      ),
-    );
-  return r?.n ?? 0;
+/** The published sandbox buyer login (TESTING.md), shared by every tester: its email, and its purchase hash. */
+async function sharedLogin(): Promise<{ has: (email: string) => boolean; hashes: Set<string> }> {
+  const emails = [process.env.SANDBOX_BUYER_EMAIL, (await sandboxBuyerLogin())?.email].filter((e): e is string => Boolean(e?.trim())).map((e) => e.trim().toLowerCase());
+  return { has: (e) => emails.includes(e), hashes: new Set(emails.map(hashBuyerEmail)) };
+}
+
+/**
+ * Earlier claims on this recall that share each identity with this claim: the payee, the same purchase, the PayPal
+ * account that paid (an earlier purchase by the same payer, or an earlier payee who is this purchase's payer), and the
+ * hashed network and device. Sample and test claims, and claims asked for a new photo, are not counted.
+ */
+export async function identityMatches(
+  recallNumber: string,
+  except: string,
+  ids: { payeeHash: string | null; payeeAsBuyer: string | null; saleId: number | null; payerHash: string | null; visitorHash: string | null },
+): Promise<IdentityMatches> {
+  const r = await db().execute(sql`
+    select
+      count(*) filter (where ${ids.payeeHash}::text is not null and c.payee_hash = ${ids.payeeHash}::text)::int as payee,
+      count(*) filter (where ${ids.saleId}::int is not null and c.linked_sale_id = ${ids.saleId}::int)::int as purchase,
+      count(*) filter (where (${ids.payerHash}::text is not null and s.buyer_email_hash = ${ids.payerHash}::text)
+                          or (${ids.payeeAsBuyer}::text is not null and s.buyer_email_hash = ${ids.payeeAsBuyer}::text))::int as payer,
+      count(*) filter (where ${ids.visitorHash}::text is not null and c.visitor_hash = ${ids.visitorHash}::text)::int as device
+    from claim c left join sale s on s.id = c.linked_sale_id
+    where c.recall_number = ${recallNumber} and c.id <> ${except}::uuid and not c.is_sample
+      and c.status in ('approved', 'paid', 'unclaimed', 'verified', 'firm_review')`);
+  const row = (r.rows[0] ?? {}) as Partial<IdentityMatches>;
+  return { payee: row.payee ?? 0, purchase: row.purchase ?? 0, payer: row.payer ?? 0, device: row.device ?? 0 };
+}
+
+/** What the auto rule has paid on this recall today (UTC), from the firm's approved payment plans. */
+export async function autoPaidToday(firmId: number, recallNumber: string): Promise<number> {
+  const r = await db().execute(sql`
+    select coalesce(sum(pp.amount), 0)::text as total from payment_plan pp join claim c on c.id = pp.claim_id
+    where c.firm_id = ${firmId} and c.recall_number = ${recallNumber} and pp.approval = 'auto' and pp.status <> 'canceled'
+      and pp.created_at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`);
+  return Math.round(Number((r.rows[0] as { total?: string } | undefined)?.total ?? 0) * 100);
 }
 
 /**
@@ -612,10 +655,23 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
   const replacement = input.choice === "replacement" ? (input.replacement_id ? await replacementFor(input.replacement_id, id) : null) : null;
   if (input.choice === "replacement" && !replacement) throw new ClaimError("invalid_request", "Please pick a replacement, or choose a refund.", 400);
 
-  // C5 at payment time: one refund per payee per recall unless a person at the firm approves more.
+  // C5 at payment time: one refund per person per recall unless a person at the firm approves more. A person is every
+  // identity the claim carries (the payee, the linked purchase and its payer, the network and device), so a new email
+  // alone does not reset the limit. The sandbox buyer login TESTING.md publishes is shared by every tester, so it is
+  // not taken as one person.
   const payeeHash = payee ? hashContact(payee.value) : null;
-  const overLimit = payeeHash ? (await payeeClaims(row.recallNumber, payeeHash, id)) >= 1 : false;
+  const shared = await sharedLogin();
+  const matches = await identityMatches(row.recallNumber, id, {
+    payeeHash: payee && !shared.has(payee.value.trim().toLowerCase()) ? payeeHash : null,
+    payeeAsBuyer: payee && !shared.has(payee.value.trim().toLowerCase()) ? hashBuyerEmail(payee.value) : null,
+    saleId: sale?.id ?? null,
+    payerHash: sale?.buyerEmailHash && !shared.hashes.has(sale.buyerEmailHash) ? sale.buyerEmailHash : null,
+    visitorHash: row.visitorHash ?? null,
+  });
+  const limit = limitVerdict(matches, terms.firmName);
+  const overLimit = limit.over;
   const amountCents = centsOf(row.amount) ?? DEMO_REFUND_CENTS;
+  const paidTodayCents = terms.firmId !== null ? await autoPaidToday(terms.firmId, row.recallNumber) : 0;
 
   const planned = await planPayment(
     {
@@ -630,7 +686,7 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
       linkedCaptureId: sale?.paypalCaptureId ?? null,
       replacement,
     },
-    { autoCapCents: terms.autoCapCents },
+    { autoCapCents: terms.autoCapCents, autoDaily: { capCents: terms.autoDailyCents, paidTodayCents } },
   );
   if (!planned.ok) throw new ClaimError("invalid_request", planned.plain, planned.code === "over_limit" ? 400 : 400);
 
@@ -645,17 +701,19 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
       updatedAt: new Date(),
     })
     .where(eq(schema.claims.id, id));
-  if (overLimit) await audit("system", "claim.limit_review", `claim:${id}`, { reason: "payee already has a claim on this recall", masked: payee ? maskPayee(payee) : null });
+  if (overLimit) await audit("system", "claim.limit_review", `claim:${id}`, { reason: "an earlier claim on this recall shares an identity", matched: limit.matched, masked: payee ? maskPayee(payee) : null });
 
   let kind: string = "needs_approval";
   let plain = `A person at ${terms.firmName} will approve this payment.`;
-  log.info("payment planned", { claim_id: id, route: planned.plan.route, plan_status: planned.plan.status, choice: input.choice, over_limit: overLimit });
+  log.info("payment planned", { claim_id: id, route: planned.plan.route, plan_status: planned.plan.status, choice: input.choice, over_limit: overLimit, matched: limit.matched });
   if (planned.plan.status === "approved") {
     const r = await payViaJob(id);
     kind = r.kind;
     plain = r.plain;
   } else if (overLimit) {
-    plain = `This email or phone already has a refund for this recall, so a person at ${terms.firmName} will check this one.`;
+    plain = limit.plain;
+  } else if (row.decision === "verified" && planned.plan.status === "awaiting_approval" && /auto-pay limit/.test(planned.plan.reasons.plain)) {
+    plain = autoPayVerdict({ amountCents, paidTodayCents, capCents: terms.autoDailyCents }).plain;
   }
   return { kind, plain, claim: (await getClaimView(id))! };
 }

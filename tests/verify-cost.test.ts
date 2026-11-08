@@ -79,7 +79,7 @@ describe("spend guard", () => {
   afterEach(() => resetMemorySpend());
 
   it("defaults to $2 a day when hosted and no limit on a local machine", () => {
-    expect(dailyBudgetUsd({ RENDER: "true" })).toBe(2);
+    expect(dailyBudgetUsd({ RENDER: "true" })).toBe(5);
     expect(dailyBudgetUsd({})).toBe(Number.POSITIVE_INFINITY);
     expect(dailyBudgetUsd({ AI_DAILY_USD: "0.5", RENDER: "true" })).toBe(0.5);
     expect(dailyBudgetUsd({ AI_DAILY_USD: "nope" })).toBe(Number.POSITIVE_INFINITY);

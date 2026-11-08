@@ -1,3 +1,4 @@
+import { visitorHash } from "@/lib/firm/limits";
 import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
 import { runJob } from "@/lib/jobs";
@@ -57,16 +58,21 @@ export async function POST(req: Request) {
       return fail("invalid_request", "Send the photo as multipart form data with a recall number.", 400);
     }
     const recall = String(form.get("recall") ?? "").trim();
-    const photo = form.get("photo");
+    const photos = form.getAll("photo");
+    const photo = photos[0];
     if (!isRecallNumber(recall)) return fail("invalid_request", "Add the recall number, for example 27056.", 400);
     if (!(photo instanceof File) || photo.size === 0) return fail("invalid_request", "Please add a photo.", 400);
     if (photo.size > MAX_PHOTO_BYTES) return fail("invalid_request", "That photo is over 15 MB. Please send a smaller one.", 413);
+    // A remedy may ask for two or three photos: they come as further `photo` fields, in order (at most three more).
+    const more = photos.slice(1, 4).filter((f): f is File => f instanceof File && f.size > 0);
+    if (more.some((f) => f.size > MAX_PHOTO_BYTES)) return fail("invalid_request", "One of the photos is over 15 MB. Please send a smaller one.", 413);
 
     const amount = Number(form.get("e2e_amount") ?? "");
     const saleId = Number(form.get("sale_id") ?? "");
     const input: SubmitInput = {
       recallNumber: recall,
       photo: Buffer.from(await photo.arrayBuffer()),
+      morePhotos: more.length ? await Promise.all(more.map(async (f) => Buffer.from(await f.arrayBuffer()))) : undefined,
       mime: photo.type || null,
       source: hasApiKey(req) ? "api" : form.get("source") === "try" ? "try" : form.get("source") === "link" ? "link" : "web",
       link: {
@@ -77,6 +83,7 @@ export async function POST(req: Request) {
       // Test-only switches: no live AI, and a $1 to $2 payout, so the sandbox flow is tested for free.
       test: test ? { noAi: form.get("e2e_no_ai") === "1", amountCents: Number.isFinite(amount) && amount >= 1 && amount <= 2 ? Math.round(amount * 100) : undefined } : null,
       noticeToken: String(form.get("notice") ?? "").trim().slice(0, 128) || null,
+      visitorHash: visitorHash(ip, req.headers.get("user-agent")),
     };
 
     if (!(req.headers.get("accept") ?? "").includes("text/event-stream")) {

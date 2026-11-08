@@ -1,3 +1,4 @@
+import { photoAsk } from "@/lib/recall/photo-count";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -110,7 +111,7 @@ async function Claim({ params }: Params) {
         </li>
 
         {asksPhoto ? (
-          <ClaimFlow recall={{ number: pr.number, product: pr.product, word, action, example: pr.example, shop: pr.number === SHOP_RECALL }} />
+          <ClaimFlow recall={{ number: pr.number, product: pr.product, word, action, example: pr.example, shop: pr.number === SHOP_RECALL, photos: photoAsk(r.remedyText) }} />
         ) : (
           <li className="cl-step" data-step="photo">
             <h2 className="cl-step-title" data-n="3">

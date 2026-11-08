@@ -104,10 +104,31 @@ export function usageOf(u: Anthropic.Beta.Messages.BetaUsage | undefined): Visio
 }
 
 /** `model` is for sweeps only; the claim path always uses Claude Opus 5.5. */
-export type VisionArgs = { photo: Buffer; recall: VerifyRecall; rule: VerifyProofRule; official: readonly OfficialImage[]; effort?: Effort; model?: string };
+export type VisionArgs = {
+  photo: Buffer;
+  /** The remedy's further photos (it asks for two or three), sent in the same request, in order. */
+  more?: readonly Buffer[];
+  recall: VerifyRecall;
+  rule: VerifyProofRule;
+  official: readonly OfficialImage[];
+  effort?: Effort;
+  model?: string;
+};
 
-/** The whole user turn: the cached recall half, then the owner's photo. Shared with the batch path. */
+/** The whole user turn: the cached recall half, then the owner's photo or photos. Shared with the batch path. */
 export function visionContent(args: VisionArgs): Block[] {
+  if (args.more?.length) {
+    const photos = [args.photo, ...args.more];
+    return [
+      ...recallBlocks(args.recall, args.rule, args.official),
+      {
+        type: "text",
+        text: `The owner's ${photos.length} photos, as the remedy asks for ${photos.length}. Read them together as one claim: an action is done when any one of the photos shows it complete; the product must match in each; report photo_source for the least camera-like of them, and person when any shows a person.`,
+      },
+      ...photos.flatMap((ph, i): Block[] => [{ type: "text", text: `The owner's photo ${i + 1} of ${photos.length}${args.rule.photo_shows?.[i] ? `, which the remedy asks to show ${args.rule.photo_shows[i]}` : ""}:` }, jpegBlock(ph)]),
+      { type: "text", text: `Check the owner's photos against the recall and the proof rule. Required actions, in order: ${args.rule.actions.join(", ") || "none"}.` },
+    ];
+  }
   return [
     ...recallBlocks(args.recall, args.rule, args.official),
     { type: "text", text: "The owner's photo:" },
