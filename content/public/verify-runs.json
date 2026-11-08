@@ -1,6 +1,6 @@
 {
  "note": "Recorded runs of verifyPhoto (src/lib/verify) on the fixture photos in content/verify/fixtures. Free cases need no model. Vision cases are live Claude Opus 5.5 calls, recorded once; the pages never call Claude. Written by scripts/public/record-runs.ts.",
- "recordedAt": "2026-11-07T22:17:12.005Z",
+ "recordedAt": "2026-11-08T05:19:40.661Z",
  "totalUsd": 0.0216,
  "runs": [
   {
@@ -11,13 +11,13 @@
    "recall": "BH-2026-01",
    "expect": "Verified, then the refund goes out",
    "needs_vision": true,
-   "settings": "Brightline Home's sample recall BH-2026-01, refund $34.99, auto-approve cap $50.00. One live Claude Opus 5.5 run recorded 2026-11-07 ($0.1148), replayed here.",
+   "settings": "Brightline Home's sample recall BH-2026-01, refund $34.99, auto-approve cap $50.00. One live Claude Opus 5.5 run recorded 2026-11-08 ($0.1158), replayed here.",
    "result": {
     "decision": "verified",
     "decided_by": "reviewers",
     "summary": {
      "plain": "Your photo checks out.",
-     "technical": "Verified by two agreeing reviewers over soft items (C1 unclear). firm amount 34.99; no linked capture; refund 34.99 USD (firm, the lower); auto cap 50.00 USD. Reviewers: Product reviewer: meets, confidence 0.7; evidence: [right_product] Black cord strain relief with a ribbed, dotted grip pattern and a flanged collar, matching the cord exit shown in official image 2 (left center, held between the fingers); [right_product] Black charger housing with rounded ends, opened up, consistent with the black brick shape in official image 1 (right side of the photo); [right_product] Long black fixed cord running from the cut strain relief back across the table, with a barrel plug end (center and upper middle, looping across the background); [made_safe] Cord cut at the strain relief with three exposed conductors: one white insulated wire and two bare stranded metal wires (center left, sticking out to the right of the strain relief); [made_safe] Yellow insulating sheets removed from the housing, one with holes punched in it (top center and top right); [own_photo] Real fingers holding the cord, natural shadows, and background blur from shallow focus, with no screen pixels or print edges (left edge and across the whole image) | Remedy reviewer: meets, confidence 0.72; evidence: [made_safe] Black cord end with its molded strain relief grommet, fully separated, with a white insulated wire and two bare stranded metal wires sticking out of the end (left center, held between the owner's thumb and finger); [made_safe] The separation is at the strain relief collar, the part that sits where the cord enters the charger case (center left, at the flanged black collar on the held cord); [own_photo] Black charger case, opened up, with internal parts visible and no cord attached (right side of the photo); [own_photo] Yellow insulating sheets from inside the charger and the rest of the black cord with a small plug end (top center and top right, with the cord looping across the middle)"
+     "technical": "Verified by two agreeing reviewers over soft items (C1 unclear). firm amount 34.99; no linked capture; refund 34.99 USD (firm, the lower); auto cap 50.00 USD. Reviewers: Product reviewer: meets, confidence 0.75; evidence: [right_product] Black charger housing with rounded end caps, opened and lying on its side, matching the shape of the recalled charger body (right side of the photo); [right_product] Black ribbed cord strain relief like the one where the cord meets the charger in official image 2, now pulled out of the housing (left center, held between the fingers); [right_product] Black fixed power cord running from the charger toward a barrel style DC plug (center of the photo, plug near top center); [made_safe] Cord cut at the strain relief with a white insulated wire and two bare stranded wires exposed (center left, sticking out to the right of the strain relief); [made_safe] Yellow insulating sheets removed from inside the housing, one with holes cut in it (top center and top right); [own_photo] Owner's thumb and finger in the foreground, shallow focus with the background blurred, real shadows and a seam line on the white surface (left edge foreground and across the background) | Remedy reviewer: meets, confidence 0.7; evidence: [made_safe] Black power cord end with its molded strain relief collar, with bare stranded metal wires and a white insulated wire sticking out, showing the cord has been severed at the collar where it joined the case (left center, held between the fingers); [made_safe] The separated cord runs loose across the table with no charger body attached to this end (center and bottom of the photo, looping cable); [right_product] Black charger housing, opened, lying on the table near the cut cord (right side of the photo); [right_product] Yellow and black insulating pieces from inside the charger case (top center and top right)"
     },
     "amount": {
      "value": "34.99",
@@ -27,22 +27,22 @@
     },
     "model": "claude-opus-5-5",
     "timings": {
-     "decode_ms": 93,
-     "official_ms": 50,
-     "match_ms": 7.3,
-     "vision_ms": 13112,
-     "checks_ms": 3,
-     "reviewers_ms": 59,
-     "total_ms": 13275
+     "decode_ms": 159,
+     "official_ms": 109,
+     "match_ms": 14.4,
+     "vision_ms": 8382,
+     "checks_ms": 5,
+     "reviewers_ms": 10959,
+     "total_ms": 19522
     },
     "checks": {
      "C1": {
       "name": "Right product",
       "status": "unclear",
       "pass": false,
-      "score": 0.75,
+      "score": 0.8,
       "reason": "We could not confirm this is the exact recalled product.",
-      "technical": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Strain relief style, black case and black fixed cord match the reference images; the case is disassembled and no printed text or label is visible, so exact identity cannot be confirmed."
+      "technical": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Strain relief texture, case profile, ferrite bead and barrel plug match the official images. No printed brand, label or model number is readable to confirm the exact product, so score stays below 0.9."
      },
      "C2": {
       "name": "Made safe",
@@ -50,15 +50,15 @@
       "pass": true,
       "score": null,
       "reason": "The photo shows the product made safe.",
-      "technical": "cut_cord: confirmed, confidence 0.85. In the left foreground the cord end at the strain relief is severed, with a white insulated wire and two bare stranded wires sticking out. The case it came from appears opened at right, so the cord is clearly separated from the charger."
+      "technical": "cut_cord: confirmed, confidence 0.9. At left center, the cord is severed at its strain relief collar where it attaches to the case, with stranded bare wires and a white insulated wire sticking out of the cut end. The opened case is at right."
      },
      "C3": {
       "name": "Your own photo",
       "status": "pass",
       "pass": true,
-      "score": 0.9,
+      "score": 0.92,
       "reason": "This is a new photo of the product.",
-      "technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus with a blurred background, a real hand and shadows on a physical surface; no screen or print artifacts. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier claim none (reused at 10 or less)."
+      "technical": "Claude: camera_photo (confidence 0.92; signs: none). Real hand, natural shadows, shallow focus and a casual tabletop setting with no screen or print artifacts. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier claim none (reused at 10 or less)."
      },
      "C4": {
       "name": "Within the recall",
@@ -87,7 +87,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T06:15:39.650Z"
+   "ran_at": "2026-11-08T05:12:08.175Z"
   },
   {
    "id": "official-image-heater",
@@ -116,13 +116,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 98,
-     "official_ms": 83,
-     "match_ms": 0.4,
+     "decode_ms": 120,
+     "official_ms": 78,
+     "match_ms": 2,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 141
+     "total_ms": 139
     },
     "checks": {
      "C1": {
@@ -176,7 +176,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "official-image-power-bank",
@@ -205,13 +205,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 25,
-     "official_ms": 17,
-     "match_ms": 0.1,
+     "decode_ms": 56,
+     "official_ms": 39,
+     "match_ms": 0.3,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 27
+     "total_ms": 59
     },
     "checks": {
      "C1": {
@@ -265,7 +265,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "duplicate-rotated-official",
@@ -294,13 +294,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 26,
-     "official_ms": 20,
-     "match_ms": 0.1,
+     "decode_ms": 54,
+     "official_ms": 37,
+     "match_ms": 0.3,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 27
+     "total_ms": 55
     },
     "checks": {
      "C1": {
@@ -354,7 +354,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "duplicate-tilted-official",
@@ -383,13 +383,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 34,
-     "official_ms": 24,
-     "match_ms": 0.1,
+     "decode_ms": 79,
+     "official_ms": 53,
+     "match_ms": 0.2,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 35
+     "total_ms": 81
     },
     "checks": {
      "C1": {
@@ -443,7 +443,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "duplicate-earlier-claim",
@@ -463,13 +463,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 54,
-     "official_ms": 20,
-     "match_ms": 38.4,
+     "decode_ms": 105,
+     "official_ms": 59,
+     "match_ms": 93.8,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 94
+     "total_ms": 200
     },
     "checks": {
      "C1": {
@@ -523,7 +523,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "blurry",
@@ -550,13 +550,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 56,
-     "official_ms": 20,
-     "match_ms": 8.1,
+     "decode_ms": 126,
+     "official_ms": 72,
+     "match_ms": 14.6,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 66
+     "total_ms": 142
     },
     "checks": {
      "C1": {
@@ -610,7 +610,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "another-recalls-picture",
@@ -639,13 +639,13 @@
     "amount": null,
     "model": null,
     "timings": {
-     "decode_ms": 66,
-     "official_ms": 52,
-     "match_ms": 11.3,
+     "decode_ms": 77,
+     "official_ms": 78,
+     "match_ms": 18.3,
      "vision_ms": 0,
      "checks_ms": 0,
      "reviewers_ms": 0,
-     "total_ms": 79
+     "total_ms": 98
     },
     "checks": {
      "C1": {
@@ -699,7 +699,7 @@
     }
    },
    "usd": 0,
-   "ran_at": "2026-11-07T22:17:12.005Z"
+   "ran_at": "2026-11-08T05:19:40.661Z"
   },
   {
    "id": "cord-cut-example",

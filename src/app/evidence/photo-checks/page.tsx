@@ -3,12 +3,13 @@ import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
 import { PhotoChecks } from "@/components/judges/PhotoChecks";
+import { RefPictures } from "@/components/judges/RefPictures";
 import { Reading, Settings } from "@/components/judges/Settings";
 import "../../pages.css";
 import "../../landing-shared.css";
 import "../evidence.css";
 
-export const metadata: Metadata = { title: "Photo checks", description: "Every recorded photo check with its six results, the model settings compared, and what the model read on the CPSC's own photos." };
+export const metadata: Metadata = { title: "Photo checks", description: "Every recorded photo check with its six results, the sample recall's reference pictures, the model settings compared with every revised answer, and what the model read on the CPSC's own photos." };
 
 /** /evidence/photo-checks: the long tables behind the photo-check figures on /evidence. */
 export default function PhotoChecksPage() {
@@ -31,6 +32,11 @@ export default function PhotoChecksPage() {
       <section id="runs" className="page-section" aria-labelledby="runs-h">
         <h2 id="runs-h">The recorded runs</h2>
         <PhotoChecks />
+      </section>
+
+      <section id="references" className="page-section" aria-labelledby="references-h">
+        <h2 id="references-h">The sample recall&rsquo;s reference pictures</h2>
+        <RefPictures />
       </section>
 
       <section id="reading" className="page-section" aria-labelledby="reading-h">

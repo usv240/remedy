@@ -8,9 +8,20 @@
       "taken": "2010-02-18",
       "edit": "label and brand marks removed by inpainting"
     },
-    "cord-detail.jpg": {
+    "cord-exit.jpg": {
       "source": "https://commons.wikimedia.org/wiki/File:DELL-DELL_Charger.JPG",
-      "edit": "a crop of intact.jpg: where the cord meets the charger"
+      "taken": "2010-02-18",
+      "edit": "a crop of the original photo where the cord meets the case, below the label, so no brand mark is in the frame; enlarged 2x"
+    },
+    "dc-plug.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-Dell_Charger.JPG",
+      "taken": "2010-02-18",
+      "edit": "a crop of the DC plug and its ferrite bead, with no label in the frame"
+    },
+    "fernway.jpg": {
+      "source": "https://commons.wikimedia.org/wiki/File:DELL-DELL_Charger.JPG",
+      "taken": "2010-02-18",
+      "edit": "a crop of intact.jpg, the case where its cord leaves it, for Fernway Home's sample recall FW-2026-01 (the same charger under a second fictional firm's name)"
     },
     "cord-cut.jpg": {
       "source": "https://commons.wikimedia.org/wiki/File:DELL-Dell_charger_cable.JPG",

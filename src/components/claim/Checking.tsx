@@ -46,6 +46,11 @@ export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed 
         </p>
         <ClaimInfo k="claim.checks" topic="the six checks" />
       </div>
+      {done && technical && technical.reviewers_ms > 0 && technical.vision_ms > 0 ? (
+        <p className="cl-split tabular">
+          {seconds(technical.vision_ms)} for the photo check, then {seconds(technical.reviewers_ms)} for the two reviewers.
+        </p>
+      ) : null}
       <ol className="cl-checks">
         {CHECK_ORDER.map(({ id, name }, i) => {
           const c = checks?.find((x) => x.id === id);

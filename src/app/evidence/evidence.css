@@ -1132,3 +1132,108 @@
 .evidence .ev-rules strong {
   font-weight: 600;
 }
+
+/* One photo, two firms: the cross-firm hash check as three columns in one panel, read left to right, stacked on a
+   phone. The hash is data, so it is set in the code face. */
+.ev-net {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 68rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.ev-net-step {
+  padding: 18px 20px 20px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.ev-net-step + .ev-net-step {
+  border-left: 1px solid var(--edge);
+}
+.ev-net-k {
+  font-weight: 600;
+}
+.ev-net-k .muted {
+  display: block;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+.ev-net-photo {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  border-radius: 8px;
+}
+.ev-net-hash code {
+  font-family: var(--font-code);
+  font-size: 0.875rem;
+  background: var(--surface-2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .ev-net {
+    grid-template-columns: 1fr;
+  }
+  .ev-net-step + .ev-net-step {
+    border-left: 0;
+    border-top: 1px solid var(--edge);
+  }
+}
+
+/* Known answers revised after the sweep: a dated list, each with what changed and why. */
+.evidence .ev-changes {
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 14px;
+  max-width: 72ch;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.evidence .ev-changes p + p {
+  margin-top: 4px;
+}
+.evidence .ev-changes code {
+  font-family: var(--font-code);
+  font-size: 0.875em;
+}
+
+/* The sample recall's reference pictures: what the firm publishes, then the score before and after. */
+.ev-refs {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+}
+.ev-refs figure {
+  margin: 0;
+  width: 160px;
+}
+.ev-refs img {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.ev-refs figcaption {
+  margin-top: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--muted);
+}

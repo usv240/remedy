@@ -153,7 +153,7 @@ const enabled = Boolean(process.env.DATABASE_URL);
 describe.skipIf(!enabled)("on Postgres: identities and the firm's own app", async () => {
   const { db } = await import("@/lib/db");
   const { sql } = await import("drizzle-orm");
-  const { identityMatches } = await import("@/app/api/claims/_lib/claims");
+  const { autoPaidToday, identityMatches } = await import("@/app/api/claims/_lib/claims");
   const { accountView, connectAccount, credentialsFor, disconnectAccount } = await import("@/lib/paypal/firm-account");
   const tag = `limtest-${Date.now().toString(36)}`;
   let recall = "";
@@ -175,7 +175,10 @@ describe.skipIf(!enabled)("on Postgres: identities and the firm's own app", asyn
   });
 
   afterAll(async () => {
-    for (const id of made) await db().execute(sql`delete from claim where id = ${id}::uuid`);
+    for (const id of made) {
+      await db().execute(sql`delete from payment_plan where claim_id = ${id}::uuid`);
+      await db().execute(sql`delete from claim where id = ${id}::uuid`);
+    }
     await db().execute(sql`delete from firm where id = ${firmId}`);
   });
 
@@ -193,6 +196,19 @@ describe.skipIf(!enabled)("on Postgres: identities and the firm's own app", asyn
 
   it("does not count the claim against itself", async () => {
     expect(await identityMatches(recall, made[0], { ...blank, payeeHash: `${tag}-payee-a`, visitorHash: `${tag}-device-d` })).toEqual({ payee: 0, purchase: 0, payer: 0, device: 0 });
+  });
+
+  it("the daily auto-pay total counts real auto-paid claims and leaves out seeded sample claims", async () => {
+    const before = await autoPaidToday(firmId, recall);
+    const real = await db().execute(sql`insert into claim (recall_number, firm_id, payee_type, payee_hash, payee_masked, decision, status, amount, channel, is_sample)
+      values (${recall}, ${firmId}, 'email', ${`${tag}-payee-r`}, ${tag}, 'verified', 'paid', 34.99, 'web', false) returning id`);
+    const sample = await db().execute(sql`insert into claim (recall_number, firm_id, payee_type, payee_hash, payee_masked, decision, status, amount, channel, is_sample)
+      values (${recall}, ${firmId}, 'email', ${`${tag}-payee-s`}, ${tag}, 'verified', 'paid', 34.99, 'web', true) returning id`);
+    made.push(String(real.rows[0].id), String(sample.rows[0].id));
+    for (const id of [real.rows[0].id, sample.rows[0].id]) {
+      await db().execute(sql`insert into payment_plan (claim_id, route, amount, approval, status) values (${String(id)}::uuid, 'payout', 34.99, 'auto', 'done')`);
+    }
+    expect((await autoPaidToday(firmId, recall)) - before).toBe(3499);
   });
 
   it("stores a firm's own PayPal app sealed, shows only its last four, and removes it on disconnect", async () => {

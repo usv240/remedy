@@ -53,8 +53,10 @@ describe("the sample recall is a sample, never a CPSC recall", () => {
   });
 
   it("comes up in search only when every word matches, so it never tops a power bank search", () => {
-    expect(sampleHits("laptop charger").map((h) => h.number)).toEqual([N]);
-    expect(sampleHits("brightline").map((h) => h.number)).toEqual([N]);
+    // Both sample firms recall the same sample charger: Brightline first, then Fernway, the second sample firm.
+    expect(sampleHits("laptop charger").map((h) => h.number)).toEqual([N, "FW-2026-01"]);
+    expect(sampleHits("brightline")[0]?.number).toBe(N);
+    expect(sampleHits("fernway").map((h) => h.number)).toEqual(["FW-2026-01"]);
     expect(sampleHits("power bank recall")).toEqual([]);
     expect(sampleHits("charger", { filters: { photoRefund: false } })).toEqual([]);
   });
@@ -69,7 +71,7 @@ describe("the sample recall is a sample, never a CPSC recall", () => {
   });
 
   it("stores its official image hashes with the one dHash, and the verifier reads its images from disk", () => {
-    expect(storedOfficialHashes(N).map((h) => h.ref)).toEqual(["/samples/charger/intact.jpg", "/samples/charger/cord-detail.jpg"]);
+    expect(storedOfficialHashes(N).map((h) => h.ref)).toEqual(["/samples/charger/intact.jpg", "/samples/charger/cord-exit.jpg", "/samples/charger/dc-plug.jpg"]);
     const images = verifyRecallFor(getRecall(N)!).images;
     expect(images.every((i) => i.data && i.data.length > 1000)).toBe(true);
   });

@@ -9,6 +9,7 @@ import path from "node:path";
 import { desc, inArray, isNotNull } from "drizzle-orm";
 import { db, dbConfigured, schema } from "@/lib/db";
 import { normalizeRecall } from "@/lib/recall/ingest";
+import { sampleFirmOf } from "@/lib/recall/label";
 import { loadAllRecalls, loadRecalls, loadSamplesFile, searchRecalls, type SearchFilters } from "@/lib/recall/search";
 import type { ProofRule } from "@/lib/recall/proof-rule";
 import type { RawCpscRecall, Recall } from "@/lib/recall/types";
@@ -97,7 +98,7 @@ export function recallByNumber(n: string): Recall | null {
  */
 export function normalizeNumber(s: string): string {
   const t = String(s ?? "").trim();
-  const sample = /\bBH-\d{4}-\d{2}\b/i.exec(t);
+  const sample = /\b(?:BH|FW)-\d{4}-\d{2}\b/i.exec(t);
   if (sample) return sample[0].toUpperCase();
   const m = /\b(\d{2})-?(\d{3})\b/.exec(t);
   return m ? `${m[1]}${m[2]}` : t;
@@ -114,7 +115,7 @@ export function storedRule(n: string): { rule: ProofRule; source: string; model:
   const num = normalizeNumber(n);
   // A sample recall's rule was written by hand by the sample firm: no model, no extraction run.
   const own = loadSamplesFile().rules[num];
-  if (own) return { rule: own, source: "firm", model: "none (written by the sample firm)", extractedAt: "", method: "Written by hand by Brightline Home, a fictional sample firm. No model call." };
+  if (own) return { rule: own, source: "firm", model: "none (written by the sample firm)", extractedAt: "", method: `Written by hand by ${sampleFirmOf(num) ?? "the sample firm"}, a fictional sample firm. No model call.` };
   const f = rules();
   const rule = f.rules[num];
   if (rule) return { rule, source: f.sources[num] ?? "selfcheck", model: f.model, extractedAt: f.extractedAt, method: f.method };

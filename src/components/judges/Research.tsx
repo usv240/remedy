@@ -1,6 +1,7 @@
 import { aboutSeconds, RESEARCH as R } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
 import measured from "../../../content/public/measured.json";
+import { checkTimes } from "./errors";
 
 const seconds = (id: string) => aboutSeconds(measured.items.find((i) => i.id === id)?.figure);
 
@@ -49,7 +50,7 @@ const FINDINGS: { fig: string; finding: string; source: string; url: string; inR
     finding: "Recalled products that come back through a recall, on average, by the CPSC's measure: every finished claim adds to it.",
     source: R.comeBack.source,
     url: R.comeBack.url,
-    inRemedy: `A finished claim takes one photo: the check runs in about ${seconds("live-check")} seconds and the PayPal payout in about ${seconds("payout")}, measured in the sandbox.`,
+    inRemedy: `A finished claim takes one photo: the check runs in about ${checkTimes().about} seconds (the median of the recorded live checks) and the PayPal payout in about ${seconds("payout")}, measured in the sandbox.`,
   },
   {
     fig: R.amazonOrder.products,

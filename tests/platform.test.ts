@@ -4,7 +4,7 @@ import { fail, ok } from "@/lib/api/envelope";
 import { ENDPOINTS } from "@/lib/api/endpoints";
 import { KEY_PREFIX, displayPrefix, hashKey, newKey } from "@/lib/api/keys";
 import { openapi } from "@/lib/api/openapi";
-import { runChecks } from "@/lib/health";
+import { liveSummary, runChecks } from "@/lib/health";
 import { serverCard } from "@/lib/mcp/card";
 import { SERVER_INFO, TOOLS } from "@/lib/mcp/tools";
 
@@ -72,7 +72,7 @@ describe("health checks", () => {
     process.env = { ...saved };
   });
 
-  it("report each integration as live, fallback or not connected from its settings", async () => {
+  it("report each integration as live, fallback, not connected or optional and off, from its settings", async () => {
     for (const k of ["DATABASE_URL", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "ANTHROPIC_API_KEY", "ELASTIC_URL", "ELASTIC_API_KEY", "CHANNEL3_API_KEY", "RENDER_EXTERNAL_URL", "CHECKS_SECRET", "CHECKS_WORKFLOW_SLUG", "PAYPAL_WEBHOOK_ID", "NEXT_PUBLIC_AG_GRID_LICENSE_KEY", "SENTRY_DSN"]) delete process.env[k];
     const none = Object.fromEntries((await runChecks()).map((c) => [c.id, c.mode]));
     expect(none).toEqual({
@@ -88,9 +88,12 @@ describe("health checks", () => {
       database: "not_connected",
       queue: "not_connected",
       worker: "fallback",
-      "error-tracking": "not_connected",
+      "error-tracking": "off",
       "recall-ingest": "fallback",
     });
+    // An optional add-on that is off is left out of the live total; the required ones still count.
+    const sum = liveSummary(await runChecks());
+    expect(sum).toEqual({ live: 3, of: 13, optionalOff: 1 });
 
     Object.assign(process.env, { ELASTIC_URL: "https://x", ELASTIC_API_KEY: "k", CHANNEL3_API_KEY: "k", RENDER_EXTERNAL_URL: "https://remedy.onrender.com" });
     const set = Object.fromEntries((await runChecks()).map((c) => [c.id, c.mode]));

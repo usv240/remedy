@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
+import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 
 type LoadResult = { id: string; name: string; requests: number; p50_ms: number; p95_ms: number; p99_ms: number; max_ms: number; errors: number; error_rate: number };
 type LoadFile = {
@@ -101,7 +102,7 @@ export const REAL: { part: string; demo: string; real: string }[] = [
     demo: "Stored in Postgres as a 1,600 px copy with no camera or location (EXIF, GPS) data, the original cleared once checked. A photo that shows a person is deleted at once, and every owner's photo 90 days after the claim is decided; its hash is kept",
     real: "Object storage with signed URLs for upload and view, the same deletion rules, and the hash kept in Postgres",
   },
-  { part: "AI", demo: "$2 of Claude a day; past it, photos go to a person at the firm", real: "A budget per firm, the Message Batches API for proof rules, and the same cache so a repeat photo costs nothing" },
+  { part: "AI", demo: `$${hostedDailyUsd() ?? "an AI_DAILY_USD amount"} of Claude a day (AI_DAILY_USD in render.yaml); past it, photos go to a person at the firm`, real: "A budget per firm, the Message Batches API for proof rules, and the same cache so a repeat photo costs nothing" },
   { part: "Firm console", demo: "Open, for the fictional sample firm", real: "Login and roles per firm (reviewer, compliance lead, read only), with every action in the ledger under a named person" },
   { part: "PayPal", demo: "Sandbox, one app, the hosted webhook plus event lookup for local servers", real: "A live app and a registered webhook per environment, with the same signature check" },
   { part: "Limits", demo: "20 API requests a minute without a key, 300 photo claims a day site-wide, each payment under $50", real: "Limits per firm and per key, set with the firm, counted in the same table" },

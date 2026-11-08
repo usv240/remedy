@@ -13,7 +13,7 @@ import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 import { aboutSeconds, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import { errorRates, freeTimings } from "@/components/judges/errors";
+import { checkTimes, errorRates, hashSpeed } from "@/components/judges/errors";
 import { moneyHeadline } from "@/components/judges/Money";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
@@ -56,13 +56,12 @@ const STEPS = [
  * and the data: the catalog of distinct published pictures, the measured official-picture answer, the refund window.
  */
 function ideas() {
-  const t = freeTimings();
   return [
     {
       line: "Each firm that joins makes every other firm safer.",
-      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} distinct pictures published with every recall, and every photo already claimed at any firm, answered in a median ${t.official.median} ms with no model call. Firms share only hashes, never a photo.`,
-      href: "/evidence#photo-checks",
-      see: "The photo checks",
+      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} distinct pictures published with every recall, and every photo already claimed at any firm: ${hashSpeed().short}. Firms share only hashes, never a photo.`,
+      href: "/evidence#network",
+      see: "One photo, two firms",
     },
     {
       line: "The refund goes back the way it was paid.",
@@ -144,7 +143,7 @@ const FIGURES: { whole: string; dec?: string; caption: string }[] = [
   { whole: String(C.all.paypalOrVenmo.count), caption: "recalls mention PayPal or Venmo anywhere in the remedy" },
 ];
 
-type RunFile = { runs: { id: string; title: string; about: string; recall: string; settings?: string; result: { decision: string; decided_by: string; summary: { plain: string }; guidance?: { plain: string } | null; amount?: { value: string } | null; timings: { total_ms: number }; checks: Record<string, { name: string; status: string; score: number | null; reason: string; technical: string }> } }[] };
+type RunFile = { runs: { id: string; title: string; about: string; recall: string; settings?: string; result: { decision: string; decided_by: string; summary: { plain: string }; guidance?: { plain: string } | null; amount?: { value: string } | null; timings: { total_ms: number; vision_ms?: number; reviewers_ms?: number }; checks: Record<string, { name: string; status: string; score: number | null; reason: string; technical: string }> } }[] };
 
 /**
  * The panel's tabs, in order. The first is the whole automatic path: Brightline's sample charger with its cord cut,
@@ -161,9 +160,16 @@ const measured = (id: string) => MEASURED.items.find((i) => i.id === id)?.figure
 /** The recall's short title; the label beside it already says when it is a sample recall. */
 const panelTitle = (title: string) => shortTitle(title).replace(/\s*\(sample recall\)$/i, "");
 
-function nextFor(decision: string, decidedBy: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
-  if (decision === "verified" && decidedBy === "reviewers")
-    return `The product match was ${checks.C1?.score?.toFixed(2) ?? "unclear"}, under the 0.85 bar, so two AI reviewers looked closer: both found the recalled charger with its cord cut, each citing what it saw. Code checked their evidence and the amount, and verified it.`;
+function nextFor(decision: string, decidedBy: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string, t?: { vision_ms?: number; reviewers_ms?: number }): string {
+  if (decision === "verified" && decidedBy === "reviewers") {
+    // The same recorded runs the headline's "about N seconds" is the median of (checkTimes in src/components/judges/errors.ts).
+    const ct = checkTimes();
+    const split =
+      t?.vision_ms && t.reviewers_ms
+        ? ` The photo check took ${(t.vision_ms / 1000).toFixed(1)} s (recorded live checks: ${ct.check.min} to ${ct.check.max} s, median ${ct.check.median} s), and the reviewers ${(t.reviewers_ms / 1000).toFixed(1)} s more.`
+        : "";
+    return `The product match was ${checks.C1?.score?.toFixed(2) ?? "unclear"}, under the 0.85 bar, so two AI reviewers looked closer: both found the recalled charger with its cord cut, each citing what it saw. Code checked their evidence and the amount, and verified it.${split}`;
+  }
   if (decision === "verified") return "Every check passed. Code checked the amount, and verified it.";
   if (decision === "retake") return guidance ? `${guidance} Nothing is paid until the photo checks out.` : summary;
   return "Two AI reviewers and then a person at the firm take a look.";
@@ -219,7 +225,7 @@ async function panelRuns(): Promise<PanelRun[]> {
         credit: p.credit,
         recall: { label: RecallLabel(rec.number), title: panelTitle(rec.title) },
         decision: res.decision as PanelRun["decision"],
-        next: nextFor(res.decision, res.decided_by, res.checks, res.guidance?.plain ?? null, res.summary.plain),
+        next: nextFor(res.decision, res.decided_by, res.checks, res.guidance?.plain ?? null, res.summary.plain, res.timings),
         totalMs: res.timings.total_ms,
         settings: r.settings ?? null,
         checks: Object.entries(res.checks).map(([id, c]) => ({ id, ...c })),
@@ -272,7 +278,7 @@ export default async function Home() {
   const money = moneyHeadline();
   const proof = {
     wrongPay: `${rates.wrongPay.count} of ${rates.wrongPay.of}`,
-    check: aboutSeconds(MEASURED.items.find((i) => i.id === "live-check")?.figure),
+    check: checkTimes().about,
     payout: aboutSeconds(MEASURED.items.find((i) => i.id === "payout")?.figure),
   };
 
@@ -297,18 +303,19 @@ export default async function Home() {
             AI checks it. PayPal pays you. <Info id="page.home" topic="Remedy" />
           </span>
         </p>
+        {/* The first screen holds one result and one action; everything else is further down the page. */}
+        <p className="hero-result">
+          <strong className="tabular">{proof.wrongPay}</strong> paid wrongly on photos with a known answer.{proof.check ? <> Checked in about {proof.check} seconds{proof.payout ? <>, paid in about {proof.payout}</> : null}.</> : null}{" "}
+          <Link className="text-link" href="/evidence#errors">
+            How it was measured
+          </Link>
+        </p>
         <div className="hero-actions">
           <Link href="/try" className="btn btn-primary hero-cta">
             Try a photo
           </Link>
-          <a href="#showcase" className="text-link hero-link">
-            Find your recall
-          </a>
-          <TourButton className="text-link hero-link" />
         </div>
-        <p className="hero-note">
-          In the headline: a hair dryer with its cord cut in half, the photo the CPSC published with recall 26125 to show it made safe.
-        </p>
+        <p className="hero-note">In the headline: the CPSC&rsquo;s photo for recall 26125, a hair dryer with its cord cut in half.</p>
       </section>
 
       <section id="intro" className="intro" aria-labelledby="intro-h">
@@ -348,42 +355,26 @@ export default async function Home() {
                 How it was counted
               </Link>
             </p>
-            <p className="intro-why">
-              Reaching owners directly is what works: about {RESEARCH.directNotice.direct} of products are corrected when the firm contacts its buyers, against {RESEARCH.directNotice.press} after a press release (
-              <a className="text-link" href={RESEARCH.directNotice.url} target="_blank" rel="noreferrer">
-                {RESEARCH.directNotice.short}
-              </a>
-              ), and a full refund lifts recall effectiveness by {RESEARCH.fullRemedy.lift} (
-              <a className="text-link" href={RESEARCH.fullRemedy.url} target="_blank" rel="noreferrer">
-                {RESEARCH.fullRemedy.short}
-              </a>
-              ).
-            </p>
             <p className="intro-lead">Remedy turns that photo into a refund in seconds.</p>
-            <p className="intro-result">
-              Measured on photos with a known answer, <strong>{proof.wrongPay}</strong> decisions paid a photo that should not have been paid.
-              {proof.check ? (
-                <>
-                  {" "}
-                  The photo check takes about <strong>{proof.check} seconds</strong>
-                  {proof.payout ? (
-                    <>
-                      {" "}
-                      and the PayPal payout about <strong>{proof.payout}</strong>
-                    </>
-                  ) : null}
-                  .
-                </>
-              ) : null}{" "}
-              <Link className="text-link" href="/evidence#errors">
-                How it was measured
-              </Link>
-            </p>
             {quotes.length > 0 && (
               <ul className="intro-quotes" aria-label="In the recalls' own words">
                 <Quote q={quotes[0]} />
               </ul>
             )}
+            <details className="intro-more">
+              <summary>Why reaching owners directly matters</summary>
+              <p className="intro-why">
+                Reaching owners directly is what works: about {RESEARCH.directNotice.direct} of products are corrected when the firm contacts its buyers, against {RESEARCH.directNotice.press} after a press release (
+                <a className="text-link" href={RESEARCH.directNotice.url} target="_blank" rel="noreferrer">
+                  {RESEARCH.directNotice.short}
+                </a>
+                ), and a full refund lifts recall effectiveness by {RESEARCH.fullRemedy.lift} (
+                <a className="text-link" href={RESEARCH.fullRemedy.url} target="_blank" rel="noreferrer">
+                  {RESEARCH.fullRemedy.short}
+                </a>
+                ).
+              </p>
+            </details>
           </div>
           <figure className="intro-photo-2">
             <img src="/landing/helmet-trash-25007.webp" alt="The same helmet and its cut straps inside a kitchen trash can." width={720} height={705} loading="lazy" />
@@ -445,13 +436,14 @@ export default async function Home() {
             See a photo become a refund
           </h2>
           <p className="try-p">
-            Start with Brightline&rsquo;s sample charger: verified, then refunded through PayPal. The other photos show the checks that ask for a new one. These are runs of Remedy&rsquo;s real verifier; the live run, with a sandbox payout, is one press away.{" "}
+            Start with Brightline&rsquo;s sample charger: verified, then refunded through PayPal. The other photos show the checks that ask for a new one.{" "}
             <Info id="try.panel" label="" topic="The photo checks" />
           </p>
           <p className="try-actions">
             <Link className="btn btn-primary" href="/try">
               Try a photo
             </Link>
+            <TourButton className="text-link" />
           </p>
         </div>
         <div className="try-fragment" data-reveal="" style={{ "--reveal-i": 1 } as React.CSSProperties}>

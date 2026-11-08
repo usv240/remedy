@@ -1,15 +1,24 @@
 import Link from "next/link";
 import { fmtMs } from "@/lib/api/format";
 import { MEASURED, cpscExampleRun } from "./data";
-import { freeTimings } from "./errors";
+import { checkTimes, hashSpeed } from "./errors";
 
 /** What the owner's claim flow measured in the PayPal sandbox, each figure with where it came from. */
 export function Measured() {
   const ex = cpscExampleRun();
-  const t = freeTimings();
+  const ct = checkTimes();
+  const hs = hashSpeed();
   return (
     <>
       <ul className="jm">
+        <li>
+          <p className="jm-fig tabular">about {ct.about} s</p>
+          <p className="jm-what">
+            for one photo check by Claude Opus 5.5 at the claim path&rsquo;s setting: a median of {ct.check.median} s, {ct.check.min} to {ct.check.max} s across {ct.check.n} recorded live checks. When the product match is unclear, the two reviewers add a
+            median of {ct.reviewers.median} s ({ct.reviewers.min} to {ct.reviewers.max} s in {ct.reviewers.n} runs).
+          </p>
+          <p className="jm-src">Counted from {ct.sources.join(", ")}</p>
+        </li>
         {MEASURED.items.map((m) => (
           <li key={m.id}>
             <p className="jm-fig tabular">{m.figure}</p>
@@ -20,11 +29,8 @@ export function Measured() {
           </li>
         ))}
         <li>
-          <p className="jm-fig tabular">{t.official.median} ms</p>
-          <p className="jm-what">
-            median to answer a photo that is a recall&rsquo;s own published picture, with no model call ({t.official.min} to {t.official.max} ms in {t.official.n} recorded runs). The hash comparison itself took {t.match.min} to {t.match.max} ms; the
-            rest is decoding the photo and loading the recall&rsquo;s pictures.
-          </p>
+          <p className="jm-fig tabular">{hs.answer.median} ms</p>
+          <p className="jm-what">median for the free picture match to answer, with no model call. {hs.sentence}</p>
           <p className="jm-src">On the machine that recorded the runs, content/public/verify-runs.json</p>
         </li>
         {ex && (
@@ -41,7 +47,7 @@ export function Measured() {
         )}
       </ul>
       <p className="page-note">
-        Measured {new Date(`${MEASURED.measuredAt}T12:00:00Z`).toLocaleDateString("en-US", { dateStyle: "long" })}. Try each one:{" "}
+        Sandbox payments measured {new Date(`${MEASURED.measuredAt}T12:00:00Z`).toLocaleDateString("en-US", { dateStyle: "long" })}. Try each one:{" "}
         <Link className="text-link" href="/try">
           the presets
         </Link>

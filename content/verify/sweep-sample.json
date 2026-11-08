@@ -1,5 +1,5 @@
 {
-  "ranAt": "2026-11-07T15:13:35.026Z",
+  "ranAt": "2026-11-08T05:14:47.603Z",
   "trials": 3,
   "configs": [
     {
@@ -10,11 +10,20 @@
     }
   ],
   "stopped": null,
+  "earlier": {
+    "file": "content/verify/history/sweep-sample.2026-11-07.json",
+    "why": "The same three photos and setting, run on 2026-11-07 with the sample recall's earlier reference pictures (the whole charger and a small crop of where its cord meets the case). The reference pictures changed on 2026-11-08 (content/verify/sample-references.json); this file is the run after that change."
+  },
   "runs": [
     {
       "trials": "1 to 3",
+      "cases": [
+        "sample-charger-cut",
+        "sample-charger-opened-cord-attached",
+        "sample-charger-opened-case"
+      ],
       "direct": true,
-      "spentUsd": 0.4117
+      "spentUsd": 0.3819
     }
   ],
   "summary": [
@@ -24,9 +33,9 @@
       "pass": 3,
       "of": 3,
       "pass %": 100,
-      "usd": 0.167,
-      "usd per case": 0.0557,
-      "median ms": 11724
+      "usd": 0.126,
+      "usd per case": 0.0421,
+      "median ms": 11122
     },
     {
       "config": "opus-medium",
@@ -34,19 +43,19 @@
       "pass": 3,
       "of": 3,
       "pass %": 100,
-      "usd": 0.12,
-      "usd per case": 0.0399,
-      "median ms": 11091
+      "usd": 0.124,
+      "usd per case": 0.0413,
+      "median ms": 10854
     },
     {
       "config": "opus-medium",
       "trial": 3,
-      "pass": 3,
+      "pass": 2,
       "of": 3,
-      "pass %": 100,
-      "usd": 0.125,
-      "usd per case": 0.0417,
-      "median ms": 10880
+      "pass %": 67,
+      "usd": 0.132,
+      "usd per case": 0.0438,
+      "median ms": 10983
     }
   ],
   "cases": [
@@ -58,37 +67,37 @@
       "misses": "",
       "decision": "verified",
       "decided_by": "reviewers",
-      "C1": 0.75,
+      "C1": 0.8,
       "C1_status": "unclear",
       "C2": "pass",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Black case, ribbed strain relief and barrel plug are consistent with the reference images, but the case is disassembled, no printed text or model is readable, and the case is out of focus. Same product type, exact identity unconfirmed.",
-      "C2_reason": "cut_cord: confirmed, confidence 0.8. In the left foreground the cord end with its strain relief is held up, and two stranded bare wires and one white insulated wire stick out from it, showing the cord is severed from the case. The case itself is opened rather than the cord being cleanly cut, but the cord is no longer attached to the charger.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Real scene with a hand in focus, shallow depth of field, uneven lighting and natural camera noise, with no screen or print artifacts. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, near",
+      "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Ribbed strain relief, black fixed cord and black case shape match the official images; case is disassembled and no printed identifiers are visible, so exact product cannot be confirmed.",
+      "C2_reason": "cut_cord: confirmed, confidence 0.85. In the left center, the cord end with its strain relief is pulled free of the case and shows cut bare stranded wires and a white insulated wire, separated from the opened charger case on the right. The cord is no longer attached to the charger.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus blur, real shadows and a hand in the frame show a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier claim ",
       "referee": "verify",
-      "usd": 0.1175,
-      "ms": 21572,
-      "vision_ms": 9282,
+      "usd": 0.0726,
+      "ms": 20719,
+      "vision_ms": 8069,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 753,
-          "cache_read_input_tokens": 0,
-          "cache_creation_input_tokens": 5127
+          "output_tokens": 656,
+          "cache_read_input_tokens": 5369,
+          "cache_creation_input_tokens": 0
         },
         "reviewers": [
           {
             "input_tokens": 1653,
-            "output_tokens": 861,
-            "cache_read_input_tokens": 0,
-            "cache_creation_input_tokens": 2492
+            "output_tokens": 910,
+            "cache_read_input_tokens": 2734,
+            "cache_creation_input_tokens": 0
           },
           {
             "input_tokens": 1652,
-            "output_tokens": 959,
-            "cache_read_input_tokens": 0,
-            "cache_creation_input_tokens": 1621
+            "output_tokens": 972,
+            "cache_read_input_tokens": 1621,
+            "cache_creation_input_tokens": 0
           }
         ]
       }
@@ -101,23 +110,23 @@
       "misses": "",
       "decision": "retake",
       "decided_by": "made_safe",
-      "C1": 0.55,
+      "C1": 0.6,
       "C1_status": "unclear",
       "C2": "fail",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.55 (pass at 0.85, unclear from 0.5). Only internals (PCB, capacitor, toroid coil, yellow insulation, metal shield) and a black cord with strain relief are visible. The black case, its shape and any label are absent, so no specific detail confirms the Brightline model.",
-      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The black cord runs down from the strain relief at the center to the bottom edge of the photo with no cut visible. The cord still connects to the circuit board at the top. The charger has been taken apart, but no cut cord ends or severed piece are in view.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow depth of field, real hand and a blurred room background show a camera photo of a physical object. dHash 63e1731616305951; nearest official 24 bits, nearest earlie",
+      "C1_reason": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Strain relief style and black cord resemble official image 2, but with the case removed there is no case shape, logo, label or 65W marking to confirm the Brightline product. Score kept in the same kind of product range.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The black cord runs down the center of the photo unbroken from the strain relief to the bottom edge. Its wires are still attached to the circuit board at the top. No cut ends or severed piece are visible. The charger has been taken apart instead.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow depth of field with a blurred background, camera noise and a real hand holding a physical object. dHash 63e1731616305951; nearest official 24 bits, nearest earlie",
       "referee": null,
-      "usd": 0.0217,
-      "ms": 8619,
-      "vision_ms": 8506,
+      "usd": 0.0258,
+      "ms": 11122,
+      "vision_ms": 10973,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 701,
-          "cache_read_input_tokens": 5127,
+          "output_tokens": 903,
+          "cache_read_input_tokens": 5369,
           "cache_creation_input_tokens": 0
         },
         "reviewers": []
@@ -136,18 +145,18 @@
       "C2": "fail",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Case shape, ferrite bead position, barrel plug and ridged strain relief match the official images. No readable label or model number to confirm the exact product, so the score stays below 0.9.",
-      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The cord runs unbroken from the strain relief on the foil-wrapped board (left of center) through the loops to the ferrite bead and barrel plug. No cut ends or severed piece are visible. The charger case was opened instead of the cord being cut.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and texture on a real surface, with no screen, print or digital image signs. dHash 679139368edef6fe; nearest official 25 bits, nearest earlier claim none (reused ",
+      "C1_reason": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Ferrite bead position, barrel plug shape, ribbed strain relief and rounded black housing match the official images with no conflicts. No readable label or model number, and disassembly prevents full comparison, so score is held below 0.9.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.9. The cord runs unbroken from the ribbed strain relief on the foil wrapped inner module at left center, through the ferrite bead, to the barrel plug. No cut ends or severed piece are visible. The case was opened and removed instead, but the cord itself is not cut.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and camera noise on a real tiled surface, with no screen or print signs. dHash 679139368edef6fe; nearest official 25 bits, nearest earlier claim none (reused at 1",
       "referee": null,
-      "usd": 0.0279,
-      "ms": 11724,
-      "vision_ms": 11636,
+      "usd": 0.028,
+      "ms": 10684,
+      "vision_ms": 10459,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 1010,
-          "cache_read_input_tokens": 5127,
+          "output_tokens": 1013,
+          "cache_read_input_tokens": 5369,
           "cache_creation_input_tokens": 0
         },
         "reviewers": []
@@ -161,96 +170,96 @@
       "misses": "",
       "decision": "verified",
       "decided_by": "reviewers",
-      "C1": 0.75,
-      "C1_status": "unclear",
-      "C2": "pass",
-      "C3": "pass",
-      "C4": "pass",
-      "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Strain relief style and black case shell match the reference images, but the case is disassembled, the full exterior is not shown, and no printed brand, model or rating is readable, so the exact product cannot be confirmed.",
-      "C2_reason": "cut_cord: confirmed, confidence 0.85. In the left foreground the cord end at the strain relief is severed, with white insulated wire and two bare stranded wires sticking out of the cut end. The case it came from lies opened in the right background, so the cord is clearly separated from the charger.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus with blurred background, shadows and camera noise indicate a real camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, neares",
-      "referee": "verify",
-      "usd": 0.0719,
-      "ms": 21074,
-      "vision_ms": 8369,
-      "usage": {
-        "vision": {
-          "input_tokens": 1658,
-          "output_tokens": 712,
-          "cache_read_input_tokens": 5127,
-          "cache_creation_input_tokens": 0
-        },
-        "reviewers": [
-          {
-            "input_tokens": 1653,
-            "output_tokens": 860,
-            "cache_read_input_tokens": 2492,
-            "cache_creation_input_tokens": 0
-          },
-          {
-            "input_tokens": 1652,
-            "output_tokens": 939,
-            "cache_read_input_tokens": 1621,
-            "cache_creation_input_tokens": 0
-          }
-        ]
-      }
-    },
-    {
-      "config": "opus-medium",
-      "trial": 2,
-      "case": "sample-charger-opened-cord-attached",
-      "ok": true,
-      "misses": "",
-      "decision": "retake",
-      "decided_by": "made_safe",
-      "C1": 0.55,
-      "C1_status": "unclear",
-      "C2": "fail",
-      "C3": "pass",
-      "C4": "pass",
-      "C1_reason": "Claude vision match score 0.55 (pass at 0.85, unclear from 0.5). Only the generic black cord and strain relief can be compared. The outer black case shape, the belt strap and any printed markings from the official images are not visible, and the charger is disassembled, so identity cannot be confirmed.",
-      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The black cord in the center runs whole from the strain relief down to the bottom edge with no cut ends or severed piece in view. The charger has been opened instead, which is not the requested action.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Handheld real object with natural lighting, shallow depth of field and a blurred background; no screen or print signs. dHash 63e1731616305951; nearest official 24 bits, nearest earlier cla",
-      "referee": null,
-      "usd": 0.021,
-      "ms": 8846,
-      "vision_ms": 8762,
-      "usage": {
-        "vision": {
-          "input_tokens": 1658,
-          "output_tokens": 667,
-          "cache_read_input_tokens": 5127,
-          "cache_creation_input_tokens": 0
-        },
-        "reviewers": []
-      }
-    },
-    {
-      "config": "opus-medium",
-      "trial": 2,
-      "case": "sample-charger-opened-case",
-      "ok": true,
-      "misses": "",
-      "decision": "retake",
-      "decided_by": "made_safe",
       "C1": 0.8,
       "C1_status": "unclear",
-      "C2": "fail",
+      "C2": "pass",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Cord, ferrite bead, barrel plug, strain relief and black case shape match the official images. Score held below 0.9 because no printed text, logo or model can be read and the case is opened, limiting comparison.",
-      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The cord runs unbroken from the ribbed strain relief on the foil-wrapped inner module, left of center, through loops to the barrel plug at center right. No cut ends or severed piece are visible. The charger was opened and the inner module removed from the case instead.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and camera texture on a real tiled surface with physical objects; no screen or print signs. dHash 679139368edef6fe; nearest official 25 bits, nearest earlier clai",
-      "referee": null,
-      "usd": 0.0266,
-      "ms": 11091,
-      "vision_ms": 10981,
+      "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Case shape, black color, ribbed strain relief and barrel plug cord match the official images. The case was disassembled and no printed label or model text is visible, so exact identity cannot be confirmed.",
+      "C2_reason": "cut_cord: confirmed, confidence 0.88. In the left foreground the cord end at the strain relief collar is cut through, showing a white insulated wire and two bare stranded metal wires. The cord is separated from the charger case, which sits opened on the right.",
+      "C3_reason": "Claude: camera_photo (confidence 0.92; signs: none). Natural lighting, shallow focus, shadows and camera noise show a real photo of physical objects; no screen or paper signs. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlie",
+      "referee": "verify",
+      "usd": 0.0703,
+      "ms": 18579,
+      "vision_ms": 7892,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 949,
-          "cache_read_input_tokens": 5127,
+          "output_tokens": 675,
+          "cache_read_input_tokens": 5369,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": [
+          {
+            "input_tokens": 1653,
+            "output_tokens": 902,
+            "cache_read_input_tokens": 2734,
+            "cache_creation_input_tokens": 0
+          },
+          {
+            "input_tokens": 1652,
+            "output_tokens": 849,
+            "cache_read_input_tokens": 1621,
+            "cache_creation_input_tokens": 0
+          }
+        ]
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 2,
+      "case": "sample-charger-opened-cord-attached",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.6,
+      "C1_status": "unclear",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Only the internal board and cord strain relief are visible. Cord color and ridged, perforated strain relief broadly resemble the official image, but no case shape, branding, wattage marking or model number can be checked.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The black cord runs unbroken from the bottom of the photo up through the strain relief into the circuit board at the top. No cut end or severed piece is visible. The case has been taken apart, but the cord is not shown cut.",
+      "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shallow depth of field with a blurred room background, and normal camera noise; no screen or print signs. dHash 63e1731616305951; nearest official 24 bits, nearest earli",
+      "referee": null,
+      "usd": 0.0251,
+      "ms": 10464,
+      "vision_ms": 10294,
+      "usage": {
+        "vision": {
+          "input_tokens": 1658,
+          "output_tokens": 871,
+          "cache_read_input_tokens": 5369,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 2,
+      "case": "sample-charger-opened-case",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.82,
+      "C1_status": "unclear",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.82 (pass at 0.85, unclear from 0.5). Cord, ferrite bead, barrel plug, ribbed strain relief and black rounded case shell all match the official images. No model numbers are listed and no readable label is visible, so the exact product cannot be confirmed above 0.85.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The cord runs unbroken from the ribbed strain relief on the left edge of the foil wrapped board, through its loops and the ferrite bead, to the barrel plug. No cut ends or severed piece are visible. The charger case was opened instead, which is not the cut the remedy asks for.",
+      "C3_reason": "Claude: camera_photo (confidence 0.92; signs: none). Natural lighting, shadows and camera texture on a real tabletop with tape lines; no screen or print signs. dHash 679139368edef6fe; nearest official 25 bits, nearest earlier claim none (re",
+      "referee": null,
+      "usd": 0.0286,
+      "ms": 10854,
+      "vision_ms": 10723,
+      "usage": {
+        "vision": {
+          "input_tokens": 1658,
+          "output_tokens": 1047,
+          "cache_read_input_tokens": 5369,
           "cache_creation_input_tokens": 0
         },
         "reviewers": []
@@ -260,39 +269,39 @@
       "config": "opus-medium",
       "trial": 3,
       "case": "sample-charger-cut",
-      "ok": true,
-      "misses": "",
-      "decision": "verified",
+      "ok": false,
+      "misses": "decision firm_review, expected verified",
+      "decision": "firm_review",
       "decided_by": "reviewers",
-      "C1": 0.75,
+      "C1": 0.82,
       "C1_status": "unclear",
       "C2": "pass",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Black 65W style brick with fixed cord, ribbed strain relief and barrel plug match the general product. No printed brand, model or label visible; case is disassembled, limiting shape comparison. Score held in the 0.6 to 0.85 band.",
-      "C2_reason": "cut_cord: confirmed, confidence 0.85. In the left foreground the cord end held in the hand is severed at the strain relief, with a white insulated wire and two bare stranded wires sticking out. The cord is clearly detached from the case, which sits opened at right. The case appears opened rather than the cord simply cut, but the cord is cut through.",
-      "C3_reason": "Claude: camera_photo (confidence 0.92; signs: none). Natural depth of field blur, shadows, camera noise and a hand in the frame indicate a real camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earl",
-      "referee": "verify",
-      "usd": 0.0764,
-      "ms": 20990,
-      "vision_ms": 8698,
+      "C1_reason": "Claude vision match score 0.82 (pass at 0.85, unclear from 0.5). Strain relief ribbing, case shape and cord match the official images; no printed brand or label visible and the case is disassembled, so exact identity cannot be confirmed above 0.85.",
+      "C2_reason": "cut_cord: confirmed, confidence 0.9. At left center, the cord end with its strain relief is held up, cut off from the case, showing a white insulated wire and two bare stranded metal wires sticking out. The opened case sits separately at right.",
+      "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shallow focus with a blurred background, real shadows and a hand in the frame show a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, ",
+      "referee": "person",
+      "usd": 0.0795,
+      "ms": 22798,
+      "vision_ms": 8945,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 754,
-          "cache_read_input_tokens": 5127,
+          "output_tokens": 683,
+          "cache_read_input_tokens": 5369,
           "cache_creation_input_tokens": 0
         },
         "reviewers": [
           {
             "input_tokens": 1653,
-            "output_tokens": 1014,
-            "cache_read_input_tokens": 2492,
+            "output_tokens": 1040,
+            "cache_read_input_tokens": 2734,
             "cache_creation_input_tokens": 0
           },
           {
             "input_tokens": 1652,
-            "output_tokens": 966,
+            "output_tokens": 1160,
             "cache_read_input_tokens": 1621,
             "cache_creation_input_tokens": 0
           }
@@ -307,23 +316,23 @@
       "misses": "",
       "decision": "retake",
       "decided_by": "made_safe",
-      "C1": 0.55,
+      "C1": 0.6,
       "C1_status": "unclear",
       "C2": "fail",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.55 (pass at 0.85, unclear from 0.5). Only the internal PCB and a cord with strain relief are visible. The black housing, overall shape, DC plug and any printed markings are absent, so the product kind is plausible but the specific product cannot be confirmed.",
-      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.75. The cord in the center runs intact from the strain relief into the board, where its wires are still attached. No cut through the cord or cut ends are visible. A dark cord in the blurred background at right cannot be seen to be cut.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow depth of field, real hand and blurred room background show a camera photo of a physical object. dHash 63e1731616305951; nearest official 24 bits, nearest earlier ",
+      "C1_reason": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). The strain relief shape and black cord resemble official image 2, but the case has been removed, so shape, color and label of the charger body cannot be compared. Same kind of product, exact product unconfirmed.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.9. The black cord runs unbroken from the bottom of the photo up through the strain relief and into the circuit board at the top. No cut ends or severed piece are visible. The charger was opened instead, which is not the requested action.",
+      "C3_reason": "Claude: camera_photo (confidence 0.95; signs: none). Natural lighting, shallow focus with a blurred background, real hand and table scene, and normal camera noise. dHash 63e1731616305951; nearest official 24 bits, nearest earlier claim none",
       "referee": null,
-      "usd": 0.0221,
-      "ms": 8943,
-      "vision_ms": 8850,
+      "usd": 0.0249,
+      "ms": 10290,
+      "vision_ms": 10093,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 720,
-          "cache_read_input_tokens": 5127,
+          "output_tokens": 859,
+          "cache_read_input_tokens": 5369,
           "cache_creation_input_tokens": 0
         },
         "reviewers": []
@@ -337,29 +346,28 @@
       "misses": "",
       "decision": "retake",
       "decided_by": "made_safe",
-      "C1": 0.78,
-      "C1_status": "unclear",
+      "C1": 0.85,
+      "C1_status": "pass",
       "C2": "fail",
       "C3": "pass",
       "C4": "pass",
-      "C1_reason": "Claude vision match score 0.78 (pass at 0.85, unclear from 0.5). Cord, ferrite bead, barrel plug and case shape match the official images, but the case is disassembled and no readable brand or model text confirms the exact product.",
-      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.9. The cord runs unbroken from the ribbed strain relief on the foil-wrapped module at left center, through the ferrite bead, to the barrel plug at center right. No cut ends or severed piece are visible. The case is opened instead, but the cord is not cut.",
-      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and camera texture on a real table surface with no screen or print signs. dHash 679139368edef6fe; nearest official 25 bits, nearest earlier claim none (reused at ",
+      "C1_reason": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Case profile, ferrite choke, barrel plug and ribbed strain relief match official images. No model number listed or readable. Missing strap and lack of labels keep the score below 0.9.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.9. The cord runs unbroken from the strain relief on the inner module, left of center, around the loop to the ferrite bead and barrel plug. No cut ends or severed piece are visible. The charger case was opened instead, but the cord is still attached and intact.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and camera noise on a real tiled surface, with no screen or print signs. dHash 679139368edef6fe; nearest official 25 bits, nearest earlier claim none (reused at 1",
       "referee": null,
-      "usd": 0.0266,
-      "ms": 10880,
-      "vision_ms": 10806,
+      "usd": 0.0271,
+      "ms": 10983,
+      "vision_ms": 10886,
       "usage": {
         "vision": {
           "input_tokens": 1658,
-          "output_tokens": 948,
-          "cache_read_input_tokens": 5127,
+          "output_tokens": 972,
+          "cache_read_input_tokens": 5369,
           "cache_creation_input_tokens": 0
         },
         "reviewers": []
       }
     }
   ],
-  "spentUsd": 0.4117,
-  "scored": "Scored against content/verify/fixtures/cases.json as of 2026-11-07: the cut-cord case asks for decision verified with C2 and C3 passing (an unclear product match goes to the two reviewers by design)."
+  "spentUsd": 0.3819
 }

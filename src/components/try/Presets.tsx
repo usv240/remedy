@@ -24,7 +24,7 @@ export type PresetCard = {
 
 type Run = {
   result: ClaimView;
-  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null };
+  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null; ms_when_recorded?: { vision: number; reviewers: number } | null };
   live?: { ran: boolean; note: string | null; usd: number | null; model: string | null } | null;
 };
 
@@ -160,7 +160,9 @@ function PresetRow({ p }: { p: PresetCard }) {
               {run.live?.ran
                 ? "The model's answer is new: the verification cache was skipped for this run, and every check around it ran in code."
                 : run.replay.used
-                ? `The model's answer is replayed from one live run of ${run.replay.model} on ${run.replay.recorded_at?.slice(0, 10)} (it cost $${run.replay.cost_usd_when_recorded}); every check around it ran again in code just now.`
+                ? `The model's answer is replayed from one live run of ${run.replay.model} on ${run.replay.recorded_at?.slice(0, 10)} (it cost $${run.replay.cost_usd_when_recorded}${
+                    run.replay.ms_when_recorded ? `; the photo check took ${(run.replay.ms_when_recorded.vision / 1000).toFixed(1)} s${run.replay.ms_when_recorded.reviewers ? ` and the two reviewers ${(run.replay.ms_when_recorded.reviewers / 1000).toFixed(1)} s` : ""} then` : ""
+                  }); every check around it ran again in code just now, in the time shown above.`
                 : "No model call was needed: this answer was found in code, live, just now."}
             </p>
             {p.technical && (

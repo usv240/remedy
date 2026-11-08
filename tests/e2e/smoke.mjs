@@ -51,7 +51,7 @@ check("try: the official-image example asks for the owner's own photo (no model 
 const health = await (await fetch(`${B}/api/health`)).json();
 const db = health.checks?.find((c) => c.id === "database");
 check("health: the database is live", db?.mode === "live", db?.detail);
-check("health: every integration reports a mode", health.checks?.every((c) => ["live", "fallback", "not_connected"].includes(c.mode)), health.checks?.map((c) => `${c.id}:${c.mode}`).join(" "));
+check("health: every integration reports a mode", health.checks?.every((c) => ["live", "fallback", "not_connected", "off"].includes(c.mode)), health.checks?.map((c) => `${c.id}:${c.mode}`).join(" "));
 
 const ledger = await fetch(`${B}/api/ledger/verify`);
 const ledgerJ = await ledger.json().catch(() => null);

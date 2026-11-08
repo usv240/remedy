@@ -5,7 +5,7 @@ Remedy runs on PayPal's sandbox, a practice version of PayPal where no real mone
 - **Hosted demo:** [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com), hosted on Render.
 - **Start here:** [`/evidence`](https://remedy-y0ym.onrender.com/evidence) has the five-minute path, the results with their sources, and a guided tour (**Take the 2-minute tour**, six stops in one tab; Escape ends it).
 
-Brightline Home, the firm in the console, is a fictional sample firm. Real CPSC recalls appear with their real data and credited images. Every payout reads "Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm."
+Brightline Home, the firm in the console, is a fictional sample firm, and so is Fernway Home, whose sample recall FW-2026-01 shows the hash check across firms. Real CPSC recalls appear with their real data and credited images. Every payout reads "Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm."
 
 ## PayPal sandbox buyer login
 
@@ -175,7 +175,7 @@ docker compose up -d          # Postgres 17 on port 5432
 cp .env.example .env.local    # then fill in the values below
 npm run db:migrate            # the reviewed schema in db/schema.sql
 npm run db:load               # recalls, proof rules and official image hashes
-npm run db:seed               # the sample firm
+npm run db:seed               # the sample firms, Brightline Home and Fernway Home
 npx tsx --env-file=.env.local scripts/seed-firm.ts   # its sample claims, plan and report history
 npm run dev                   # http://localhost:3300
 npm run worker                # the job worker, in a second terminal (photo checks and payouts; without it, routes run their jobs inline after 2 s)
@@ -205,7 +205,7 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 440 passed, 49 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
+| Unit tests, no network | `npm test` | 456 passed, 49 skipped (the live Claude, live PayPal and Postgres suites skip without keys or a database) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
@@ -218,7 +218,7 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | 60 ledger appends at once keep one chain | `npm run test:ledger-race` | Chain verified |
 | 100 visitors at once on the free paths (official-picture claim, search, scan sample), against the production build on port 3400 | `BASE_URL=http://localhost:3400 node --env-file=.env.local scripts/load-test.mjs` | Writes `content/public/load-test.json`, shown on `/evidence/operations#load`; 0 errors |
 | Rescore the extraction benchmark from the stored outputs (no AI call) | `npx tsx scripts/recalls/bench.ts` | Writes `content/recalls/benchmark/results.json`, marked draft until every label is confirmed |
-| The figures the README, TESTING.md and `/evidence` repeat, after the suites above | `npx tsx scripts/facts.ts` | Writes `content/public/facts.json`; `tests/facts.test.ts` fails when a document or the code disagrees with it |
+| The figures the README, `docs/*.md`, TESTING.md and `/evidence` repeat, after the suites above | `npx tsx scripts/facts.ts` | Writes `content/public/facts.json`; `tests/facts.test.ts` fails when a document or the code disagrees with it |
 | Recount the CPSC figures | `npx tsx scripts/recalls/stats.ts` | Writes `content/recalls/stats.json`; the 2026-11-01 snapshot gives the published 523 of 1,227 |
 
 The schema is reviewed SQL in `db/schema.sql`, applied with `npm run db:migrate` (safe to run again); `tests/schema.test.ts` checks that it and the Drizzle schema in `src/lib/db/schema.ts` define the same tables and columns.

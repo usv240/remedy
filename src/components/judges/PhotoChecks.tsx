@@ -1,4 +1,5 @@
-import { fmtMs } from "@/lib/api/format";
+import { fmtInt, fmtMs } from "@/lib/api/format";
+import { catalogOfficialHashes } from "@/lib/verify/dhash";
 import { RUNS, cpscExampleReplay, type CpscReplay, type RunRow } from "./data";
 
 /** The same decision words as the claim page, the firm queue and the home page. */
@@ -114,7 +115,7 @@ export async function PhotoChecks() {
             ))}
           </ul>
           <p>
-            The free checks run before any AI call: the photo&rsquo;s quality, and a 64-bit perceptual hash compared with the recall&rsquo;s official CPSC images and every earlier claim photo, in all eight orientations (four turns, each mirrored or not). A match within 10 bits asks for the owner&rsquo;s own photo, and within 4 bits of a picture published with any other recall or a photo claimed on one, the same. That catches the official picture, a turned and recompressed copy, a tilted and cropped copy, and a photo sent before. The same hash is then compared with the 1,777 distinct published pictures of every other recall, and with every photo already claimed on any recall at any firm, within 4 bits: a re-saved, halved or turned copy of a published picture stays within 2 bits, and none of the test photos that are not a published picture comes within 9. Between firms, only the hash is compared, never the photo.
+            The free checks run before any AI call: the photo&rsquo;s quality, and a 64-bit perceptual hash compared with the recall&rsquo;s official CPSC images and every earlier claim photo, in all eight orientations (four turns, each mirrored or not). A match within 10 bits asks for the owner&rsquo;s own photo, and within 4 bits of a picture published with any other recall or a photo claimed on one, the same. That catches the official picture, a turned and recompressed copy, a tilted and cropped copy, and a photo sent before. The same hash is then compared with the {fmtInt(catalogOfficialHashes().length)} distinct published pictures of every other recall, and with every photo already claimed on any recall at any firm, within 4 bits: a re-saved, halved or turned copy of a published picture stays within 2 bits, and none of the test photos that are not a published picture comes within 9. Between firms, only the hash is compared, never the photo.
           </p>
           <p>
             The vision check reads the photo against the proof rule: the product, each required action, and signs of a screen or printout. The decision, the amount and the payment route are plain code. Unclear cases go to two independent AI reviewers and a referee, and then to a person at the firm.

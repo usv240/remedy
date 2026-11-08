@@ -22,7 +22,8 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
-const read = <T>(...p: string[]): T => JSON.parse(readFileSync(path.join(ROOT, ...p), "utf8")) as T;
+/** A JSON file under content/, the only folder these figures are read from (a fixed root keeps the build from tracing the whole project). */
+const read = <T>(...p: string[]): T => JSON.parse(readFileSync(path.join(ROOT, "content", ...p), "utf8")) as T;
 
 type Expect = { decision?: string; not_decision?: string; checks?: Record<string, string> };
 type Case = { id: string; photo: string; recall: string; official_hash_check?: boolean; expect: Expect };
@@ -61,7 +62,7 @@ const TITLES: Record<string, string> = {
  * reused photo, a blurry one or another recall's picture is never verified (content/public/verify-runs.json).
  */
 export function freeCaught() {
-  const runs = read<{ runs: { needs_vision?: boolean; result: { decision: string } }[] }>("content", "public", "verify-runs.json").runs;
+  const runs = read<{ runs: { needs_vision?: boolean; result: { decision: string } }[] }>("public", "verify-runs.json").runs;
   const free = runs.filter((r) => !r.needs_vision);
   return { caught: free.filter((r) => r.result.decision !== "verified").length, total: free.length };
 }
@@ -83,7 +84,7 @@ const spread = (xs: number[]) => ({ median: median(xs), min: xs.length ? Math.mi
  */
 export function freeTimings() {
   type T = { decode_ms: number; official_ms: number; match_ms?: number; total_ms: number };
-  const runs = read<{ recordedAt: string; runs: { id: string; needs_vision?: boolean; result: { decision: string; decided_by: string; timings: T } }[] }>("content", "public", "verify-runs.json");
+  const runs = read<{ recordedAt: string; runs: { id: string; needs_vision?: boolean; result: { decision: string; decided_by: string; timings: T } }[] }>("public", "verify-runs.json");
   const free = runs.runs.filter((r) => !r.needs_vision);
   const official = free.filter((r) => r.result.decided_by === "own_photo");
   const match = free.map((r) => r.result.timings.match_ms).filter((m): m is number => typeof m === "number");
@@ -137,9 +138,9 @@ function caseFor(cases: Case[], recall: string, photo: string, hashOff: boolean)
 const isOfficialReading = (c: Case | undefined) => Boolean(c && c.photo.startsWith("official/") && !c.expect.decision && !c.expect.not_decision);
 
 export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: SweepFile; sample: SweepFile | null; allConfigs: Decided[]; officialPicture: { caseId: string; decision: string }[] } {
-  const cases = read<{ cases: Case[] }>("content", "verify", "fixtures", "cases.json").cases;
+  const cases = read<{ cases: Case[] }>("verify", "fixtures", "cases.json").cases;
   const byId = new Map(cases.map((c) => [c.id, c]));
-  const sweep = read<SweepFile>("content", "verify", "sweep-results.json");
+  const sweep = read<SweepFile>("verify", "sweep-results.json");
   const out: Decided[] = [];
   const allConfigs: Decided[] = [];
   const officialPicture: { caseId: string; decision: string }[] = [];
@@ -154,16 +155,16 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
   }
 
   // The sample recall's photos, run at the claim path's setting only: in the two rates, not in the four-setting figure.
-  const sample = existsSync(path.join(ROOT, "content", "verify", "sweep-sample.json")) ? read<SweepFile>("content", "verify", "sweep-sample.json") : null;
+  const sample = existsSync(path.join(ROOT, "content", "verify", "sweep-sample.json")) ? read<SweepFile>("verify", "sweep-sample.json") : null;
   for (const row of sample?.cases ?? []) {
     if (row.config !== config) continue;
     const known = knownAnswer(byId.get(row.case)?.expect, byId.get(row.case)?.photo);
     if (known) out.push({ source: "sample", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail" });
   }
 
-  const index = read<PresetIndex>("content", "presets", "index.json");
+  const index = read<PresetIndex>("presets", "index.json");
   const recDir = path.join(ROOT, "content", "presets", "recorded");
-  const recording = (name: string | undefined): Recording | null => (name && existsSync(path.join(recDir, name)) ? read<Recording>("content", "presets", "recorded", name) : null);
+  const recording = (name: string | undefined): Recording | null => (name && existsSync(path.join(recDir, name)) ? read<Recording>("presets", "recorded", name) : null);
   for (const p of index.presets) {
     for (const [name, hashOff, own] of [
       [p.recorded, false, p.expected],
@@ -180,7 +181,7 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
     }
   }
 
-  const runs = read<RunsFile>("content", "public", "verify-runs.json");
+  const runs = read<RunsFile>("public", "verify-runs.json");
   for (const r of runs.runs) {
     // A run that replays a preset's recording, or reads the model's answer back from the verification cache, repeats
     // a decision already counted: the same model answer, counted once.
@@ -248,7 +249,7 @@ export function errorRates() {
   };
 }
 
-type SweepRow = SweepFile["cases"][number] & { C1_status?: string; C2?: string; C4?: string; usd?: number; ms?: number; ok?: boolean };
+type SweepRow = SweepFile["cases"][number] & { C1_status?: string; C2?: string; C4?: string; usd?: number; ms?: number; ok?: boolean; vision_ms?: number; decided_by?: string };
 
 /** Whether a sweep row meets its case's current known answer (the same rules as meetsExpectation in src/lib/verify/fixtures.ts). */
 function meets(e: Expect & { not_checks?: Record<string, string>; decided_by?: string }, r: SweepRow): boolean {
@@ -261,19 +262,29 @@ function meets(e: Expect & { not_checks?: Record<string, string>; decided_by?: s
   return true;
 }
 
+/** A known answer revised after the sweep ran: what it was, what it is now, and why (content/verify/answer-changes.json). */
+export type AnswerChange = { date: string; case: string; photo: string; was: Expect & { decided_by?: string }; now: Expect & { decided_by?: string }; why: string };
+
+export function answerChanges(): AnswerChange[] {
+  return read<{ changes: AnswerChange[] }>("verify", "answer-changes.json").changes;
+}
+
 /**
  * The four model settings in the sweep, on the measure that matters for money first: paid when it should not have
- * been, then held back when it could have been paid, then every known answer as it stands today in
- * content/verify/fixtures/cases.json. `atSweep` is the accuracy the sweep report printed with the known answers of the
- * day it ran (content/verify/sweep-report.json); two answers were revised after it (see the cases' `revised` notes).
+ * been, then held back when it could have been paid. Accuracy is scored twice, in this order: `atSweep`, against the
+ * known answers as they stood the day the sweep ran (each revised answer's `was` in content/verify/answer-changes.json;
+ * tests/facts.test.ts checks it equals the sweep's own pass marks), then `correct`, re-scored against the answers in
+ * content/verify/fixtures/cases.json today. `changed` counts, per revised answer, the trials whose score moved.
  */
 export function sweepSettings() {
-  const cases = read<{ cases: (Case & { not_checks?: Record<string, string> })[] }>("content", "verify", "fixtures", "cases.json").cases;
+  const cases = read<{ cases: (Case & { not_checks?: Record<string, string> })[] }>("verify", "fixtures", "cases.json").cases;
   const byId = new Map(cases.map((c) => [c.id, c]));
-  const sweep = read<Omit<SweepFile, "cases"> & { cases: SweepRow[] }>("content", "verify", "sweep-results.json");
+  const was = new Map(answerChanges().map((a) => [a.case, a.was]));
+  const sweep = read<Omit<SweepFile, "cases"> & { cases: SweepRow[] }>("verify", "sweep-results.json");
   return sweep.configs.map((cfg) => {
     const rows = sweep.cases.filter((r) => r.config === cfg.id);
     const known = rows.map((r) => ({ r, c: byId.get(r.case), k: knownAnswer(byId.get(r.case)?.expect, byId.get(r.case)?.photo) }));
+    const thenScored = known.filter((x) => x.c).map((x) => ({ ...x, ok: meets(was.get(x.r.case) ?? x.c!.expect, x.r), now: meets(x.c!.expect, x.r) }));
     const notPaid = known.filter((x) => x.k === "not_paid");
     const paid = known.filter((x) => x.k === "paid");
     const scored = known.filter((x) => x.c);
@@ -289,7 +300,10 @@ export function sweepSettings() {
       correct: { count: scored.filter((x) => meets(x.c!.expect, x.r)).length, of: scored.length },
       /** The CPSC's own published pictures sent with the official-picture match off: verified here would have paid for a published picture. */
       officialPaid: { count: known.filter((x) => !x.k && isOfficialReading(x.c) && x.r.decision === "verified").length, of: known.filter((x) => !x.k && isOfficialReading(x.c)).length },
-      atSweep: { count: rows.filter((r) => r.ok).length, of: rows.length },
+      atSweep: { count: thenScored.filter((x) => x.ok).length, of: thenScored.length },
+      /** The sweep's own pass marks, written when it ran: tests/facts.test.ts checks `atSweep` against them. */
+      markedAtSweep: { count: rows.filter((r) => r.ok).length, of: rows.length },
+      changed: answerChanges().map((a) => ({ case: a.case, trials: thenScored.filter((x) => x.r.case === a.case && x.ok !== x.now).length, of: thenScored.filter((x) => x.r.case === a.case).length })),
       usdPerCase: rows.length ? Math.round((usd / rows.length) * 10000) / 10000 : 0,
       medianSeconds: secs.length ? Math.round(secs[Math.floor((secs.length - 1) / 2)] * 10) / 10 : 0,
     };
@@ -304,9 +318,9 @@ export function sweepSettings() {
  * unsure (it recognized the CPSC's published picture).
  */
 export function readingAccuracy(config = CLAIM_PATH_CONFIG) {
-  const cases = read<{ cases: Case[] }>("content", "verify", "fixtures", "cases.json").cases;
+  const cases = read<{ cases: Case[] }>("verify", "fixtures", "cases.json").cases;
   const reading = cases.filter((c) => c.photo.startsWith("official/") && c.official_hash_check === false && c.expect.checks?.C1 && c.expect.checks?.C2);
-  const sweep = read<Omit<SweepFile, "cases"> & { cases: SweepRow[] }>("content", "verify", "sweep-results.json");
+  const sweep = read<Omit<SweepFile, "cases"> & { cases: SweepRow[] }>("verify", "sweep-results.json");
   const rows = sweep.cases.filter((r) => r.config === config && reading.some((c) => c.id === r.case));
   const at = (r: SweepRow) => reading.find((c) => c.id === r.case)!.expect.checks!;
   const product = rows.filter((r) => r.C1_status === at(r).C1).length;
@@ -326,3 +340,79 @@ export function readingAccuracy(config = CLAIM_PATH_CONFIG) {
   return { photos: reading.length, recalls: new Set(reading.map((c) => c.recall)).size, trials: rows.length, readings: rows.length * 2, right: product + madeSafe, product, madeSafe, asked };
 }
 
+
+const secs = (ms: number) => Math.round(ms / 100) / 10;
+const spreadSeconds = (ms: number[]) => {
+  const s = spread(ms);
+  return { median: secs(s.median), min: secs(s.min), max: secs(s.max), n: s.n };
+};
+
+type Recorded = { engine?: string; vision: { ms: number; replayed?: boolean } | null; reviews?: { ms: number; votes?: { ms?: number }[] } | null };
+
+/**
+ * How long a live photo check takes at the claim path's setting, from every recorded live Claude call in the repo: the
+ * model sweep's rows at that setting, the sample recall's sweep, and each /try preset's recording. `check` is the one
+ * vision call that reads the photo; `reviewers` is the extra time when the product match is unclear and the two
+ * reviewers look closer (a sweep row's time minus its vision call, or a recording's reviewer run). A replayed answer
+ * (read back from a cache, so not timed live) is left out. The flagship preset's own times are returned beside them, so
+ * every page that shows that run can say where it sits in the range.
+ */
+export function checkTimes() {
+  const sweep = read<{ cases: SweepRow[] }>("verify", "sweep-results.json").cases.filter((r) => r.config === CLAIM_PATH_CONFIG);
+  const samplePath = path.join(ROOT, "content", "verify", "sweep-sample.json");
+  const sample = existsSync(samplePath) ? read<{ cases: SweepRow[] }>("verify", "sweep-sample.json").cases.filter((r) => r.config === CLAIM_PATH_CONFIG) : [];
+  const rows = [...sweep, ...sample].filter((r) => (r.vision_ms ?? 0) > 0);
+  const vision = rows.map((r) => r.vision_ms ?? 0);
+  const reviewers = rows.filter((r) => r.decided_by === "reviewers").map((r) => (r.ms ?? 0) - (r.vision_ms ?? 0));
+  const index = read<PresetIndex>("presets", "index.json");
+  const recDir = path.join(ROOT, "content", "presets", "recorded");
+  let flagship: { checkMs: number; reviewersMs: number } | null = null;
+  for (const p of index.presets) {
+    for (const name of [p.recorded, p.technical?.recorded]) {
+      if (!name || !existsSync(path.join(recDir, name))) continue;
+      const rec = read<Recorded>("presets", "recorded", name);
+      if (!rec.vision || rec.vision.replayed || !rec.engine?.endsWith(":medium")) continue;
+      vision.push(rec.vision.ms);
+      // A reviewer run read back from a local cache answers in milliseconds; only a live one is a timing.
+      const liveReviews = rec.reviews && (rec.reviews.votes ?? []).every((v) => (v.ms ?? 0) > 1000) ? rec.reviews.ms : null;
+      if (liveReviews) reviewers.push(liveReviews);
+      if (p.id === "sample-charger-cut") flagship = { checkMs: rec.vision.ms, reviewersMs: liveReviews ?? 0 };
+    }
+  }
+  const check = spreadSeconds(vision);
+  return { check, reviewers: spreadSeconds(reviewers), about: Math.round(check.median), flagship, sources: [SOURCES.sweep, SOURCES.sample, SOURCES.presets] };
+}
+
+/**
+ * The one sentence every page uses for how fast the free picture match answers, from the recorded runs
+ * (content/public/verify-runs.json via freeTimings): the hash comparison itself, then the whole answer with reading the
+ * photo. Shared so the home page, /evidence and the README cannot drift apart (tests/facts.test.ts).
+ */
+export function hashSpeed() {
+  const t = freeTimings();
+  const ms = (n: number) => `${n.toLocaleString("en-US")} ms`;
+  return {
+    match: t.match,
+    answer: t.free,
+    sentence: `The hash comparison itself takes a median of ${ms(t.match.median)} (${t.match.min} to ${t.match.max} ms); reading the photo and answering takes a median of ${ms(t.free.median)} (${t.free.min} to ${t.free.max} ms), across ${t.free.n} recorded runs with no model call.`,
+    short: `a median of ${ms(t.free.median)} with no model call, the hash comparison itself ${ms(t.match.median)}`,
+  };
+}
+
+type SampleRefs = { changedAt: string; why: string; before: { images: string[]; sweep: string; preset: string }; after: { images: string[]; sweep: string; preset: string } };
+
+/**
+ * The sample recall's reference pictures before and after they changed (content/verify/sample-references.json), with the
+ * right-product score (C1) the sample charger with its cord cut got from each set: every sweep trial and the recorded
+ * preset, and how each ended.
+ */
+export function referencePictures() {
+  const f = read<SampleRefs>("verify", "sample-references.json");
+  const side = (s: SampleRefs["before"]) => {
+    const sweep = read<{ ranAt: string; cases: (SweepRow & { C1?: number })[] }>(...s.sweep.replace(/^content\//, "").split("/"));
+    const trials = sweep.cases.filter((r) => r.case === "sample-charger-cut").map((r) => ({ trial: r.trial, c1: r.C1 ?? null, decision: r.decision, decidedBy: r.decided_by ?? "" }));
+    const preset = read<{ recorded_at: string; decision: string; decided_by: string; vision: { report: { product: { match_score: number } } } }>(...s.preset.replace(/^content\//, "").split("/"));
+    return { images: s.images, ranAt: sweep.ranAt, trials, preset: { c1: preset.vision.report.product.match_score, decision: preset.decision, decidedBy: preset.decided_by, recordedAt: preset.recorded_at }, files: [s.sweep, s.preset] };
+  };
+  return { changedAt: f.changedAt, why: f.why, before: side(f.before), after: side(f.after), file: "content/verify/sample-references.json" };
+}

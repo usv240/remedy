@@ -234,7 +234,7 @@ export type PresetRun = {
   preset: Preset;
   result: ClaimView;
   /** Whether a recorded Claude answer was replayed, and when it was recorded. */
-  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null };
+  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null; ms_when_recorded: { vision: number; reviewers: number } | null };
   live_ai: boolean;
   /** A "Run it live" request: whether the model ran just now, what it cost, or why the recorded run is shown instead. */
   live?: { ran: boolean; note: string | null; usd: number | null; model: string | null } | null;
@@ -301,7 +301,7 @@ export async function runPreset(p: Preset, opts: { technical?: boolean; live?: L
   return {
     preset: p,
     result: viewFromResult(r, p, { name: terms.firmName, reviewHours: terms.reviewHours }),
-    replay: { used: !liveAi && Boolean(recorded?.vision), recorded_at: recorded?.recorded_at ?? null, model: recorded?.vision?.model ?? null, cost_usd_when_recorded: recorded?.cost_usd ?? null },
+    replay: { used: !liveAi && Boolean(recorded?.vision), recorded_at: recorded?.recorded_at ?? null, model: recorded?.vision?.model ?? null, cost_usd_when_recorded: recorded?.cost_usd ?? null, ms_when_recorded: recorded?.vision ? { vision: recorded.vision.ms, reviewers: recorded.reviews?.ms ?? 0 } : null },
     live_ai: liveAi,
     live: live ? { ran: ranLive, note: ranLive ? null : (liveNote ?? (liveAi ? "The model could not be reached just now, so a person at the firm would look at this claim." : null)), usd: usd === null ? null : Math.round(usd * 10000) / 10000, model: ranLive ? r.model : null } : null,
   };

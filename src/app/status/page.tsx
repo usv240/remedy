@@ -4,14 +4,13 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { Info } from "@/components/Info";
 import { dailyBudgetUsd, spendByRouteToday, spendToday } from "@/lib/ai/usage";
-import { runChecks } from "@/lib/health";
+import { liveSummary, MODE_LABEL, runChecks } from "@/lib/health";
 import { CheckedAt } from "./CheckedAt";
 import "../pages.css";
 import "./status.css";
 
-export const metadata: Metadata = { title: "Status", description: "Every service Remedy uses, and whether it is live, on its fallback, or not connected." };
+export const metadata: Metadata = { title: "Status", description: "Every service Remedy uses, and whether it is live, on its fallback, or an optional add-on that is off." };
 
-const LABEL = { live: "Live", fallback: "Fallback", not_connected: "Not connected" } as const;
 /** The Info entry that explains each service, when it is not stack.<id>. */
 const INFO: Record<string, string> = { database: "postgres", webhooks: "paypal", "error-tracking": "error-tracking", queue: "queue", worker: "worker" };
 
@@ -19,12 +18,12 @@ async function Rows() {
   await connection();
   const checks = await runChecks();
   const at = new Date().toISOString();
-  const live = checks.filter((c) => c.mode === "live").length;
+  const sum = liveSummary(checks);
   return (
     <>
       <p className="status-sum">
         <span className="tabular">
-          {live} of {checks.length} services live, checked at <CheckedAt iso={at} />.
+          {sum.live} of {sum.of} services live{sum.optionalOff ? `, ${sum.optionalOff} optional ${sum.optionalOff === 1 ? "add-on" : "add-ons"} off` : ""}, checked at <CheckedAt iso={at} />.
         </span>{" "}
         <a className="text-link" href="/status">
           Check again
@@ -41,7 +40,7 @@ async function Rows() {
               {c.ms ? <span className="tabular"> in {c.ms} ms</span> : null}
             </span>
             <span className="status-mode" data-mode={c.mode}>
-              {LABEL[c.mode]}
+              {MODE_LABEL[c.mode]}
             </span>
           </li>
         ))}

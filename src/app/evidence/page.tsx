@@ -8,7 +8,8 @@ import { Measured } from "@/components/judges/Measured";
 import { NeverDecides } from "@/components/judges/NeverDecides";
 import { Research } from "@/components/judges/Research";
 import { Money } from "@/components/judges/Money";
-import { freeCaught, freeTimings, readingAccuracy } from "@/components/judges/errors";
+import { Network } from "@/components/judges/Network";
+import { freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/judges/errors";
 import { Results } from "@/components/judges/Results";
 import { Tested } from "@/components/judges/Tested";
 import { S } from "@/components/judges/data";
@@ -72,6 +73,7 @@ const PARTS: Part[] = [
     name: "What is new",
     line: "Each firm that joins makes the others safer, the refund goes back the way it was paid, and a payout nobody accepts becomes a task in the recall plan.",
     links: [
+      ["#network", "One photo, two firms"],
       ["/evidence/market#compare", "How it compares"],
       ["/developers", "For AI agents"],
     ],
@@ -83,6 +85,7 @@ const PARTS: Part[] = [
 const TOC: [string, string][] = [
   ["#path", "Five-minute path"],
   ["#parts", "Each part"],
+  ["#network", "Across firms"],
   ["#benchmark", "Benchmark"],
   ["#photo-checks", "Photo checks"],
   ["#never", "What the AI never decides"],
@@ -197,6 +200,11 @@ export default function EvidencePage() {
         </dl>
       </section>
 
+      <section id="network" className="page-section" aria-labelledby="network-h">
+        <h2 id="network-h">One photo, two firms</h2>
+        <Network />
+      </section>
+
       <section id="benchmark" className="page-section" aria-labelledby="bench-h">
         <div className="title-row">
           <h2 id="bench-h">Reading the remedy, measured</h2>
@@ -213,8 +221,7 @@ export default function EvidencePage() {
         </div>
         <p className="page-prose jp-intro tabular">
           Before any AI call, {free.caught} of {free.total} recorded photos that needed a closer look were stopped by code: {free.retake} asked for a new photo (the recall&rsquo;s own pictures, turned and cropped copies, another recall&rsquo;s picture, a blurry
-          photo) and {free.firmReview === 1 ? "one photo already used on an earlier claim went" : `${free.firmReview} photos already used went`} to a person at the firm. Each answered in {t.free.min} to {t.free.max} ms (median {t.free.median} ms) on the machine that
-          recorded them. Reading the CPSC&rsquo;s own photos with that match off, the model was right on {ra.right} of {ra.readings} readings.
+          photo) and {free.firmReview === 1 ? "one photo already used on an earlier claim went" : `${free.firmReview} photos already used went`} to a person at the firm. {hashSpeed().sentence} Reading the CPSC&rsquo;s own photos with that match off, the model was right on {ra.right} of {ra.readings} readings.
         </p>
         <p className="page-prose">
           <Link className="text-link" href="/evidence/photo-checks">

@@ -7,7 +7,7 @@ import { OpsChart } from "@/components/ops/OpsChart";
 import { OpsStream } from "@/components/ops/OpsStream";
 import { OpsTrace } from "@/components/ops/OpsTrace";
 import { CheckedAt } from "@/app/status/CheckedAt";
-import { ago, runChecks } from "@/lib/health";
+import { ago, liveSummary, MODE_LABEL, runChecks } from "@/lib/health";
 import { ai24h, alerts, decisions24h, feed, hourly7d, payments24h, rightNow, routes24h, webhooks24h } from "@/lib/ops/data";
 import "../pages.css";
 import "../developers/dev.css";
@@ -15,7 +15,6 @@ import "./ops.css";
 
 export const metadata: Metadata = { title: "Operations", description: "Remedy watching itself, live: services, the job queue, latency and errors, payments and webhooks by status, and the event stream. Nothing private." };
 
-const LABEL = { live: "Live", fallback: "Fallback", not_connected: "Not connected" } as const;
 const usd = (n: number) => `$${n.toFixed(n < 1 ? 4 : 2)}`;
 const int = (n: number) => n.toLocaleString("en-US");
 
@@ -35,11 +34,11 @@ async function RightNow() {
   await connection();
   const [checks, now] = await Promise.all([runChecks(), rightNow()]);
   const at = new Date().toISOString();
-  const live = checks.filter((c) => c.mode === "live").length;
+  const sum = liveSummary(checks);
   const q = now.queue;
   const waiting = q ? q.queued + q.running : 0;
   const tiles = [
-    { k: "Services live", v: `${live} of ${checks.length}`, s: "checked now" },
+    { k: "Services live", v: `${sum.live} of ${sum.of}`, s: sum.optionalOff ? `checked now; ${sum.optionalOff} optional off` : "checked now" },
     { k: "Jobs waiting", v: int(waiting), s: waiting && q?.oldestWaitingSec ? `oldest ${q.oldestWaitingSec} s` : q?.failed ? `${q.failed} failed` : "none held up" },
     { k: "AI spend today", v: usd(now.ai.usd), s: Number.isFinite(now.ai.budget) ? `of ${usd(now.ai.budget)} cap` : "no cap locally" },
     { k: "Requests, last hour", v: int(now.requestsLastHour), s: now.errorsLastHour ? `${now.errorsLastHour} server errors` : "no server errors" },
@@ -71,7 +70,7 @@ async function RightNow() {
               {c.ms ? <span className="tabular"> in {c.ms} ms</span> : null}
             </span>
             <span className="status-mode" data-mode={c.mode}>
-              {LABEL[c.mode]}
+              {MODE_LABEL[c.mode]}
             </span>
           </li>
         ))}

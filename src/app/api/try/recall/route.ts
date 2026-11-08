@@ -1,5 +1,6 @@
 import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
+import { sampleFirmOf } from "@/lib/recall/label";
 import { lookupAnyRecall } from "../_lib/any-recall";
 
 /**
@@ -31,9 +32,9 @@ export async function GET(req: Request) {
           r.recall.ruleSource === "ai"
             ? `Claude (${r.recall.ruleModel}), extracted from the remedy text and stored`
             : r.recall.ruleSource === "firm"
-              ? "Written by hand by Brightline Home, a fictional sample firm, no model"
+              ? `Written by hand by ${sampleFirmOf(r.recall.number) ?? "the sample firm"}, a fictional sample firm, no model`
               : "Quick read: Remedy's deterministic keyword rules, no model",
-        source: r.recall.sample ? "Brightline Home's fictional sample recall (content/recalls/samples.json), not a CPSC recall" : r.from === "list" ? "Remedy's list of CPSC recalls since January 2024" : "CPSC Recalls API, fetched live",
+        source: r.recall.sample ? `${sampleFirmOf(r.recall.number) ?? "The sample firm"}'s fictional sample recall (content/recalls/samples.json), not a CPSC recall` : r.from === "list" ? "Remedy's list of CPSC recalls since January 2024" : "CPSC Recalls API, fetched live",
         credit: r.recall.sample
           ? "Sample recall; fictional. Photos: one real charger before and after its cord was cut, by Dmitry G, Wikimedia Commons, public domain (brand marks removed)."
           : "Recall data and images: US Consumer Product Safety Commission (cpsc.gov), public domain.",

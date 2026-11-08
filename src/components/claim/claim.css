@@ -650,6 +650,12 @@
   min-width: 4.5ch;
   text-align: right;
 }
+/* When the two reviewers ran, where the time went: the photo check, then the reviewers. */
+.cl-split {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
 .cl-checks {
   list-style: none;
   padding: 0;

@@ -1,10 +1,12 @@
 /**
  * The sample firm's terms for a recall: who pays, how much, and the cap under which a verified claim is paid with no
  * person. Every demo claim is paid by Brightline Home (fictional) from its PayPal sandbox account, whichever real
- * recall it is for, and says so.
+ * recall it is for, and says so; a claim on Fernway Home's sample recall (FW-2026-01) is paid by Fernway Home, the
+ * second fictional sample firm.
  */
 import { and, asc, eq } from "drizzle-orm";
 import { db, dbConfigured, schema } from "@/lib/db";
+import { sampleFirmOf } from "@/lib/recall/label";
 
 export const SAMPLE_FIRM = "Brightline Home";
 
@@ -45,16 +47,23 @@ const cents = (v: string | number | null | undefined) => {
 export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, autoCapCents: 5000, autoDailyCents: 35_000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
 
 export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
-  if (!dbConfigured()) return DEFAULT_TERMS;
+  // Without a database, a sample recall is still named for the firm that runs it.
+  const fallback: FirmTerms = { ...DEFAULT_TERMS, firmName: sampleFirmOf(recallNumber) ?? DEFAULT_TERMS.firmName };
+  if (!dbConfigured()) return fallback;
   try {
-    const [firm] = await db().select().from(schema.firms).where(eq(schema.firms.isSample, true)).orderBy(asc(schema.firms.id)).limit(1);
-    if (!firm) return DEFAULT_TERMS;
-    const settings = firm.settings ?? {};
-    const [fr] = await db()
-      .select()
+    // The sample firm that runs this recall (Fernway Home runs FW-2026-01); any other recall falls to the first sample
+    // firm, Brightline Home, as before.
+    const [runs] = await db()
+      .select({ firm: schema.firms, fr: schema.firmRecalls })
       .from(schema.firmRecalls)
-      .where(and(eq(schema.firmRecalls.firmId, firm.id), eq(schema.firmRecalls.recallNumber, recallNumber)))
+      .innerJoin(schema.firms, eq(schema.firms.id, schema.firmRecalls.firmId))
+      .where(and(eq(schema.firms.isSample, true), eq(schema.firmRecalls.recallNumber, recallNumber)))
+      .orderBy(asc(schema.firms.id))
       .limit(1);
+    const firm = runs?.firm ?? (await db().select().from(schema.firms).where(eq(schema.firms.isSample, true)).orderBy(asc(schema.firms.id)).limit(1))[0];
+    if (!firm) return fallback;
+    const settings = firm.settings ?? {};
+    const fr = runs?.fr;
     const refund = cents(fr?.defaultRefund);
     return {
       firmId: firm.id,
@@ -67,7 +76,7 @@ export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
       runsRecall: Boolean(fr),
     };
   } catch {
-    return DEFAULT_TERMS;
+    return fallback;
   }
 }
 

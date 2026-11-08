@@ -94,8 +94,22 @@
   font-size: var(--step-lead);
   line-height: 1.3;
 }
+/* The one result on the first screen: what was measured, small and quiet beside the headline it supports. */
+.hero-result {
+  margin: 1.25rem auto 0;
+  max-width: 60ch;
+  text-align: center;
+  text-wrap: balance;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.hero-result strong {
+  color: var(--ink);
+  font-weight: 600;
+}
 .hero-actions {
-  margin-top: 2.25rem;
+  margin-top: 1.75rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,12 +119,6 @@
 .hero-cta {
   min-height: 52px;
   padding-inline: 1.5rem;
-}
-.hero-link {
-  font-size: 1.0625rem;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
 }
 .hero-note {
   margin-top: auto;
@@ -167,7 +175,7 @@
   .hero-half-a {
     text-align: center;
   }
-  /* The action takes the full width; the two text links share the line under it. */
+  /* The one action takes the full width. */
   .hero-actions {
     margin-top: 1.75rem;
     gap: 0 1.5rem;
@@ -323,8 +331,7 @@
 }
 /* Why it matters, from the research, and what Remedy measured: quieter than the claim they support. */
 .intro-why,
-.intro-money,
-.intro-result {
+.intro-money {
   margin-top: 1rem;
   max-width: 34rem;
   font-size: 1.0625rem;
@@ -333,9 +340,48 @@
 .intro-why {
   color: var(--muted);
 }
-.intro-result strong,
 .intro-money strong {
   font-weight: 600;
+}
+/* The research behind the claim, one click away: a quiet disclosure with the FAQ's chevron. */
+.intro-more {
+  margin-top: 1.25rem;
+  max-width: 34rem;
+}
+.intro-more > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  font-size: 1.0625rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+.intro-more > summary::-webkit-details-marker {
+  display: none;
+}
+.intro-more > summary::after {
+  content: "";
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform var(--dur-menu) var(--ease-out);
+}
+.intro-more[open] > summary::after {
+  transform: translateY(15%) rotate(-135deg);
+}
+.intro-more > summary:active {
+  opacity: 0.7;
+}
+.intro-more .intro-why {
+  margin-top: 0.25rem;
 }
 .intro-quotes {
   list-style: none;
@@ -800,10 +846,19 @@
 }
 .try-actions {
   margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
 }
 .try-actions .btn {
   min-height: 52px;
   padding-inline: 1.5rem;
+}
+.try-actions .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 .try-fragment {
   grid-column: 6 / -1;

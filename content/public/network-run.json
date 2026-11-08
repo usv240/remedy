@@ -1,0 +1,59 @@
+{
+  "note": "One photo, two firms: a photo already claimed at Brightline Home is sent for Fernway Home's recall and held for a person, because its 64-bit hash matches Brightline's claim. Both firms and both recalls are fictional samples. Recorded by scripts/public/record-network-run.ts with no model call, no network and no database; tests/network-run.test.ts runs it again.",
+  "recordedAt": "2026-11-08T05:54:11.211Z",
+  "photo": {
+    "file": "content/verify/fixtures/sample/cord-cut.jpg",
+    "credit": "Dmitry G, Wikimedia Commons, public domain (public/samples/charger/CREDITS.json)"
+  },
+  "first": {
+    "firm": "Brightline Home",
+    "recall": "BH-2026-01",
+    "claim": {
+      "decision": "verified",
+      "decided_by": "reviewers",
+      "recorded": "content/presets/recorded/sample-charger-cut.json",
+      "recorded_at": "2026-11-08T05:12:08.175Z"
+    },
+    "pool_row": {
+      "source": "claim",
+      "ref": "bffd4c1e-4111-46a8-9cc2-43bb1cb57c44",
+      "recall_number": "BH-2026-01",
+      "dhash": "337bfb9f4e7f3e0f"
+    }
+  },
+  "crossed": {
+    "fields": [
+      "ref",
+      "dhash"
+    ],
+    "dhash": "337bfb9f4e7f3e0f",
+    "note": "The claim route reads every other recall's claim rows from image_hash as { ref, dhash } (src/app/api/claims/_lib/claims.ts). No photo, claimant, amount or recall crosses; ref is a row id that opens nothing at Fernway."
+  },
+  "second": {
+    "firm": "Fernway Home",
+    "recall": "FW-2026-01",
+    "decision": "firm_review",
+    "decided_by": "checks",
+    "reached_model": false,
+    "c3": {
+      "status": "fail",
+      "plain": "This photo matches one sent with a claim on another recall, so a person at the firm will take a look.",
+      "technical": "Matches a photo sent with a claim on another recall at 0 bits (upright), in the check against every recall at 4 bits or under. Only the 64-bit hash is compared across recalls and firms, never the photo. dHash 337bfb9f4e7f3e0f; nearest official 32 bits, nearest earlier claim none (reused at 10 or less)."
+    },
+    "summary": {
+      "plain": "A person at Fernway Home will take a look.",
+      "technical": "Firm review: C1 skipped, C2 skipped, C3 fail, C4 skipped. firm amount 29.99; no linked capture; refund 29.99 USD (firm, the lower); auto cap 50.00 USD."
+    },
+    "timings": {
+      "decode_ms": 61,
+      "match_ms": 35,
+      "total_ms": 103
+    }
+  },
+  "control": {
+    "pool": 0,
+    "reached_model": true,
+    "note": "The same photo for Fernway with Brightline's hash left out of the pool goes on to the model step, so the hold above comes from the shared hash."
+  },
+  "model_calls": 0
+}

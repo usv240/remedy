@@ -10,8 +10,22 @@ import pkg from "../../package.json";
 /** Versions as the project pins them; "npm:@bryntum/gantt-trial@7.3.8" reads as 7.3.8. */
 export const pinned = (name: string) => String((pkg.dependencies as Record<string, string>)[name] ?? "").replace(/^.*@/, "").replace(/^[~^]/, "");
 
-export type Mode = "live" | "fallback" | "not_connected";
-export type Check = { id: string; name: string; mode: Mode; detail: string; ms?: number };
+/**
+ * live: answering. fallback: not configured or not answering, with a stand-in that keeps every flow working.
+ * not_connected: a required service is missing. off: an optional add-on that is not switched on; nothing depends on it,
+ * so it reads "Optional, off" and is left out of the live count.
+ */
+export type Mode = "live" | "fallback" | "not_connected" | "off";
+export type Check = { id: string; name: string; mode: Mode; detail: string; ms?: number; optional?: boolean };
+
+/** The words each mode shows on /status and /ops. */
+export const MODE_LABEL: Record<Mode, string> = { live: "Live", fallback: "Fallback", not_connected: "Not connected", off: "Optional, off" };
+
+/** "13 of 13 services live": optional add-ons that are off are counted apart, not against the total. */
+export function liveSummary(checks: readonly Check[]) {
+  const counted = checks.filter((c) => c.mode !== "off");
+  return { live: counted.filter((c) => c.mode === "live").length, of: counted.length, optionalOff: checks.length - counted.length };
+}
 
 const set = (name: string) => Boolean(process.env[name]?.trim());
 /** A key is set and its FALLBACK_<NAME> switch is not forcing the fallback. */
@@ -141,9 +155,12 @@ export async function runChecks(): Promise<Check[]> {
     ...queue,
     {
       id: "error-tracking",
-      name: "Error tracking",
-      mode: sentry ? "live" : "not_connected",
-      detail: sentry ? `Sentry receives server, edge and browser errors with personal data scrubbed; release ${sentryRelease()?.slice(0, 7) ?? "unset"}, environment ${sentryEnvironment()}` : "Not connected: SENTRY_DSN is not set, so errors stay in the structured log only",
+      name: "Error tracking (Sentry)",
+      mode: sentry ? "live" : "off",
+      optional: true,
+      detail: sentry
+        ? `Sentry receives server, edge and browser errors with personal data scrubbed; release ${sentryRelease()?.slice(0, 7) ?? "unset"}, environment ${sentryEnvironment()}`
+        : "An optional add-on, switched on by setting SENTRY_DSN. Every error is already in the structured log with its request id, and /ops traces it",
     },
     {
       id: "recall-ingest",

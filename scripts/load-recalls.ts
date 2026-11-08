@@ -5,10 +5,11 @@
 //   npx tsx --env-file=.env.local scripts/load-recalls.ts
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, notInArray, sql } from "drizzle-orm";
 import { audit } from "../src/lib/audit";
 import { db, dbConfigured, schema } from "../src/lib/db";
 import { chunks, officialHashRows, recallRow, ruleAction, type RecallRow } from "../src/lib/db/load";
+import { sampleFirmOf } from "../src/lib/recall/label";
 
 const DIR = join(process.cwd(), "content", "recalls");
 
@@ -129,11 +130,19 @@ async function loadSamples(file: unknown) {
     if (!loaded.numbers.has(recallNumber)) continue;
     const rule = clean(raw);
     const [latest] = await db().select({ id: schema.proofRules.id, rule: schema.proofRules.rule }).from(schema.proofRules).where(eq(schema.proofRules.recallNumber, recallNumber)).orderBy(desc(schema.proofRules.version)).limit(1);
-    if (!latest) await db().insert(schema.proofRules).values({ recallNumber, rule, source: "firm", model: null, version: 1, approvedBy: "Brightline Home (sample firm)" });
+    if (!latest) await db().insert(schema.proofRules).values({ recallNumber, rule, source: "firm", model: null, version: 1, approvedBy: `${sampleFirmOf(recallNumber) ?? "The sample firm"} (sample firm)` });
     else if (JSON.stringify(latest.rule) !== JSON.stringify(rule)) await db().update(schema.proofRules).set({ rule, source: "firm", model: null }).where(eq(schema.proofRules.id, latest.id));
     ruleCount++;
   }
   const hashFile = Object.fromEntries(f.recalls.map((r) => [r.number, (r.images ?? []).filter((i) => i.dhash).map((i) => ({ url: i.url, dhash: i.dhash }))]));
+  // A sample recall's pictures are the firm's own to change (content/verify/sample-references.json): a picture it no
+  // longer publishes leaves the official hashes, so the stored set matches samples.json exactly.
+  for (const r of f.recalls) {
+    const keep = (r.images ?? []).map((i) => i.url);
+    await db()
+      .delete(schema.imageHashes)
+      .where(and(eq(schema.imageHashes.source, "official"), eq(schema.imageHashes.recallNumber, r.number), keep.length ? notInArray(schema.imageHashes.ref, keep) : sql`true`));
+  }
   const hashes = await loadHashes(hashFile, loaded.numbers);
   return { recalls: loaded.loaded, rules: ruleCount, hashes };
 }

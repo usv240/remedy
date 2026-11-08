@@ -1,0 +1,21 @@
+{
+  "note": "Every known answer in content/verify/fixtures/cases.json that was revised after the model sweep ran (content/verify/sweep-results.json, run 2026-11-06), each with its date, its case id, the answer as it stood when the sweep ran (`was`), the answer today (`now`), and why. The sweep is scored first against the `was` answers, as the sweep report printed it, and second against today's (sweepSettings() in src/components/judges/errors.ts); tests/facts.test.ts fails when the first does not match the sweep's own pass marks, or when a case in cases.json differs from its `now` here.",
+  "changes": [
+    {
+      "date": "2026-11-06",
+      "case": "made-safe-helmet-in-trash",
+      "photo": "official/25007-droyd-5-in-trash.jpg",
+      "was": { "checks": { "C1": "pass", "C2": "pass" } },
+      "now": { "decision": "retake", "checks": { "C1": "pass", "C2": "fail" } },
+      "why": "Recall 25007 asks for two photos, one of both straps cut off and one of the helmet in a trash can. This is the second, and on its own it does not show the straps cut, so a request for the other photo is the right answer. Every setting in the three-trial sweep read it that way (made safe: fail, 12 of 12)."
+    },
+    {
+      "date": "2026-11-06",
+      "case": "look-alike-hair-dryer",
+      "photo": "official/26125-hair-dryer-cord-cut.png",
+      "was": { "decision": "firm_review" },
+      "now": { "not_decision": "verified" },
+      "why": "What matters for a look-alike is that it is never paid. Sending it to a person and asking for a new photo both keep the refund for the recalled product, so either is a right answer. No setting paid it (0 of 12)."
+    }
+  ]
+}

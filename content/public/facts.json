@@ -1,19 +1,19 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-07T23:43:26.905Z",
+  "writtenAt": "2026-11-08T06:37:29.198Z",
   "unitTests": {
-    "passed": 440,
+    "passed": 456,
     "skipped": 49,
     "failed": 0,
-    "files": 50,
-    "ranAt": "2026-11-07T23:43:06.667Z",
+    "files": 52,
+    "ranAt": "2026-11-08T06:37:04.781Z",
     "note": "npm test with no keys and no database, as CI runs it: the live Claude, live PayPal and Postgres suites skip."
   },
   "a11y": {
     "pages": 31,
     "views": 124,
     "passed": 124,
-    "ranAt": "2026-11-07T23:42:52.752Z"
+    "ranAt": "2026-11-08T06:36:32.162Z"
   },
   "mcp": {
     "tools": 7,
@@ -38,38 +38,89 @@
       "photos": 18
     },
     "heldBack": {
-      "count": 0,
+      "count": 1,
       "of": 4,
       "photos": 1
     },
     "decisions": 40,
     "photos": 19
   },
-  "catalogPictures": 1777,
+  "catalogPictures": 1779,
   "measured": {
-    "checkSeconds": 12,
+    "checkSeconds": 11,
     "payoutSeconds": 18
   },
   "timings": {
     "free": {
-      "median": 66,
-      "min": 27,
-      "max": 141,
+      "median": 98,
+      "min": 55,
+      "max": 200,
       "n": 7
-    },
-    "official": {
-      "median": 35,
-      "min": 27,
-      "max": 141,
-      "n": 5
     },
     "match": {
-      "median": 0.4,
-      "min": 0.1,
-      "max": 38.4,
+      "median": 2,
+      "min": 0.2,
+      "max": 93.8,
       "n": 7
     },
-    "recordedAt": "2026-11-07T22:17:12.005Z"
+    "recordedAt": "2026-11-08T05:19:40.661Z",
+    "sentence": "The hash comparison itself takes a median of 2 ms (0.2 to 93.8 ms); reading the photo and answering takes a median of 98 ms (55 to 200 ms), across 7 recorded runs with no model call."
+  },
+  "checkTimes": {
+    "check": {
+      "median": 10.8,
+      "min": 6.4,
+      "max": 20.7,
+      "n": 36
+    },
+    "reviewers": {
+      "median": 10.7,
+      "min": 8.6,
+      "max": 13.9,
+      "n": 7
+    },
+    "about": 11,
+    "flagship": {
+      "checkMs": 8382,
+      "reviewersMs": 10959
+    }
+  },
+  "hostedAiDailyUsd": 5,
+  "answerChanges": {
+    "count": 2,
+    "cases": [
+      "made-safe-helmet-in-trash",
+      "look-alike-hair-dryer"
+    ]
+  },
+  "references": {
+    "changedAt": "2026-11-08",
+    "before": [
+      0.75,
+      0.75,
+      0.75,
+      0.75
+    ],
+    "after": [
+      0.8,
+      0.8,
+      0.8,
+      0.82
+    ],
+    "afterVerified": 3
+  },
+  "network": {
+    "firstFirm": "Brightline Home",
+    "secondFirm": "Fernway Home",
+    "decision": "firm_review",
+    "decidedBy": "checks",
+    "reachedModel": false,
+    "controlReachedModel": true,
+    "crossed": [
+      "ref",
+      "dhash"
+    ],
+    "totalMs": 103
   },
   "reading": {
     "right": 16,
@@ -83,29 +134,29 @@
     {
       "id": "opus-medium",
       "wrongPay": "0 of 18",
-      "correct": "22 of 24",
       "atSweep": "18 of 24",
+      "correct": "22 of 24",
       "usdPerCase": 0.0297
     },
     {
       "id": "opus-low",
       "wrongPay": "0 of 18",
-      "correct": "23 of 24",
       "atSweep": "20 of 24",
+      "correct": "23 of 24",
       "usdPerCase": 0.0203
     },
     {
       "id": "sonnet-default",
       "wrongPay": "0 of 18",
-      "correct": "23 of 24",
       "atSweep": "19 of 24",
+      "correct": "23 of 24",
       "usdPerCase": 0.0116
     },
     {
       "id": "haiku-medium",
       "wrongPay": "0 of 18",
-      "correct": "16 of 24",
       "atSweep": "13 of 24",
+      "correct": "16 of 24",
       "usdPerCase": 0.0009
     }
   ],

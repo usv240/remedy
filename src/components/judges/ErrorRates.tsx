@@ -1,7 +1,7 @@
 import { Info } from "@/components/Info";
 import { fmtDate } from "@/lib/api/format";
 import Link from "next/link";
-import { errorRates, freeTimings, readingAccuracy, type ErrorRate } from "./errors";
+import { errorRates, hashSpeed, readingAccuracy, type ErrorRate } from "./errors";
 
 const photos = (n: number) => (n === 1 ? "1 photo" : `${n} photos`);
 const times = (n: number) => (n === 1 ? "once" : n === 2 ? "twice" : `${n} times`);
@@ -16,7 +16,7 @@ function happened(r: ErrorRate): string {
     const own = m.notOwn ? `; the model noted it was not the owner's own camera photo in ${m.notOwn === m.n ? "each" : `${m.notOwn} of ${m.n}`}` : "";
     return `${m.title.charAt(0).toUpperCase()}${m.title.slice(1)}: it ${went}${own}`;
   });
-  const lead = r.misses.length === 1 ? `All ${r.count} are one photo. ` : "";
+  const lead = r.misses.length === 1 && r.count > 1 ? `All ${r.count} are one photo. ` : "";
   return `${lead}${parts.join(". ")}.`;
 }
 
@@ -27,7 +27,7 @@ function happened(r: ErrorRate): string {
  */
 export function ErrorRates() {
   const e = errorRates();
-  const t = freeTimings();
+  const hs = hashSpeed();
   const ra = readingAccuracy();
   const src = e.sources;
   const n = (s: string) => e.bySource.find((b) => b.source === s)?.decisions ?? 0;
@@ -83,7 +83,7 @@ export function ErrorRates() {
           <span className="tabular">
             {e.officialPicture.paid} of {e.officialPicture.of}
           </span>{" "}
-          runs. On every claim the match runs first and answers that picture in a median of <span className="tabular">{t.official.median} ms</span> ({t.official.min} to {t.official.max} ms recorded), with no model call and no payment, so these runs count in neither rate.
+          runs. On every claim the match runs first and answers that picture in <span className="tabular">{hs.short}</span>, with no payment, so these runs count in neither rate.
         </p>
       )}
       <p className="je-src lp-tech tabular">

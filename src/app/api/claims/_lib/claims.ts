@@ -471,7 +471,8 @@ export async function getClaimView(id: string, opts: { refresh?: boolean } = {})
     await db().update(schema.claims).set({ status, updatedAt: new Date() }).where(eq(schema.claims.id, id));
     if (status === "paid") await audit("system", "claim.paid", `claim:${id}`, { route: payment?.route, amount: payment?.amount });
   }
-  return redactDeep(toView({ ...row, status }, payment));
+  // toView is async: redact the view itself, not the promise (a promise has no fields, so it redacts to {}).
+  return redactDeep(await toView({ ...row, status }, payment));
 }
 
 export async function toView(row: ClaimRow, payment: PaymentView | null): Promise<ClaimView> {
@@ -574,11 +575,14 @@ export async function identityMatches(
   return { payee: row.payee ?? 0, purchase: row.purchase ?? 0, payer: row.payer ?? 0, device: row.device ?? 0 };
 }
 
-/** What the auto rule has paid on this recall today (UTC), from the firm's approved payment plans. */
+/**
+ * What the auto rule has paid on this recall today (UTC), from the firm's approved payment plans. Seeded sample and
+ * test claims (is_sample) are not counted, as in the per-person limit above.
+ */
 export async function autoPaidToday(firmId: number, recallNumber: string): Promise<number> {
   const r = await db().execute(sql`
     select coalesce(sum(pp.amount), 0)::text as total from payment_plan pp join claim c on c.id = pp.claim_id
-    where c.firm_id = ${firmId} and c.recall_number = ${recallNumber} and pp.approval = 'auto' and pp.status <> 'canceled'
+    where c.firm_id = ${firmId} and c.recall_number = ${recallNumber} and not c.is_sample and pp.approval = 'auto' and pp.status <> 'canceled'
       and pp.created_at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`);
   return Math.round(Number((r.rows[0] as { total?: string } | undefined)?.total ?? 0) * 100);
 }
