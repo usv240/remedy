@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { aiAvailable, aiPaused } from "./ai/claude";
+import { aiPaused, keyAccepted } from "./ai/claude";
 import { db, dbConfigured } from "./db";
 import { queueStats, WORKER_STALE_MS } from "./jobs/queue";
 import { accessToken, paypalConfigured } from "./paypal/client";
@@ -66,11 +66,12 @@ export async function queueChecks(): Promise<Check[]> {
 }
 
 export async function runChecks(): Promise<Check[]> {
-  const [pp, database, ingest, queue] = await Promise.all([
+  const [pp, database, ingest, queue, claudeKey] = await Promise.all([
     paypalConfigured() ? timed(async () => (await accessToken()) && "Sandbox token issued; Payouts, Refunds and Orders v2 use it") : Promise.resolve(null),
     dbConfigured() ? timed(async () => (await db().execute(sql`select 1`)) && "Postgres answered a test query") : Promise.resolve(null),
     lastRun().catch(() => null),
     queueChecks(),
+    keyAccepted(),
   ]);
   const ingestFresh = Boolean(ingest?.lastOkAt && Date.now() - new Date(ingest.lastOkAt).getTime() < 48 * 3600_000);
   const elastic = on("ELASTIC_URL", "FALLBACK_ELASTIC") && set("ELASTIC_API_KEY");
@@ -93,12 +94,12 @@ export async function runChecks(): Promise<Check[]> {
     {
       id: "claude",
       name: "Claude Opus 5.5",
-      mode: aiAvailable() ? "live" : "fallback",
-      detail: aiAvailable()
-        ? "API key set; proof rules, photo checks and the two reviewers are live"
+      mode: claudeKey.ok ? "live" : "fallback",
+      detail: claudeKey.ok
+        ? "The API accepted this server's key (checked at most every 10 minutes); proof rules, photo checks and the two reviewers are live"
         : aiPaused()
           ? "The API is not taking requests from this account just now; photo checks go to a person at the firm"
-          : "No API key; saved proof rules are shown and photo checks go to a person at the firm",
+          : `${claudeKey.detail}; saved proof rules are shown and photo checks go to a person at the firm`,
     },
     {
       id: "elastic",

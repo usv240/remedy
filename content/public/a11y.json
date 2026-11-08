@@ -1,6 +1,6 @@
 {
   "note": "Written by tests/e2e/pages-a11y.mjs: axe (WCAG 2.2 AA, serious and critical) and sideways scroll, each page at phone and desktop width in light and dark.",
-  "ranAt": "2026-11-08T03:42:42.351Z",
+  "ranAt": "2026-11-08T04:00:48.876Z",
   "pages": 31,
   "widths": [
     1440,
@@ -11,5 +11,5 @@
     "dark"
   ],
   "views": 124,
-  "passed": 120
+  "passed": 124
 }

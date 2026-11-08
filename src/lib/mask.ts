@@ -11,6 +11,35 @@ const LONG_DIGITS = /(?:\(?\+?\d[\d\s().-]{8,}\d)/g;
 const DATA_URI = /data:[\w/+.-]+;base64,[A-Za-z0-9+/=]{16,}/g;
 /** A long run of base64 or hex: photo bytes, a key, a hash chain. Keep hashes (64 hex) readable, mask longer runs. */
 const LONG_BLOB = /[A-Za-z0-9+/=_-]{120,}/g;
+/**
+ * Credentials that must never reach a page, an API response, a log line or a stored row, whatever carries them: an
+ * Anthropic key, a bearer or basic credential, a PayPal access token, and NAME=value lines from a pasted .env block.
+ */
+const SECRETS: [RegExp, (m: string) => string][] = [
+  [/sk-ant-[A-Za-z0-9_-]+/g, () => "[redacted key]"],
+  [/\b(?:Bearer|Basic|ApiKey)\s+[A-Za-z0-9._~+/=-]{8,}/gi, (m) => `${m.split(/\s+/)[0]} [redacted]`],
+  [/\bA21AA[A-Za-z0-9_-]{16,}/g, () => "[redacted token]"],
+  [/\b([A-Z][A-Z0-9_]{2,})=[^\s"'\,;]{6,}/g, (m) => `${m.slice(0, m.indexOf("="))}=[redacted]`],
+];
+
+/** The same text with every credential-looking run replaced. Plain words, numbers and ids pass through unchanged. */
+export function redactSecrets(s: string): string {
+  let out = s;
+  for (const [re, to] of SECRETS) out = out.replace(re, to);
+  return out;
+}
+
+/** A copy of any JSON-like value with redactSecrets applied to every string in it. */
+export function redactDeep<T>(value: T, depth = 0): T {
+  if (typeof value === "string") return redactSecrets(value) as T;
+  if (value === null || typeof value !== "object" || depth > 12) return value;
+  if (Array.isArray(value)) return value.map((v) => redactDeep(v, depth + 1)) as T;
+  if (value instanceof Date || ArrayBuffer.isView(value) || value instanceof ArrayBuffer) return value;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(value as Record<string, unknown>)) out[k] = redactDeep(v, depth + 1);
+  return out as T;
+}
+
 /** A Remedy API key (rm_test_...): only its display prefix is kept, as the Developers page shows it. */
 const REMEDY_KEY = /\brm_[A-Za-z0-9_]{8,}/g;
 
@@ -25,7 +54,7 @@ export function maskContact(value: string): string {
 
 export function maskString(s: string): string {
   if (s.length > 4000) return `[${s.length} chars]`;
-  return s
+  return redactSecrets(s)
     .replace(DATA_URI, "[image data]")
     .replace(EMAIL, (m) => maskContact(m))
     .replace(REMEDY_KEY, (m) => `${m.slice(0, 12)}…`)

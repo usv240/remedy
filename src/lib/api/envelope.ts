@@ -1,4 +1,5 @@
 import { currentRequestId, newRequestId } from "@/lib/log";
+import { redactDeep, redactSecrets } from "@/lib/mask";
 
 export type ApiErrorCode = "invalid_request" | "rate_limited" | "unauthorized" | "not_found" | "upstream_unavailable" | "internal";
 
@@ -28,7 +29,7 @@ export function fail(code: ApiErrorCode, message: string, status: number, detail
     {
       data: null,
       meta: { request_id: id, version: API_VERSION },
-      error: { code, message: withRequestIdSuffix(message, id), docs: `${DOCS}-${code}`, details },
+      error: { code, message: withRequestIdSuffix(redactSecrets(message), id), docs: `${DOCS}-${code}`, details: redactDeep(details) },
     },
     { status },
   );

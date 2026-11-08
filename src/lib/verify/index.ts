@@ -1,4 +1,6 @@
-import { aiAvailable } from "@/lib/ai/claude";
+import { aiAvailable, publicAiError } from "@/lib/ai/claude";
+import { log } from "@/lib/log";
+import { redactDeep } from "@/lib/mask";
 import { overBudget, RESTING_PLAIN } from "@/lib/ai/usage";
 import { cacheKey, defaultVerifyCache, engineVersion, photoSha256, ruleVersion, type VerifyCache } from "./cache";
 import {
@@ -269,7 +271,8 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
             reviewRun = await (deps.reviewers ?? runReviewers)({ photo: img.jpeg, recall, rule, official: o.officialImgs, effort: input.options?.effort });
             cacheInfo.reviewers = "live";
           } catch (e) {
-            reviewError = (e as Error).message;
+            log.warn("reviewers did not finish", { err: e });
+            reviewError = publicAiError(e, "second look");
           }
         }
       }
@@ -298,7 +301,8 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       cacheInfo.stored = true;
     }
     timings.total_ms = ms(t0);
-    return {
+    // Belt and braces: nothing that reads like a credential leaves the engine, whatever an upstream error carried.
+    return redactDeep({
       decision: verdict.decision,
       decided_by: verdict.decided_by,
       checks: o.checks,
@@ -319,7 +323,7 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       cache: cacheInfo,
       official: { loaded: official.images.length, failed: official.failed, sent: o.vision || reviewRun ? o.officialImgs.length : 0 },
       timings,
-    };
+    });
   };
 
   // 2. Not their own photo, already sent with an earlier claim, or not good enough to check: no model call needed.
@@ -364,7 +368,8 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
         vision = await (deps.vision ?? runVision)({ photo: img.jpeg, ...(more.length ? { more: more.map((m) => m.img.jpeg) } : {}), recall, rule, official: visionImages, effort: input.options?.effort });
         cacheInfo.vision = "live";
       } catch (e) {
-        visionError = (e as Error).message;
+        log.warn("vision check did not finish", { err: e });
+        visionError = publicAiError(e, "photo check");
       }
     }
   } else visionError = "No ANTHROPIC_API_KEY on this server, or the AI service is paused.";
