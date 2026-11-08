@@ -2,6 +2,7 @@ import { connection } from "next/server";
 import stats from "../../../content/recalls/stats.json";
 import { ENDPOINTS } from "@/lib/api/endpoints";
 import { TOOLS } from "@/lib/mcp/tools";
+import { HEADLINE } from "@/lib/recall/headline";
 import { publicOrigin } from "@/lib/origin";
 
 /** GET /llms.txt: what Remedy is and how an AI assistant can use it, in plain text. */
@@ -17,7 +18,7 @@ export async function GET(req: Request) {
 
 > Recall refunds in seconds. Many US product recalls offer a refund once the owner sends a photo showing the product made safe: the cord cut, the item cut in half, or "RECALLED" written on it. Remedy reads the official CPSC remedy as a checklist, verifies the owner's photo, and pays the refund through PayPal. It uses the CPSC's public recall data and is independent: not affiliated with the CPSC or any recalling firm. This deployment uses the PayPal sandbox; no real money moves.
 
-${C.all.photoRefund.count} of the ${C.recalls.count} US consumer product recalls from ${C.range.from} to ${C.range.to} offer a refund for a photo of the product made safe (CPSC Recalls API).
+${HEADLINE.count} of the ${C.recalls.count} US consumer product recalls from ${C.range.from} to ${C.range.to} refund an owner for a photo of the product made safe (CPSC Recalls API, read through each recall's proof rule).
 
 ## Connect
 

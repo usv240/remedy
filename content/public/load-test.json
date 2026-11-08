@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-11-06T23:29:00.195Z",
-  "baseUrl": "http://localhost:3400",
+  "measuredAt": "2026-11-08T09:22:50.483Z",
+  "baseUrl": "http://localhost:3410",
   "users": 100,
   "method": "100 virtual users started at once, each running the three calls in a row (claim, search, scan sample), 300 requests in all; latency measured in the client from request start to the full JSON body; a run counts as an error when the status is not 200 or the body is not the expected answer. Each user carries its own x-forwarded-for so the per-visitor limits see 100 visitors. The claim uses the recall's own official picture, settled by the perceptual hash with no model call.",
   "machine": {
@@ -12,21 +12,21 @@
   },
   "server": {
     "build": "next start, local production build",
-    "worker": "running",
+    "worker": "not running (inline fallback)",
     "elastic": "live",
     "database": "Postgres 17 in Docker on the same machine"
   },
-  "wallMs": 21780,
-  "requestsPerSecond": 13.8,
+  "wallMs": 14467,
+  "requestsPerSecond": 20.7,
   "results": [
     {
       "id": "claim",
       "name": "POST /api/claims (official picture, no AI)",
       "requests": 100,
-      "p50_ms": 15706,
-      "p95_ms": 20703,
-      "p99_ms": 21149,
-      "max_ms": 21149,
+      "p50_ms": 7865,
+      "p95_ms": 8893,
+      "p99_ms": 8938,
+      "max_ms": 8938,
       "errors": 0,
       "error_rate": 0,
       "statuses": {
@@ -37,10 +37,10 @@
       "id": "search",
       "name": "GET /api/v1/recalls?query=power bank",
       "requests": 100,
-      "p50_ms": 1079,
-      "p95_ms": 2487,
-      "p99_ms": 2643,
-      "max_ms": 2643,
+      "p50_ms": 3812,
+      "p95_ms": 5495,
+      "p99_ms": 5572,
+      "max_ms": 5572,
       "errors": 0,
       "error_rate": 0,
       "statuses": {
@@ -51,15 +51,72 @@
       "id": "scan",
       "name": "GET /api/v1/scan/sample",
       "requests": 100,
-      "p50_ms": 319,
-      "p95_ms": 909,
-      "p99_ms": 999,
-      "max_ms": 999,
+      "p50_ms": 20,
+      "p95_ms": 72,
+      "p99_ms": 423,
+      "max_ms": 423,
       "errors": 0,
       "error_rate": 0,
       "statuses": {
         "200": 100
       }
     }
-  ]
+  ],
+  "before": {
+    "measuredAt": "2026-11-08T08:45:20.305Z",
+    "change": "running a claim's job at once when no worker is alive, instead of after a 2 s wait",
+    "claimP50": 10149,
+    "claimP95": 10905,
+    "worker": "not running (inline fallback)"
+  },
+  "claim": {
+    "what": "For the claim path: the client time is from request start to the full answer and includes each job's wait in the queue; the server stage timings are the check itself, as verifyPhoto measured it inside the job.",
+    "alone": {
+      "clientMs": 162,
+      "ok": true,
+      "server": {
+        "match_ms": 0.4,
+        "total_ms": 36,
+        "checks_ms": 0,
+        "decode_ms": 35,
+        "vision_ms": 0,
+        "official_ms": 26,
+        "reviewers_ms": 0
+      }
+    },
+    "serverStages": {
+      "decode_ms": {
+        "p50": 670,
+        "p95": 1700,
+        "max": 1768
+      },
+      "official_ms": {
+        "p50": 662,
+        "p95": 1686,
+        "max": 1751
+      },
+      "match_ms": {
+        "p50": 0,
+        "p95": 1,
+        "max": 5
+      },
+      "checks_ms": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "total_ms": {
+        "p50": 1077,
+        "p95": 1701,
+        "max": 1769
+      }
+    },
+    "queue": {
+      "jobCreatedToDone": {
+        "p50": 4504,
+        "p95": 5030,
+        "max": 5258
+      }
+    }
+  }
 }

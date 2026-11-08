@@ -25,15 +25,16 @@ import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
 import { CHECK_LABEL, CHECK_ORDER, TONE, WORD } from "@/lib/firm/checks";
 import { STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
+import { AG_LICENSE_KEY, agGridEnterprise } from "./ag-license";
 import { remedyGridTheme } from "./agTheme";
 import { Thumb } from "./Thumb";
 
 // Community modules for the queue. With a valid AG Grid Enterprise license (NEXT_PUBLIC_AG_GRID_LICENSE_KEY), three
 // Enterprise ones join them: set filters on the status columns, the column menu and the status bar with selected and
 // total counts. Without one, the same queue runs on Community alone, with text filters and no trial watermark.
-const AG_LICENSE = process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY?.trim();
-export const ENTERPRISE = Boolean(AG_LICENSE) && LicenseManager.getLicenseDetails(AG_LICENSE!).valid === true;
-if (ENTERPRISE) LicenseManager.setLicenseKey(AG_LICENSE!);
+// The license check is shared with /status (./ag-license.ts), so both say the same thing.
+export const ENTERPRISE = agGridEnterprise();
+if (ENTERPRISE) LicenseManager.setLicenseKey(AG_LICENSE_KEY!);
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,

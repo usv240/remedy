@@ -5,8 +5,9 @@ import { notifySales } from "@/lib/firm/buyers-data";
 import { publicOrigin } from "@/lib/origin";
 
 /**
- * POST /api/firm/buyers/notify { sale_ids, recall? }: create a personal claim link for each matched buyer (the notice
- * table keeps only the link token's hash). No mail service is connected, so each notice is logged as "would send".
+ * POST /api/firm/buyers/notify { sale_ids, recall? }: make a personal claim link and a notice for each matched buyer
+ * (the notice table keeps only the link token's hash). Remedy sends no mail: each notice comes back once, with its
+ * subject and text, for the firm to download as a CSV and send from its own mail tool (src/lib/firm/notices.ts).
  */
 export async function POST(req: Request) {
   return guard(req, "firm.buyers.notify", async () => {
@@ -17,6 +18,13 @@ export async function POST(req: Request) {
     const ids = Array.isArray(body?.sale_ids) ? body.sale_ids.map(Number).filter((n) => Number.isInteger(n) && n > 0) : [];
     if (!ids.length) return fail("invalid_request", "Choose at least one matched buyer.", 400);
     const links = await notifySales(got.ctx.firm, got.recall, ids, publicOrigin(req));
-    return ok({ links, sent: 0, would_send: links.filter((l) => l.status === "would_send").length, delivery: "stub: no mail service connected, so nothing was emailed or texted" }, started);
+    return ok(
+      {
+        links,
+        ready: links.filter((l) => l.status === "ready").length,
+        delivery: "export: the firm downloads these notices as a CSV and sends them from its own mail tool; Remedy sends no mail",
+      },
+      started,
+    );
   });
 }

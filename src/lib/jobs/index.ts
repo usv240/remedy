@@ -1,7 +1,7 @@
 /**
- * The job queue, as routes use it: enqueue a job and wait for it, streaming its progress events, with the inline
- * fallback when no worker takes the job within 2 seconds (local development without `npm run worker`), so nothing
- * hangs. Server only.
+ * The job queue, as routes use it: enqueue a job and wait for it, streaming its progress events. With no worker
+ * reporting in (local development without `npm run worker`, or a deployment whose worker is down), the route runs the
+ * job itself at once, so nothing hangs and nothing waits for a worker that is not there. Server only.
  */
 import { log } from "../log";
 import { runClaimed } from "./handlers";
@@ -20,7 +20,7 @@ export type WaitOptions = {
   onProgress?: (e: unknown) => void;
   /** Give up waiting after this long (the job keeps running). Default 4 minutes. */
   timeoutMs?: number;
-  /** Run the job in this process if no worker took it within this long. Default 2 s; 0 never. */
+  /** 0: never run the job in this process. Any other value: run it here when no worker is alive. */
   inlineAfterMs?: number;
   signal?: AbortSignal;
 };
@@ -45,9 +45,11 @@ export async function waitForJob(id: number, o: WaitOptions = {}): Promise<JobRo
     seen = job.progress.length;
     if (job.status === "done" || job.status === "failed") return job;
     const waited = Date.now() - started;
-    if (job.status === "queued" && !triedInline && inlineAfter > 0 && waited >= inlineAfter) {
-      // No worker reporting in: run it here so nothing hangs. With a live worker, keep waiting: it is draining the
-      // queue, and a hundred routes each running their own job would only slow the web process down.
+    if (job.status === "queued" && !triedInline && inlineAfter > 0) {
+      // No worker reporting in (its heartbeat is older than WORKER_STALE_MS): run it here at once, since no one else
+      // will take it. With a live worker, keep waiting (up to INLINE_DESPITE_WORKER_MS): it is draining the queue, and a
+      // hundred routes each running their own job would only slow the web process down. Measured on 2026-11-08 with
+      // no worker, waiting the 2 s first was 2.3 of the 2.5 s a lone no-AI claim took (content/public/load-test.json).
       const alive = await workerAlive();
       if (!alive || waited >= INLINE_DESPITE_WORKER_MS) {
         triedInline = true;

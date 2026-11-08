@@ -93,7 +93,7 @@ export const FIRM_INFO = {
   },
   "firm.buyers": {
     title: "Find buyers",
-    what: "Find the people who bought the recalled product, from a sales file or from PayPal, and send each a personal claim link.",
+    what: "Find the people who bought the recalled product, from a sales file or from PayPal, and download a notice for each, with a personal claim link, to send from your own mail tool.",
     why: "A direct notice reaches the people who own the product, which is what makes a recall work.",
     technical: "Sales lines match the recalled product by shared words or an exact SKU (matchItem). PayPal Transaction Search reads 31-day windows.",
   },

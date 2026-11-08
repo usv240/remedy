@@ -12,12 +12,14 @@
  * disagree with this file, or when this file disagrees with the code.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { answerChanges, checkTimes, errorRates, freeCaught, freeTimings, hashSpeed, readingAccuracy, referencePictures, sweepSettings } from "../src/components/judges/errors";
 import { hostedDailyUsd } from "../src/lib/ai/hosted-budget";
 import { photoAsk } from "../src/lib/recall/photo-count";
+import { proofSplit, type SplitRecall, type SplitRule } from "../src/lib/recall/made-safe";
 import { moneyWords, recallValue, type ValueRecall } from "../src/lib/recall/value";
 import { TOOLS } from "../src/lib/mcp/tools";
 import { aboutSeconds } from "../src/lib/research";
@@ -27,7 +29,9 @@ const ROOT = process.cwd();
 const OUT = path.join(ROOT, "content", "public", "facts.json");
 const read = <T>(file: string): T => JSON.parse(readFileSync(file, "utf8")) as T;
 
-type UnitTests = { passed: number; skipped: number; failed: number; files: number; ranAt: string; note: string };
+/** What a skipped test needs to run: a database, a Claude key, or PayPal sandbox keys. */
+export type SkipNeeds = { database: number; claude: number; paypal: number; other: number };
+type UnitTests = { passed: number; skipped: number; skippedNeeds: SkipNeeds; failed: number; files: number; testsHash: string; ranAt: string; note: string };
 type Facts = {
   note: string;
   writtenAt: string;
@@ -58,6 +62,8 @@ type Facts = {
   multiPhoto: { count: number; of: number; numbers: string[] };
   /** What the photo-refund recalls are worth to their owners (content/recalls/value.json). */
   value: { covered: number; recalls: number; total: string; unclaimed: string; perPoint: string };
+  /** The headline count, and what the other photo-refund recalls ask for (content/recalls/proof-split.json). */
+  headline: { recalls: number; photoRefund: number; madeSafeRefund: number; share: number; byYear: Record<string, number>; madeSafeCredit: number; otherPhoto: number; noPhoto: number };
 };
 type Spread = { median: number; min: number; max: number; n: number };
 
@@ -70,18 +76,38 @@ function unitTests(): UnitTests {
     for (const k of ["DATABASE_URL", "ANTHROPIC_API_KEY", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "SANDBOX_BUYER_EMAIL", "SANDBOX_BUYER_PASSWORD"]) delete env[k];
     const r = spawnSync(process.execPath, [path.join(ROOT, "node_modules", "vitest", "vitest.mjs"), "run", "--reporter=json", `--outputFile=${report}`], { cwd: ROOT, env, stdio: "inherit" });
     if (!existsSync(report)) throw new Error(`vitest wrote no report (exit ${r.status})`);
-    const j = read<{ numPassedTests: number; numPendingTests: number; numTodoTests: number; numFailedTests: number; numTotalTestSuites: number; testResults: unknown[]; startTime: number }>(report);
+    const j = read<{ numPassedTests: number; numPendingTests: number; numTodoTests: number; numFailedTests: number; testResults: { name: string; assertionResults: { status: string }[] }[]; startTime: number }>(report);
+    const needs: SkipNeeds = { database: 0, claude: 0, paypal: 0, other: 0 };
+    for (const f of j.testResults) for (const a of f.assertionResults) if (a.status === "pending" || a.status === "skipped" || a.status === "todo") needs[skipNeed(path.basename(f.name))]++;
     return {
       passed: j.numPassedTests,
       skipped: j.numPendingTests + j.numTodoTests,
+      skippedNeeds: needs,
       failed: j.numFailedTests,
       files: j.testResults.length,
+      testsHash: testsHash(),
       ranAt: new Date(j.startTime).toISOString(),
-      note: "npm test with no keys and no database, as CI runs it: the live Claude, live PayPal and Postgres suites skip.",
+      note: "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed).",
     };
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+}
+
+/** The live suites, by file. Every other suite that skips needs a database (describe.skipIf(!DATABASE_URL)). */
+const NEEDS_KEY: Record<string, keyof SkipNeeds> = { "verify.live.test.ts": "claude", "payments.live.test.ts": "paypal" };
+const NEEDS_DB = /\.pg\.test\.ts$|^(firm-limits|jobs|photo-privacy|ratelimit|sample-claims)\.test\.ts$/;
+export const skipNeed = (file: string): keyof SkipNeeds => NEEDS_KEY[file] ?? (NEEDS_DB.test(file) ? "database" : "other");
+
+/**
+ * A fingerprint of every unit test file (line endings normalized), so tests/facts.test.ts can tell when a test was
+ * added or changed after the counts were taken: they then need `npx tsx scripts/facts.ts` again.
+ */
+export function testsHash(): string {
+  const dir = path.join(ROOT, "tests");
+  const h = createHash("sha256");
+  for (const f of readdirSync(dir).filter((x) => x.endsWith(".test.ts")).sort()) h.update(f).update(readFileSync(path.join(dir, f), "utf8").replace(/\r\n/g, "\n"));
+  return h.digest("hex").slice(0, 16);
 }
 
 /** The figures counted from the recorded runs, the sweep and the CPSC data: no tests, no network. Shared with tests/facts.test.ts. */
@@ -96,10 +122,12 @@ export function derived() {
     crossed: { fields: string[] };
   };
   const ra = readingAccuracy();
-  const recalls = read<{ recalls: (ValueRecall & { remedyText: string })[] }>(path.join(ROOT, "content", "recalls", "recalls.json")).recalls;
+  const recalls = read<{ recalls: (ValueRecall & SplitRecall & { remedyText: string })[] }>(path.join(ROOT, "content", "recalls", "recalls.json")).recalls;
+  const rules = read<{ rules: Record<string, SplitRule> }>(path.join(ROOT, "content", "recalls", "proof-rules.json")).rules;
   const pr = recalls.filter((r) => r.photoRefund);
   const multi = pr.filter((r) => photoAsk(r.remedyText).count > 1).map((r) => r.number);
-  const v = recallValue(recalls);
+  const v = recallValue(recalls, rules);
+  const split = proofSplit(recalls, rules);
   return {
     timings: { free: t.free, match: t.match, recordedAt: t.recordedAt, sentence: hashSpeed().sentence },
     checkTimes: { check: ct.check, reviewers: ct.reviewers, about: ct.about, flagship: ct.flagship },
@@ -125,6 +153,16 @@ export function derived() {
     settings: sweepSettings().map((s) => ({ id: s.id, wrongPay: `${s.wrongPay.count} of ${s.wrongPay.of}`, atSweep: `${s.atSweep.count} of ${s.atSweep.of}`, correct: `${s.correct.count} of ${s.correct.of}`, usdPerCase: s.usdPerCase })),
     multiPhoto: { count: multi.length, of: pr.length, numbers: multi },
     value: { covered: v.covered, recalls: v.recalls, total: moneyWords(v.lowUsd), unclaimed: moneyWords(v.unclaimedLowUsd), perPoint: moneyWords(v.perPointLowUsd) },
+    headline: {
+      recalls: split.recalls,
+      photoRefund: split.photoRefund,
+      madeSafeRefund: split.madeSafeRefund.count,
+      share: split.madeSafeRefund.share,
+      byYear: split.madeSafeRefund.byYear,
+      madeSafeCredit: split.madeSafeCredit.count,
+      otherPhoto: split.otherPhoto.count,
+      noPhoto: split.noPhoto.count,
+    },
   };
 }
 
@@ -155,7 +193,7 @@ function main() {
   };
   writeFileSync(OUT, JSON.stringify(facts, null, 2) + "\n");
   console.log(
-    `facts: ${tests.passed} unit tests passed, ${tests.skipped} skipped${tests.failed ? `, ${tests.failed} FAILED` : ""}; a11y ${a11y ? `${a11y.passed} of ${a11y.views} views on ${a11y.pages} pages` : "not run yet"}; ${facts.mcp.tools} MCP tools; ${free.caught} of ${free.total} free cases; paid wrongly ${e.wrongPay.count} of ${e.wrongPay.of}; held back ${e.heldBack.count} of ${e.heldBack.of}; ${facts.catalogPictures} catalog pictures`,
+    `facts: ${tests.passed} unit tests passed, ${tests.skipped} skipped (${tests.skippedNeeds?.database} need a database, ${tests.skippedNeeds?.claude} a Claude key, ${tests.skippedNeeds?.paypal} PayPal keys)${tests.failed ? `, ${tests.failed} FAILED` : ""}; a11y ${a11y ? `${a11y.passed} of ${a11y.views} views on ${a11y.pages} pages` : "not run yet"}; ${facts.mcp.tools} MCP tools; ${free.caught} of ${free.total} free cases; paid wrongly ${e.wrongPay.count} of ${e.wrongPay.of}; held back ${e.heldBack.count} of ${e.heldBack.of}; ${facts.catalogPictures} catalog pictures`,
   );
   if (tests.failed) process.exitCode = 1;
 }

@@ -1,8 +1,10 @@
 "use client";
 
+import Papa from "papaparse";
 import { useRef, useState } from "react";
 import type { BuyerLine } from "@/lib/firm/buyers";
 import type { NoticeLink } from "@/lib/firm/buyers-data";
+import { noticeCsv, noticeFileName, type NoticeRow } from "@/lib/firm/notices";
 import { FirmInfo } from "./FirmInfo";
 
 type Line = BuyerLine & { saleId: number | null };
@@ -11,11 +13,39 @@ const usd = (c: number) => `$${(c / 100).toFixed(2)}`;
 const DAY = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 const day = (iso: string) => DAY.format(new Date(iso.length === 10 ? `${iso}T12:00:00Z` : iso));
 
-export function BuyersImport({ recall, product, today }: { recall: string; product: string; today: string }) {
+/**
+ * Each sales-file line's address and order id, read again in the browser from the firm's own file, by the same line
+ * numbers the server uses (the header is line 1). Remedy's server never returns a buyer's full address.
+ */
+async function fileContacts(f: File | undefined): Promise<Map<number, { contact: string; orderId: string | null }>> {
+  const out = new Map<number, { contact: string; orderId: string | null }>();
+  if (!f) return out;
+  const parsed = Papa.parse<Record<string, string>>((await f.text()).replace(/^\uFEFF/, ""), { header: true, skipEmptyLines: true, transformHeader: (h) => h.trim().toLowerCase().replace(/\s+/g, "_") });
+  parsed.data.slice(0, 5000).forEach((r, i) => {
+    const contact = (r.buyer_email ?? "").trim() || (r.buyer_phone ?? "").trim();
+    if (contact) out.set(i + 2, { contact, orderId: (r.order_id ?? "").trim() || null });
+  });
+  return out;
+}
+
+/** The notices as rows for the download: the address from the firm's own file where it has one, masked otherwise. */
+function noticeRows(links: NoticeLink[], lines: Line[] | null, contacts: Map<number, { contact: string; orderId: string | null }>): NoticeRow[] {
+  const lineOf = new Map((lines ?? []).filter((l) => l.saleId).map((l) => [l.saleId!, l]));
+  return links
+    .filter((l) => l.status === "ready")
+    .map((l) => {
+      const line = lineOf.get(l.saleId) ?? null;
+      const own = line ? contacts.get(line.line) : undefined;
+      return { saleId: l.saleId, line: line?.line ?? null, orderId: own?.orderId ?? line?.orderId ?? null, channel: l.channel, contact: own?.contact ?? l.contact, link: l.link, subject: l.subject, body: l.message, refundToOriginal: l.refundToOriginal };
+    });
+}
+
+export function BuyersImport({ recall, product, today, firmName }: { recall: string; product: string; today: string; firmName: string }) {
   const file = useRef<HTMLInputElement>(null);
   const [lines, setLines] = useState<Line[] | null>(null);
   const [summary, setSummary] = useState<{ total: number; matched: number; warnings: string[] } | null>(null);
   const [links, setLinks] = useState<NoticeLink[] | null>(null);
+  const [rows, setRows] = useState<NoticeRow[]>([]);
   const [busy, setBusy] = useState<"idle" | "upload" | "notify" | "paypal">("idle");
   const [status, setStatus] = useState<{ text: string; tone?: "attention" | "positive" } | null>(null);
   const [from, setFrom] = useState(() => new Date(Date.parse(`${today}T00:00:00Z`) - 30 * 86_400_000).toISOString().slice(0, 10));
@@ -51,10 +81,11 @@ export function BuyersImport({ recall, product, today }: { recall: string; produ
     setBusy("notify");
     try {
       const r = await fetch("/api/firm/buyers/notify", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sale_ids: ids, recall }) });
-      const j = (await r.json()) as { data: { links: NoticeLink[]; would_send: number } | null; error: { message: string } | null };
+      const j = (await r.json()) as { data: { links: NoticeLink[]; ready: number } | null; error: { message: string } | null };
       if (!j.data) return setStatus({ text: j.error?.message ?? "The notices could not be made.", tone: "attention" });
       setLinks(j.data.links);
-      setStatus({ text: `${j.data.would_send} personal claim ${j.data.would_send === 1 ? "link" : "links"} made. No mail service is connected, so each notice is logged as "would send" and shown below.`, tone: "positive" });
+      setRows(noticeRows(j.data.links, lines, await fileContacts(file.current?.files?.[0])));
+      setStatus({ text: `${j.data.ready} ${j.data.ready === 1 ? "notice" : "notices"} ready, each with its own claim link. Download them below and send them from your mail tool.`, tone: "positive" });
     } catch {
       setStatus({ text: "The notices could not be made. Please try again.", tone: "attention" });
     } finally {
@@ -158,7 +189,7 @@ export function BuyersImport({ recall, product, today }: { recall: string; produ
           {matched.length > 0 && (
             <p className="firm-actions" style={{ marginTop: 12 }}>
               <button type="button" className="btn btn-primary" onClick={() => void notify()} disabled={busy !== "idle"} data-testid="notify-buyers">
-                {busy === "notify" ? "Making links…" : `Notify ${matched.length} matched ${matched.length === 1 ? "buyer" : "buyers"}`}
+                {busy === "notify" ? "Making notices…" : `Make ${matched.length} ${matched.length === 1 ? "notice" : "notices"}`}
               </button>
               <FirmInfo id="firm.refund-original" label="" />
             </p>
@@ -168,18 +199,28 @@ export function BuyersImport({ recall, product, today }: { recall: string; produ
 
       {links && (
         <section className="firm-section" aria-labelledby="by-links">
-          <h2 id="by-links">Personal claim links</h2>
-          <p className="muted">Each link is shown once; Remedy keeps only a fingerprint of it. Would send:</p>
+          <h2 id="by-links">Notices ready to send ({rows.length})</h2>
+          <p className="muted by-note">
+            Remedy sends no mail. Download the notices for your own mail tool: one row for each buyer, with the address from your sales file, the subject, the text and the buyer&rsquo;s personal claim link. Each link is shown once; Remedy keeps
+            only a fingerprint of it.
+          </p>
+          {rows.length > 0 && (
+            <p className="firm-actions" style={{ marginTop: 12 }}>
+              <button type="button" className="btn btn-primary" onClick={() => download(rows, recall, today)} data-testid="notice-csv">
+                Download the notices (CSV)
+              </button>
+            </p>
+          )}
+          {rows[0] && <EmailPreview row={rows[0]} firmName={firmName} paragraphs={links.find((l) => l.saleId === rows[0].saleId)?.paragraphs ?? [rows[0].body]} />}
           <ul className="by-links" data-testid="notice-links">
             {links.map((l) => (
               <li key={l.saleId}>
                 <span>
                   <strong>{l.contact}</strong> by {l.channel === "sms" ? "text" : "email"}
-                  {l.status === "already_notified" ? <span className="muted">, already notified earlier</span> : null}
+                  {l.status === "already_notified" ? <span className="muted">, already has a notice from an earlier download</span> : null}
                   {l.refundToOriginal ? <span className="muted">, refund to the original PayPal payment</span> : null}
                 </span>
                 {l.link && <span className="by-link">{l.link}</span>}
-                {l.message && <span className="muted">{l.message}</span>}
               </li>
             ))}
           </ul>
@@ -237,5 +278,64 @@ export function BuyersImport({ recall, product, today }: { recall: string; produ
         )}
       </section>
     </>
+  );
+}
+
+/** Save the notices as a CSV file, built here from the firm's own file and the links Remedy made. */
+function download(rows: NoticeRow[], recall: string, today: string) {
+  const url = URL.createObjectURL(new Blob([noticeCsv(rows)], { type: "text/csv;charset=utf-8" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = noticeFileName(recall, today);
+  document.body.append(a);
+  a.click();
+  a.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/** The first notice as the buyer will read it: plain text, real headings and a real link, nothing hidden. */
+function EmailPreview({ row, firmName, paragraphs }: { row: NoticeRow; firmName: string; paragraphs: string[] }) {
+  return (
+    <article className="by-email" aria-labelledby="by-email-h" data-testid="notice-preview">
+      <h3 id="by-email-h" className="by-email-h">
+        The {row.channel === "sms" ? "text message" : "email"} the first buyer gets
+      </h3>
+      <dl className="by-email-head">
+        <div>
+          <dt>From</dt>
+          <dd>The {firmName} recall team, sent from your own mail tool</dd>
+        </div>
+        <div>
+          <dt>To</dt>
+          <dd>{row.contact}</dd>
+        </div>
+        {row.channel === "email" && (
+          <div>
+            <dt>Subject</dt>
+            <dd>{row.subject}</dd>
+          </div>
+        )}
+      </dl>
+      <div className="by-email-body">
+        {paragraphs.map((p) => {
+          const at = p.indexOf(row.link);
+          return (
+            <p key={p}>
+              {at < 0 ? (
+                p
+              ) : (
+                <>
+                  {p.slice(0, at)}
+                  <a className="text-link by-link" href={row.link}>
+                    {row.link}
+                  </a>
+                  {p.slice(at + row.link.length)}
+                </>
+              )}
+            </p>
+          );
+        })}
+      </div>
+    </article>
   );
 }

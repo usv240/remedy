@@ -15,7 +15,7 @@ const FINDINGS: { fig: string; finding: string; source: string; url: string; inR
     finding: `Recalls where the firm contacts its buyers directly see about ${R.directNotice.direct} of products corrected by consumers, against ${R.directNotice.press} when the recall reaches them through a press release, by CPSC staff's recall data. The CPSC's own workshop report finds direct notice recalls the most effective.`,
     source: R.directNotice.source,
     url: R.directNotice.url,
-    inRemedy: "A firm finds the buyers who paid it with PayPal through Transaction Search and sends each one a personal claim link, so the notice reaches the owner directly.",
+    inRemedy: "A firm finds the buyers who paid it with PayPal through Transaction Search, or in its own sales file, and Remedy makes each one a personal claim link and a notice. The firm downloads them for its own mail tool and sends them itself.",
   },
   {
     fig: `${R.euStudy.direct} vs ${R.euStudy.generic}`,
@@ -33,14 +33,14 @@ const FINDINGS: { fig: string; finding: string; source: string; url: string; inR
   },
   {
     fig: R.fullRemedy.lift,
-    finding: `A full refund lifts the share of recalled products that come back by ${R.fullRemedy.lift} on average, across ${R.fullRemedy.recalls} CPSC recalls. It works two ways: owners see more benefit, and they feel more able to take part.`,
+    finding: `Across ${R.fullRemedy.recalls} CPSC recalls from ${R.fullRemedy.years}, ${R.fullRemedy.what}. Recall effectiveness here is the share of affected products corrected, from the firms' CPSC progress reports. Experiments in the same study find owners see more benefit and feel more able to take part.`,
     source: R.fullRemedy.source,
     url: R.fullRemedy.url,
     inRemedy: "Each claim names the refund in its first line, and the remedy becomes up to four plain steps with a drawing for each.",
   },
   {
     fig: `${R.simpler.from} to ${R.simpler.named}`,
-    finding: `Evidence from another kind of claim: in an IRS field experiment with ${R.simpler.filers} tax filers, a simpler notice raised claiming from ${R.simpler.from} to ${R.simpler.to}, and naming the amount in the headline raised it to ${R.simpler.named}.`,
+    finding: `From a tax credit, not a recall: in an IRS field experiment with ${R.simpler.filers} tax filers who had not claimed ${R.simpler.benefit} after a first notice, a simpler second notice raised claiming from ${R.simpler.from} to ${R.simpler.to}, and showing the amount they could get more prominently raised it to ${R.simpler.named}.`,
     source: R.simpler.source,
     url: R.simpler.url,
     inRemedy: "One page on a phone, no account, and one photo. The checks explain each result in plain words.",

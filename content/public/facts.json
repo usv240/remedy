@@ -1,19 +1,26 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-08T06:37:29.198Z",
+  "writtenAt": "2026-11-08T09:24:33.131Z",
   "unitTests": {
-    "passed": 456,
-    "skipped": 49,
+    "passed": 474,
+    "skipped": 50,
+    "skippedNeeds": {
+      "database": 20,
+      "claude": 28,
+      "paypal": 2,
+      "other": 0
+    },
     "failed": 0,
-    "files": 52,
-    "ranAt": "2026-11-08T06:37:04.781Z",
-    "note": "npm test with no keys and no database, as CI runs it: the live Claude, live PayPal and Postgres suites skip."
+    "files": 54,
+    "testsHash": "c41e831d9768b353",
+    "ranAt": "2026-11-08T09:24:13.547Z",
+    "note": "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed)."
   },
   "a11y": {
     "pages": 31,
     "views": 124,
     "passed": 124,
-    "ranAt": "2026-11-08T06:36:32.162Z"
+    "ranAt": "2026-11-08T09:12:37.790Z"
   },
   "mcp": {
     "tools": 7,
@@ -175,10 +182,24 @@
     ]
   },
   "value": {
-    "covered": 522,
-    "recalls": 525,
-    "total": "$1.4 billion",
-    "unclaimed": "$1.3 billion",
-    "perPoint": "$14.7 million"
+    "covered": 442,
+    "recalls": 447,
+    "total": "$471.1 million",
+    "unclaimed": "$442.8 million",
+    "perPoint": "$4.7 million"
+  },
+  "headline": {
+    "recalls": 1239,
+    "photoRefund": 525,
+    "madeSafeRefund": 447,
+    "share": 36.1,
+    "byYear": {
+      "2024": 54,
+      "2025": 151,
+      "2026": 242
+    },
+    "madeSafeCredit": 5,
+    "otherPhoto": 71,
+    "noPhoto": 2
   }
 }

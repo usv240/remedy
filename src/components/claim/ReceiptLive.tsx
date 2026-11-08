@@ -19,7 +19,7 @@ export function headline(c: ClaimView): { title: string; pill: { word: string; t
   if (p.plan_status === "awaiting_approval") return { title: `Waiting for ${c.firm.name}.`, pill: { word: "Firm review", tone: "info" }, sub: `Your ${amount} refund is sent as soon as it is approved, ${reviewWindow(c.firm.review_hours)}.` };
   if (p.status === "paid") {
     if (p.route === "refund") return { title: `Refunded ${amount} to your PayPal payment.`, pill: { word: "Refunded", tone: "paid" }, sub: "PayPal returns it the way you paid." };
-    if (p.route === "replacement") return { title: "Your safe replacement is paid for.", pill: { word: "Replacement paid", tone: "paid" }, sub: `${c.firm.name} paid ${p.replacement?.retailer ?? "the retailer"}, who ships it to you.` };
+    if (p.route === "replacement") return { title: "Your safe replacement is paid for.", pill: { word: "Replacement paid", tone: "paid" }, sub: `${c.firm.name.charAt(0).toUpperCase()}${c.firm.name.slice(1)} paid ${p.replacement?.retailer ?? "the retailer"}, who ships it to you.` };
     return { title: `Paid ${amount} to ${p.payee?.type === "venmo" ? "your Venmo" : "your PayPal"}.`, pill: { word: "Paid", tone: "paid" }, sub: `Sent to ${payeeWords(p.payee)}.` };
   }
   if (p.status === "unclaimed") return { title: `Your ${amount} refund is waiting for you.`, pill: { word: "Waiting to be accepted", tone: "attention" }, sub: "PayPal emailed you a link to accept it. We will send a friendly reminder too." };

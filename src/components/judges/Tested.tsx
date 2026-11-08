@@ -1,7 +1,7 @@
 import facts from "../../../content/public/facts.json";
 
 type Facts = {
-  unitTests: { passed: number; skipped: number; ranAt: string };
+  unitTests: { passed: number; skipped: number; ranAt: string; skippedNeeds?: { database: number; claude: number; paypal: number } };
   a11y: { pages: number; views: number; passed: number; ranAt: string } | null;
   mcp: { tools: number; names: string[] };
 };
@@ -21,7 +21,8 @@ export function Tested() {
           <p className="jm-fig tabular">{f.unitTests.passed.toLocaleString("en-US")}</p>
           <p className="jm-what">unit tests pass with no keys and no database, as CI runs them: the proof rules, the six checks and the decision, perceptual hashing, payments and webhooks, the firm console, the API and MCP.</p>
           <p className="jm-src">
-            npm test, {day(f.unitTests.ranAt)}. {f.unitTests.skipped} more run where the Claude, PayPal or Postgres keys are set.
+            npm test, {day(f.unitTests.ranAt)}. {f.unitTests.skipped} more need what CI does not have
+            {f.unitTests.skippedNeeds ? `: ${f.unitTests.skippedNeeds.database} a Postgres database, ${f.unitTests.skippedNeeds.claude} a Claude key and ${f.unitTests.skippedNeeds.paypal} PayPal sandbox keys` : ""}.
           </p>
         </li>
         {f.a11y && (

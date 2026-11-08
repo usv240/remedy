@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { ViewMenu } from "./ViewMenu";
 
+/** Five links, then the one action. "Try a photo" is the button beside them, so it is not repeated as a link. */
 const LINKS = [
   { href: "/#how", label: "How it works" },
-  { href: "/try", label: "Try a photo" },
   { href: "/recalls", label: "Recalls" },
+  { href: "/firm", label: "For firms" },
   { href: "/developers", label: "Developers" },
   { href: "/evidence", label: "Evidence" },
 ];

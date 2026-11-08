@@ -6,6 +6,7 @@ import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
 import { Toc } from "@/components/learn/Toc";
 import { fmtDate, fmtInt } from "@/lib/api/format";
+import { HEADLINE, SPLIT } from "@/lib/recall/headline";
 import "../pages.css";
 import "../landing-shared.css";
 import "./toc.css";
@@ -118,7 +119,7 @@ export default function LearnPage() {
           <section id="photo" className="page-section ln-sec" aria-labelledby="photo-h">
             <h2 id="photo-h">Why a photo</h2>
             <p className="ln-answer">
-              When the remedy is a refund, many firms ask for a photo that shows the product made safe, so it cannot be used or sold again. <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> recalls since 2024 do.
+              When the remedy is a refund, many firms ask for a photo that shows the product made safe, so it cannot be used or sold again. <span className="tabular">{fmtInt(HEADLINE.count)}</span> recalls since 2024 refund that photo.
             </p>
             {/* The example photo beside the text it shows, not above it. */}
             <div className="ln-split">
@@ -246,7 +247,7 @@ export default function LearnPage() {
           <section id="data" className="page-section ln-sec" aria-labelledby="data-h">
             <h2 id="data-h">Where the numbers come from</h2>
             <p className="ln-answer">
-              Every figure is counted from the CPSC Recalls API: <span className="tabular">{fmtInt(C.recalls.count)}</span> recalls from {fmtDate(C.range.from)} to {fmtDate(C.range.to)}, pulled {fmtDate(C.pulledAt.slice(0, 10))}. <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> of them ask for a photo and offer a refund.
+              Every figure is counted from the CPSC Recalls API: <span className="tabular">{fmtInt(C.recalls.count)}</span> recalls from {fmtDate(C.range.from)} to {fmtDate(C.range.to)}, pulled {fmtDate(C.pulledAt.slice(0, 10))}. <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> of them name a photo and a refund in their remedy; their proof rules show <span className="tabular">{fmtInt(HEADLINE.count)}</span> refund a photo of the product made safe, <span className="tabular">{fmtInt(SPLIT.otherPhoto.count)}</span> ask for a photo for another reason (proof of ownership, a label or a code), <span className="tabular">{fmtInt(SPLIT.madeSafeCredit.count)}</span> pay store credit for it and <span className="tabular">{fmtInt(SPLIT.noPhoto.count)}</span> need no photo.
             </p>
             <div className="page-prose">
               <p>

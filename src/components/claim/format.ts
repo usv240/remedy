@@ -37,13 +37,12 @@ export const when = (iso: string | null | undefined) =>
 /** Seconds with one decimal, for the elapsed timer: "4.2 s". */
 export const seconds = (ms: number) => `${(Math.max(0, ms) / 1000).toFixed(1)} s`;
 
-/** The owner's words for a check's status. */
 /**
  * The word beside each check. `reviewersAgreed`: the claim was verified by the two AI reviewers agreeing, so an unclear
  * check was settled by them, not left for a person.
  */
 export function checkWord(status: string, opts: { reviewersAgreed?: boolean } = {}): { word: string; tone: "positive" | "attention" | "info" | "neutral" } {
-  if (status === "unclear" && opts.reviewersAgreed) return { word: "Reviewers agreed", tone: "info" };
+  if (status === "unclear" && opts.reviewersAgreed) return { word: "Confirmed by two reviewers", tone: "positive" };
   switch (status) {
     case "pass":
       return { word: "Done", tone: "positive" };
@@ -59,6 +58,14 @@ export function checkWord(status: string, opts: { reviewersAgreed?: boolean } = 
 }
 
 /** The owner's words for where the money went. */
+/**
+ * An unsure check the two AI reviewers then settled: one state, said plainly, with the photo check's own score and
+ * reason kept for a closer look. No threshold changes; this is how the outcome reads.
+ */
+export const settledLine = "Two AI reviewers looked closer and confirmed it, each citing what it saw in the photo.";
+export const scoreLine = (score: number | null, reason: string) =>
+  `${score !== null ? `The photo check scored ${score.toFixed(2)}, under the 0.85 pass mark, and said: ` : "The photo check said: "}“${reason}”`;
+
 export function payeeWords(p: { type: "email" | "phone" | "venmo"; masked: string } | null) {
   if (!p) return "your PayPal account";
   return p.type === "venmo" ? `Venmo (${p.masked})` : `your PayPal account (${p.masked})`;

@@ -43,18 +43,45 @@ export const RESEARCH = {
     short: "GAO, 2011",
     url: "https://www.gao.gov/assets/gao-11-603.pdf",
   },
+  /**
+   * How a claim portal states its refund timing today, word for word from its own published page text (key
+   * step1.registration_instructions.step3a, read 2026-11-08): "Once your registration is confirmed, your refund will be
+   * issued via check within 10-15 business days." The comparison table on /evidence/market cites the same page.
+   */
+  portal: {
+    days: "10 to 15 business days",
+    how: "by check, after the claim is confirmed",
+    quote: "Once your registration is confirmed, your refund will be issued via check within 10-15 business days.",
+    source: "Real Time Results, Cuisinart grill recall portal (recallrtr.com), its published page text",
+    short: "a recall portal's own page",
+    url: "https://www.recallrtr.com/SiteResources/3in1grill/locales/en/translation.json",
+  },
+  /**
+   * What it measures (introduction, read 2026-11-08): "recall effectiveness improves, on average, by 11.4% if firms
+   * offer full instead of partial remedy (all else equal)". Recall effectiveness is the share of affected products
+   * corrected, from CPSC progress reports; a full remedy is a free repair, exchange or refund, a partial one shifts work
+   * to the owner (for example a repair kit). 338 CPSC recalls from 2001 to 2013, effectiveness data for 217.
+   */
   fullRemedy: {
     lift: "11.4%",
     recalls: 338,
+    years: "2001 to 2013",
+    what: "the share of recalled products corrected was 11.4% higher on average when the firm offered a full remedy (a free repair, exchange or refund) instead of a partial one, all else equal",
     source: "Raithel, Hock and Mafael, Journal of the Academy of Marketing Science, 2024",
     short: "Raithel, Hock and Mafael, 2024",
     url: "https://link.springer.com/article/10.1007/s11747-023-00967-x",
   },
+  /**
+   * A tax credit, not a recall: an IRS field experiment with 35,050 tax filers who had not claimed the Earned Income Tax
+   * Credit after a first notice. A simpler second notice raised claiming from 14% to 23%, and showing the amount they
+   * could get raised it to 31%.
+   */
   simpler: {
     from: "14%",
     to: "23%",
     named: "31%",
     filers: "35,050",
+    benefit: "the Earned Income Tax Credit",
     source: "Bhargava and Manoli, American Economic Review, 2015",
     short: "Bhargava and Manoli, 2015",
     url: "https://www.aeaweb.org/articles?id=10.1257/aer.20121493",

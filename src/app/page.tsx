@@ -10,10 +10,12 @@ import { TryPanel, type PanelRun } from "@/components/landing/TryPanel";
 import { cpscExampleDefault, MEASURED } from "@/components/judges/data";
 import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
+import { HEADLINE, shareParts } from "@/lib/recall/headline";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 import { aboutSeconds, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import { checkTimes, errorRates, hashSpeed } from "@/components/judges/errors";
+import { checkTimes, errorRates } from "@/components/judges/errors";
+import { Contrast } from "@/components/judges/Contrast";
 import { moneyHeadline } from "@/components/judges/Money";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
@@ -45,9 +47,9 @@ async function showcaseStart() {
 }
 
 const STEPS = [
-  { line: "First the recall is read.", note: "Remedy turns the official remedy into a clear checklist: what to cut or mark, and what the photo must show." },
+  { line: "First the recall is read.", note: "The official remedy becomes a checklist: what to cut or mark, and what the photo must show." },
   { line: "Then you snap a photo.", note: "On your phone, in under a minute. No account needed." },
-  { line: "Then the photo is verified.", note: "Right product, made safe, your own photo. Claude reads the photo; plain code decides the payout and the amount. Unclear cases get two AI reviewers and a person at the firm." },
+  { line: "Then the photo is verified.", note: "Claude reads the photo; plain code decides the payout and the amount. Unclear cases get two AI reviewers, then a person." },
   { line: "Then PayPal pays you.", note: `To your PayPal or Venmo. Inside ${REFUND_WINDOW_DAYS} days of a PayPal purchase, straight back to how you paid.` },
 ];
 
@@ -59,7 +61,7 @@ function ideas() {
   return [
     {
       line: "Each firm that joins makes every other firm safer.",
-      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} distinct pictures published with every recall, and every photo already claimed at any firm: ${hashSpeed().short}. Firms share only hashes, never a photo.`,
+      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} pictures published with every recall and every photo already claimed at any firm, before any model call. Firms share only hashes, never a photo.`,
       href: "/evidence#network",
       see: "One photo, two firms",
     },
@@ -98,7 +100,7 @@ const SOURCES: (Source & { full: string; says: string })[] = [
     name: "the Journal of the Academy of Marketing Science on full remedies",
     full: "Raithel, Hock and Mafael, Journal of the Academy of Marketing Science, 2024",
     href: "https://link.springer.com/article/10.1007/s11747-023-00967-x",
-    says: "Their study of CPSC recalls finds that recall effectiveness improves by 11.4% on average when firms offer a full remedy instead of a partial one (volume 52, pages 716 to 735).",
+    says: `Across ${RESEARCH.fullRemedy.recalls} CPSC recalls from ${RESEARCH.fullRemedy.years}, ${RESEARCH.fullRemedy.what} (volume 52, pages 716 to 735).`,
   },
   {
     name: "the CPSC Recall Effectiveness Workshop",
@@ -129,16 +131,16 @@ const FAQ = [
   { q: "Do I need an account?", a: "No. Open the link from your recall notice, follow the checklist, and snap a photo. You only enter where to send the refund." },
   { q: "Where does the money go?", a: "To your PayPal or Venmo, or, if you bought with PayPal in the last 180 days, straight back to how you paid. This demo runs in PayPal's sandbox." },
   { q: "How is the photo checked?", a: "Remedy checks that it shows the recalled product, that it has been made safe as the recall asks, and that it is your own photo. Unclear photos get two AI reviewers and then a person at the firm." },
-  { q: "Who pays the refund?", a: "The recalling company, through PayPal. Remedy never holds the money. In this demo, the sample firm's PayPal sandbox account pays." },
+  { q: "Who pays the refund?", a: "The recalling company, from its own PayPal account. Remedy never holds the money. In this demo every refund comes from a PayPal sandbox account, so no real money moves: Remedy's own on real CPSC recalls, standing in for the recalling firm, and the sample firm's on its fictional sample recalls." },
   { q: "Is this connected to the CPSC?", a: "Remedy uses the CPSC's public recall data. It is an independent tool, not affiliated with the CPSC or any recalling firm." },
 ];
 
 /** The stats column: whole part and decimals in their own tracks, so the figures align on the point. */
 const FIGURES: { whole: string; dec?: string; caption: string }[] = [
   { whole: fmtInt(C.recalls.count), caption: `US consumer product recalls from ${fmtDate(C.range.from)} to ${fmtDate(C.range.to)}, from the CPSC` },
-  { whole: fmtInt(C.all.photoRefund.count), caption: "of them offer a refund for a photo of the product made safe" },
-  { whole: String(Math.trunc(C.all.photoRefund.share)), dec: `.${String(C.all.photoRefund.share).split(".")[1] ?? "0"}`, caption: "percent of all recalls in that time" },
-  { whole: fmtInt(C.byYear["2026"].photoRefund), caption: `photo-refund recalls in 2026 so far, up from ${C.byYear["2024"].photoRefund} in 2024` },
+  { whole: fmtInt(HEADLINE.count), caption: "of them refund an owner for a photo of the product made safe" },
+  { ...shareParts(HEADLINE.share), caption: "percent of all recalls in that time" },
+  { whole: fmtInt(HEADLINE.byYear["2026"]), caption: `of those in 2026 so far, up from ${HEADLINE.byYear["2024"]} in 2024` },
   { whole: String(Math.trunc(C.all.under50k.share)), dec: `.${String(C.all.under50k.share).split(".")[1] ?? "0"}`, caption: "percent of recalls cover fewer than 50,000 units: mostly small firms" },
   { whole: String(C.all.paypalOrVenmo.count), caption: "recalls mention PayPal or Venmo anywhere in the remedy" },
 ];
@@ -160,15 +162,18 @@ const measured = (id: string) => MEASURED.items.find((i) => i.id === id)?.figure
 /** The recall's short title; the label beside it already says when it is a sample recall. */
 const panelTitle = (title: string) => shortTitle(title).replace(/\s*\(sample recall\)$/i, "");
 
-function nextFor(decision: string, decidedBy: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string, t?: { vision_ms?: number; reviewers_ms?: number }): string {
+/** For a run the two reviewers settled: how long the photo check and the reviewers took, against every recorded live check. */
+function timingsFor(t?: { vision_ms?: number; reviewers_ms?: number }): string | null {
+  // The same recorded runs the headline's "about N seconds" is the median of (checkTimes in src/components/judges/errors.ts).
+  const ct = checkTimes();
+  return t?.vision_ms && t.reviewers_ms
+    ? `The photo check took ${(t.vision_ms / 1000).toFixed(1)} s (recorded live checks: ${ct.check.min} to ${ct.check.max} s, median ${ct.check.median} s), and the two reviewers ${(t.reviewers_ms / 1000).toFixed(1)} s more.`
+    : null;
+}
+
+function nextFor(decision: string, decidedBy: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
   if (decision === "verified" && decidedBy === "reviewers") {
-    // The same recorded runs the headline's "about N seconds" is the median of (checkTimes in src/components/judges/errors.ts).
-    const ct = checkTimes();
-    const split =
-      t?.vision_ms && t.reviewers_ms
-        ? ` The photo check took ${(t.vision_ms / 1000).toFixed(1)} s (recorded live checks: ${ct.check.min} to ${ct.check.max} s, median ${ct.check.median} s), and the reviewers ${(t.reviewers_ms / 1000).toFixed(1)} s more.`
-        : "";
-    return `The product match was ${checks.C1?.score?.toFixed(2) ?? "unclear"}, under the 0.85 bar, so two AI reviewers looked closer: both found the recalled charger with its cord cut, each citing what it saw. Code checked their evidence and the amount, and verified it.${split}`;
+    return "Both reviewers found the recalled charger with its cord cut. Code checked their evidence and the amount, and verified it.";
   }
   if (decision === "verified") return "Every check passed. Code checked the amount, and verified it.";
   if (decision === "retake") return guidance ? `${guidance} Nothing is paid until the photo checks out.` : summary;
@@ -199,6 +204,7 @@ async function panelRuns(): Promise<PanelRun[]> {
           credit: p.credit,
           recall: { label: RecallLabel(rec.number), title: panelTitle(rec.title) },
           decision: cpsc.decision as PanelRun["decision"],
+          reviewersSettled: false,
           next: "This is the CPSC's own published photo of the cut cord, so the free picture match finds it in code, with no model call, and Remedy asks the owner for a photo of their own hair dryer made safe.",
           totalMs: cpsc.totalMs,
           settings: null,
@@ -225,7 +231,9 @@ async function panelRuns(): Promise<PanelRun[]> {
         credit: p.credit,
         recall: { label: RecallLabel(rec.number), title: panelTitle(rec.title) },
         decision: res.decision as PanelRun["decision"],
-        next: nextFor(res.decision, res.decided_by, res.checks, res.guidance?.plain ?? null, res.summary.plain, res.timings),
+        reviewersSettled: res.decision === "verified" && res.decided_by === "reviewers",
+        next: nextFor(res.decision, res.decided_by, res.checks, res.guidance?.plain ?? null, res.summary.plain),
+        more: res.decided_by === "reviewers" ? timingsFor(res.timings) : null,
         totalMs: res.timings.total_ms,
         settings: r.settings ?? null,
         checks: Object.entries(res.checks).map(([id, c]) => ({ id, ...c })),
@@ -233,7 +241,8 @@ async function panelRuns(): Promise<PanelRun[]> {
           verified && res.amount
             ? {
                 line: `$${res.amount.value} back through PayPal, at once`,
-                note: `Under Brightline's $${(DEFAULT_TERMS.autoCapCents / 100).toFixed(2)} auto-approve cap, so no person is needed. Bought with PayPal, it goes back to that purchase, which the sandbox did at once; otherwise it is a payout to an email or phone${payout ? `, which reached SUCCESS in ${payout}` : ""}.`,
+                note: `Under Brightline's $${(DEFAULT_TERMS.autoCapCents / 100).toFixed(2)} auto-approve cap, so no person is needed.`,
+                more: `Bought with PayPal, it goes back to that purchase, which the sandbox did at once; otherwise it is a payout to an email or phone${payout ? `, which reached SUCCESS in ${payout}` : ""}.`,
                 href: "/try/shop",
                 cta: "Buy the charger in the sandbox and claim it",
               }
@@ -343,19 +352,18 @@ export default async function Home() {
           </figure>
           <div className="intro-text">
             <p className="intro-stat">
-              Since January 2024, <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> of <span className="tabular">{fmtInt(C.recalls.count)}</span> US product recalls offer a refund once the owner
-              sends a photo of the product made safe, and the share grows each year: <span className="tabular">{C.byYear["2024"].photoRefund}</span> in 2024,{" "}
-              <span className="tabular">{C.byYear["2025"].photoRefund}</span> in 2025 and <span className="tabular">{C.byYear["2026"].photoRefund}</span> so far in 2026.{" "}
-              <Info id="intro.stat" label="" topic={`How ${fmtInt(C.all.photoRefund.count)} was counted`} />
+              Since January 2024, <span className="tabular">{fmtInt(HEADLINE.count)}</span> of <span className="tabular">{fmtInt(C.recalls.count)}</span> US product recalls refund an owner who sends a photo of the
+              product made safe, and the number grows each year: <span className="tabular">{HEADLINE.byYear["2024"]}</span> in 2024, <span className="tabular">{HEADLINE.byYear["2025"]}</span> in 2025 and{" "}
+              <span className="tabular">{HEADLINE.byYear["2026"]}</span> so far in 2026.{" "}
+              <Info id="intro.stat" label="" topic={`How ${fmtInt(HEADLINE.count)} was counted`} />
             </p>
+            <Contrast className="vs intro-vs" />
             <p className="intro-money">
-              Those recalls cover <strong className="tabular">{money.total}</strong> of products at their lowest stated price. At the average of about {money.share} that come back, <strong className="tabular">{money.unclaimed}</strong> of those products stays in homes unclaimed, and each
-              extra point of return is worth <strong className="tabular">{money.perPoint}</strong> to their owners in refunds or replacements.{" "}
-              <Link className="text-link" href="/evidence#money">
+              Those refunds come to <strong className="tabular">{money.total}</strong> at the lowest stated prices. At the average of about {money.share} products that come back, <strong className="tabular">{money.unclaimed}</strong> of it goes unclaimed.{" "}
+              <Link className="text-link" href="/evidence/market#money">
                 How it was counted
               </Link>
             </p>
-            <p className="intro-lead">Remedy turns that photo into a refund in seconds.</p>
             {quotes.length > 0 && (
               <ul className="intro-quotes" aria-label="In the recalls' own words">
                 <Quote q={quotes[0]} />
@@ -368,7 +376,7 @@ export default async function Home() {
                 <a className="text-link" href={RESEARCH.directNotice.url} target="_blank" rel="noreferrer">
                   {RESEARCH.directNotice.short}
                 </a>
-                ), and a full refund lifts recall effectiveness by {RESEARCH.fullRemedy.lift} (
+                ). Across {RESEARCH.fullRemedy.recalls} CPSC recalls from {RESEARCH.fullRemedy.years}, {RESEARCH.fullRemedy.what} (
                 <a className="text-link" href={RESEARCH.fullRemedy.url} target="_blank" rel="noreferrer">
                   {RESEARCH.fullRemedy.short}
                 </a>

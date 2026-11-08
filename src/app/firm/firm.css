@@ -1364,3 +1364,53 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Buyers: the notices, ready for the firm's own mail tool. */
+.by-note {
+  max-width: 44rem;
+}
+/* The notice as the buyer reads it: a plain message, its header as a quiet list, the link a real link. */
+.by-email {
+  margin-top: 16px;
+  max-width: 40rem;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--bg);
+}
+.by-email-h {
+  margin: 0;
+  padding: 12px 16px 0;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.by-email-head {
+  margin: 8px 0 0;
+  padding: 0 16px 12px;
+  display: grid;
+  gap: 2px;
+  border-bottom: 1px solid var(--edge);
+  font-size: 0.875rem;
+}
+.by-email-head > div {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 8px;
+}
+.by-email-head dt {
+  color: var(--muted);
+}
+.by-email-head dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.by-email-body {
+  padding: 12px 16px 16px;
+  display: grid;
+  gap: 10px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.by-email-body p {
+  margin: 0;
+}

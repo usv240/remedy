@@ -313,7 +313,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     autoCap: { value: toValue(terms.autoCapCents), currency: "USD" },
     linkedCapture: sale?.paypalCaptureId ? { id: sale.paypalCaptureId, amount: { value: Number(sale.amount).toFixed(2), currency: "USD" }, capturedAt: (sale.paidAt ?? sale.createdAt).toISOString() } : null,
     hasPriorRefund: (id) => priorRefundCheck(id),
-    firmName: terms.firmName,
+    firmName: terms.ownerName,
   };
 
   const deps = verifyDeps(input.test, emit);
@@ -515,7 +515,7 @@ export async function toView(row: ClaimRow, payment: PaymentView | null): Promis
     review: (row.debate as ClaimView["review"]) ?? null,
     link: r?.link ?? null,
     payment,
-    firm: { name: terms.firmName, sample: true, review_hours: terms.reviewHours, refund_source: terms.refundSource },
+    firm: { name: terms.ownerName, sample: true, review_hours: terms.reviewHours, refund_source: terms.refundSource },
     photo_url: row.photoId && kept?.has ? `/api/claims/${row.id}/photo` : null,
     receipt_url: `/r/${row.id}`,
     sandbox_label: SANDBOX_LABEL,
@@ -673,7 +673,7 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
     payerHash: sale?.buyerEmailHash && !shared.hashes.has(sale.buyerEmailHash) ? sale.buyerEmailHash : null,
     visitorHash: row.visitorHash ?? null,
   });
-  const limit = limitVerdict(matches, terms.firmName);
+  const limit = limitVerdict(matches, terms.ownerName);
   const overLimit = limit.over;
   const amountCents = centsOf(row.amount) ?? DEMO_REFUND_CENTS;
   const paidTodayCents = terms.firmId !== null ? await autoPaidToday(terms.firmId, row.recallNumber) : 0;
@@ -709,7 +709,7 @@ export async function payForClaim(id: string, input: PayInput): Promise<PayView>
   if (overLimit) await audit("system", "claim.limit_review", `claim:${id}`, { reason: "an earlier claim on this recall shares an identity", matched: limit.matched, masked: payee ? maskPayee(payee) : null });
 
   let kind: string = "needs_approval";
-  let plain = `A person at ${terms.firmName} will approve this payment.`;
+  let plain = `A person at ${terms.ownerName} will approve this payment.`;
   log.info("payment planned", { claim_id: id, route: planned.plan.route, plan_status: planned.plan.status, choice: input.choice, over_limit: overLimit, matched: limit.matched });
   if (planned.plan.status === "approved") {
     const r = await payViaJob(id);

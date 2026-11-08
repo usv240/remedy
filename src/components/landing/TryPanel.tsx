@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { fmtMs } from "@/lib/api/format";
+import { scoreLine, settledLine } from "@/components/claim/format";
 
 export type PanelCheck = { id: string; name: string; status: string; score: number | null; reason: string; technical: string };
 export type PanelRun = {
@@ -17,12 +18,16 @@ export type PanelRun = {
   /** "Sample recall BH-2026-01" or "CPSC recall 27056", and the recall's short title. */
   recall: { label: string; title: string };
   decision: "verified" | "retake" | "firm_review";
+  /** Verified by the two AI reviewers agreeing: an unsure check they settled reads as confirmed by them. */
+  reviewersSettled: boolean;
   next: string;
+  /** More on how it was decided, one tap away: the timings, for a verified run. */
+  more?: string | null;
   totalMs: number;
   settings: string | null;
   checks: PanelCheck[];
   /** What PayPal does next, for a verified run. */
-  paid: { line: string; note: string; href: string; cta: string } | null;
+  paid: { line: string; note: string; more?: string | null; href: string; cta: string } | null;
 };
 
 /** The same words the owner's claim page uses for each result (src/components/claim/format.ts), with Unclear kept. */
@@ -33,6 +38,8 @@ const STATUS: Record<string, { word: string; tone: string }> = {
   skipped: { word: "Not checked", tone: "neutral" },
   unavailable: { word: "For a person", tone: "info" },
 };
+
+const SETTLED = { word: "Confirmed by two reviewers", tone: "positive" };
 
 const DECISION: Record<PanelRun["decision"], string> = {
   verified: "Verified",
@@ -132,7 +139,9 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
         </p>
         <ol className="tp-checks" aria-label="Checks">
           {run.checks.map((c, i) => {
-            const st = STATUS[c.status] ?? STATUS.unclear;
+            // Unsure, then settled by the two reviewers: one state, with the photo check's own score a tap away.
+            const settled = run.reviewersSettled && c.status === "unclear";
+            const st = settled ? SETTLED : (STATUS[c.status] ?? STATUS.unclear);
             const on = i < shown;
             return (
               <li key={c.id} className="tp-check" data-on={on ? "" : undefined}>
@@ -140,7 +149,13 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
                 <span className="pill" data-tone={on ? st.tone : undefined}>
                   {on ? st.word : "Checking"}
                 </span>
-                <span className="tp-reason">{on && c.status !== "skipped" ? c.reason : " "}</span>
+                <span className="tp-reason">{on && c.status !== "skipped" ? (settled ? settledLine : c.reason) : " "}</span>
+                {on && settled && (
+                  <details className="tp-score">
+                    <summary>The photo check&rsquo;s own score</summary>
+                    <p>{scoreLine(c.score, c.reason)}</p>
+                  </details>
+                )}
                 {on && (
                   <span className="tp-tech lp-tech">
                     {c.id}
@@ -156,6 +171,12 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
             <>
               <p className="tp-decision">{DECISION[run.decision]}</p>
               <p className="tp-next">{run.next}</p>
+              {run.more && (
+                <details className="tp-score">
+                  <summary>How long each step took</summary>
+                  <p>{run.more}</p>
+                </details>
+              )}
               {run.settings && <p className="tp-settings lp-tech">Recorded with: {run.settings}</p>}
             </>
           )}
@@ -171,6 +192,12 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
                   {run.paid.line}
                 </p>
                 <p className="tp-paid-note">{run.paid.note}</p>
+                {run.paid.more && (
+                  <details className="tp-score">
+                    <summary>How the refund is sent</summary>
+                    <p>{run.paid.more}</p>
+                  </details>
+                )}
                 <p className="tp-paid-cta">
                   <Link className="text-link" href={run.paid.href}>
                     {run.paid.cta}

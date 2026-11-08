@@ -1,9 +1,10 @@
 /**
- * Saving matched buyers as sales and sending them personal claim links. Server only.
+ * Saving matched buyers as sales and making each a personal claim link and a notice. Server only.
  * Contacts are stored encrypted (sale.buyer_contact_enc) with the payments engine's email hash, so an owner who later
  * claims with the same email is linked to the sale, and a PayPal buyer inside 180 days is refunded to that payment.
- * A claim link's token is shown once and stored only as its SHA-256. Sending is a stub: with no mail service
- * connected, every notice is logged as "would send" and stays queued.
+ * A claim link's token is shown once and stored only as its SHA-256. Remedy sends no mail: each notice is returned
+ * once, with its link, subject and text, and the firm downloads them as a CSV for its own mail tool
+ * (src/lib/firm/notices.ts). The notice row stays queued with provider "export" until a claim arrives through its link.
  */
 import { createHash, randomBytes } from "node:crypto";
 import { sql } from "drizzle-orm";
@@ -13,7 +14,8 @@ import { hashBuyerEmail } from "@/lib/payments/shop";
 import { refundWindow } from "@/lib/payments/refunds";
 import { decrypt, encrypt, hashContact, maskContact } from "@/lib/secure";
 import { SHOP } from "@/lib/payments/shop-catalog";
-import { noticeText, type ParsedLine, type Target } from "./buyers";
+import type { ParsedLine, Target } from "./buyers";
+import { noticeEmail } from "./notices";
 import { SAMPLE_RECALL, type Firm, type FirmRecall } from "./firm";
 
 /** The names a sales line can match: the recall's products, and for the sample recall the sample shop's product. */
@@ -63,7 +65,18 @@ export async function saveMatchedSales(firm: Firm, recall: FirmRecall, lines: Pa
   return out;
 }
 
-export type NoticeLink = { saleId: number; contact: string; channel: "email" | "sms"; link: string; message: string; status: "would_send" | "already_notified"; refundToOriginal: boolean };
+export type NoticeLink = {
+  saleId: number;
+  /** Masked; the full address stays encrypted on the server, and the firm's own file supplies it to its download. */
+  contact: string;
+  channel: "email" | "sms";
+  link: string;
+  subject: string;
+  message: string;
+  paragraphs: string[];
+  status: "ready" | "already_notified";
+  refundToOriginal: boolean;
+};
 
 const tokenHash = (t: string) => createHash("sha256").update(t).digest("hex");
 
@@ -90,20 +103,19 @@ export async function notifySales(firm: Firm, recall: FirmRecall, saleIds: numbe
     const channel = contact.includes("@") ? "email" : "sms";
     const refundToOriginal = Boolean(s.paypal_capture_id && s.paid_at && refundWindow(s.paid_at, new Date()).within);
     if (s.notified) {
-      out.push({ saleId: s.id, contact: maskContact(contact), channel, link: "", message: "", status: "already_notified", refundToOriginal });
+      out.push({ saleId: s.id, contact: maskContact(contact), channel, link: "", subject: "", message: "", paragraphs: [], status: "already_notified", refundToOriginal });
       continue;
     }
     const token = randomBytes(18).toString("base64url");
     const link = `${origin.replace(/\/$/, "")}/claim/${encodeURIComponent(recall.number)}?n=${token}`;
     await db().execute(sql`
       insert into notice (firm_id, recall_number, sale_id, kind, channel, recipient_hash, claim_link_token_hash, status, provider)
-      values (${firm.id}, ${recall.number}, ${s.id}, 'notice', ${channel}, ${hashContact(contact)}, ${tokenHash(token)}, 'queued', 'stub')`);
-    const message = noticeText({ firmName: firm.name, product: recall.short, recallNumber: recall.number, link, refundToOriginal });
-    console.log(`[firm] would send a recall notice by ${channel} to ${maskContact(contact)} (sale ${s.id})`);
-    out.push({ saleId: s.id, contact: maskContact(contact), channel, link, message, status: "would_send", refundToOriginal });
+      values (${firm.id}, ${recall.number}, ${s.id}, 'notice', ${channel}, ${hashContact(contact)}, ${tokenHash(token)}, 'queued', 'export')`);
+    const email = noticeEmail({ firmName: firm.name.replace(/\s*\(sample\)\s*$/i, ""), product: recall.short, recallNumber: recall.number, link, refundToOriginal });
+    out.push({ saleId: s.id, contact: maskContact(contact), channel, link, subject: email.subject, message: email.paragraphs.join(" "), paragraphs: email.paragraphs, status: "ready", refundToOriginal });
   }
-  const queued = out.filter((o) => o.status === "would_send").length;
-  if (queued) await audit("person", "notices.queued", `firm:${firm.id}`, { recall: recall.number, queued, sent: 0, provider: "stub" });
+  const ready = out.filter((o) => o.status === "ready").length;
+  if (ready) await audit("person", "notices.made", `firm:${firm.id}`, { recall: recall.number, ready, provider: "export" });
   return out;
 }
 

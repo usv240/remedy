@@ -7,6 +7,7 @@ import { getClaimView, isClaimId } from "@/app/api/claims/_lib/claims";
 import { CHECK_ORDER, checkWord, money, seconds, when } from "@/components/claim/format";
 import { ReceiptLive } from "@/components/claim/ReceiptLive";
 import { db, dbConfigured, schema } from "@/lib/db";
+import { payerWords } from "@/lib/recall/label";
 import "../../pages.css";
 import "@/components/claim/claim.css";
 
@@ -102,7 +103,7 @@ async function Receipt({ params }: Params) {
             )}
             <div>
               <dt>Paid by</dt>
-              <dd>{c.firm.name}, a fictional sample firm, from its PayPal sandbox account</dd>
+              <dd>{payerWords(c.recall.number).short}</dd>
             </div>
           </dl>
           {p && <p className="rc-why">{p.reasons.plain}</p>}

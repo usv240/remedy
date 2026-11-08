@@ -6,6 +6,7 @@ import { reportPeriod } from "@/lib/firm/dates";
 import { basePlan, noteFor, type PlanRow } from "@/lib/firm/plan";
 import { buildReport, formRows, reportCsv, type ReportCounts } from "@/lib/firm/report";
 import { payoutNote } from "@/lib/payments/payouts";
+import { payerWords } from "@/lib/recall/label";
 import { isSampleNumber, recallCredit, recallLabel, RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 
 /**
@@ -67,6 +68,12 @@ describe("the sample recall's name and credit", () => {
     expect(note).toContain("(sample recall BH-2026-01)");
     expect(note).not.toContain("CPSC recall");
     expect(payoutNote({ recallNumber: REAL, recallTitle: "HAIARA Power Banks Recalled" }, "Brightline Home")).toContain("(CPSC recall 27056)");
+    // A fictional sample firm is never named as the payer of a real recall.
+    expect(payoutNote({ recallNumber: REAL, recallTitle: "HAIARA Power Banks Recalled" }, "Brightline Home (sample)")).not.toContain("Brightline");
+    expect(payoutNote({ recallNumber: SAMPLE, recallTitle: "Brightline 65W Laptop Chargers Recalled" }, "Brightline Home (sample)")).toContain("from Brightline Home.");
+    expect(payerWords(REAL).demo).not.toMatch(/Brightline|Fernway/);
+    expect(payerWords(REAL).real).toContain("the recalling firm pays from its own PayPal account");
+    expect(payerWords(SAMPLE).demo).toContain("Brightline Home, a fictional sample firm");
 
     const notice = noticeText({ firmName: "Brightline Home", product: "Brightline 65W laptop charger", recallNumber: SAMPLE, link: "https://example.com/c/x", refundToOriginal: true });
     expect(notice).toContain("(sample recall BH-2026-01)");

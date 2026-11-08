@@ -1237,3 +1237,15 @@
   line-height: 1.4;
   color: var(--muted);
 }
+/* The measured contrast leads the stake section, wider than the home page's column, above the money figures. */
+.ev-vs {
+  max-width: 48rem;
+  margin: 0 0 16px;
+}
+/* The claim path's three timings under the load table, each labelled with what it measures. */
+.jl-claim {
+  margin-top: 16px;
+}
+.jl-claim + .page-prose {
+  margin-top: 12px;
+}

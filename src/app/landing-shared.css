@@ -48,3 +48,46 @@
   background: var(--pill-neutral);
   color: var(--pill-neutral-ink);
 }
+
+/* The measured contrast: a claim portal's stated refund time, then Remedy's measured payout, as two lines of one
+   statement. The figure leads in the display face; Remedy's line carries the accent rule, the portal's a hairline. */
+.vs {
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 0;
+  max-width: 34rem;
+}
+.vs-row {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  gap: 4px 20px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-top: 1px solid var(--edge);
+}
+.vs-row[data-rm] {
+  border-top: 2px solid var(--ink);
+}
+.vs-fig {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+  text-wrap: balance;
+}
+.vs-what {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.vs-row[data-rm] .vs-what {
+  color: var(--ink);
+}
+@media (max-width: 760px) {
+  .vs-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

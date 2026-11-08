@@ -1,9 +1,13 @@
 /**
- * What the photo-refund recalls are worth to their owners, from the CPSC records alone: each recall's US units times
- * the sale price its record states in its Sold At field ("Amazon.com ... for between $24 and $34."). Only recalls whose
- * record states both count; a price range is taken at its lowest price, so the figure is a floor, not an estimate.
- * Nothing is extrapolated to recalls that state no price. Pure.
+ * What the photo-refund recalls offer their owners in refunds, from the CPSC records and the proof rules alone. Only the
+ * recalls whose rule asks for a photo of the product made safe and pays a refund in money count (madeSafeRefund in
+ * src/lib/recall/made-safe.ts). Each counts as its US units times the refund for one unit: the sale price its record
+ * states in its Sold At field ("Amazon.com ... for between $24 and $34."), taken at its lowest, or the fixed amount its
+ * rule states when that is lower, so the figure is a floor, never an estimate. A pro-rated refund states no share of
+ * the price, so it is left out, as are recalls whose record states no units or no price. Pure.
  */
+import { madeSafeRefund, type SplitRule } from "./made-safe";
+
 export type ValueRecall = { number: string; units: number | null; photoRefund: boolean; retailers?: (string | { name?: string; Name?: string })[] };
 
 /** Every dollar amount in the record's Sold At field (the CPSC's Retailers), in dollars: the prices it sold for. */
@@ -12,12 +16,21 @@ export function statedPrices(retailers: ValueRecall["retailers"]): number[] {
   return [...text.matchAll(/\$\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?(?![\d.,]*\d|\s*(?:million|billion))/gi)].map((m) => Number(m[1].replace(/,/g, "")) + (m[2] ? Number(`0.${m[2]}`) : 0)).filter((n) => n > 0);
 }
 
+/** A refund the rule says is pro-rated (by age or purchase date): it states no share of the price to count. */
+export const proRated = (rule: Pick<SplitRule, "remedy" | "refund_amount" | "refund_amount_text">) =>
+  /pro-?rated/i.test(rule.refund_amount_text ?? "") || (rule.remedy === "partial_refund" && rule.refund_amount === null);
+
 export type RecallValue = {
-  /** Photo-refund recalls in the data, and how many state both units and a price. */
+  /** Recalls that refund an owner for a photo of the product made safe, and how many of them are counted. */
   recalls: number;
   covered: number;
+  /** Left out: a pro-rated refund (no stated share), and no units or no price in the record. */
+  proRated: { count: number; numbers: string[] };
+  noPrice: number;
+  /** Counted at the fixed amount their rule states, because it is under the lowest stated price. */
+  atStatedAmount: { count: number; numbers: string[] };
   units: number;
-  /** Units times the lowest stated price, and times the highest, in whole dollars. */
+  /** Units times the refund for one unit at the lowest stated price, and at the highest, in whole dollars. */
   lowUsd: number;
   highUsd: number;
   /** At the share that comes back (6 in 100), what stays with owners unclaimed, at the lowest price. */
@@ -25,21 +38,32 @@ export type RecallValue = {
   unclaimedLowUsd: number;
   /** What one more point of return (1 in 100 more units) sends back to owners, at the lowest price. */
   perPointLowUsd: number;
-  /** The largest single recalls by low value, for the method page. */
+  /** The largest single recalls by low value, for the method page. `price` is the refund counted for one unit. */
   largest: { number: string; units: number; price: number; usd: number }[];
 };
 
-export function recallValue(recalls: ValueRecall[], comeBackShare = 0.06): RecallValue {
-  const pr = recalls.filter((r) => r.photoRefund);
-  const rows = pr
-    .map((r) => ({ r, prices: statedPrices(r.retailers) }))
+export function recallValue(recalls: ValueRecall[], rules: Record<string, SplitRule>, comeBackShare = 0.06): RecallValue {
+  const pr = recalls.filter((r) => r.photoRefund && rules[r.number] && madeSafeRefund(rules[r.number]));
+  const pro = pr.filter((r) => proRated(rules[r.number]));
+  const rest = pr.filter((r) => !proRated(rules[r.number]));
+  const rows = rest
+    .map((r) => ({ r, prices: statedPrices(r.retailers), amount: rules[r.number].refund_amount }))
     .filter((x) => x.r.units && x.r.units > 0 && x.prices.length)
-    .map((x) => ({ number: x.r.number, units: x.r.units!, low: Math.min(...x.prices), high: Math.max(...x.prices) }));
+    .map((x) => {
+      const low = Math.min(...x.prices);
+      const high = Math.max(...x.prices);
+      const a = x.amount !== null && x.amount > 0 ? x.amount : null;
+      return { number: x.r.number, units: x.r.units!, low: a !== null ? Math.min(low, a) : low, high: a !== null ? Math.min(high, a) : high, byAmount: a !== null && a < low };
+    });
   const low = rows.reduce((s, x) => s + x.units * x.low, 0);
   const high = rows.reduce((s, x) => s + x.units * x.high, 0);
+  const byAmount = rows.filter((x) => x.byAmount);
   return {
     recalls: pr.length,
     covered: rows.length,
+    proRated: { count: pro.length, numbers: pro.map((r) => r.number) },
+    noPrice: rest.length - rows.length,
+    atStatedAmount: { count: byAmount.length, numbers: byAmount.map((x) => x.number) },
     units: rows.reduce((s, x) => s + x.units, 0),
     lowUsd: Math.round(low),
     highUsd: Math.round(high),

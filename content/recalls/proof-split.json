@@ -1,0 +1,50 @@
+{
+ "note": "Written by scripts/recalls/value.ts from content/recalls/recalls.json and content/recalls/proof-rules.json. A recall is photo-refund when its remedy text names a photo and a refund (src/lib/recall/classify.ts); its proof rule then says what the photo must show and what the owner gets (src/lib/recall/made-safe.ts). The headline is madeSafeRefund: a photo of the product made safe, and a refund in money.",
+ "pulledAt": "2026-11-05T18:56:05.863Z",
+ "range": {
+  "from": "2024-01-04",
+  "to": "2026-11-05"
+ },
+ "recalls": 1239,
+ "photoRefund": 525,
+ "missingRules": [],
+ "madeSafe": 452,
+ "madeSafeRefund": {
+  "count": 447,
+  "share": 36.1,
+  "byYear": {
+   "2024": 54,
+   "2025": 151,
+   "2026": 242
+  }
+ },
+ "madeSafeCredit": {
+  "count": 5,
+  "numbers": [
+   "26434",
+   "26053",
+   "25135",
+   "25042",
+   "24341"
+  ]
+ },
+ "otherPhoto": {
+  "count": 71,
+  "product": 68,
+  "identifier": {
+   "count": 3,
+   "numbers": [
+    "26741",
+    "26702",
+    "24189"
+   ]
+  }
+ },
+ "noPhoto": {
+  "count": 2,
+  "numbers": [
+   "27015",
+   "24193"
+  ]
+ }
+}

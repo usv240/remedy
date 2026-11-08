@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { recallLabel } from "@/lib/recall/label";
+import { recallLabel, sampleFirmOf } from "@/lib/recall/label";
 import { SANDBOX_LABEL, resolveDeps, toCents, toValue, type PaymentsDeps } from "./deps";
 import { recordStatus, type PaymentEventSource } from "./events";
 import { payoutItemStatus, plainIssue } from "./status";
@@ -53,8 +53,11 @@ export function recipientFor(payee: Payee, opts: { venmoWallet: boolean } = { ve
   return { recipient_type: "PHONE", receiver: phone };
 }
 
+/** The firm named on a payout: only on its own fictional sample recall, never as the payer of a real CPSC recall. */
+const payerOn = (recallNumber: string, firmName: string) => (sampleFirmOf(recallNumber) ? ` from ${firmName.replace(/\s*\(sample\)\s*$/i, "")}` : "");
+
 export function payoutNote(line: Pick<PayoutLine, "recallNumber" | "recallTitle">, firmName: string) {
-  return `Recall refund for ${line.recallTitle} (${recallLabel(line.recallNumber)}) from ${firmName}. Thank you for making it safe. ${SANDBOX_LABEL}`.slice(0, 4000);
+  return `Recall refund for ${line.recallTitle} (${recallLabel(line.recallNumber)})${payerOn(line.recallNumber, firmName)}. Thank you for making it safe. ${SANDBOX_LABEL}`.slice(0, 4000);
 }
 
 /** sender_item_id is the claim id (PayPal allows 63 characters). */
@@ -79,7 +82,7 @@ export function buildPayoutBatch(lines: PayoutLine[], o: { senderBatchId: string
   return {
     sender_batch_header: {
       sender_batch_id: o.senderBatchId,
-      email_subject: `Your recall refund from ${o.firmName}`,
+      email_subject: `Your recall refund${lines.length && lines.every((l) => sampleFirmOf(l.recallNumber)) ? payerOn(lines[0].recallNumber, o.firmName) : ""}`,
       email_message: `Thank you for making your recalled product safe. ${SANDBOX_LABEL}`,
     },
     items,

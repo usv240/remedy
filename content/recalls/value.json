@@ -1,33 +1,33 @@
 {
- "note": "Written by scripts/recalls/value.ts from content/recalls/recalls.json (CPSC Recalls API). Each photo-refund recall's US units times the sale price its record states in the Sold At line; a range is taken at its lowest price. Recalls that state no price are left out, not estimated. 'comeBackShare' is the CPSC's measure that about 6 in 100 recalled products come back (src/lib/research.ts).",
+ "note": "Written by scripts/recalls/value.ts from content/recalls/recalls.json (CPSC Recalls API) and content/recalls/proof-rules.json. Only the recalls whose rule asks for a photo of the product made safe and pays a refund in money count. Each is its US units times the refund for one unit: the lowest sale price its record states in the Sold At line, or the fixed amount its rule states when that is lower. Pro-rated refunds state no share of the price and are left out, as are recalls that state no units or no price; nothing is estimated. 'comeBackShare' is the CPSC's measure that about 6 in 100 recalled products come back (src/lib/research.ts).",
  "pulledAt": "2026-11-05T18:56:05.863Z",
- "recalls": 525,
- "covered": 522,
- "units": 70463292,
- "lowUsd": 1471440065,
- "highUsd": 4161231614,
+ "recalls": 447,
+ "covered": 442,
+ "proRated": {
+  "count": 3,
+  "numbers": [
+   "25355",
+   "25323",
+   "25320"
+  ]
+ },
+ "noPrice": 2,
+ "atStatedAmount": {
+  "count": 4,
+  "numbers": [
+   "26727",
+   "26698",
+   "26414",
+   "26408"
+  ]
+ },
+ "units": 16705640,
+ "lowUsd": 471125375,
+ "highUsd": 1298957814,
  "comeBackShare": 0.06,
- "unclaimedLowUsd": 1383153661,
- "perPointLowUsd": 14714401,
+ "unclaimedLowUsd": 442857852,
+ "perPointLowUsd": 4711254,
  "largest": [
-  {
-   "number": "25320",
-   "units": 1700000,
-   "price": 280,
-   "usd": 476000000
-  },
-  {
-   "number": "25451",
-   "units": 2900000,
-   "price": 74,
-   "usd": 214600000
-  },
-  {
-   "number": "24281",
-   "units": 21000000,
-   "price": 7,
-   "usd": 147000000
-  },
   {
    "number": "24309",
    "units": 3200000,
@@ -39,6 +39,24 @@
    "units": 3600000,
    "price": 20,
    "usd": 72000000
+  },
+  {
+   "number": "26659",
+   "units": 1500000,
+   "price": 15,
+   "usd": 22500000
+  },
+  {
+   "number": "25036",
+   "units": 512500,
+   "price": 30,
+   "usd": 15375000
+  },
+  {
+   "number": "26489",
+   "units": 113440,
+   "price": 120,
+   "usd": 13612800
   }
  ]
 }

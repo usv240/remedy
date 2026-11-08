@@ -27,7 +27,7 @@
   min-height: 24px;
 }
 /* File links: mono, ink, underlined, the same in the tool rows and in the PayPal table. */
-:is(.stack-files, .pp-apis-table) a.stack-file {
+:is(.stack-files, .pp-apis-table, .stack-changes) a.stack-file {
   display: inline-flex;
   align-items: center;
   min-height: 24px;
@@ -41,13 +41,13 @@
   transition: text-decoration-color 160ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  :is(.stack-files, .pp-apis-table) a.stack-file:hover {
+  :is(.stack-files, .pp-apis-table, .stack-changes) a.stack-file:hover {
     text-decoration-color: var(--ink);
   }
 }
 @media (pointer: coarse) {
   .stack-jump a,
-  :is(.stack-files, .pp-apis-table) a.stack-file {
+  :is(.stack-files, .pp-apis-table, .stack-changes) a.stack-file {
     min-height: 44px;
   }
 }
@@ -127,7 +127,18 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  :is(.stack-files, .pp-apis-table) a.stack-file {
+  :is(.stack-files, .pp-apis-table, .stack-changes) a.stack-file {
     transition: none;
   }
+}
+
+/* What a production onboarding changes, file by file. */
+.stack-changes {
+  margin: 8px 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 8px;
+  max-width: 70ch;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }

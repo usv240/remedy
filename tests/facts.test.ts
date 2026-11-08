@@ -6,7 +6,7 @@ import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 import { TOOLS } from "@/lib/mcp/tools";
 import { aboutSeconds, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import { derived } from "../scripts/facts";
+import { derived, skipNeed, testsHash } from "../scripts/facts";
 
 /**
  * One source for each figure the README, docs/*.md, TESTING.md and /evidence repeat: content/public/facts.json, written
@@ -18,7 +18,7 @@ const ROOT = process.cwd();
 const read = (...p: string[]) => readFileSync(path.join(ROOT, ...p), "utf8");
 const FACTS = path.join(ROOT, "content", "public", "facts.json");
 type Facts = {
-  unitTests: { passed: number; skipped: number; failed: number };
+  unitTests: { passed: number; skipped: number; failed: number; skippedNeeds: { database: number; claude: number; paypal: number; other: number }; testsHash: string };
   a11y: { pages: number; views: number; passed: number } | null;
   mcp: { tools: number; names: string[] };
   photoChecks: { freeCaught: number; freeTotal: number };
@@ -116,6 +116,22 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
       for (const [p, s] of found) expect([p, s]).toEqual([int(facts.unitTests.passed), int(facts.unitTests.skipped)]);
     }
     for (const text of ALL) for (const [p, s] of all(text, /(\d[\d,]*) passed, (\d[\d,]*) skipped/g)) expect([p, s]).toEqual([int(facts.unitTests.passed), int(facts.unitTests.skipped)]);
+    // Each skipped test is counted by what it needs, and the parts add up.
+    const n = facts.unitTests.skippedNeeds;
+    expect(n.other).toBe(0);
+    expect(n.database + n.claude + n.paypal).toBe(facts.unitTests.skipped);
+    for (const text of [doc("run-and-test.md"), TESTING]) expect(text).toContain(`${n.database} need a database, ${n.claude} a Claude key and ${n.paypal} PayPal sandbox keys`);
+  });
+
+  it("the unit-test counts were taken on the tests as they are now", () => {
+    // A test added or changed after the count changes this fingerprint: run `npx tsx scripts/facts.ts` again.
+    if (COUNTING) return;
+    expect(facts.unitTests.testsHash, "tests changed since content/public/facts.json was written; run npx tsx scripts/facts.ts").toBe(testsHash());
+    // Each suite that can skip is named in skipNeed, so its skipped tests are counted under what they need.
+    for (const f of readdirSync(path.join(ROOT, "tests")).filter((x) => x.endsWith(".test.ts"))) {
+      // verify-dhash skips only without content/recalls/image-hashes.json, which the repo commits.
+      if (f !== "verify-dhash.test.ts" && /describe\.skipIf|it\.skipIf/.test(read("tests", f))) expect(skipNeed(f), f).not.toBe("other");
+    }
   });
 
   it("accessibility page views and pages", () => {
@@ -201,9 +217,8 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     const claim = d.settings.find((s) => s.id === "opus-medium")!;
     const low = d.settings.find((s) => s.id === "opus-low")!;
     const sonnet = d.settings.find((s) => s.id === "sonnet-default")!;
-    expect(README).toContain(`was right on **${claim.atSweep}** against the known answers on the day the sweep ran, and **${claim.correct}** re-scored after ${WORDS[d.answerChanges.count]} answers were revised`);
-    expect(README).toContain("content/verify/answer-changes.json");
     const r = doc("results.md");
+    expect(r).toContain("content/verify/answer-changes.json");
     expect(r).toContain(`the claim path's setting was right on **${claim.atSweep}** (Opus at low effort ${low.atSweep}, Sonnet 5.5 ${sonnet.atSweep})`);
     expect(r).toContain(`Re-scored with today's answers: ${claim.correct}, Opus at low effort and Sonnet 5.5 ${low.correct}`);
     expect(low.correct).toBe(sonnet.correct);
@@ -211,15 +226,14 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(r).toContain(`$${low.usdPerCase} a check against $${claim.usdPerCase}`);
     const e = facts.errors.heldBack;
     expect(r).toContain(`the sample charger, paid in ${e.of - e.count} of ${e.of}`);
-    // Day-of-sweep first: in each document, the day-of-sweep score is printed before the re-scored one.
-    for (const text of [README, r]) expect(text.indexOf(claim.atSweep)).toBeLessThan(text.indexOf(claim.correct));
+    // Day-of-sweep first: the day-of-sweep score is printed before the re-scored one.
+    expect(r.indexOf(claim.atSweep)).toBeLessThan(r.indexOf(claim.correct));
   });
 
   it("the sample recall's reference pictures, before and after", () => {
     const d = derived();
     expect(facts.references).toEqual(d.references);
     const ref = d.references;
-    expect(README).toContain(`went from ${range(ref.before)} to ${range(ref.after)}`);
     const r = doc("results.md");
     expect(r).toContain(`scored ${range(ref.before)} on the right-product check in all ${ref.before.length} runs`);
     expect(r).toContain(`the score is ${range(ref.after)} in ${ref.after.length} runs`);
@@ -244,17 +258,44 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(facts.multiPhoto).toEqual(d.multiPhoto);
     expect(facts.value).toEqual(d.value);
     const r = d.reading;
-    for (const text of [README, doc("results.md")]) expect(text).toContain(`**Reading accuracy on real CPSC recalls: ${r.right} of ${r.readings} readings right`);
-    for (const text of [README, doc("results.md")]) expect(text).toContain(`right product ${r.product} of ${r.trials}, made safe ${r.madeSafe} of ${r.trials}`);
+    expect(doc("results.md")).toContain(`**Reading accuracy on real CPSC recalls: ${r.right} of ${r.readings} readings right`);
+    expect(doc("results.md")).toContain(`right product ${r.product} of ${r.trials}, made safe ${r.madeSafe} of ${r.trials}`);
     expect(doc("results.md")).toContain(`${d.multiPhoto.count} of the ${d.multiPhoto.of} ask for more than one photo`);
-    expect(README).toContain(`cover **${d.value.total}**`);
-    expect(README).toContain(`**${d.value.unclaimed}** of those products stays in homes unclaimed`);
-    expect(README).toContain(`is worth **${d.value.perPoint}** to their owners in refunds or replacements`);
-    expect(README).toContain(`(${d.value.covered} of ${d.value.recalls} state units and a price)`);
+    expect(README).toContain(`those ${d.value.recalls} recalls offer **${d.value.total}** in refunds`);
+    expect(README).toContain(`**${d.value.unclaimed}** of it stays unclaimed`);
+    expect(README).toContain(`sends **${d.value.perPoint}** back to owners`);
+    expect(README).toContain(`(${d.value.covered} of ${d.value.recalls} state units and a price;`);
+    // The headline count, its share and its years, read through each recall's proof rule (content/recalls/proof-split.json).
+    const h = d.headline;
+    expect(facts.headline).toEqual(h);
+    expect(h.madeSafeRefund).toBe(d.value.recalls);
+    expect(README).toContain(`**${h.madeSafeRefund} of ${int(h.recalls)}** US consumer product recalls since January 2024 (${h.share}%)`);
+    expect(README).toContain(`${h.byYear["2024"]} in 2024, ${h.byYear["2025"]} in 2025 and ${h.byYear["2026"]} in 2026 so far`);
+    expect(README).toContain(`of the ${h.photoRefund} whose remedy names a photo and a refund, ${h.madeSafeRefund} ask for the product made safe and pay a refund for it, ${h.otherPhoto} ask for a photo of the product as it is`);
+    expect(README).toContain(`${h.madeSafeCredit} pay store credit and ${h.noPhoto} need no photo`);
+    const r2 = doc("results.md");
+    expect(r2).toContain(`${h.madeSafeRefund + h.madeSafeCredit} ask for a photo of the product made safe, of which ${h.madeSafeRefund} pay a refund for it (the headline) and ${h.madeSafeCredit} pay store credit`);
+    expect(r2).toContain(`${h.otherPhoto} ask for a photo for another reason`);
+    expect(r2).toContain(`The ${h.madeSafeRefund} recalls offer ${d.value.total} in refunds`);
+    // No headline anywhere says every photo-refund recall refunds a made-safe photo.
+    for (const text of [...ALL, TESTING]) expect(text).not.toMatch(new RegExp(`${h.photoRefund} (?:of [\d,]+ )?(?:US )?(?:consumer )?(?:product )?recalls[^.]{0,60}(?:offer|refund)[^.]{0,40}made safe`));
   });
 
-  it("the research and the payout timing", () => {
+  it("the research, framed as what it measures, and the measured contrast the impact story leads with", () => {
     for (const fig of [RESEARCH.fullRemedy.lift, `${RESEARCH.simpler.from} to ${RESEARCH.simpler.to}`, RESEARCH.simpler.named, RESEARCH.comeBack.share]) expect(README).toContain(fig);
+    expect(README).toContain(`Across ${RESEARCH.fullRemedy.recalls} CPSC recalls from ${RESEARCH.fullRemedy.years}`);
+    expect(README).toContain(`had not claimed ${RESEARCH.simpler.benefit} after a first notice`);
+    for (const text of ALL) expect(text).not.toMatch(/a full refund lifts/i);
+    // The contrast: the portal's own words and page, against the payout measured in the sandbox.
+    const items = (JSON.parse(read("content", "public", "measured.json")) as { items: { id: string; figure: string }[] }).items;
+    const payout = items.find((i) => i.id === "payout")!.figure.replace(/ s$/, " seconds");
+    expect(RESEARCH.portal.quote).toContain("10-15 business days");
+    expect(README).toContain(`"via check within 10-15 business days"`);
+    expect(README).toContain(RESEARCH.portal.url);
+    expect(README).toContain(`**${payout}** after approval`);
+    expect(README.indexOf("**The difference:**")).toBeLessThan(README.indexOf("Reaching the owner directly"));
+    expect(doc("research.md")).toContain(RESEARCH.portal.url);
+    expect(doc("research.md")).toContain(payout);
     const research = doc("research.md");
     for (const fig of [RESEARCH.directNotice.direct, RESEARCH.directNotice.press, RESEARCH.euStudy.direct, RESEARCH.euStudy.generic, RESEARCH.fullRemedy.lift]) expect(research).toContain(fig);
     expect(README).toContain(`the PayPal payout in **about ${facts.measured.payoutSeconds}**`);

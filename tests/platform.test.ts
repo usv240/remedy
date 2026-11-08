@@ -4,6 +4,7 @@ import { fail, ok } from "@/lib/api/envelope";
 import { ENDPOINTS } from "@/lib/api/endpoints";
 import { KEY_PREFIX, displayPrefix, hashKey, newKey } from "@/lib/api/keys";
 import { openapi } from "@/lib/api/openapi";
+import { agGridEnterprise } from "@/components/firm/ag-license";
 import { liveSummary, runChecks } from "@/lib/health";
 import { serverCard } from "@/lib/mcp/card";
 import { SERVER_INFO, TOOLS } from "@/lib/mcp/tools";
@@ -101,5 +102,17 @@ describe("health checks", () => {
 
     process.env.FALLBACK_ELASTIC = "true";
     expect((await runChecks()).find((c) => c.id === "elastic")?.mode).toBe("fallback");
+  });
+
+  it("say what the claims grid runs, from the same license check the grid uses", async () => {
+    delete process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY;
+    const without = (await runChecks()).find((c) => c.id === "ag-grid")!.detail;
+    expect(agGridEnterprise(null)).toBe(false);
+    expect(without).toMatch(/^AG Grid Community .* with no license notice/);
+    expect(without).not.toMatch(/trial/);
+    // A key AG Grid does not accept (an AG Studio key, say) leaves the grid on Community, and /status says so.
+    process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY = "not-a-real-ag-grid-key";
+    expect(agGridEnterprise("not-a-real-ag-grid-key")).toBe(false);
+    expect((await runChecks()).find((c) => c.id === "ag-grid")!.detail).toMatch(/^AG Grid Community/);
   });
 });

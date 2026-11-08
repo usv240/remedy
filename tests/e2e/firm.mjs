@@ -4,7 +4,8 @@
 //      (skip with FIRM_E2E_PAY=0; then step 4 uses a sample claim instead);
 //   3. the monthly report's numbers match the same counts made directly in SQL;
 //   4. the Gantt shows a "Re-notice" task, without a reload, after a seeded UNCLAIMED event
-//      (scripts/payments/seed-event.ts, the same recordStatus path a PayPal webhook uses).
+//      (scripts/payments/seed-event.ts, the same recordStatus path a PayPal webhook uses);
+//   5. a sales file becomes notices: the email preview, and the CSV the firm downloads for its own mail tool.
 // Seed first: npx tsx --env-file=.env.local scripts/seed-firm.ts
 // Usage: BASE_URL=http://localhost:3300 node --env-file=.env.local tests/e2e/firm.mjs
 import { spawnSync } from "node:child_process";
@@ -43,7 +44,7 @@ await page.waitForSelector(".cq-drawer[open] .cq-check-list li", { timeout: 30_0
 const checksShown = await page.locator(".cq-drawer[open] .cq-check-list li").count();
 check("the drawer opens with the six checks", checksShown === 6, `${checksShown} checks`);
 const drawerTitle = await page.locator("#cq-drawer-title").textContent();
-check("the drawer names the claimant, masked", /^Claim from (.+•••|No contact)/.test(drawerTitle ?? ""), drawerTitle ?? "");
+check("the drawer names the claimant, masked", /^(Claim from .+•••|Claim with no contact yet)/.test(drawerTitle ?? ""), drawerTitle ?? "");
 await page.keyboard.press("Escape");
 await page.waitForTimeout(400);
 check("Escape closes the drawer", (await page.locator(".cq-drawer[open]").count()) === 0);
@@ -128,6 +129,31 @@ const after = await page.locator(".plan-gantt .b-grid-row", { hasText: "Re-notic
 check("the Re-notice row is in the Gantt", after > before, `${before} then ${after}`);
 const dep = await one(`select t.dependencies from plan_task t where t.ref = $1`, [`re-notice:${(await one(`select request_id from payment where claim_id = $1 order by id desc limit 1`, [target]))?.request_id}:unclaimed`]);
 check("it is linked to its batch when the payout was real", paidClaim ? Array.isArray(dep?.dependencies) && dep.dependencies.length === 1 : true, JSON.stringify(dep?.dependencies ?? null));
+
+// 5. Buyers: a sales file becomes notices the firm downloads for its own mail tool, with a preview of the email.
+{
+  const stamp = Date.now().toString(36);
+  const email = `notice-${stamp}@example.com`;
+  const csv = `order_id,order_date,buyer_email,buyer_phone,item_name,sku,quantity,amount_usd,paid_with,paypal_transaction_id\nE2E-${stamp},${new Date().toISOString().slice(0, 10)},${email},,Brightline 65W laptop charger,BLH-65W,1,34.99,card,\n`;
+  const ctx = await browser.newContext({ acceptDownloads: true, viewport: { width: 1440, height: 900 } });
+  const p = await ctx.newPage();
+  p.on("pageerror", (e) => errors.push(String(e)));
+  await p.goto(`${B}/firm/buyers`, { waitUntil: "networkidle" });
+  await p.setInputFiles('[data-testid="buyers-file"]', { name: "sales.csv", mimeType: "text/csv", buffer: Buffer.from(csv) });
+  await p.getByRole("button", { name: "Match buyers" }).click();
+  await p.waitForSelector('[data-testid="notify-buyers"]', { timeout: 30_000 });
+  await p.locator('[data-testid="notify-buyers"]').click();
+  await p.waitForSelector('[data-testid="notice-preview"]', { timeout: 30_000 });
+  const preview = (await p.locator('[data-testid="notice-preview"]').innerText()) ?? "";
+  check("buyers: the email preview shows the full address from the file, the subject and a claim link", preview.includes(email) && /Subject\s+Safety recall/.test(preview) && /\/claim\/[^?\s]+\?n=/.test(preview), preview.slice(0, 160));
+  const [download] = await Promise.all([p.waitForEvent("download", { timeout: 15_000 }), p.locator('[data-testid="notice-csv"]').click()]);
+  const path = await download.path();
+  const text = path ? (await import("node:fs")).readFileSync(path, "utf8") : "";
+  check("buyers: the notices download as a CSV for the firm's mail tool", /^order_id,channel,to,subject,body,claim_link,refund_to_original_payment\r\n/.test(text) && text.includes(`E2E-${stamp},email,${email},`), `${download.suggestedFilename()} ${text.split("\r\n").length - 2} rows`);
+  const notice = await one(`select n.status, n.provider from notice n join sale s on s.id = n.sale_id where s.item_name = 'Brightline 65W laptop charger' and s.source = 'csv' order by n.id desc limit 1`);
+  check("buyers: the notice row is kept for export, with only the link's hash", notice?.provider === "export" && notice?.status === "queued", JSON.stringify(notice));
+  await ctx.close();
+}
 
 check("no page errors", errors.length === 0, errors.slice(0, 2).join(" | "));
 await browser.close();

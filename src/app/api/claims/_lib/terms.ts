@@ -25,6 +25,11 @@ export const DEMO_REFUND_CENTS = 2000;
 export type FirmTerms = {
   firmId: number | null;
   firmName: string;
+  /**
+   * The firm as an owner reads it on a claim: the sample firm by name on its own fictional sample recall, and "the
+   * recalling firm" on a real CPSC recall, so a fictional firm is never named as the one that pays or reviews it.
+   */
+  ownerName: string;
   /** Verified claims at or under this are paid with no person. */
   autoCapCents: number;
   /** What the auto rule pays on this recall in a UTC day at most (firm_recall.daily_cap); past it, a person approves. */
@@ -44,11 +49,12 @@ const cents = (v: string | number | null | undefined) => {
   return Number.isFinite(n) && n >= 0 ? n : null;
 };
 
-export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, autoCapCents: 5000, autoDailyCents: 35_000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
+export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, ownerName: "the recalling firm", autoCapCents: 5000, autoDailyCents: 35_000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
 
 export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
   // Without a database, a sample recall is still named for the firm that runs it.
-  const fallback: FirmTerms = { ...DEFAULT_TERMS, firmName: sampleFirmOf(recallNumber) ?? DEFAULT_TERMS.firmName };
+  const ownerName = sampleFirmOf(recallNumber) ?? "the recalling firm";
+  const fallback: FirmTerms = { ...DEFAULT_TERMS, firmName: sampleFirmOf(recallNumber) ?? DEFAULT_TERMS.firmName, ownerName };
   if (!dbConfigured()) return fallback;
   try {
     // The sample firm that runs this recall (Fernway Home runs FW-2026-01); any other recall falls to the first sample
@@ -68,6 +74,7 @@ export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
     return {
       firmId: firm.id,
       firmName: firm.name.replace(/\s*\(sample\)\s*$/i, "") || SAMPLE_FIRM,
+      ownerName,
       autoCapCents: cents(fr?.autoCap) ?? cents(settings.autoApproveCap) ?? DEFAULT_TERMS.autoCapCents,
       autoDailyCents: cents(fr?.dailyCap) ?? cents(settings.dailyPayoutCap) ?? DEFAULT_TERMS.autoDailyCents,
       refundCents: refund ?? DEMO_REFUND_CENTS,

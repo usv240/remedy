@@ -1,4 +1,5 @@
 import { fmtInt } from "@/lib/api/format";
+import { HEADLINE } from "@/lib/recall/headline";
 import { BENCH, RUNS, S, freeCaught, pct } from "./data";
 
 /**
@@ -15,11 +16,11 @@ export function Results() {
       <li className="jr-item">
         <a className="jr-link" href="#data">
           <span className="jr-fig tabular">
-            {fmtInt(S.all.photoRefund.count)} of {fmtInt(S.recalls.count)}
+            {fmtInt(HEADLINE.count)} of {fmtInt(S.recalls.count)}
           </span>
-          <span className="jr-what">US product recalls since January 2024 offer a refund for a photo of the product made safe.</span>
+          <span className="jr-what">US product recalls since January 2024 refund an owner for a photo of the product made safe.</span>
           <span className="jr-base">
-            <span className="tabular">{S.byYear["2024"].photoRefund}</span> in 2024, <span className="tabular">{S.byYear["2026"].photoRefund}</span> in 2026 so far. CPSC Recalls API.
+            <span className="tabular">{HEADLINE.byYear["2024"]}</span> in 2024, <span className="tabular">{HEADLINE.byYear["2026"]}</span> in 2026 so far. CPSC Recalls API and each recall&rsquo;s proof rule.
           </span>
         </a>
       </li>
@@ -54,7 +55,7 @@ export function Results() {
       <li className="jr-item">
         <a className="jr-link" href="#adoption">
           <span className="jr-fig tabular">{S.all.paypalOrVenmo.count}</span>
-          <span className="jr-what">recalls mention PayPal or Venmo. The photo goes to an email address in <span className="tabular">{S.photoRefund.email.count}</span> of the {fmtInt(S.all.photoRefund.count)}.</span>
+          <span className="jr-what">recalls mention PayPal or Venmo. The photo goes to an email address in <span className="tabular">{S.photoRefund.email.count}</span> of the {fmtInt(S.all.photoRefund.count)} recalls whose remedy names a photo and a refund.</span>
           <span className="jr-base">
             <span className="tabular">{pct(S.all.under50k.share / 100)}</span> of all recalls cover fewer than 50,000 units.
           </span>

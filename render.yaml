@@ -47,7 +47,7 @@ services:
         sync: false
       - key: PAYPAL_VENDOR_EMAIL # the sandbox business account that stands in for the retailer of a safe replacement
         sync: false
-      - key: NEXT_PUBLIC_AG_GRID_LICENSE_KEY # optional: without it the claims grid runs on AG Grid's enterprise trial
+      - key: NEXT_PUBLIC_AG_GRID_LICENSE_KEY # optional: without a valid AG Grid key the claims grid runs on AG Grid Community, with no license notice
         sync: false
       # Optional: each has a working fallback until it is set.
       - key: ELASTIC_URL

@@ -385,7 +385,7 @@ export function retakeMessage(o: { firmName: string; product: string; steps: str
   return lines.filter(Boolean).join("\n\n");
 }
 
-/** "Ask for a retake": mark the claim, cancel any plan not yet paid, and queue a friendly message (sending is a stub). */
+/** "Ask for a retake": mark the claim, cancel any plan not yet paid, and write a friendly message for the firm to send from its own mail tool. */
 export async function askForRetake(firm: Firm, claimId: string, reviewer: string, note?: string | null) {
   const r = await rawClaim(firm.id, claimId);
   if (!r) return { ok: false as const, plain: "This claim was not found." };
@@ -402,9 +402,8 @@ export async function askForRetake(firm: Firm, claimId: string, reviewer: string
   const channel = r.payee_type === "email" ? "email" : r.payee_type ? "sms" : "email";
   await db().execute(sql`
     insert into notice (firm_id, recall_number, claim_id, kind, channel, status, provider)
-    values (${firm.id}, ${r.recall_number}, ${claimId}::uuid, 're_notice', ${channel}, 'queued', 'stub')`);
-  await audit("person", "claim.retake_asked", `claim:${claimId}`, { by: who, channel, sent: false, reason: "no mail service connected; message logged" });
-  console.log(`[firm] would send a retake message by ${channel} to ${r.payee_masked ?? "the owner"} for claim ${claimId}`);
+    values (${firm.id}, ${r.recall_number}, ${claimId}::uuid, 're_notice', ${channel}, 'queued', 'export')`);
+  await audit("person", "claim.retake_asked", `claim:${claimId}`, { by: who, channel, sent: false, delivery: "export: the message is shown to the firm to send from its own mail tool" });
   return { ok: true as const, message, channel, to: r.payee_masked ?? "the owner", sent: false };
 }
 

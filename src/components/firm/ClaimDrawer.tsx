@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { TONE, WORD } from "@/lib/firm/checks";
-import { recallLabel } from "@/lib/recall/label";
+import { isSampleNumber, recallLabel } from "@/lib/recall/label";
 import { STAGE_LABEL, STAGE_TONE, type ClaimDetail } from "@/lib/firm/types";
+import { CopyButton } from "@/components/developers/CopyButton";
 import { FirmInfo } from "./FirmInfo";
 import { Thumb } from "./Thumb";
 
@@ -101,7 +102,7 @@ export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { 
       const j = (await r.json()) as { data: { message: string; to: string; channel: string } | null; error: { message: string } | null };
       if (j.data) {
         setMessage({ text: j.data.message, to: j.data.to, channel: j.data.channel });
-        setStatus({ text: `Saved. With no mail service connected, this message is logged as "would send" to ${j.data.to}.`, tone: "positive" });
+        setStatus({ text: `Saved. The message to ${j.data.to} is below, to send from your own mail tool; Remedy sends no mail.`, tone: "positive" });
         setRetakeOpen(false);
         onChanged();
       } else setStatus({ text: j.error?.message ?? "The request could not be saved.", tone: "attention" });
@@ -298,6 +299,9 @@ export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { 
                     Message to {message.to} ({message.channel === "sms" ? "text" : "email"})
                   </h3>
                   <p className="cq-message">{message.text}</p>
+                  <p>
+                    <CopyButton text={message.text} label="Copy the message" />
+                  </p>
                 </section>
               )}
 
@@ -346,7 +350,7 @@ export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { 
               </div>
             )}
             <p className="firm-status" role="status" data-tone={status?.tone}>
-              {status?.text ?? (canPay ? `Pays from Brightline Home's PayPal sandbox account, approved by ${reviewer}.` : "")}
+              {status?.text ?? (canPay && detail ? `${isSampleNumber(detail.recall.number) ? "Pays from Brightline Home's PayPal sandbox account" : "Pays from Remedy's PayPal sandbox account in this demo (in a real deployment, the recalling firm's own)"}, approved by ${reviewer}.` : "")}
             </p>
           </div>
         )}

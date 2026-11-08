@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import type { ClaimView, PayView, ReplacementOption } from "@/app/api/claims/_lib/types";
+import { payerWords } from "@/lib/recall/label";
 import { ClaimInfo } from "./ClaimInfo";
 import { day, money } from "./format";
 
@@ -189,7 +190,7 @@ export function Payout({ claim, review = false, onDone }: { claim: ClaimView; re
         </button>
       </div>
       <p className="cl-fine">
-        Paid by {claim.firm.name}, a fictional sample firm, from its PayPal sandbox account. {claim.sandbox_label}
+        {payerWords(claim.recall.number).demo} {claim.sandbox_label}
       </p>
     </form>
   );

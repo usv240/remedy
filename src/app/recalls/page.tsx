@@ -5,6 +5,7 @@ import stats from "../../../content/recalls/stats.json";
 import { Info } from "@/components/Info";
 import { fmtDate, fmtInt, fmtUnits, shortTitle } from "@/lib/api/format";
 import { explore } from "@/lib/api/explore";
+import { HEADLINE } from "@/lib/recall/headline";
 import { facets, filtersFrom, type ApiHit } from "@/lib/api/recall-data";
 import { ruleChips } from "@/lib/api/rule-chips";
 import { Filters } from "./_parts/Filters";
@@ -34,7 +35,7 @@ export default function RecallsPage(props: PageProps<"/recalls">) {
         <p className="lede">Find your recall, see what it asks you to do, and start a claim.</p>
         <p className="page-prose rx-intro">
           All <span className="tabular">{fmtInt(C.recalls.count)}</span> US consumer product recalls from {fmtDate(C.range.from)} to {fmtDate(C.range.to)}, from the U.S. Consumer Product Safety Commission.{" "}
-          <span className="tabular">{fmtInt(C.all.photoRefund.count)}</span> of them offer a refund for a photo of the product made safe.
+          <span className="tabular">{fmtInt(HEADLINE.count)}</span> of them refund an owner for a photo of the product made safe.
         </p>
       </header>
       <Suspense fallback={<p className="page-loading rx-loading">Loading recalls…</p>}>

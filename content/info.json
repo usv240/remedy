@@ -213,10 +213,10 @@
     "technical": "Every call, from Payouts and refunds to Orders, Transaction Search, Disputes and webhook checks, uses fetch with one cached OAuth token."
   },
   "intro.stat": {
-    "title": "How 525 was counted",
-    "what": "Out of every US consumer product recall the CPSC published since January 2024, these are the ones whose remedy asks for a photo and offers a refund.",
+    "title": "How this was counted",
+    "what": "Out of every US consumer product recall the CPSC published since January 2024, these are the ones whose remedy asks for a photo of the product made safe and pays a refund for it.",
     "why": "Many recalls already pay on a photo. Remedy makes that photo quick to check and quick to pay.",
-    "technical": "CPSC Recalls API, every recall dated on or after 2024-01-01. A recall counts when its remedy text matches /photo|picture|image/i and /refund/i (src/lib/recall/classify.ts). The figures are read from content/recalls/stats.json.",
+    "technical": "CPSC Recalls API, every recall dated on or after 2024-01-01. First the remedy text must name a photo and a refund (/photo|picture|image/i and /refund/i, src/lib/recall/classify.ts). Then the recall's proof rule must list a made-safe action (cut, mark, remove a part) and a refund in money, not store credit (src/lib/recall/made-safe.ts). The counts, with every recall left out and why, are in content/recalls/proof-split.json.",
     "learnMore": {
       "label": "The data method",
       "href": "/learn#data"
@@ -478,8 +478,8 @@
   },
   "evidence.money": {
     "title": "What is at stake",
-    "what": "What the photo-refund recalls are worth to their owners, counted from the CPSC records.",
+    "what": "What the recalls that refund a photo of the product made safe offer their owners, counted from the CPSC records and the proof rules.",
     "why": "Every point of return that simpler claiming adds sends real money back to owners, and every product made safe is one fewer hazard in a home.",
-    "technical": "scripts/recalls/value.ts writes content/recalls/value.json: for each photo-refund recall, its US units times the lowest price its Sold At field states, only where the record states both (src/lib/recall/value.ts, tested in tests/recall-value.test.ts). The 6 in 100 is the CPSC measure in src/lib/research.ts."
+    "technical": "scripts/recalls/value.ts writes content/recalls/value.json: for each recall whose proof rule asks for a made-safe photo and pays a refund in money, its US units times the lowest price its Sold At field states, or the fixed refund its rule states when that is lower, only where the record states units and a price. Pro-rated refunds state no share and are left out (src/lib/recall/value.ts, tested in tests/recall-value.test.ts). The 6 in 100 is the CPSC measure in src/lib/research.ts."
   }
 }

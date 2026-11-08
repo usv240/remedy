@@ -6,6 +6,10 @@ import "../pages.css";
 import "../developers/dev.css";
 import "../learn/disclosure.css";
 import "./stack.css";
+import mcpRead from "../../../content/public/paypal-mcp-read.json";
+
+/** The last read-only check of C6 through PayPal's MCP server (scripts/payments/mcp-probe.ts). */
+const MCP_READ = mcpRead as { readAt: string; getOrder: { ok: boolean; ms: number } } | null;
 
 export const metadata: Metadata = { title: "How it is built", description: "Every tool in Remedy, the one job it does, and where it lives in the code." };
 
@@ -19,8 +23,8 @@ const TOOLS: Tool[] = [
     id: "paypal",
     name: "PayPal",
     job: "Pays refunds instantly, and refunds to the original purchase inside 180 days.",
-    how: "Payouts to an email, a phone number or Venmo; a refund to the original capture when the owner bought with PayPal in the last 180 days; Orders v2 for the sample shop and for safe replacements. A firm can connect its own PayPal REST app, checked with PayPal and stored sealed, and its refunds and payouts then run on it; the sample firm pays from the platform's sandbox account. Every status comes from signature-checked webhooks, and every payment writes to the hash-chained ledger.",
-    files: ["src/lib/paypal/client.ts", "src/lib/paypal/firm-account.ts", "src/lib/payments/router.ts", "src/lib/audit.ts"],
+    how: "Payouts to an email, a phone number or Venmo; a refund to the original capture when the owner bought with PayPal in the last 180 days; Orders v2 for the sample shop and for safe replacements. A firm can connect its own PayPal REST app, checked with PayPal and stored sealed, and its refunds and payouts then run on it; the sample firm pays from the platform's sandbox account. Every status comes from signature-checked webhooks, and every payment writes to the hash-chained ledger. Check C6 (not already refunded) reads the purchase's order, its captures and refunds, through PayPal's own MCP server with its read-only get_order tool, and from the Orders API when that server cannot answer.",
+    files: ["src/lib/paypal/client.ts", "src/lib/paypal/mcp.ts", "src/lib/paypal/firm-account.ts", "src/lib/payments/router.ts", "src/lib/audit.ts"],
   },
   {
     id: "claude",
@@ -82,8 +86,24 @@ const PAYPAL_APIS: { api: string; call: string; job: string }[] = [
   { api: "JavaScript SDK v6", call: "web-sdk/v6/core", job: "The PayPal button in the sample shop." },
   { api: "Transaction Search", call: "GET /v1/reporting/transactions", job: "Finds buyers who paid the firm with PayPal, so they can be told about the recall." },
   { api: "Disputes", call: "GET /v1/customer/disputes", job: "Checks that a purchase has no open dispute before it is refunded." },
+  { api: "PayPal MCP server", call: "get_order (read only)", job: "Check C6 reads the purchase's captures and refunds from PayPal's own MCP server; the Orders API is the fallback. Only read tools can be called." },
   { api: "Webhooks", call: "POST /v1/notifications/verify-webhook-signature", job: "Checks PayPal's signature on every payout and refund event before it updates a payment." },
 ];
+
+/**
+ * How firms connect their PayPal today, and what a production rollout changes. PayPal's Partner Referrals API returned
+ * NOT_AUTHORIZED (HTTP 403) for this sandbox app on 2026-11-07, so firms paste their own REST app for now
+ * (src/lib/paypal/firm-account.ts).
+ */
+const ONBOARDING: { now: string; prod: string; changes: { file: string; what: string }[] } = {
+  now: "A firm connects its own PayPal REST app in its console: the client ID and secret are checked with PayPal (an OAuth token request), sealed with AES-256-GCM and never shown again, and its refunds and payouts then run on that app. The sample firm pays from the platform's sandbox account.",
+  prod: "A production rollout onboards each firm through PayPal's Partner Referrals API instead: the firm signs in on PayPal's own page and grants Remedy permission, and Remedy keeps only the firm's merchant ID. Each call for that firm then carries Remedy's own partner token with a PayPal-Auth-Assertion header naming the firm, so the money still moves on the firm's own account and no secret of the firm's is ever held.",
+  changes: [
+    { file: "src/lib/paypal/firm-account.ts", what: "connectAccount stores the merchant ID from PayPal's onboarding return in place of a sealed client ID and secret; restForFirm builds each call with the partner token and a PayPal-Auth-Assertion header for that merchant." },
+    { file: "db/schema.sql", what: "The firm row's two sealed credential columns give way to one merchant ID column, as a reviewed migration." },
+    { file: "src/lib/payments/router.ts", what: "No change: the router, the six checks and the ledger already pay through whatever account restForFirm returns." },
+  ],
+};
 
 /** A short name for a file link: its last two path parts, plus the folder above when that part is src or a [param]. */
 function shortPath(file: string) {
@@ -164,6 +184,12 @@ export default function StackPage() {
         <p className="page-prose">
           {PAYPAL_APIS.length} PayPal APIs, each with one job. All run against the PayPal sandbox. Going live changes only the base URL, the client ID and the secret.
         </p>
+        {MCP_READ?.getOrder.ok && (
+          <p className="page-prose">
+            PayPal&rsquo;s MCP server, read in the sandbox on {new Date(MCP_READ.readAt).toLocaleDateString("en-US", { dateStyle: "long", timeZone: "UTC" })}: get_order answered in {MCP_READ.getOrder.ms.toLocaleString("en-US")} ms, and check C6 read the order through it (
+            <code>content/public/paypal-mcp-read.json</code>, written by <code>scripts/payments/mcp-probe.ts</code>).
+          </p>
+        )}
         <details id="paypal-apis-all" className="dsc pp-apis">
           <summary>
             <span className="dsc-k">All {PAYPAL_APIS.length} PayPal APIs, with the call and the job for each</span>
@@ -190,6 +216,23 @@ export default function StackPage() {
               </tbody>
             </table>
           </div>
+        </details>
+      </section>
+      <section id="onboarding" className="page-section" aria-labelledby="onb-h">
+        <h2 id="onb-h">How firms connect their PayPal</h2>
+        <p className="page-prose">{ONBOARDING.now}</p>
+        <p className="page-prose">{ONBOARDING.prod}</p>
+        <details className="dsc stack-more">
+          <summary>
+            <span className="dsc-k">What changes in the code</span>
+          </summary>
+          <ul className="stack-changes">
+            {ONBOARDING.changes.map((c) => (
+              <li key={c.file}>
+                <FileLink file={c.file} /> {c.what}
+              </li>
+            ))}
+          </ul>
         </details>
       </section>
       <OpenOnHash />

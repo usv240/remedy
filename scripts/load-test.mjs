@@ -7,7 +7,10 @@
 //   3. GET /api/v1/scan/sample: the catalog scan sample
 // Each virtual user carries its own x-forwarded-for, so the per-visitor limits see 100 visitors, as a real crowd
 // would. The claims it makes are removed at the end (DATABASE_URL), unless --keep.
-//   node --env-file=.env.local scripts/load-test.mjs [--users 100] [--keep]     BASE_URL=http://localhost:3400
+// Each claim also reports the server's own stage timings (the check itself, alone) and, from the job table, how long
+// its job waited in the queue, so the file says what each figure measures: the client time includes the wait.
+// --only claim runs just the claim path; --alone first times one claim with nothing else running.
+//   node --env-file=.env.local scripts/load-test.mjs [--users 100] [--only claim] [--keep]     BASE_URL=http://localhost:3400
 import { readFileSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import pg from "pg";
@@ -19,6 +22,16 @@ const arg = (name, dflt) => {
 };
 const USERS = Number(arg("--users", 100));
 const keep = process.argv.includes("--keep");
+const ONLY = arg("--only", null);
+/** --change "what changed": keep the claim figures of the file this run replaces, as `before`, to compare. */
+const CHANGE = arg("--change", null);
+const previous = (() => {
+  try {
+    return JSON.parse(readFileSync("content/public/load-test.json", "utf8"));
+  } catch {
+    return null;
+  }
+})();
 const PHOTO = "content/verify/fixtures/official/27056-haiara-1.jpg";
 const photo = readFileSync(PHOTO);
 
@@ -28,6 +41,8 @@ const PATHS = {
   scan: { name: "GET /api/v1/scan/sample", run: (h) => get("/api/v1/scan/sample", h, (j) => j?.data?.items?.length > 0) },
 };
 const claimIds = [];
+/** The server's own timings for each claim, from its answer (result.timings). */
+const serverTimings = [];
 
 async function get(path, headers, okIf) {
   const r = await fetch(B + path, { headers });
@@ -42,6 +57,7 @@ async function claim(headers) {
   const r = await fetch(`${B}/api/claims`, { method: "POST", body: fd, headers });
   const j = await r.json().catch(() => null);
   if (j?.data?.id) claimIds.push(j.data.id);
+  if (j?.data?.timings) serverTimings.push(j.data.timings);
   return { ok: r.status === 200 && j?.data?.decision === "retake" && j.data.decided_by === "own_photo", status: r.status };
 }
 
@@ -49,6 +65,12 @@ const quantile = (sorted, q) => (sorted.length ? sorted[Math.min(sorted.length -
 
 async function main() {
   const health = await fetch(`${B}/api/health`).then((r) => r.json());
+  if (ONLY) for (const k of Object.keys(PATHS)) if (k !== ONLY) delete PATHS[k];
+  // One claim alone first: the claim path's time with nothing else running, on the same server.
+  const aloneT = performance.now();
+  const alone = await claim({ "x-forwarded-for": "203.0.113.251", "x-request-id": "load_alone" });
+  const aloneMs = Math.round(performance.now() - aloneT);
+  const aloneServer = serverTimings.pop() ?? null;
   const samples = Object.fromEntries(Object.keys(PATHS).map((k) => [k, { ms: [], errors: 0, statuses: {} }]));
   const started = Date.now();
   await Promise.all(
@@ -88,6 +110,23 @@ async function main() {
     };
   });
   const totalReq = results.reduce((s, r) => s + r.requests, 0);
+  const spread = (xs) => {
+    const s = xs.filter((x) => typeof x === "number").sort((a, b) => a - b);
+    return s.length ? { p50: Math.round(quantile(s, 0.5)), p95: Math.round(quantile(s, 0.95)), max: Math.round(s.at(-1)) } : null;
+  };
+  // How long each claim's job waited before it ran, and ran, from the job table (when DATABASE_URL is set).
+  let queue = null;
+  if (process.env.DATABASE_URL && claimIds.length) {
+    const c = new pg.Client({ connectionString: process.env.DATABASE_URL });
+    await c.connect();
+    try {
+      const rows = (await c.query("select extract(epoch from (updated - created)) * 1000 as total from job where kind = 'verify_claim' and payload->>'claimId' = any($1::text[])", [claimIds])).rows;
+      queue = { jobCreatedToDone: spread(rows.map((r) => Number(r.total))) };
+    } finally {
+      await c.end();
+    }
+  }
+  const stages = Object.fromEntries(["decode_ms", "official_ms", "match_ms", "checks_ms", "total_ms"].map((k) => [k, spread(serverTimings.map((t) => t[k]))]));
   const out = {
     measuredAt: new Date().toISOString(),
     baseUrl: B,
@@ -98,6 +137,20 @@ async function main() {
     wallMs,
     requestsPerSecond: Number((totalReq / (wallMs / 1000)).toFixed(1)),
     results,
+    ...(CHANGE && previous?.results
+      ? (() => {
+          const c = previous.results.find((r) => r.id === "claim");
+          return c ? { before: { measuredAt: previous.measuredAt, change: CHANGE, claimP50: c.p50_ms, claimP95: c.p95_ms, worker: previous.server?.worker ?? "unknown" } } : {};
+        })()
+      : previous?.before && !CHANGE
+        ? { before: previous.before }
+        : {}),
+    claim: {
+      what: "For the claim path: the client time is from request start to the full answer and includes each job's wait in the queue; the server stage timings are the check itself, as verifyPhoto measured it inside the job.",
+      alone: { clientMs: aloneMs, ok: alone.ok, server: aloneServer },
+      serverStages: stages,
+      queue,
+    },
   };
   writeFileSync("content/public/load-test.json", JSON.stringify(out, null, 2) + "\n");
   for (const r of results) console.log(`${r.name}: ${r.requests} requests, p50 ${r.p50_ms} ms, p95 ${r.p95_ms} ms, p99 ${r.p99_ms} ms, max ${r.max_ms} ms, errors ${r.errors} (${(r.error_rate * 100).toFixed(1)}%) ${JSON.stringify(r.statuses)}`);

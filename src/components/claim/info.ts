@@ -87,7 +87,7 @@ export const CLAIM_INFO = {
   "check.C6": { title: "Not already refunded", what: "If your PayPal purchase is linked, PayPal is asked whether it was already refunded or is in a dispute.", why: "Each purchase is refunded once." },
   "claim.verified": {
     title: "Verified",
-    what: "Every check passed, so the sample firm's auto-approve rule pays the refund now.",
+    what: "Every check passed, so the firm's auto-approve rule pays the refund now.",
     why: "When a photo shows everything the recall asks for, there is no reason to make you wait.",
     technical: "Verified means C1 to C6 pass and the amount is at or under the firm's auto-approve cap. The payment router then picks a refund to your PayPal purchase (inside 180 days), a safe replacement, or a PayPal payout.",
   },
@@ -141,7 +141,7 @@ export const CLAIM_INFO = {
     title: "Your photo",
     what: "Pick a recall, add any photo, and see the six checks run live.",
     why: "It is the same path an owner takes.",
-    technical: "Live Claude Opus 5.5 vision, within a daily AI budget and a per-visitor limit. Payouts come from the sample firm's PayPal sandbox account.",
+    technical: "Live Claude Opus 5.5 vision, within a daily AI budget and a per-visitor limit. In this demo, payouts come from a PayPal sandbox account; in a real deployment, from the recalling firm's own.",
     sponsor: ["Claude", "PayPal"],
   },
   "try.anyrecall": {

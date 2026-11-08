@@ -1,0 +1,23 @@
+{
+  "note": "Written by scripts/payments/mcp-probe.ts: one read-only check of check C6 reading a sandbox order through PayPal's MCP server (get_order). Nothing was paid or refunded.",
+  "readAt": "2026-11-08T08:38:57.829Z",
+  "server": "https://mcp.sandbox.paypal.com",
+  "sessionOpened": true,
+  "getOrder": {
+    "ok": true,
+    "ms": 1190,
+    "status": "COMPLETED"
+  },
+  "c6": {
+    "pass": true,
+    "orderSource": {
+      "via": "mcp",
+      "note": null
+    },
+    "calls": [
+      "GET /v2/payments/captures/26Y8…",
+      "PayPal MCP get_order 3JW1…",
+      "GET /v1/customer/disputes?disputed_transaction_id=26Y8…"
+    ]
+  }
+}

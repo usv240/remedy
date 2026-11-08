@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getRecall, publicRecall } from "@/app/api/claims/_lib/recall";
 import { isRecallNumber, refundPhrase, SAMPLE_PHOTO_CREDIT } from "@/app/api/claims/_lib/recall-text";
-import { SAMPLE_FIRM, SHOP_RECALL } from "@/app/api/claims/_lib/terms";
+import { SHOP_RECALL } from "@/app/api/claims/_lib/terms";
+import { payerWords } from "@/lib/recall/label";
 import { ClaimFlow } from "@/components/claim/ClaimFlow";
 import { ClaimInfo } from "@/components/claim/ClaimInfo";
 import { Example } from "@/components/claim/Example";
@@ -128,7 +129,8 @@ async function Claim({ params }: Params) {
       </ol>
 
       <p className="page-note cl-note-foot">
-        {SANDBOX_LABEL} Refunds here are paid by {SAMPLE_FIRM}, a fictional sample firm, from its PayPal sandbox account.{" "}
+        {SANDBOX_LABEL} {payerWords(pr.number).demo}
+        {payerWords(pr.number).real ? ` ${payerWords(pr.number).real}` : ""}{" "}
         {pr.sample ? `This recall is fictional. ${SAMPLE_PHOTO_CREDIT}. The example photo: US Consumer Product Safety Commission.` : "Recall data and images: US Consumer Product Safety Commission."}
       </p>
     </>

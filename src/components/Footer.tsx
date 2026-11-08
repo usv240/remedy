@@ -7,6 +7,7 @@ import { Suspense } from "react";
 const LINKS = [
   { href: "/try", label: "Try a photo" },
   { href: "/recalls", label: "Recalls" },
+  { href: "/firm", label: "For firms" },
   { href: "/learn", label: "Learn" },
   { href: "/developers", label: "Developers" },
   { href: "/evidence", label: "Evidence" },

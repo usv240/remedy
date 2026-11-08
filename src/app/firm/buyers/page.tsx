@@ -10,7 +10,7 @@ import { firmContext } from "@/lib/firm/firm";
 import { fmtUsd } from "@/lib/firm/report";
 import { recallLabel } from "@/lib/recall/label";
 
-export const metadata: Metadata = { title: "Buyers", description: "Find the people who bought a recalled product, from a sales file or PayPal, and send each a personal claim link. A fictional sample firm." };
+export const metadata: Metadata = { title: "Buyers", description: "Find the people who bought a recalled product, from a sales file or PayPal, and download a notice with a personal claim link for each. A fictional sample firm." };
 
 const SOURCE: Record<string, string> = { shop: "Sample shop", paypal: "PayPal search", csv: "Sales file" };
 
@@ -24,7 +24,7 @@ async function Buyers() {
       <p className="firm-sub" style={{ marginTop: 8 }}>
         For {ctx.main.short}, {recallLabel(ctx.main.number)}.
       </p>
-      <BuyersImport recall={ctx.main.number} product={ctx.main.short} today={isoDay(new Date())} />
+      <BuyersImport recall={ctx.main.number} product={ctx.main.short} today={isoDay(new Date())} firmName={ctx.firm.name.replace(/\s*\(sample\)\s*$/i, "")} />
       <section className="firm-section" aria-labelledby="by-known">
         <h2 id="by-known">Buyers already in Remedy ({sales.length})</h2>
         {sales.length === 0 ? (
@@ -83,13 +83,13 @@ export default function BuyersPage() {
             <h1 className="firm-title">Buyers</h1>
             <FirmInfo id="firm.buyers" />
           </div>
-          <p className="firm-sub">Find the people who bought the recalled product, and send each a personal claim link.</p>
+          <p className="firm-sub">Find the people who bought the recalled product, and download a notice for each, with a personal claim link, to send from your own mail tool.</p>
         </div>
       </header>
       <Suspense fallback={<p className="firm-sub page-loading">Loading the buyers&hellip;</p>}>
         <Buyers />
       </Suspense>
-      <p className="firm-label">Sales files stay private: contacts are stored encrypted and shown masked. Email sending is not connected in this demo, so notices are logged as &ldquo;would send&rdquo;. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
+      <p className="firm-label">Sales files stay private: contacts are stored encrypted and shown masked, and the download takes each address from your own file, in your browser. Remedy sends no mail; you send the notices from your mail tool. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
     </>
   );
 }

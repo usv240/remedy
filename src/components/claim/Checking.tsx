@@ -2,7 +2,7 @@
 
 import type { CheckView } from "@/app/api/claims/_lib/types";
 import { ClaimInfo } from "./ClaimInfo";
-import { CHECK_ORDER, checkWord, seconds } from "./format";
+import { CHECK_ORDER, checkWord, scoreLine, seconds, settledLine } from "./format";
 
 export type Stage = "sending" | "stored" | "vision" | "reviewers" | "done";
 
@@ -55,9 +55,12 @@ export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed 
         {CHECK_ORDER.map(({ id, name }, i) => {
           const c = checks?.find((x) => x.id === id);
           const w = c ? checkWord(c.status, { reviewersAgreed }) : null;
+          // Unsure, then settled by the two reviewers: shown as confirmed, with the photo check's own reading a tap away.
+          const settled = Boolean(c && c.status === "unclear" && reviewersAgreed);
+          const shown = settled ? "pass" : (c?.status ?? "pending");
           return (
-            <li key={id} className="cl-check" data-s={c?.status ?? "pending"} style={{ "--i": i } as React.CSSProperties}>
-              <Mark status={c?.status ?? "pending"} />
+            <li key={id} className="cl-check" data-s={shown} style={{ "--i": i } as React.CSSProperties}>
+              <Mark status={shown} />
               <div className="cl-check-body">
                 <p className="cl-check-name">
                   <span>{name}</span>
@@ -65,7 +68,13 @@ export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed 
                     {w ? w.word : "Waiting"}
                   </span>
                 </p>
-                {c && c.status !== "skipped" && <p className="cl-check-why">{c.reason_plain}</p>}
+                {c && c.status !== "skipped" && <p className="cl-check-why">{settled ? settledLine : c.reason_plain}</p>}
+                {c && settled && (
+                  <details className="cl-score">
+                    <summary>The photo check&rsquo;s own score</summary>
+                    <p>{scoreLine(c.score, c.reason_plain)}</p>
+                  </details>
+                )}
                 {c && (
                   <p className="cl-tech cl-check-tech">
                     {c.id}

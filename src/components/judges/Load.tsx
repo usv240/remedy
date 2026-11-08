@@ -4,6 +4,12 @@ import Link from "next/link";
 import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 
 type LoadResult = { id: string; name: string; requests: number; p50_ms: number; p95_ms: number; p99_ms: number; max_ms: number; errors: number; error_rate: number };
+type Spread = { p50: number; p95: number; max: number } | null;
+type ClaimProfile = {
+  alone: { clientMs: number; ok: boolean; server: Record<string, number> | null };
+  serverStages: Record<string, Spread>;
+  queue: { jobCreatedToDone: Spread } | null;
+};
 type LoadFile = {
   measuredAt: string;
   users: number;
@@ -13,6 +19,9 @@ type LoadFile = {
   wallMs: number;
   requestsPerSecond: number;
   results: LoadResult[];
+  claim?: ClaimProfile;
+  /** The run before a change, kept beside it to compare. */
+  before?: { measuredAt: string; change: string; claimP50: number; claimP95: number; worker: string };
 };
 
 /** content/public/load-test.json, written by scripts/load-test.mjs; absent until the test has run on this checkout. */
@@ -32,7 +41,7 @@ export function Load() {
   return (
     <>
       <p className="page-prose jp-intro tabular">
-        {t.users} visitors at once, {total.toLocaleString("en-US")} requests in {(t.wallMs / 1000).toFixed(1)} s ({t.requestsPerSecond} a second), {errors} {errors === 1 ? "error" : "errors"}.
+        {t.users} visitors at once, {total.toLocaleString("en-US")} requests in {(t.wallMs / 1000).toFixed(1)} s ({t.requestsPerSecond} a second), {errors} {errors === 1 ? "error" : "errors"}. Measured from the client, request start to the full answer, against the local production build on one laptop ({t.machine.cpu}), worker {t.server.worker}; not the hosted site.
       </p>
       <div className="ops-table-wrap" tabIndex={0} role="region" aria-label="Load test results, scrollable">
         <table className="ops-table jl-table">
@@ -70,6 +79,7 @@ export function Load() {
           </tbody>
         </table>
       </div>
+      {t.claim && <ClaimTimes t={t} />}
       <details className="jx-disc">
         <summary>The method and the machine</summary>
         <div className="jx-body">
@@ -88,6 +98,39 @@ export function Load() {
         </Link>
         .
       </p>
+    </>
+  );
+}
+
+/**
+ * The claim path, three ways, each labelled with what it measures: one claim alone, the same claim among 100 at once
+ * (client time, which includes its job's wait in the queue), and the check itself inside each job (server time). The
+ * "98 ms" on /evidence is a fourth: the free picture match answering one photo on the machine that recorded the runs.
+ */
+function ClaimTimes({ t }: { t: LoadFile }) {
+  const c = t.claim!;
+  const at = t.results.find((r) => r.id === "claim");
+  const total = c.serverStages.total_ms;
+  const rows: { fig: string; what: string }[] = [
+    { fig: ms(c.alone.clientMs), what: "one claim alone, nothing else running: client time, request start to the full answer" },
+    ...(at ? [{ fig: ms(at.p50_ms), what: `the same claim among ${t.users} at once, p50 of client time (p95 ${ms(at.p95_ms)}): it includes each job's wait for the server to reach it` }] : []),
+    ...(total ? [{ fig: ms(total.p50), what: `the check itself inside each of those ${t.users} jobs, p50 of server time (p95 ${ms(total.p95)}): decode, the recall's pictures and the hash match` }] : []),
+  ];
+  return (
+    <>
+      <ul className="jm jl-claim">
+        {rows.map((r) => (
+          <li key={r.what}>
+            <p className="jm-fig tabular">{r.fig}</p>
+            <p className="jm-what">{r.what}.</p>
+          </li>
+        ))}
+      </ul>
+      {t.before && (
+        <p className="page-prose tabular">
+          Before {t.before.change}: p50 {ms(t.before.claimP50)}, p95 {ms(t.before.claimP95)} for the claim among {t.users}, measured {new Date(t.before.measuredAt).toLocaleDateString("en-US", { dateStyle: "long" })} with the worker {t.before.worker}.
+        </p>
+      )}
     </>
   );
 }

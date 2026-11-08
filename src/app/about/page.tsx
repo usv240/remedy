@@ -12,6 +12,7 @@ const IS = [
   "A way to pay recall refunds the moment a photo of the product made safe is verified, through PayPal.",
   "Built on the CPSC's public recall data: every US consumer product recall since January 2024.",
   "A tool a recalling firm runs to pay its refunds through PayPal. The refund comes from the firm; Remedy never holds the money. A firm connects its own PayPal REST app in its console, and its refunds and payouts run on that app; the sample firm, Brightline Home, pays from the platform's sandbox account.",
+  "Ready to onboard firms through PayPal. A production rollout signs each firm up through PayPal's Partner Referrals API and calls PayPal for it with a PayPal-Auth-Assertion header, so Remedy keeps only the firm's merchant ID; the change sits in src/lib/paypal/firm-account.ts, and How it is built lists it.",
   "Open source under the MIT license.",
 ];
 

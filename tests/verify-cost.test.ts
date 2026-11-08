@@ -38,6 +38,8 @@ describe("local replay (AI_CACHE_DIR)", () => {
   });
 
   it("calls through when AI_CACHE_DIR is unset", async () => {
+    // Unset here too: a run with .env.local loaded starts with it set, and would replay instead.
+    delete process.env.AI_CACHE_DIR;
     const call = vi.fn(async () => ({ n: 1 }));
     await replayable({ a: 1 }, call);
     await replayable({ a: 1 }, call);

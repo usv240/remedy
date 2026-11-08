@@ -36,7 +36,7 @@ type CaptureBody = {
   name?: string;
   details?: { issue?: string }[];
 };
-type OrderBody = { purchase_units?: { payments?: { refunds?: { id?: string; status?: string; amount?: { value?: string }; links?: Link[] }[] } }[] };
+type OrderBody = { purchase_units?: { payments?: { captures?: { id?: string; status?: string }[]; refunds?: { id?: string; status?: string; amount?: { value?: string }; links?: Link[] }[] } }[] };
 
 export type CaptureView = { captureId: string; status: string; amountCents: number; capturedAt: string | null; orderId: string | null; customId: string | null };
 
@@ -115,6 +115,8 @@ export type PriorRefund = {
   capturedAt: string | null;
   orderId: string | null;
   disputes: { checked: boolean; count: number; open: number; ids: string[]; note: string | null };
+  /** Where the order's captures and refunds were read: PayPal's MCP server (get_order) or the Orders API. */
+  orderSource: { via: "mcp" | "rest" | null; note: string | null };
   /** C6 passes: the purchase is found, has no earlier refund and no dispute. */
   pass: boolean;
   plain: string;
@@ -137,6 +139,7 @@ export async function hasPriorRefund(captureId: string, partial?: Partial<Paymen
   const calls: string[] = [`GET /v2/payments/captures/${captureId}`];
   const base = { captureId, refundedCents: 0, captureCents: 0, remainingCents: 0, captureStatus: null, capturedAt: null, orderId: null, calls };
   const noDisputes = { checked: false, count: 0, open: 0, ids: [], note: null };
+  const noOrder = { via: null, note: null } as PriorRefund["orderSource"];
 
   const cap = await getCapture(captureId, deps);
   if (!cap.ok) {
@@ -147,6 +150,7 @@ export async function hasPriorRefund(captureId: string, partial?: Partial<Paymen
       refunded: false,
       fullyRefunded: false,
       disputes: noDisputes,
+      orderSource: noOrder,
       pass: false,
       plain: missing ? "We could not find that PayPal purchase, so a person at the firm will check it." : "PayPal did not answer the refund check, so a person at the firm will check it.",
       technical: `GET capture returned ${cap.status} ${cap.issue}`,
@@ -154,13 +158,31 @@ export async function hasPriorRefund(captureId: string, partial?: Partial<Paymen
   }
   const c = cap.capture;
 
-  // Refunds on this capture, from its order (PayPal lists them under purchase_units[].payments.refunds).
+  // Refunds on this capture, from its order (PayPal lists them under purchase_units[].payments.refunds): read through
+  // PayPal's own MCP server first (get_order, read only), and from the Orders API when that cannot answer.
   let paypalRefunded = 0;
+  let orderSource: PriorRefund["orderSource"] = noOrder;
   if (c.orderId) {
-    calls.push(`GET /v2/checkout/orders/${c.orderId}`);
-    const o = await deps.rest<OrderBody>(`/v2/checkout/orders/${encodeURIComponent(c.orderId)}`, { method: "GET" });
-    if (o.status < 400) {
-      for (const pu of o.body.purchase_units ?? [])
+    let order: OrderBody | null = null;
+    if (deps.orderViaMcp) {
+      const m = await deps.orderViaMcp(c.orderId).catch((e: Error) => ({ via: null, why: `not reached (${e.message.slice(0, 80)})` }) as const);
+      if (m.via === "mcp") {
+        calls.push(`PayPal MCP get_order ${c.orderId}`);
+        order = m.body as OrderBody;
+        orderSource = { via: "mcp", note: null };
+        // PayPal's own copy of this capture, from the same order, confirms its state.
+        const mcpCapture = order.purchase_units?.flatMap((pu) => pu.payments?.captures ?? []).find((x) => x.id === captureId);
+        if (mcpCapture?.status && mcpCapture.status !== c.status) orderSource.note = `PayPal's MCP server lists the capture as ${mcpCapture.status}, the Payments API as ${c.status}`;
+      } else orderSource = { via: "rest", note: `PayPal's MCP server ${m.why}, so the Orders API was read instead` };
+    }
+    if (!order) {
+      calls.push(`GET /v2/checkout/orders/${c.orderId}`);
+      const o = await deps.rest<OrderBody>(`/v2/checkout/orders/${encodeURIComponent(c.orderId)}`, { method: "GET" });
+      if (o.status < 400) order = o.body;
+      if (orderSource.via === null) orderSource = { via: "rest", note: null };
+    }
+    if (order) {
+      for (const pu of order.purchase_units ?? [])
         for (const rf of pu.payments?.refunds ?? []) {
           const upCapture = rf.links?.find((l) => l.rel === "up")?.href?.split("/").pop();
           const counts = rf.status === "COMPLETED" || rf.status === "PENDING";
@@ -183,7 +205,8 @@ export async function hasPriorRefund(captureId: string, partial?: Partial<Paymen
       ? { checked: true, count: d.body.items?.length ?? 0, open: (d.body.items ?? []).filter((x) => OPEN_DISPUTE.has(x.status ?? "")).length, ids: (d.body.items ?? []).map((x) => x.dispute_id ?? "").filter(Boolean), note: null }
       : { checked: false, count: 0, open: 0, ids: [], note: d.status === 401 || d.status === 403 ? "This PayPal app does not have the disputes read scope, so disputes were not checked." : `The Disputes API answered ${d.status}, so disputes were not checked.` };
 
-  const pass = !refunded && disputes.count === 0 && c.status === "COMPLETED";
+  // Two PayPal answers that disagree on the capture's state are not a pass: a person looks.
+  const pass = !refunded && disputes.count === 0 && c.status === "COMPLETED" && !orderSource.note?.startsWith("PayPal's MCP server lists");
   const plain = refunded
     ? fullyRefunded
       ? "This purchase was already refunded in full."
@@ -207,9 +230,10 @@ export async function hasPriorRefund(captureId: string, partial?: Partial<Paymen
     capturedAt: c.capturedAt,
     orderId: c.orderId,
     disputes,
+    orderSource,
     pass,
     plain,
-    technical: `capture ${c.status}, ${toValue(c.amountCents)} USD; refunded at PayPal ${toValue(paypalRefunded)}, by Remedy ${toValue(oursCents)}; disputes ${disputes.checked ? disputes.count : "not checked"}`,
+    technical: `capture ${c.status}, ${toValue(c.amountCents)} USD; refunded at PayPal ${toValue(paypalRefunded)}, by Remedy ${toValue(oursCents)}; disputes ${disputes.checked ? disputes.count : "not checked"}; order read ${orderSource.via === "mcp" ? "through PayPal's MCP server (get_order)" : orderSource.via === "rest" ? "from the Orders API" : "not needed"}${orderSource.note ? ` (${orderSource.note})` : ""}`,
   };
 }
 

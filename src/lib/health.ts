@@ -5,6 +5,7 @@ import { queueStats, WORKER_STALE_MS } from "./jobs/queue";
 import { accessToken, paypalConfigured } from "./paypal/client";
 import { lastRun } from "./recall/daily";
 import { sentryEnvironment, sentryRelease } from "./sentry";
+import { agGridEnterprise, ENTERPRISE_FEATURES } from "@/components/firm/ag-license";
 import pkg from "../../package.json";
 
 /** Versions as the project pins them; "npm:@bryntum/gantt-trial@7.3.8" reads as 7.3.8. */
@@ -137,7 +138,9 @@ export async function runChecks(): Promise<Check[]> {
       id: "ag-grid",
       name: "AG Grid",
       mode: "live",
-      detail: `ag-grid-enterprise ${pinned("ag-grid-enterprise")} for the claims queue, on the trial, which shows a license notice`,
+      detail: agGridEnterprise(process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY?.trim() || null)
+        ? `AG Grid ${pinned("ag-grid-community")} Enterprise for the claims queue, with a valid license key: ${ENTERPRISE_FEATURES}`
+        : `AG Grid Community ${pinned("ag-grid-community")} for the claims queue, with no license notice; the Enterprise features (${ENTERPRISE_FEATURES}) switch on only with a valid AG Grid license key`,
     },
     {
       id: "apimatic",

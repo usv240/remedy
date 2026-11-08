@@ -30,8 +30,14 @@ export function Measured() {
         ))}
         <li>
           <p className="jm-fig tabular">{hs.answer.median} ms</p>
-          <p className="jm-what">median for the free picture match to answer, with no model call. {hs.sentence}</p>
-          <p className="jm-src">On the machine that recorded the runs, content/public/verify-runs.json</p>
+          <p className="jm-what">median for the free picture match to answer one photo, with no model call: server time inside the check, one claim at a time. {hs.sentence}</p>
+          <p className="jm-src">
+            On the laptop that recorded the runs, content/public/verify-runs.json. With 100 claims at once, see{" "}
+            <Link className="text-link" href="/evidence/operations#load">
+              Under load
+            </Link>
+            .
+          </p>
         </li>
         {ex && (
           <li>

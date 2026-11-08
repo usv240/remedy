@@ -7,6 +7,7 @@ import { ErrorRates } from "@/components/judges/ErrorRates";
 import { Measured } from "@/components/judges/Measured";
 import { NeverDecides } from "@/components/judges/NeverDecides";
 import { Research } from "@/components/judges/Research";
+import { Contrast } from "@/components/judges/Contrast";
 import { Money } from "@/components/judges/Money";
 import { Network } from "@/components/judges/Network";
 import { freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/judges/errors";
@@ -18,6 +19,7 @@ import { limitRules } from "@/lib/firm/limits";
 import { TourStart } from "@/components/tour/Tour";
 import { TOUR } from "@/components/tour/steps";
 import { fmtDate, fmtInt } from "@/lib/api/format";
+import { HEADLINE } from "@/lib/recall/headline";
 import "../pages.css";
 import "../landing-shared.css";
 import "../ops/ops.css";
@@ -62,7 +64,7 @@ const PARTS: Part[] = [
   },
   {
     name: "Impact",
-    line: `${fmtInt(S.all.photoRefund.count)} recalls since 2024 already pay on a photo, a growing share, and full remedies raise recall effectiveness.`,
+    line: `${fmtInt(HEADLINE.count)} recalls since 2024 already refund a photo of the product made safe, and more each year. Their portals pay by check in days; Remedy's PayPal payout lands in seconds.`,
     links: [
       ["/evidence/market#adoption", "Who runs it first"],
       ["/learn#data", "The data method"],
@@ -117,7 +119,7 @@ export default function EvidencePage() {
           <Info id="page.evidence" />
         </div>
         <p className="lede">
-          {fmtInt(S.all.photoRefund.count)} of {fmtInt(S.recalls.count)} US product recalls since 2024 already refund an owner who sends one photo of the product made safe. Here is what Remedy does with that photo, measured, with the file behind every number.
+          {fmtInt(HEADLINE.count)} of {fmtInt(S.recalls.count)} US product recalls since 2024 already refund an owner who sends one photo of the product made safe. Here is what Remedy does with that photo, measured, with the file behind every number.
         </p>
         <p className="jp-tour">
           <TourStart /> <span className="muted">{TOUR.length} stops in this tab, about two minutes. Escape ends it.</span>
@@ -131,12 +133,13 @@ export default function EvidencePage() {
       <Results />
       <section id="money" className="page-section ev-stake" aria-labelledby="money-h">
         <div className="title-row">
-          <h2 id="money-h">What is at stake</h2>
+          <h2 id="money-h">What changes, and what is at stake</h2>
           <Info id="evidence.money" label="" topic="What is at stake" />
         </div>
+        <Contrast className="vs ev-vs" />
         <Money />
         <p className="page-note">
-          Counted from the CPSC records alone; recalls that state no price are left out, not estimated.{" "}
+          Counted from the CPSC records and each recall&rsquo;s proof rule; pro-rated refunds and recalls that state no price are left out, not estimated.{" "}
           <Link className="text-link" href="/evidence/market#money">
             The method and the largest recalls
           </Link>
@@ -262,7 +265,7 @@ export default function EvidencePage() {
       <section id="data" className="page-section" aria-labelledby="data-h">
         <h2 id="data-h">The data</h2>
         <p className="page-prose">
-          Every figure comes from the CPSC Recalls API, pulled {fmtDate(S.pulledAt.slice(0, 10))}: {fmtInt(S.recalls.count)} recalls from {fmtDate(S.range.from)} to {fmtDate(S.range.to)}. A recall counts as a photo refund when its remedy text mentions a photo, picture or image and a refund ({fmtInt(S.all.photoRefund.count)}).
+          Every figure comes from the CPSC Recalls API, pulled {fmtDate(S.pulledAt.slice(0, 10))}: {fmtInt(S.recalls.count)} recalls from {fmtDate(S.range.from)} to {fmtDate(S.range.to)}. A recall counts as a photo refund when its remedy text mentions a photo, picture or image and a refund ({fmtInt(S.all.photoRefund.count)}). The headline then reads each one&rsquo;s proof rule: {fmtInt(HEADLINE.count)} ask for a photo of the product made safe and pay a refund in money for it.
         </p>
         <p className="page-note">Run on the earlier snapshot behind our research note (1,227 recalls to October 29), the same classifier gives the same 523 photo-refund recalls.</p>
         <p className="page-prose">

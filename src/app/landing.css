@@ -1676,3 +1676,24 @@
     width: 100%;
   }
 }
+
+/* An unsure check the two reviewers settled: the photo check's own score, one tap away, under its line. */
+.tp-score {
+  grid-column: 1 / -1;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tp-score > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+.tp-score > p {
+  margin: 0 0 4px;
+  max-width: 60ch;
+}
