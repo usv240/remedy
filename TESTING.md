@@ -192,7 +192,7 @@ npm run worker                # the job worker, in a second terminal (photo chec
 | `AI_DAILY_USD` | Daily Claude budget in US dollars ($5 on the hosted site; no limit locally) |
 | `ELASTIC_URL`, `ELASTIC_API_KEY` | Elastic recall search; without them, the in-app BM25 search |
 | `CHANNEL3_API_KEY` | Safe replacements; without it, owners are offered a refund |
-| `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` | AG Grid Enterprise license for the claims queue; without it the grid runs on AG Grid's enterprise trial |
+| `NEXT_PUBLIC_AG_GRID_LICENSE_KEY` | AG Grid Enterprise license for the claims queue; a valid key adds set filters, the column menu and the status bar, and without one the queue runs on AG Grid Community |
 | `CHECKS_SECRET` | Guards the test-only approval route the claim suites use |
 | `DATA_KEY`, `AUDIT_SALT`, `REMEDY_SECRET_KEY` | Encryption and hashing secrets; set long random values when hosted |
 
@@ -232,4 +232,4 @@ The schema is reviewed SQL in `db/schema.sql`, applied with `npm run db:migrate`
 - **A payout reads "Waiting to be accepted":** the email has no PayPal sandbox account, so PayPal holds the payout. The plan adds a friendly re-notice.
 - **A new purchase is not in `/firm/buyers` yet:** PayPal's sandbox can take up to three hours to list a new transaction in Transaction Search.
 - **An API call answers 429:** wait a minute, or use a free key for higher limits.
-- **A trial watermark on the plan, or a license notice on the grid:** Bryntum runs on its trial, and AG Grid's enterprise features show a notice until a license key is set.
+- **A trial watermark on the plan, or a license notice on the grid:** Bryntum runs on its trial. AG Grid's Enterprise features switch on only with a valid license key, so the queue shows no AG Grid notice without one.

@@ -108,7 +108,7 @@ export function BuyersImport({ recall, product, today }: { recall: string; produ
             {matched.length} matched {matched.length === 1 ? "buyer" : "buyers"}
             {summary ? <span className="muted" style={{ fontWeight: 400 }}>&nbsp;of {summary.total} lines</span> : null}
           </h2>
-          <div className="by-table-wrap">
+          <div className="by-table-wrap" role="region" aria-labelledby="by-res" tabIndex={0}>
             <table className="by-table">
               <thead>
                 <tr>

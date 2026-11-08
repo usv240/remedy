@@ -34,7 +34,7 @@ export const FIRM_INFO = {
     title: "Claims queue",
     what: "Every claim, with its photo, the six checks, the decision and where the payment stands.",
     why: "One place to see what is done, what needs a person, and what is ready to pay.",
-    technical: "AG Grid 36.3 (Enterprise features, trial watermark). Rows from claim, payment_plan and payment; payout status updates live over Server-Sent Events.",
+    technical: "AG Grid 36.3: Community modules, plus Enterprise set filters, column menu and status bar when a valid license key is set. Rows from claim, payment_plan and payment; payout status updates live over Server-Sent Events.",
   },
   "firm.approve-pay": {
     title: "Approve and pay",

@@ -28,11 +28,12 @@ import { STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
 import { remedyGridTheme } from "./agTheme";
 import { Thumb } from "./Thumb";
 
-// Community modules for the queue, plus three Enterprise ones: set filters on the status columns, the column menu
-// and the status bar with selected and total counts. No licence key is set, so AG Grid shows its trial watermark.
-// AG Grid Enterprise's license, when the deployment has one; without it the grid runs on AG Grid's trial notice.
-const AG_LICENSE = process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY;
-if (AG_LICENSE) LicenseManager.setLicenseKey(AG_LICENSE);
+// Community modules for the queue. With a valid AG Grid Enterprise license (NEXT_PUBLIC_AG_GRID_LICENSE_KEY), three
+// Enterprise ones join them: set filters on the status columns, the column menu and the status bar with selected and
+// total counts. Without one, the same queue runs on Community alone, with text filters and no trial watermark.
+const AG_LICENSE = process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY?.trim();
+export const ENTERPRISE = Boolean(AG_LICENSE) && LicenseManager.getLicenseDetails(AG_LICENSE!).valid === true;
+if (ENTERPRISE) LicenseManager.setLicenseKey(AG_LICENSE!);
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
@@ -47,10 +48,8 @@ ModuleRegistry.registerModules([
   RenderApiModule,
   RowApiModule,
   TooltipModule,
-  SetFilterModule,
-  ColumnMenuModule,
-  StatusBarModule,
 ]);
+if (ENTERPRISE) ModuleRegistry.registerModules([SetFilterModule, ColumnMenuModule, StatusBarModule]);
 
 const usd = (c: number | null) => (c === null ? null : `$${(c / 100).toFixed(2)}`);
 const TIME = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
@@ -161,9 +160,10 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         headerName: "Decision",
         field: "decision",
         width: 106,
-        filter: "agSetColumnFilter",
+        filter: ENTERPRISE ? "agSetColumnFilter" : "agTextColumnFilter",
         valueFormatter: (p) => DECISION[p.value as string] ?? String(p.value ?? ""),
-        filterParams: { valueFormatter: (p: { value: string }) => DECISION[p.value] ?? p.value },
+        filterValueGetter: (p) => DECISION[p.data?.decision as string] ?? String(p.data?.decision ?? ""),
+        filterParams: ENTERPRISE ? { valueFormatter: (p: { value: string }) => DECISION[p.value] ?? p.value } : undefined,
       },
       {
         headerName: "Amount",
@@ -181,10 +181,11 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         field: "stage",
         flex: 1,
         minWidth: 178,
-        filter: "agSetColumnFilter",
-        suppressHeaderMenuButton: false,
+        filter: ENTERPRISE ? "agSetColumnFilter" : "agTextColumnFilter",
+        suppressHeaderMenuButton: !ENTERPRISE,
         valueFormatter: (p) => STAGE_LABEL[p.value as QueueRow["stage"]] ?? "",
-        filterParams: { valueFormatter: (p: { value: QueueRow["stage"] }) => STAGE_LABEL[p.value] ?? p.value },
+        filterValueGetter: (p) => (p.data ? STAGE_LABEL[p.data.stage] : ""),
+        filterParams: ENTERPRISE ? { valueFormatter: (p: { value: QueueRow["stage"] }) => STAGE_LABEL[p.value] ?? p.value } : undefined,
         cellRenderer: (p: ICellRendererParams<QueueRow>) => {
           if (!p.data) return null;
           // One status mark per row: the second line only says something the pill does not.
@@ -239,7 +240,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
       }}
       onFirstDataRendered={() => onReady?.()}
       onSelectionChanged={onSelectionChanged}
-      statusBar={{ statusPanels: [{ statusPanel: "agTotalAndFilteredRowCountComponent", align: "left" }, { statusPanel: "agSelectedRowCountComponent", align: "left" }] }}
+      statusBar={ENTERPRISE ? { statusPanels: [{ statusPanel: "agTotalAndFilteredRowCountComponent", align: "left" }, { statusPanel: "agSelectedRowCountComponent", align: "left" }] } : undefined}
       overlayNoRowsTemplate='<span class="muted">No claims in this view.</span>'
       animateRows={false}
       suppressCellFocus={false}

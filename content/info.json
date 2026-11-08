@@ -186,7 +186,7 @@
     "title": "AG Grid",
     "what": "The firm's claims queue.",
     "why": "A reviewer sees every claim with its photo and checks in one place, and pays verified claims in bulk.",
-    "technical": "AG Grid 36 (community and enterprise modules) for the claims queue: set filters, the column menu and the status bar.",
+    "technical": "AG Grid 36 for the claims queue: Community modules always, and with a valid Enterprise license key, set filters, the column menu and the status bar too.",
     "sponsor": [
       "AG Grid"
     ]

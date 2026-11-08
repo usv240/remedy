@@ -30,7 +30,7 @@ async function Buyers() {
         {sales.length === 0 ? (
           <p className="muted">None yet. A purchase in the sample shop, a sales file or a PayPal search adds them here.</p>
         ) : (
-          <div className="by-table-wrap">
+          <div className="by-table-wrap" role="region" aria-labelledby="by-known" tabIndex={0}>
             <table className="by-table">
               <thead>
                 <tr>

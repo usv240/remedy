@@ -147,7 +147,7 @@ export function ScanCatalog({ freeItems, maxItems }: { freeItems: number; maxIte
             ))}
           </div>
           <p className="muted sc-ai">{report.ai.note}</p>
-          <div className="by-table-wrap">
+          <div className="by-table-wrap" role="region" aria-label="Catalog scan results" tabIndex={0}>
             <table className="by-table sc-table">
               <thead>
                 <tr>
