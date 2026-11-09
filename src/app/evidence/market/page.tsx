@@ -10,6 +10,7 @@ import { fmtInt } from "@/lib/api/format";
 import { storedRule } from "@/lib/api/recall-data";
 import { SPLIT } from "@/lib/recall/headline";
 import { moneyWords } from "@/lib/recall/value";
+import { REVIEWER_MODEL_ENV } from "@/lib/verify/reviewers";
 import "../../pages.css";
 import "../../landing-shared.css";
 import "../evidence.css";
@@ -50,8 +51,8 @@ export default function MarketPage() {
         <p className="page-prose">
           The method: for each of the {fmtInt(VALUE.recalls)} recalls whose proof rule asks for a photo of the product made safe and pays a refund in money, its US units times the refund for one unit. That is the lowest sale price its CPSC record states in the Sold
           At field, or the fixed refund its rule states when that is lower ({fmtInt(VALUE.atStatedAmount.count)} recalls). {fmtInt(VALUE.covered)} records state units and a price. {fmtInt(VALUE.proRated.count)} pro-rated refunds ({VALUE.proRated.numbers.join(", ")}) state no share of the
-          price and {fmtInt(VALUE.noPrice)} records state no price, so those {fmtInt(VALUE.recalls - VALUE.covered)} are left out, not estimated. At the highest stated prices the same refunds come to {moneyWords(VALUE.highUsd)}. The 6 in 100 is an average across consumer
-          product recalls, not a measure of these recalls in particular.
+          price and {fmtInt(VALUE.noPrice)} records state no price, so those {fmtInt(VALUE.recalls - VALUE.covered)} are left out, not estimated. At the highest stated prices the same refunds come to {moneyWords(VALUE.highUsd)}. Both rates are averages across consumer
+          product recalls, not measures of these recalls in particular, so the unclaimed figure is shown at each.
         </p>
         <div className="jb-wrap" role="region" aria-label="The largest recalls by value" tabIndex={0}>
           <table className="jb">
@@ -95,6 +96,11 @@ export default function MarketPage() {
         </div>
         <p className="page-prose jp-intro">What the regulator, the firms and the payment issuers report, from their own pages and filings, and what Remedy does about each.</p>
         <ProblemResearch />
+        <p className="page-prose" id="reviewers">
+          The two reviewers both run on Claude Opus 5.5 today. Their independence comes from the rulebook each reads: one holds the photo against the recall&rsquo;s official pictures, the other against the remedy text, and when they disagree a
+          person at the firm decides. Each reviewer&rsquo;s model is its own setting, <code>{REVIEWER_MODEL_ENV.product}</code> and <code>{REVIEWER_MODEL_ENV.remedy}</code> (read by reviewerModel in src/lib/verify/reviewers.ts, empty for
+          Opus 5.5), so running one reviewer on a second model is a configuration change with no code change; tests/reviewer-model.test.ts checks that each request carries the model its setting names.
+        </p>
       </section>
 
       <section id="photo-asks" className="page-section" aria-labelledby="asks-h">

@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { passCount } from "@/lib/firm/checks";
-import { STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
+import { SAMPLE_REVIEWER, STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
 import { ClaimDrawer } from "./ClaimDrawer";
 import type { GridHandle } from "./ClaimsGrid";
 import { FirmInfo } from "./FirmInfo";
@@ -32,7 +32,7 @@ const watch = (cb: () => void) => {
   m.addEventListener("change", cb);
   return () => m.removeEventListener("change", cb);
 };
-const REVIEWERS = ["Ana", "Devon"] as const;
+const REVIEWER_KEY = "remedy-firm-reviewer";
 const usd = (c: number | null) => (c === null ? "" : `$${(c / 100).toFixed(2)}`);
 const TIME = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
@@ -92,7 +92,7 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [open, setOpen] = useState<string | null>(null);
-  const [reviewer, setReviewer] = useState<string>(REVIEWERS[0]);
+  const [reviewer, setReviewer] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<{ text: string; tone?: "attention" | "positive" } | null>(null);
   const [live, setLive] = useState(false);
@@ -104,9 +104,9 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
 
   useEffect(() => {
     try {
-      const r = localStorage.getItem("remedy-firm-reviewer");
+      const r = localStorage.getItem(REVIEWER_KEY);
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (r && (REVIEWERS as readonly string[]).includes(r)) setReviewer(r);
+      if (r === SAMPLE_REVIEWER) setReviewer(r);
     } catch {
       /* storage unavailable */
     }
@@ -171,17 +171,18 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
     window.history.replaceState(null, "", u);
   }
 
-  function chooseReviewer(r: string) {
+  function signIn(r: string | null) {
     setReviewer(r);
     try {
-      localStorage.setItem("remedy-firm-reviewer", r);
+      if (r) localStorage.setItem(REVIEWER_KEY, r);
+      else localStorage.removeItem(REVIEWER_KEY);
     } catch {
       /* storage unavailable */
     }
   }
 
   async function paySelected(ids: string[]) {
-    if (!ids.length) return;
+    if (!ids.length || !reviewer) return;
     setBusy(true);
     setStatus({ text: `Approving ${ids.length} ${ids.length === 1 ? "claim" : "claims"} and sending one PayPal Payouts batch…` });
     try {
@@ -225,16 +226,24 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
           Search claims
           <input className="cq-search" type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Name, recall or status" />
         </label>
-        <label className="firm-field">
-          Reviewing as
-          <select value={reviewer} onChange={(e) => chooseReviewer(e.target.value)}>
-            {REVIEWERS.map((r) => (
-              <option key={r} value={r}>
-                {r} (sample reviewer)
-              </option>
-            ))}
-          </select>
-        </label>
+        <p className="cq-signin" aria-live="polite">
+          {reviewer ? (
+            <>
+              <span className="cq-signin-dot" aria-hidden="true" />
+              <span>
+                Signed in as <strong>{reviewer}</strong> <span className="muted">(sample reviewer)</span>
+              </span>
+              <button type="button" className="cq-open" onClick={() => signIn(null)}>
+                Sign out
+              </button>
+            </>
+          ) : (
+            <button type="button" className="btn btn-quiet" onClick={() => signIn(SAMPLE_REVIEWER)} data-testid="sign-in">
+              Sign in as {SAMPLE_REVIEWER} (sample reviewer)
+            </button>
+          )}
+          <FirmInfo id="firm.sign-in" label="" />
+        </p>
         <p className="cq-live" aria-live="polite">
           <span className="plan-dot" data-on={live ? "" : undefined} aria-hidden="true" />
           {live ? "Live: payout status updates here" : "Connecting for live updates"}
@@ -244,7 +253,7 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
       <div className="cq-bulk" role="region" aria-label="Bulk actions">
         <span className="cq-bulk-text">
           {payableSelected.length
-            ? `${payableSelected.length} selected, ${usd(selectedTotal)}`
+            ? `${payableSelected.length} selected, ${usd(selectedTotal)}${reviewer ? "" : ". Sign in to approve."}`
             : readyCount
               ? `${readyCount} verified ${readyCount === 1 ? "claim is" : "claims are"} ready to pay.`
               : "No verified claims are waiting to be paid."}
@@ -265,9 +274,10 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
           <button
             type="button"
             className="btn btn-primary"
-            disabled={busy || !payableSelected.length}
+            disabled={busy || !payableSelected.length || !reviewer}
             onClick={() => void paySelected(payableSelected)}
             data-testid="approve-and-pay"
+            title={reviewer ? undefined : "Sign in as the sample reviewer first"}
           >
             {busy ? "Sending…" : payableSelected.length ? `Approve and pay ${payableSelected.length}` : "Approve and pay"}
           </button>
@@ -339,7 +349,7 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
         </div>
       )}
 
-      <ClaimDrawer claimId={open} stamp={stamp} reviewer={reviewer} onClose={onClose} onChanged={() => void reload()} />
+      <ClaimDrawer claimId={open} stamp={stamp} reviewer={reviewer} onSignIn={() => signIn(SAMPLE_REVIEWER)} onClose={onClose} onChanged={() => void reload()} />
     </div>
   );
 }

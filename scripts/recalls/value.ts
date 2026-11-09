@@ -35,7 +35,7 @@ writeFileSync(
   path.join(dir, "value.json"),
   JSON.stringify(
     {
-      note: "Written by scripts/recalls/value.ts from content/recalls/recalls.json (CPSC Recalls API) and content/recalls/proof-rules.json. Only the recalls whose rule asks for a photo of the product made safe and pays a refund in money count. Each is its US units times the refund for one unit: the lowest sale price its record states in the Sold At line, or the fixed amount its rule states when that is lower. Pro-rated refunds state no share of the price and are left out, as are recalls that state no units or no price; nothing is estimated. 'comeBackShare' is the CPSC's measure that about 6 in 100 recalled products come back (src/lib/research.ts).",
+      note: "Written by scripts/recalls/value.ts from content/recalls/recalls.json (CPSC Recalls API) and content/recalls/proof-rules.json. Only the recalls whose rule asks for a photo of the product made safe and pays a refund in money count. Each is its US units times the refund for one unit: the lowest sale price its record states in the Sold At line, or the fixed amount its rule states when that is lower. Pro-rated refunds state no share of the price and are left out, as are recalls that state no units or no price; nothing is estimated. The unclaimed figure is given at two published rates that measure different things: 'comeBackShare' is the CPSC's measure that about 6 in 100 recalled units come back, and 'correctionRate' is the CPSC's FY2025 average correction rate across recalls (44.55%, a method revised in FY2024), both from src/lib/research.ts.",
       pulledAt: data.pulledAt,
       ...v,
     },
@@ -48,5 +48,5 @@ console.log(
   `split: ${split.photoRefund} photo-refund recalls; ${split.madeSafe} ask for a photo made safe (${split.madeSafeRefund.count} pay a refund, ${split.madeSafeCredit.count} store credit); ${split.otherPhoto.count} a photo for another reason (${split.otherPhoto.product} the product, ${split.otherPhoto.identifier.count} a label or code); ${split.noPhoto.count} no photo.`,
 );
 console.log(
-  `value: ${v.covered} of ${v.recalls} counted (${v.proRated.count} pro-rated, ${v.noPrice} no price); ${v.units.toLocaleString("en-US")} units; ${moneyWords(v.lowUsd)} at the lowest stated price (${moneyWords(v.highUsd)} at the highest); ${moneyWords(v.unclaimedLowUsd)} unclaimed at 6 in 100; ${moneyWords(v.perPointLowUsd)} per point.`,
+  `value: ${v.covered} of ${v.recalls} counted (${v.proRated.count} pro-rated, ${v.noPrice} no price); ${v.units.toLocaleString("en-US")} units; ${moneyWords(v.lowUsd)} at the lowest stated price (${moneyWords(v.highUsd)} at the highest); ${moneyWords(v.unclaimedLowUsd)} unclaimed at 6 in 100 and ${moneyWords(v.unclaimedAtCorrectionLowUsd)} at the ${(v.correctionRate * 100).toFixed(2)}% correction rate; ${moneyWords(v.perPointLowUsd)} per point.`,
 );

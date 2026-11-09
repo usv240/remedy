@@ -650,6 +650,10 @@
   min-width: 4.5ch;
   text-align: right;
 }
+/* Where the model's answer came from, beside the time: Replayed for a recorded run, Live for one made just now. */
+.cl-source {
+  flex: none;
+}
 /* When the two reviewers ran, where the time went: the photo check, then the reviewers. */
 .cl-split {
   margin: 0 0 4px;

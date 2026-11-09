@@ -1,4 +1,5 @@
 import { fmtInt } from "@/lib/api/format";
+import { catalogCounts } from "@/lib/verify/dhash";
 import run from "../../../content/public/hash-reuse-run.json";
 import "./hash-reuse.css";
 
@@ -14,6 +15,7 @@ export function HashReuse() {
   const f = r.falseMatches;
   const same = r.thresholds.sameRecall;
   const other = r.thresholds.otherRecalls;
+  const cat = catalogCounts();
   const distance = (k: { medianDistance: number; maxDistance: number }) => (k.medianDistance === k.maxDistance ? `${k.medianDistance}` : `${k.medianDistance}, up to ${k.maxDistance}`);
   return (
     <div className="ev-reuse">
@@ -73,6 +75,11 @@ export function HashReuse() {
           </li>
         ))}
       </ul>
+      <p className="page-prose ev-reuse-after">
+        <strong>A copy the hash misses is not paid on that alone.</strong> The hash is one part of one check of six. A cropped or turned copy still meets the rest of the own-photo check, where the model looks for the signs of a screen, a print
+        or a downloaded picture, and the other five checks; when a check is unsure, the two reviewers read it, and the Product reviewer is asked whether it is a camera photo of a real object. Every published picture of a recall is in the pool
+        for claims on that recall, and the {fmtInt(cat.catalog)} distinct enough to tell their recall apart (of {fmtInt(cat.stored)} stored) for claims on every other recall.
+      </p>
       <p className="page-note">
         Measured in code, with no model call: scripts/public/hash-reuse-run.ts hashes each copy the way a claim photo is hashed (src/lib/verify/dhash.ts) and writes content/public/hash-reuse-run.json with every distance; tests/hash-reuse-run.test.ts makes the copies
         again and checks the counts. It measures these {fmtInt(r.sources.length)} photos and these {r.variants.length} changes. Photos: the sample charger (Dmitry G, Wikimedia Commons, public domain), three Wikimedia Commons photos (credits in content/verify/fixtures/credits.json) and the

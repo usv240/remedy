@@ -1,4 +1,5 @@
 import { autoPayVerdict } from "@/lib/firm/limits";
+import { paypalApiOf } from "@/lib/paypal/sdk-rest";
 import { recallLabel } from "@/lib/recall/label";
 import { LIMITS, resolveDeps, usd, type PaymentsDeps } from "./deps";
 import { recordStatus } from "./events";
@@ -255,7 +256,7 @@ async function claimForExecution(planId: string, deps: PaymentsDeps): Promise<{ 
 /** The deps a plan pays with: the firm's own PayPal app when it connected one, else the platform's account. */
 async function depsForFirm(firmId: string | null, deps: PaymentsDeps): Promise<PaymentsDeps> {
   const own = deps.restFor ? await deps.restFor(firmId).catch(() => null) : null;
-  return own ? { ...deps, rest: own } : deps;
+  return own ? { ...deps, rest: own, paypal: paypalApiOf(own) } : deps;
 }
 
 export async function executePlan(planId: string, partial?: Partial<PaymentsDeps>): Promise<PayResult> {

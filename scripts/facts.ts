@@ -63,7 +63,7 @@ type Facts = {
   /** Photo-refund remedies that ask for more than one photo (src/lib/recall/photo-count.ts). */
   multiPhoto: { count: number; of: number; numbers: string[] };
   /** What the photo-refund recalls are worth to their owners (content/recalls/value.json). */
-  value: { covered: number; recalls: number; proRated: number; noPrice: number; total: string; unclaimed: string; perPoint: string };
+  value: { covered: number; recalls: number; proRated: number; noPrice: number; total: string; unclaimed: string; unclaimedAtCorrection: string; correctionRate: string; perPoint: string };
   /** The headline count, and what the other photo-refund recalls ask for (content/recalls/proof-split.json). */
   headline: { recalls: number; photoRefund: number; madeSafeRefund: number; share: number; byYear: Record<string, number>; madeSafeCredit: number; otherPhoto: number; noPhoto: number };
 };
@@ -154,7 +154,17 @@ export function derived() {
     reading: { right: ra.right, readings: ra.readings, product: ra.product, madeSafe: ra.madeSafe, trials: ra.trials, photos: ra.photos },
     settings: sweepSettings().map((s) => ({ id: s.id, wrongPay: `${s.wrongPay.count} of ${s.wrongPay.of}`, atSweep: `${s.atSweep.count} of ${s.atSweep.of}`, correct: `${s.correct.count} of ${s.correct.of}`, usdPerCase: s.usdPerCase })),
     multiPhoto: { count: multi.length, of: pr.length, numbers: multi },
-    value: { covered: v.covered, recalls: v.recalls, proRated: v.proRated.count, noPrice: v.noPrice, total: moneyWords(v.lowUsd), unclaimed: moneyWords(v.unclaimedLowUsd), perPoint: moneyWords(v.perPointLowUsd) },
+    value: {
+      covered: v.covered,
+      recalls: v.recalls,
+      proRated: v.proRated.count,
+      noPrice: v.noPrice,
+      total: moneyWords(v.lowUsd),
+      unclaimed: moneyWords(v.unclaimedLowUsd),
+      unclaimedAtCorrection: moneyWords(v.unclaimedAtCorrectionLowUsd),
+      correctionRate: `${(v.correctionRate * 100).toFixed(2)}%`,
+      perPoint: moneyWords(v.perPointLowUsd),
+    },
     headline: {
       recalls: split.recalls,
       photoRefund: split.photoRefund,
@@ -170,7 +180,11 @@ export function derived() {
 
 function main() {
   const before = existsSync(OUT) ? read<Facts>(OUT) : null;
-  const tests = process.argv.includes("--no-tests") && before ? before.unitTests : unitTests();
+  const ran = process.argv.includes("--no-tests") && before ? before.unitTests : unitTests();
+  // A run with a failing test never becomes the published count: a test that timed out on a busy machine would
+  // otherwise lower the passed figure /evidence prints below the one the README states. Keep the last clean count.
+  if (ran.failed && before) console.error(`facts: ${ran.failed} unit tests FAILED in this run, so the unit-test figures stay at the last clean run (${before.unitTests.passed} passed). Fix the failure and run again.`);
+  const tests = ran.failed && before ? before.unitTests : ran;
   const a11yFile = path.join(ROOT, "content", "public", "a11y.json");
   const a11y = existsSync(a11yFile) ? read<{ pages: number; views: number; passed: number; ranAt: string }>(a11yFile) : null;
   const e = errorRates();
@@ -198,7 +212,7 @@ function main() {
   console.log(
     `facts: ${tests.passed} unit tests passed, ${tests.skipped} skipped (${tests.skippedNeeds?.database} need a database, ${tests.skippedNeeds?.claude} a Claude key, ${tests.skippedNeeds?.paypal} PayPal keys)${tests.failed ? `, ${tests.failed} FAILED` : ""}; a11y ${a11y ? `${a11y.passed} of ${a11y.views} views on ${a11y.pages} pages` : "not run yet"}; ${facts.mcp.tools} MCP tools; ${free.caught} of ${free.total} free cases; paid wrongly ${e.wrongPay.count} of ${e.wrongPay.of}; held back ${e.heldBack.count} of ${e.heldBack.of}; ${facts.catalogPictures} catalog pictures`,
   );
-  if (tests.failed) process.exitCode = 1;
+  if (ran.failed) process.exitCode = 1;
 }
 
 if (process.argv[1] && /facts\.ts$/.test(process.argv[1])) main();

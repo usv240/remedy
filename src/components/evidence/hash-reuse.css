@@ -58,3 +58,7 @@
     display: block;
   }
 }
+/* The mitigation sits right under the table, close enough to read as its answer. */
+.ev-reuse .ev-reuse-after {
+  margin-top: 14px;
+}

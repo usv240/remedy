@@ -371,7 +371,8 @@ export default async function Home() {
             </p>
             <Contrast className="vs intro-vs" />
             <p className="intro-money">
-              Those refunds come to <strong className="tabular">{money.total}</strong> at the lowest stated prices. At the average of about {money.share} products that come back, <strong className="tabular">{money.unclaimed}</strong> of it goes unclaimed.{" "}
+              Those refunds come to <strong className="tabular">{money.total}</strong> at the lowest stated prices, and <strong className="tabular">{money.range}</strong> of it goes unclaimed, at the CPSC&rsquo;s {money.correctionRate} correction
+              rate and at its figure of about {money.share} products that come back.{" "}
               <Link className="text-link" href="/evidence/market#money">
                 How it was counted
               </Link>

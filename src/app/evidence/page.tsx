@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
 import { Benchmark } from "@/components/evidence/Benchmark";
@@ -11,7 +12,7 @@ import { LANDSCAPE } from "@/components/evidence/Compare";
 import { Contrast } from "@/components/evidence/Contrast";
 import { Money } from "@/components/evidence/Money";
 import { Network } from "@/components/evidence/Network";
-import { HashPoolCall } from "@/components/evidence/HashPoolCall";
+import { HashPoolCall, HashPoolCallLive } from "@/components/evidence/HashPoolCall";
 import { HashReuse } from "@/components/evidence/HashReuse";
 import { freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/evidence/errors";
 import { Results } from "@/components/evidence/Results";
@@ -234,7 +235,9 @@ export default function EvidencePage() {
       <section id="network" className="page-section" aria-labelledby="network-h">
         <h2 id="network-h">One photo, two firms</h2>
         <Network />
-        <HashPoolCall />
+        <Suspense fallback={<HashPoolCall host={null} />}>
+          <HashPoolCallLive />
+        </Suspense>
         <HashReuse />
         <FraudDocket />
       </section>

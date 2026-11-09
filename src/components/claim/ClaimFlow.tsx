@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import type { MadeSafeExample } from "@/app/api/claims/_lib/recall-text";
@@ -7,9 +8,28 @@ import type { ClaimEvent, ClaimView, PayView } from "@/app/api/claims/_lib/types
 import { Checking, type Stage } from "./Checking";
 import { ClaimInfo } from "./ClaimInfo";
 import { day, money } from "./format";
-import { ACCEPT, checkPhoto, type PhotoCheck } from "./photo-check";
-import { Result } from "./Result";
+import type { PhotoCheck } from "./photo-check";
 import type { StepKind } from "./steps";
+
+/** The photo types the claim takes; the in-browser check says the same when a photo is something else. */
+const ACCEPT = "image/jpeg,image/png";
+
+/**
+ * The in-browser photo check (blur, light and size, src/components/claim/photo-check.ts) loads when "Take a photo" or
+ * "Choose a photo" is first pressed, so the claim page opens and answers without it.
+ */
+let photoCheck: Promise<typeof import("./photo-check")> | null = null;
+function loadPhotoCheck() {
+  photoCheck ??= import("./photo-check");
+  photoCheck.catch(() => {
+    photoCheck = null;
+  });
+  return photoCheck;
+}
+
+/** The result, with its payout choices, loads while the six checks run: it is not needed before then. */
+const loadResult = () => import("./Result").then((m) => m.Result);
+const Result = dynamic(loadResult, { loading: () => <p className="cl-later">Loading your result</p> });
 
 export type FlowRecall = {
   number: string;
@@ -100,7 +120,12 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
       return /heic|heif/i.test(f.type) || /\.(heic|heif)$/i.test(f.name) ? null : URL.createObjectURL(f);
     });
     setCheck(null);
-    setCheck(await checkPhoto(f));
+    try {
+      const { checkPhoto } = await loadPhotoCheck();
+      setCheck(await checkPhoto(f));
+    } catch {
+      setError("The photo check could not load just now. Please check your connection and choose the photo again.");
+    }
   }
 
   /** The shop recall only: Brightline's published photo of this charger with its cord cut, for a visitor with no charger to cut. */
@@ -133,6 +158,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
     setError("");
     t0.current = performance.now();
     setElapsed(0);
+    void loadResult();
     requestAnimationFrame(() => checkingRef.current?.focus());
     const fd = new FormData();
     fd.set("recall", recall.number);
@@ -244,11 +270,11 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
             {(recall.action && FRAME_TIP[recall.action]) ?? "Fit the whole product in the frame."} Good light, phone held still.
           </p>
           <div className="cl-pick">
-            <label className="btn btn-ink cl-pick-btn">
+            <label className="btn btn-ink cl-pick-btn" onPointerDown={() => void loadPhotoCheck()}>
               <input id={takeId} className="cl-file" type="file" accept={ACCEPT} capture="environment" aria-describedby={tipId} onChange={(e) => void pick(e.target.files?.[0])} disabled={phase === "checking"} />
               {file ? "Take it again" : "Take a photo"}
             </label>
-            <label className="btn btn-quiet cl-pick-btn">
+            <label className="btn btn-quiet cl-pick-btn" onPointerDown={() => void loadPhotoCheck()}>
               <input id={chooseId} className="cl-file" type="file" accept={ACCEPT} onChange={(e) => void pick(e.target.files?.[0])} disabled={phase === "checking"} />
               Choose a photo
             </label>

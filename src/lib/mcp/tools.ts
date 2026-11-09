@@ -156,7 +156,7 @@ export const TOOLS = [
     name: "verify_photo",
     title: "Verify a photo",
     description:
-      "Checks an owner's photo against a recall's proof rule: right product, made safe, their own photo, within the recall. Returns each check and the decision (verified, retake or firm_review). Without an API key only the free checks run. Stores nothing and pays nothing.",
+      "Checks an owner's photo against a recall's proof rule: right product, made safe, their own photo, within the recall. Returns each check and the decision (verified, retake or firm_review). Without an API key no model is called: the free checks run, and a photo checked before is answered from the verification cache. Stores nothing and pays nothing.",
     input: z.object({ recall_number: recallNumber, ...image }),
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
     run: async (i, ctx) => {
@@ -221,9 +221,19 @@ export const TOOLS = [
       const r = await claimRoute(ctx, `/api/claims/${encodeURIComponent(i.claim_id)}?refresh=1`);
       if (r.status === 404) return { text: `There is no claim ${i.claim_id}.`, isError: true };
       if (r.status >= 400 || !r.body?.data) return { text: r.body?.error?.message ?? `The claim could not be read (${r.status}).`, isError: true };
-      const d = r.body.data as Record<string, unknown> & { status?: string; decision?: string; summary?: { plain?: string } | null; payment?: { status_plain?: string | null; status_label?: string | null; paypal_status?: string | null; amount?: string } | null };
+      const d = r.body.data as Record<string, unknown> & {
+        status?: string;
+        decision?: string;
+        summary?: { plain?: string } | null;
+        amount?: { value?: string } | null;
+        receipt_url?: string;
+        payment?: { status_plain?: string | null; status_label?: string | null; paypal_status?: string | null; amount?: string } | null;
+      };
       const pay = d.payment ? ` Payment: ${d.payment.status_plain ?? d.payment.status_label ?? "planned"}${d.payment.paypal_status ? ` (PayPal ${d.payment.paypal_status})` : ""}.` : "";
-      return { text: `Claim ${i.claim_id}: ${d.status ?? d.decision ?? "unknown"}. ${d.summary?.plain ?? ""}${pay} Sandbox.`.replace(/\s+/g, " ").trim(), data: d };
+      // Verified, with a refund and nothing paid yet: the claim is ready to pay, and the owner's choice of where the money goes is the one step left.
+      const receipt = d.receipt_url ? (String(d.receipt_url).startsWith("http") ? String(d.receipt_url) : `${ctx.origin}${d.receipt_url}`) : null;
+      const ready = d.status === "verified" && !d.payment && d.amount?.value ? ` Ready to pay: $${d.amount.value} through PayPal, once the owner chooses where the refund goes${receipt ? ` at ${receipt}` : ""}.` : "";
+      return { text: `Claim ${i.claim_id}: ${d.status ?? d.decision ?? "unknown"}. ${d.summary?.plain ?? ""}${ready}${pay} Sandbox.`.replace(/\s+/g, " ").trim(), data: d };
     },
   }),
 ];

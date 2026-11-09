@@ -32,7 +32,24 @@ function Mark({ status }: { status: CheckView["status"] | "pending" }) {
  * stage (sending, comparing with the official pictures, the two reviewers). When the answer lands, the checks resolve
  * in order, 70 ms apart, and the timer stops at the real elapsed time.
  */
-export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed = false }: { checks: CheckView[] | null; stage: Stage; elapsedMs: number; technical?: Record<string, number> | null; reviewersAgreed?: boolean }) {
+/** A word beside the timer saying where the model's answer came from: Replayed (a recorded run) or Live (just now). */
+export type AnswerSource = "replayed" | "live";
+
+export function Checking({
+  checks,
+  stage,
+  elapsedMs,
+  technical,
+  reviewersAgreed = false,
+  source,
+}: {
+  checks: CheckView[] | null;
+  stage: Stage;
+  elapsedMs: number;
+  technical?: Record<string, number> | null;
+  reviewersAgreed?: boolean;
+  source?: AnswerSource | null;
+}) {
   const done = Boolean(checks);
   return (
     <div className="cl-checking" data-ui>
@@ -41,6 +58,11 @@ export function Checking({ checks, stage, elapsedMs, technical, reviewersAgreed 
           {STAGE_LINE[stage]}
           {!done && <span className="cl-dots" aria-hidden="true" />}
         </p>
+        {done && source && (
+          <span className="pill cl-source" data-tone={source === "live" ? "positive" : "info"} title={source === "live" ? "The model read this photo just now" : "The model's answer is replayed from a recorded run; the checks around it ran just now"}>
+            {source === "live" ? "Live" : "Replayed"}
+          </span>
+        )}
         <p className="cl-elapsed tabular" aria-label={`${done ? "Checked in" : "Elapsed"} ${seconds(elapsedMs)}`}>
           {seconds(elapsedMs)}
         </p>

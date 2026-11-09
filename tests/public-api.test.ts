@@ -142,6 +142,20 @@ describe("the MCP tools", () => {
   const ctx = { origin: "https://remedy.example", keyId: null, auth: null };
   const run = (name: string, input: unknown) => (TOOLS.find((t) => t.name === name)!.run as (i: unknown, c: typeof ctx) => Promise<{ text: string; data?: Record<string, unknown>; isError?: boolean }>)(input, ctx);
 
+  it("the recorded session on /developers runs the whole loop: the recall, verify_photo on the replayed verdict, the claim, ready to pay", () => {
+    // content/public/mcp-session.json is written by scripts/public/record-mcp-session.mjs against a running server with no Claude key.
+    const s = JSON.parse(readFileSync(path.join(process.cwd(), "content", "public", "mcp-session.json"), "utf8")) as { note: string; steps: { tool: string; text: string; isError: boolean }[] };
+    const tools = s.steps.map((x) => x.tool);
+    expect(tools).toEqual(["search_recalls", "get_proof_rule", "open_claim", "verify_photo", "open_claim", "claim_status"]);
+    expect(s.steps.every((x) => !x.isError)).toBe(true);
+    const verify = s.steps.find((x) => x.tool === "verify_photo")!;
+    expect(verify.text).toMatch(/^Verified\./);
+    expect(verify.text).toMatch(/verification cache/);
+    expect(s.steps.at(-1)!.text).toMatch(/: verified\./);
+    expect(s.steps.at(-1)!.text).toMatch(/Ready to pay: \$34\.99/);
+    expect(s.note).toMatch(/no AI model was called/);
+  });
+
   it("are the five plan tools, the catalog scan and ping, each with a schema and plain description", () => {
     expect(TOOLS.map((t) => t.name).sort()).toEqual(["claim_status", "get_proof_rule", "open_claim", "ping", "scan_catalog", "search_recalls", "verify_photo"]);
     for (const t of TOOLS) expect(t.description).not.toMatch(/—|\bfraud|\bfake/i);

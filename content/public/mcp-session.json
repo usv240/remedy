@@ -1,6 +1,6 @@
 {
-  "note": "A recorded session of real MCP tool calls against Remedy's own server (/api/mcp, streamable HTTP), written by scripts/public/record-mcp-session.mjs. These are the tool calls an AI assistant makes to help an owner; no AI model was called to record them, and the claim's photo was answered by the verification cache. {origin} is the server's own address. Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.",
-  "recordedAt": "2026-11-07T20:08:48.074Z",
+  "note": "A recorded session of real MCP tool calls against Remedy's own server (/api/mcp, streamable HTTP), written by scripts/public/record-mcp-session.mjs. These are the tool calls an AI assistant makes to help an owner, from the recall to a claim ready to pay; no AI model was called to record them, and the photo was answered by the verification cache, the model's recorded answers replayed. {origin} is the server's own address. Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.",
+  "recordedAt": "2026-11-09T06:28:07.942Z",
   "server": {
     "name": "remedy",
     "version": "2026.11.5",
@@ -24,9 +24,9 @@
         "query": "Brightline 65W laptop charger",
         "limit": 3
       },
-      "text": "3 recalls for \"Brightline 65W laptop charger\" (elastic search):\n1. Recall BH-2026-01, 2026-10-15: Brightline Home recalls 65W laptop chargers (sample recall). Photo refund: Cut the cord, $34.99 refund. {origin}/recalls/BH-2026-01\n2. Recall 25248, 2025-05-01: Baseus Portable Chargers Recalled Due to Fire Hazard; Sold on Amazon.com by Shenzhen Baseus Technology. Remedy: Replace. {origin}/recalls/25248\n3. Recall 24122, 2024-02-21: Dynabook Americas Recalls 15.5 Million Toshiba Laptop AC Adapters Due to Burn and Fire Hazards. Remedy: Replace. {origin}/recalls/24122",
+      "text": "3 recalls for \"Brightline 65W laptop charger\" (elastic search):\n1. Recall BH-2026-01, 2026-10-15: Brightline Home recalls 65W laptop chargers (sample recall). Photo refund: Cut the cord, $34.99 refund. {origin}/recalls/BH-2026-01\n2. Recall FW-2026-01, 2026-10-29: Fernway Home recalls 65W laptop chargers (sample recall). Photo refund: Cut the cord, $29.99 refund. {origin}/recalls/FW-2026-01\n3. Recall 25248, 2025-05-01: Baseus Portable Chargers Recalled Due to Fire Hazard; Sold on Amazon.com by Shenzhen Baseus Technology. Remedy: Replace. {origin}/recalls/25248",
       "isError": false,
-      "ms": 790
+      "ms": 1444
     },
     {
       "why": "Read what the recall asks the owner to do and photograph.",
@@ -36,7 +36,7 @@
       },
       "text": "Recall BH-2026-01: Brightline Home recalls 65W laptop chargers (sample recall).\nIt pays on a photo. First: Cut the cord. Remedy: Full refund of $34.99.\nSteps: Unplug the charger. Cut the cord where it meets the charger case. Take one photo of the cut cord with the charger.\nOfficial remedy: \"Stop using the charger and cut the power cord where it meets the charger case. Send one photo of the cut cord with the charger for a full refund of $34.99.\"\nSource: stored rule, none (written by the sample firm). Details: {origin}/recalls/BH-2026-01",
       "isError": false,
-      "ms": 17
+      "ms": 121
     },
     {
       "why": "Give the owner their own claim link and checklist. Nothing is opened yet.",
@@ -46,28 +46,39 @@
       },
       "text": "To claim the refund for recall BH-2026-01 (Brightline Home recalls 65W laptop chargers (sample recall)), the owner opens {origin}/claim/BH-2026-01, follows these steps: Unplug the charger. Cut the cord where it meets the charger case. Take one photo of the cut cord with the charger., and takes one photo. They choose where the refund goes. Demonstration in PayPal sandbox; Remedy is not affiliated with the recalling firm.",
       "isError": false,
-      "ms": 18
+      "ms": 107
     },
     {
-      "why": "The owner has cut the cord and sends one photo: open the claim, which runs the six checks.",
+      "why": "The owner has cut the cord and taken one photo. Check it before anything is opened: verify_photo stores nothing and pays nothing, and this photo was checked before, so the verification cache answers with no model call.",
+      "tool": "verify_photo",
+      "arguments": {
+        "recall_number": "BH-2026-01",
+        "image_base64": "<the owner's photo: public/samples/charger/cord-cut.jpg, 271 KB>"
+      },
+      "text": "Verified.\nC1 Right product: unclear. We could not confirm this is the exact recalled product.\nC2 Made safe: pass. The photo shows the product made safe.\nC3 Your own photo: pass. This is a new photo of the product.\nC4 Within the recall: pass. No model or lot number is needed for this recall.\nC5 Claim limits: pass. This claim is within the limit for one purchase.\nC6 Not already refunded: pass. No PayPal purchase linked.\nWithout an API key only the free checks run: photo quality and the own-photo match. A photo checked before is answered from the verification cache, with no model call. Add a key for the full checks.",
+      "isError": false,
+      "ms": 1635
+    },
+    {
+      "why": "The photo checks out: open the claim with it, which runs the six checks again on the server's own record.",
       "tool": "open_claim",
       "arguments": {
         "recall_number": "BH-2026-01",
         "image_base64": "<the owner's photo: public/samples/charger/cord-cut.jpg, 271 KB>"
       },
-      "text": "Claim db4245a5-d59b-4cc0-b8b5-576a7c303b9d opened for recall BH-2026-01. Decision: verified. Your photo checks out. The owner chooses where the refund goes at {origin}/r/db4245a5-d59b-4cc0-b8b5-576a7c303b9d. Follow it with claim_status. Demonstration in PayPal sandbox; Remedy is not affiliated with the recalling firm.",
+      "text": "Claim 30b42162-ca48-4f71-9496-7aca864dfc00 opened for recall BH-2026-01. Decision: verified. Your photo checks out. The owner chooses where the refund goes at {origin}/r/30b42162-ca48-4f71-9496-7aca864dfc00. Follow it with claim_status. Demonstration in PayPal sandbox; Remedy is not affiliated with the recalling firm.",
       "isError": false,
-      "ms": 4059
+      "ms": 6496
     },
     {
-      "why": "Follow the claim to its decision and payment.",
+      "why": "Follow the claim: verified and ready to pay, with the owner's choice of where the refund goes the one step left.",
       "tool": "claim_status",
       "arguments": {
-        "claim_id": "db4245a5-d59b-4cc0-b8b5-576a7c303b9d"
+        "claim_id": "30b42162-ca48-4f71-9496-7aca864dfc00"
       },
-      "text": "Claim db4245a5-d59b-4cc0-b8b5-576a7c303b9d: verified. Your photo checks out. Sandbox.",
+      "text": "Claim 30b42162-ca48-4f71-9496-7aca864dfc00: verified. Your photo checks out. Ready to pay: $34.99 through PayPal, once the owner chooses where the refund goes at {origin}/r/30b42162-ca48-4f71-9496-7aca864dfc00. Sandbox.",
       "isError": false,
-      "ms": 98
+      "ms": 540
     }
   ]
 }

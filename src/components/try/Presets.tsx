@@ -130,7 +130,14 @@ function PresetRow({ p }: { p: PresetCard }) {
         {state === "running" && !run && <Checking checks={null} stage="stored" elapsedMs={0} />}
         {run && (
           <>
-            <Checking checks={run.result.checks} stage="done" elapsedMs={run.result.timings?.total_ms ?? elapsed} technical={run.result.timings} reviewersAgreed={run.result.decision === "verified" && run.result.decided_by === "reviewers"} />
+            <Checking
+              checks={run.result.checks}
+              stage="done"
+              elapsedMs={run.result.timings?.total_ms ?? elapsed}
+              technical={run.result.timings}
+              reviewersAgreed={run.result.decision === "verified" && run.result.decided_by === "reviewers"}
+              source={run.live?.ran ? "live" : run.replay.used ? "replayed" : null}
+            />
             <Result claim={run.result} ctx={{ action: null, word: null, example: null }} preview />
             {vs && (
               <p className="tr-vs" data-ok={vs.ok ? "" : undefined}>
@@ -171,7 +178,7 @@ function PresetRow({ p }: { p: PresetCard }) {
                 <button type="button" className="btn btn-quiet" onClick={() => void go(true)} disabled={state === "running"}>
                   Run with the official-image match off
                 </button>
-                {tech && <Checking checks={tech.result.checks} stage="done" elapsedMs={tech.result.timings?.total_ms ?? 0} technical={tech.result.timings} />}
+                {tech && <Checking checks={tech.result.checks} stage="done" elapsedMs={tech.result.timings?.total_ms ?? 0} technical={tech.result.timings} source={tech.replay.used ? "replayed" : null} />}
               </div>
             )}
           </>

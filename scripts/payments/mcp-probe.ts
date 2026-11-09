@@ -8,13 +8,16 @@
  */
 import { writeFileSync } from "node:fs";
 import path from "node:path";
-import { paypalRest } from "../../src/lib/paypal/client";
+import { orders, paypalRest, payments } from "../../src/lib/paypal/client";
 import { PayPalMcp, paypalMcpBase, readOrderViaMcp } from "../../src/lib/paypal/mcp";
 import { getCapture, hasPriorRefund } from "../../src/lib/payments/refunds";
 import { MemoryStore } from "../../src/lib/payments/store";
 import { memoryLedger } from "../../src/lib/payments/deps";
-import { sdkRest } from "../../src/lib/paypal/sdk-rest";
+import { sdkApi } from "../../src/lib/paypal/sdk-rest";
 import type { Rest } from "../../src/lib/payments/types";
+
+// Orders and Payments on the PayPal Server SDK's own methods, REST for Transaction Search: as the app runs them.
+const platform = () => ({ store: new MemoryStore(), ledger: memoryLedger().ledger, rest: paypalRest as Rest, paypal: sdkApi({ orders, payments }) });
 
 async function recentCapture(): Promise<string | null> {
   const end = new Date();
@@ -28,7 +31,7 @@ async function recentCapture(): Promise<string | null> {
 async function main() {
   const captureId = process.argv[2] ?? (await recentCapture());
   if (!captureId) throw new Error("No recent sandbox capture found; pass a capture id.");
-  const cap = await getCapture(captureId, { store: new MemoryStore(), ledger: memoryLedger().ledger, rest: sdkRest as Rest });
+  const cap = await getCapture(captureId, platform());
   if (!cap.ok || !cap.capture.orderId) throw new Error(`Capture lookup: ${cap.ok ? "no order id" : cap.status}`);
   const t0 = Date.now();
   const mcp = await readOrderViaMcp(cap.capture.orderId);
@@ -39,7 +42,7 @@ async function main() {
       return true;
     })
     .catch(() => false);
-  const c6 = await hasPriorRefund(captureId, { store: new MemoryStore(), ledger: memoryLedger().ledger, rest: sdkRest as Rest, orderViaMcp: (id) => readOrderViaMcp(id) });
+  const c6 = await hasPriorRefund(captureId, { ...platform(), orderViaMcp: (id) => readOrderViaMcp(id) });
   const out = {
     note: "Written by scripts/payments/mcp-probe.ts: one read-only check of check C6 reading a sandbox order through PayPal's MCP server (get_order). Nothing was paid or refunded.",
     readAt: new Date().toISOString(),

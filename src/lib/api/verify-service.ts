@@ -2,8 +2,9 @@
  * Photo verification for the public API (POST /api/v1/verify) and the MCP tool verify_photo. No claim is stored and
  * nothing is paid: this answers "would this photo be accepted for this recall?".
  *
- * Spend care: without an API key only the free checks run (the photo's quality, and whether it matches the recall's
- * official CPSC pictures or an earlier claim), with no AI call. With a key the full checks run, at most
+ * Spend care: without an API key no model is called. The free checks run (the photo's quality, and whether it matches
+ * the recall's official CPSC pictures or an earlier claim), and a photo checked before is answered from the
+ * verification cache, the model's recorded answers replayed at no cost. With a key the full checks run, at most
  * VERIFY_LIMITS.visionPerKeyPerDay a day, and never when the site's daily AI budget is used up.
  */
 import { createHash } from "node:crypto";
@@ -36,13 +37,16 @@ export async function callsToday(keyId: number, endpoint: string): Promise<numbe
   return r?.n ?? 0;
 }
 
+/** In free mode no model is called; a photo checked before still gets the model's recorded answers, at no cost. */
+const REPLAYED = " A photo checked before is answered from the verification cache, with no model call.";
+
 /** Decide how much of the check runs, and say why in plain words. */
 export async function verifyMode(keyId: number | null, endpoint: string): Promise<{ mode: VerifyMode; note: string }> {
-  if (!keyId) return { mode: "free", note: "Without an API key only the free checks run: photo quality and the own-photo match. Add a key for the full checks." };
-  if (!process.env.ANTHROPIC_API_KEY) return { mode: "free", note: "The AI service is not connected on this server, so only the free checks ran." };
-  if ((await callsToday(keyId, endpoint)) >= VERIFY_LIMITS.visionPerKeyPerDay) return { mode: "free", note: `This key has run ${VERIFY_LIMITS.visionPerKeyPerDay} full checks today, so only the free checks ran. The limit resets over the next 24 hours.` };
+  if (!keyId) return { mode: "free", note: `Without an API key only the free checks run: photo quality and the own-photo match.${REPLAYED} Add a key for the full checks.` };
+  if (!process.env.ANTHROPIC_API_KEY) return { mode: "free", note: `The AI service is not connected on this server, so only the free checks ran.${REPLAYED}` };
+  if ((await callsToday(keyId, endpoint)) >= VERIFY_LIMITS.visionPerKeyPerDay) return { mode: "free", note: `This key has run ${VERIFY_LIMITS.visionPerKeyPerDay} full checks today, so only the free checks ran.${REPLAYED} The limit resets over the next 24 hours.` };
   const budget = await overBudget().catch(() => ({ over: false }));
-  if (budget.over) return { mode: "free", note: "The photo checker has used today's AI budget, so only the free checks ran." };
+  if (budget.over) return { mode: "free", note: `The photo checker has used today's AI budget, so only the free checks ran.${REPLAYED}` };
   return { mode: "full", note: "All checks ran, including the vision checks by Claude Opus 5.5." };
 }
 
@@ -98,7 +102,9 @@ export async function verifyForApi(o: { photo: Uint8Array; mime?: string; recall
       proofRule: stored.rule,
       priorHashes: await priorClaimHashes(recall.number),
       claimContext: amount ? { firmAmount: { value: amount, currency: "USD" }, autoCap: { value: "50.00", currency: "USD" } } : {},
-      options: { reviewers: !free },
+      // The two reviewers run in both modes; in free mode no model is reachable, so only their recorded answers for a
+      // photo checked before can count, read from the verification cache like the vision answer.
+      options: { reviewers: true },
     },
     free ? { aiAvailable: () => false } : {},
   );

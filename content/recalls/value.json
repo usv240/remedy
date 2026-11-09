@@ -1,5 +1,5 @@
 {
- "note": "Written by scripts/recalls/value.ts from content/recalls/recalls.json (CPSC Recalls API) and content/recalls/proof-rules.json. Only the recalls whose rule asks for a photo of the product made safe and pays a refund in money count. Each is its US units times the refund for one unit: the lowest sale price its record states in the Sold At line, or the fixed amount its rule states when that is lower. Pro-rated refunds state no share of the price and are left out, as are recalls that state no units or no price; nothing is estimated. 'comeBackShare' is the CPSC's measure that about 6 in 100 recalled products come back (src/lib/research.ts).",
+ "note": "Written by scripts/recalls/value.ts from content/recalls/recalls.json (CPSC Recalls API) and content/recalls/proof-rules.json. Only the recalls whose rule asks for a photo of the product made safe and pays a refund in money count. Each is its US units times the refund for one unit: the lowest sale price its record states in the Sold At line, or the fixed amount its rule states when that is lower. Pro-rated refunds state no share of the price and are left out, as are recalls that state no units or no price; nothing is estimated. The unclaimed figure is given at two published rates that measure different things: 'comeBackShare' is the CPSC's measure that about 6 in 100 recalled units come back, and 'correctionRate' is the CPSC's FY2025 average correction rate across recalls (44.55%, a method revised in FY2024), both from src/lib/research.ts.",
  "pulledAt": "2026-11-05T18:56:05.863Z",
  "recalls": 447,
  "covered": 442,
@@ -26,6 +26,8 @@
  "highUsd": 1298957814,
  "comeBackShare": 0.06,
  "unclaimedLowUsd": 442857852,
+ "correctionRate": 0.4455,
+ "unclaimedAtCorrectionLowUsd": 261239020,
  "perPointLowUsd": 4711254,
  "largest": [
   {

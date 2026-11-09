@@ -1,7 +1,7 @@
 // Records the tool calls an AI assistant makes to help an owner with a recall, against Remedy's own MCP server
 // (/api/mcp), and writes content/public/mcp-session.json for /developers. Each call is a real JSON-RPC request to the
-// running server: find the recall, read its proof rule, get the owner's claim link, open the claim with the owner's
-// photo, and follow it. No AI model is called to record it: the assistant's turns are not part of the file, only its
+// running server: find the recall, read its proof rule, get the owner's claim link, check the owner's photo
+// (verify_photo, which stores nothing), open the claim with it, and follow it to ready to pay. No AI model is called to record it: the assistant's turns are not part of the file, only its
 // tool calls and the server's answers. The photo is Brightline's published sample photo (public domain), checked by
 // the real verifier and answered by the verification cache, so no model runs on the server either (start the server
 // with ANTHROPIC_API_KEY= to be sure). The claim it opens is removed afterwards unless --keep.
@@ -46,13 +46,20 @@ async function main() {
   await call("Read what the recall asks the owner to do and photograph.", "get_proof_rule", { recall_number: "BH-2026-01" });
   await call("Give the owner their own claim link and checklist. Nothing is opened yet.", "open_claim", { recall_number: "BH-2026-01" });
   const b64 = readFileSync(PHOTO).toString("base64");
-  const opened = await call("The owner has cut the cord and sends one photo: open the claim, which runs the six checks.", "open_claim", { recall_number: "BH-2026-01", image_base64: b64 }, { recall_number: "BH-2026-01", image_base64: `<the owner's photo: ${PHOTO}, ${Math.round(readFileSync(PHOTO).length / 1024)} KB>` });
+  const shownPhoto = { recall_number: "BH-2026-01", image_base64: `<the owner's photo: ${PHOTO}, ${Math.round(readFileSync(PHOTO).length / 1024)} KB>` };
+  await call(
+    "The owner has cut the cord and taken one photo. Check it before anything is opened: verify_photo stores nothing and pays nothing, and this photo was checked before, so the verification cache answers with no model call.",
+    "verify_photo",
+    { recall_number: "BH-2026-01", image_base64: b64 },
+    shownPhoto,
+  );
+  const opened = await call("The photo checks out: open the claim with it, which runs the six checks again on the server's own record.", "open_claim", { recall_number: "BH-2026-01", image_base64: b64 }, shownPhoto);
   const claimId = opened.structuredContent?.id;
   if (!claimId) throw new Error("open_claim did not return a claim id");
-  await call("Follow the claim to its decision and payment.", "claim_status", { claim_id: claimId });
+  await call("Follow the claim: verified and ready to pay, with the owner's choice of where the refund goes the one step left.", "claim_status", { claim_id: claimId });
 
   const out = {
-    note: "A recorded session of real MCP tool calls against Remedy's own server (/api/mcp, streamable HTTP), written by scripts/public/record-mcp-session.mjs. These are the tool calls an AI assistant makes to help an owner; no AI model was called to record them, and the claim's photo was answered by the verification cache. {origin} is the server's own address. Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.",
+    note: "A recorded session of real MCP tool calls against Remedy's own server (/api/mcp, streamable HTTP), written by scripts/public/record-mcp-session.mjs. These are the tool calls an AI assistant makes to help an owner, from the recall to a claim ready to pay; no AI model was called to record them, and the photo was answered by the verification cache, the model's recorded answers replayed. {origin} is the server's own address. Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.",
     recordedAt: new Date().toISOString(),
     server: { name: init.result.serverInfo?.name, version: init.result.serverInfo?.version, protocolVersion: init.result.protocolVersion },
     tools: list.result.tools.map((t) => t.name),

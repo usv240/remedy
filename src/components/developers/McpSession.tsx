@@ -22,7 +22,7 @@ const words = ["no", "one", "two", "three", "four", "five", "six", "seven", "eig
 
 /**
  * An AI assistant using Remedy's tools: a recorded session of real MCP tool calls against this server's /api/mcp,
- * from finding the recall to the claim's decision. Only the tool calls and the server's answers are shown; no model
+ * from finding the recall to a claim ready to pay. Only the tool calls and the server's answers are shown; no model
  * was called to record them. {origin} in the record is this server's own address.
  */
 export function McpSession({ host }: { host: string }) {
@@ -37,8 +37,8 @@ export function McpSession({ host }: { host: string }) {
         <Info id="dev.mcp-session" label="" topic="the recorded session" />
       </div>
       <p className="page-prose">
-        The tool calls an assistant makes to help an owner, from the recall to a verified claim: {words[s.steps.length] ?? s.steps.length} calls to this server&rsquo;s MCP endpoint, recorded on {day(s.recordedAt)}. Only the
-        calls and the server&rsquo;s answers are shown. No AI model was called to record them, and the owner chooses where the refund goes.
+        The tool calls an assistant makes to help an owner, from the recall to a claim ready to pay: {words[s.steps.length] ?? s.steps.length} calls to this server&rsquo;s MCP endpoint, recorded on {day(s.recordedAt)}. Only the
+        calls and the server&rsquo;s answers are shown. No AI model was called to record them: the photo&rsquo;s verdict is replayed from the verification cache, and the owner chooses where the refund goes.
       </p>
       <p className="mcp-ask">
         <span className="mcp-k">The owner asks</span> &ldquo;{s.owner}&rdquo;

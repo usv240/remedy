@@ -112,7 +112,7 @@
   },
   "page.status": {
     "title": "About this page",
-    "what": "A check of every service Remedy uses: PayPal, Claude, the database and each sponsor tool.",
+    "what": "A check of every service Remedy uses: PayPal, Claude, the database and each tool it is built on.",
     "why": "If a service is not connected, Remedy uses its fallback so every flow keeps working. This page shows which mode each one is in. An optional add-on that is not switched on, such as Sentry error tracking, reads Optional, off and is not counted against the live total.",
     "technical": "GET /api/health runs the same checks and returns JSON, with a summary that leaves optional add-ons that are off out of the total. PayPal and Postgres answer a real call; the rest are read from their settings."
   },

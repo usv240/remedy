@@ -40,7 +40,7 @@ export async function reconcileOpenPayments(partial?: Partial<PaymentsDeps>) {
       report.waitingForRetry++;
       continue;
     }
-    const o = await deps.rest<{ status?: string; purchase_units?: { payments?: { captures?: { status?: string }[] } }[] }>(`/v2/checkout/orders/${encodeURIComponent(p.orderId)}`, { method: "GET" });
+    const o = await deps.paypal.getOrder<{ status?: string; purchase_units?: { payments?: { captures?: { status?: string }[] } }[] }>(p.orderId);
     report.orders++;
     if (o.status >= 400) {
       report.errors.push(`order ${p.orderId}: ${o.status}`);

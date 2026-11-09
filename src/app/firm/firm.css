@@ -418,6 +418,23 @@
   min-height: 44px;
   width: min(20rem, 100%);
 }
+/* Who is reviewing: one click signs in as the sample reviewer; signed in, the name shows with a green dot. */
+.cq-signin {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  min-height: 44px;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+.cq-signin-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--positive);
+  flex: none;
+}
 .cq-total {
   font-size: 0.875rem;
   color: var(--muted);

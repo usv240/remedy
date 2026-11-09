@@ -33,16 +33,25 @@ export type RecallValue = {
   /** Units times the refund for one unit at the lowest stated price, and at the highest, in whole dollars. */
   lowUsd: number;
   highUsd: number;
-  /** At the share that comes back (6 in 100), what stays with owners unclaimed, at the lowest price. */
+  /**
+   * What stays with owners unclaimed, at the lowest price, at two published rates that measure different things:
+   * `comeBackShare` (6 in 100) is the share of recalled units that come back; `correctionRate` (the CPSC's FY2025
+   * 44.55%) is an average correction rate across recalls, under a method revised in FY2024. Shown as a range.
+   */
   comeBackShare: number;
   unclaimedLowUsd: number;
+  correctionRate: number;
+  unclaimedAtCorrectionLowUsd: number;
   /** What one more point of return (1 in 100 more units) sends back to owners, at the lowest price. */
   perPointLowUsd: number;
   /** The largest single recalls by low value, for the method page. `price` is the refund counted for one unit. */
   largest: { number: string; units: number; price: number; usd: number }[];
 };
 
-export function recallValue(recalls: ValueRecall[], rules: Record<string, SplitRule>, comeBackShare = 0.06): RecallValue {
+/** The CPSC's FY2025 average correction rate across recalls, as a share (PROBLEM.correctionRate.rate in src/lib/research.ts). */
+export const CORRECTION_RATE = 0.4455;
+
+export function recallValue(recalls: ValueRecall[], rules: Record<string, SplitRule>, comeBackShare = 0.06, correctionRate = CORRECTION_RATE): RecallValue {
   const pr = recalls.filter((r) => r.photoRefund && rules[r.number] && madeSafeRefund(rules[r.number]));
   const pro = pr.filter((r) => proRated(rules[r.number]));
   const rest = pr.filter((r) => !proRated(rules[r.number]));
@@ -69,6 +78,8 @@ export function recallValue(recalls: ValueRecall[], rules: Record<string, SplitR
     highUsd: Math.round(high),
     comeBackShare,
     unclaimedLowUsd: Math.round(low * (1 - comeBackShare)),
+    correctionRate,
+    unclaimedAtCorrectionLowUsd: Math.round(low * (1 - correctionRate)),
     perPointLowUsd: Math.round(low * 0.01),
     largest: rows
       .map((x) => ({ number: x.number, units: x.units, price: x.low, usd: Math.round(x.units * x.low) }))

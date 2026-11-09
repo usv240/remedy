@@ -2,23 +2,31 @@ import value from "../../../content/recalls/value.json";
 import { fmtInt } from "@/lib/api/format";
 import type { RecallValue } from "@/lib/recall/value";
 import { moneyWords } from "@/lib/recall/value";
-import { RESEARCH } from "@/lib/research";
+import { PROBLEM, RESEARCH } from "@/lib/research";
 
 /** What the made-safe refund recalls offer their owners, from content/recalls/value.json (scripts/recalls/value.ts). */
 export const VALUE = value as RecallValue & { note: string; pulledAt: string };
 
+/**
+ * The money figures. What stays unclaimed is a range at two published rates that measure different things: about 6 in
+ * 100 recalled units come back (the CPSC's 2017 workshop figure), and the CPSC's FY2025 average correction rate across
+ * its recalls (44.55%, a method revised in FY2024). Both come from src/lib/research.ts through value.json.
+ */
 export function moneyHeadline() {
   return {
     total: moneyWords(VALUE.lowUsd),
     unclaimed: moneyWords(VALUE.unclaimedLowUsd),
+    unclaimedAtCorrection: moneyWords(VALUE.unclaimedAtCorrectionLowUsd),
+    range: `${moneyWords(VALUE.unclaimedAtCorrectionLowUsd)} to ${moneyWords(VALUE.unclaimedLowUsd)}`,
     perPoint: moneyWords(VALUE.perPointLowUsd),
     units: fmtInt(VALUE.units),
     covered: `${fmtInt(VALUE.covered)} of ${fmtInt(VALUE.recalls)}`,
     share: RESEARCH.comeBack.share,
+    correctionRate: PROBLEM.correctionRate.rate,
   };
 }
 
-/** The three money figures, each with what it counts. */
+/** The money figures, each with what it counts; the unclaimed share as a range, each end with the rate it uses. */
 export function Money() {
   const m = moneyHeadline();
   return (
@@ -31,8 +39,11 @@ export function Money() {
         </dd>
       </div>
       <div>
-        <dt>{m.unclaimed}</dt>
-        <dd>of those refunds stays unclaimed if these recalls see the CPSC&rsquo;s average of about {m.share} products come back.</dd>
+        <dt>{m.range}</dt>
+        <dd>
+          of those refunds stays unclaimed, at two published rates that measure different things: <span className="tabular">{m.unclaimed}</span> if about {m.share} recalled units come back, the CPSC&rsquo;s figure for how many products return
+          after a recall; <span className="tabular">{m.unclaimedAtCorrection}</span> at the {m.correctionRate} the CPSC reports as its FY2025 average correction rate across recalls, measured by a method revised in FY2024.
+        </dd>
       </div>
       <div>
         <dt>{m.perPoint}</dt>

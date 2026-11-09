@@ -42,7 +42,8 @@ export type CaptureView = { captureId: string; status: string; amountCents: numb
 
 export async function getCapture(captureId: string, partial?: Partial<PaymentsDeps>): Promise<{ ok: true; capture: CaptureView } | { ok: false; status: number; issue: string }> {
   const deps = await resolveDeps(partial);
-  const r = await deps.rest<CaptureBody>(`/v2/payments/captures/${encodeURIComponent(captureId)}`, { method: "GET" });
+  // paymentsController.getCapturedPayment, on the SDK.
+  const r = await deps.paypal.getCapture<CaptureBody>(captureId);
   if (r.status >= 400) return { ok: false, status: r.status, issue: issueOf(r.body) };
   const up = r.body.links?.find((l) => l.rel === "up")?.href;
   return {
@@ -63,8 +64,8 @@ export type RefundResult =
   | { ok: false; issue: string; plain: string; status: number; debugId: string | null; definite: boolean };
 
 /**
- * POST /v2/payments/captures/{id}/refund for `amountCents`, with PayPal-Request-Id so a retry of the same attempt
- * returns the first refund instead of making a second one.
+ * paymentsController.refundCapturedPayment (POST /v2/payments/captures/{id}/refund) for `amountCents`, with
+ * PayPal-Request-Id so a retry of the same attempt returns the first refund instead of making a second one.
  */
 export async function refundCapture(
   o: { captureId: string; amountCents: number; requestId: string; noteToPayer?: string; mock?: string },
@@ -72,16 +73,12 @@ export async function refundCapture(
 ): Promise<RefundResult> {
   const deps = await resolveDeps(partial);
   type RefundBody = { id?: string; status?: string; name?: string; details?: { issue?: string }[]; debug_id?: string };
-  const call = () =>
-    deps.rest<RefundBody>(`/v2/payments/captures/${encodeURIComponent(o.captureId)}/refund`, {
-      method: "POST",
-      requestId: o.requestId,
-      headers: { Prefer: "return=representation", ...(o.mock ? { "PayPal-Mock-Response": JSON.stringify({ mock_application_codes: o.mock }) } : {}) },
-      body: JSON.stringify({
-        amount: { value: toValue(o.amountCents), currency_code: "USD" },
-        note_to_payer: (o.noteToPayer ?? `Recall refund. ${SANDBOX_LABEL}`).slice(0, 255),
-      }),
-    });
+  const body = {
+    amount: { value: toValue(o.amountCents), currency_code: "USD" },
+    note_to_payer: (o.noteToPayer ?? `Recall refund. ${SANDBOX_LABEL}`).slice(0, 255),
+  };
+  // The same PayPal-Request-Id on every retry of this attempt: PayPal answers with the first refund.
+  const call = () => deps.paypal.refundCapture<RefundBody>(o.captureId, body, { requestId: o.requestId, mock: o.mock });
   const offline = { status: 599, body: { name: "NETWORK_ERROR" } as RefundBody, debugId: null };
   let r = await call().catch(() => offline);
   for (let i = 1; r.status >= 500 && i <= 2; i++) {
@@ -96,7 +93,7 @@ export async function refundCapture(
 
 export async function getRefund(refundId: string, partial?: Partial<PaymentsDeps>) {
   const deps = await resolveDeps(partial);
-  const r = await deps.rest<{ id?: string; status?: string; amount?: { value?: string }; name?: string }>(`/v2/payments/refunds/${encodeURIComponent(refundId)}`, { method: "GET" });
+  const r = await deps.paypal.getRefund<{ id?: string; status?: string; amount?: { value?: string }; name?: string }>(refundId);
   if (r.status >= 400) return { ok: false as const, status: r.status, issue: r.body.name ?? "PAYPAL_ERROR" };
   return { ok: true as const, paypalStatus: r.body.status ?? "PENDING", status: refundStatus(r.body.status), amountCents: toCents(r.body.amount?.value ?? 0) };
 }
@@ -177,7 +174,8 @@ export async function hasPriorRefund(captureId: string, partial?: Partial<Paymen
     }
     if (!order) {
       calls.push(`GET /v2/checkout/orders/${c.orderId}`);
-      const o = await deps.rest<OrderBody>(`/v2/checkout/orders/${encodeURIComponent(c.orderId)}`, { method: "GET" });
+      // ordersController.getOrder, on the SDK.
+      const o = await deps.paypal.getOrder<OrderBody>(c.orderId);
       if (o.status < 400) order = o.body;
       if (orderSource.via === null) orderSource = { via: "rest", note: null };
     }

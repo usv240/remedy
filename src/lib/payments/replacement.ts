@@ -49,13 +49,9 @@ export async function payReplacement(
   const deps = await resolveDeps(partial);
   const retailerEmail = process.env.PAYPAL_VENDOR_EMAIL?.trim();
   if (!retailerEmail) return { ok: false, issue: "NO_RETAILER", plain: "The sample retailer is not set up on this server, so a replacement cannot be ordered.", status: 503, debugId: null, definite: true };
-  const call = () =>
-    deps.rest<OrderBody>("/v2/checkout/orders", {
-      method: "POST",
-      requestId: o.requestId,
-      headers: { Prefer: "return=representation" },
-      body: JSON.stringify(replacementOrderBody({ ...o, retailerEmail })),
-    });
+  // ordersController.createOrder, on the SDK; the attempt's PayPal-Request-Id makes a retry return the first order.
+  const body = replacementOrderBody({ ...o, retailerEmail });
+  const call = () => deps.paypal.createOrder<OrderBody>(body, { requestId: o.requestId });
   let r = await call().catch(() => ({ status: 599, body: { name: "NETWORK_ERROR" } as OrderBody, debugId: null }));
   for (let i = 1; r.status >= 500 && i <= 2; i++) {
     await new Promise((res) => setTimeout(res, 700 * i));

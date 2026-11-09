@@ -18,7 +18,7 @@ Use this login in the PayPal window that opens from the sample shop's PayPal but
 
 - It is a PayPal sandbox personal account. It works only in the sandbox checkout window, and its balance is practice money.
 - Please log in rather than paying with a sandbox test card: the sandbox declines test cards at exactly $34.99, the sample product's price.
-- Please keep the password as it is so the next person can use it too. The login stays active through the end of judging.
+- Please keep the password as it is so the next person can use it too. The login stays active.
 
 ## The five-minute path
 
@@ -80,14 +80,14 @@ Open [`/firm`](https://remedy-y0ym.onrender.com/firm): Brightline Home's recall 
 - [`/firm/claims`](https://remedy-y0ym.onrender.com/firm/claims) is the claims queue in AG Grid: photo, claimant (masked), the six checks, decision, amount and payout status, with quick views and search. On a phone it becomes a card list.
 - Open any row: the drawer shows the photo, each check with its reason, and the payment plan. **Ask for a retake** asks the owner, kindly, for a new photo through the same claim link.
 - The look-alike claim on recall 26754 (the CPSC's photo of a different hair dryer) shows the **Two reviewers**: the Product reviewer, who sees only the official images, and the Remedy reviewer, who sees only the remedy text. Each cites what it saw, and the referee in code sends the claim to a person.
-- **Reviewing as** picks a sample reviewer (Ana or Devon); approvals are recorded in that name.
+- **Sign in as Ana (sample reviewer)**, above the queue or in a claim's drawer, is one click; approving a payout and asking for a retake wait for it, and are recorded in Ana's name. There is no real account behind it (the info button's Technical view says so); a firm's own deployment signs in through PayPal's Partner Referrals onboarding.
 - **Payments and claim limits**, on [`/firm`](https://remedy-y0ym.onrender.com/firm): the PayPal account the firm pays from, and the claim limits as plain rules. **Connect your PayPal app** takes a sandbox REST app's client ID and secret and checks them with PayPal; a firm's own console stores them sealed and pays its refunds and payouts from them, while this open sample console only checks them and keeps the platform's sandbox account. The limits: one refund per person per recall, where a person is the payee, the PayPal purchase, the PayPal account that paid, or the network and browser (a new email alone does not reset it), and the auto rule pays at most $350.00 a day for each recall, with the rest waiting in **Needs review**.
 - Sample claims show the sample set's own photos of the charger (Dmitry G, Wikimedia Commons, public domain): cut for the paid and reviewed claims, intact or opened for the ones asked for a new photo.
 
 ## Bulk pay
 
 1. In `/firm/claims`, press **Select all ready to pay** (or choose **Ready to pay** and tick the rows).
-2. Press **Approve and pay**. The status line reads, for example, "2 payouts sent in PayPal batch ...": one PayPal Payouts batch for all of them.
+2. Press **Sign in as Ana (sample reviewer)** if you have not yet, then **Approve and pay**. The status line reads, for example, "2 payouts sent in PayPal batch ...": one PayPal Payouts batch for all of them.
 3. The payout status updates live in the grid ("Live: payout status updates here"). In our runs, a sandbox payout reached SUCCESS 17 to 18 seconds after approval.
 
 Two sample claims are always ready to pay, at the recall's refund of $34.99, to the sandbox buyer: when a visitor has paid them, the queue adds two more the next time it opens. Any **Needs review** claim can also be approved and paid from its drawer.
@@ -161,7 +161,7 @@ curl -X POST https://remedy-y0ym.onrender.com/api/mcp \
   -H "content-type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-A recorded session of these tool calls, from finding the recall to a verified claim, is on [`/developers`](https://remedy-y0ym.onrender.com/developers#mcp-h) (`content/public/mcp-session.json`). To record it again against a running server, with no AI call: `BASE_URL=http://localhost:3300 node --env-file=.env.local scripts/public/record-mcp-session.mjs` (start the server with `ANTHROPIC_API_KEY=` empty to be sure; the claim it opens is removed afterwards).
+A recorded session of these tool calls, from finding the recall through verify_photo to a claim ready to pay, is on [`/developers`](https://remedy-y0ym.onrender.com/developers#mcp-h) (`content/public/mcp-session.json`). To record it again against a running server, with no AI call: `BASE_URL=http://localhost:3300 node --env-file=.env.local scripts/public/record-mcp-session.mjs` (start the server with `ANTHROPIC_API_KEY=` empty to be sure; the claim it opens is removed afterwards).
 
 Agents can also find the server on their own through `/api/mcp/server-card`, `/.well-known/ai-catalog.json` and `/llms.txt`.
 
@@ -205,7 +205,7 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 502 passed, 50 skipped: 20 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests, no network | `npm test` | 512 passed, 50 skipped: 20 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |

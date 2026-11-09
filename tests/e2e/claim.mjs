@@ -55,6 +55,12 @@ async function main() {
     const b = await chromium.launch({ executablePath: process.env.CHROME_PATH ?? "C:/Program Files/Google/Chrome/Application/chrome.exe" });
     const p = await b.newPage({ viewport: { width: 390, height: 844 }, extraHTTPHeaders: { "x-checks-secret": SECRET } });
     await p.goto(`${B}/claim/27056`, { waitUntil: "networkidle" });
+    // The page is server-rendered: on a busy machine the network goes quiet before React has attached its handlers,
+    // and a photo chosen before then is never read. Wait for the photo input to be live first.
+    await p.waitForFunction(() => {
+      const el = document.querySelectorAll('input[type="file"]')[1];
+      return Boolean(el && Object.keys(el).some((k) => k.startsWith("__reactProps")));
+    }, null, { timeout: 30_000 });
     await p.locator('input[type="file"]').nth(1).setInputFiles(`${FIX}/official/27056-haiara-1.jpg`);
     await p.waitForSelector(".cl-precheck, .cl-precheck-ok");
     if (await p.locator(".cl-precheck").count()) await p.getByLabel("Send it anyway").check();

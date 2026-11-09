@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TONE, WORD } from "@/lib/firm/checks";
 import { isSampleNumber, recallLabel } from "@/lib/recall/label";
-import { STAGE_LABEL, STAGE_TONE, type ClaimDetail } from "@/lib/firm/types";
+import { SAMPLE_REVIEWER, STAGE_LABEL, STAGE_TONE, type ClaimDetail } from "@/lib/firm/types";
 import { CopyButton } from "@/components/developers/CopyButton";
 import { FirmInfo } from "./FirmInfo";
 import { Thumb } from "./Thumb";
@@ -29,7 +29,25 @@ function summary(d: ClaimDetail): string {
   return DECISION[r.decision] ?? "";
 }
 
-export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { claimId: string | null; stamp: string; reviewer: string; onClose: () => void; onChanged: () => void }) {
+/**
+ * `reviewer` is null until the person signs in as the sample reviewer; approving and retakes wait for that, and the
+ * drawer offers the same one-click sign-in (`onSignIn`) so nobody has to close it first.
+ */
+export function ClaimDrawer({
+  claimId,
+  stamp,
+  reviewer,
+  onSignIn,
+  onClose,
+  onChanged,
+}: {
+  claimId: string | null;
+  stamp: string;
+  reviewer: string | null;
+  onSignIn?: () => void;
+  onClose: () => void;
+  onChanged: () => void;
+}) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [detail, setDetail] = useState<ClaimDetail | null>(null);
   const [busy, setBusy] = useState<Busy>("idle");
@@ -337,20 +355,30 @@ export function ClaimDrawer({ claimId, stamp, reviewer, onClose, onChanged }: { 
               </form>
             ) : (
               <div className="firm-actions">
+                {(canPay || canRetake) && !reviewer && onSignIn && (
+                  <button type="button" className="btn btn-quiet" onClick={onSignIn} data-testid="drawer-sign-in">
+                    Sign in as {SAMPLE_REVIEWER} (sample reviewer)
+                  </button>
+                )}
                 {canPay && (
-                  <button type="button" className="btn btn-primary" onClick={() => void pay()} disabled={busy !== "idle"}>
+                  <button type="button" className="btn btn-primary" onClick={() => void pay()} disabled={busy !== "idle" || !reviewer} title={reviewer ? undefined : "Sign in as the sample reviewer first"}>
                     {busy === "paying" ? "Sending…" : `Approve and pay ${usd(r.amountCents)}`}
                   </button>
                 )}
                 {canRetake && (
-                  <button type="button" className="btn btn-quiet" onClick={() => setRetakeOpen(true)} disabled={busy !== "idle"}>
+                  <button type="button" className="btn btn-quiet" onClick={() => setRetakeOpen(true)} disabled={busy !== "idle" || !reviewer} title={reviewer ? undefined : "Sign in as the sample reviewer first"}>
                     Ask for a retake
                   </button>
                 )}
               </div>
             )}
             <p className="firm-status" role="status" data-tone={status?.tone}>
-              {status?.text ?? (canPay && detail ? `${isSampleNumber(detail.recall.number) ? "Pays from Brightline Home's PayPal sandbox account" : "Pays from Remedy's PayPal sandbox account in this demo (in a real deployment, the recalling firm's own)"}, approved by ${reviewer}.` : "")}
+              {status?.text ??
+                ((canPay || canRetake) && !reviewer
+                  ? "Approving and asking for a new photo are done in a reviewer's name: sign in as the sample reviewer first."
+                  : canPay && detail
+                    ? `${isSampleNumber(detail.recall.number) ? "Pays from Brightline Home's PayPal sandbox account" : "Pays from Remedy's PayPal sandbox account in this demo (in a real deployment, the recalling firm's own)"}, approved by ${reviewer}.`
+                    : "")}
             </p>
           </div>
         )}

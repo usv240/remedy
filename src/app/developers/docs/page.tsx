@@ -250,7 +250,7 @@ async function Docs() {
             </div>
             </details>
             <p className="page-prose">
-              Send your key as <code>Authorization: Bearer {KEY_PREFIX}…</code> for the full photo checks (up to {VERIFY_LIMITS.visionPerKeyPerDay} a day per key); without one, verify_photo runs the free checks only. Discovery:{" "}
+              Send your key as <code>Authorization: Bearer {KEY_PREFIX}…</code> for the full photo checks (up to {VERIFY_LIMITS.visionPerKeyPerDay} a day per key); without one, verify_photo calls no model: the free checks run, and a photo checked before is answered from the verification cache. Discovery:{" "}
               <a className="text-link" href="/api/mcp/server-card">
                 server card
               </a>

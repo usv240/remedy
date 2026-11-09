@@ -1,15 +1,20 @@
+import { paypalApiOf } from "@/lib/paypal/sdk-rest";
 import type { PaymentStore } from "./store";
-import type { Ledger, Rest } from "./types";
+import type { Ledger, PayPalApi, Rest } from "./types";
 
 /**
- * What every payments function needs: a store, the ledger, PayPal REST access and a clock. Production code passes
- * nothing and gets Postgres, the hash-chained ledger and the sandbox client. Tests pass a MemoryStore, an in-memory
- * ledger and a fake `rest`, so no network or database is touched. Defaults load lazily so tests never import them.
+ * What every payments function needs: a store, the ledger, PayPal access and a clock. Production code passes nothing
+ * and gets Postgres, the hash-chained ledger, the PayPal Server SDK for Orders and Payments and REST for the rest.
+ * Tests pass a MemoryStore, an in-memory ledger and a fake `rest`, so no network or database is touched; their
+ * `paypal` is the same six calls over that fake. Defaults load lazily so tests never import them.
  */
 export type PaymentsDeps = {
   store: PaymentStore;
   ledger: Ledger;
+  /** REST, for what the SDK does not cover: Payouts, Transaction Search, Disputes, webhook verification. */
   rest: Rest;
+  /** Orders and Payments: the SDK's own methods in production (src/lib/paypal/sdk-rest.ts). */
+  paypal: PayPalApi;
   now: () => Date;
   /** The firm the money comes from. In this build, the sample firm's sandbox account. */
   firm: { id: string | null; name: string };
@@ -37,13 +42,21 @@ let defaults: Promise<PaymentsDeps> | null = null;
 
 async function loadDefaults(): Promise<PaymentsDeps> {
   // Orders and Payments go through the APIMatic-generated PayPal Server SDK; Payouts and Transaction Search use REST.
-  const [{ PgStore }, { audit }, { sdkRest }, { restForFirm }, mcp] = await Promise.all([import("./pg-store"), import("@/lib/audit"), import("@/lib/paypal/sdk-rest"), import("@/lib/paypal/firm-account"), import("@/lib/paypal/mcp")]);
+  const [{ PgStore }, { audit }, { sdkApi }, client, { restForFirm }, mcp] = await Promise.all([
+    import("./pg-store"),
+    import("@/lib/audit"),
+    import("@/lib/paypal/sdk-rest"),
+    import("@/lib/paypal/client"),
+    import("@/lib/paypal/firm-account"),
+    import("@/lib/paypal/mcp"),
+  ]);
   const store = new PgStore();
   const firmId = await store.sampleFirmId().catch(() => null);
   return {
     store,
     ledger: audit as Ledger,
-    rest: sdkRest as Rest,
+    rest: client.paypalRest as Rest,
+    paypal: sdkApi({ orders: client.orders, payments: client.payments }),
     now: () => new Date(),
     firm: { id: firmId, name: SAMPLE_FIRM_NAME },
     restFor: (id) => restForFirm(id),
@@ -53,11 +66,22 @@ async function loadDefaults(): Promise<PaymentsDeps> {
 
 export async function resolveDeps(partial: Partial<PaymentsDeps> = {}): Promise<PaymentsDeps> {
   if (partial.store && partial.ledger && partial.rest) {
-    return { store: partial.store, ledger: partial.ledger, rest: partial.rest, now: partial.now ?? (() => new Date()), firm: partial.firm ?? { id: null, name: SAMPLE_FIRM_NAME }, restFor: partial.restFor, orderViaMcp: partial.orderViaMcp };
+    return {
+      store: partial.store,
+      ledger: partial.ledger,
+      rest: partial.rest,
+      paypal: partial.paypal ?? paypalApiOf(partial.rest),
+      now: partial.now ?? (() => new Date()),
+      firm: partial.firm ?? { id: null, name: SAMPLE_FIRM_NAME },
+      restFor: partial.restFor,
+      orderViaMcp: partial.orderViaMcp,
+    };
   }
   defaults ??= loadDefaults();
   const d = await defaults;
-  return { ...d, ...partial };
+  // A caller that swaps the REST client alone (a dry run, a test seam) gets its Orders and Payments over the same client.
+  const paypal = partial.paypal ?? (partial.rest ? paypalApiOf(partial.rest) : d.paypal);
+  return { ...d, ...partial, paypal };
 }
 
 /** An in-memory ledger for tests and dry runs: the same calls as `audit`, kept in an array. */

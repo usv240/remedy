@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { madeSafeRefund, proofKind, proofSplit, type SplitRecall, type SplitRule } from "@/lib/recall/made-safe";
-import { moneyWords, proRated, recallValue, statedPrices, type ValueRecall } from "@/lib/recall/value";
+import { CORRECTION_RATE, moneyWords, proRated, recallValue, statedPrices, type ValueRecall } from "@/lib/recall/value";
+import { PROBLEM, RESEARCH } from "@/lib/research";
 
 const dir = path.join(process.cwd(), "content", "recalls");
 const read = <T>(f: string) => JSON.parse(readFileSync(path.join(dir, f), "utf8")) as T;
@@ -74,8 +75,9 @@ describe("what the made-safe refund recalls offer their owners", () => {
       // A gift card for the made-safe photo: not a refund.
       "8": rule({ remedy: "other" }),
     };
-    const v = recallValue(rs, rr, 0.06);
-    expect(v).toMatchObject({ recalls: 5, covered: 2, noPrice: 2, units: 1100, lowUsd: 21_000, highUsd: 31_000, unclaimedLowUsd: 19_740, perPointLowUsd: 210 });
+    const v = recallValue(rs, rr, 0.06, 0.4455);
+    // Unclaimed at both rates: 21,000 x 0.94 and 21,000 x 0.5545.
+    expect(v).toMatchObject({ recalls: 5, covered: 2, noPrice: 2, units: 1100, lowUsd: 21_000, highUsd: 31_000, unclaimedLowUsd: 19_740, unclaimedAtCorrectionLowUsd: 11_645, perPointLowUsd: 210 });
     expect(v.proRated.numbers).toEqual(["6"]);
     expect(v.atStatedAmount.numbers).toEqual(["5"]);
     expect(proRated(rules["25320"])).toBe(true);
@@ -93,5 +95,9 @@ describe("what the made-safe refund recalls offer their owners", () => {
     // The money covers exactly the headline's recalls.
     expect(v.recalls).toBe(proofSplit(data.recalls, rules).madeSafeRefund.count);
     expect(v.covered + v.proRated.count + v.noPrice).toBe(v.recalls);
+    // The two rates the unclaimed range uses are the published figures in src/lib/research.ts, not typed in twice.
+    expect(v.comeBackShare).toBe(Number(RESEARCH.comeBack.share.split(" in ")[0]) / Number(RESEARCH.comeBack.share.split(" in ")[1]));
+    expect(`${(CORRECTION_RATE * 100).toFixed(2)}%`).toBe(PROBLEM.correctionRate.rate);
+    expect(v.unclaimedAtCorrectionLowUsd).toBeLessThan(v.unclaimedLowUsd);
   });
 });

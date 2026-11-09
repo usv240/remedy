@@ -36,6 +36,12 @@ export const FIRM_INFO = {
     why: "One place to see what is done, what needs a person, and what is ready to pay.",
     technical: "AG Grid 36.3: Community modules, plus Enterprise set filters, column menu and status bar when a valid license key is set. Rows from claim, payment_plan and payment; payout status updates live over Server-Sent Events.",
   },
+  "firm.sign-in": {
+    title: "Sign in as the sample reviewer",
+    what: "One click signs you in as Ana, the sample reviewer, so each approval is recorded in a reviewer's name.",
+    why: "A payout is approved by a named person at the firm, and the claim's payment plan and the audit ledger record that name. The sample console is open to everyone, so the sign-in is a sample step rather than a real account.",
+    technical: "No real authentication: the name is kept in this browser's localStorage (remedy-firm-reviewer) and sent with POST /api/firm/claims/pay as `reviewer`, where approvePlan records it in the ledger. A firm's own deployment signs in through PayPal's Partner Referrals onboarding (see /stack#onboarding).",
+  },
   "firm.approve-pay": {
     title: "Approve and pay",
     what: "Pays every verified claim you chose, in one PayPal Payouts batch.",

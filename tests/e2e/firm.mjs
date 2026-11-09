@@ -67,6 +67,10 @@ if (PAY && ready.length >= 2) {
   await page.goto(`${B}/firm/claims?view=ready`, { waitUntil: "networkidle" });
   await page.waitForSelector(".ag-row", { timeout: 60_000 });
   for (const id of ids) await page.locator(`.ag-row[row-id="${id}"] input[type=checkbox]`).first().check();
+  // Approving needs a signed-in reviewer: one click signs in as the sample reviewer (no real account).
+  check("Approve and pay waits for a sign-in", await page.getByTestId("approve-and-pay").isDisabled());
+  await page.getByTestId("sign-in").click();
+  await page.waitForSelector(".cq-signin strong", { timeout: 10_000 });
   await page.getByTestId("approve-and-pay").click();
   await page.waitForFunction(() => /payouts? sent/.test(document.querySelector(".cq-bulk .firm-status")?.textContent ?? ""), null, { timeout: 90_000 });
   const statusText = await page.locator(".cq-bulk .firm-status").textContent();

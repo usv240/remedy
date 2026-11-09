@@ -131,5 +131,26 @@ export type Actor = "person" | "agent" | "system" | "webhook";
 /** The hash-chained ledger (`@/lib/audit`), injected so tests run without a database. */
 export type Ledger = (actor: Actor, action: string, ref: string, detail?: Record<string, unknown>) => Promise<unknown>;
 
-/** PayPal REST access with the shape of `paypalRest` in `@/lib/paypal/client`, injected so tests run offline. */
-export type Rest = <T>(path: string, init?: RequestInit & { requestId?: string }) => Promise<{ status: number; body: T; debugId: string | null }>;
+/** PayPal's answer: its status, its body as sent, and the debug id from its headers. */
+export type PayPalOut<T> = { status: number; body: T; debugId: string | null };
+
+/**
+ * PayPal REST access with the shape of `paypalRest` in `@/lib/paypal/client`, injected so tests run offline. Used for
+ * the APIs the Server SDK does not cover (Payouts, Transaction Search, Disputes, webhook verification). An account's
+ * Rest may carry its own `paypal` (the SDK on that account's credentials); without one, the same calls go over REST.
+ */
+export type Rest = (<T>(path: string, init?: RequestInit & { requestId?: string }) => Promise<PayPalOut<T>>) & { paypal?: PayPalApi };
+
+/**
+ * Orders and Payments as the PayPal Server SDK exposes them: six typed calls, no path building. Production passes the
+ * SDK's controllers (`sdkApi` in src/lib/paypal/sdk-rest.ts); tests get the same six calls over the fake's REST
+ * (`restApi`). `requestId` is the PayPal-Request-Id, one per attempt, so a retry returns the first answer.
+ */
+export type PayPalApi = {
+  createOrder: <T>(body: unknown, o?: { requestId?: string; mock?: string }) => Promise<PayPalOut<T>>;
+  getOrder: <T>(orderId: string) => Promise<PayPalOut<T>>;
+  captureOrder: <T>(orderId: string, o?: { requestId?: string; mock?: string }) => Promise<PayPalOut<T>>;
+  getCapture: <T>(captureId: string) => Promise<PayPalOut<T>>;
+  refundCapture: <T>(captureId: string, body: unknown, o: { requestId: string; mock?: string }) => Promise<PayPalOut<T>>;
+  getRefund: <T>(refundId: string) => Promise<PayPalOut<T>>;
+};

@@ -16,7 +16,7 @@ import { eq } from "drizzle-orm";
 import { db, dbConfigured, schema } from "@/lib/db";
 import type { Rest } from "@/lib/payments/types";
 import { decrypt, encrypt } from "@/lib/secure";
-import { makeSdkRest } from "./sdk-rest";
+import { sdkApi } from "./sdk-rest";
 
 export const PAYPAL_API = "https://api-m.sandbox.paypal.com";
 
@@ -75,10 +75,12 @@ export function restFor(c: Credentials, f: Fetch = fetch): Rest {
     const body = (await res.json().catch(() => ({}))) as T;
     return { status: res.status, body, debugId: res.headers.get("paypal-debug-id") };
   }) as Rest;
-  // In tests the fetch is replaced, so the SDK (which has its own HTTP client) stays out of the way.
+  // In tests the fetch is replaced, so the SDK (which has its own HTTP client) stays out of the way and the same six
+  // Orders and Payments calls go over this REST client (paypalApiOf).
   if (f !== fetch) return rest;
   const client = new Client({ clientCredentialsAuthCredentials: { oAuthClientId: c.clientId, oAuthClientSecret: c.secret }, timeout: 0, environment: Environment.Sandbox });
-  return makeSdkRest({ orders: () => new OrdersController(client), payments: () => new PaymentsController(client) }, rest) as Rest;
+  rest.paypal = sdkApi({ orders: () => new OrdersController(client), payments: () => new PaymentsController(client) });
+  return rest;
 }
 
 const tail = (id: string) => id.slice(-4);

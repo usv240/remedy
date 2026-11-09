@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 // A fresh copy of the module for each test, so one test's pause never carries into the next.
 async function load() {
@@ -9,15 +9,22 @@ async function load() {
 
 describe("Claude errors fall back the way a missing key does", () => {
   const key = process.env.ANTHROPIC_API_KEY;
+  // The first import of the AI module and the SDK is the slow part under a full-suite load (vitest reports most of a
+  // run as import time). Pay it once here, with room to spare, so no test below waits on a cold import.
+  beforeAll(async () => {
+    await import("@/lib/ai/claude");
+  }, 120_000);
   afterEach(() => {
     process.env.ANTHROPIC_API_KEY = key;
     vi.useRealTimers();
   });
 
   it("a billing refusal pauses every AI feature for three minutes, then they come back", async () => {
-    vi.useFakeTimers();
     process.env.ANTHROPIC_API_KEY = "test-key";
+    // Load the module on real timers, then fake only the clock: the pause is measured by Date.now, so the three
+    // minutes pass in no time and nothing else waits on a held timer.
     const ai = await load();
+    vi.useFakeTimers({ toFake: ["Date"] });
     expect(ai.aiAvailable()).toBe(true);
     // The SDK builds the message from the response body, as the API sent it.
     const body = { type: "error", error: { type: "invalid_request_error", message: "Your credit balance is too low to access the Anthropic API." } };
@@ -25,9 +32,9 @@ describe("Claude errors fall back the way a missing key does", () => {
     expect(err).toBeInstanceOf(ai.AiUnavailableError);
     expect(ai.aiAvailable()).toBe(false);
     expect(ai.aiPaused()).toBe(true);
-    vi.advanceTimersByTime(3 * 60_000 + 1);
+    vi.setSystemTime(Date.now() + 3 * 60_000 + 1);
     expect(ai.aiAvailable()).toBe(true);
-  });
+  }, 120_000);
 
   it("a revoked key pauses too", async () => {
     process.env.ANTHROPIC_API_KEY = "test-key";

@@ -46,8 +46,21 @@ ${COMMON}`,
 type Block = Anthropic.Beta.Messages.BetaContentBlockParam;
 const jpegBlock = (data: Buffer): Block => ({ type: "image", source: { type: "base64", media_type: "image/jpeg", data: data.toString("base64") } });
 
-/** `model` is for sweeps only; the claim path always uses Claude Opus 5.5. */
+/** `model` is for sweeps only; the claim path uses each reviewer's configured model (reviewerModel). */
 export type ReviewArgs = { photo: Buffer; recall: VerifyRecall; rule: VerifyProofRule; official: readonly OfficialImage[]; effort?: Effort; model?: string };
+
+/**
+ * Which model each reviewer runs on. Both run on Claude Opus 5.5 today (MODEL in src/lib/ai/claude.ts); their
+ * independence comes from the rulebook each reads, not from the model name. Running one reviewer on a second model is
+ * a configuration change: set REMEDY_REVIEWER_MODEL_PRODUCT or REMEDY_REVIEWER_MODEL_REMEDY to its model id (one the
+ * Messages API serves); empty keeps Opus 5.5. The setting changes the request's model and its replay key, nothing else.
+ */
+export const REVIEWER_MODEL_ENV: Record<ReviewerId, string> = { product: "REMEDY_REVIEWER_MODEL_PRODUCT", remedy: "REMEDY_REVIEWER_MODEL_REMEDY" };
+
+export function reviewerModel(who: ReviewerId, env: Record<string, string | undefined> = process.env): string {
+  const set = env[REVIEWER_MODEL_ENV[who]]?.trim();
+  return set || MODEL;
+}
 
 export function reviewerContent(who: ReviewerId, a: ReviewArgs): Block[] {
   const evidence: Block[] = [];
@@ -94,7 +107,7 @@ export async function review(who: ReviewerId, a: ReviewArgs): Promise<Review> {
 
 /** The exact reviewer request, shared by the live call, the replay key and the token counter. */
 export function reviewParams(who: ReviewerId, a: ReviewArgs) {
-  const model = a.model ?? MODEL;
+  const model = a.model ?? reviewerModel(who);
   const effort = effortFor(model, a.effort);
   return {
     model,

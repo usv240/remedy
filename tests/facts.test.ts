@@ -131,6 +131,28 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     for (const text of [doc("run-and-test.md"), TESTING]) expect(text).toContain(`${n.database} need a database, ${n.claude} a Claude key and ${n.paypal} PayPal sandbox keys`);
   });
 
+  it("the README's PayPal table and /stack say the same about onboarding firms", () => {
+    const stack = read("src", "app", "stack", "page.tsx");
+    for (const text of [README, stack]) {
+      expect(text).toContain("Partner Referrals");
+      expect(text).toContain("PayPal-Auth-Assertion");
+      expect(text).toMatch(/403 `?NOT_AUTHORIZED`?/);
+      expect(text).toContain("November 7, 2026");
+    }
+  });
+
+  it("/evidence reads its unit-test figure from facts.json and types none of its own", () => {
+    // The "How it is tested" list is one component; it imports the file and prints its fields, never a literal count.
+    const tested = read("src", "components", "evidence", "Tested.tsx");
+    expect(tested).toContain("content/public/facts.json");
+    for (const field of ["f.unitTests.passed", "f.unitTests.skipped", "f.a11y.passed", "f.a11y.views", "f.mcp.tools"]) expect(tested).toContain(field);
+    expect(tested).not.toMatch(/\b\d{2,}\b/);
+    // The published count comes from a clean run: scripts/facts.ts never writes the figures of a run with a failure.
+    expect(facts.unitTests.failed).toBe(0);
+    // Nowhere else on the site is a unit-test count typed in.
+    for (const f of ["src/app/evidence/page.tsx", "content/info.json", "src/components/tour/steps.ts"]) expect(read(...f.split("/"))).not.toMatch(/\d{3} unit tests|\d{3} tests pass/);
+  });
+
   it("the unit-test counts were taken on the tests as they are now", () => {
     // A test added or changed after the count changes this fingerprint: run `npx tsx scripts/facts.ts` again.
     if (COUNTING) return;
@@ -326,6 +348,11 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(README).toContain(`those ${d.value.recalls} recalls offer **${d.value.total}** in refunds`);
     expect(README).toContain(`**${d.value.unclaimed}** of it stays unclaimed`);
     expect(README).toContain(`sends **${d.value.perPoint}** back to owners`);
+    // What stays unclaimed is a range at two published rates, each named with what it measures (README and /evidence/market).
+    expect(README).toContain(`**${d.value.unclaimedAtCorrection}** to **${d.value.unclaimed}** of it stays unclaimed: the lower figure at the CPSC's FY2025 average correction rate across recalls (${d.value.correctionRate}), the higher if about ${RESEARCH.comeBack.share} recalled units come back`);
+    expect(d.value.correctionRate).toBe(PROBLEM.correctionRate.rate);
+    const money = read("src", "components", "evidence", "Money.tsx");
+    for (const field of ["VALUE.unclaimedLowUsd", "VALUE.unclaimedAtCorrectionLowUsd", "PROBLEM.correctionRate.rate", "RESEARCH.comeBack.share"]) expect(money).toContain(field);
     // The arithmetic closes: covered plus the two kinds left out is the whole, and the README says all three.
     expect(d.value.covered + d.value.proRated + d.value.noPrice).toBe(d.value.recalls);
     const leftOut = `(${d.value.covered} of ${d.value.recalls} state units and a price; ${d.value.proRated} pro-rated refunds state no share and ${d.value.noPrice} records state no price, so those ${d.value.proRated + d.value.noPrice} are left out)`;

@@ -7,7 +7,8 @@ import { log } from "@/lib/log";
 /**
  * POST /api/v1/verify (multipart): photo, recall_number, and optionally amount.
  * Runs the six checks against the recall's proof rule and returns the decision. No claim is stored and nothing is paid.
- * Without a key, only the free checks run (no AI call); with a key, the full checks run.
+ * Without a key, only the free checks run (no AI call; a photo checked before is answered from the verification
+ * cache); with a key, the full checks run.
  */
 export async function POST(req: Request) {
   return guard(req, "v1.verify", async () => {

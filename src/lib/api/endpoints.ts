@@ -317,7 +317,7 @@ export const ENDPOINTS: Endpoint[] = [
     method: "GET",
     path: "/api/health",
     title: "Service status",
-    summary: "Whether PayPal, Claude, the database and each sponsor tool are live, on a fallback, or not connected right now.",
+    summary: "Whether PayPal, Claude, the database and each tool Remedy is built on are live, on a fallback, or not connected right now.",
     keyed: false,
   },
 ];

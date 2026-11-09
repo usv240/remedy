@@ -214,7 +214,8 @@ export default function FirmPage() {
           </div>
           <p className="firm-sub">The recall console: claims to review, the recall plan and the monthly CPSC report. A fictional sample firm.</p>
           <p className="firm-sub firm-open">
-            This console is open without a sign-in, by design, so the sample firm can be seen end to end. A firm&rsquo;s own deployment runs on its own PayPal app and signs in through PayPal&rsquo;s Partner Referrals onboarding, as{" "}
+            This console is open to everyone, by design, so the sample firm can be seen end to end; approving a payout takes one click to sign in as Ana, the sample reviewer. A firm&rsquo;s own deployment runs on its own PayPal app and signs in through
+            PayPal&rsquo;s Partner Referrals onboarding, as{" "}
             <Link className="text-link" href="/stack#onboarding">
               the stack page
             </Link>{" "}

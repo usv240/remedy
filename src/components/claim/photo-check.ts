@@ -6,7 +6,6 @@ import type { QualityReport } from "@/lib/verify/types";
  * photo is caught in a moment and costs nothing. The server checks again; this only saves a round trip.
  */
 
-export const ACCEPT = "image/jpeg,image/png";
 export const MAX_BYTES = 15 * 1024 * 1024;
 
 export type PhotoCheck =

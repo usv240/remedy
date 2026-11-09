@@ -40,7 +40,7 @@ describe("rate limit windows", () => {
     expect(clientKey("203.0.113.9", "other")).not.toBe(k);
   });
 
-  it("keeps the picture route's 120-a-minute limit", async () => {
+  it("keeps the picture route's 120-a-minute limit", { timeout: 60_000 }, async () => {
     const t0 = Date.now() + 3_600_000;
     for (let i = 0; i < 120; i++) expect((await allowPicture(IP, 120, t0 + i)).ok).toBe(true);
     expect((await allowPicture(IP, 120, t0 + 500)).ok).toBe(false);

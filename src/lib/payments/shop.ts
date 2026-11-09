@@ -72,12 +72,8 @@ const isShopOrder = (o: OrderBody) => {
 /** Create a sample-shop order for one power bank ($34.99). `returnUrl` is for redirect checkout (no JS button). */
 export async function createShopOrder(o: { returnUrl?: string; cancelUrl?: string; requestId?: string } = {}, partial?: Partial<PaymentsDeps>) {
   const deps = await resolveDeps(partial);
-  const r = await deps.rest<OrderBody>("/v2/checkout/orders", {
-    method: "POST",
-    requestId: o.requestId ?? `shop-${crypto.randomUUID()}`,
-    headers: { Prefer: "return=representation" },
-    body: JSON.stringify(shopOrderBody(o)),
-  });
+  // ordersController.createOrder, on the SDK, with one PayPal-Request-Id per order.
+  const r = await deps.paypal.createOrder<OrderBody>(shopOrderBody(o), { requestId: o.requestId ?? `shop-${crypto.randomUUID()}` });
   if (r.status >= 400 || !r.body.id) {
     const issue = r.body.details?.[0]?.issue ?? r.body.name ?? "PAYPAL_ERROR";
     return { ok: false as const, issue, plain: plainIssue(issue), status: r.status >= 400 ? r.status : 502, debugId: r.debugId };
@@ -102,14 +98,15 @@ export async function captureShopOrder(orderId: string, actor: "person" | "webho
   const known = await deps.store.getSaleByOrder(orderId);
   if (known) return { kind: "already", sale: known, status: "COMPLETED", payerFirstName: null, refundableUntil: refundWindow(known.paidAt, deps.now()).deadline };
 
-  const got = await deps.rest<OrderBody>(`/v2/checkout/orders/${encodeURIComponent(orderId)}`, { method: "GET" });
+  const got = await deps.paypal.getOrder<OrderBody>(orderId);
   if (got.status === 404) return { kind: "not_found" };
   if (got.status >= 400) return { kind: "failed", issue: got.body.name ?? "PAYPAL_ERROR", plain: plainIssue(got.body.name), status: got.status, debugId: got.debugId };
   if (!isShopOrder(got.body)) return { kind: "not_shop" };
 
   let order = got.body;
   if (order.status !== "COMPLETED") {
-    const capture = () => deps.rest<OrderBody>(`/v2/checkout/orders/${encodeURIComponent(orderId)}/capture`, { method: "POST", requestId: `shop-capture-${orderId}`, headers: { Prefer: "return=representation" } });
+    // ordersController.captureOrder, on the SDK; one PayPal-Request-Id per order, so a race with the webhook captures once.
+    const capture = () => deps.paypal.captureOrder<OrderBody>(orderId, { requestId: `shop-capture-${orderId}` });
     let r = await capture();
     for (let i = 1; r.status >= 500 && i <= 3; i++) {
       await new Promise((res) => setTimeout(res, 700 * i));
@@ -117,7 +114,7 @@ export async function captureShopOrder(orderId: string, actor: "person" | "webho
     }
     const issue = r.body.details?.[0]?.issue ?? r.body.name ?? null;
     if (issue === "ORDER_ALREADY_CAPTURED" || (r.status < 400 && !r.body.purchase_units?.[0]?.payments?.captures?.length)) {
-      const again = await deps.rest<OrderBody>(`/v2/checkout/orders/${encodeURIComponent(orderId)}`, { method: "GET" });
+      const again = await deps.paypal.getOrder<OrderBody>(orderId);
       if (again.status < 400) order = again.body;
     } else if (r.status >= 400 || r.body.status !== "COMPLETED") {
       const code = issue ?? r.body.status ?? "PAYPAL_ERROR";

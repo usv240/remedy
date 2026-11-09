@@ -49,6 +49,12 @@ export type QueueRow = {
 
 export type Stage = "needs_review" | "ready" | "sending" | "paid" | "unclaimed" | "retake" | "declined" | "checking" | "closed";
 
+/**
+ * The sample reviewer. Signing in to the sample console is one click that sets this name; there is no real account
+ * (FIRM_INFO["firm.sign-in"]). Approvals and retake requests are recorded in the name.
+ */
+export const SAMPLE_REVIEWER = "Ana";
+
 export const STAGE_LABEL: Record<Stage, string> = {
   needs_review: "Needs review",
   ready: "Ready to pay",
