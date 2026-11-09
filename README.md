@@ -1,6 +1,6 @@
 # Remedy
 
-[![CI](https://github.com/usv240/remedy/actions/workflows/ci.yml/badge.svg)](https://github.com/usv240/remedy/actions/workflows/ci.yml)
+[![CI](https://github.com/usv240/remedy/actions/workflows/ci.yml/badge.svg)](https://github.com/usv240/remedy/actions/workflows/ci.yml) [![Sandbox-payouts](https://github.com/usv240/remedy/actions/workflows/sandbox-e2e.yml/badge.svg)](https://github.com/usv240/remedy/actions/workflows/sandbox-e2e.yml)
 
 <p>
   <img src="docs/img/strip-1-claim.png" alt="An owner's claim page on a phone" height="300">
