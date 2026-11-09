@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { fmtInt } from "@/lib/api/format";
+import { PROBLEM } from "@/lib/research";
 import { S, pct } from "./data";
 
 /** The pilot's two outcomes: each with the baseline it is compared to and where Remedy already records it. */
@@ -43,6 +44,9 @@ export function Pilot() {
           </li>
         ))}
       </ol>
+      <p className="jpl-holds">
+        <span className="jpl-k">Who pays Remedy:</span> the firm, a fee per finished claim, set against the {PROBLEM.checkCost.cost} a paper check costs its issuer and the {PROBLEM.payoutFee.fee} a PayPal payout costs the sender; the owner pays nothing.
+      </p>
       <p className="jpl-holds">
         <span className="jpl-k">Why it holds up:</span> an established tool that adds the same model gains a reader of photos; what makes each payout safe to send is the checks in code, the hash-chained evidence behind every payment, and the error rates measured on photos with known answers. It also grows with use: every claim photo is checked against the published pictures of every recall and every photo already claimed on any recall, at any firm, by a 64-bit hash alone, so each firm that joins makes every other firm&rsquo;s refunds safer.
       </p>

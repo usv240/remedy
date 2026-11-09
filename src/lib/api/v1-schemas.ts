@@ -43,3 +43,28 @@ export const ScanRequest = z.object({
   items: z.array(ScanItemRequest).min(1).max(500).describe("Up to 500 rows (50 without an API key)."),
   ai: z.boolean().default(true).describe("False skips Claude for the ambiguous rows, which then come back unknown. Default true."),
 });
+
+/** A 64-bit dHash as Remedy stores it: 16 lowercase hex characters (src/lib/verify/dhash.ts). */
+export const DhashField = z
+  .string()
+  .regex(/^[0-9a-f]{16}$/, "dhash must be 16 lowercase hex characters: the 64-bit upright dHash of the photo.")
+  .describe("The 64-bit perceptual hash of the photo, upright, as 16 lowercase hex characters (the dHash in src/lib/verify/dhash.ts).");
+
+/** POST /api/v1/hash-pool/check: is this photo hash already in the shared pool? */
+export const HashPoolCheckRequest = z.object({
+  dhash: DhashField,
+  recall_number: z.string().min(4).max(40).optional().describe("The recall the photo is claimed on. With it, that recall's own earlier claim photos and published pictures are matched at 10 bits; everything else at 4."),
+});
+
+/** POST /api/v1/hash-pool/register: a connected firm adds a hash it has paid on. */
+export const HashPoolRegisterRequest = z.object({
+  dhash: DhashField,
+  recall_number: z.string().min(4).max(40).describe("The recall the photo was claimed on, as your firm names it."),
+  ref: z
+    .string()
+    .min(1)
+    .max(64)
+    .regex(/^[\w.:-]+$/, "ref may use letters, digits, dot, colon, underscore and dash.")
+    .optional()
+    .describe("Your own opaque id for the row, up to 64 characters; it is the only thing another firm sees on a hit. Left out, Remedy makes a UUID."),
+});

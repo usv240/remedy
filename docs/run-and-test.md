@@ -32,13 +32,15 @@ Every push to `main` runs [CI](../.github/workflows/ci.yml): the dependency audi
 
 | Suite | Command | Result |
 |---|---|---|
-| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 479 passed, 50 skipped: 20 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 502 passed, 50 skipped: 20 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
 | Accessibility (axe, WCAG 2.2 AA) and sideways scroll, 31 pages at phone and desktop width, light and dark | `npm run e2e:a11y` | 124 of 124 page views |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, and the MCP tools | `node tests/e2e/public.mjs` | All pass |
 | One photo, two firms: the cross-firm hash check, recorded with no model call | `npx tsx scripts/public/record-network-run.ts` | [`content/public/network-run.json`](../content/public/network-run.json); `tests/network-run.test.ts` runs it again |
-| The owner's claim: presets, a streamed claim, firm review, approval, a real sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
-| Buy in the sample shop, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11 |
+| Another firm joins the hash pool: register, a hit, a no-hit, made with curl from outside the app against the local build with a sandbox key | `REMEDY_DEV_KEY=rm_test_... BASE_URL=http://localhost:3400 npx tsx scripts/public/record-hash-pool-call.ts` | [`content/public/hash-pool-call.json`](../content/public/hash-pool-call.json); `tests/hash-pool.test.ts` runs the same comparison with no database |
+| The hash against a reused photo: 9 photos, 13 changes each, caught at 10 and 4 bits, false matches against the catalog | `npx tsx scripts/public/hash-reuse-run.ts` | [`content/public/hash-reuse-run.json`](../content/public/hash-reuse-run.json); `tests/hash-reuse-run.test.ts` makes the copies again |
+| The owner's claim: presets, a streamed claim, firm review, approval, a real sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23; the run's steps and PayPal ids in [`content/public/e2e-transcript.json`](../content/public/e2e-transcript.json) |
+| Buy in the sample shop, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11; transcribed in the same file |
 | The firm console: queue and drawer, bulk Approve and pay, the report against SQL, and a live Gantt re-notice | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
 | The audit ledger's hash chain | `npm run verify-ledger` | Every hash links to the one before it |
 | The figures the README, these pages and TESTING.md repeat, counted after the suites run | `npx tsx scripts/facts.ts` | [`content/public/facts.json`](../content/public/facts.json); `tests/facts.test.ts` fails when the README, `docs/*.md` or TESTING.md disagree with it |

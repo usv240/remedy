@@ -221,6 +221,8 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
           C2_reason: r.checks.C2.reason_technical.slice(0, 400),
           C3_reason: r.checks.C3.reason_technical.slice(0, 240),
           referee: r.review?.referee.decision ?? null,
+          // What each reviewer said on its own, so a later reading can set one reviewer against the referee.
+          votes: r.review?.reviews.map((v) => ({ reviewer: v.reviewer, answer: v.answer, confidence: v.confidence, counted: v.counted })) ?? null,
           usd: Number(callUsd.toFixed(4)),
           ms: r.timings.total_ms,
           vision_ms: r.timings.vision_ms,

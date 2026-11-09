@@ -1,0 +1,85 @@
+{
+  "note": "A firm joining the shared hash pool from outside the app: three real curl calls against a local production build, recorded by scripts/public/record-hash-pool-call.ts. The register call used a sandbox API key, shown masked; the key is never stored on the row, so a hit names no firm. Only the 64-bit hash and an opaque ref cross. Brightline Home, Fernway Home and their recalls are fictional samples; the photo is the sample charger (Dmitry G, Wikimedia Commons, public domain) and the mug is Kurt Kaiser, CC0.",
+  "recordedAt": "2026-11-09T00:10:48.686Z",
+  "crossed": [
+    "dhash",
+    "ref"
+  ],
+  "calls": [
+    {
+      "step": "register",
+      "why": "Brightline Home has paid a claim on this photo and registers its hash for its own recall, with its own opaque ref.",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -H \"Authorization: Bearer rm_test_...\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"BH-2026-01\",\"ref\":\"partner-demo-1\"}' http://localhost:3401/api/v1/hash-pool/register",
+      "status": 200,
+      "ms": 386,
+      "response": {
+        "data": {
+          "registered": true,
+          "ref": "partner-demo-1",
+          "dhash": "337bfb9f4e7f3e0f",
+          "note": "In the pool. A photo within 4 bits of this hash, sent on any other recall at any firm, is now held for a person."
+        },
+        "meta": {
+          "request_id": "req_7100a81a4c1d4c2fba11",
+          "version": "2026-11-05",
+          "latency_ms": 62
+        },
+        "error": null
+      }
+    },
+    {
+      "step": "check-hit",
+      "why": "Fernway Home receives the same photo on its own recall and asks the pool with the hash alone.",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"FW-2026-01\"}' http://localhost:3401/api/v1/hash-pool/check",
+      "status": 200,
+      "ms": 455,
+      "response": {
+        "data": {
+          "hit": true,
+          "distance": 0,
+          "threshold_bits": 4,
+          "ref": "partner-demo-1",
+          "source": "partner",
+          "pool": {
+            "claim_rows": 0,
+            "partner_rows": 1,
+            "published_pictures": 1779
+          }
+        },
+        "meta": {
+          "request_id": "req_91a5d0cec12d4cb2a531",
+          "version": "2026-11-05",
+          "latency_ms": 248
+        },
+        "error": null
+      }
+    },
+    {
+      "step": "check-no-hit",
+      "why": "A photo of a mug, never claimed anywhere, asked the same way: no hit.",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -d '{\"dhash\":\"22626e3a339458d1\",\"recall_number\":\"FW-2026-01\"}' http://localhost:3401/api/v1/hash-pool/check",
+      "status": 200,
+      "ms": 178,
+      "response": {
+        "data": {
+          "hit": false,
+          "distance": null,
+          "threshold_bits": null,
+          "ref": null,
+          "source": null,
+          "pool": {
+            "claim_rows": 0,
+            "partner_rows": 1,
+            "published_pictures": 1779
+          }
+        },
+        "meta": {
+          "request_id": "req_70c12b19d63041c28fbd",
+          "version": "2026-11-05",
+          "latency_ms": 11
+        },
+        "error": null
+      }
+    }
+  ]
+}

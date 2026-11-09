@@ -104,6 +104,9 @@
   color: var(--muted);
   max-width: 44rem;
 }
+.firm-open {
+  font-size: 0.875rem;
+}
 .firm-label {
   margin-top: 16px;
   font-size: 0.8125rem;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type ReactNode } from "react";
 import type { ClaimView, PayView, ReplacementOption } from "@/app/api/claims/_lib/types";
 import { payerWords } from "@/lib/recall/label";
 import { ClaimInfo } from "./ClaimInfo";
@@ -83,11 +83,20 @@ export function Payout({ claim, review = false, onDone }: { claim: ClaimView; re
   }
 
   const label = choice === "email" ? "Email of your PayPal account" : choice === "venmo" ? "Phone number on your Venmo account" : "Phone number on your PayPal account";
-  const options: { id: Choice; title: string; sub: string }[] = [
+  const options: { id: Choice; title: string; sub: ReactNode }[] = [
     ...(linked ? [{ id: "refund" as const, title: "Back to your PayPal payment", sub: `Your purchase on ${day(linked.paid_at)}, ${money(linked.amount)}. PayPal returns it the way you paid.` }] : []),
     { id: "email", title: "PayPal, by email", sub: "Sent to the PayPal account for your email." },
     { id: "phone", title: "PayPal, by phone", sub: "Sent to the PayPal account for your phone number." },
-    { id: "venmo", title: "Venmo", sub: "By phone number. Falls back to a PayPal phone payout in the sandbox." },
+    {
+      id: "venmo",
+      title: "Venmo",
+      sub: (
+        <>
+          By phone number. Falls back to a PayPal phone payout in the sandbox.
+          <span className="cl-tech"> The sandbox refuses recipient_wallet VENMO, so the payout is resent as recipient_type PHONE to the same number (src/lib/payments/payouts.ts); live PayPal would deliver it to Venmo.</span>
+        </>
+      ),
+    },
     ...(!review ? [{ id: "replacement" as const, title: "A safe replacement", sub: `A similar product at or under ${money(claim.amount?.value)}, with no active recall.` }] : []),
   ];
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
 import { OpenAll } from "@/components/developers/OpenAll";
@@ -10,7 +11,7 @@ import { KEY_PREFIX, LIMITS } from "@/lib/api/keys";
 import { openapi } from "@/lib/api/openapi";
 import { VERIFY_LIMITS } from "@/lib/api/v1-schemas";
 import { TOOLS } from "@/lib/mcp/tools";
-import { HOSTED_URL } from "@/lib/origin";
+import { pageOrigin } from "@/lib/origin";
 
 /** One recorded response per endpoint, from content/public/api-examples.json. */
 const EXAMPLES = (examples as { recordedAt: string; examples: Record<string, { request: string; status: number; ms: number; response: unknown }> }).examples;
@@ -51,7 +52,6 @@ import "../dev.css";
 
 export const metadata: Metadata = { title: "API docs", description: "Every Remedy endpoint, its fields, errors and limits." };
 
-const HOST = (process.env.RENDER_EXTERNAL_URL || HOSTED_URL).replace(/\/$/, "");
 
 type JsonSchema = { type?: string | string[]; description?: string; enum?: unknown[]; default?: unknown; properties?: Record<string, JsonSchema>; required?: string[]; items?: JsonSchema; anyOf?: JsonSchema[] };
 
@@ -80,7 +80,7 @@ function fields(s: JsonSchema, prefix = ""): { name: string; type: string; requi
 }
 
 /** The example request for an endpoint, in cURL, built from the same data the playground uses. */
-function curlFor(e: Endpoint) {
+function curlFor(e: Endpoint, HOST: string) {
   const q = (e.query ?? []).filter((p) => p.example).map((p) => `${p.name}=${encodeURIComponent(p.example ?? "")}`);
   const url = `${HOST}${e.samplePath ?? e.path}${q.length ? `?${q.join("&")}` : ""}`;
   const parts = [`curl${e.method === "POST" ? " -X POST" : ""} "${url}"`];
@@ -94,7 +94,17 @@ function curlFor(e: Endpoint) {
   return parts.join(" \\\n");
 }
 
+/** The docs, printed with the address the visitor is using (the request's host, or Render's public address). */
 export default function DocsPage() {
+  return (
+    <Suspense fallback={<p className="page frame page-loading muted">Loading the API docs</p>}>
+      <Docs />
+    </Suspense>
+  );
+}
+
+async function Docs() {
+  const HOST = await pageOrigin();
   const spec = openapi("");
   const contents = [{ id: "keys", title: "Keys and limits" }, ...ENDPOINTS.map((e) => ({ id: e.id, title: e.title })), { id: "mcp", title: "MCP server" }, { id: "errors", title: "Errors" }];
   return (
@@ -170,7 +180,7 @@ export default function DocsPage() {
                       <figure className="doc-example">
                         <figcaption className="doc-cap">Example request</figcaption>
                         <pre className="dev-pre tabular" tabIndex={0} aria-label={`${e.title}: example request`}>
-                          {curlFor(e)}
+                          {curlFor(e, HOST)}
                         </pre>
                       </figure>
                       {e.responseFields && <FieldTable rows={e.responseFields} label={`${e.title} response fields`} />}

@@ -53,7 +53,9 @@ async function Home() {
         <div className="firm-kpi">
           <p className="firm-kpi-label">Claims verified</p>
           <p className="firm-kpi-value">{fmtInt(s.claimsVerified)}</p>
-          <p className="firm-kpi-sub">of {fmtInt(s.claimsTotal)} received</p>
+          <p className="firm-kpi-sub">
+            of {fmtInt(s.claimsTotal)} received on this recall; {fmtInt(s.claimsAllRecalls.claims)} in the queue across {fmtInt(s.claimsAllRecalls.recalls)} {s.claimsAllRecalls.recalls === 1 ? "recall" : "recalls"}
+          </p>
         </div>
         <div className="firm-kpi">
           <p className="firm-kpi-label">Units corrected</p>
@@ -211,6 +213,13 @@ export default function FirmPage() {
             <Info id="page.firm" />
           </div>
           <p className="firm-sub">The recall console: claims to review, the recall plan and the monthly CPSC report. A fictional sample firm.</p>
+          <p className="firm-sub firm-open">
+            This console is open without a sign-in, by design, so the sample firm can be seen end to end. A firm&rsquo;s own deployment runs on its own PayPal app and signs in through PayPal&rsquo;s Partner Referrals onboarding, as{" "}
+            <Link className="text-link" href="/stack#onboarding">
+              the stack page
+            </Link>{" "}
+            describes.
+          </p>
         </div>
       </header>
       <Suspense fallback={<p className="firm-sub page-loading">Loading the recall&hellip;</p>}>

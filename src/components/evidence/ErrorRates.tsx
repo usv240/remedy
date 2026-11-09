@@ -23,7 +23,7 @@ function happened(r: ErrorRate): string {
 /**
  * The two error rates that matter for money, right under the results: paid when it should not have been, and held
  * back when it could have been paid. Each with its denominator, a one-line definition and, in Technical view, the
- * files it is counted from (src/components/judges/errors.ts).
+ * files it is counted from (src/components/evidence/errors.ts).
  */
 export function ErrorRates() {
   const e = errorRates();
@@ -87,7 +87,7 @@ export function ErrorRates() {
         </p>
       )}
       <p className="je-src lp-tech tabular">
-        Counted by src/components/judges/errors.ts from {src.sweep} ({n("sweep")} decisions: {e.sweep.cases} photos, {e.sweep.trials} trials each, at the claim path&rsquo;s setting, Claude Opus 5.5 at medium effort,
+        Counted by src/components/evidence/errors.ts from {src.sweep} ({n("sweep")} decisions: {e.sweep.cases} photos, {e.sweep.trials} trials each, at the claim path&rsquo;s setting, Claude Opus 5.5 at medium effort,
         run {fmtDate(e.sweep.ranAt.slice(0, 10))}),{" "}
         {e.sample && (
           <>

@@ -1,6 +1,6 @@
 /**
  * Records verifyPhoto results for the public pages: the home page's "Try a photo" panel and the results band on
- * /judges. Run once; the pages read content/public/verify-runs.json and never call Claude themselves.
+ * /evidence. Run once; the pages read content/public/verify-runs.json and never call Claude themselves.
  *
  *   AI_CACHE_DIR=<dir> npx tsx --env-file=.env.local scripts/public/record-runs.ts [--vision] [--cap-usd 0.50 --since <ISO time>]
  *

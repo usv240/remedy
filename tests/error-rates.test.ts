@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
-import { decisions, errorRates, knownAnswer } from "@/components/judges/errors";
+import { decisions, errorRates, knownAnswer } from "@/components/evidence/errors";
 import { fixtureFile, loadFixtureCases, loadFixtureRecalls } from "@/lib/verify/fixtures";
 
 describe("known answers for money", () => {

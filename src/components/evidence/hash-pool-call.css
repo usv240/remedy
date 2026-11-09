@@ -1,0 +1,74 @@
+/* A firm joining the hash pool from outside: three recorded curl calls, each a request block and an answer block, in
+   the same panel as the two-firm run above it. Code is data here, so it is set in the code face; long lines wrap so
+   nothing scrolls sideways on a phone. */
+.ev-pool {
+  margin-top: 24px;
+}
+.ev-pool-calls {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  max-width: 68rem;
+}
+.ev-pool-call {
+  display: grid;
+  gap: 8px;
+  padding: 18px 20px 20px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  min-width: 0;
+}
+.ev-pool-k {
+  font-weight: 600;
+}
+.ev-pool-why {
+  color: var(--muted);
+}
+.ev-pool-meta {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.ev-pool-pre {
+  margin: 0;
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 22rem;
+  overflow: auto;
+}
+.ev-pool-pre:focus-visible {
+  outline: 2px solid var(--focus, currentColor);
+  outline-offset: 2px;
+}
+@media (min-width: 1040px) {
+  .ev-pool-call {
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+    gap: 8px 20px;
+    align-items: start;
+  }
+  .ev-pool-k,
+  .ev-pool-why {
+    grid-column: 1;
+  }
+  .ev-pool-pre,
+  .ev-pool-meta {
+    grid-column: 2;
+  }
+  .ev-pool-k {
+    grid-row: 1;
+  }
+  .ev-pool-why {
+    grid-row: 2 / span 3;
+  }
+}

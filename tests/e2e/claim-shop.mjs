@@ -8,6 +8,7 @@
 import { readFileSync } from "node:fs";
 import pg from "pg";
 import { approveAsBuyer } from "../../scripts/payments/approve-as-buyer.ts";
+import { startTranscript } from "./transcript.mjs";
 
 const B = process.env.BASE_URL ?? "http://localhost:3300";
 const SECRET = process.env.CHECKS_SECRET ?? "";
@@ -19,8 +20,10 @@ const check = (name, ok, detail = "") => {
   if (ok) pass++;
   else fail++;
   console.log(`${ok ? "PASS" : "FAIL"}  ${name}${detail ? `  | ${detail}` : ""}`);
+  transcript.step(name, ok, detail);
 };
 const made = { claims: [], sale: null };
+const transcript = startTranscript("claim-shop", "Buy the sample charger in the PayPal sandbox, claim it with the sale linked, see it verified from the verify cache with no model call, and see the refund go back to the original capture.");
 const post = async (path, body, headers = {}) => {
   const r = await fetch(B + path, { method: "POST", body, headers });
   return { status: r.status, j: await r.json().catch(() => null) };
@@ -48,6 +51,7 @@ async function main() {
   made.sale = sale?.sale_id ?? null;
   check("purchase captured and stored as a sale", cap.status === 200 && Boolean(sale?.capture_id), `capture ${sale?.capture_id}, sale ${sale?.sale_id}, $${sale?.amount}`);
 
+  transcript.ids({ order_id: order.j?.data?.id, capture_id: sale?.capture_id, sale_id: sale?.sale_id, amount: sale?.amount });
   const tPhoto = Date.now();
   const c = await post("/api/claims", claimForm(sale), { "x-checks-secret": SECRET });
   const claim = c.j?.data;
@@ -71,6 +75,7 @@ async function main() {
     view = (await (await fetch(`${B}/api/claims/${claim.id}?refresh=1`)).json()).data ?? view;
   }
   const tPaid = Date.now();
+  transcript.ids({ claim_ids: [claim.id], route: view?.payment?.route, refund_id: view?.payment?.ids?.refund_id, refund_status: view?.payment?.paypal_status, photo_to_verified_ms: tVerified - tPhoto, photo_to_completed_ms: tPaid - tPhoto });
   check(
     "PayPal completes the refund to the capture",
     view?.payment?.status === "paid" && Boolean(view?.payment?.ids?.refund_id),
@@ -106,6 +111,8 @@ main()
       await c.end();
       console.log(`removed ${made.claims.length} test claims and the test sale (ledger entries stay)`);
     }
+    transcript.ids({ claim_ids: made.claims });
+    console.log(`transcript: ${transcript.save({ passed: pass, failed: fail })}`);
     console.log(`\n${pass} passed, ${fail} failed`);
     process.exit(fail ? 1 : 0);
   });

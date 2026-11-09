@@ -1,0 +1,88 @@
+/* One reviewer against the referee: a table from 761px, a list on a phone. Only one of the two is shown. */
+.rv-list {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 4px 16px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+}
+.rv-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--edge);
+}
+.rv-item:last-child {
+  border-bottom: 0;
+}
+.rv-item p {
+  margin: 0;
+}
+.rv-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-weight: 600;
+}
+.rv-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.rv-item-meta .pill {
+  flex: none;
+}
+.rv-votes {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+}
+.rv-none {
+  color: var(--muted);
+}
+.rv-counts {
+  margin: 14px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 56rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.rv-counts > div {
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+}
+.rv-counts dt {
+  font-weight: 600;
+}
+.rv-counts dd {
+  margin: 4px 0 0;
+}
+.rv-counts dd + dd {
+  margin-top: 2px;
+}
+.rv-k {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+@media (max-width: 760px) {
+  .jb-wrap:has(> .rv) {
+    display: none;
+  }
+  .rv-list {
+    display: block;
+  }
+  .rv-counts {
+    grid-template-columns: 1fr;
+  }
+}

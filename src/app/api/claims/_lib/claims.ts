@@ -50,6 +50,9 @@ import { replacementQuery } from "./recall-text";
 import { DEMO_REFUND_CENTS, SHOP_RECALL, firmTerms, type FirmTerms } from "./terms";
 import type { CheckView, ClaimEvent, ClaimStatus, ClaimView, LinkView, PaymentView, PayView, ReplacementOption } from "./types";
 
+/** The image_hash sources that make up the shared hash pool: photos claimed here, and hashes connected firms registered (POST /api/v1/hash-pool/register). */
+const POOL_SOURCES = ["claim", "partner"] as const;
+
 export type ApiCode = "invalid_request" | "not_found" | "rate_limited" | "upstream_unavailable" | "internal";
 export class ClaimError extends Error {
   constructor(
@@ -286,14 +289,15 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     db()
       .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash })
       .from(schema.imageHashes)
-      .where(and(eq(schema.imageHashes.source, "claim"), eq(schema.imageHashes.recallNumber, recall.number)))
+      .where(and(inArray(schema.imageHashes.source, POOL_SOURCES), eq(schema.imageHashes.recallNumber, recall.number)))
       .orderBy(desc(schema.imageHashes.id))
       .limit(5000),
-    // Earlier claim photos on every other recall, from any firm: only their hashes, matched at CATALOG_MAX_DISTANCE.
+    // Earlier claim photos on every other recall, from any firm, and the hashes connected firms registered through
+    // POST /api/v1/hash-pool/register: only their hashes, matched at CATALOG_MAX_DISTANCE.
     db()
       .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash })
       .from(schema.imageHashes)
-      .where(and(eq(schema.imageHashes.source, "claim"), ne(schema.imageHashes.recallNumber, recall.number)))
+      .where(and(inArray(schema.imageHashes.source, POOL_SOURCES), ne(schema.imageHashes.recallNumber, recall.number)))
       .orderBy(desc(schema.imageHashes.id))
       .limit(20000),
     db()

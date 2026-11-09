@@ -87,6 +87,34 @@
   font-size: 0.9375rem;
   user-select: all;
 }
+.sbl .sbl-note dd {
+  font-size: var(--step-small);
+  max-width: 44ch;
+}
+/* A masked value with its two controls: the code sits first, the buttons after it, wrapping under it on a narrow sheet. */
+.secret {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+.secret-value {
+  letter-spacing: 0.08em;
+  min-width: 8ch;
+}
+.secret[data-shown] .secret-value {
+  letter-spacing: normal;
+}
+.secret-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+.secret-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.4rem 0.85rem;
+  font-size: var(--step-small);
+}
 
 /* The guided tour: a card in the corner that names what to look at, and a ring on the element it describes. */
 .tour {

@@ -6,7 +6,7 @@
  *
  * Unit tests: counted from vitest's own JSON report of this run. Accessibility: the tally tests/e2e/pages-a11y.mjs
  * wrote at its last run (content/public/a11y.json). MCP tools: src/lib/mcp/tools.ts. Photo checks and error rates:
- * src/components/judges/errors.ts, from the recorded runs. The catalog of distinct published pictures:
+ * src/components/evidence/errors.ts, from the recorded runs. The catalog of distinct published pictures:
  * src/lib/verify/dhash.ts. Payout timing: content/public/measured.json; photo check timing: checkTimes() over every recorded
  * live call. The hosted AI budget: render.yaml. tests/facts.test.ts fails when the README, docs/*.md or TESTING.md
  * disagree with this file, or when this file disagrees with the code.
@@ -16,14 +16,14 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { answerChanges, checkTimes, errorRates, freeCaught, freeTimings, hashSpeed, readingAccuracy, referencePictures, sweepSettings } from "../src/components/judges/errors";
+import { answerChanges, checkTimes, errorRates, freeCaught, freeTimings, hashSpeed, readingAccuracy, referencePictures, sweepSettings } from "../src/components/evidence/errors";
 import { hostedDailyUsd } from "../src/lib/ai/hosted-budget";
 import { photoAsk } from "../src/lib/recall/photo-count";
 import { proofSplit, type SplitRecall, type SplitRule } from "../src/lib/recall/made-safe";
 import { moneyWords, recallValue, type ValueRecall } from "../src/lib/recall/value";
 import { TOOLS } from "../src/lib/mcp/tools";
 import { aboutSeconds } from "../src/lib/research";
-import { catalogOfficialHashes } from "../src/lib/verify/dhash";
+import { catalogCounts, catalogOfficialHashes } from "../src/lib/verify/dhash";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "content", "public", "facts.json");
@@ -41,6 +41,8 @@ type Facts = {
   photoChecks: { freeCaught: number; freeTotal: number };
   errors: { wrongPay: { count: number; of: number; photos: number }; heldBack: { count: number; of: number; photos: number }; decisions: number; photos: number };
   catalogPictures: number;
+  /** The same catalog in full: pictures stored, distinct hash values among them, and the pictures distinct enough to tell their recall apart. */
+  catalog: { stored: number; distinctHashes: number; catalog: number };
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
   /** The free answers' times, from the recorded runs (content/public/verify-runs.json): the whole answer and the hash comparison. */
   timings: { free: Spread; match: Spread; recordedAt: string; sentence: string };
@@ -188,6 +190,7 @@ function main() {
       photos: e.photos,
     },
     catalogPictures: catalogOfficialHashes().length,
+    catalog: catalogCounts(),
     measured: { checkSeconds: checkTimes().about, payoutSeconds: aboutSeconds(measured.find((m) => m.id === "payout")?.figure) },
     ...derived(),
   };

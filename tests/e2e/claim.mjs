@@ -9,6 +9,7 @@
 //   node --env-file=.env.local tests/e2e/claim.mjs [--keep]
 import { readFileSync } from "node:fs";
 import pg from "pg";
+import { startTranscript } from "./transcript.mjs";
 
 const B = process.env.BASE_URL ?? "http://localhost:3300";
 const SECRET = process.env.CHECKS_SECRET ?? "";
@@ -22,8 +23,10 @@ const check = (name, ok, detail = "") => {
   if (ok) pass++;
   else fail++;
   console.log(`${ok ? "PASS" : "FAIL"}  ${name}${detail ? `  | ${detail}` : ""}`);
+  transcript.step(name, ok, detail);
 };
 const made = [];
+const transcript = startTranscript("claim", "The owner's claim: presets, a streamed claim, firm review, the firm's approval, a real sandbox payout at $1.25 and the receipt.");
 
 /** A JSON call. A dev server compiling a route for the first time can answer with an HTML page once: retry those. */
 async function json(path, init) {
@@ -115,6 +118,7 @@ async function main() {
   check("the test approval route does not exist without CHECKS_SECRET", noSecret.status === 404);
   const approved = await json(`/api/claims/${claim.id}/e2e-approve`, { method: "POST", headers: { "x-checks-secret": SECRET } });
   check("the firm approves and the payout is sent", approved.status === 200 && approved.j?.data?.kind === "sent", `${approved.j?.data?.plain} ${approved.j?.data?.claim?.payment?.ids?.payout_batch_id ?? ""}`);
+  transcript.ids({ claim_ids: [claim.id], amount: claim?.amount?.value, route: approved.j?.data?.claim?.payment?.route, payout_batch_id: approved.j?.data?.claim?.payment?.ids?.payout_batch_id });
   const t0 = Date.now();
   let view = approved.j?.data?.claim;
   while (view?.payment?.status !== "paid" && Date.now() - t0 < 120_000) {
@@ -122,6 +126,7 @@ async function main() {
     view = (await json(`/api/claims/${claim.id}?refresh=1`)).j?.data ?? view;
   }
   check("PayPal reports the payout paid (polling, as the receipt does)", view?.payment?.status === "paid" && view?.status === "paid", `${Math.round((Date.now() - t0) / 1000)} s, ${view?.payment?.paypal_status}, item ${view?.payment?.ids?.payout_item_id}`);
+  transcript.ids({ payout_item_id: view?.payment?.ids?.payout_item_id, payout_status: view?.payment?.paypal_status, approval_to_paid_s: Math.round((Date.now() - t0) / 1000) });
   const receipt = await (await fetch(`${B}/r/${claim.id}`)).text();
   check("the receipt says Paid $1.25, with the sandbox payout ID and the labels", receipt.includes("Paid $1.25") && receipt.includes("Sandbox payout ID") && receipt.includes("Remedy is not affiliated with the recalling firm") && receipt.includes("Thank you for keeping your home safe"));
   const ph = await fetch(`${B}/api/claims/${claim.id}/photo`);
@@ -154,6 +159,8 @@ main()
       await c.end();
       console.log(`removed ${rows.length} test claims (ledger entries stay, as a ledger should)`);
     }
+    transcript.ids({ claim_ids: made });
+    console.log(`transcript: ${transcript.save({ passed: pass, failed: fail })}`);
     console.log(`\n${pass} passed, ${fail} failed`);
     process.exit(fail ? 1 : 0);
   });

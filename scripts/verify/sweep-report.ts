@@ -8,7 +8,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { knownAnswer } from "../../src/components/judges/errors";
+import { knownAnswer } from "../../src/components/evidence/errors";
 import { meetsExpectation, type FixtureCase } from "../../src/lib/verify/fixtures";
 
 type Row = { config: string; trial: number; case: string; ok: boolean; decision: string; decided_by: string; C1: number | string; C1_status: string; C2: string; C3: string; usd: number; ms: number; vision_ms: number };

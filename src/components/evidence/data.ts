@@ -1,5 +1,5 @@
 /**
- * The figures /judges shows, each read from the file that holds it: the CPSC counts (content/recalls/stats.json), the
+ * The figures /evidence shows, each read from the file that holds it: the CPSC counts (content/recalls/stats.json), the
  * extraction benchmark (content/recalls/benchmark/results.json), the extraction's own cost
  * (content/recalls/proof-rules.json) and the recorded photo checks (content/public/verify-runs.json). Server only.
  */
@@ -86,7 +86,7 @@ export type ReplayCheck = { id: string; name: string; status: string; score: num
 export type CpscReplay = { decision: string; decidedBy: string; checks: ReplayCheck[]; summaryPlain: string; summaryTechnical: string; visionMs: number; recordedAt: string; settings: string };
 
 /**
- * The 26125 example as the site shows it everywhere (home, /try, /judges): the owner flow's one recorded Claude answer,
+ * The 26125 example as the site shows it everywhere (home, /try, /evidence): the owner flow's one recorded Claude answer,
  * read with the recall's official pictures, replayed through the real verifier with no model call. The official-picture
  * match is off for this run so the AI check can be seen; with it on (the default), the photo is answered in code.
  * Null when the recording or the verifier cannot run, so callers fall back to their own recorded row.

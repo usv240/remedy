@@ -104,7 +104,7 @@ export async function runChecks(): Promise<Check[]> {
       id: "webhooks",
       name: "PayPal webhooks",
       mode: set("PAYPAL_WEBHOOK_ID") ? "live" : "fallback",
-      detail: set("PAYPAL_WEBHOOK_ID") ? "Every event is signature-checked with PayPal before it updates a payment" : "Webhook ID not set; payout statuses are read by polling PayPal instead",
+      detail: set("PAYPAL_WEBHOOK_ID") ? "Every event is verified with PayPal before it updates a payment: by its signature, or by looking the event up at PayPal and acting on PayPal's own copy" : "Webhook ID not set; payout statuses are read by polling PayPal instead",
     },
     {
       id: "claude",

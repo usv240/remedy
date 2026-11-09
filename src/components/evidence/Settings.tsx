@@ -21,7 +21,7 @@ function answerWords(e: AnswerChange["was"]): string {
 
 /**
  * Which model setting the claim path uses, and why, from the measured sweep (content/verify/sweep-results.json),
- * scored by src/components/judges/errors.ts: money first (paid when it should not have been), then accuracy against the
+ * scored by src/components/evidence/errors.ts: money first (paid when it should not have been), then accuracy against the
  * known answers as they stood the day the sweep ran, then re-scored against today's, beside the dated list of every
  * answer revised in between (content/verify/answer-changes.json).
  */

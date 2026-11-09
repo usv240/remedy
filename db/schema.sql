@@ -283,12 +283,16 @@ create unique index if not exists report_firm_recall_month_idx on report (firm_i
 
 create table if not exists image_hash (
   id             serial primary key,
-  source         text not null check (source in ('official', 'claim')),
+  source         text not null check (source in ('official', 'claim', 'partner')),
   ref            text not null,
   recall_number  text,
   dhash          text not null check (dhash ~ '^[0-9a-f]{16}$'),
   created_at     timestamptz not null default now()
 );
+-- source 'partner' (a hash a connected firm registered through POST /api/v1/hash-pool/register) was added after the
+-- table existed, so an existing database gets the wider check here; a fresh one already has it from the create above.
+alter table image_hash drop constraint if exists image_hash_source_check;
+alter table image_hash add constraint image_hash_source_check check (source in ('official', 'claim', 'partner'));
 create unique index if not exists image_hash_source_ref_idx on image_hash (source, ref);
 create index if not exists image_hash_recall_idx on image_hash (recall_number);
 create index if not exists image_hash_dhash_idx on image_hash (dhash);

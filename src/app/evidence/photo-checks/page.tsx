@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
-import { Lineage } from "@/components/judges/Lineage";
-import { PhotoChecks } from "@/components/judges/PhotoChecks";
-import { RefPictures } from "@/components/judges/RefPictures";
-import { Reading, Settings } from "@/components/judges/Settings";
+import { Lineage } from "@/components/evidence/Lineage";
+import { PhotoChecks } from "@/components/evidence/PhotoChecks";
+import { RefPictures } from "@/components/evidence/RefPictures";
+import { Reviewers } from "@/components/evidence/Reviewers";
+import { Reading, Settings } from "@/components/evidence/Settings";
 import "../../pages.css";
 import "../../landing-shared.css";
 import "../evidence.css";
@@ -35,6 +36,11 @@ export default function PhotoChecksPage() {
         <PhotoChecks />
       </section>
 
+      <section id="reviewers" className="page-section" aria-labelledby="reviewers-h">
+        <h2 id="reviewers-h">One reviewer against the referee</h2>
+        <Reviewers />
+      </section>
+
       <section id="references" className="page-section" aria-labelledby="references-h">
         <h2 id="references-h">The sample recall&rsquo;s reference pictures</h2>
         <RefPictures />
@@ -56,7 +62,7 @@ export default function PhotoChecksPage() {
       <section id="settings" className="page-section" aria-labelledby="settings-h">
         <h2 id="settings-h">Which model setting checks the photo, and why</h2>
         <Settings />
-        <p className="page-note">Scored by src/components/judges/errors.ts from content/verify/sweep-results.json, three trials of eight photos per setting, against the known answers in content/verify/fixtures/cases.json.</p>
+        <p className="page-note">Scored by src/components/evidence/errors.ts from content/verify/sweep-results.json, three trials of eight photos per setting, against the known answers in content/verify/fixtures/cases.json.</p>
       </section>
     </div>
   );

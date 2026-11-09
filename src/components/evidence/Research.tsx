@@ -65,7 +65,7 @@ const FINDINGS: { fig: string; finding: string; source: string; url: string; inR
     finding: `The difference hash (dHash) treats two pictures more than ${R.dhash.bits} bits apart as different images, and 1 to ${R.dhash.bits} bits as variations of one, after tests on over ${R.dhash.images} images.`,
     source: R.dhash.source,
     url: R.dhash.url,
-    inRemedy: `A claim photo is matched within 10 bits to its own recall's pictures, and within 4 bits to the ${catalogOfficialHashes().length.toLocaleString("en-US")} distinct pictures of every other recall.`,
+    inRemedy: `A claim photo is matched within 10 bits to its own recall's pictures, and within 4 bits to the ${catalogOfficialHashes().length.toLocaleString("en-US")} published pictures of other recalls that are distinct enough to tell their recall apart.`,
   },
   {
     fig: R.paypal.accounts,

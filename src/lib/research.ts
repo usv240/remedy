@@ -121,7 +121,7 @@ const LISTING = listing as { source: string; readAt: string; latestRecallDate: s
 /**
  * The problem, measured from primary sources (each read 2026-11-08): the regulator's own correction rate, its request
  * for information on recall claims that are not genuine and two comments on that docket, how firms pay photo-proof refunds today, the payment
- * economics from the issuers, and why owners do not act. Rendered by src/components/judges/Research.tsx (on
+ * economics from the issuers, and why owners do not act. Rendered by src/components/evidence/Research.tsx (on
  * /evidence/market), cited in the README and docs/research.md; tests/facts.test.ts checks the README figures.
  */
 export const PROBLEM = {

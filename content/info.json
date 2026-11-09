@@ -141,7 +141,7 @@
     "title": "PayPal",
     "what": "Pays refunds instantly, and refunds to the original purchase inside 180 days.",
     "why": "An owner who made the product safe gets the money in seconds, the way they already get paid by friends.",
-    "technical": "Payouts (email, phone, Venmo), Payments v2 refunds to the original capture, Orders v2 and the JavaScript SDK v6, with signature-checked webhooks. Sandbox only.",
+    "technical": "Payouts (email, phone, Venmo), Payments v2 refunds to the original capture, Orders v2 and the JavaScript SDK v6, with webhooks verified with PayPal by signature or by looking the event up. Sandbox only.",
     "sponsor": [
       "PayPal"
     ]
@@ -456,7 +456,7 @@
     "title": "The error rates",
     "what": "The two mistakes that cost money: paying for a photo that should not be paid, and holding back one that could have been paid. Each is counted on every recorded decision where the right answer is known.",
     "why": "A refund engine is only as good as its mistakes. Counting both, with the photos behind them, shows where it pays and where it hands over to a person.",
-    "technical": "src/components/judges/errors.ts reads content/verify/sweep-results.json (the claim path's setting only), content/presets/recorded/*.json and content/public/verify-runs.json when the page is built, and the known answers from content/verify/fixtures/cases.json and content/presets/index.json. A known answer of verified, or right product and made safe both required, counts as paid; any other named decision counts as not paid."
+    "technical": "src/components/evidence/errors.ts reads content/verify/sweep-results.json (the claim path's setting only), content/presets/recorded/*.json and content/public/verify-runs.json when the page is built, and the known answers from content/verify/fixtures/cases.json and content/presets/index.json. A known answer of verified, or right product and made safe both required, counts as paid; any other named decision counts as not paid."
   },
   "evidence.never": {
     "title": "What the AI never decides",
@@ -474,7 +474,7 @@
     "title": "Grounded in research",
     "what": "Published findings on recall response, claiming and photo matching, each with what Remedy does about it.",
     "why": "A full refund and simple steps are what help owners finish a recall; Remedy is built around both.",
-    "technical": "Sources: Raithel, Hock and Mafael (2024), Journal of the Academy of Marketing Science 52:716-735; Bhargava and Manoli (2015), American Economic Review 105(11):3489-3529; CPSC news release, January 17, 2025; Krawetz (2013), dHash; PayPal Holdings 3Q 2026 earnings release. The list is src/components/judges/Research.tsx."
+    "technical": "Sources: Raithel, Hock and Mafael (2024), Journal of the Academy of Marketing Science 52:716-735; Bhargava and Manoli (2015), American Economic Review 105(11):3489-3529; CPSC news release, January 17, 2025; Krawetz (2013), dHash; PayPal Holdings 3Q 2026 earnings release. The list is src/components/evidence/Research.tsx."
   },
   "evidence.money": {
     "title": "What is at stake",
@@ -486,19 +486,19 @@
     "title": "What is first here",
     "what": "Three things Remedy does that the nearest existing products and filings, read from their own pages, stop short of: the checked photo paid in the same flow, a hash pool shared across firms, and the refund routed back to the original purchase with an unclaimed payout turned into a task.",
     "why": "A claim of novelty is only as good as the comparison beside it, so each line links to the row that shows what exists.",
-    "technical": "The comparison rows live in src/components/judges/Compare.tsx (LANDSCAPE), each with its source URL and date; the three statements are in src/app/evidence/page.tsx (FIRST) and point at those rows by id."
+    "technical": "The comparison rows live in src/components/evidence/Compare.tsx (LANDSCAPE), each with its source URL and date; the three statements are in src/app/evidence/page.tsx (FIRST) and point at those rows by id."
   },
   "evidence.problem": {
     "title": "The problem, measured",
     "what": "The regulator's own correction rate, its 2026 request for information on recall claims that are not genuine and two comments on that docket, how firms pay photo-proof refunds today, the payment issuers' own terms and costs, and surveys of why owners do not act.",
     "why": "Every figure here is a primary source read on November 8, 2026 and paraphrased, with what Remedy does about it beside it. In Technical view each card also names the code that answers it.",
-    "technical": "The figures live in src/lib/research.ts (PROBLEM) with their URLs and page dates; the cards are src/components/judges/Research.tsx (ProblemResearch). The CPSC listing count is written by scripts/recalls/listing-mentions.ts to content/recalls/listing-mentions.json. The FY2025 correction rate is an average across recalls under a method revised in FY2024, so it is not comparable with the 6 in 100 figure, which is the share of recalled units that come back."
+    "technical": "The figures live in src/lib/research.ts (PROBLEM) with their URLs and page dates; the cards are src/components/evidence/Research.tsx (ProblemResearch). The CPSC listing count is written by scripts/recalls/listing-mentions.ts to content/recalls/listing-mentions.json. The FY2025 correction rate is an average across recalls under a method revised in FY2024, so it is not comparable with the 6 in 100 figure, which is the share of recalled units that come back."
   },
   "evidence.landscape": {
     "title": "What exists near Remedy",
     "what": "Seven products, portals and one patent application that do part of what Remedy does, each described from its own page or filing, with the one step it leaves to others.",
     "why": "Each does its job. Naming them is how the difference is shown rather than claimed.",
-    "technical": "src/components/judges/Compare.tsx (LANDSCAPE): Truepic Vision and the Truepic Risk Network, Sedgwick's recall pages, Real Time Results portals, a recall administrator's live photo capture (CPSC docket comment), CCC Estimate-STP and Snapsheet in insurance, and US 2016/0350756 A1 (abandoned 2018). Pages read November 8, 2026."
+    "technical": "src/components/evidence/Compare.tsx (LANDSCAPE): Truepic Vision and the Truepic Risk Network, Sedgwick's recall pages, Real Time Results portals, a recall administrator's live photo capture (CPSC docket comment), CCC Estimate-STP and Snapsheet in insurance, and US 2016/0350756 A1 (abandoned 2018). Pages read November 8, 2026."
   },
   "evidence.lineage": {
     "title": "The two-reviewer design",

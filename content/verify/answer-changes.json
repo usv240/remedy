@@ -1,5 +1,5 @@
 {
-  "note": "Every known answer in content/verify/fixtures/cases.json that was revised after the model sweep ran (content/verify/sweep-results.json, run 2026-11-06), each with its date, its case id, the answer as it stood when the sweep ran (`was`), the answer today (`now`), and why. The sweep is scored first against the `was` answers, as the sweep report printed it, and second against today's (sweepSettings() in src/components/judges/errors.ts); tests/facts.test.ts fails when the first does not match the sweep's own pass marks, or when a case in cases.json differs from its `now` here.",
+  "note": "Every known answer in content/verify/fixtures/cases.json that was revised after the model sweep ran (content/verify/sweep-results.json, run 2026-11-06), each with its date, its case id, the answer as it stood when the sweep ran (`was`), the answer today (`now`), and why. The sweep is scored first against the `was` answers, as the sweep report printed it, and second against today's (sweepSettings() in src/components/evidence/errors.ts); tests/facts.test.ts fails when the first does not match the sweep's own pass marks, or when a case in cases.json differs from its `now` here.",
   "changes": [
     {
       "date": "2026-11-06",

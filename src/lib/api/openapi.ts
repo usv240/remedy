@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ENDPOINTS, ERRORS } from "./endpoints";
 import { API_VERSION } from "./envelope";
 import { KeyRequest } from "./schemas";
-import { ProofRuleRequest, ScanRequest } from "./v1-schemas";
+import { HashPoolCheckRequest, HashPoolRegisterRequest, ProofRuleRequest, ScanRequest } from "./v1-schemas";
 
 const json = (s: z.ZodType) => {
   const { $schema: _drop, ...rest } = z.toJSONSchema(s, { io: "input" }) as Record<string, unknown>;
@@ -11,7 +11,7 @@ const json = (s: z.ZodType) => {
 };
 
 /** JSON request bodies by endpoint id, from the same Zod schemas the routes validate with. */
-const BODIES: Record<string, Record<string, unknown>> = { "proof-rule": json(ProofRuleRequest), scan: json(ScanRequest) };
+const BODIES: Record<string, Record<string, unknown>> = { "proof-rule": json(ProofRuleRequest), scan: json(ScanRequest), "hash-pool-check": json(HashPoolCheckRequest), "hash-pool-register": json(HashPoolRegisterRequest) };
 
 /** OpenAPI 3.1, generated from the same Zod schemas the endpoints validate with. */
 export function openapi(server: string) {
@@ -21,7 +21,7 @@ export function openapi(server: string) {
       operationId: e.id.replace(/-(\w)/g, (_, c: string) => c.toUpperCase()),
       summary: e.title,
       description: e.summary,
-      tags: [e.id.startsWith("scan") ? "Catalog scan" : e.id === "badge" ? "Embeds" : e.keyed ? "Recalls and claims" : "Utilities"],
+      tags: [e.id.startsWith("scan") ? "Catalog scan" : e.id.startsWith("hash-pool") ? "Hash pool" : e.id === "badge" ? "Embeds" : e.keyed ? "Recalls and claims" : "Utilities"],
       security: e.keyed ? [{ apiKey: [] }, {}] : [],
       responses: {
         "200": { description: "Success. The answer is in data; meta has request_id, version and latency_ms.", content: { "application/json": { schema: { $ref: "#/components/schemas/Envelope" } } } },
@@ -81,6 +81,7 @@ export function openapi(server: string) {
     tags: [
       { name: "Recalls and claims", description: "Recall search, proof rules, photo verification and claims. A key is optional for reads; with one you get higher limits and usage." },
       { name: "Catalog scan", description: "Check a whole catalog against every recall since 2024 in one call." },
+      { name: "Hash pool", description: "The shared pool of photo hashes across firms: check one 64-bit hash, or register one your firm has paid on. Only the hash and an opaque ref cross." },
       { name: "Embeds", description: "A server-rendered recall badge any product page can show in an iframe or with one script." },
       { name: "Utilities", description: "The ledger check and service status." },
       { name: "Keys", description: "Free sandbox keys." },

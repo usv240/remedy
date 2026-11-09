@@ -72,6 +72,7 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
       status: payFromDb(u.status, u.route),
     })),
     sampleClaims: c?.sample ?? 0,
+    claimsAllRecalls: { claims: counts.reduce((s, r) => s + r.n, 0), recalls: counts.length },
     otherRecalls: others.map((r) => ({ number: r.number, short: r.short, claims: byRecall.get(r.number) ?? 0 })),
   };
 }

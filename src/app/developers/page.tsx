@@ -1,28 +1,69 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Info } from "@/components/Info";
 import { CopyButton } from "@/components/developers/CopyButton";
 import { DevConsole } from "@/components/developers/DevConsole";
 import { EmbedBadge } from "@/components/developers/EmbedBadge";
 import { McpSession } from "@/components/developers/McpSession";
 import { LIMITS } from "@/lib/api/keys";
-import { HOSTED_URL } from "@/lib/origin";
+import { pageOrigin } from "@/lib/origin";
 import "../pages.css";
 import "./dev.css";
 
 export const metadata: Metadata = { title: "Developers", description: "Add verify-and-refund to any recall page: free sandbox keys, a live playground, docs and an MCP server." };
 
-const HOST = (process.env.RENDER_EXTERNAL_URL || HOSTED_URL).replace(/\/$/, "");
-
 /** The first call shown beside the lede: one that works on every deployment, with or without keys or Elastic. */
-const FIRST_CURL = `curl "${HOST}/api/v1/recalls?query=power%20bank&photo_refund=true&limit=3"`;
+const FIRST_PATH = "/api/v1/recalls?query=power%20bank&photo_refund=true&limit=3";
 
 const USES: { who: string; what: string; link?: { href: string; label: string } }[] = [
   { who: "Marketplaces and retailers", what: "Show a recall's proof rule on the product page, and verify a buyer's photo before the refund is sent.", link: { href: "/developers/docs#verify", label: "Verify a photo" } },
   { who: "Recall service providers", what: "Turn emailed photos into verified claims, with each check and its reason, and pay the refund through PayPal.", link: { href: "/developers/docs#proof-rule", label: "Read a proof rule" } },
+  {
+    who: "Recall firms",
+    what: "Join the shared hash pool from your own systems: register the hash of a photo you have paid on, and check a hash before you pay. Only the 64-bit hash and an opaque ref cross.",
+    link: { href: "/developers/docs#hash-pool-check", label: "The hash pool" },
+  },
   { who: "AI agents", what: "Connect the Remedy MCP server: search_recalls, scan_catalog, get_proof_rule, verify_photo, open_claim and claim_status. A recorded session below shows an assistant using them.", link: { href: "#mcp-h", label: "The recorded session" } },
   { who: "Catalogs", what: "Send every product you list in one call and get back which ones a recall covers, which pay a refund for a photo, and the claim link for each.", link: { href: "/developers/docs#scan", label: "Scan a catalog" } },
 ];
+
+/**
+ * The first call, with the address the visitor is using: the request's own host, or Render's public address when it
+ * is hosted there (src/lib/origin.ts). Before the host is known, the same command with the path alone.
+ */
+function FirstCall({ host }: { host: string | null }) {
+  const cmd = `curl "${host ?? ""}${FIRST_PATH}"`;
+  return (
+    <figure className="dev-first" data-ui>
+      <div className="dev-first-head">
+        <figcaption>First call: recalls that pay on a photo</figcaption>
+        {host ? <CopyButton text={cmd} label="Copy" /> : null}
+      </div>
+      <pre className="dev-pre tabular" tabIndex={0} aria-label="First call, in cURL">
+        {cmd}
+      </pre>
+      <p className="dev-first-note">
+        Each hit carries its proof rule: what to cut or mark, what the photo must show, and the refund. No key needed for reads; <code>/api/health</code> shows what is connected.
+      </p>
+    </figure>
+  );
+}
+
+async function FirstCallLive() {
+  return <FirstCall host={await pageOrigin()} />;
+}
+
+/** The recorded MCP session and the embed snippets, each printed with this server's own address. */
+async function HostedExamples() {
+  const host = await pageOrigin();
+  return (
+    <>
+      <McpSession host={host} />
+      <EmbedBadge host={host} />
+    </>
+  );
+}
 
 export default function DevelopersPage() {
   return (
@@ -35,18 +76,9 @@ export default function DevelopersPage() {
           </div>
           <p className="lede">Add verify-and-refund to any recall page. One API call, or our MCP server.</p>
         </header>
-        <figure className="dev-first" data-ui>
-          <div className="dev-first-head">
-            <figcaption>First call: recalls that pay on a photo</figcaption>
-            <CopyButton text={FIRST_CURL} label="Copy" />
-          </div>
-          <pre className="dev-pre tabular" tabIndex={0} aria-label="First call, in cURL">
-            {FIRST_CURL}
-          </pre>
-          <p className="dev-first-note">
-            Each hit carries its proof rule: what to cut or mark, what the photo must show, and the refund. No key needed for reads; <code>/api/health</code> shows what is connected.
-          </p>
-        </figure>
+        <Suspense fallback={<FirstCall host={null} />}>
+          <FirstCallLive />
+        </Suspense>
       </div>
 
       <ul className="dev-uses">
@@ -71,9 +103,9 @@ export default function DevelopersPage() {
         </li>
       </ul>
 
-      <McpSession host={HOST} />
-
-      <EmbedBadge host={HOST} />
+      <Suspense fallback={<p className="page-loading muted">Loading the recorded session</p>}>
+        <HostedExamples />
+      </Suspense>
 
       <DevConsole />
 

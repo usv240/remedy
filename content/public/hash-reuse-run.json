@@ -1,0 +1,1812 @@
+{
+  "note": "What the hash pool catches on a reused photo, measured in code on 9 photos from content/verify/fixtures, each put through 13 changes a reuser makes (saved again, resized, cropped, turned, brightened, screenshotted, mirrored): how many of the 117 copies the two thresholds catch against the source photo's stored hash, and how many copies come within those thresholds of a picture they are not a copy of (the other source photos, and every other recall's distinct published pictures). It measures these photos and these changes; recorded by scripts/public/hash-reuse-run.ts with no model call, no network and no database, and derived again by tests/hash-reuse-run.test.ts.",
+  "recordedAt": "2026-11-08T23:21:06.036Z",
+  "thresholds": {
+    "sameRecall": 10,
+    "otherRecalls": 4
+  },
+  "sources": [
+    {
+      "file": "sample/cord-cut.jpg",
+      "recall": "BH-2026-01",
+      "what": "the sample charger with its cord cut",
+      "credit": "Dmitry G, Wikimedia Commons, public domain",
+      "dhash": "337bfb9f4e7f3e0f"
+    },
+    {
+      "file": "sample/opened-cord-attached.jpg",
+      "recall": "BH-2026-01",
+      "what": "the sample charger opened, its cord still attached",
+      "credit": "Dmitry G, Wikimedia Commons, public domain",
+      "dhash": "63e1731616305951"
+    },
+    {
+      "file": "sample/opened-case.jpg",
+      "recall": "BH-2026-01",
+      "what": "the sample charger taken apart",
+      "credit": "Dmitry G, Wikimedia Commons, public domain",
+      "dhash": "679139368edef6fe"
+    },
+    {
+      "file": "other/commons-powerbank-oraimo.jpg",
+      "recall": null,
+      "what": "a look-alike power bank",
+      "credit": "Reladex, Wikimedia Commons, CC BY-SA 4.0",
+      "dhash": "03e8e8c9e161631f"
+    },
+    {
+      "file": "other/commons-powerbank-romoss.jpg",
+      "recall": null,
+      "what": "a second look-alike power bank",
+      "credit": "Shwangtianyuan, Wikimedia Commons, CC BY-SA 4.0",
+      "dhash": "63636373733d393d"
+    },
+    {
+      "file": "other/commons-coffee-in-a-mug.jpg",
+      "recall": null,
+      "what": "a mug of coffee",
+      "credit": "Kurt Kaiser, Wikimedia Commons, CC0 1.0",
+      "dhash": "22626e3a339458d1"
+    },
+    {
+      "file": "official/26125-hair-dryer-cord-cut.png",
+      "recall": "26125",
+      "what": "the CPSC's example: the hair dryer with its cord cut",
+      "credit": "U.S. Consumer Product Safety Commission, recall 26125, public domain",
+      "dhash": "e0808ed69ce174f8"
+    },
+    {
+      "file": "official/25007-droyd-4-straps-cut.jpg",
+      "recall": "25007",
+      "what": "the CPSC's example: the helmet with its straps cut",
+      "credit": "U.S. Consumer Product Safety Commission, recall 25007, public domain",
+      "dhash": "294cf0e8c8ccec78"
+    },
+    {
+      "file": "official/25007-droyd-5-in-trash.jpg",
+      "recall": "25007",
+      "what": "the CPSC's example: the helmet in the trash",
+      "credit": "U.S. Consumer Product Safety Commission, recall 25007, public domain",
+      "dhash": "0e337179796933af"
+    }
+  ],
+  "variants": [
+    {
+      "kind": "jpeg-85",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 85"
+    },
+    {
+      "kind": "jpeg-60",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 60"
+    },
+    {
+      "kind": "jpeg-35",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 35"
+    },
+    {
+      "kind": "resize-50",
+      "label": "Resized",
+      "parameters": "half the width"
+    },
+    {
+      "kind": "resize-25",
+      "label": "Resized",
+      "parameters": "a quarter of the width"
+    },
+    {
+      "kind": "crop-4",
+      "label": "Cropped",
+      "parameters": "4 percent off every edge"
+    },
+    {
+      "kind": "crop-10",
+      "label": "Cropped",
+      "parameters": "10 percent off every edge"
+    },
+    {
+      "kind": "rotate-2",
+      "label": "Turned",
+      "parameters": "2 degrees, white fill"
+    },
+    {
+      "kind": "rotate-5",
+      "label": "Turned",
+      "parameters": "5 degrees, white fill"
+    },
+    {
+      "kind": "bright-115",
+      "label": "Brightened",
+      "parameters": "15 percent lighter"
+    },
+    {
+      "kind": "bright-85",
+      "label": "Darkened",
+      "parameters": "15 percent darker"
+    },
+    {
+      "kind": "screenshot",
+      "label": "Phone screenshot",
+      "parameters": "fit to 1170 px on a 1170 by 2532 screen, 24 px bars"
+    },
+    {
+      "kind": "mirror",
+      "label": "Mirrored",
+      "parameters": "flipped left to right"
+    }
+  ],
+  "byKind": [
+    {
+      "kind": "jpeg-85",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 85",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 0
+    },
+    {
+      "kind": "jpeg-60",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 60",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 0
+    },
+    {
+      "kind": "jpeg-35",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 35",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 1
+    },
+    {
+      "kind": "resize-50",
+      "label": "Resized",
+      "parameters": "half the width",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 2
+    },
+    {
+      "kind": "resize-25",
+      "label": "Resized",
+      "parameters": "a quarter of the width",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 2
+    },
+    {
+      "kind": "crop-4",
+      "label": "Cropped",
+      "parameters": "4 percent off every edge",
+      "n": 9,
+      "caught10": 6,
+      "caught4": 1,
+      "medianDistance": 8,
+      "maxDistance": 12
+    },
+    {
+      "kind": "crop-10",
+      "label": "Cropped",
+      "parameters": "10 percent off every edge",
+      "n": 9,
+      "caught10": 0,
+      "caught4": 0,
+      "medianDistance": 21,
+      "maxDistance": 25
+    },
+    {
+      "kind": "rotate-2",
+      "label": "Turned",
+      "parameters": "2 degrees, white fill",
+      "n": 9,
+      "caught10": 6,
+      "caught4": 1,
+      "medianDistance": 8,
+      "maxDistance": 14
+    },
+    {
+      "kind": "rotate-5",
+      "label": "Turned",
+      "parameters": "5 degrees, white fill",
+      "n": 9,
+      "caught10": 0,
+      "caught4": 0,
+      "medianDistance": 14,
+      "maxDistance": 24
+    },
+    {
+      "kind": "bright-115",
+      "label": "Brightened",
+      "parameters": "15 percent lighter",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 1,
+      "maxDistance": 2
+    },
+    {
+      "kind": "bright-85",
+      "label": "Darkened",
+      "parameters": "15 percent darker",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 1
+    },
+    {
+      "kind": "screenshot",
+      "label": "Phone screenshot",
+      "parameters": "fit to 1170 px on a 1170 by 2532 screen, 24 px bars",
+      "n": 9,
+      "caught10": 1,
+      "caught4": 0,
+      "medianDistance": 21,
+      "maxDistance": 32
+    },
+    {
+      "kind": "mirror",
+      "label": "Mirrored",
+      "parameters": "flipped left to right",
+      "n": 9,
+      "caught10": 9,
+      "caught4": 9,
+      "medianDistance": 0,
+      "maxDistance": 1
+    }
+  ],
+  "totals": {
+    "n": 117,
+    "caught10": 85,
+    "caught4": 74,
+    "medianDistance": 0,
+    "maxDistance": 32
+  },
+  "falseMatches": {
+    "of": 117,
+    "within10": 23,
+    "within4": 0,
+    "nearestUnrelatedMin": 6,
+    "unrelatedRefs": {
+      "sources": 8,
+      "catalog": 1776
+    }
+  },
+  "rows": [
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "crop-4",
+      "distance": 6,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "crop-10",
+      "distance": 15,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2-2-2_1.png",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "rotate-2",
+      "distance": 9,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/KICIMPRO.jpg",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "rotate-5",
+      "distance": 19,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/KICIMPRO.jpg",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "bright-115",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "screenshot",
+      "distance": 28,
+      "orientation": "turned 270",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture17_2.jpg",
+        "distance": 9,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/cord-cut.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "jpeg-35",
+      "distance": 1,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "crop-4",
+      "distance": 11,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "crop-10",
+      "distance": 16,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/lol-bright-pink-pjs.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "rotate-2",
+      "distance": 8,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/babyjoy-3_0.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "rotate-5",
+      "distance": 17,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/green-black-plaid.png",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "bright-115",
+      "distance": 1,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "bright-85",
+      "distance": 1,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "screenshot",
+      "distance": 24,
+      "orientation": "turned 270",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture17_2.jpg",
+        "distance": 9,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-cord-attached.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "crop-4",
+      "distance": 8,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Leon-Rading-clock-2.jpg",
+        "distance": 17,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "crop-10",
+      "distance": 24,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Leon-Rading-clock-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "rotate-2",
+      "distance": 6,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/BBWOO-7.png",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "rotate-5",
+      "distance": 11,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/babyga.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "bright-115",
+      "distance": 1,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "screenshot",
+      "distance": 32,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture17_2.jpg",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "sample/opened-case.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "jpeg-35",
+      "distance": 1,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "crop-4",
+      "distance": 5,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/seeday-11.gif",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "crop-10",
+      "distance": 21,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Atomi-heater-AT1482-AT1521.png",
+        "distance": 8,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "rotate-2",
+      "distance": 11,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-1.gif",
+        "distance": 9,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "rotate-5",
+      "distance": 12,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/oitnlaughter-3.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "bright-115",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "screenshot",
+      "distance": 21,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-1.png",
+        "distance": 6,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-oraimo.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "crop-4",
+      "distance": 5,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/JURLEA-gray-beige.png",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "crop-10",
+      "distance": 16,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Kobayashi3.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "rotate-2",
+      "distance": 12,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 9,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "rotate-5",
+      "distance": 24,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/RecalledWLIVEFabric16DrawerDresserWhite.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "bright-115",
+      "distance": 2,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "screenshot",
+      "distance": 6,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/JURLEA-gray-beige.png",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-powerbank-romoss.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "crop-4",
+      "distance": 10,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Ambiano-purple.png",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "crop-10",
+      "distance": 19,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/raychy-2.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "rotate-2",
+      "distance": 14,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Yaomiao-3.png",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "rotate-5",
+      "distance": 22,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Yaomiao-3.png",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "bright-115",
+      "distance": 1,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "screenshot",
+      "distance": 21,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/blacksheep-1.png",
+        "distance": 9,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "other/commons-coffee-in-a-mug.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/SNLN-2.jpg",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "crop-4",
+      "distance": 12,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture9_5.jpg",
+        "distance": 15,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "crop-10",
+      "distance": 21,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1lightpink.png",
+        "distance": 16,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "rotate-2",
+      "distance": 3,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Woolite-Delicates-1.jpg",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "rotate-5",
+      "distance": 13,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/mGanna-1.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "bright-115",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "screenshot",
+      "distance": 24,
+      "orientation": "upright, mirrored",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/babyoil-1.png",
+        "distance": 8,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/26125-hair-dryer-cord-cut.png",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "resize-50",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/nightgown-clear-blue.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "resize-25",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "crop-4",
+      "distance": 11,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture20_1.jpg",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "crop-10",
+      "distance": 25,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/OrangeTwist-3.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "rotate-2",
+      "distance": 8,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/DR-Power-1.png",
+        "distance": 8,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "rotate-5",
+      "distance": 12,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/nightgown-navy.jpg",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "bright-115",
+      "distance": 2,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/superb-bath-seat-1.jpg",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "screenshot",
+      "distance": 20,
+      "orientation": "turned 180",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/philton-2.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-4-straps-cut.jpg",
+      "kind": "mirror",
+      "distance": 1,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/helmet-blue.png",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "jpeg-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "jpeg-60",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "jpeg-35",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "resize-50",
+      "distance": 2,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/TonGass2.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "resize-25",
+      "distance": 2,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/TonGass2.png",
+        "distance": 10,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "crop-4",
+      "distance": 4,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/TonGass2.png",
+        "distance": 14,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "crop-10",
+      "distance": 23,
+      "orientation": "turned 180, mirrored",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/yoox-2.jpg",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "rotate-2",
+      "distance": 7,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 12,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "rotate-5",
+      "distance": 14,
+      "orientation": "upright",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 13,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "bright-115",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "bright-85",
+      "distance": 0,
+      "orientation": "upright",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "screenshot",
+      "distance": 21,
+      "orientation": "turned 90, mirrored",
+      "caught10": false,
+      "caught4": false,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Tadakazu-1.png",
+        "distance": 9,
+        "where": "catalog"
+      }
+    },
+    {
+      "source": "official/25007-droyd-5-in-trash.jpg",
+      "kind": "mirror",
+      "distance": 0,
+      "orientation": "upright, mirrored",
+      "caught10": true,
+      "caught4": true,
+      "nearestUnrelated": {
+        "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
+        "distance": 11,
+        "where": "catalog"
+      }
+    }
+  ]
+}

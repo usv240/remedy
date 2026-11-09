@@ -1,8 +1,8 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-08T21:17:17.694Z",
+  "writtenAt": "2026-11-09T00:56:52.630Z",
   "unitTests": {
-    "passed": 479,
+    "passed": 502,
     "skipped": 50,
     "skippedNeeds": {
       "database": 20,
@@ -11,16 +11,16 @@
       "other": 0
     },
     "failed": 0,
-    "files": 55,
-    "testsHash": "8cac7c34bf1ec674",
-    "ranAt": "2026-11-08T21:17:03.985Z",
+    "files": 58,
+    "testsHash": "8faf3992ddbfe501",
+    "ranAt": "2026-11-09T00:55:21.665Z",
     "note": "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed)."
   },
   "a11y": {
     "pages": 31,
     "views": 124,
     "passed": 124,
-    "ranAt": "2026-11-08T09:45:12.990Z"
+    "ranAt": "2026-11-09T00:29:39.108Z"
   },
   "mcp": {
     "tools": 7,
@@ -53,6 +53,11 @@
     "photos": 19
   },
   "catalogPictures": 1779,
+  "catalog": {
+    "stored": 1825,
+    "distinctHashes": 1794,
+    "catalog": 1779
+  },
   "measured": {
     "checkSeconds": 11,
     "payoutSeconds": 18

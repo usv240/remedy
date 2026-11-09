@@ -7,16 +7,16 @@ import { LitNames, type Source } from "@/components/landing/LitNames";
 import { ShowcaseSearch } from "@/components/landing/ShowcaseSearch";
 import { TourButton } from "@/components/landing/TourButton";
 import { TryPanel, type PanelRun } from "@/components/landing/TryPanel";
-import { cpscExampleDefault, MEASURED } from "@/components/judges/data";
+import { cpscExampleDefault, MEASURED } from "@/components/evidence/data";
 import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
 import { HEADLINE, shareParts } from "@/lib/recall/headline";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import { checkTimes, errorRates } from "@/components/judges/errors";
-import { Contrast } from "@/components/judges/Contrast";
-import { moneyHeadline } from "@/components/judges/Money";
+import { checkTimes, errorRates } from "@/components/evidence/errors";
+import { Contrast } from "@/components/evidence/Contrast";
+import { moneyHeadline } from "@/components/evidence/Money";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
 import "./landing-shared.css";
@@ -176,7 +176,7 @@ const panelTitle = (title: string) => shortTitle(title).replace(/\s*\(sample rec
 
 /** For a run the two reviewers settled: how long the photo check and the reviewers took, against every recorded live check. */
 function timingsFor(t?: { vision_ms?: number; reviewers_ms?: number }): string | null {
-  // The same recorded runs the headline's "about N seconds" is the median of (checkTimes in src/components/judges/errors.ts).
+  // The same recorded runs the headline's "about N seconds" is the median of (checkTimes in src/components/evidence/errors.ts).
   const ct = checkTimes();
   return t?.vision_ms && t.reviewers_ms
     ? `The photo check took ${(t.vision_ms / 1000).toFixed(1)} s (recorded live checks: ${ct.check.min} to ${ct.check.max} s, median ${ct.check.median} s), and the two reviewers ${(t.reviewers_ms / 1000).toFixed(1)} s more.`
@@ -293,7 +293,7 @@ export default async function Home() {
   const start = await showcaseStart();
   const quotes = QUOTES.filter((q) => recallByNumber(q.n)?.remedyText.includes(q.text));
   const fragment = devFragment();
-  // The two measured results the intro states: the error rate (src/components/judges/errors.ts) and the timings
+  // The two measured results the intro states: the error rate (src/components/evidence/errors.ts) and the timings
   // measured in the sandbox (content/public/measured.json).
   const rates = errorRates();
   const money = moneyHeadline();

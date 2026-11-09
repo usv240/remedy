@@ -1,11 +1,13 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { answerChanges, checkTimes, errorRates, freeCaught, hashSpeed, sweepSettings } from "@/components/judges/errors";
+import { answerChanges, checkTimes, errorRates, freeCaught, hashSpeed, sweepSettings } from "@/components/evidence/errors";
 import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
+import { dailyBudgetUsd } from "@/lib/ai/usage";
+import { ENTERPRISE_FEATURES } from "@/components/firm/ag-license";
 import { TOOLS } from "@/lib/mcp/tools";
 import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
-import { catalogOfficialHashes } from "@/lib/verify/dhash";
+import { catalogCounts, catalogOfficialHashes } from "@/lib/verify/dhash";
 import { derived, skipNeed, testsHash } from "../scripts/facts";
 
 /**
@@ -24,6 +26,7 @@ type Facts = {
   photoChecks: { freeCaught: number; freeTotal: number };
   errors: { wrongPay: { count: number; of: number; photos: number }; heldBack: { count: number; of: number; photos: number } };
   catalogPictures: number;
+  catalog: { stored: number; distinctHashes: number; catalog: number };
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
 } & ReturnType<typeof derived>;
 const facts = JSON.parse(readFileSync(FACTS, "utf8")) as Facts;
@@ -79,6 +82,11 @@ describe("content/public/facts.json agrees with the code", () => {
 
   it("counts the catalog of distinct published pictures, the photo check time from the recorded live calls, and the payout from measured.json", () => {
     expect(facts.catalogPictures).toBe(catalogOfficialHashes().length);
+    // The catalog in three figures, from one function: stored pictures, distinct hash values, pictures distinct enough to tell their recall apart.
+    expect(facts.catalog).toEqual(catalogCounts());
+    expect(facts.catalog.catalog).toBe(facts.catalogPictures);
+    expect(facts.catalog.catalog).toBeLessThanOrEqual(facts.catalog.distinctHashes);
+    expect(facts.catalog.distinctHashes).toBeLessThanOrEqual(facts.catalog.stored);
     const items = (JSON.parse(read("content", "public", "measured.json")) as { items: { id: string; figure: string }[] }).items;
     expect(facts.measured).toEqual({ checkSeconds: checkTimes().about, payoutSeconds: aboutSeconds(items.find((i) => i.id === "payout")?.figure) });
     // One source for how long a check takes: the recorded live calls, never a typed-in figure.
@@ -167,10 +175,14 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     }
     for (const text of ALL) {
       for (const [n, of] of all(text, /(\d+) of (\d+) paid wrongly/g)) expect([n, of]).toEqual([String(e.wrongPay.count), String(e.wrongPay.of)]);
-      for (const [n] of all(text, /the ([\d,]+) distinct published pictures/g)) expect(n).toBe(int(facts.catalogPictures));
-      for (const [n] of all(text, /against the ([\d,]+) distinct published pictures/g)) expect(n).toBe(int(facts.catalogPictures));
+      // The catalog figure always comes with its definition: the pictures distinct enough to tell their recall apart, of the pictures stored.
+      for (const [n] of all(text, /the ([\d,]+) (?:distinct )?published pictures of every recall/g)) expect(n).toBe(int(facts.catalog.catalog));
+      for (const [n] of all(text, /\(of ([\d,]+) stored\)/g)) expect(n).toBe(int(facts.catalog.stored));
+      for (const [n] of all(text, /the ([\d,]+) published pictures of other recalls that are distinct enough/g)) expect(n).toBe(int(facts.catalog.catalog));
+      expect(text).not.toMatch(/[\d,]+ distinct pictures of every other recall/);
+      expect(text).not.toMatch(/distinct published pictures of every recall and every photo/);
     }
-    expect(README).toContain(`the ${int(facts.catalogPictures)} distinct published pictures`);
+    expect(README).toContain(`the ${int(facts.catalog.catalog)} published pictures of every recall that are distinct enough to tell their recall apart (of ${int(facts.catalog.stored)} stored)`);
   });
 
   it("one story for the free answers' times, from the recorded runs, and no figure they do not support", () => {
@@ -200,6 +212,11 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     const usd = hostedDailyUsd();
     expect(usd).not.toBeNull();
     expect(facts.hostedAiDailyUsd).toBe(usd);
+    // The code's own hosted default, render.yaml and the comment in .env.example say the same number.
+    expect(dailyBudgetUsd({ RENDER: "true" })).toBe(usd);
+    const envExample = read(".env.example");
+    expect(envExample).toContain(`Default ${usd} when hosted`);
+    expect(envExample).not.toMatch(new RegExp(`Default (?!${usd}\\b)\\d+ when hosted`));
     let seen = 0;
     for (const text of ALL) {
       for (const [n] of [...all(text, /\$(\d+(?:\.\d+)?) of Claude a day/g), ...all(text, /\$(\d+(?:\.\d+)?) a day on the hosted site/g)]) {
@@ -208,6 +225,51 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
       }
     }
     expect(seen).toBeGreaterThan(0);
+  });
+
+  it(".env.example describes the claims queue without a license key the way the code and /api/health do", () => {
+    const envExample = read(".env.example");
+    const health = read("src", "lib", "health.ts");
+    expect(envExample).toContain("AG Grid Community, with no license notice");
+    expect(envExample).not.toMatch(/enterprise trial/i);
+    expect(health).toContain("AG Grid Community");
+    expect(health).toContain("ENTERPRISE_FEATURES");
+    expect(ENTERPRISE_FEATURES.length).toBeGreaterThan(20);
+    // Webhook trust is described as the code does it: a signature, or PayPal's own copy of the event looked up by id.
+    const webhooks = read("src", "lib", "payments", "webhooks.ts");
+    expect(webhooks).toMatch(/method: "signature" \| "lookup"/);
+    expect(health).toMatch(/by its signature, or by looking the event up at PayPal/);
+    for (const text of [read("src", "app", "stack", "page.tsx"), read("content", "info.json"), health]) expect(text).not.toMatch(/signature-checked/);
+  });
+
+  it("who pays, Venmo in the sandbox, and the end-to-end transcript", () => {
+    // Who pays Remedy: the README and the pilot say the same, with the two issuer figures from src/lib/research.ts.
+    expect(README).toContain(`**Who pays Remedy:** the firm, a fee per finished claim, set against the ${PROBLEM.checkCost.cost} a paper check costs its issuer and the ${PROBLEM.payoutFee.fee} a PayPal payout costs the sender`);
+    const pilot = read("src", "app", "evidence", "market", "page.tsx") + read("src", "components", "evidence", "Adoption.tsx");
+    expect(pilot).toContain("Who pays Remedy:");
+    expect(pilot).toContain("PROBLEM.checkCost.cost");
+    // Venmo: the sandbox refuses the wallet and the payout is resent by phone; the README says so wherever it offers Venmo.
+    const payouts = read("src", "lib", "payments", "payouts.ts");
+    expect(payouts).toContain('recipient_wallet: "VENMO"');
+    expect(payouts).toMatch(/walletRefused/);
+    for (const m of README.matchAll(/or Venmo.{0,400}/g)) expect(m[0]).toMatch(/sandbox/);
+    expect(read("src", "components", "claim", "Payout.tsx")).toContain("recipient_wallet VENMO");
+    // The end-to-end transcript: both suites, the last run of each passed, no email and no secret in it.
+    const file = path.join(ROOT, "content", "public", "e2e-transcript.json");
+    expect(existsSync(file)).toBe(true);
+    const t = JSON.parse(readFileSync(file, "utf8")) as { suites: Record<string, { passed: number; failed: number; steps: unknown[]; ids: Record<string, unknown> }> };
+    expect(Object.keys(t.suites).sort()).toEqual(["claim", "claim-shop"]);
+    for (const s of Object.values(t.suites)) {
+      expect(s.failed).toBe(0);
+      expect(s.steps.length).toBeGreaterThan(5);
+      expect(s.passed).toBe(s.steps.length);
+    }
+    const raw = readFileSync(file, "utf8");
+    expect(raw).not.toMatch(/[^\s@"'<>()]+@[^\s@"'<>()]+\.[A-Za-z]{2,}/);
+    expect(raw).not.toMatch(/rm_test_[A-Za-z0-9]{20,}|localhost:\d+/);
+    expect(t.suites["claim-shop"].ids.refund_id).toBeTruthy();
+    expect(t.suites.claim.ids.payout_item_id).toBeTruthy();
+    for (const text of [README, doc("results.md")]) expect(text).toContain("content/public/e2e-transcript.json");
   });
 
   it("the model settings, scored as they stood the day of the sweep first, then re-scored beside the dated revisions", () => {

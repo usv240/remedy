@@ -2,19 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
-import { Benchmark } from "@/components/judges/Benchmark";
-import { ErrorRates } from "@/components/judges/ErrorRates";
-import { Measured } from "@/components/judges/Measured";
-import { NeverDecides } from "@/components/judges/NeverDecides";
-import { FraudDocket, Research } from "@/components/judges/Research";
-import { LANDSCAPE } from "@/components/judges/Compare";
-import { Contrast } from "@/components/judges/Contrast";
-import { Money } from "@/components/judges/Money";
-import { Network } from "@/components/judges/Network";
-import { freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/judges/errors";
-import { Results } from "@/components/judges/Results";
-import { Tested } from "@/components/judges/Tested";
-import { S } from "@/components/judges/data";
+import { Benchmark } from "@/components/evidence/Benchmark";
+import { ErrorRates } from "@/components/evidence/ErrorRates";
+import { Measured } from "@/components/evidence/Measured";
+import { NeverDecides } from "@/components/evidence/NeverDecides";
+import { FraudDocket, Research } from "@/components/evidence/Research";
+import { LANDSCAPE } from "@/components/evidence/Compare";
+import { Contrast } from "@/components/evidence/Contrast";
+import { Money } from "@/components/evidence/Money";
+import { Network } from "@/components/evidence/Network";
+import { HashPoolCall } from "@/components/evidence/HashPoolCall";
+import { HashReuse } from "@/components/evidence/HashReuse";
+import { freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/evidence/errors";
+import { Results } from "@/components/evidence/Results";
+import { Tested } from "@/components/evidence/Tested";
+import { S } from "@/components/evidence/data";
 import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { limitRules } from "@/lib/firm/limits";
 import { TourStart } from "@/components/tour/Tour";
@@ -110,6 +112,7 @@ const landscapeName = (id: string) => LANDSCAPE.find((l) => l.id === id)?.name.r
 
 const TOC: [string, string][] = [
   ["#path", "Five-minute path"],
+  ["#results", "Results"],
   ["#parts", "Each part"],
   ["#network", "Across firms"],
   ["#first", "What is first here"],
@@ -151,6 +154,29 @@ export default function EvidencePage() {
         </p>
       </header>
 
+      <section id="path" className="page-section" aria-labelledby="path-h">
+        <h2 id="path-h">The five-minute path</h2>
+        <ol className="jp-path">
+          {PATH.map((p, i) => (
+            <li key={p.label} className="jp-step" data-ui>
+              <span className="jp-n tabular" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <p className="jp-head">
+                  <Link className="jp-link" href={p.href}>
+                    {p.label}
+                  </Link>
+                  <span className="jp-time tabular muted">{p.time}</span>
+                </p>
+                <p>{p.look}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="page-note">Every payout runs in the PayPal sandbox. Brightline Home is a fictional sample firm. Remedy is not affiliated with the CPSC or any recalling firm.</p>
+      </section>
+
       <div className="jr-head">
         <h2 className="sr-only">Results</h2>
         <Info id="evidence.results" label="" topic="The results" />
@@ -184,29 +210,6 @@ export default function EvidencePage() {
         </ul>
       </nav>
 
-      <section id="path" className="page-section" aria-labelledby="path-h">
-        <h2 id="path-h">The five-minute path</h2>
-        <ol className="jp-path">
-          {PATH.map((p, i) => (
-            <li key={p.label} className="jp-step" data-ui>
-              <span className="jp-n tabular" aria-hidden="true">
-                {i + 1}
-              </span>
-              <div>
-                <p className="jp-head">
-                  <Link className="jp-link" href={p.href}>
-                    {p.label}
-                  </Link>
-                  <span className="jp-time tabular muted">{p.time}</span>
-                </p>
-                <p>{p.look}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p className="page-note">Every payout runs in the PayPal sandbox. Brightline Home is a fictional sample firm. Remedy is not affiliated with the CPSC or any recalling firm.</p>
-      </section>
-
       <section id="parts" className="page-section" aria-labelledby="parts-h">
         <h2 id="parts-h">Where to see each part</h2>
         <dl className="jp-parts">
@@ -231,6 +234,8 @@ export default function EvidencePage() {
       <section id="network" className="page-section" aria-labelledby="network-h">
         <h2 id="network-h">One photo, two firms</h2>
         <Network />
+        <HashPoolCall />
+        <HashReuse />
         <FraudDocket />
       </section>
 

@@ -419,7 +419,9 @@ export const reports = pgTable(
 );
 
 /**
- * Perceptual hashes for C3. source official: ref is the CPSC image URL. source claim: ref is the photo id.
+ * Perceptual hashes for C3. source official: ref is the CPSC image URL. source claim: ref is the photo id. source partner:
+ * a hash a connected firm registered through POST /api/v1/hash-pool/register; ref is the firm's own opaque id or a UUID,
+ * and the key that registered it is not stored on the row.
  */
 export const imageHashes = pgTable(
   "image_hash",

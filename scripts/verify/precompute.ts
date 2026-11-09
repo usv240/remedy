@@ -1,5 +1,5 @@
 /**
- * Precompute the verification answers for every demo preset (cost free win B), so judges pressing a preset cost $0.
+ * Precompute the verification answers for every demo preset (cost free win B), so a visitor pressing a preset costs $0.
  * For each preset that needs Claude:
  *   - with a recording in content/presets/recorded/, the recorded answer seeds the verify_result table, at no cost;
  *   - without one, one live run records it (the /try page replays it) and seeds verify_result.

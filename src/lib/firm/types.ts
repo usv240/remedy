@@ -137,5 +137,7 @@ export type HomeSummary = {
   nextReport: { index: number; month: string; dueOn: string; daysLeft: number } | null;
   unclaimed: { claimId: string; claimant: string; amountCents: number; since: string; sample: boolean; status: PayStatus }[];
   sampleClaims: number;
+  /** Every claim in this console, across its recalls: what the claims queue lists. */
+  claimsAllRecalls: { claims: number; recalls: number };
   otherRecalls: { number: string; short: string; claims: number }[];
 };

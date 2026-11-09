@@ -229,6 +229,17 @@ export function catalogOfficialHashes(): readonly CatalogRef[] {
   return catalog;
 }
 
+/**
+ * The catalog in numbers, from the one file: every stored official picture hash, how many distinct hash values they
+ * make, and how many pictures are distinct enough to tell their recall apart (catalogOfficialHashes). The pages, the
+ * README and content/public/facts.json print these three, and tests/facts.test.ts holds them to this function.
+ */
+export function catalogCounts(): { stored: number; distinctHashes: number; catalog: number } {
+  loadStored();
+  const all = Object.values(stored ?? {}).flatMap((imgs) => imgs.filter((i) => isHash(i.dhash)).map((i) => i.dhash.toLowerCase()));
+  return { stored: all.length, distinctHashes: new Set(all).size, catalog: catalogOfficialHashes().length };
+}
+
 /** The closest match among other recalls' distinct official pictures, at CATALOG_MAX_DISTANCE or under. */
 export function otherRecallMatch(variants: string[], recallNumber: string): (HashMatch & { recall: string }) | null {
   const refs = catalogOfficialHashes().filter((r) => r.recall !== recallNumber);
