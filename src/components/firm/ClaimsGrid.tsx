@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientSideRowModelModule, CsvExportModule, DateFilterModule, ModuleRegistry, NumberFilterModule, QuickFilterModule, RowSelectionModule, TextFilterModule, ExternalFilterModule, CellStyleModule, RenderApiModule, RowApiModule, TooltipModule, type ColDef, type GridApi, type ICellRendererParams, type IRowNode, type SelectionChangedEvent, type RowClickedEvent, type CellKeyDownEvent } from "ag-grid-community";
+import { ClientSideRowModelModule, ClientSideRowModelApiModule, CsvExportModule, DateFilterModule, ModuleRegistry, NumberFilterModule, QuickFilterModule, RowSelectionModule, TextFilterModule, ExternalFilterModule, CellStyleModule, RenderApiModule, RowApiModule, TooltipModule, type ColDef, type GridApi, type ICellRendererParams, type IRowNode, type SelectionChangedEvent, type RowClickedEvent, type CellKeyDownEvent } from "ag-grid-community";
 import { ColumnMenuModule, LicenseManager, SetFilterModule, StatusBarModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
@@ -19,6 +19,8 @@ if (ENTERPRISE) LicenseManager.setLicenseKey(AG_LICENSE_KEY!);
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
+  // forEachNodeAfterFilter, used by "Select all ready to pay".
+  ClientSideRowModelApiModule,
   RowSelectionModule,
   QuickFilterModule,
   ExternalFilterModule,
