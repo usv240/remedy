@@ -139,6 +139,8 @@ export type HomeSummary = {
   claimsVerified: number;
   unitsCorrected: number;
   refundsPaid: { count: number; cents: number };
+  /** The verified claims on the main recall by where their latest payment stands: the reconciliation line (./kpis). */
+  verifiedBy: { paid: number; waiting: number; unpaid: number; other: number };
   completionPercent: number;
   needsReview: number;
   readyToPay: number;

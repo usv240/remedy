@@ -16,7 +16,7 @@ import { ONBOARDING_TODAY } from "@/lib/paypal/onboarding";
 import { perRefund } from "@/lib/pricing";
 import { payerWords, STAND_IN } from "@/lib/recall/label";
 import { payoutTiming } from "@/lib/payout-timing";
-import { PROBLEM, RESEARCH } from "@/lib/research";
+import { INFERENCES, PORTAL_WAITS, PROBLEM, RESEARCH } from "@/lib/research";
 import { catalogCounts, catalogOfficialHashes } from "@/lib/verify/dhash";
 import { derived, skipNeed, testsHash } from "../scripts/facts";
 
@@ -209,6 +209,18 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     for (const name of facts.mcp.names) expect(info["dev.mcp"].technical).toContain(name);
   });
 
+  it("the photo checks and the error rates' decisions settled in code are the same runs, said in one line", () => {
+    const e = errorRates();
+    const free = freeCaught();
+    // Code settled exactly the photo-check runs that needed no model call; every other decision was the model's.
+    expect(e.inCode).toBe(free.total);
+    expect(e.byModel + e.inCode).toBe(e.decisions);
+    expect(README).toContain(`**${free.caught} of ${free.total}** stopped by code alone, before any AI call ([\`content/public/verify-runs.json\`](content/public/verify-runs.json)). They are the ${e.inCode} of the error rates' ${e.decisions} decisions settled in code; the model made the other ${e.byModel}.`);
+    const rates = read("src", "components", "evidence", "ErrorRates.tsx");
+    expect(rates).toContain("{e.byModel} by the model and {e.inCode} settled in code before any model call: the same {fc.total} recorded runs as the photo checks&rsquo; {fc.caught} of {fc.total} stopped by code alone.");
+    expect(rates).not.toMatch(/n\("public"\)\} settled in code/);
+  });
+
   it("the photo checks, the error rates and the catalog", () => {
     const f = facts.photoChecks;
     const e = facts.errors;
@@ -237,10 +249,20 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     const code = e.bySource.find((b) => b.source === "public")?.decisions ?? 0;
     // The error rates' model decisions are exactly the reviewer rows with a known answer.
     expect(e.decisions - code).toBe(known);
+    const modelPublic = code - e.inCode;
+    expect(modelPublic).toBe(1);
     expect(doc("results.md")).toContain(
-      `Of ${c.rows.length} recorded model decisions at the claim path's setting, ${c.reached.length} reached the two reviewers. (The ${c.rows.length} are the ${known} decisions with a known answer that the error rates below also count, and ${reading} readings of the CPSC's own photos, which count in neither rate; the error rates' ${e.decisions} decisions are those ${known} and ${code} public runs settled in code with no model call.)`,
+      `Of ${c.rows.length} recorded model decisions at the claim path's setting, ${c.reached.length} reached the two reviewers. (The ${c.rows.length} are the ${known} decisions with a known answer that the error rates below also count, and ${reading} readings of the CPSC's own photos, which count in neither rate; the error rates' ${e.decisions} decisions are those ${known} and ${code} public runs: ${e.inCode} settled in code with no model call, and ${modelPublic}, a photo of a mug, read by the model with the reviewers off.)`,
     );
-    expect(read("src", "components", "evidence", "ErrorRates.tsx")).toContain('{e.decisions - n("public")} by the model and {n("public")} settled in code');
+    // Every row that reached the reviewers is accounted for: the known answers in the two rates, and the readings.
+    const r = c.referee;
+    const readingsReached = c.reached.filter((x) => x.known === "reading").length;
+    expect(r.notPaid + r.paid + readingsReached).toBe(c.reached.length);
+    expect(doc("results.md")).toContain(
+      `Of the ${c.reached.length} that reached the reviewers, ${r.notPaid} had a known answer of no payment and the referee paid neither (${r.wrongPay} of ${r.notPaid}); ${r.paid} had a known answer to pay and it held ${r.wrongHold} (${r.wrongHold} of ${r.paid}); the seventh was a reading of the CPSC's own photo, which counts in neither rate, and the referee sent it to a person.`,
+    );
+    expect(readingsReached).toBe(1);
+    expect(read("src", "components", "evidence", "ErrorRates.tsx")).toContain("{e.byModel} by the model and {e.inCode} settled in code");
   });
 
   it("who pays on a real CPSC recall: one sentence on the claim page's footer and in the README", () => {
@@ -269,6 +291,26 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(read("src", "lib", "verify", "vision.ts").match(/return model === MODEL \? "medium" : undefined;/g)).toHaveLength(1);
     expect(KEYED_LINE).toContain("effortFor() in src/lib/verify/vision.ts");
     expect(doc("results.md")).toContain("`effortFor()` in [`src/lib/verify/vision.ts`]");
+  });
+
+  it("the README opens on a three-image strip from docs/img, with alt text, then a first paragraph of at most three short sentences", () => {
+    const blocks = README.split(/\r?\n\r?\n/);
+    const strip = blocks.findIndex((b) => b.startsWith("<p>") && b.includes("<img"));
+    expect(strip).toBeGreaterThan(0);
+    expect(strip).toBeLessThan(4);
+    const imgs = [...blocks[strip].matchAll(/<img src="(docs\/img\/[\w.-]+)" alt="([^"]+)"/g)];
+    expect(imgs).toHaveLength(3);
+    for (const [, src, alt] of imgs) {
+      expect(existsSync(path.join(ROOT, src)), src).toBe(true);
+      expect(alt.split(" ").length).toBeGreaterThan(3);
+    }
+    const intro = blocks[strip + 1];
+    const sentences = intro.split(/(?<=\.)\s+(?=[A-Z])/);
+    expect(sentences.length).toBeLessThanOrEqual(3);
+    for (const x of sentences) expect(x.split(/\s+/).length).toBeLessThan(25);
+    expect(intro).toContain("https://remedy-y0ym.onrender.com");
+    // The figures come straight after it.
+    expect(blocks[strip + 2].startsWith("Since January 2024")).toBe(true);
   });
 
   it("the README's first paragraph states the problem: the recalls, the money at stake and the check wait", () => {
@@ -514,6 +556,31 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     const research = doc("research.md");
     for (const fig of [RESEARCH.directNotice.direct, RESEARCH.directNotice.press, RESEARCH.euStudy.direct, RESEARCH.euStudy.generic, RESEARCH.fullRemedy.lift]) expect(research).toContain(fig);
     expect(README).toContain(`the PayPal payout in **about ${facts.measured.payoutSeconds}**`);
+  });
+
+  it("the portal waits are a table of pages already read, each with its source and date, beside the payout measured in the sandbox", () => {
+    expect(PORTAL_WAITS.map((w) => w.url)).toEqual([RESEARCH.portal.url, PROBLEM.weeksPortal.url, PROBLEM.paypalPortal.url]);
+    for (const w of PORTAL_WAITS) {
+      expect(w.date).toMatch(/20\d\d/);
+      // Each page is one docs/research.md already cites.
+      expect(doc("research.md"), w.id).toContain(w.url);
+    }
+    const contrast = read("src", "components", "evidence", "Contrast.tsx");
+    expect(contrast).toContain("PORTAL_WAITS.map");
+    expect(contrast).toContain("Remedy, in the ${c.environment}");
+    for (const f of ["src/app/page.tsx", "src/app/evidence/page.tsx", "src/app/evidence/market/page.tsx"]) expect(read(...f.split("/")), f).toContain("<Contrast");
+    for (const w of PORTAL_WAITS.slice(1)) expect(README).toContain(w.url);
+  });
+
+  it("the two inferences are said as inferences wherever their figures appear", () => {
+    const market = read("src", "app", "evidence", "market", "page.tsx");
+    expect(market).toContain("{INFERENCES.unclaimed}");
+    expect(market).toContain("{INFERENCES.claims}");
+    expect(README).toContain(INFERENCES.unclaimed);
+    expect(README).toContain(INFERENCES.claims);
+    // Each sits right after the figures it qualifies.
+    expect(README.indexOf(INFERENCES.unclaimed)).toBeGreaterThan(README.indexOf("of it stays unclaimed"));
+    expect(README.indexOf(INFERENCES.claims)).toBeGreaterThan(README.indexOf(`**${RESEARCH.simpler.named}**`));
   });
 
   it("the README stays short: its top screen and the three ideas, with the long sections in docs/*.md", () => {

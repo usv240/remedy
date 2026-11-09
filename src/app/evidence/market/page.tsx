@@ -4,6 +4,7 @@ import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
 import { Adoption, Pilot } from "@/components/evidence/Adoption";
 import { Compare, LANDSCAPE, Landscape } from "@/components/evidence/Compare";
+import { Contrast } from "@/components/evidence/Contrast";
 import { Money, VALUE } from "@/components/evidence/Money";
 import { ProblemResearch } from "@/components/evidence/Research";
 import { fmtInt } from "@/lib/api/format";
@@ -11,6 +12,7 @@ import { storedRule } from "@/lib/api/recall-data";
 import { SPLIT } from "@/lib/recall/headline";
 import { moneyWords } from "@/lib/recall/value";
 import { REVIEWER_MODEL_ENV } from "@/lib/verify/reviewers";
+import { INFERENCES } from "@/lib/research";
 import "../../pages.css";
 import "../../landing-shared.css";
 import "../evidence.css";
@@ -53,6 +55,9 @@ export default function MarketPage() {
           At field, or the fixed refund its rule states when that is lower ({fmtInt(VALUE.atStatedAmount.count)} recalls). {fmtInt(VALUE.covered)} records state units and a price. {fmtInt(VALUE.proRated.count)} pro-rated refunds ({VALUE.proRated.numbers.join(", ")}) state no share of the
           price and {fmtInt(VALUE.noPrice)} records state no price, so those {fmtInt(VALUE.recalls - VALUE.covered)} are left out, not estimated. At the highest stated prices the same refunds come to {moneyWords(VALUE.highUsd)}. Both rates are averages across consumer
           product recalls, not measures of these recalls in particular, so the unclaimed figure is shown at each.
+        </p>
+        <p className="page-prose ev-inference">
+          {INFERENCES.unclaimed}
         </p>
         <div className="jb-wrap" role="region" aria-label="The largest recalls by value" tabIndex={0}>
           <table className="jb">
@@ -134,6 +139,7 @@ export default function MarketPage() {
           <Info id="evidence.compare" label="" topic="How it compares" />
         </div>
         <p className="page-prose jp-intro">Each of these does its job. Remedy adds the instant check and the PayPal payout to what firms already do.</p>
+        <Contrast className="vs ev-vs" />
         <Compare />
         <details className="jx-disc ev-land-disc" id="landscape">
           <summary>
@@ -158,6 +164,9 @@ export default function MarketPage() {
         <p className="page-prose jp-intro">Three groups already handle recall claims. Each can run Remedy as it is today.</p>
         <Adoption />
         <Pilot />
+        <p className="page-prose ev-inference">
+          {INFERENCES.claims}
+        </p>
       </section>
     </div>
   );

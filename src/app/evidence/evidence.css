@@ -1201,6 +1201,30 @@
   }
 }
 
+/* An inference stated as one: the figure's method, beside the figure. */
+.evidence .ev-inference {
+  margin-top: 12px;
+}
+.evidence .ev-inference strong {
+  font-weight: 600;
+}
+
+/* The docket's pattern, replayed in code, right under the two-firm run. */
+.ev-replay {
+  margin-top: 24px;
+  display: grid;
+  gap: 10px;
+}
+.ev-replay .ev-sub {
+  margin: 0;
+}
+.ev-replay p {
+  margin: 0;
+}
+.ev-replay strong {
+  font-weight: 600;
+}
+
 /* The pool's measured limits and its lineage, right under the two-firm run. */
 .ev-limits {
   margin-top: 18px;

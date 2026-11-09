@@ -108,3 +108,23 @@ export const REVIEWERS_TONE: Record<ReviewersWord, "positive" | "attention" | "i
 
 /** How many of the six checks passed, for a phone card ("5 of 6 checks pass"). */
 export const passCount = (words: Record<CheckId, CheckWord>) => CHECK_ORDER.filter((id) => words[id] === "pass").length;
+
+/**
+ * A check the photo check left unsure and the two reviewers then settled: when both reviewers agreed the recalled
+ * product is shown made safe (the recorded outcome, reviewersOutcome above), the unsure Right product check reads as
+ * confirmed by them, not "Unsure". The photo check's own score stays on the claim, in the Technical view.
+ */
+export const SETTLED_WORD = "Confirmed by reviewers";
+export const settledByReviewers = (id: CheckId, word: CheckWord, reviewers: ReviewersWord) => id === "C1" && word === "unclear" && reviewers === "agreed";
+
+/** The word and tone a check shows on a claim, with the reviewers' outcome taken into account. */
+export function shownCheck(id: CheckId, word: CheckWord, reviewers: ReviewersWord): { word: string; tone: (typeof TONE)[CheckWord]; settled: boolean } {
+  if (settledByReviewers(id, word, reviewers)) return { word: SETTLED_WORD, tone: "positive", settled: true };
+  return { word: WORD[word], tone: TONE[word], settled: false };
+}
+
+/** "5 of 6 checks pass" and, when the reviewers settled the unsure one, that they did. */
+export function checksLine(words: Record<CheckId, CheckWord>, reviewers: ReviewersWord): string {
+  const settled = CHECK_ORDER.filter((id) => settledByReviewers(id, words[id], reviewers));
+  return `${passCount(words)} of 6 checks pass${settled.length ? `, ${settled.join(" and ")} ${SETTLED_WORD.toLowerCase()}` : ""}`;
+}

@@ -32,6 +32,20 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
     where c.firm_id = ${firm.id} and c.recall_number = ${main.number} and ${notTest()} and ((p.route = 'payout' and p.status = 'success') or (p.route = 'refund' and p.status = 'refunded'))`)
   ).rows as { n: number; usd: string }[];
 
+  // The verified claims on the main recall by where their latest payment stands, so the three counters above can be
+  // reconciled in one line (kpiReconcile in ./kpis): paid, waiting to be accepted, not paid yet, or on the way.
+  const [v] = (
+    await db().execute(sql`
+    select
+      count(*) filter (where (p.route = 'payout' and p.status = 'success') or (p.route = 'refund' and p.status = 'refunded'))::int as paid,
+      count(*) filter (where p.status in ('unclaimed', 'returned'))::int as waiting,
+      count(*) filter (where p.id is null)::int as unpaid,
+      count(*)::int as n
+    from claim c left join lateral (select id, status, route from payment x where x.claim_id = c.id order by x.id desc limit 1) p on true
+    where c.firm_id = ${firm.id} and c.recall_number = ${main.number} and ${notTest()}
+      and (c.decision = 'verified' and coalesce(c.review_outcome, '') not in ('retake', 'declined') or c.review_outcome = 'approved')`)
+  ).rows as { paid: number; waiting: number; unpaid: number; n: number }[];
+
   // Needs a person: firm-review claims nobody has decided, and payments that could not be sent.
   const [q] = (
     await db().execute(sql`
@@ -70,6 +84,7 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
     claimsVerified: c?.verified ?? 0,
     unitsCorrected: c?.units ?? 0,
     refundsPaid: { count: p?.n ?? 0, cents: Math.round(Number(p?.usd ?? 0) * 100) },
+    verifiedBy: { paid: v?.paid ?? 0, waiting: v?.waiting ?? 0, unpaid: v?.unpaid ?? 0, other: Math.max(0, (v?.n ?? 0) - (v?.paid ?? 0) - (v?.waiting ?? 0) - (v?.unpaid ?? 0)) },
     completionPercent: completion(c?.units ?? 0, main.units) ?? 0,
     needsReview: (q?.review ?? 0) + (q?.failed ?? 0),
     readyToPay: q?.ready ?? 0,

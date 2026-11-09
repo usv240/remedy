@@ -3,271 +3,271 @@
   "suites": {
     "claim": {
       "about": "The owner's claim: presets, a streamed claim, firm review, the firm's approval, a real sandbox payout at $1.25 and the receipt.",
-      "ranAt": "2026-11-09T14:02:21.625Z",
+      "ranAt": "2026-11-09T15:35:14.690Z",
       "base": "local production build",
-      "total_ms": 45862,
+      "total_ms": 47357,
       "passed": 23,
       "failed": 0,
       "ids": {
         "claim_ids": [
-          "4fd9f806-5be2-4b90-b22a-39ed6bc6a5d8",
-          "ca84db8b-db60-4afd-a8de-6e5cc1b6442f",
-          "60934d4a-c043-4745-ae45-0b78bae6fb58"
+          "462fcd40-a67c-452d-8ccf-5793e594c639",
+          "8a2ef491-bdf5-4301-a609-70c0132fd162",
+          "53a2c28a-267a-4642-883f-e767ae234317"
         ],
         "amount": "1.25",
         "route": "payout",
-        "payout_batch_id": "ASTALY92ZV7BW",
-        "payout_item_id": "9JZTG5ZC8TNXL",
+        "payout_batch_id": "8YGGCJG8P4AAJ",
+        "payout_item_id": "DVYAASAYXCMHE",
         "payout_status": "SUCCESS",
-        "approval_to_paid_s": 16
+        "approval_to_paid_s": 18
       },
       "steps": [
         {
           "step": "browser: the claim page checks a photo and shows the result",
           "ok": true,
-          "at_ms": 2620,
-          "detail": "Please send a photo of your own product. in 562 ms"
+          "at_ms": 2522,
+          "detail": "Please send a photo of your own product. in 703 ms"
         },
         {
           "step": "preset official-image: asks for the owner's own photo",
           "ok": true,
-          "at_ms": 3143,
+          "at_ms": 3114,
           "detail": "Please send a photo of your own product."
         },
         {
           "step": "preset official-image: own-photo check is the reason, and nothing is paid",
           "ok": true,
-          "at_ms": 3143,
+          "at_ms": 3114,
           "detail": ""
         },
         {
           "step": "preset blurry: a friendly retake from the quality precheck",
           "ok": true,
-          "at_ms": 3208,
+          "at_ms": 3236,
           "detail": "The photo is a bit blurry. Please take it again."
         },
         {
           "step": "presets list: the examples, each with its expected result, and the opened-charger photos with their recorded results",
           "ok": true,
-          "at_ms": 3218,
+          "at_ms": 3248,
           "detail": ""
         },
         {
           "step": "preset download is a JSON file",
           "ok": true,
-          "at_ms": 3258,
+          "at_ms": 3298,
           "detail": ""
         },
         {
           "step": "preset photo downloads",
           "ok": true,
-          "at_ms": 3263,
+          "at_ms": 3303,
           "detail": ""
         },
         {
           "step": "streamed claim: events arrive in order (claim, stage, result)",
           "ok": true,
-          "at_ms": 3373,
+          "at_ms": 3402,
           "detail": "claim,stage,result"
         },
         {
           "step": "streamed claim: the official picture gets the own-photo retake",
           "ok": true,
-          "at_ms": 3373,
+          "at_ms": 3403,
           "detail": "Please send a photo of your own product."
         },
         {
           "step": "a retake cannot be paid",
           "ok": true,
-          "at_ms": 3383,
-          "detail": "This claim needs a new photo before it can be paid. Request id: req_f7f7f133744b439ca8c7"
+          "at_ms": 3426,
+          "detail": "This claim needs a new photo before it can be paid. Request id: req_176645ece9be45e2aacc"
         },
         {
           "step": "claim with no live AI goes to firm review at the test amount",
           "ok": true,
-          "at_ms": 28688,
-          "detail": "4fd9f806-5be2-4b90-b22a-39ed6bc6a5d8 C1:unavailable C2:unavailable C3:unavailable C4:pass C5:pass C6:pass"
+          "at_ms": 28771,
+          "detail": "462fcd40-a67c-452d-8ccf-5793e594c639 C1:unavailable C2:unavailable C3:unavailable C4:pass C5:pass C6:pass"
         },
         {
           "step": "paying with no payee asks where to send it",
           "ok": true,
-          "at_ms": 28706,
-          "detail": "Add the email or phone number of your PayPal account, so we know where to send the refund. Request id: req_dbf4142155a74d3581c1"
+          "at_ms": 28789,
+          "detail": "Add the email or phone number of your PayPal account, so we know where to send the refund. Request id: req_42af5e699e124b97bc29"
         },
         {
           "step": "a short phone number is refused in plain words",
           "ok": true,
-          "at_ms": 28727,
-          "detail": "Please use a 10-digit US phone number. Request id: req_1b0cdd82a8c44f3daac9"
+          "at_ms": 28803,
+          "detail": "Please use a 10-digit US phone number. Request id: req_b94521608ac842c69669"
         },
         {
           "step": "firm review: the payee is kept and the payment waits for the firm",
           "ok": true,
-          "at_ms": 28782,
+          "at_ms": 28851,
           "detail": "A person at the recalling firm will approve this payment."
         },
         {
           "step": "the payee is shown masked, never in full",
           "ok": true,
-          "at_ms": 28782,
+          "at_ms": 28851,
           "detail": "<email>"
         },
         {
           "step": "paying again changes nothing",
           "ok": true,
-          "at_ms": 28801,
+          "at_ms": 28879,
           "detail": ""
         },
         {
           "step": "the test approval route does not exist without CHECKS_SECRET",
           "ok": true,
-          "at_ms": 28808,
+          "at_ms": 28886,
           "detail": ""
         },
         {
           "step": "the firm approves and the payout is sent",
           "ok": true,
-          "at_ms": 29277,
-          "detail": "On its way. PayPal is sending it now. ASTALY92ZV7BW"
+          "at_ms": 29497,
+          "detail": "On its way. PayPal is sending it now. 8YGGCJG8P4AAJ"
         },
         {
           "step": "PayPal reports the payout paid (polling, as the receipt does)",
           "ok": true,
-          "at_ms": 45720,
-          "detail": "16 s, SUCCESS, item 9JZTG5ZC8TNXL"
+          "at_ms": 47069,
+          "detail": "18 s, SUCCESS, item DVYAASAYXCMHE"
         },
         {
           "step": "the receipt says Paid $1.25, with the sandbox payout ID and the labels",
           "ok": true,
-          "at_ms": 45789,
+          "at_ms": 47228,
           "detail": ""
         },
         {
           "step": "the claim photo is served for the receipt",
           "ok": true,
-          "at_ms": 45806,
+          "at_ms": 47261,
           "detail": ""
         },
         {
           "step": "a malformed claim id is refused",
           "ok": true,
-          "at_ms": 45813,
+          "at_ms": 47277,
           "detail": ""
         },
         {
           "step": "routes carry rate-limit headers",
           "ok": true,
-          "at_ms": 45813,
+          "at_ms": 47277,
           "detail": ""
         }
       ]
     },
     "claim-shop": {
       "about": "Buy the sample charger in the PayPal sandbox, claim it with the sale linked, see it verified from the verify cache with no model call, and see the refund go back to the original capture.",
-      "ranAt": "2026-11-09T14:04:45.656Z",
+      "ranAt": "2026-11-09T15:36:03.038Z",
       "base": "local production build",
-      "total_ms": 15457,
+      "total_ms": 18192,
       "passed": 11,
       "failed": 0,
       "ids": {
-        "order_id": "89S06661GW414180C",
-        "capture_id": "9Y4561732K9565037",
+        "order_id": "3KD75824VL478142F",
+        "capture_id": "06U41100A4872301F",
         "sale_id": "4",
         "amount": "34.99",
         "claim_ids": [
-          "f78eb65b-1ee7-41d7-9b29-2b7369da18b8",
-          "6b5121cb-1588-4c07-b13f-392b656f1186"
+          "73aad3e2-053a-48e2-b30a-404f00614b7d",
+          "e9270eb8-e120-4079-a0bd-e44b47c37081"
         ],
         "route": "refund",
-        "refund_id": "05P20398D52399712",
+        "refund_id": "0GU50153E04298252",
         "refund_status": "COMPLETED",
-        "photo_to_verified_ms": 2185,
-        "photo_to_completed_ms": 5591
+        "photo_to_verified_ms": 2283,
+        "photo_to_completed_ms": 6315
       },
       "steps": [
         {
           "step": "sample shop order created",
           "ok": true,
-          "at_ms": 803,
-          "detail": "89S06661GW414180C"
+          "at_ms": 1311,
+          "detail": "3KD75824VL478142F"
         },
         {
           "step": "purchase captured and stored as a sale",
           "ok": true,
-          "at_ms": 9479,
-          "detail": "capture 9Y4561732K9565037, sale 4, $34.99"
+          "at_ms": 11345,
+          "detail": "capture 06U41100A4872301F, sale 4, $34.99"
         },
         {
           "step": "the claim links the purchase",
           "ok": true,
-          "at_ms": 11664,
-          "detail": "{\"item\":\"Brightline 65W laptop charger (sample)\",\"amount\":\"34.99\",\"status\":\"linked\",\"paid_at\":\"2026-11-09T14:04:54.000Z\",\"days_left\":179,\"refundable_until\":\"2027-05-08T14:04:54.000Z\"}"
+          "at_ms": 13628,
+          "detail": "{\"item\":\"Brightline 65W laptop charger (sample)\",\"amount\":\"34.99\",\"status\":\"linked\",\"paid_at\":\"2026-11-09T15:36:13.000Z\",\"days_left\":179,\"refundable_until\":\"2027-05-08T15:36:13.000Z\"}"
         },
         {
           "step": "verified: right charger, cord cut, own photo (answered by the verify cache, no Claude call)",
           "ok": true,
-          "at_ms": 11664,
-          "detail": "verified by reviewers; C1 unclear, C2 pass, C3 pass, C4 pass, C5 pass, C6 pass; 2185 ms; cache hit"
+          "at_ms": 13628,
+          "detail": "verified by reviewers; C1 unclear, C2 pass, C3 pass, C4 pass, C5 pass, C6 pass; 2283 ms; cache hit"
         },
         {
           "step": "C6 asks PayPal about the capture: no earlier refund or dispute",
           "ok": true,
-          "at_ms": 11665,
+          "at_ms": 13628,
           "detail": "capture COMPLETED, 34.99 USD; refunded at PayPal 0.00, by Remedy 0.00; disputes 0; order read through PayPal's MCP server (get_order)"
         },
         {
           "step": "the refund is the lower of the firm's $34.99 and the purchase",
           "ok": true,
-          "at_ms": 11665,
+          "at_ms": 13628,
           "detail": "34.99"
         },
         {
           "step": "no payee needed: the router picks a refund to the original capture",
           "ok": true,
-          "at_ms": 15070,
+          "at_ms": 17660,
           "detail": "You paid with PayPal today, so the refund goes back to that same payment."
         },
         {
           "step": "the firm's auto rule approves it ($34.99 is under the $50.00 cap) and the refund is sent, with no person",
           "ok": true,
-          "at_ms": 15070,
+          "at_ms": 17660,
           "detail": "sent: Refunded to the account they paid with."
         },
         {
           "step": "PayPal completes the refund to the capture",
           "ok": true,
-          "at_ms": 15070,
-          "detail": "refund 05P20398D52399712; photo to verified 2.2 s, photo to PayPal COMPLETED 5.6 s"
+          "at_ms": 17661,
+          "detail": "refund 0GU50153E04298252; photo to verified 2.3 s, photo to PayPal COMPLETED 6.3 s"
         },
         {
           "step": "the receipt says Refunded $34.99 to your PayPal payment",
           "ok": true,
-          "at_ms": 15112,
+          "at_ms": 17696,
           "detail": ""
         },
         {
           "step": "the same purchase cannot be linked to a second claim",
           "ok": true,
-          "at_ms": 15391,
+          "at_ms": 18097,
           "detail": "That purchase already has a claim, so this one is checked on its own."
         }
       ]
     },
     "try-payout": {
       "about": "The one-click sandbox payout on /try: the sample charger verified, Send $34.99 to the sandbox buyer, the receipt with PayPal's batch id, PayPal reporting it paid, and a second press shown the latest receipt.",
-      "ranAt": "2026-11-09T14:13:01.724Z",
+      "ranAt": "2026-11-09T15:42:18.805Z",
       "base": "local production build",
-      "total_ms": 32097,
+      "total_ms": 32092,
       "passed": 8,
       "failed": 0,
       "ids": {
         "claim_ids": [
-          "43839728-88ad-423d-923e-6121889cb7dd"
+          "6800c954-6218-4400-96eb-5fec53a44460"
         ],
         "amount": "34.99",
         "route": "payout",
-        "payout_batch_id": "4H3TW3TNRK2DW",
-        "payout_item_id": "CWYH6T5VUMGDS",
+        "payout_batch_id": "ALQDAZBY3M8WY",
+        "payout_item_id": "A5XF2P55S2PDE",
         "payout_status": "SUCCESS",
         "approval_to_paid_s": 18
       },
@@ -275,49 +275,49 @@
         {
           "step": "the first example is Brightline's sample charger, cord cut",
           "ok": true,
-          "at_ms": 1924,
+          "at_ms": 1729,
           "detail": ""
         },
         {
           "step": "the result opens full width below the examples, with focus on it",
           "ok": true,
-          "at_ms": 2222,
+          "at_ms": 2035,
           "detail": "1184 px against a 387 px card"
         },
         {
           "step": "once verified, the result offers the sandbox payout, labelled as one",
           "ok": true,
-          "at_ms": 2226,
+          "at_ms": 2039,
           "detail": ""
         },
         {
           "step": "PayPal accepted the payout: sent, $34.99, to the sandbox buyer, with a batch id",
           "ok": true,
-          "at_ms": 3006,
-          "detail": "On its way. PayPal is sending it now. batch 4H3TW3TNRK2DW"
+          "at_ms": 2873,
+          "detail": "On its way. PayPal is sending it now. batch ALQDAZBY3M8WY"
         },
         {
           "step": "the page opens the receipt",
           "ok": true,
-          "at_ms": 3060,
+          "at_ms": 2914,
           "detail": "the run opened its own claim's receipt; the recorded copy is /r/recorded"
         },
         {
           "step": "PayPal reports the payout paid",
           "ok": true,
-          "at_ms": 20380,
-          "detail": "18 s, SUCCESS, item CWYH6T5VUMGDS"
+          "at_ms": 19889,
+          "detail": "18 s, SUCCESS, item A5XF2P55S2PDE"
         },
         {
           "step": "the receipt shows the sandbox payout batch and the paid status",
           "ok": true,
-          "at_ms": 21301,
-          "detail": "Sandbox payout ID CWYH6T5VUMGDS, batch 4H3TW3TNRK2DW, PayPal status SUCCESS"
+          "at_ms": 20971,
+          "detail": "Sandbox payout ID A5XF2P55S2PDE, batch ALQDAZBY3M8WY, PayPal status SUCCESS"
         },
         {
           "step": "a second press the same day sends nothing and shows the most recent receipt",
           "ok": true,
-          "at_ms": 31630,
+          "at_ms": 31650,
           "detail": "You have sent today's sandbox payout from this page. Here is the most recent sandbox payout from this page."
         }
       ]
@@ -359,6 +359,18 @@
       "ranAt": "2026-11-09T14:13:01.724Z",
       "seconds": 18,
       "payout_batch_id": "4H3TW3TNRK2DW"
+    },
+    {
+      "suite": "claim",
+      "ranAt": "2026-11-09T15:35:14.690Z",
+      "seconds": 18,
+      "payout_batch_id": "8YGGCJG8P4AAJ"
+    },
+    {
+      "suite": "try-payout",
+      "ranAt": "2026-11-09T15:42:18.805Z",
+      "seconds": 18,
+      "payout_batch_id": "ALQDAZBY3M8WY"
     }
   ]
 }

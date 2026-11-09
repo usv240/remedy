@@ -83,9 +83,10 @@ function localOfficial(url: string): Buffer | undefined {
 
 /** An image file inside the repo (public/samples/...), read for a sample recall. Never a path outside it. */
 function sampleFile(rel: string | undefined): Buffer | undefined {
-  if (!rel) return undefined;
-  const full = path.resolve(ROOT, rel);
-  if (!full.startsWith(path.resolve(ROOT, "public") + path.sep)) return undefined;
+  if (!rel?.startsWith("public/")) return undefined;
+  // Scoped to public/ in the path itself, so the build traces that folder only, not the whole project.
+  const full = path.join(ROOT, "public", rel.slice("public/".length));
+  if (!full.startsWith(path.join(ROOT, "public") + path.sep)) return undefined;
   try {
     return readFileSync(full);
   } catch {

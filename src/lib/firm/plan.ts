@@ -81,31 +81,56 @@ export function noteFor(r: PlanRow): string {
   return SOURCE_NOTE[r.source];
 }
 
+/**
+ * The sample firm's seeded history repeats one task per day (a payout batch, and its follow-up thirty days on). Each
+ * set folds under one closed parent inside its group, so the plan reads as a plan: notices, live batches, re-notices
+ * and reports, with the history a press away. Matched by the seed's own refs (scripts/seed-firm.ts).
+ */
+export const SAMPLE_SETS: { id: string; group: string; ref: string; name: (n: number, refunds: number) => string }[] = [
+  { id: "g-payouts-sample", group: "g-payouts", ref: "sample-batch:", name: (n: number, refunds: number) => `Sample payout history: ${n} ${n === 1 ? "batch" : "batches"}, ${refunds} ${refunds === 1 ? "refund" : "refunds"}` },
+  { id: "g-follow-sample", group: "g-follow", ref: "sample-follow-up:", name: (n: number) => `Follow-up checks on the sample batches: ${n}` },
+];
+
+const groupTask = (id: string, name: string, children: GanttTask[], expanded: boolean): GanttTask => ({
+  id,
+  name,
+  startDate: [...children].sort((a, b) => a.startDate.localeCompare(b.startDate))[0].startDate,
+  duration: 1,
+  durationUnit: "day",
+  percentDone: 0,
+  kind: "group",
+  source: "group",
+  note: name,
+  readOnly: true,
+  expanded,
+  children,
+});
+
 /** plan_task rows to the Gantt's tree and dependency list. Groups that would be empty are left out. */
 export function toGantt(rows: PlanRow[], today: string): { tasks: GanttTask[]; dependencies: GanttDependency[] } {
   const byGroup = new Map<string, GanttTask[]>();
+  const bySet = new Map<string, { tasks: GanttTask[]; refunds: number }>();
   const roots: GanttTask[] = [];
   const ids = new Set(rows.map((r) => r.id));
   for (const r of rows) {
     const t = taskFor(r, today);
+    const set = SAMPLE_SETS.find((x) => r.ref?.startsWith(x.ref));
+    if (set) {
+      const cur = bySet.get(set.id) ?? { tasks: [], refunds: 0 };
+      const claims = (r.data as { claims?: unknown[] }).claims;
+      bySet.set(set.id, { tasks: [...cur.tasks, t], refunds: cur.refunds + (Array.isArray(claims) ? claims.length : 0) });
+      continue;
+    }
     const g = groupFor(r.kind);
     if (g) byGroup.set(g, [...(byGroup.get(g) ?? []), t]);
     else roots.push(t);
   }
-  const groups: GanttTask[] = GROUPS.filter((g) => byGroup.has(g.id)).map((g) => ({
-    id: g.id,
-    name: g.name,
-    startDate: byGroup.get(g.id)![0].startDate,
-    duration: 1,
-    durationUnit: "day",
-    percentDone: 0,
-    kind: "group",
-    source: "group",
-    note: g.name,
-    readOnly: true,
-    expanded: true,
-    children: byGroup.get(g.id)!,
-  }));
+  // Each folded history goes first in its group, before the tasks that are live or still to come.
+  for (const set of SAMPLE_SETS) {
+    const got = bySet.get(set.id);
+    if (got?.tasks.length) byGroup.set(set.group, [groupTask(set.id, set.name(got.tasks.length, got.refunds), got.tasks, false), ...(byGroup.get(set.group) ?? [])]);
+  }
+  const groups: GanttTask[] = GROUPS.filter((g) => byGroup.has(g.id)).map((g) => groupTask(g.id, g.name, byGroup.get(g.id)!, true));
   const dependencies: GanttDependency[] = [];
   for (const r of rows)
     for (const d of r.dependencies ?? [])

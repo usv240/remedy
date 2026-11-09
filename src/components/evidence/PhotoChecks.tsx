@@ -12,13 +12,16 @@ function decidedBy(r: RunRow): string {
   if (r.result.decided_by === "quality") parts.push("Photo quality");
   if (r.result.decided_by !== "own_photo" && c.C3?.status === "fail") parts.push("it matches a photo sent with an earlier claim");
   if (c.C1?.status === "fail") parts.push(`Right product, scored ${c.C1.score?.toFixed(2) ?? "low"}`);
-  if (c.C1?.status === "unclear") parts.push(`Right product unclear, scored ${c.C1.score?.toFixed(2) ?? ""}`);
+  // Unsure, then settled by the two reviewers: said as confirmed, with the photo check's own score beside it.
+  const settled = c.C1?.status === "unclear" && r.result.decided_by === "reviewers" && r.result.decision === "verified";
+  if (settled) parts.push(`Right product confirmed by the two reviewers (the photo check scored ${c.C1?.score?.toFixed(2) ?? ""}, under the pass mark)`);
+  else if (c.C1?.status === "unclear") parts.push(`Right product unclear, scored ${c.C1.score?.toFixed(2) ?? ""}`);
   if (c.C3?.status === "unclear") parts.push(`Your own photo unclear: Claude saw the CPSC's published picture`);
   if (c.C1?.status === "pass" && c.C3?.status === "unclear") parts.push(`right product ${c.C1.score?.toFixed(2) ?? ""}`);
   if (c.C2?.status === "pass" && c.C3?.status === "unclear") parts.push("made safe confirmed");
   if (r.result.decided_by === "made_safe" || c.C2?.status === "fail") parts.push("made safe not confirmed");
   if (r.result.decided_by === "person") parts.push("A person in the photo: asked for one of the product alone, and the photo deleted");
-  if (r.result.decided_by === "reviewers") parts.push("Two reviewers");
+  if (r.result.decided_by === "reviewers" && !settled) parts.push("Two reviewers");
   const s = parts.join("; ") || r.result.decided_by;
   return s.charAt(0).toUpperCase() + s.slice(1);
 }

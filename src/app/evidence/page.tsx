@@ -11,6 +11,7 @@ import { FraudDocket, Research } from "@/components/evidence/Research";
 import { PROBLEM } from "@/lib/research";
 import { LANDSCAPE } from "@/components/evidence/Compare";
 import { Contrast } from "@/components/evidence/Contrast";
+import { DocketReplay, docketReplay } from "@/components/evidence/Docket";
 import { Money, moneyHeadline } from "@/components/evidence/Money";
 import { Network } from "@/components/evidence/Network";
 import { HashPoolCall, HashPoolCallLive } from "@/components/evidence/HashPoolCall";
@@ -48,7 +49,7 @@ export const metadata: Metadata = { title: "Evidence", description: "Every numbe
 const PATH = [
   { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Try a photo, as on the home page: run Brightline's sample charger with its cord cut through the six checks and send its $34.99 refund as a real PayPal sandbox payout, or open a recorded receipt without sending one. In the sample shop, buy the charger, claim it with the sample photo, and watch the refund go back to the original PayPal purchase." },
   { href: "/#showcase", label: "Every recall, read as a checklist", time: "20 s", look: "On the home page, type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund." },
-  { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy (CPSC 27056), word for word, and the checklist Claude read from it, with how sure it is of each field. Switch Plain or Technical, top right, to Technical for the batch trace and the raw CPSC record." },
+  { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy (CPSC 27056), word for word, and the checklist Claude read from it, with how sure it is of each field. Press Switch to Technical, top right, for the batch trace and the raw CPSC record." },
   { href: "/firm", label: "The firm's side", time: "60 s", look: "Brightline Home, a fictional sample firm: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report." },
   { href: "/developers", label: "For developers and AI agents", time: "40 s", look: "A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim." },
   { href: "#results", label: "The numbers, and where they come from", time: "30 s", look: "The CPSC count, the extraction benchmark and the recorded photo checks, each with its source file." },
@@ -216,8 +217,13 @@ export default function EvidencePage() {
           </p>
         </Fold>
 
-        <Fold id="network" title="One photo, two firms" what={`A photo already claimed at one firm is held at the next before any model call; only a hash and a row id cross. ${poolLimits().sentence}`}>
+        <Fold
+          id="network"
+          title="One photo, two firms"
+          what={`A photo already claimed at one firm is held at the next before any model call; only a hash and a row id cross. In a replay of the docket's pattern, the pool held ${docketReplay().held} of ${docketReplay().claims} copies of one claimed photo. ${poolLimits().sentence}`}
+        >
           <Network />
+          <DocketReplay />
           <PoolLimits />
           <PoolTrust />
           <Suspense fallback={<HashPoolCall host={null} />}>

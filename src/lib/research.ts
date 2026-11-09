@@ -188,6 +188,7 @@ export const PROBLEM = {
   paypalPortal: {
     photos: "two",
     confirm: "48 to 72 hours",
+    fastest: "You will receive your refund fastest using PayPal",
     source: "Merkury Innovations, Hot + Cool fan recall page",
     short: "a firm's June 2026 recall page",
     date: "recall dated June 11, 2026; page read November 8, 2026",
@@ -196,6 +197,7 @@ export const PROBLEM = {
   /** A 2025 photo-refund page (steam cleaner, $39.99, cut cord and label photographed): "Please allow 4 to 6 weeks". */
   weeksPortal: {
     wait: "4 to 6 weeks",
+    quote: "Please allow 4 to 6 weeks",
     source: "Deale International, CasaClean steam cleaner recall page",
     short: "a 2025 photo-refund page",
     date: "July 17, 2025",
@@ -307,6 +309,34 @@ export const PROBLEM = {
     date: "July 2003",
     url: "https://www.cpsc.gov/s3fs-public/RecallEffectiveness.pdf",
   },
+} as const;
+
+/**
+ * How long a photo-refund claim takes to pay today, as each page already read here states it (each read November 8,
+ * 2026): a recall administrator's claim portal, a firm's own 2025 page, and a firm's 2026 page that pays by PayPal and
+ * states no time. Shown beside Remedy's measured payout, labelled as the sandbox (Contrast in
+ * src/components/evidence/Contrast.tsx). Only pages read and cited above; tests/facts.test.ts holds the table to them.
+ */
+export const PORTAL_WAITS = [
+  { id: "rtr", wait: RESEARCH.portal.days, says: `“${RESEARCH.portal.quote}”`, who: "Real Time Results, a recall administrator's claim portal (Cuisinart grill recall)", date: "read November 8, 2026", url: RESEARCH.portal.url },
+  { id: "deale", wait: PROBLEM.weeksPortal.wait, says: `“${PROBLEM.weeksPortal.quote}.”`, who: "Deale International's own recall page (CasaClean steam cleaner)", date: `dated ${PROBLEM.weeksPortal.date}, read November 8, 2026`, url: PROBLEM.weeksPortal.url },
+  {
+    id: "merkury",
+    wait: "No time stated",
+    says: `PayPal or a gift card: “${PROBLEM.paypalPortal.fastest}”, with an email confirmation in ${PROBLEM.paypalPortal.confirm}.`,
+    who: "Merkury Innovations' own recall page (Hot + Cool fan)",
+    date: PROBLEM.paypalPortal.date,
+    url: PROBLEM.paypalPortal.url,
+  },
+] as const;
+
+/**
+ * Two inferences, said plainly wherever their figures appear (the README and /evidence/market): neither is a
+ * measurement of Remedy. tests/facts.test.ts checks both places print them.
+ */
+export const INFERENCES = {
+  claims: "That a faster refund raises claims is an inference from the cited studies (a full remedy against a partial one; a simpler tax-credit notice), not a measurement of Remedy.",
+  unclaimed: "The unclaimed range is an inference: it applies rates measured across recalls to these recalls' dollars, not a count of unpaid refunds.",
 } as const;
 
 /**

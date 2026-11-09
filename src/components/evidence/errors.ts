@@ -114,12 +114,14 @@ export type Decided = {
   known: Known;
   /** The model said the photo was not the owner's own camera photo (the CPSC's published picture, a screen, a download). */
   notOwn: boolean;
+  /** False when code settled the decision before any model call (a public run that needed no vision). */
+  model: boolean;
 };
 
 type SweepFile = { ranAt: string; trials: number; configs: { id: string; model: string; effort?: string }[]; cases: { config: string; trial: number; case: string; decision: string; C3: string }[] };
 type PresetIndex = { presets: { id: string; recall: string; photo: string; expected: Expect; recorded?: string; technical?: { recorded: string; options: { officialHashCheck?: boolean } } }[] };
 type Recording = { recorded_at: string; decision: string; options?: { officialHashCheck?: boolean }; vision: { report: { photo_source?: { kind: string } } } | null };
-type RunsFile = { recordedAt: string; runs: { id: string; recall: string; photo: string; result: { decision: string; summary?: { technical: string }; checks: Record<string, { status: string }> } }[] };
+type RunsFile = { recordedAt: string; runs: { id: string; recall: string; photo: string; needs_vision?: boolean; result: { decision: string; summary?: { technical: string }; checks: Record<string, { status: string }> } }[] };
 
 export const SOURCES = {
   sweep: "content/verify/sweep-results.json",
@@ -150,7 +152,7 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
     const known = knownAnswer(byId.get(row.case)?.expect, byId.get(row.case)?.photo);
     if (!known && row.config === config && isOfficialReading(byId.get(row.case))) officialPicture.push({ caseId: row.case, decision: row.decision });
     if (!known) continue;
-    const d: Decided = { source: "sweep", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail" };
+    const d: Decided = { source: "sweep", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail", model: true };
     allConfigs.push(d);
     if (row.config === config) out.push(d);
   }
@@ -160,7 +162,7 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
   for (const row of sample?.cases ?? []) {
     if (row.config !== config) continue;
     const known = knownAnswer(byId.get(row.case)?.expect, byId.get(row.case)?.photo);
-    if (known) out.push({ source: "sample", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail" });
+    if (known) out.push({ source: "sample", caseId: row.case, trial: row.trial, decision: row.decision, known, notOwn: row.C3 === "unclear" || row.C3 === "fail", model: true });
   }
 
   const index = read<PresetIndex>("presets", "index.json");
@@ -178,7 +180,7 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
       if (!known && !own?.decision && isOfficialReading(c)) officialPicture.push({ caseId: c!.id, decision: rec.decision });
       if (!known) continue;
       const kind = rec.vision.report.photo_source?.kind;
-      out.push({ source: "preset", caseId: c?.id ?? p.id, trial: null, decision: rec.decision, known, notOwn: Boolean(kind && kind !== "camera_photo") });
+      out.push({ source: "preset", caseId: c?.id ?? p.id, trial: null, decision: rec.decision, known, notOwn: Boolean(kind && kind !== "camera_photo"), model: true });
     }
   }
 
@@ -192,7 +194,7 @@ export function decisions(config = CLAIM_PATH_CONFIG): { all: Decided[]; sweep: 
     if (c && !known && isOfficialReading(c)) officialPicture.push({ caseId: c.id, decision: r.result.decision });
     if (!c || !known) continue;
     const c3 = r.result.checks.C3?.status;
-    out.push({ source: "public", caseId: c.id, trial: null, decision: r.result.decision, known, notOwn: c3 === "unclear" || c3 === "fail" });
+    out.push({ source: "public", caseId: c.id, trial: null, decision: r.result.decision, known, notOwn: c3 === "unclear" || c3 === "fail", model: Boolean(r.needs_vision) });
   }
   return { all: out, sweep, sample, allConfigs, officialPicture };
 }
@@ -233,6 +235,12 @@ export function errorRates() {
     wrongPay,
     heldBack,
     decisions: all.length,
+    /**
+     * Who settled each decision: the model, or code before any model call. The ones code settled are the public runs
+     * that needed no vision, the same photos freeCaught() counts as stopped by code alone.
+     */
+    byModel: all.filter((d) => d.model).length,
+    inCode: all.filter((d) => !d.model).length,
     /** The recall's own published picture sent as a claim photo, with the official-picture match off: never paid is right. */
     officialPicture: { of: officialPicture.length, paid: officialPicture.filter((d) => d.decision === "verified").length, cases: new Set(officialPicture.map((d) => d.caseId)).size },
     photos: new Set(all.map((d) => d.caseId)).size,

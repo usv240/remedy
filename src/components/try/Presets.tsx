@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useId, useRef, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import type { ClaimView } from "@/app/api/claims/_lib/types";
 import type { RecordedSample } from "@/app/api/try/_lib/presets";
 import { Checking, type AnswerSource, type RecordedTimes } from "@/components/claim/Checking";
 import { ClaimInfo } from "@/components/claim/ClaimInfo";
 import { Result } from "@/components/claim/Result";
+import { Reviewers } from "@/components/claim/Reviewers";
 import { SandboxPay } from "./SandboxPay";
 
 export type PresetCard = {
@@ -92,7 +93,37 @@ function useSideBySide(list: RefObject<HTMLUListElement | null>) {
   return wide;
 }
 
-function PresetRow({ p, slot, open, onOpen }: { p: PresetCard; slot: HTMLElement | null; open: boolean; onOpen: (id: string) => void }) {
+/**
+ * What the AI did on a replayed run, in the Plain view, labelled as recorded: the photo check's own time and score,
+ * then each reviewer's answer and evidence and the referee's call, so a run with no AI key still shows the model's
+ * work. `timing` is how long a check takes across every recorded live run (checkTimeWords in errors.ts).
+ */
+function RecordedAi({ run, timing }: { run: Run; timing: string | null }) {
+  const hid = useId();
+  const ms = run.replay.ms_when_recorded;
+  const review = run.result.review;
+  if (!run.replay.used || !review || !ms) return null;
+  const c1 = run.result.checks.find((c) => c.id === "C1");
+  const s1 = (n: number) => `${(n / 1000).toFixed(1)} s`;
+  return (
+    <section className="tr-ai" aria-labelledby={hid}>
+      <p className="tr-ai-k" id={hid}>
+        <span className="pill" data-tone="info">
+          Recorded
+        </span>{" "}
+        What the AI did{run.replay.recorded_at ? `, on ${day(run.replay.recorded_at)}` : ""}
+      </p>
+      <p className="tr-ai-line tabular">
+        {(run.replay.model ?? "Claude").replace(/^claude-(opus|sonnet|haiku)-(\d+)-(\d+).*$/, (_m, f: string, a: string, b: string) => `Claude ${f.charAt(0).toUpperCase()}${f.slice(1)} ${a}.${b}`)} read the photo in {s1(ms.vision)}
+        {c1?.score !== null && c1?.score !== undefined ? ` and scored the right product ${c1.score.toFixed(2)}, under the 0.85 pass mark` : ""}, so the two reviewers looked closer, in {s1(ms.reviewers)}. Plain code then checked their evidence and the amount.
+        {timing ? ` Across the recorded live runs, a photo check takes ${timing}.` : ""}
+      </p>
+      <Reviewers review={review} />
+    </section>
+  );
+}
+
+function PresetRow({ p, slot, open, onOpen, timing }: { p: PresetCard; slot: HTMLElement | null; open: boolean; onOpen: (id: string) => void; timing: string | null }) {
   const [state, setState] = useState<"idle" | "running" | "done" | "error">("idle");
   const [run, setRun] = useState<Run | null>(null);
   const [tech, setTech] = useState<Run | null>(null);
@@ -148,6 +179,7 @@ function PresetRow({ p, slot, open, onOpen }: { p: PresetCard; slot: HTMLElement
           <div className="tr-out-answer">
             <Result claim={run.result} ctx={{ action: null, word: null, example: null }} preview previewNote={p.pay && run.result.decision === "verified" ? "Checked, and nothing is paid yet: send the refund below as a real PayPal sandbox payout." : undefined} />
             {p.pay && run.result.decision === "verified" && <SandboxPay amount={p.pay.amount} payee={p.pay.payee} />}
+            <RecordedAi run={run} timing={timing} />
             {vs && (
               <p className="tr-vs cl-tech" data-ok={vs.ok ? "" : undefined}>
                 {vs.line}
@@ -312,7 +344,7 @@ type Item = { kind: "preset"; p: PresetCard } | { kind: "recorded"; s: RecordedS
  * One group of examples. Side by side, a result opens full width under the group (one at a time, focus moved to it,
  * with a way back to its card); one card wide, it opens inside its card.
  */
-function ExampleList({ items }: { items: Item[] }) {
+function ExampleList({ items, timing }: { items: Item[]; timing: string | null }) {
   const list = useRef<HTMLUListElement>(null);
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
@@ -320,14 +352,14 @@ function ExampleList({ items }: { items: Item[] }) {
   return (
     <>
       <ul ref={list} className="tr-preset-list">
-        {items.map((it) => (it.kind === "preset" ? <PresetRow key={it.p.id} p={it.p} slot={wide ? slot : null} open={openId === it.p.id} onOpen={setOpenId} /> : <RecordedRow key={it.s.id} s={it.s} />))}
+        {items.map((it) => (it.kind === "preset" ? <PresetRow key={it.p.id} p={it.p} slot={wide ? slot : null} open={openId === it.p.id} onOpen={setOpenId} timing={timing} /> : <RecordedRow key={it.s.id} s={it.s} />))}
       </ul>
       <div ref={setSlot} className="tr-slot" />
     </>
   );
 }
 
-export function Presets({ madeSafe, recorded, others, user }: { madeSafe: PresetCard[]; recorded: RecordedSample[]; others: PresetCard[]; user: PresetCard[] }) {
+export function Presets({ madeSafe, recorded, others, user, timing = null }: { madeSafe: PresetCard[]; recorded: RecordedSample[]; others: PresetCard[]; user: PresetCard[]; timing?: string | null }) {
   const first: Item[] = [...madeSafe.map((p) => ({ kind: "preset" as const, p })), ...recorded.map((s) => ({ kind: "recorded" as const, s })), ...user.map((p) => ({ kind: "preset" as const, p }))];
   return (
     <div className="tr-presets">
@@ -339,10 +371,10 @@ export function Presets({ madeSafe, recorded, others, user }: { madeSafe: Preset
         One real charger, photographed before and after its cord was cut. Brightline Home&rsquo;s sample recall asks for the cord to be cut, so the cut cord is verified and its refund can be sent, while the charger opened up
         with its cord still attached is asked again.
       </p>
-      <ExampleList items={first} />
+      <ExampleList items={first} timing={timing} />
       <h3 className="tr-sub">Photos that are asked for again</h3>
       <p className="tr-sub-lede">A recall&rsquo;s own picture, a copy, a blurry photo, a look-alike or another product: each gets a kind answer saying what to send instead, and nothing is paid. Most run against the real CPSC recall 27056, the HAIARA power bank, with their recorded answers.</p>
-      <ExampleList items={others.map((p) => ({ kind: "preset" as const, p }))} />
+      <ExampleList items={others.map((p) => ({ kind: "preset" as const, p }))} timing={timing} />
     </div>
   );
 }

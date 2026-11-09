@@ -99,6 +99,27 @@
 }
 
 /* Ready-made examples */
+/* What the AI did on a replayed run: the photo check's time and score, then the two reviewers, labelled as recorded. */
+.tr-ai {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--edge);
+  display: grid;
+  gap: 8px;
+  font-family: var(--font-ui);
+}
+.tr-ai-k {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.tr-ai-line {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  max-width: 62ch;
+}
 .tr-live {
   margin-top: 10px;
   font-family: var(--font-ui);

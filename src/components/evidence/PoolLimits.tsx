@@ -16,9 +16,10 @@ export function poolLimits() {
   const past = run.phash.byKind.filter((k) => k.either < k.n).map((k) => run.byKind.find((b) => b.kind === k.kind)?.label.toLowerCase() ?? k.kind);
   const pastWords = past.length === 0 ? "no change gets past both" : `only ${past.length === 1 ? "the" : ""} ${past.join(" and ")} copies get past both`.replace(/\s+/g, " ");
   return {
-    sentence: `Measured on ${fmtInt(t.n)} reused copies of ${run.sources.length} photos: ${t.caught4} of ${t.n} caught at the ${across}-bit threshold used across firms, ${t.caught10} at ${within} bits, and ${f.within4} unrelated matches within ${across} bits.`,
-    /** The second hash beside the dHash, at the thresholds in use (src/lib/verify/phash.ts, PHASH_MAX_DISTANCE). */
-    second: `With the second hash beside it, at ${p.phashBits} bits, ${p.either.caught} of ${t.n} are caught across firms, with ${p.either.unrelated} unrelated matches; ${pastWords}.`,
+    /** The two hashes together lead, as the claim route uses them; the difference hash alone follows. */
+    sentence: `Measured on ${fmtInt(t.n)} reused copies of ${run.sources.length} photos: the two hashes together catch ${p.either.caught} of ${t.n} across firms, with ${p.either.unrelated} unrelated matches; the difference hash alone catches ${t.caught4} at its ${across}-bit threshold across firms (${t.caught10} at ${within} bits), with ${f.within4} unrelated matches.`,
+    /** What gets past both hashes at the thresholds in use (src/lib/verify/phash.ts, PHASH_MAX_DISTANCE). */
+    second: `${pastWords.charAt(0).toUpperCase()}${pastWords.slice(1)}.`,
     caught4: t.caught4,
     caught10: t.caught10,
     n: t.n,

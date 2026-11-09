@@ -28,7 +28,7 @@ The same steps are on `/evidence`, with a link to each page. The first is the sa
 |---|---|---|---|
 | 1 | [`/try`](https://remedy-y0ym.onrender.com/try) | 90 s | Run Brightline's sample charger with its cord cut through the six checks: verified. Or buy the charger in the sample shop, claim it with the sample photo, and watch the refund go back to the original PayPal purchase. A paid receipt without sending a payout: [`/r/recorded`](https://remedy-y0ym.onrender.com/r/recorded). |
 | 2 | [`/#showcase`](https://remedy-y0ym.onrender.com/#showcase) | 20 s | Type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund. |
-| 3 | [`/recalls/27056`](https://remedy-y0ym.onrender.com/recalls/27056) | 40 s | The power bank recall's official remedy, word for word, and the proof rule Claude read from it, with how sure it is of each field. Set **Plain or Technical** (top right) to Technical for the batch trace and the raw CPSC record. |
+| 3 | [`/recalls/27056`](https://remedy-y0ym.onrender.com/recalls/27056) | 40 s | The power bank recall's official remedy, word for word, and the proof rule Claude read from it, with how sure it is of each field. Press **Switch to Technical** (top right) for the batch trace and the raw CPSC record. |
 | 4 | [`/firm`](https://remedy-y0ym.onrender.com/firm) | 60 s | The firm's side: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report. |
 | 5 | [`/developers`](https://remedy-y0ym.onrender.com/developers) | 40 s | A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim. |
 | 6 | [`/evidence#results`](https://remedy-y0ym.onrender.com/evidence#results) | 30 s | The CPSC count, the extraction benchmark (draft labels) and the recorded photo checks, each with its source file. |
@@ -205,7 +205,7 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 578 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests, no network | `npm test` | 593 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |

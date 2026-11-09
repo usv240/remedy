@@ -1,13 +1,16 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { csvTemplate, noticeText, parseSales, publicLine } from "@/lib/firm/buyers";
-import { checkWords, confidence, passCount, REVIEWERS_LABEL, reviewersOutcome } from "@/lib/firm/checks";
-import { sampleDebate, sampleResult, SAMPLE_PLAN } from "@/lib/firm/sample-claims";
+import { checksLine, checkWords, confidence, passCount, REVIEWERS_LABEL, reviewersOutcome, shownCheck } from "@/lib/firm/checks";
+import { sampleChecks, sampleDebate, sampleResult, SAMPLE_PLAN } from "@/lib/firm/sample-claims";
 import { addMonths, daysBetween, nextReportDue, reportMonths, reportPeriod, whenWords } from "@/lib/firm/dates";
 import { fingerprint, narrativeProblems, promptFigures } from "@/lib/firm/narrative";
 import { basePlan, groupFor, MOVABLE, taskFor, toGantt, type PlanRow } from "@/lib/firm/plan";
 import { payFromDb, retakeMessage, stageOf } from "@/lib/firm/queue";
 import { buildReport, completion, formRows, reportCsv, strayFigures, templateNarrative, type ReportCounts } from "@/lib/firm/report";
 import { FIRM_INFO } from "@/lib/firm/info";
+import { kpiReconcile } from "@/lib/firm/kpis";
 
 const NOW = new Date("2026-11-05T20:00:00Z");
 
@@ -83,6 +86,41 @@ describe("checks as the grid shows them", () => {
       });
     }
     expect([...seen].sort()).toEqual(["Agreed", "Not needed", "Not settled"]);
+  });
+  it("an unsure Right product check that the two reviewers settled reads as confirmed by them, never Unsure", () => {
+    expect(shownCheck("C1", "unclear", "agreed")).toEqual({ word: "Confirmed by reviewers", tone: "positive", settled: true });
+    // Only the reviewers' recorded agreement settles it; held, disagreed or never reviewed stays Unsure.
+    for (const r of ["not_settled", "disagreed", "agreed_not", "not_needed"] as const) expect(shownCheck("C1", "unclear", r)).toEqual({ word: "Unsure", tone: "info", settled: false });
+    expect(shownCheck("C2", "unclear", "agreed").settled).toBe(false);
+    expect(shownCheck("C1", "pass", "agreed")).toEqual({ word: "Pass", tone: "positive", settled: false });
+    const words = checkWords({ C1: { status: "unclear" }, C2: { status: "pass" }, C3: { status: "pass" }, C4: { status: "pass" }, C5: { status: "pass" }, C6: { status: "pass" } } as never);
+    expect(checksLine(words, "agreed")).toBe("5 of 6 checks pass, C1 confirmed by reviewers");
+    expect(checksLine(words, "not_settled")).toBe("5 of 6 checks pass");
+    // Every sample claim, from its recorded run: a verified or paid claim with an unsure C1 shows it confirmed; a held one does not.
+    let confirmed = 0;
+    for (const p of SAMPLE_PLAN) {
+      p.at.forEach((_, i) => {
+        const w = checkWords(sampleChecks(p.kind, i) as never);
+        const result = sampleResult(p.kind, i) as { decided_by: string };
+        const debate = sampleDebate(p.kind, i) as { referee?: { decision: string; agreed: boolean } } | null;
+        const decision = p.kind === "paid" || p.kind === "unclaimed" ? "verified" : p.kind === "retake" ? "retake" : "firm_review";
+        const reviewers = reviewersOutcome({ decision, decidedBy: result.decided_by, refereeDecision: debate?.referee?.decision ?? null, refereeAgreed: debate?.referee?.agreed ?? null });
+        const c1 = shownCheck("C1", w.C1, reviewers);
+        if (decision === "verified" && w.C1 === "unclear") {
+          expect(c1.word).toBe("Confirmed by reviewers");
+          confirmed++;
+        }
+        if (decision !== "verified") expect(c1.word).not.toBe("Confirmed by reviewers");
+      });
+    }
+    expect(confirmed).toBeGreaterThan(0);
+  });
+  it("the grid, the phone card and the drawer all read the check through shownCheck", () => {
+    const src = (f: string) => readFileSync(path.join(process.cwd(), "src", "components", "firm", f), "utf8");
+    expect(src("ClaimsGrid.tsx")).toContain("shownCheck(id, p.data!.checks[id], p.data!.reviewers)");
+    expect(src("ClaimDrawer.tsx")).toContain("shownCheck(c.id, c.status, r.reviewers)");
+    expect(src("ClaimsQueue.tsx")).toContain("checksLine(r.checks, r.reviewers)");
+    for (const f of ["ClaimsGrid.tsx", "ClaimDrawer.tsx"]) expect(src(f)).not.toMatch(/WORD\[/);
   });
 });
 
@@ -217,6 +255,29 @@ describe("the corrective-action plan", () => {
       { id: "d1-4", fromTask: 1, toTask: 4, type: 2 },
     ]);
   });
+  it("the sample firm's repeated history folds under one closed parent in its group, so the plan reads as a plan", () => {
+    const seeded = (id: number, kind: PlanRow["kind"], ref: string, deps: number[] = [], data: Record<string, unknown> = {}): PlanRow => ({ ...row(id, kind, deps), ref, data });
+    const g = toGantt(
+      [
+        row(1, "announcement"),
+        seeded(2, "payout_batch", "sample-batch:BH-2026-01:2026-10-16", [], { claims: ["a"] }),
+        seeded(3, "payout_batch", "sample-batch:BH-2026-01:2026-10-20", [], { claims: ["b", "c"] }),
+        row(4, "payout_batch", [], "system"),
+        seeded(5, "follow_up", "sample-follow-up:BH-2026-01:2026-10-16", [2]),
+        row(6, "re_notice", [2], "webhook"),
+      ],
+      "2026-11-05",
+    );
+    const pay = g.tasks.find((t) => t.id === "g-payouts")!;
+    expect(pay.children!.map((t) => t.id)).toEqual(["g-payouts-sample", 4]);
+    expect(pay.children![0]).toMatchObject({ name: "Sample payout history: 2 batches, 3 refunds", kind: "group", expanded: false, readOnly: true });
+    expect(pay.children![0].children!.map((t) => t.id)).toEqual([2, 3]);
+    const follow = g.tasks.find((t) => t.id === "g-follow")!;
+    expect(follow.children!.map((t) => t.id)).toEqual(["g-follow-sample", 6]);
+    expect(follow.children![0]).toMatchObject({ name: "Follow-up checks on the sample batches: 1", expanded: false });
+    // Live tasks and re-notices stay in view; the dependencies still cross the fold.
+    expect(g.dependencies.map((d) => d.id)).toEqual(["d2-5", "d2-6"]);
+  });
   it("records keep their dates; plans can move", () => {
     expect(taskFor(row(2, "payout_batch"), "2026-11-05")).toMatchObject({ readOnly: true, manuallyScheduled: true });
     expect(taskFor(row(4, "report"), "2026-11-05")).toMatchObject({ readOnly: false, constraintType: "startnoearlierthan", constraintDate: "2026-11-05" });
@@ -267,5 +328,23 @@ describe("Info entries for the console", () => {
       expect(e.why, id).toBeTruthy();
       expect(JSON.stringify(e), id).not.toMatch(/—|\b(fraud|fake|scam)/i);
     }
+  });
+});
+
+describe("the console's counters, reconciled", () => {
+  it("one line from the same figures says what each counter counts and why they differ", () => {
+    const s = { claimsVerified: 30, unitsCorrected: 33, refundsPaid: { count: 25, cents: 87_475 }, verifiedBy: { paid: 25, waiting: 3, unpaid: 2, other: 0 } };
+    expect(kpiReconcile(s)).toBe("Of the 30 verified claims, 25 are paid, 3 were sent and wait to be accepted and 2 are not paid yet; together they cover 33 units, as a claim can cover more than one.");
+    // The parts add up to the verified claims, and the paid part is the refunds paid counter.
+    const v = s.verifiedBy;
+    expect(v.paid + v.waiting + v.unpaid + v.other).toBe(s.claimsVerified);
+    expect(v.paid).toBe(s.refundsPaid.count);
+    expect(kpiReconcile({ claimsVerified: 1, unitsCorrected: 1, refundsPaid: { count: 1, cents: 100 }, verifiedBy: { paid: 1, waiting: 0, unpaid: 0, other: 0 } })).toBe("Of the 1 verified claim, 1 is paid; together they cover 1 unit, one each.");
+    // A payment that landed on a claim no longer counted as verified is named, never hidden.
+    expect(kpiReconcile({ ...s, refundsPaid: { count: 26, cents: 0 } })).toContain("refunds paid counts every payment that landed on this recall, 26 in all");
+  });
+  it("the console prints it under the counters, and the home summary counts its parts in the same query family", () => {
+    expect(readFileSync(path.join(process.cwd(), "src", "app", "firm", "page.tsx"), "utf8")).toContain("{kpiReconcile(s)}");
+    expect(readFileSync(path.join(process.cwd(), "src", "lib", "firm", "home.ts"), "utf8")).toContain("verifiedBy: { paid:");
   });
 });

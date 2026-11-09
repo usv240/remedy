@@ -4,7 +4,7 @@ import { ClientSideRowModelModule, CsvExportModule, DateFilterModule, ModuleRegi
 import { ColumnMenuModule, LicenseManager, SetFilterModule, StatusBarModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
-import { CHECK_LABEL, CHECK_ORDER, REVIEWERS_LABEL, REVIEWERS_PLAIN, REVIEWERS_TONE, TONE, WORD } from "@/lib/firm/checks";
+import { CHECK_LABEL, CHECK_ORDER, REVIEWERS_LABEL, REVIEWERS_PLAIN, REVIEWERS_TONE, settledByReviewers, shownCheck } from "@/lib/firm/checks";
 import { STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
 import { AG_LICENSE_KEY, agGridEnterprise } from "./ag-license";
 import { remedyGridTheme } from "./agTheme";
@@ -73,6 +73,9 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
     };
   }, [handleRef]);
 
+  // A row whose unsure check the two reviewers settled names that in full ("C1 Confirmed by reviewers"), so the
+  // column makes room for it only when such a row is in the queue.
+  const wideChecks = useMemo(() => rows.some((r) => CHECK_ORDER.some((id) => settledByReviewers(id, r.checks[id], r.reviewers))), [rows]);
   const columns = useMemo<ColDef<QueueRow>[]>(
     () => [
       {
@@ -116,30 +119,34 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         headerName: "Checks",
         colId: "checks",
         headerTooltip: CHECK_ORDER.map((id) => `${id} ${CHECK_LABEL[id].long}`).join(", "),
-        width: 236,
+        width: wideChecks ? 348 : 236,
         sortable: false,
         filter: false,
-        valueGetter: (p) => (p.data ? CHECK_ORDER.map((id) => `${id} ${WORD[p.data!.checks[id]]}`).join(", ") : ""),
+        valueGetter: (p) => (p.data ? CHECK_ORDER.map((id) => `${id} ${shownCheck(id, p.data!.checks[id], p.data!.reviewers).word}`).join(", ") : ""),
         // Each chip names its check (C1 to C6) beside the word; the short name is in its tooltip and in the Technical
         // view's key above the grid.
         cellRenderer: (p: ICellRendererParams<QueueRow>) =>
           p.data ? (
             <span className="cq-checks" role="list" aria-label="The six checks">
-              {CHECK_ORDER.map((id) => (
-                <span
-                  key={id}
-                  role="listitem"
-                  className="cq-check"
-                  data-tone={TONE[p.data!.checks[id]]}
-                  title={`${id} ${CHECK_LABEL[id].short} (${CHECK_LABEL[id].long}): ${WORD[p.data!.checks[id]]}`}
-                  aria-label={`${id} ${CHECK_LABEL[id].long}: ${WORD[p.data!.checks[id]]}`}
-                >
-                  <span className="cq-check-id" aria-hidden="true">
-                    {id}
+              {CHECK_ORDER.map((id) => {
+                const c = shownCheck(id, p.data!.checks[id], p.data!.reviewers);
+                return (
+                  <span
+                    key={id}
+                    role="listitem"
+                    className="cq-check"
+                    data-tone={c.tone}
+                    data-settled={c.settled ? "" : undefined}
+                    title={`${id} ${CHECK_LABEL[id].short} (${CHECK_LABEL[id].long}): ${c.word}${c.settled ? ". The photo check's own score is in the claim, in the Technical view" : ""}`}
+                    aria-label={`${id} ${CHECK_LABEL[id].long}: ${c.word}`}
+                  >
+                    <span className="cq-check-id" aria-hidden="true">
+                      {id}
+                    </span>
+                    <span aria-hidden="true">{c.word}</span>
                   </span>
-                  <span aria-hidden="true">{WORD[p.data!.checks[id]]}</span>
-                </span>
-              ))}
+                );
+              })}
             </span>
           ) : null,
       },
@@ -231,7 +238,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         comparator: (a: string, b: string) => a.localeCompare(b),
       },
     ],
-    [onOpen],
+    [onOpen, wideChecks],
   );
 
   const onSelectionChanged = useCallback((e: SelectionChangedEvent<QueueRow>) => onSelection(e.api.getSelectedRows().map((r) => r.id)), [onSelection]);

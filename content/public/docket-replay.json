@@ -1,0 +1,5976 @@
+{
+  "note": "A replay of the pattern on the CPSC's 2026 docket on recall claims (one device filing over 400 claims, photos from the same vantage point), not of the real claims: one claimed sample photo, 400 copies made with the changes the reuse run measures, filed by turns at two fictional sample firms through the claim path's hash step with no model call, no network and no database. Recorded by scripts/public/docket-replay.ts; tests/docket-replay.test.ts checks it and runs the first claims again.",
+  "recordedAt": "2026-11-09T15:15:18.044Z",
+  "pattern": {
+    "source": "Truepic Inc., public comment CPSC-2026-0067-0010",
+    "url": "https://downloads.regulations.gov/CPSC-2026-0067-0010/attachment_1.pdf",
+    "date": "May 29, 2026",
+    "claims": "400",
+    "docket": "CPSC-2026-0067"
+  },
+  "photo": {
+    "file": "content/verify/fixtures/sample/cord-cut.jpg",
+    "credit": "Dmitry G, Wikimedia Commons, public domain (public/samples/charger/CREDITS.json)"
+  },
+  "first": {
+    "firm": "Brightline Home",
+    "recall": "BH-2026-01",
+    "dhash": "337bfb9f4e7f3e0f",
+    "phash": "d524aae40283d5ff"
+  },
+  "seed": 20138,
+  "changes": [
+    {
+      "kind": "jpeg-85",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 85"
+    },
+    {
+      "kind": "jpeg-60",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 60"
+    },
+    {
+      "kind": "jpeg-35",
+      "label": "Saved again as JPEG",
+      "parameters": "quality 35"
+    },
+    {
+      "kind": "resize-50",
+      "label": "Resized",
+      "parameters": "half the width"
+    },
+    {
+      "kind": "resize-25",
+      "label": "Resized",
+      "parameters": "a quarter of the width"
+    },
+    {
+      "kind": "crop-4",
+      "label": "Cropped",
+      "parameters": "4 percent off every edge"
+    },
+    {
+      "kind": "crop-10",
+      "label": "Cropped",
+      "parameters": "10 percent off every edge"
+    },
+    {
+      "kind": "rotate-2",
+      "label": "Turned",
+      "parameters": "2 degrees, white fill"
+    },
+    {
+      "kind": "rotate-5",
+      "label": "Turned",
+      "parameters": "5 degrees, white fill"
+    },
+    {
+      "kind": "bright-115",
+      "label": "Brightened",
+      "parameters": "15 percent lighter"
+    },
+    {
+      "kind": "bright-85",
+      "label": "Darkened",
+      "parameters": "15 percent darker"
+    },
+    {
+      "kind": "screenshot",
+      "label": "Phone screenshot",
+      "parameters": "fit to 1170 px on a 1170 by 2532 screen, 24 px bars"
+    },
+    {
+      "kind": "mirror",
+      "label": "Mirrored",
+      "parameters": "flipped left to right"
+    }
+  ],
+  "firms": [
+    {
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01"
+    },
+    {
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01"
+    }
+  ],
+  "totals": {
+    "claims": 400,
+    "held": 308,
+    "heldAcrossFirms": 1,
+    "heldSameRecall": 307,
+    "newPhotoAsked": 14,
+    "reachedModel": 78,
+    "reachedModelScreenshot": 78,
+    "newPhotoQuality": 9,
+    "paid": 0,
+    "byFirm": {
+      "Brightline Home": {
+        "claims": 200,
+        "held": 148
+      },
+      "Fernway Home": {
+        "claims": 200,
+        "held": 160
+      }
+    },
+    "medianMs": 55,
+    "poolEnd": 309
+  },
+  "model_calls": 0,
+  "rows": [
+    {
+      "n": 1,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 132
+    },
+    {
+      "n": 2,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "resize-25",
+        "crop-10"
+      ],
+      "decision": "retake",
+      "decided_by": "own_photo",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 38
+    },
+    {
+      "n": 3,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 85
+    },
+    {
+      "n": 4,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "screenshot",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 62
+    },
+    {
+      "n": 5,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "mirror",
+        "resize-50"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 46
+    },
+    {
+      "n": 6,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "another recall",
+      "ms": 55
+    },
+    {
+      "n": 7,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 8,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 34
+    },
+    {
+      "n": 9,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-35",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 46
+    },
+    {
+      "n": 10,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 11,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 100
+    },
+    {
+      "n": 12,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 13,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-10",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 14,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "resize-50",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 42
+    },
+    {
+      "n": 15,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 66
+    },
+    {
+      "n": 16,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "rotate-5",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 58
+    },
+    {
+      "n": 17,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 52
+    },
+    {
+      "n": 18,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-85",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 52
+    },
+    {
+      "n": 19,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-2",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 20,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 40
+    },
+    {
+      "n": 21,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 22,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-85",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 56
+    },
+    {
+      "n": 23,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 24,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-115",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 49
+    },
+    {
+      "n": 25,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 26,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "crop-10",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 36
+    },
+    {
+      "n": 27,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 67
+    },
+    {
+      "n": 28,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 46
+    },
+    {
+      "n": 29,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 91
+    },
+    {
+      "n": 30,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "bright-115",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 31,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "screenshot",
+        "crop-10"
+      ],
+      "decision": "retake",
+      "decided_by": "own_photo",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 58
+    },
+    {
+      "n": 32,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 84
+    },
+    {
+      "n": 33,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 90
+    },
+    {
+      "n": 34,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 35,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "jpeg-85",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 70
+    },
+    {
+      "n": 36,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 44
+    },
+    {
+      "n": 37,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "screenshot",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 75
+    },
+    {
+      "n": 38,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 36
+    },
+    {
+      "n": 39,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "jpeg-60",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 40,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 41,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 58
+    },
+    {
+      "n": 42,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "bright-85",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 42
+    },
+    {
+      "n": 43,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 90
+    },
+    {
+      "n": 44,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "rotate-2",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 82
+    },
+    {
+      "n": 45,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "mirror",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 71
+    },
+    {
+      "n": 46,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "rotate-2",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 47,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 69
+    },
+    {
+      "n": 48,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 49,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 52
+    },
+    {
+      "n": 50,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 51,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "bright-115",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 52,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "resize-50",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 39
+    },
+    {
+      "n": 53,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 54,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 55,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "mirror",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 90
+    },
+    {
+      "n": 56,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 61
+    },
+    {
+      "n": 57,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "crop-10",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 58,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-2",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 59,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "resize-25",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 60,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "crop-10",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 31
+    },
+    {
+      "n": 61,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "bright-115",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 99
+    },
+    {
+      "n": 62,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 42
+    },
+    {
+      "n": 63,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 93
+    },
+    {
+      "n": 64,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-50",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 42
+    },
+    {
+      "n": 65,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-85",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 66,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 67,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "rotate-2",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 68,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "rotate-5",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 69,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 91
+    },
+    {
+      "n": 70,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-60",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 83
+    },
+    {
+      "n": 71,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-4",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 99
+    },
+    {
+      "n": 72,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 73,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "resize-25",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 59
+    },
+    {
+      "n": 74,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 75,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 67
+    },
+    {
+      "n": 76,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "mirror",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 77,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 72
+    },
+    {
+      "n": 78,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-85",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 39
+    },
+    {
+      "n": 79,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-115",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 43
+    },
+    {
+      "n": 80,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 40
+    },
+    {
+      "n": 81,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 86
+    },
+    {
+      "n": 82,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-10",
+        "bright-115",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 83,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 78
+    },
+    {
+      "n": 84,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-85",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 85,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 58
+    },
+    {
+      "n": 86,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 87,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "bright-115",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 67
+    },
+    {
+      "n": 88,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 89,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "crop-4",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 72
+    },
+    {
+      "n": 90,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 91,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 74
+    },
+    {
+      "n": 92,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 93,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 67
+    },
+    {
+      "n": 94,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "jpeg-35",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 44
+    },
+    {
+      "n": 95,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "mirror",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 96,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "bright-115",
+        "resize-50"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 29
+    },
+    {
+      "n": 97,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-35",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 67
+    },
+    {
+      "n": 98,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "screenshot",
+        "crop-10"
+      ],
+      "decision": "retake",
+      "decided_by": "own_photo",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 55
+    },
+    {
+      "n": 99,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-85",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 67
+    },
+    {
+      "n": 100,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "jpeg-35",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 101,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "screenshot",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 67
+    },
+    {
+      "n": 102,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 103,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 84
+    },
+    {
+      "n": 104,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "crop-4",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 62
+    },
+    {
+      "n": 105,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "screenshot",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 57
+    },
+    {
+      "n": 106,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "mirror",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 107,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-4",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 97
+    },
+    {
+      "n": 108,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "jpeg-35",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 34
+    },
+    {
+      "n": 109,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-115",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 110,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-35",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 111,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "rotate-2",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 78
+    },
+    {
+      "n": 112,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 113,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 72
+    },
+    {
+      "n": 114,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-10",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 115,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 113
+    },
+    {
+      "n": 116,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 98
+    },
+    {
+      "n": 117,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 69
+    },
+    {
+      "n": 118,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "mirror",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 119,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 74
+    },
+    {
+      "n": 120,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 77
+    },
+    {
+      "n": 121,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 122,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "screenshot",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 56
+    },
+    {
+      "n": 123,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-25",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 124,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 38
+    },
+    {
+      "n": 125,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 61
+    },
+    {
+      "n": 126,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "resize-50",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 127,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "rotate-2",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 128,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 41
+    },
+    {
+      "n": 129,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "jpeg-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 130,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "rotate-5",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 70
+    },
+    {
+      "n": 131,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 65
+    },
+    {
+      "n": 132,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 56
+    },
+    {
+      "n": 133,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "jpeg-35",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 42
+    },
+    {
+      "n": 134,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "crop-10",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 135,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "crop-4",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 136,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "rotate-5",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 137,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 138,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 47
+    },
+    {
+      "n": 139,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "rotate-5",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 79
+    },
+    {
+      "n": 140,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-50",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 47
+    },
+    {
+      "n": 141,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "rotate-5",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 142,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-5",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 143,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 80
+    },
+    {
+      "n": 144,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "screenshot",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 54
+    },
+    {
+      "n": 145,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "bright-85",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 146,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "rotate-5",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 147,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "screenshot",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 60
+    },
+    {
+      "n": 148,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-60",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 52
+    },
+    {
+      "n": 149,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-115",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 69
+    },
+    {
+      "n": 150,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 151,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 94
+    },
+    {
+      "n": 152,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 153,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 43
+    },
+    {
+      "n": 154,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "jpeg-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 31
+    },
+    {
+      "n": 155,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "screenshot",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 64
+    },
+    {
+      "n": 156,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 157,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-85",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 158,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "mirror",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 159,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "resize-25"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 49
+    },
+    {
+      "n": 160,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-10",
+        "mirror",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 161,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "rotate-2",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 162,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-85",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 163,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "jpeg-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 164,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "bright-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 165,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 166,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 29
+    },
+    {
+      "n": 167,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 168,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 169,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-10",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 170,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "rotate-5",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 171,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 172,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 173,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "mirror",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 77
+    },
+    {
+      "n": 174,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 31
+    },
+    {
+      "n": 175,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "mirror",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 176,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 177,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 49
+    },
+    {
+      "n": 178,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 179,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 180,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 181,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-25",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 46
+    },
+    {
+      "n": 182,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 183,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "resize-50",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 184,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 47
+    },
+    {
+      "n": 185,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 56
+    },
+    {
+      "n": 186,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 187,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-50",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 90
+    },
+    {
+      "n": 188,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "resize-50",
+        "rotate-5"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 30
+    },
+    {
+      "n": 189,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "jpeg-60",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 190,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 191,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "resize-25",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 44
+    },
+    {
+      "n": 192,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 69
+    },
+    {
+      "n": 193,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "crop-10",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 52
+    },
+    {
+      "n": 194,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-60",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 38
+    },
+    {
+      "n": 195,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "crop-4",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 196,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 197,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "resize-50",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 198,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 199,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 71
+    },
+    {
+      "n": 200,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 201,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-85",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 202,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 61
+    },
+    {
+      "n": 203,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 204,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "screenshot",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 36
+    },
+    {
+      "n": 205,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "resize-25",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 46
+    },
+    {
+      "n": 206,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-5",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 207,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 44
+    },
+    {
+      "n": 208,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "resize-25",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 209,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "bright-85",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 82
+    },
+    {
+      "n": 210,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "bright-85",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 211,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 69
+    },
+    {
+      "n": 212,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "resize-25",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 36
+    },
+    {
+      "n": 213,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-35",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 66
+    },
+    {
+      "n": 214,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "resize-25",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 41
+    },
+    {
+      "n": 215,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 71
+    },
+    {
+      "n": 216,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "jpeg-85",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 47
+    },
+    {
+      "n": 217,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "crop-4",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 78
+    },
+    {
+      "n": 218,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 219,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "crop-10",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 220,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "crop-10",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 87
+    },
+    {
+      "n": 221,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-60",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 222,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-115",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 99
+    },
+    {
+      "n": 223,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-35",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 56
+    },
+    {
+      "n": 224,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 65
+    },
+    {
+      "n": 225,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 130
+    },
+    {
+      "n": 226,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "resize-25",
+        "bright-115"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 48
+    },
+    {
+      "n": 227,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "resize-25",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 73
+    },
+    {
+      "n": 228,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-4",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 92
+    },
+    {
+      "n": 229,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "resize-25",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 74
+    },
+    {
+      "n": 230,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 68
+    },
+    {
+      "n": 231,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "rotate-2",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 115
+    },
+    {
+      "n": 232,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "mirror",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 233,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 72
+    },
+    {
+      "n": 234,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "rotate-2",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 72
+    },
+    {
+      "n": 235,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 82
+    },
+    {
+      "n": 236,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "screenshot",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 52
+    },
+    {
+      "n": 237,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "bright-115",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 43
+    },
+    {
+      "n": 238,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 239,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 70
+    },
+    {
+      "n": 240,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 241,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 68
+    },
+    {
+      "n": 242,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 58
+    },
+    {
+      "n": 243,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 76
+    },
+    {
+      "n": 244,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 40
+    },
+    {
+      "n": 245,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "crop-10",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 98
+    },
+    {
+      "n": 246,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 247,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-10",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 248,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "resize-50"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 30
+    },
+    {
+      "n": 249,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "jpeg-85",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 250,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-60",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 251,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-115",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 66
+    },
+    {
+      "n": 252,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 85
+    },
+    {
+      "n": 253,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "crop-4",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 86
+    },
+    {
+      "n": 254,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "resize-50",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 255,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 53
+    },
+    {
+      "n": 256,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 38
+    },
+    {
+      "n": 257,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "crop-10",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 258,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "screenshot",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 46
+    },
+    {
+      "n": 259,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "jpeg-60",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 260,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "rotate-5",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 261,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "mirror",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 52
+    },
+    {
+      "n": 262,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "screenshot",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 58
+    },
+    {
+      "n": 263,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 264,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 61
+    },
+    {
+      "n": 265,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "crop-4",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 266,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "crop-4",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 267,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "bright-85",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 40
+    },
+    {
+      "n": 268,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 269,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-50",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 270,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "crop-10",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 271,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "rotate-2",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 272,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 52
+    },
+    {
+      "n": 273,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "bright-85",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 61
+    },
+    {
+      "n": 274,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "bright-115",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 275,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "resize-50",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 276,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "crop-10",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 69
+    },
+    {
+      "n": 277,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "resize-50",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 278,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "jpeg-60",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 58
+    },
+    {
+      "n": 279,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 75
+    },
+    {
+      "n": 280,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 44
+    },
+    {
+      "n": 281,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "mirror",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 48
+    },
+    {
+      "n": 282,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-4",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 43
+    },
+    {
+      "n": 283,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 284,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "screenshot",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 50
+    },
+    {
+      "n": 285,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "bright-115",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 75
+    },
+    {
+      "n": 286,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "crop-4",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 60
+    },
+    {
+      "n": 287,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "bright-85",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 288,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-10",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 38
+    },
+    {
+      "n": 289,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 290,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-10",
+        "screenshot",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 45
+    },
+    {
+      "n": 291,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-50",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 292,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-25",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 29
+    },
+    {
+      "n": 293,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 91
+    },
+    {
+      "n": 294,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "jpeg-85",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 295,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "bright-85",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 70
+    },
+    {
+      "n": 296,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "crop-10",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 74
+    },
+    {
+      "n": 297,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "resize-50",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 298,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "mirror",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 299,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "bright-115",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 300,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "crop-10",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 301,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-35",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 302,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-4",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 74
+    },
+    {
+      "n": 303,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "rotate-2",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 92
+    },
+    {
+      "n": 304,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-60",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 39
+    },
+    {
+      "n": 305,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "mirror",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 306,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 49
+    },
+    {
+      "n": 307,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "rotate-5",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 75
+    },
+    {
+      "n": 308,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "mirror",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 309,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 310,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "jpeg-35",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 311,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-35",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 62
+    },
+    {
+      "n": 312,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "crop-10",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 46
+    },
+    {
+      "n": 313,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "screenshot",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 51
+    },
+    {
+      "n": 314,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "bright-85",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 315,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 67
+    },
+    {
+      "n": 316,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "resize-25",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 32
+    },
+    {
+      "n": 317,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "resize-50",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 46
+    },
+    {
+      "n": 318,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-50",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 34
+    },
+    {
+      "n": 319,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 54
+    },
+    {
+      "n": 320,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "jpeg-35",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 46
+    },
+    {
+      "n": 321,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 54
+    },
+    {
+      "n": 322,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "bright-115",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 323,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 47
+    },
+    {
+      "n": 324,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "bright-115",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 37
+    },
+    {
+      "n": 325,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 326,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "jpeg-85",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 327,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-10",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 112
+    },
+    {
+      "n": 328,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "jpeg-35",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 329,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "jpeg-85",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 97
+    },
+    {
+      "n": 330,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "rotate-5",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 78
+    },
+    {
+      "n": 331,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "jpeg-60",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 332,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-60",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 69
+    },
+    {
+      "n": 333,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 334,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-85",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 39
+    },
+    {
+      "n": 335,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "resize-25",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 336,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "jpeg-60",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 337,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "mirror",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 67
+    },
+    {
+      "n": 338,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-35",
+        "crop-10",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 339,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 56
+    },
+    {
+      "n": 340,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 341,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "screenshot",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 57
+    },
+    {
+      "n": 342,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-85",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 61
+    },
+    {
+      "n": 343,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "bright-115",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 344,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "resize-50",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 73
+    },
+    {
+      "n": 345,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-25",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 47
+    },
+    {
+      "n": 346,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 43
+    },
+    {
+      "n": 347,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 65
+    },
+    {
+      "n": 348,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "screenshot",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 47
+    },
+    {
+      "n": 349,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "bright-115",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 350,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "rotate-5",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 41
+    },
+    {
+      "n": 351,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "crop-4",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 80
+    },
+    {
+      "n": 352,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "jpeg-35",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 45
+    },
+    {
+      "n": 353,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "mirror",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 87
+    },
+    {
+      "n": 354,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "crop-4",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 355,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-85",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 62
+    },
+    {
+      "n": 356,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-2",
+        "resize-50",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 39
+    },
+    {
+      "n": 357,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-50",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 358,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 56
+    },
+    {
+      "n": 359,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "resize-25",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 45
+    },
+    {
+      "n": 360,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "bright-85",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 37
+    },
+    {
+      "n": 361,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 65
+    },
+    {
+      "n": 362,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "rotate-2",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 86
+    },
+    {
+      "n": 363,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "rotate-5",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 364,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "crop-10",
+        "mirror"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 57
+    },
+    {
+      "n": 365,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 100
+    },
+    {
+      "n": 366,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 367,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 368,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "crop-10",
+        "resize-50"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 33
+    },
+    {
+      "n": 369,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "mirror",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 62
+    },
+    {
+      "n": 370,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "mirror",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 53
+    },
+    {
+      "n": 371,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-60",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 47
+    },
+    {
+      "n": 372,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "mirror",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 44
+    },
+    {
+      "n": 373,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "jpeg-60",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 81
+    },
+    {
+      "n": 374,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "resize-25",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 30
+    },
+    {
+      "n": 375,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-10",
+        "rotate-5",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 59
+    },
+    {
+      "n": 376,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-115",
+        "mirror",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 377,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-115",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 72
+    },
+    {
+      "n": 378,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "screenshot",
+        "bright-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 43
+    },
+    {
+      "n": 379,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-60",
+        "jpeg-35",
+        "screenshot"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 99
+    },
+    {
+      "n": 380,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "rotate-2",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 55
+    },
+    {
+      "n": 381,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "crop-4",
+        "bright-85",
+        "rotate-2"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 63
+    },
+    {
+      "n": 382,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "rotate-5",
+        "screenshot",
+        "crop-10"
+      ],
+      "decision": "retake",
+      "decided_by": "own_photo",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 45
+    },
+    {
+      "n": 383,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "mirror",
+        "jpeg-60",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 384,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "bright-85",
+        "jpeg-35"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 64
+    },
+    {
+      "n": 385,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-35",
+        "screenshot",
+        "crop-4"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 58
+    },
+    {
+      "n": 386,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "rotate-5",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 36
+    },
+    {
+      "n": 387,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "rotate-5",
+        "mirror",
+        "resize-25"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 48
+    },
+    {
+      "n": 388,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-10",
+        "jpeg-35",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 389,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "crop-4",
+        "resize-50"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 50
+    },
+    {
+      "n": 390,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-60",
+        "resize-50",
+        "jpeg-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 49
+    },
+    {
+      "n": 391,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "rotate-5",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 392,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "jpeg-85",
+        "crop-10"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 43
+    },
+    {
+      "n": 393,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "jpeg-85",
+        "mirror",
+        "bright-85"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 76
+    },
+    {
+      "n": 394,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "jpeg-85",
+        "screenshot",
+        "jpeg-60"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 62
+    },
+    {
+      "n": 395,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "screenshot",
+        "crop-10",
+        "rotate-2"
+      ],
+      "decision": "retake",
+      "decided_by": "own_photo",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 72
+    },
+    {
+      "n": 396,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-25",
+        "screenshot",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": true,
+      "held_by": null,
+      "ms": 48
+    },
+    {
+      "n": 397,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "bright-85",
+        "resize-25",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 51
+    },
+    {
+      "n": 398,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "crop-4",
+        "jpeg-35",
+        "bright-115"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 66
+    },
+    {
+      "n": 399,
+      "firm": "Brightline Home",
+      "recall": "BH-2026-01",
+      "steps": [
+        "resize-25",
+        "rotate-5"
+      ],
+      "decision": "firm_review",
+      "decided_by": "checks",
+      "reached_model": false,
+      "held_by": "same recall",
+      "ms": 50
+    },
+    {
+      "n": 400,
+      "firm": "Fernway Home",
+      "recall": "FW-2026-01",
+      "steps": [
+        "resize-50",
+        "mirror",
+        "resize-25"
+      ],
+      "decision": "retake",
+      "decided_by": "quality",
+      "reached_model": false,
+      "held_by": null,
+      "ms": 38
+    }
+  ]
+}

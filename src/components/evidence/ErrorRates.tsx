@@ -1,7 +1,7 @@
 import { Info } from "@/components/Info";
 import { fmtDate } from "@/lib/api/format";
 import Link from "next/link";
-import { errorRates, hashSpeed, heldBackStory, readingAccuracy, type ErrorRate } from "./errors";
+import { errorRates, freeCaught, hashSpeed, heldBackStory, readingAccuracy, type ErrorRate } from "./errors";
 
 const photos = (n: number) => (n === 1 ? "1 photo" : `${n} photos`);
 const times = (n: number) => (n === 1 ? "once" : n === 2 ? "twice" : `${n} times`);
@@ -27,6 +27,7 @@ function happened(r: ErrorRate): string {
  */
 export function ErrorRates({ folded = false }: { folded?: boolean } = {}) {
   const e = errorRates();
+  const fc = freeCaught();
   const hs = hashSpeed();
   const ra = readingAccuracy();
   const src = e.sources;
@@ -40,7 +41,7 @@ export function ErrorRates({ folded = false }: { folded?: boolean } = {}) {
           </h2>
         )}
         <p className="je-scope tabular">
-          Every recorded decision where the right answer is known: {e.decisions} decisions on {e.photos} photos, {e.decisions - n("public")} by the model and {n("public")} settled in code before any model call.
+          Every recorded decision where the right answer is known: {e.decisions} decisions on {e.photos} photos, {e.byModel} by the model and {e.inCode} settled in code before any model call: the same {fc.total} recorded runs as the photo checks&rsquo; {fc.caught} of {fc.total} stopped by code alone.
         </p>
       </div>
       <div className="je-item">

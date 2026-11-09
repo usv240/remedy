@@ -3,7 +3,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import stats from "../content/recalls/stats.json";
 import { explore } from "@/lib/api/explore";
-import { ENDPOINTS } from "@/lib/api/endpoints";
+import { ENDPOINTS, v1Index } from "@/lib/api/endpoints";
 import { fmtDate, fmtMs, fmtUnits, shortTitle } from "@/lib/api/format";
 import { openapi } from "@/lib/api/openapi";
 import { extractionTrace, filtersFrom, findRecalls, normalizeNumber, recallDetail, storedRule } from "@/lib/api/recall-data";
@@ -189,5 +189,22 @@ describe("the guided tour", () => {
       expect(s.text.length).toBeLessThan(220);
       expect(JSON.stringify(s)).not.toMatch(/—/);
     }
+  });
+});
+
+describe("GET /api/v1, the index of the v1 endpoints", () => {
+  it("lists every v1 endpoint from the same ENDPOINTS list the docs and the playground read, each with its docs link", () => {
+    const idx = v1Index("https://remedy.example");
+    const v1 = ENDPOINTS.filter((e) => e.path.startsWith("/api/v1/"));
+    expect(idx.endpoints.map((e) => [e.method, e.path])).toEqual(v1.map((e) => [e.method, e.path]));
+    expect(idx.endpoints.length).toBeGreaterThan(8);
+    for (const e of idx.endpoints) {
+      expect(e.docs).toBe(`https://remedy.example/developers/docs#${e.id}`);
+      expect(e.summary).toMatch(/^[A-Z].*\.$/);
+    }
+    expect(idx).toMatchObject({ docs: "https://remedy.example/developers/docs", openapi: "https://remedy.example/openapi.json", mcp: "https://remedy.example/api/mcp" });
+    // The route serves exactly this index, in the API's usual envelope.
+    const route = readFileSync(path.join(process.cwd(), "src", "app", "api", "v1", "route.ts"), "utf8");
+    expect(route).toContain("ok(v1Index(publicOrigin(req)), started)");
   });
 });

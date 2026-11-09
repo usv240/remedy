@@ -13,6 +13,7 @@ import { dbConfigured } from "@/lib/db";
 import { dayName, monthName, whenWords } from "@/lib/firm/dates";
 import { firmContext } from "@/lib/firm/firm";
 import { homeSummary } from "@/lib/firm/home";
+import { kpiReconcile } from "@/lib/firm/kpis";
 import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 import { fmtInt, fmtPct, fmtUsd } from "@/lib/firm/report";
 import { isSampleNumber, recallCredit, RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
@@ -87,6 +88,9 @@ async function Home() {
           <p className="firm-kpi-sub">{s.recall.daysSince === 1 ? "day" : "days"}</p>
         </div>
       </div>
+      <p className="firm-kpi-note tabular" data-testid="kpi-reconcile">
+        {kpiReconcile(s)}
+      </p>
 
       <div className="firm-tiles">
         <section className="firm-tile" aria-labelledby="t-review">

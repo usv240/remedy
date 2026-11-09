@@ -1,10 +1,19 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { verifyPhoto } from "@/lib/verify";
+import { setLogSink } from "@/lib/log";
 import { CATALOG_MAX_DISTANCE, catalogOfficialHashes, DUPLICATE_MAX_DISTANCE, hamming, otherRecallMatch, photoHashes } from "@/lib/verify/dhash";
 import { FIXTURES_DIR, fixtureFile, loadFixtureRecalls } from "@/lib/verify/fixtures";
+
+/** Deliberate fallbacks log a warning ("vision check did not finish"); read back here instead of printed. */
+const logged: { level: string; msg: string }[] = [];
+beforeEach(() => {
+  logged.length = 0;
+  setLogSink((level, line) => logged.push({ level, msg: (JSON.parse(line) as { msg: string }).msg }));
+});
+afterEach(() => setLogSink(null));
 
 const recalls = loadFixtureRecalls();
 const noModel = () => ({
@@ -60,6 +69,8 @@ describe("the match against every recall's published pictures", () => {
     const { recall, rule } = recalls["26754"];
     const r = await verifyPhoto({ photo: fixtureFile("official/26125-hair-dryer-cord-cut.png"), recall, proofRule: rule, options: { officialHashCheck: false } }, noModel());
     expect(r.decided_by).not.toBe("own_photo");
+    // With the match set aside the photo goes on to the model step, which this test leaves unanswered.
+    expect(logged).toContainEqual({ level: "warn", msg: "vision check did not finish" });
   });
 });
 

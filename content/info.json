@@ -1,6 +1,6 @@
 {
   "view.mode": {
-    "title": "Plain or Technical",
+    "title": "Plain and Technical views",
     "what": "Plain shows short explanations in everyday words. Technical adds the API calls, the checks behind each decision and the tools used.",
     "why": "Owners, firms and developers can read the same page at the level that suits them."
   },
@@ -462,7 +462,7 @@
     "title": "What the AI never decides",
     "what": "Claude reads the remedy and describes the photo. Whether to pay, how much, to whom and when are plain code.",
     "why": "The money path stays predictable and testable, and the model's part can be measured on its own.",
-    "technical": "The decision is decide() in src/lib/verify/decide.ts; pass marks are LIMITS in src/lib/verify/checks.ts; the amount is computeAmount() there; the route and approval are planPayment() in src/lib/payments/router.ts. Switch Plain or Technical (top right) to Technical to see the file for each line."
+    "technical": "The decision is decide() in src/lib/verify/decide.ts; pass marks are LIMITS in src/lib/verify/checks.ts; the amount is computeAmount() there; the route and approval are planPayment() in src/lib/payments/router.ts. Press Switch to Technical (top right) to see the file for each line."
   },
   "evidence.pilot": {
     "title": "The pilot",

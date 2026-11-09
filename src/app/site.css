@@ -73,6 +73,10 @@
   padding: 0.5rem 0.95rem;
   font-size: 1rem;
 }
+/* The settings button is square: after the shared padding above. */
+.header-actions .view-btn {
+  padding: 0;
+}
 .menu-btn {
   display: none;
 }
@@ -137,25 +141,85 @@
     display: inline-flex;
   }
 }
+/* The display settings: an icon button that opens the popover. */
 .view-btn {
+  width: 44px;
+  padding: 0;
+  justify-content: center;
+}
+/* The view switch: the view in use on a small line, the other view as the action under it. */
+.view-swap {
+  min-height: 44px;
+  padding: 0.3rem 0.85rem;
+  display: inline-grid;
+  justify-items: start;
+  align-content: center;
+  gap: 1px;
   white-space: nowrap;
+  text-align: left;
+  line-height: 1.15;
+}
+.view-now {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.view-act {
+  font-size: 0.9375rem;
+}
+.vm-tech {
+  display: none;
+}
+:root[data-mode="technical"] .vm-plain {
+  display: none;
+}
+:root[data-mode="technical"] .vm-tech {
+  display: inline;
+}
+/* The phone menu's display settings, under the links. */
+.mobile-display {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--edge);
+  display: grid;
+  gap: 14px;
+  font-family: var(--font-ui);
 }
 @media (max-width: 560px) {
   .header-cta {
     display: none;
   }
-  /* "Plain or Technical" stays on one line beside the wordmark and Menu on a phone. */
+  /* The view switch stays on the header beside the wordmark and Menu; the settings move into Menu. */
   .header-actions {
     gap: 0.4rem;
   }
-  .view-btn,
+  .view-btn {
+    display: none;
+  }
+  .view-swap,
   .menu-btn {
-    padding-inline: 0.7rem;
+    padding-inline: 0.65rem;
+  }
+  .menu-btn {
     font-size: 0.9375rem;
   }
 }
+/* The narrowest phones: the switch and Menu tighten so the header keeps to one line without scrolling sideways. */
+@media (max-width: 380px) {
+  .header-actions {
+    gap: 0.3rem;
+  }
+  .view-swap,
+  .menu-btn {
+    padding-inline: 0.5rem;
+  }
+  .view-act {
+    font-size: 0.875rem;
+  }
+}
 
-/* The Plain or Technical settings popover (floats, so it may cast a shadow). */
+/* The display settings popover (floats, so it may cast a shadow). */
 .view-pop {
   z-index: 70;
   width: min(340px, calc(100vw - 24px));

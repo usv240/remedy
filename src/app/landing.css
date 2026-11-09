@@ -435,16 +435,17 @@
   .intro-l2 {
     padding-left: 0;
   }
+  /* On a phone the heading sits whole above the photograph: no line runs onto it, so it reads at every width. */
   .intro-ink {
-    clip-path: inset(-0.2em calc(100% - 25vw + var(--margin)) -0.3em -1em);
+    clip-path: none;
   }
   .intro-ink-on {
-    clip-path: inset(-0.2em -1em -0.3em calc(25vw - var(--margin)));
+    display: none;
   }
-  /* The photograph is 75% of the width, flush right, and starts under the heading's first line. */
+  /* The photograph is 75% of the width, flush right, under the heading. */
   .intro-photo {
     width: 75vw;
-    margin: calc(-10vw * 1.04) calc(-1 * var(--margin)) 0 auto;
+    margin: 1rem calc(-1 * var(--margin)) 0 auto;
   }
   .intro-text {
     margin-top: 2rem;

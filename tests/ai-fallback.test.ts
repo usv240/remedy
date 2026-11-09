@@ -1,9 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
-// A fresh copy of the module for each test, so one test's pause never carries into the next.
+/** The log lines the fresh module wrote, read back here instead of printed: the pause is logged as an error by design. */
+let logged: { level: string; msg: string; status?: number }[] = [];
+
+// A fresh copy of the module for each test, so one test's pause never carries into the next. Its logger is fresh too,
+// and its lines go to `logged`, so a clean run prints no error line while each test can still read what was logged.
 async function load() {
   vi.resetModules();
+  const { setLogSink } = await import("@/lib/log");
+  logged = [];
+  setLogSink((level, line) => logged.push({ level, ...(JSON.parse(line) as { msg: string; status?: number }) }));
   return import("@/lib/ai/claude");
 }
 
@@ -32,6 +39,8 @@ describe("Claude errors fall back the way a missing key does", () => {
     expect(err).toBeInstanceOf(ai.AiUnavailableError);
     expect(ai.aiAvailable()).toBe(false);
     expect(ai.aiPaused()).toBe(true);
+    // The pause is logged once, as an error with the API's status, so the operator sees it on /ops.
+    expect(logged.filter((l) => l.level === "error")).toEqual([{ level: "error", msg: "Claude API turned the account away; AI features use their fallbacks for three minutes", status: 400, ts: expect.any(String) }]);
     vi.setSystemTime(Date.now() + 3 * 60_000 + 1);
     expect(ai.aiAvailable()).toBe(true);
   }, 120_000);
@@ -41,6 +50,7 @@ describe("Claude errors fall back the way a missing key does", () => {
     const ai = await load();
     ai.aiError(new Anthropic.AuthenticationError(401, { type: "error" }, "invalid x-api-key", new Headers()));
     expect(ai.aiAvailable()).toBe(false);
+    expect(logged.some((l) => l.level === "error" && l.status === 401 && /turned the account away/.test(l.msg))).toBe(true);
   });
 
   it("a busy or unreachable API falls back for that request only", async () => {
@@ -49,6 +59,8 @@ describe("Claude errors fall back the way a missing key does", () => {
     expect(ai.aiError(new Anthropic.InternalServerError(529, { type: "error" }, "Overloaded", new Headers()))).toBeInstanceOf(ai.AiUnavailableError);
     expect(ai.aiError(new Anthropic.APIConnectionError({ message: "socket hang up" }))).toBeInstanceOf(ai.AiUnavailableError);
     expect(ai.aiAvailable()).toBe(true);
+    // A busy API is not a pause: nothing is logged as an error.
+    expect(logged.filter((l) => l.level === "error")).toEqual([]);
   });
 
   it("any other error is passed on unchanged, so a real bug still shows", async () => {

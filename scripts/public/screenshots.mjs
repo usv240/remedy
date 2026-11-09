@@ -106,6 +106,25 @@ const shots = {
     await page.screenshot({ path: `${OUT}/10-proof-rule.png` });
     await ctx.close();
   },
+  // The README's top strip: an owner on a phone, the paid receipt, the firm's queue. Each is cropped below the header.
+  11: async () => {
+    const { page, ctx } = await open("/claim/27056", 390, 860);
+    await page.screenshot({ path: `${OUT}/strip-1-claim.png`, clip: { x: 0, y: 80, width: 390, height: 760 } });
+    await ctx.close();
+  },
+  12: async () => {
+    const { page, ctx } = await open("/r/recorded", 390, 860);
+    await page.screenshot({ path: `${OUT}/strip-2-receipt.png`, clip: { x: 0, y: 80, width: 390, height: 760 } });
+    await ctx.close();
+  },
+  13: async () => {
+    const { page, ctx } = await open("/firm/claims", 1440, 1000);
+    await page.waitForSelector(".ag-row", { timeout: 60_000 });
+    await page.waitForTimeout(500);
+    const box = await page.locator(".ag-root-wrapper").first().boundingBox();
+    await page.screenshot({ path: `${OUT}/strip-3-queue.png`, clip: { x: Math.round(box.x), y: Math.round(box.y), width: 880, height: 500 } });
+    await ctx.close();
+  },
 };
 
 for (const [n, take] of Object.entries(shots)) {

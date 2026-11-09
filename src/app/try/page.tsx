@@ -5,6 +5,7 @@ import { LIVE_PRESET, listPresets, readRecorded, recordedSamples } from "@/app/a
 import { AssistantRun } from "@/components/developers/McpSession";
 import { Info } from "@/components/Info";
 import { AnyRecall } from "@/components/try/AnyRecall";
+import { checkTimeWords } from "@/components/evidence/errors";
 import { Presets, type PresetCard } from "@/components/try/Presets";
 import { TryTabs } from "@/components/try/TryTabs";
 import { YourPhoto } from "@/components/try/YourPhoto";
@@ -56,7 +57,7 @@ export default async function TryPage() {
       </header>
       <TryTabs
         panels={{
-          examples: <Presets madeSafe={presets.filter((p) => p.group === "made-safe").map(card)} recorded={recordedSamples()} others={presets.filter((p) => p.group !== "made-safe").map(card)} user={user.map(card)} />,
+          examples: <Presets madeSafe={presets.filter((p) => p.group === "made-safe").map(card)} recorded={recordedSamples()} others={presets.filter((p) => p.group !== "made-safe").map(card)} user={user.map(card)} timing={checkTimeWords().short} />,
           "your-photo": <YourPhoto picks={demoPicks()} />,
           "any-recall": <AnyRecall />,
         }}

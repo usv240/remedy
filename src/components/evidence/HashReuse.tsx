@@ -23,8 +23,8 @@ export function HashReuse() {
     <div className="ev-reuse">
       <h3 className="ev-sub">The same hash against a reused photo</h3>
       <p className="page-prose tabular">
-        The {fmtInt(r.sources.length)} photos in the repo with a known answer, each put through {r.variants.length} changes a reuser makes, give {fmtInt(t.n)} copies. Against the source photo&rsquo;s stored hash, {fmtInt(t.caught10)} of {fmtInt(t.n)} are caught at{" "}
-        {same} bits (the same recall&rsquo;s earlier claims) and {fmtInt(t.caught4)} of {fmtInt(t.n)} at {other} bits (every other recall and firm). Against the {fmtInt(f.unrelatedRefs.catalog)} published pictures of other recalls and the other {f.unrelatedRefs.sources} photos, none of
+        The {fmtInt(r.sources.length)} photos in the repo with a known answer, each put through {r.variants.length} changes a reuser makes, give {fmtInt(t.n)} copies. With both hashes at the thresholds in use, {fmtInt(p.inUse.either.caught)} of {fmtInt(t.n)} are caught across firms, with {p.inUse.either.unrelated} unrelated matches. The difference hash alone, against the source photo&rsquo;s stored hash, catches{" "}
+        {fmtInt(t.caught4)} of {fmtInt(t.n)} at {other} bits (every other recall and firm) and {fmtInt(t.caught10)} at {same} bits (the same recall&rsquo;s earlier claims). Against the {fmtInt(f.unrelatedRefs.catalog)} published pictures of other recalls and the other {f.unrelatedRefs.sources} photos, none of
         the {fmtInt(f.of)} copies comes within {other} bits of a picture it is not a copy of ({f.within4} of {fmtInt(f.of)}); {f.within10} come within {same}, which is why that wider threshold is used only within one recall. The nearest unrelated picture is {f.nearestUnrelatedMin} bits away.
       </p>
       <h3 className="ev-sub">A second hash for crops and turns</h3>

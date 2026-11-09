@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { CHECK_LABEL, CHECK_ORDER, passCount, REVIEWERS_LABEL, REVIEWERS_PLAIN } from "@/lib/firm/checks";
+import { CHECK_LABEL, CHECK_ORDER, checksLine, passCount, REVIEWERS_LABEL, REVIEWERS_PLAIN } from "@/lib/firm/checks";
 import { SAMPLE_REVIEWER, STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
 import { ClaimDrawer } from "./ClaimDrawer";
 import type { GridHandle } from "./ClaimsGrid";
@@ -321,7 +321,7 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
                   {r.sample ? ", sample" : ""}
                 </p>
                 <p className="cq-card-meta">
-                  {passCount(r.checks)} of 6 checks pass. {TIME.format(new Date(r.submittedAt))}
+                  {checksLine(r.checks, r.reviewers)}. {TIME.format(new Date(r.submittedAt))}
                 </p>
                 {r.reviewers !== "not_needed" && <p className="cq-card-meta">Reviewers: {REVIEWERS_PLAIN[r.reviewers]}</p>}
               </div>

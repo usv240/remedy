@@ -91,3 +91,56 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* The same rows as a small table: the portals' stated waits, each with its source and date, then Remedy's. */
+table.vs-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+.vs-cap {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: 8px;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.vs-table .vs-row {
+  display: table-row;
+}
+.vs-table .vs-row > th,
+.vs-table .vs-row > td {
+  padding: 12px 0;
+  border-top: 1px solid var(--edge);
+  vertical-align: baseline;
+  text-align: left;
+}
+.vs-table .vs-row > th {
+  width: 11.5rem;
+  padding-right: 20px;
+  font-weight: 300;
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.6rem);
+}
+.vs-table .vs-row[data-rm] > th,
+.vs-table .vs-row[data-rm] > td {
+  border-top: 2px solid var(--ink);
+}
+.vs-table .vs-what {
+  font-size: 0.9375rem;
+}
+.vs-table .vs-row:not([data-rm]) .vs-what {
+  font-size: 0.875rem;
+}
+@media (max-width: 760px) {
+  .vs-table .vs-row > th,
+  .vs-table .vs-row > td {
+    display: block;
+    width: auto;
+    padding-right: 0;
+  }
+  .vs-table .vs-row > td,
+  .vs-table .vs-row[data-rm] > td {
+    border-top: 0;
+    padding-top: 2px;
+  }
+}

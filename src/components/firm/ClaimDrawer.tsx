@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { TONE, WORD } from "@/lib/firm/checks";
+import { shownCheck } from "@/lib/firm/checks";
 import { isSampleNumber, recallLabel } from "@/lib/recall/label";
 import { SAMPLE_REVIEWER, STAGE_LABEL, STAGE_TONE, type ClaimDetail } from "@/lib/firm/types";
 import { CopyButton } from "@/components/developers/CopyButton";
@@ -210,23 +210,30 @@ export function ClaimDrawer({
                   The checks <FirmInfo id="firm.checks" label="" />
                 </h3>
                 <ul className="cq-check-list">
-                  {detail.checks.map((c) => (
-                    <li key={c.id}>
-                      <span className="cq-check" data-tone={TONE[c.status]}>
-                        {WORD[c.status]}
-                      </span>
-                      <span>
-                        <span className="cq-check-name">{c.name}.</span> {c.plain}
-                        {c.technical && (
-                          <span className="tech">
-                            {" "}
-                            {c.id}
-                            {c.score !== null ? `, score ${c.score.toFixed(2)}` : ""}: {c.technical}
-                          </span>
-                        )}
-                      </span>
-                    </li>
-                  ))}
+                  {detail.checks.map((c) => {
+                    // An unsure check the two reviewers settled reads as confirmed; the photo check's own reading and
+                    // score stay one switch away, in the Technical view.
+                    const w = shownCheck(c.id, c.status, r.reviewers);
+                    return (
+                      <li key={c.id}>
+                        <span className="cq-check" data-tone={w.tone} data-settled={w.settled ? "" : undefined}>
+                          {w.word}
+                        </span>
+                        <span>
+                          <span className="cq-check-name">{c.name}.</span> {w.settled ? "The two reviewers looked closer and confirmed it, each citing what it saw in the photo." : c.plain}
+                          {(c.technical || w.settled) && (
+                            <span className="tech">
+                              {" "}
+                              {c.id}
+                              {c.score !== null ? `, score ${c.score.toFixed(2)}` : ""}
+                              {w.settled ? `, under the pass mark, so the two reviewers looked; the photo check said: ${c.plain}` : ""}
+                              {c.technical ? `: ${c.technical}` : ""}
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
 

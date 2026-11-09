@@ -16,6 +16,7 @@ import { PROBLEM, REFUND_TIMING, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
 import { checkTimeWords, errorRates } from "@/components/evidence/errors";
 import { Contrast } from "@/components/evidence/Contrast";
+import { docketWords } from "@/components/evidence/Docket";
 import { moneyHeadline } from "@/components/evidence/Money";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
 import { findRecalls, recallByNumber, storedRule } from "@/lib/api/recall-data";
@@ -54,28 +55,30 @@ const STEPS = [
 ];
 
 /**
- * The three ideas that open how it works, each with the page that shows it running. Figures are read from the code
- * and the data: the catalog of distinct published pictures, the measured official-picture answer, the refund window.
+ * The three ideas that open how it works, each with the page that shows it running: what is new leads (the pool across
+ * firms, with the docket replay's figure, and the payout nobody accepts turned into a task), then how the refund is
+ * paid. Figures are read from the code and the data: the replay (content/public/docket-replay.json), the catalog of
+ * distinct published pictures, the refund window.
  */
 function ideas() {
   return [
     {
       line: "Each firm that joins makes every other firm safer.",
-      note: `Every claim photo is matched by two 64-bit hashes against the ${fmtInt(catalogOfficialHashes().length)} pictures published with every recall and every photo already claimed at any firm, before any model call. Firms share only hashes, never a photo.`,
+      note: `${docketWords()} Every claim photo is matched by two 64-bit hashes against the ${fmtInt(catalogOfficialHashes().length)} pictures published with every recall and every photo already claimed at any firm, before any model call. Firms share only hashes, never a photo.`,
       href: "/evidence#network",
       see: "One photo, two firms",
-    },
-    {
-      line: "The refund goes back the way it was paid.",
-      note: `Inside PayPal's ${REFUND_WINDOW_DAYS}-day refund window, Remedy refunds the original PayPal purchase. After it, a PayPal payout to an email or phone, or Venmo. Plain code picks the route and the amount.`,
-      href: "/try/shop",
-      see: "Buy, claim and get it back",
     },
     {
       line: "A payout nobody accepts becomes a task.",
       note: "When PayPal's webhook says a payout is waiting to be accepted, a re-notice appears in the firm's recall plan, live and linked to its payout batch, so the refund still reaches its owner.",
       href: "/firm/plan",
       see: "The recall plan",
+    },
+    {
+      line: "The refund goes back the way it was paid.",
+      note: `Inside PayPal's ${REFUND_WINDOW_DAYS}-day refund window, Remedy refunds the original PayPal purchase. After it, a PayPal payout to an email or phone, or Venmo. Plain code picks the route and the amount.`,
+      href: "/try/shop",
+      see: "Buy, claim and get it back",
     },
   ];
 }
@@ -433,7 +436,8 @@ export default async function Home() {
           <ol className="ideas-list">
             {ideas().map((d, i) => (
               <li key={d.line} className="ideas-item" data-reveal="" style={{ "--reveal-i": i } as React.CSSProperties}>
-                <details className="ideas-more">
+                {/* The first idea opens with the page: the pool across firms and the docket replay's figure lead. */}
+                <details className="ideas-more" open={i === 0}>
                   <summary className="ideas-line">{d.line}</summary>
                   <p className="ideas-note">
                     {d.note}{" "}

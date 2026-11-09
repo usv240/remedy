@@ -1,5 +1,5 @@
 import { measured, payoutTiming } from "@/lib/payout-timing";
-import { RESEARCH, REFUND_TIMING } from "@/lib/research";
+import { PORTAL_WAITS, RESEARCH, REFUND_TIMING } from "@/lib/research";
 
 /**
  * The measured contrast the impact story leads with: how a claim portal states its refund timing on its own page
@@ -21,28 +21,46 @@ export function speedContrast() {
   };
 }
 
-/** Two lines, the same shape: what a claim portal states today, and what Remedy measured. */
+/**
+ * A small table of how long a photo-refund takes today, as each page already read states it (PORTAL_WAITS in
+ * src/lib/research.ts, each with its source and date), then Remedy's payout as measured, labelled as the sandbox.
+ */
 export function Contrast({ className = "vs" }: { className?: string }) {
   const c = speedContrast();
   if (!c.payout) return null;
   return (
-    <dl className={className}>
-      <div className="vs-row">
-        <dt className="vs-fig tabular">{c.portal.days}</dt>
-        <dd className="vs-what">
-          A claim portal&rsquo;s refund today: {c.portal.how}, as{" "}
-          <a className="text-link" href={c.portal.url} target="_blank" rel="noreferrer">
-            {c.portal.short}
-          </a>{" "}
-          states it.
-        </dd>
-      </div>
-      <div className="vs-row" data-rm="">
-        <dt className="vs-fig tabular">{c.payout.figure}</dt>
-        <dd className="vs-what">
-          {`Remedy’s refund: from approval to a PayPal payout reaching the owner, measured in the ${c.environment}${c.payout.runs ? ` (${c.payout.runs} runs)` : ""}.${c.refundAtOnce ? ` ${REFUND_TIMING.marked}; ${REFUND_TIMING.reach}.` : ""}`}
-        </dd>
-      </div>
-    </dl>
+    <table className={`${className} vs-table`}>
+      <caption className="vs-cap">How long a photo refund takes: as each page states it, and Remedy as measured in the {c.environment}</caption>
+      <thead className="sr-only">
+        <tr>
+          <th scope="col">Wait</th>
+          <th scope="col">What the page says, whose page, and when</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PORTAL_WAITS.map((w) => (
+          <tr key={w.id} className="vs-row">
+            <th scope="row" className="vs-fig tabular">
+              {w.wait}
+            </th>
+            <td className="vs-what">
+              {w.says}{" "}
+              <a className="text-link" href={w.url} target="_blank" rel="noreferrer">
+                {w.who}
+              </a>
+              , {w.date}.
+            </td>
+          </tr>
+        ))}
+        <tr className="vs-row" data-rm="">
+          <th scope="row" className="vs-fig tabular">
+            {c.payout.figure}
+          </th>
+          <td className="vs-what">
+            {`Remedy, in the ${c.environment}: from approval to a PayPal payout reaching the owner${c.payout.runs ? `, ${c.payout.runs} runs` : ""}.${c.refundAtOnce ? ` ${REFUND_TIMING.marked}; ${REFUND_TIMING.reach}.` : ""}`}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 }

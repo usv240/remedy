@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { ViewMenu } from "./ViewMenu";
+import { DisplaySettings, ViewMenu } from "./ViewMenu";
 
 /** Five links, then the one action. "Try a photo" is the button beside them, so it is not repeated as a link. */
 const LINKS = [
@@ -97,6 +97,10 @@ function HeaderBar({ path }: { path: string | null }) {
               {CTA.label}
             </Link>
           </nav>
+          {/* On a phone the display settings live here; the header keeps the view switch. */}
+          <section className="mobile-display" aria-label="Display settings">
+            <DisplaySettings scope="menu" />
+          </section>
         </div>
       )}
     </header>

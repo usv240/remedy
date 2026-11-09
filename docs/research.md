@@ -4,7 +4,7 @@ Part of the [Remedy README](../README.md). The published findings Remedy is buil
 
 ## The measured contrast
 
-A recall claim portal today states its refund timing on its own page: "Once your registration is confirmed, your refund will be issued via check within 10-15 business days" ([Real Time Results, Cuisinart grill recall portal](https://www.recallrtr.com/SiteResources/3in1grill/locales/en/translation.json), read November 8, 2026). Remedy's PayPal payout reached the owner 16 to 19 seconds after approval, in 10 PayPal sandbox runs, and PayPal marked a refund to the original PayPal purchase COMPLETED at once; PayPal says a refund takes 3 to 5 business days to reach the buyer ([`content/public/measured.json`](../content/public/measured.json)). The research below is why that speed, and a claim that asks for one photo, can move more recalled products out of homes.
+A recall claim portal today states its refund timing on its own page: "Once your registration is confirmed, your refund will be issued via check within 10-15 business days" ([Real Time Results, Cuisinart grill recall portal](https://www.recallrtr.com/SiteResources/3in1grill/locales/en/translation.json), read November 8, 2026). Remedy's PayPal payout reached the owner 16 to 19 seconds after approval, in 12 PayPal sandbox runs, and PayPal marked a refund to the original PayPal purchase COMPLETED at once; PayPal says a refund takes 3 to 5 business days to reach the buyer ([`content/public/measured.json`](../content/public/measured.json)). The research below is why that speed, and a claim that asks for one photo, can move more recalled products out of homes.
 
 ## The findings
 

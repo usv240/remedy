@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { setLogSink } from "@/lib/log";
 import { dhash, referee, verifyPhoto, VISION_UNAVAILABLE, type VerifyInput } from "@/lib/verify";
 import { fixtureFile, loadFixtureCases, loadFixtureRecalls, meetsExpectation } from "@/lib/verify/fixtures";
 import type { ReviewInput, ReviewRun } from "@/lib/verify/reviewers";
@@ -205,9 +206,13 @@ describe("with no Claude key", () => {
     const vision = vi.fn(async () => {
       throw new Error("The AI service is busy just now.");
     });
-    const r = await verifyPhoto(base(), { ...live, vision });
+    // The error is logged as a warning by design; read it back here instead of printing it.
+    const logged: { level: string; msg: string }[] = [];
+    setLogSink((level, line) => logged.push({ level, msg: (JSON.parse(line) as { msg: string }).msg }));
+    const r = await verifyPhoto(base(), { ...live, vision }).finally(() => setLogSink(null));
     expect(r.decision).toBe("firm_review");
     expect(r.checks.C1.status).toBe("unavailable");
+    expect(logged).toEqual([{ level: "warn", msg: "vision check did not finish" }]);
   });
 });
 

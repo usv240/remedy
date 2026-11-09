@@ -334,3 +334,27 @@ export const ERRORS = [
 
 /** The MCP server's tools, for the docs and llms.txt (the server itself is src/lib/mcp/tools.ts). */
 export const MCP_URL_PATH = "/api/mcp";
+
+/**
+ * GET /api/v1: a small index of the v1 endpoints, from the same list /developers/docs, the playground and /openapi.json
+ * read. `origin` makes each link absolute (publicOrigin in src/lib/origin.ts).
+ */
+export function v1Index(origin: string) {
+  const v1 = ENDPOINTS.filter((e) => e.path.startsWith("/api/v1/"));
+  return {
+    name: "Remedy API, v1",
+    docs: `${origin}/developers/docs`,
+    openapi: `${origin}/openapi.json`,
+    mcp: `${origin}${MCP_URL_PATH}`,
+    keys: `${origin}/developers#key-h`,
+    endpoints: v1.map((e) => ({
+      id: e.id,
+      method: e.method,
+      path: e.path,
+      title: e.title,
+      summary: e.summary.split(". ")[0].replace(/\.$/, "") + ".",
+      ...(e.scope ? { scope: e.scope } : {}),
+      docs: `${origin}/developers/docs#${e.id}`,
+    })),
+  };
+}

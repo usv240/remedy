@@ -35,8 +35,9 @@ describe("test rows in the firm console", () => {
 
   it("every firm console query over claims leaves test rows out", () => {
     const filtered: Record<string, number> = {
-      // the home tiles: claims and units, refunds paid, needs a person, waiting to be accepted (list and count), claims per recall
-      "src/lib/firm/home.ts": 5,
+      // the home tiles: claims and units, refunds paid, the verified claims by payment (the counters' reconciling line),
+      // needs a person, waiting to be accepted (list and count), claims per recall
+      "src/lib/firm/home.ts": 6,
       // the claims queue and its drawer rows
       "src/lib/firm/queue.ts": 1,
       // the monthly report's claims and payments

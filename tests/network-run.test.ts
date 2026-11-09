@@ -1,11 +1,20 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { isSampleNumber, recallCredit, sampleFirmOf } from "@/lib/recall/label";
 import { getRecall, ruleFor } from "@/app/api/claims/_lib/recall";
 import { photoHashes } from "@/lib/verify";
+import { setLogSink } from "@/lib/log";
 import { FIXTURES_DIR } from "@/lib/verify/fixtures";
 import { NETWORK, sendToSecondFirm } from "../scripts/public/record-network-run";
+
+/** Deliberate fallbacks log a warning ("vision check did not finish"); read back here instead of printed. */
+const logged: { level: string; msg: string }[] = [];
+beforeEach(() => {
+  logged.length = 0;
+  setLogSink((level, line) => logged.push({ level, msg: (JSON.parse(line) as { msg: string }).msg }));
+});
+afterEach(() => setLogSink(null));
 
 /**
  * The shared hash pool across two firms (content/public/network-run.json, written by
@@ -55,5 +64,7 @@ describe("one photo, two firms (content/public/network-run.json)", () => {
     expect(held.result.checks.C3.reason_technical).toContain("Only the 64-bit hash is compared across recalls and firms");
     const open = await sendToSecondFirm([]);
     expect(open.reachedModel).toBe(true);
+    // The stand-in model answers nothing, so the claim path logs that the vision check did not finish.
+    expect(logged).toContainEqual({ level: "warn", msg: "vision check did not finish" });
   });
 });
