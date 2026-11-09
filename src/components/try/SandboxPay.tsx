@@ -49,6 +49,10 @@ export function SandboxPay({ amount, payee }: { amount: string; payee: string | 
         <button type="button" className="btn btn-primary" onClick={() => void send()} disabled={busy} aria-describedby="tr-pay-state">
           {busy ? "Sending to PayPal" : `Send ${amount} to the sandbox buyer`}
         </button>
+        {/* RECORDED_RECEIPT_URL in src/lib/recorded-receipt.ts: a receipt to look at without sending anything. */}
+        <Link className="text-link" href="/r/recorded">
+          See a recorded receipt
+        </Link>
       </p>
       <p id="tr-pay-state" className="tr-pay-state" role="status" aria-live="polite">
         {out && (

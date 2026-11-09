@@ -227,6 +227,8 @@ export const claims = pgTable(
     reviewedBy: text("reviewed_by"),
     reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
     isSample: boolean("is_sample").notNull().default(false),
+    /** app | test. A row a test script made or faked (src/lib/firm/origin.ts) is left out of every firm console list and count. */
+    origin: text("origin").notNull().default("app"),
     decidedAt: timestamp("decided_at", { withTimezone: true }),
     createdAt: created(),
     updatedAt: updated(),

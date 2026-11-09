@@ -20,6 +20,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { LIMITS } from "@/lib/verify/checks";
 
 const ROOT = process.cwd();
 /** A JSON file under content/, the only folder these figures are read from (a fixed root keeps the build from tracing the whole project). */
@@ -364,6 +365,8 @@ export function checkTimes() {
   const rows = [...sweep, ...sample].filter((r) => (r.vision_ms ?? 0) > 0);
   const vision = rows.map((r) => r.vision_ms ?? 0);
   const reviewers = rows.filter((r) => r.decided_by === "reviewers").map((r) => (r.ms ?? 0) - (r.vision_ms ?? 0));
+  // The whole answer when the reviewers looked: the photo check and the two reviewers together, run by run.
+  const both = rows.filter((r) => r.decided_by === "reviewers").map((r) => r.ms ?? 0);
   const index = read<PresetIndex>("presets", "index.json");
   const recDir = path.join(ROOT, "content", "presets", "recorded");
   let flagship: { checkMs: number; reviewersMs: number } | null = null;
@@ -375,12 +378,72 @@ export function checkTimes() {
       vision.push(rec.vision.ms);
       // A reviewer run read back from a local cache answers in milliseconds; only a live one is a timing.
       const liveReviews = rec.reviews && (rec.reviews.votes ?? []).every((v) => (v.ms ?? 0) > 1000) ? rec.reviews.ms : null;
-      if (liveReviews) reviewers.push(liveReviews);
+      if (liveReviews) {
+        reviewers.push(liveReviews);
+        both.push(rec.vision.ms + liveReviews);
+      }
       if (p.id === "sample-charger-cut") flagship = { checkMs: rec.vision.ms, reviewersMs: liveReviews ?? 0 };
     }
   }
   const check = spreadSeconds(vision);
-  return { check, reviewers: spreadSeconds(reviewers), about: Math.round(check.median), flagship, sources: [SOURCES.sweep, SOURCES.sample, SOURCES.presets] };
+  const withReviewers = spreadSeconds(both);
+  return {
+    check,
+    reviewers: spreadSeconds(reviewers),
+    /** The photo check and the two reviewers together, on the runs where the reviewers looked. */
+    withReviewers,
+    about: Math.round(check.median),
+    aboutWithReviewers: Math.round(withReviewers.median),
+    flagship,
+    sources: [SOURCES.sweep, SOURCES.sample, SOURCES.presets],
+  };
+}
+
+/**
+ * How long a check takes, said the way the recorded runs say it: the photo check alone, and the whole answer when the
+ * two reviewers look closer. One sentence for the home page, the flagship example and the README.
+ */
+export function checkTimeWords(flagshipTotalMs?: number) {
+  const ct = checkTimes();
+  const f = ct.flagship;
+  const s1 = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
+  const short = `about ${ct.about} s; about ${ct.aboutWithReviewers} s when the two reviewers look`;
+  return {
+    about: ct.about,
+    withReviewers: ct.aboutWithReviewers,
+    /** "about 11 s; about 22 s when the two reviewers look". */
+    short,
+    /** For the flagship example, a run the two reviewers settled: its own times, then the medians it sits among. */
+    flagship:
+      f && f.reviewersMs
+        ? `This recorded run took ${flagshipTotalMs ? s1(flagshipTotalMs) : s1(f.checkMs + f.reviewersMs)}: the photo check ${s1(f.checkMs)} and the two reviewers ${s1(f.reviewersMs)}${flagshipTotalMs ? ", and the checks in code the rest" : ""}. Across the recorded live runs a check takes ${short}.`
+        : null,
+  };
+}
+
+/**
+ * The held-back rate in plain words: how many photos its decisions are on, and why that photo is paid only through the
+ * two reviewers (its right-product score sits under the pass mark). Counted from errorRates() and referencePictures().
+ */
+export function heldBackStory() {
+  const e = errorRates().heldBack;
+  const refs = referencePictures();
+  const scores = [refs.after.preset.c1, ...refs.after.trials.map((t) => t.c1)].filter((x): x is number => x !== null);
+  const lo = Math.min(...scores);
+  const hi = Math.max(...scores);
+  const score = lo === hi ? lo.toFixed(2) : `${lo.toFixed(2)} to ${hi.toFixed(2)}`;
+  const toPerson = e.misses.reduce((n, m) => n + m.firmReview, 0);
+  const photo = e.cases === 1 ? "one photo, the sample charger with its cord cut" : `${e.cases} photos`;
+  return {
+    count: e.count,
+    of: e.of,
+    photos: e.cases,
+    score,
+    pass: LIMITS.productPass.toFixed(2),
+    paid: e.of - e.count,
+    toPerson,
+    sentence: `That is ${e.of} decisions on ${photo}, whose right-product score of ${score} is under the ${LIMITS.productPass.toFixed(2)} pass mark, so only the two reviewers verify it: ${e.of - e.count} of ${e.of}${toPerson ? `, and ${toPerson} went to a person at the firm` : ""}.`,
+  };
 }
 
 /**

@@ -310,6 +310,27 @@ export const PROBLEM = {
 } as const;
 
 /**
+ * Where a shared hash list comes from: two long-running services that match a picture by its hash instead of the
+ * picture itself, each read on its own page on November 9, 2026, and how Remedy's pool differs. Shared by the README,
+ * /evidence#network and docs/research.md (tests/hash-pool-lineage.test.ts).
+ */
+export const HASH_LINEAGE = {
+  photoDna: {
+    name: "Microsoft PhotoDNA",
+    says: "makes a hash of an image that cannot be turned back into the image and compares it with the hashes of known images; Microsoft offers it free to qualified organizations and donated it to the National Center for Missing & Exploited Children",
+    url: "https://www.microsoft.com/en-us/photodna",
+    read: "November 9, 2026",
+  },
+  stopNcii: {
+    name: "StopNCII",
+    says: "makes the hash on the person's own device, sends only the hash, never the image, and its partner platforms look for matches",
+    url: "https://stopncii.org/how-it-works/",
+    read: "November 9, 2026",
+  },
+  differs: "Remedy's pool is open code, holds recall photos, and shares only a 64-bit hash and a row id between firms",
+} as const;
+
+/**
  * How a refund to the original PayPal purchase is timed, said the same way everywhere: what PayPal answered in the
  * sandbox (content/public/e2e-transcript.json, refund_status COMPLETED) and how long PayPal says the money takes to reach
  * the buyer (its refund documentation, PROBLEM.refundTerms).

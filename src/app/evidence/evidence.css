@@ -1190,6 +1190,19 @@
   }
 }
 
+/* The pool's measured limits and its lineage, right under the two-firm run. */
+.ev-limits {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+.ev-limits p {
+  margin: 0;
+}
+.ev-limits strong {
+  font-weight: 600;
+}
+
 /* Known answers revised after the sweep: a dated list, each with what changed and why. */
 .evidence .ev-changes {
   margin: 8px 0 0;

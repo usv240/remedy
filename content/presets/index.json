@@ -8,12 +8,12 @@
       "recall": "BH-2026-01",
       "photo": "sample/cord-cut.jpg",
       "photo_alt": "A hand holding a laptop charger's cord, cut where it met the charger case, with the bare wires showing; the opened charger case lies behind it.",
-      "photo_credit": "Public-domain photos of one charger, before and after its cord was cut (Dmitry G, Wikimedia Commons). Sample recall; fictional.",
+      "photo_credit": "Public-domain photos of one charger, before and after its cord was cut (Dmitry G, Wikimedia Commons).",
       "sample": true,
       "group": "made-safe",
       "expected": {
         "decision": "verified",
-        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so on a real claim the sandbox refund goes out at once. Sample recall; fictional."
+        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so on a real claim the sandbox refund goes out at once."
       },
       "recorded": "sample-charger-cut.json"
     },

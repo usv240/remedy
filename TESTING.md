@@ -3,7 +3,7 @@
 Remedy runs on PayPal's sandbox, a practice version of PayPal where no real money moves. You do not need a Remedy account.
 
 - **Hosted demo:** [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com), hosted on Render.
-- **Start here:** [`/evidence`](https://remedy-y0ym.onrender.com/evidence) has the five-minute path, the results with their sources, and a guided tour (**Take the 2-minute tour**, six stops in one tab; Escape ends it).
+- **Start here:** press **Try a photo** on the [home page](https://remedy-y0ym.onrender.com) (it opens [`/try`](https://remedy-y0ym.onrender.com/try)) and press **Run it** on the first photo, Brightline's sample charger with its cord cut. Then [`/evidence`](https://remedy-y0ym.onrender.com/evidence) has the longer path below, the results with their sources, and a guided tour (**Take the 2-minute tour**, six stops in one tab; Escape ends it).
 
 Brightline Home, the firm in the console, is a fictional sample firm, and so is Fernway Home, whose sample recall FW-2026-01 shows the hash check across firms. Real CPSC recalls appear with their real data and credited images. Every payout reads "Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm."
 
@@ -20,15 +20,15 @@ Use this login in the PayPal window that opens from the sample shop's PayPal but
 - Please log in rather than paying with a sandbox test card: the sandbox declines test cards at exactly $34.99, the sample product's price.
 - Please keep the password as it is so the next person can use it too. The login stays active.
 
-## The five-minute path
+## The longer path, about five minutes
 
-The same steps are on `/evidence`, with a link to each page.
+The same steps are on `/evidence`, with a link to each page. The first is the same first step as everywhere else.
 
 | # | Page | Time | What to look at |
 |---|---|---|---|
-| 1 | [`/#showcase`](https://remedy-y0ym.onrender.com/#showcase) | 20 s | Type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund. |
-| 2 | [`/recalls/27056`](https://remedy-y0ym.onrender.com/recalls/27056) | 40 s | The power bank recall's official remedy, word for word, and the proof rule Claude read from it, with how sure it is of each field. Set **Display** to Technical for the batch trace and the raw CPSC record. |
-| 3 | [`/try`](https://remedy-y0ym.onrender.com/try) | 90 s | Run Brightline's sample charger with its cord cut through the six checks: verified. Or buy the charger in the sample shop, claim it with the sample photo, and watch the refund go back to the original PayPal purchase. |
+| 1 | [`/try`](https://remedy-y0ym.onrender.com/try) | 90 s | Run Brightline's sample charger with its cord cut through the six checks: verified. Or buy the charger in the sample shop, claim it with the sample photo, and watch the refund go back to the original PayPal purchase. A paid receipt without sending a payout: [`/r/recorded`](https://remedy-y0ym.onrender.com/r/recorded). |
+| 2 | [`/#showcase`](https://remedy-y0ym.onrender.com/#showcase) | 20 s | Type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund. |
+| 3 | [`/recalls/27056`](https://remedy-y0ym.onrender.com/recalls/27056) | 40 s | The power bank recall's official remedy, word for word, and the proof rule Claude read from it, with how sure it is of each field. Set **Plain or Technical** (top right) to Technical for the batch trace and the raw CPSC record. |
 | 4 | [`/firm`](https://remedy-y0ym.onrender.com/firm) | 60 s | The firm's side: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report. |
 | 5 | [`/developers`](https://remedy-y0ym.onrender.com/developers) | 40 s | A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim. |
 | 6 | [`/evidence#results`](https://remedy-y0ym.onrender.com/evidence#results) | 30 s | The CPSC count, the extraction benchmark (draft labels) and the recorded photo checks, each with its source file. |
@@ -88,7 +88,7 @@ Open [`/firm`](https://remedy-y0ym.onrender.com/firm): Brightline Home's recall 
 
 1. In `/firm/claims`, press **Select all ready to pay** (or choose **Ready to pay** and tick the rows).
 2. Press **Sign in as Ana (sample reviewer)** if you have not yet, then **Approve and pay**. The status line reads, for example, "2 payouts sent in PayPal batch ...": one PayPal Payouts batch for all of them.
-3. The payout status updates live in the grid ("Live: payout status updates here"). In our runs, a sandbox payout reached SUCCESS 17 to 18 seconds after approval.
+3. The payout status updates live in the grid ("Live: payout status updates here"). In our runs, a sandbox payout reached SUCCESS 16 to 19 seconds after approval.
 
 Two sample claims are always ready to pay, at the recall's refund of $34.99, to the sandbox buyer: when a visitor has paid them, the queue adds two more the next time it opens. Any **Needs review** claim can also be approved and paid from its drawer.
 
@@ -205,11 +205,11 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 529 passed, 50 skipped: 20 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests, no network | `npm test` | 562 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
-| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 31 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 124 page views pass |
+| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 32 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 128 page views pass |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, docs and the MCP tools (no AI call) | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: examples, a streamed claim, firm review, approval, a $1.25 sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
 | Buy in the sample shop as the sandbox buyer, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11 |

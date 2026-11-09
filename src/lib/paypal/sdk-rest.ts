@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { ApiError, type OrdersController, type PaymentsController } from "@paypal/paypal-server-sdk";
 import type { PayPalApi, PayPalOut, Rest } from "@/lib/payments/types";
 
@@ -39,9 +40,14 @@ const header = (headers: Record<string, string> | undefined, name: string) => {
 export type Controllers = { orders: () => OrdersController; payments: () => PaymentsController };
 type SdkResponse = { statusCode: number; body: unknown; headers: Record<string, string> };
 
-/** The six calls on the SDK's own controllers. Each attempt carries its PayPal-Request-Id, so a retry returns the first answer. */
+/**
+ * The six calls on the SDK's own controllers. Each attempt carries its PayPal-Request-Id, so a retry returns the first
+ * answer; a create or capture called without one gets a fresh id here, so the SDK's own retry after a timeout
+ * (SDK_HTTP in src/lib/paypal/http.ts) resends the same request and never makes a second order or capture.
+ */
 export function sdkApi(ctrl: Controllers): PayPalApi {
   const prefer = "return=representation";
+  const idOf = (o: { requestId?: string }) => o.requestId ?? randomUUID();
   const run = async <T>(call: () => Promise<SdkResponse>): Promise<PayPalOut<T>> => {
     try {
       const res = await call();
@@ -52,9 +58,9 @@ export function sdkApi(ctrl: Controllers): PayPalApi {
     }
   };
   return {
-    createOrder: (body, o = {}) => run(() => ctrl.orders().createOrder({ body: toSdkShape(body) as never, paypalRequestId: o.requestId, prefer, paypalMockResponse: o.mock })),
+    createOrder: (body, o = {}) => run(() => ctrl.orders().createOrder({ body: toSdkShape(body) as never, paypalRequestId: idOf(o), prefer, paypalMockResponse: o.mock })),
     getOrder: (id) => run(() => ctrl.orders().getOrder({ id })),
-    captureOrder: (id, o = {}) => run(() => ctrl.orders().captureOrder({ id, paypalRequestId: o.requestId, prefer, paypalMockResponse: o.mock })),
+    captureOrder: (id, o = {}) => run(() => ctrl.orders().captureOrder({ id, paypalRequestId: idOf(o), prefer, paypalMockResponse: o.mock })),
     getCapture: (captureId) => run(() => ctrl.payments().getCapturedPayment({ captureId })),
     refundCapture: (captureId, body, o) => run(() => ctrl.payments().refundCapturedPayment({ captureId, paypalRequestId: o.requestId, prefer, paypalMockResponse: o.mock, body: toSdkShape(body) as never })),
     getRefund: (refundId) => run(() => ctrl.payments().getRefund({ refundId })),

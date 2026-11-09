@@ -6,8 +6,10 @@ import { Info } from "@/components/Info";
 type Step = { why: string; tool: string; arguments: Record<string, unknown>; text: string; isError: boolean; ms: number };
 type Session = { note: string; recordedAt: string; server: { name?: string; version?: string; protocolVersion?: string }; tools: string[]; owner: string; steps: Step[] };
 
+export const MCP_SESSION_FILE = "content/public/mcp-session.json";
+
 /** content/public/mcp-session.json, written by scripts/public/record-mcp-session.mjs, or null when it is not there. */
-function session(): Session | null {
+export function session(): Session | null {
   const file = path.join(process.cwd(), "content", "public", "mcp-session.json");
   if (!existsSync(file)) return null;
   try {
@@ -28,14 +30,57 @@ const words = ["no", "one", "two", "three", "four", "five", "six", "seven", "eig
 export function McpSession({ host }: { host: string }) {
   const s = session();
   if (!s?.steps.length) return null;
-  const at = (v: string) => v.split("{origin}").join(host);
-  const fmtArgs = (a: Record<string, unknown>) => at(JSON.stringify(a, null, 2));
   return (
     <section className="page-section mcp" aria-labelledby="mcp-h">
       <div className="title-row">
         <h2 id="mcp-h">An AI assistant, using Remedy&rsquo;s tools</h2>
         <Info id="dev.mcp-session" label="" topic="the recorded session" />
       </div>
+      <SessionBody s={s} host={host} />
+      <p className="page-note">
+        Server {s.server.name} {s.server.version}, MCP protocol {s.server.protocolVersion}, with {s.tools.length} tools: {s.tools.join(", ")}. Add it to your own assistant with the command in the{" "}
+        <Link className="text-link" href="/developers/docs#mcp">
+          docs
+        </Link>
+        . Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.
+      </p>
+    </section>
+  );
+}
+
+/**
+ * The same recorded run on /try, folded under one heading: "An assistant does it", from the owner's question to "Ready
+ * to pay", with the file it is read from. The page's own note carries the sandbox caveat.
+ */
+export function AssistantRun() {
+  const s = session();
+  if (!s?.steps.length) return null;
+  return (
+    <section className="page-section mcp tr-assistant" aria-labelledby="assist-h">
+      <details className="dsc">
+        <summary>
+          <h2 id="assist-h" className="dsc-k tr-assistant-h">
+            An assistant does it
+          </h2>
+        </summary>
+        <SessionBody s={s} host="" />
+        <p className="page-note">
+          Read from <code>{MCP_SESSION_FILE}</code>, written by <code>scripts/public/record-mcp-session.mjs</code>. Every tool, with the command to add them to your own assistant:{" "}
+          <Link className="text-link" href="/developers">
+            For developers
+          </Link>
+          .
+        </p>
+      </details>
+    </section>
+  );
+}
+
+function SessionBody({ s, host }: { s: Session; host: string }) {
+  const at = (v: string) => v.split("{origin}").join(host);
+  const fmtArgs = (a: Record<string, unknown>) => at(JSON.stringify(a, null, 2));
+  return (
+    <>
       <p className="page-prose">
         The tool calls an assistant makes to help an owner, from the recall to a claim ready to pay: {words[s.steps.length] ?? s.steps.length} calls to this server&rsquo;s MCP endpoint, recorded on {day(s.recordedAt)}. Only the
         calls and the server&rsquo;s answers are shown. No AI model was called to record them: the photo&rsquo;s verdict is replayed from the verification cache, and the owner chooses where the refund goes.
@@ -62,13 +107,6 @@ export function McpSession({ host }: { host: string }) {
           </li>
         ))}
       </ol>
-      <p className="page-note">
-        Server {s.server.name} {s.server.version}, MCP protocol {s.server.protocolVersion}, with {s.tools.length} tools: {s.tools.join(", ")}. Add it to your own assistant with the command in the{" "}
-        <Link className="text-link" href="/developers/docs#mcp">
-          docs
-        </Link>
-        . Demonstration in PayPal sandbox; Brightline Home and its recall are fictional.
-      </p>
-    </section>
+    </>
   );
 }

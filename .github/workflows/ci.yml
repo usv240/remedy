@@ -2,8 +2,8 @@
 # against a freshly seeded Postgres with no service keys, where every page must answer and pass axe (WCAG 2.2 AA) on
 # desktop and phone, in light and dark, and the unit tests run once more with the database, so the Postgres suites run.
 #
-# The checks that move sandbox money (payouts, refunds, the sample shop) need keys and run from a machine that has
-# them; see TESTING.md.
+# The checks that move sandbox money need keys: sandbox-e2e.yml runs the claim payout and the one-click payout on
+# demand once the repository has the sandbox secrets it lists, and TESTING.md runs every suite from a machine with keys.
 name: CI
 
 on:

@@ -1,7 +1,7 @@
 import { Info } from "@/components/Info";
 import { fmtDate } from "@/lib/api/format";
 import Link from "next/link";
-import { errorRates, hashSpeed, readingAccuracy, type ErrorRate } from "./errors";
+import { errorRates, hashSpeed, heldBackStory, readingAccuracy, type ErrorRate } from "./errors";
 
 const photos = (n: number) => (n === 1 ? "1 photo" : `${n} photos`);
 const times = (n: number) => (n === 1 ? "once" : n === 2 ? "twice" : `${n} times`);
@@ -40,7 +40,7 @@ export function ErrorRates({ folded = false }: { folded?: boolean } = {}) {
           </h2>
         )}
         <p className="je-scope tabular">
-          Every recorded decision where the right answer is known: {e.decisions} decisions on {e.photos} photos.
+          Every recorded decision where the right answer is known: {e.decisions} decisions on {e.photos} photos, {e.decisions - n("public")} by the model and {n("public")} settled in code before any model call.
         </p>
       </div>
       <div className="je-item">
@@ -61,7 +61,7 @@ export function ErrorRates({ folded = false }: { folded?: boolean } = {}) {
         <p className="je-def">
           A photo whose known answer is to pay, sent to a person at the firm or asked for a new photo instead: the sample charger with its cord cut, an owner&rsquo;s own photo of a product made safe. <span className="tabular">{photos(e.heldBack.cases)}</span>.
         </p>
-        {e.heldBack.count > 0 && <p className="je-def je-happened">{happened(e.heldBack)}</p>}
+        {e.heldBack.count > 0 && <p className="je-def je-happened">{heldBackStory().sentence}</p>}
       </div>
       <div className="je-item">
         <p className="je-fig tabular">

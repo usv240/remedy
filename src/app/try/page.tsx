@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { demoPicks } from "@/app/api/claims/_lib/recall";
 import { LIVE_PRESET, listPresets, readRecorded, recordedSamples } from "@/app/api/try/_lib/presets";
+import { AssistantRun } from "@/components/developers/McpSession";
 import { Info } from "@/components/Info";
 import { AnyRecall } from "@/components/try/AnyRecall";
 import { Presets, type PresetCard } from "@/components/try/Presets";
@@ -12,6 +13,8 @@ import { readyPayee } from "@/lib/firm/sample-claims";
 import { SANDBOX_LABEL } from "@/lib/payments/deps";
 import { maskContact } from "@/lib/secure";
 import "../pages.css";
+import "../developers/dev.css";
+import "../learn/disclosure.css";
 import "@/components/claim/claim.css";
 import "@/components/try/try.css";
 
@@ -58,6 +61,7 @@ export default async function TryPage() {
           "any-recall": <AnyRecall />,
         }}
       />
+      <AssistantRun />
       <p className="page-note">{SANDBOX_LABEL} Payouts on this page come from Brightline Home, a fictional sample firm, using its PayPal sandbox account.</p>
     </div>
   );

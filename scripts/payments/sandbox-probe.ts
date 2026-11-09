@@ -1,7 +1,9 @@
 // Record what the PayPal sandbox accepts for Payouts, with $1.00 items: EMAIL, PHONE, Venmo, an unregistered email
 // (UNCLAIMED), negative testing with PayPal-Mock-Response, and canceling an unclaimed item.
 //   npx tsx --env-file=.env.local scripts/payments/sandbox-probe.ts
-// Uses an in-memory store, so it touches no database and no ledger.
+// Uses an in-memory store, so it touches no database and no ledger: it writes no claim or payment row, so nothing it
+// sends can show in the firm console. Its batches carry the sender_batch_id prefix rmd-probe-, which no claim uses, so
+// a PayPal webhook about one finds no claim and changes nothing.
 import { memoryLedger } from "../../src/lib/payments/deps";
 import { buildPayoutBatch, cancelPayoutItem, createPayoutBatch, getPayoutBatch, type PayoutLine } from "../../src/lib/payments/payouts";
 import { MemoryStore } from "../../src/lib/payments/store";

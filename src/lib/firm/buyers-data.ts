@@ -18,6 +18,7 @@ import type { ParsedLine, Target } from "./buyers";
 import { noticeEmail } from "./notices";
 import { SAMPLE_RECALL, type Firm, type FirmRecall } from "./firm";
 import { SAMPLE_TS_MARK } from "./samples/transaction-search";
+import { notTest } from "./origin";
 
 /** The names a sales line can match: the recall's products, and for the sample recall the sample shop's product. */
 export function targetsFor(recall: FirmRecall): Target[] {
@@ -126,7 +127,7 @@ export async function knownSales(firm: Firm, recall: FirmRecall) {
     await db().execute(sql`
     select s.id, s.source, s.item_name, s.amount::text as amount, s.paid_at, s.paypal_capture_id, s.paypal_order_id, s.buyer_contact_enc,
            (select count(*)::int from notice n where n.sale_id = s.id) as notices,
-           (select count(*)::int from claim c where c.linked_sale_id = s.id) as claims
+           (select count(*)::int from claim c where c.linked_sale_id = s.id and ${notTest()}) as claims
     from sale s where s.firm_id = ${firm.id} and (s.recall_number = ${recall.number} or s.recall_number is null)
     order by s.paid_at desc nulls last limit 200`)
   ).rows as { id: number; source: string; item_name: string; amount: string; paid_at: Date | null; paypal_capture_id: string | null; paypal_order_id: string | null; buyer_contact_enc: string | null; notices: number; claims: number }[];

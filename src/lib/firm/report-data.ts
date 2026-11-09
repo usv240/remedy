@@ -12,6 +12,7 @@ import { db } from "@/lib/db";
 import { reportPeriod, type ReportPeriod } from "./dates";
 import type { Firm, FirmRecall } from "./firm";
 import { buildReport, type ReportCounts, type ReportNumbers } from "./report";
+import { notTest } from "./origin";
 
 const n = (v: unknown) => Number(v ?? 0) || 0;
 const c = (v: unknown) => Math.round(Number(v ?? 0) * 100) || 0;
@@ -27,7 +28,7 @@ export async function reportCounts(firmId: number, recallNumber: string, p: Pick
           when c.review_outcome = 'approved' then coalesce(c.reviewed_at, c.decided_at, c.created_at)
           when c.decision = 'verified' and coalesce(c.review_outcome, '') not in ('retake', 'declined') then coalesce(c.decided_at, c.created_at)
         end as verified_at
-      from claim c where c.firm_id = ${firmId} and c.recall_number = ${recallNumber}
+      from claim c where c.firm_id = ${firmId} and c.recall_number = ${recallNumber} and ${notTest()}
     )
     select
       count(*) filter (where created_at >= ${s}::timestamptz and created_at < ${e}::timestamptz) as received,
@@ -52,7 +53,7 @@ export async function reportCounts(firmId: number, recallNumber: string, p: Pick
       count(*) filter (where p.status in ('unclaimed', 'returned') and p.created_at < ${e}::timestamptz) as unclaimed_n,
       coalesce(sum(p.amount) filter (where p.status in ('unclaimed', 'returned') and p.created_at < ${e}::timestamptz), 0) as unclaimed_usd
     from payment p join claim c on c.id = p.claim_id
-    where c.firm_id = ${firmId} and c.recall_number = ${recallNumber}`)
+    where c.firm_id = ${firmId} and c.recall_number = ${recallNumber} and ${notTest()}`)
   ).rows as Record<string, unknown>[];
 
   const [notices] = (

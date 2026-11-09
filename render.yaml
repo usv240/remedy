@@ -37,6 +37,8 @@ services:
         value: "5"
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: PAYPAL_ENV # sandbox, or live with a live app's client ID and secret (src/lib/paypal/env.ts)
+        value: sandbox
       - key: PAYPAL_CLIENT_ID
         sync: false
       - key: PAYPAL_CLIENT_SECRET
@@ -100,6 +102,11 @@ services:
         value: "5"
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: PAYPAL_ENV
+        fromService:
+          type: web
+          name: remedy
+          envVarKey: PAYPAL_ENV
       - key: PAYPAL_CLIENT_ID
         sync: false
       - key: PAYPAL_CLIENT_SECRET

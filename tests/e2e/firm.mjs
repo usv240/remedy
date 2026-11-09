@@ -4,7 +4,8 @@
 //      (skip with FIRM_E2E_PAY=0; then step 4 uses a sample claim instead);
 //   3. the monthly report's numbers match the same counts made directly in SQL;
 //   4. the Gantt shows a "Re-notice" task, without a reload, after a seeded UNCLAIMED event
-//      (scripts/payments/seed-event.ts, the same recordStatus path a PayPal webhook uses);
+//      (scripts/payments/seed-event.ts, the same recordStatus path a PayPal webhook uses); the seeded claim is then a
+//      test row (origin 'test'), out of the console's "Waiting to be accepted" list and every other list and count;
 //   5. a sales file becomes notices: the email preview, and the CSV the firm downloads for its own mail tool.
 // Seed first: npx tsx --env-file=.env.local scripts/seed-firm.ts
 // Usage: BASE_URL=http://localhost:3300 node --env-file=.env.local tests/e2e/firm.mjs
@@ -100,11 +101,11 @@ if (n) {
   const firm = await one(`select id from firm where is_sample order by id limit 1`);
   const sqlCounts = await one(
     `select
-       (select count(*) from claim where firm_id = $1 and recall_number = $2 and created_at >= $3 and created_at < $4)::int as received,
-       (select count(*) from payment p join claim c on c.id = p.claim_id where c.firm_id = $1 and c.recall_number = $2 and p.route = 'payout' and p.status = 'success' and p.paid_at >= $3 and p.paid_at < $4)::int
-         + (select count(*) from payment p join claim c on c.id = p.claim_id where c.firm_id = $1 and c.recall_number = $2 and p.route = 'refund' and p.status = 'refunded' and p.paid_at >= $3 and p.paid_at < $4)::int as refunds,
-       (select coalesce(sum(p.amount), 0) from payment p join claim c on c.id = p.claim_id where c.firm_id = $1 and c.recall_number = $2 and ((p.route = 'payout' and p.status = 'success') or (p.route = 'refund' and p.status = 'refunded')) and p.paid_at >= $3 and p.paid_at < $4)::text as refunds_usd,
-       (select coalesce(sum(units_claimed), 0) from claim where firm_id = $1 and recall_number = $2 and ((decision = 'verified' and coalesce(review_outcome, '') not in ('retake', 'declined') and coalesce(decided_at, created_at) < $4) or (review_outcome = 'approved' and coalesce(reviewed_at, decided_at, created_at) < $4)))::int as corrected`,
+       (select count(*) from claim where firm_id = $1 and recall_number = $2 and origin <> 'test' and created_at >= $3 and created_at < $4)::int as received,
+       (select count(*) from payment p join claim c on c.id = p.claim_id where c.firm_id = $1 and c.recall_number = $2 and c.origin <> 'test' and p.route = 'payout' and p.status = 'success' and p.paid_at >= $3 and p.paid_at < $4)::int
+         + (select count(*) from payment p join claim c on c.id = p.claim_id where c.firm_id = $1 and c.recall_number = $2 and c.origin <> 'test' and p.route = 'refund' and p.status = 'refunded' and p.paid_at >= $3 and p.paid_at < $4)::int as refunds,
+       (select coalesce(sum(p.amount), 0) from payment p join claim c on c.id = p.claim_id where c.firm_id = $1 and c.recall_number = $2 and c.origin <> 'test' and ((p.route = 'payout' and p.status = 'success') or (p.route = 'refund' and p.status = 'refunded')) and p.paid_at >= $3 and p.paid_at < $4)::text as refunds_usd,
+       (select coalesce(sum(units_claimed), 0) from claim where firm_id = $1 and recall_number = $2 and origin <> 'test' and ((decision = 'verified' and coalesce(review_outcome, '') not in ('retake', 'declined') and coalesce(decided_at, created_at) < $4) or (review_outcome = 'approved' and coalesce(reviewed_at, decided_at, created_at) < $4)))::int as corrected`,
     [firm.id, n.recallNumber, s, e],
   );
   check("claims received match SQL", n.claimsReceived === sqlCounts.received, `${n.claimsReceived} vs ${sqlCounts.received}`);
@@ -133,6 +134,9 @@ const after = await page.locator(".plan-gantt .b-grid-row", { hasText: "Re-notic
 check("the Re-notice row is in the Gantt", after > before, `${before} then ${after}`);
 const dep = await one(`select t.dependencies from plan_task t where t.ref = $1`, [`re-notice:${(await one(`select request_id from payment where claim_id = $1 order by id desc limit 1`, [target]))?.request_id}:unclaimed`]);
 check("it is linked to its batch when the payout was real", paidClaim ? Array.isArray(dep?.dependencies) && dep.dependencies.length === 1 : true, JSON.stringify(dep?.dependencies ?? null));
+const marked = await one(`select origin from claim where id = $1`, [target]);
+const listed = ((await (await fetch(`${B}/api/firm/claims`)).json()).data?.claims ?? []).some((c) => c.id === target);
+check("the seeded claim is a test row, out of the console's lists", marked?.origin === "test" && !listed, `origin ${marked?.origin}, listed ${listed}`);
 
 // 5. Buyers: a sales file becomes notices the firm downloads for its own mail tool, with a preview of the email.
 {

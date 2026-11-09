@@ -6,12 +6,13 @@
  *
  * PayPal's hosted server speaks MCP over HTTP and server-sent events: GET {base}/sse opens a stream whose first
  * "endpoint" event names a URL; JSON-RPC requests are POSTed there with the same bearer token, and the answers arrive on
- * the stream, matched by id. PAYPAL_MCP=off switches it off; PAYPAL_MCP_URL names another server. Server only.
+ * the stream, matched by id. The server is PayPal's sandbox or live one, as PAYPAL_ENV says (src/lib/paypal/env.ts);
+ * PAYPAL_MCP=off switches it off; PAYPAL_MCP_URL names another server. Server only.
  */
 import { accessToken, paypalConfigured } from "./client";
+import { paypalMcpDefault } from "./env";
 
-export const PAYPAL_MCP_SANDBOX = "https://mcp.sandbox.paypal.com";
-export const paypalMcpBase = () => process.env.PAYPAL_MCP_URL?.trim() || PAYPAL_MCP_SANDBOX;
+export const paypalMcpBase = () => process.env.PAYPAL_MCP_URL?.trim() || paypalMcpDefault();
 /** The only tools Remedy calls on PayPal's server. Reading an order changes nothing. */
 export const PAYPAL_READ_TOOLS: ReadonlySet<string> = new Set(["get_order"]);
 export const paypalMcpEnabled = () => paypalConfigured() && process.env.PAYPAL_MCP?.trim().toLowerCase() !== "off";

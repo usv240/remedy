@@ -132,6 +132,7 @@ const ISSUE: Record<string, string> = {
   ORDER_ALREADY_CAPTURED: "This purchase is already complete.",
   VALIDATION_ERROR: "PayPal could not accept these payment details.",
   DUPLICATE_REQUEST_ID: "This payment was already sent once.",
+  TIMEOUT: "PayPal did not answer in time. The next try asks PayPal about this same payment first, so it is never sent twice.",
 };
 
 export function plainIssue(issue: string | null | undefined) {

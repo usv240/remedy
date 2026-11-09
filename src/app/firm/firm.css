@@ -868,6 +868,46 @@
   border-radius: 12px;
   overflow: hidden;
 }
+/* The plan's tasks as a list, in the chart's place until it opens (and for good if it cannot): the same box, so
+   nothing jumps when the chart arrives. */
+.plan-fallback {
+  margin-top: 16px;
+  height: min(64svh, 620px);
+  min-height: 420px;
+  overflow: auto;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  padding: 14px 18px;
+  background: var(--surface);
+}
+.plan-fallback:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.plan-fallback-status {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.plan-fallback-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plan-fallback-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--edge);
+  font-size: 0.9375rem;
+}
+.plan-fallback-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .plan-loading {
   display: grid;
   place-items: center;

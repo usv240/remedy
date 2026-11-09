@@ -11,18 +11,19 @@
  * The sample firm's console is open to every visitor, so for it the credentials are checked and never stored.
  * Server only.
  */
-import { Client, Environment, OrdersController, PaymentsController } from "@paypal/paypal-server-sdk";
+import { Client, OrdersController, PaymentsController } from "@paypal/paypal-server-sdk";
 import { eq } from "drizzle-orm";
 import { db, dbConfigured, schema } from "@/lib/db";
 import type { Rest } from "@/lib/payments/types";
 import { decrypt, encrypt } from "@/lib/secure";
+import { sdkConfig } from "./client";
+import { paypalApiBase, paypalEnv, type PayPalEnv } from "./env";
+import { paypalFetch } from "./http";
 import { sdkApi } from "./sdk-rest";
-
-export const PAYPAL_API = "https://api-m.sandbox.paypal.com";
 
 export type Credentials = { clientId: string; secret: string };
 export type AccountView =
-  | { mode: "own"; clientIdTail: string; connectedAt: string; verifiedAt: string; env: "sandbox" }
+  | { mode: "own"; clientIdTail: string; connectedAt: string; verifiedAt: string; env: PayPalEnv }
   | { mode: "platform"; note: string };
 
 type Fetch = typeof fetch;
@@ -36,12 +37,11 @@ export async function verifyCredentials(c: Credentials, f: Fetch = fetch): Promi
   const secret = c.secret.trim();
   if (!looksLikeKey(clientId) || !looksLikeKey(secret)) return { ok: false, plain: "That does not look like a PayPal client ID and secret. Copy both from your app in the PayPal developer dashboard." };
   try {
-    const res = await f(`${PAYPAL_API}/v1/oauth2/token`, {
-      method: "POST",
-      headers: { Authorization: "Basic " + Buffer.from(`${clientId}:${secret}`).toString("base64"), "Content-Type": "application/x-www-form-urlencoded" },
-      body: "grant_type=client_credentials",
-      signal: AbortSignal.timeout(15_000),
-    });
+    const res = await paypalFetch(
+      `${paypalApiBase()}/v1/oauth2/token`,
+      { method: "POST", headers: { Authorization: "Basic " + Buffer.from(`${clientId}:${secret}`).toString("base64"), "Content-Type": "application/x-www-form-urlencoded" }, body: "grant_type=client_credentials" },
+      { fetch: f },
+    );
     if (res.status === 401) return { ok: false, plain: "PayPal did not accept that client ID and secret. Check that both are from the same sandbox app." };
     if (!res.ok) return { ok: false, plain: `PayPal did not answer as expected (${res.status}). Please try again.` };
     const j = (await res.json()) as { app_id?: string; scope?: string };
@@ -56,11 +56,11 @@ export function restFor(c: Credentials, f: Fetch = fetch): Rest {
   let token: { value: string; exp: number } | null = null;
   const accessToken = async () => {
     if (token && token.exp > Date.now() + 5 * 60_000) return token.value;
-    const res = await f(`${PAYPAL_API}/v1/oauth2/token`, {
-      method: "POST",
-      headers: { Authorization: "Basic " + Buffer.from(`${c.clientId}:${c.secret}`).toString("base64"), "Content-Type": "application/x-www-form-urlencoded" },
-      body: "grant_type=client_credentials",
-    });
+    const res = await paypalFetch(
+      `${paypalApiBase()}/v1/oauth2/token`,
+      { method: "POST", headers: { Authorization: "Basic " + Buffer.from(`${c.clientId}:${c.secret}`).toString("base64"), "Content-Type": "application/x-www-form-urlencoded" }, body: "grant_type=client_credentials" },
+      { fetch: f },
+    );
     if (!res.ok) throw new Error(`PayPal token request for the firm's own app failed (${res.status})`);
     const j = (await res.json()) as { access_token: string; expires_in: number };
     token = { value: j.access_token, exp: Date.now() + j.expires_in * 1000 };
@@ -68,17 +68,19 @@ export function restFor(c: Credentials, f: Fetch = fetch): Rest {
   };
   const rest = (async <T>(path: string, init: RequestInit & { requestId?: string } = {}) => {
     const t = await accessToken();
-    const res = await f(`${PAYPAL_API}${path}`, {
-      ...init,
-      headers: { Authorization: `Bearer ${t}`, "Content-Type": "application/json", ...(init.requestId ? { "PayPal-Request-Id": init.requestId } : {}), ...((init.headers as Record<string, string>) ?? {}) },
-    });
+    const { requestId, headers, ...rest } = init;
+    const res = await paypalFetch(
+      `${paypalApiBase()}${path}`,
+      { ...rest, headers: { Authorization: `Bearer ${t}`, "Content-Type": "application/json", ...(requestId ? { "PayPal-Request-Id": requestId } : {}), ...((headers as Record<string, string>) ?? {}) } },
+      { fetch: f },
+    );
     const body = (await res.json().catch(() => ({}))) as T;
     return { status: res.status, body, debugId: res.headers.get("paypal-debug-id") };
   }) as Rest;
   // In tests the fetch is replaced, so the SDK (which has its own HTTP client) stays out of the way and the same six
   // Orders and Payments calls go over this REST client (paypalApiOf).
   if (f !== fetch) return rest;
-  const client = new Client({ clientCredentialsAuthCredentials: { oAuthClientId: c.clientId, oAuthClientSecret: c.secret }, timeout: 0, environment: Environment.Sandbox });
+  const client = new Client(sdkConfig(c.clientId, c.secret));
   rest.paypal = sdkApi({ orders: () => new OrdersController(client), payments: () => new PaymentsController(client) });
   return rest;
 }
@@ -87,12 +89,12 @@ const tail = (id: string) => id.slice(-4);
 
 /** The firm's PayPal account as the console shows it. Never returns a secret or a full client ID. */
 export async function accountView(firmId: number): Promise<AccountView> {
-  const platform: AccountView = { mode: "platform", note: "Refunds and payouts are paid from Remedy's PayPal sandbox account." };
+  const platform: AccountView = { mode: "platform", note: `Refunds and payouts are paid from Remedy's PayPal ${paypalEnv() === "live" ? "" : "sandbox "}account.` };
   if (!dbConfigured()) return platform;
   const [f] = await db().select().from(schema.firms).where(eq(schema.firms.id, firmId)).limit(1);
   const p = (f?.settings as { paypal?: { clientIdTail?: string; connectedAt?: string; verifiedAt?: string } } | undefined)?.paypal;
   if (!f?.paypalClientIdEnc || !f.paypalSecretEnc || !p?.clientIdTail) return platform;
-  return { mode: "own", clientIdTail: p.clientIdTail, connectedAt: p.connectedAt ?? "", verifiedAt: p.verifiedAt ?? "", env: "sandbox" };
+  return { mode: "own", clientIdTail: p.clientIdTail, connectedAt: p.connectedAt ?? "", verifiedAt: p.verifiedAt ?? "", env: paypalEnv() };
 }
 
 /** The firm's own credentials, when it has connected them; null pays from the platform account. */

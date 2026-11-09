@@ -4,11 +4,13 @@
 //   3. a $1.00 payout to an email with no PayPal account goes UNCLAIMED; PayPal's real webhook event for it is
 //      forwarded to POST /api/webhooks/paypal, verified by lookup, and adds a Re-notice task to plan_task;
 //   4. the ledger chain still verifies.
-// It makes two sample claims (is_sample = true) and removes them, their payments, tasks and sale afterwards unless
-// --keep is given.   npx tsx --env-file=.env.local scripts/payments/e2e.ts [--keep]
+// It makes two sample claims (is_sample = true, origin 'test', so the firm console never lists or counts them) and
+// removes them, their payments, tasks and sale afterwards unless --keep is given.
+//   npx tsx --env-file=.env.local scripts/payments/e2e.ts [--keep]
 import { sql } from "drizzle-orm";
 import { verifyLedger } from "../../src/lib/audit";
 import { db } from "../../src/lib/db";
+import { TEST_ORIGIN } from "../../src/lib/firm/origin";
 import { resolveDeps } from "../../src/lib/payments/deps";
 import { payClaim, planPayment } from "../../src/lib/payments/router";
 import { paypalRest } from "../../src/lib/paypal/client";
@@ -61,7 +63,7 @@ async function main() {
     const firm = Number(deps.firm.id);
     const recall = String((await db().execute(sql`select number from recall where title ilike '%power bank%' order by date desc limit 1`)).rows[0]?.number ?? (await db().execute(sql`select number from recall order by date desc limit 1`)).rows[0].number);
     const ins = await db().execute(
-      sql`insert into claim (recall_number, firm_id, payee_type, payee_masked, linked_sale_id, decision, status, amount, channel, is_sample) values (${recall}, ${firm}, 'email', 'e2e', ${Number(cap.json?.data?.sale_id)}, 'verified', 'verified', 34.99, 'api', true), (${recall}, ${firm}, 'email', 'e2e', null, 'verified', 'verified', 1.00, 'api', true) returning id`,
+      sql`insert into claim (recall_number, firm_id, payee_type, payee_masked, linked_sale_id, decision, status, amount, channel, is_sample, origin) values (${recall}, ${firm}, 'email', 'e2e', ${Number(cap.json?.data?.sale_id)}, 'verified', 'verified', 34.99, 'api', true, ${TEST_ORIGIN}), (${recall}, ${firm}, 'email', 'e2e', null, 'verified', 'verified', 1.00, 'api', true, ${TEST_ORIGIN}) returning id`,
     );
     const [refundClaim, payoutClaim] = ins.rows.map((r) => String(r.id));
     made.claims.push(refundClaim, payoutClaim);

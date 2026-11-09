@@ -40,7 +40,7 @@ export const FIRM_INFO = {
     title: "Sign in as the sample reviewer",
     what: "One click signs you in as Ana, the sample reviewer, so each approval is recorded in a reviewer's name.",
     why: "A payout is approved by a named person at the firm, and the claim's payment plan and the audit ledger record that name. The sample console is open to everyone, so the sign-in is a sample step rather than a real account.",
-    technical: "No real authentication: the name is kept in this browser's localStorage (remedy-firm-reviewer) and sent with POST /api/firm/claims/pay as `reviewer`, where approvePlan records it in the ledger. A firm's own deployment signs in through PayPal's Partner Referrals onboarding (see /stack#onboarding).",
+    technical: "No real authentication: the name is kept in this browser's localStorage (remedy-firm-reviewer) and sent with POST /api/firm/claims/pay as `reviewer`, where approvePlan records it in the ledger. A firm's own deployment puts its reviewers behind its own sign-in, and connects its PayPal as /stack#onboarding describes.",
   },
   "firm.approve-pay": {
     title: "Approve and pay",

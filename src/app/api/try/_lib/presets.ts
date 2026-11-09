@@ -38,7 +38,7 @@ export type Preset = {
   recorded?: string;
   /** One of the team's own photos, from content/verify/fixtures/user/expected.json. */
   user?: boolean;
-  /** Runs against a fictional sample recall (Brightline Home's BH-2026-01): label it "Sample recall; fictional". */
+  /** Runs against a fictional sample recall (Brightline Home's BH-2026-01); the page's note says so once. */
   sample?: boolean;
   /** "made-safe": a photo of a product made safe, shown first on /try with the photos of the same product before. */
   group?: "made-safe";
@@ -150,7 +150,8 @@ export function recordedSamples(): RecordedSample[] {
   if (!existsSync(file)) return [];
   const sweep = JSON.parse(readFileSync(file, "utf8")) as SweepSample;
   const config = sweep.configs[0];
-  const credit = "Photo: Dmitry G, Wikimedia Commons, public domain. Sample recall; fictional.";
+  // The page's own note says the sample firm and its recall are fictional, once for the page.
+  const credit = "Photo: Dmitry G, Wikimedia Commons, public domain.";
   return SAMPLE_PHOTOS.flatMap((s) => {
     const rows = sweep.cases.filter((c) => c.case === s.id && c.config === config?.id);
     if (!rows.length) return [];

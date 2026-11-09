@@ -3,6 +3,7 @@ import { aiPaused, keyAccepted } from "./ai/claude";
 import { db, dbConfigured } from "./db";
 import { queueStats, WORKER_STALE_MS } from "./jobs/queue";
 import { accessToken, paypalConfigured } from "./paypal/client";
+import { paypalEnvWord } from "./paypal/env";
 import { lastRun } from "./recall/daily";
 import { sentryEnvironment, sentryRelease } from "./sentry";
 import { agGridEnterprise, ENTERPRISE_FEATURES } from "@/components/firm/ag-license";
@@ -82,7 +83,7 @@ export async function queueChecks(): Promise<Check[]> {
 
 export async function runChecks(): Promise<Check[]> {
   const [pp, database, ingest, queue, claudeKey] = await Promise.all([
-    paypalConfigured() ? timed(async () => (await accessToken()) && "Sandbox token issued; Payouts, Refunds and Orders v2 use it") : Promise.resolve(null),
+    paypalConfigured() ? timed(async () => (await accessToken()) && `${paypalEnvWord()} token issued; Payouts, Refunds and Orders v2 use it`) : Promise.resolve(null),
     dbConfigured() ? timed(async () => (await db().execute(sql`select 1`)) && "Postgres answered a test query") : Promise.resolve(null),
     lastRun().catch(() => null),
     queueChecks(),

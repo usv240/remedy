@@ -11,7 +11,7 @@ import { LIMITS } from "@/lib/verify/checks";
 import stats from "../../../content/recalls/stats.json";
 import runsFile from "../../../content/public/verify-runs.json";
 import bench from "../../../content/recalls/benchmark/results.json";
-import measuredFile from "../../../content/public/measured.json";
+import { measured } from "@/lib/payout-timing";
 
 export const S = stats.current;
 
@@ -63,7 +63,8 @@ export type RunRow = {
 };
 export const RUNS = runsFile as unknown as { recordedAt: string; totalUsd: number; runs: RunRow[] };
 
-export const MEASURED = measuredFile as { note: string; measuredAt: string; environment: string; items: { id: string; figure: string; what: string; source: string }[] };
+/** content/public/measured.json, with the payout's range and run count counted from both records (src/lib/payout-timing.ts). */
+export const MEASURED = measured();
 
 /**
  * The owner flow's recorded run of the CPSC's 26125 example with the official-image match off: what Claude read in the

@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import { isoDay } from "./dates";
 import type { Firm, FirmRecall } from "./firm";
 import { basePlan, MOVABLE, type PlanKind, type PlanRow, type PlanSource } from "./plan";
+import { notTest, notTestTask } from "./origin";
 
 const DAY = 86_400_000;
 type Raw = { id: number; name: string; kind: PlanKind; start_date: Date | null; duration: string | null; percent_done: string; source: PlanSource; ref: string | null; dependencies: PlanRow["dependencies"]; data: Record<string, unknown>; created_at: Date };
@@ -49,12 +50,16 @@ export async function ensureBasePlan(firm: Firm, recall: FirmRecall) {
   });
 }
 
-/** Every task of the recall's plan. A real payout batch's progress is the share of its payouts PayPal has paid. */
+/**
+ * Every task of the recall's plan. A real payout batch's progress is the share of its payouts PayPal has paid. The
+ * whole plan (afterId 0, a page opening) leaves out tasks of test claims (./origin); the live feed after it still
+ * streams every new task once, so an open page sees a seeded re-notice arrive.
+ */
 export async function planRows(firm: Firm, recallNumber: string, afterId = 0): Promise<PlanRow[]> {
   const raw = (
     await db().execute(sql`
     select id, name, kind, start_date, duration, percent_done, source, ref, dependencies, data, created_at
-    from plan_task where firm_id = ${firm.id} and (recall_number = ${recallNumber} or recall_number is null) and id > ${afterId}
+    from plan_task where firm_id = ${firm.id} and (recall_number = ${recallNumber} or recall_number is null) and id > ${afterId}${afterId === 0 ? sql` and ${notTestTask()}` : sql``}
     order by start_date nulls last, order_index, id`)
   ).rows as Raw[];
   const rows = raw.map(toRow);
@@ -121,7 +126,7 @@ export async function reviewSchedule(firm: Firm, now = new Date()) {
     await db().execute(sql`
     select c.id, c.created_at, c.reviewed_at, c.reviewed_by, c.review_outcome, c.payee_masked, r.products, r.title
     from claim c join recall r on r.number = c.recall_number
-    where c.firm_id = ${firm.id} and (c.decision = 'firm_review' or c.review_outcome is not null) and c.created_at > ${new Date(now.getTime() - 21 * DAY)}
+    where c.firm_id = ${firm.id} and ${notTest()} and (c.decision = 'firm_review' or c.review_outcome is not null) and c.created_at > ${new Date(now.getTime() - 21 * DAY)}
     order by c.created_at`)
   ).rows as { id: string; created_at: Date; reviewed_at: Date | null; reviewed_by: string | null; review_outcome: string | null; payee_masked: string | null; products: { name?: string }[]; title: string }[];
   let turn = 0;

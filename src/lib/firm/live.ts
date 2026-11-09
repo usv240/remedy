@@ -15,6 +15,7 @@ import type { Firm } from "./firm";
 import { groupFor, taskFor, type GanttDependency } from "./plan";
 import { lastTaskId, planRows } from "./plan-data";
 import { payFromDb } from "./queue";
+import { notTest } from "./origin";
 
 const enc = new TextEncoder();
 const frame = (event: string, data: unknown) => enc.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
@@ -71,7 +72,7 @@ export function liveStream(firm: Firm, recallNumber: string, signal: AbortSignal
           const changed = (
             await db().execute(sql`
             select p.claim_id, p.status, p.route, p.updated_at, p.paypal_status from payment p join claim c on c.id = p.claim_id
-            where c.firm_id = ${firm.id} and p.updated_at > ${lastPay} order by p.updated_at`)
+            where c.firm_id = ${firm.id} and ${notTest()} and p.updated_at > ${lastPay} order by p.updated_at`)
           ).rows as { claim_id: string; status: string; route: string; updated_at: Date; paypal_status: string | null }[];
           for (const p of changed) {
             lastPay = new Date(Math.max(lastPay.getTime(), new Date(p.updated_at).getTime()));

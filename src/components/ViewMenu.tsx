@@ -38,9 +38,9 @@ function Segmented<K extends keyof Prefs>({ name, label, options, infoId }: { na
   );
 }
 
-/** The menu's words. */
+/** The menu's words. The button names what it mostly does: switch between the Plain and Technical views. */
 const WORDS = {
-  button: "Display",
+  button: "Plain or Technical",
   title: "Display settings",
   mode: ["Explanations", "Plain", "Technical"],
   labels: ["Info labels", "Show", "Hide"],

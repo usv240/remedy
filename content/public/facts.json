@@ -1,26 +1,26 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-09T10:00:37.939Z",
+  "writtenAt": "2026-11-09T12:17:43.788Z",
   "unitTests": {
-    "passed": 529,
-    "skipped": 50,
+    "passed": 562,
+    "skipped": 51,
     "skippedNeeds": {
-      "database": 20,
+      "database": 21,
       "claude": 28,
       "paypal": 2,
       "other": 0
     },
     "failed": 0,
-    "files": 61,
-    "testsHash": "49a078da1ab25196",
-    "ranAt": "2026-11-09T10:00:11.871Z",
+    "files": 70,
+    "testsHash": "8c349acd8e2779d0",
+    "ranAt": "2026-11-09T12:03:36.684Z",
     "note": "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed)."
   },
   "a11y": {
-    "pages": 31,
-    "views": 124,
-    "passed": 124,
-    "ranAt": "2026-11-09T09:46:45.243Z"
+    "pages": 32,
+    "views": 128,
+    "passed": 128,
+    "ranAt": "2026-11-09T12:12:33.915Z"
   },
   "mcp": {
     "tools": 7,
@@ -60,7 +60,13 @@
   },
   "measured": {
     "checkSeconds": 11,
-    "payoutSeconds": 18
+    "payoutSeconds": 19
+  },
+  "payout": {
+    "min": 16,
+    "max": 19,
+    "runs": 8,
+    "figure": "16 to 19 s"
   },
   "timings": {
     "free": {
@@ -214,7 +220,7 @@
   "history": {
     "first": "November 5, 2026",
     "latest": "November 9, 2026",
-    "latestCommit": "908f405",
+    "latestCommit": "29cd5bf",
     "sentence": "History: the first commit is dated November 5, 2026 and the latest November 9, 2026."
   }
 }

@@ -46,6 +46,11 @@ export type RecallValue = {
   perPointLowUsd: number;
   /** The largest single recalls by low value, for the method page. `price` is the refund counted for one unit. */
   largest: { number: string; units: number; price: number; usd: number }[];
+  /**
+   * How concentrated the total is: the two largest recalls' share of lowUsd (a percent, one decimal), and the median
+   * recall's value at the lowest price across the counted recalls, in whole dollars.
+   */
+  concentration: { topTwoUsd: number; topTwoShare: number; medianUsd: number };
 };
 
 /** The CPSC's FY2025 average correction rate across recalls, as a share (PROBLEM.correctionRate.rate in src/lib/research.ts). */
@@ -67,6 +72,7 @@ export function recallValue(recalls: ValueRecall[], rules: Record<string, SplitR
   const low = rows.reduce((s, x) => s + x.units * x.low, 0);
   const high = rows.reduce((s, x) => s + x.units * x.high, 0);
   const byAmount = rows.filter((x) => x.byAmount);
+  const byValue = rows.map((x) => ({ number: x.number, units: x.units, price: x.low, usd: Math.round(x.units * x.low) })).sort((a, b) => b.usd - a.usd);
   return {
     recalls: pr.length,
     covered: rows.length,
@@ -81,11 +87,21 @@ export function recallValue(recalls: ValueRecall[], rules: Record<string, SplitR
     correctionRate,
     unclaimedAtCorrectionLowUsd: Math.round(low * (1 - correctionRate)),
     perPointLowUsd: Math.round(low * 0.01),
-    largest: rows
-      .map((x) => ({ number: x.number, units: x.units, price: x.low, usd: Math.round(x.units * x.low) }))
-      .sort((a, b) => b.usd - a.usd)
-      .slice(0, 5),
+    largest: byValue.slice(0, 5),
+    concentration: {
+      topTwoUsd: byValue.slice(0, 2).reduce((s, x) => s + x.usd, 0),
+      topTwoShare: low ? Math.round((byValue.slice(0, 2).reduce((s, x) => s + x.usd, 0) / Math.round(low)) * 1000) / 10 : 0,
+      medianUsd: median(byValue.map((x) => x.units * x.price)),
+    },
   };
+}
+
+/** The middle value, the mean of the two middle ones for an even count, in whole dollars. */
+function median(xs: number[]): number {
+  if (!xs.length) return 0;
+  const s = [...xs].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return Math.round(s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2);
 }
 
 /** "$41.2 million" or "$870,000": plain, rounded down to what the data supports. */

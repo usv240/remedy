@@ -1,13 +1,18 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { answerChanges, checkTimes, errorRates, freeCaught, hashSpeed, sweepSettings } from "@/components/evidence/errors";
+import { answerChanges, checkTimes, errorRates, freeCaught, hashSpeed, heldBackStory, sweepSettings } from "@/components/evidence/errors";
+import { concentrationWords } from "@/components/evidence/Money";
+import { reviewerComparison } from "@/components/evidence/reviewer-data";
 import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 import { dailyBudgetUsd } from "@/lib/ai/usage";
 import { ENTERPRISE_FEATURES } from "@/components/firm/ag-license";
 import { TOOLS } from "@/lib/mcp/tools";
+import { ONBOARDING_TODAY } from "@/lib/paypal/onboarding";
 import { perRefund } from "@/lib/pricing";
-import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
+import { payerWords, STAND_IN } from "@/lib/recall/label";
+import { payoutTiming } from "@/lib/payout-timing";
+import { PROBLEM, RESEARCH } from "@/lib/research";
 import { catalogCounts, catalogOfficialHashes } from "@/lib/verify/dhash";
 import { derived, skipNeed, testsHash } from "../scripts/facts";
 
@@ -29,6 +34,7 @@ type Facts = {
   catalogPictures: number;
   catalog: { stored: number; distinctHashes: number; catalog: number };
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
+  payout: { min: number; max: number; runs: number; figure: string } | null;
   history: { first: string; latest: string; latestCommit: string; sentence: string } | null;
 } & ReturnType<typeof derived>;
 const facts = JSON.parse(readFileSync(FACTS, "utf8")) as Facts;
@@ -82,17 +88,21 @@ describe("content/public/facts.json agrees with the code", () => {
     expect(facts.errors.heldBack).toEqual({ count: e.heldBack.count, of: e.heldBack.of, photos: e.heldBack.cases });
   });
 
-  it("counts the catalog of distinct published pictures, the photo check time from the recorded live calls, and the payout from measured.json", () => {
+  it("counts the catalog of distinct published pictures, the photo check time from the recorded live calls, and the payout from both records", () => {
     expect(facts.catalogPictures).toBe(catalogOfficialHashes().length);
     // The catalog in three figures, from one function: stored pictures, distinct hash values, pictures distinct enough to tell their recall apart.
     expect(facts.catalog).toEqual(catalogCounts());
     expect(facts.catalog.catalog).toBe(facts.catalogPictures);
     expect(facts.catalog.catalog).toBeLessThanOrEqual(facts.catalog.distinctHashes);
     expect(facts.catalog.distinctHashes).toBeLessThanOrEqual(facts.catalog.stored);
-    const items = (JSON.parse(read("content", "public", "measured.json")) as { items: { id: string; figure: string }[] }).items;
-    expect(facts.measured).toEqual({ checkSeconds: checkTimes().about, payoutSeconds: aboutSeconds(items.find((i) => i.id === "payout")?.figure) });
+    const items = (JSON.parse(read("content", "public", "measured.json")) as { items: { id: string; figure?: string }[] }).items;
+    const pt = payoutTiming()!;
+    expect(facts.measured).toEqual({ checkSeconds: checkTimes().about, payoutSeconds: pt.about });
+    expect(facts.payout).toEqual({ min: pt.min, max: pt.max, runs: pt.runs, figure: pt.figure });
     // One source for how long a check takes: the recorded live calls, never a typed-in figure.
     expect(items.some((i) => i.id === "live-check")).toBe(false);
+    // The payout's range and run count are counted, never typed: measured.json keeps only the first runs' record.
+    expect(items.find((i) => i.id === "payout")?.figure).toBeUndefined();
   });
 
   it("holds the accessibility suite's last run, every page it covers at four views each, all passing", () => {
@@ -131,6 +141,12 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(n.other).toBe(0);
     expect(n.database + n.claude + n.paypal).toBe(facts.unitTests.skipped);
     for (const text of [doc("run-and-test.md"), TESTING]) expect(text).toContain(`${n.database} need a database, ${n.claude} a Claude key and ${n.paypal} PayPal sandbox keys`);
+  });
+
+  it("the README and /firm say how a firm connects its PayPal today in one sentence", () => {
+    expect(README).toContain(ONBOARDING_TODAY);
+    expect(read("src", "app", "firm", "page.tsx")).toContain("{ONBOARDING_TODAY}");
+    for (const f of ["src/app/firm/page.tsx", "src/lib/firm/info.ts"]) expect(read(...f.split("/"))).not.toMatch(/signs in through\s+PayPal(?:&rsquo;|')s Partner Referrals/);
   });
 
   it("the README's PayPal table and /stack say the same about onboarding firms", () => {
@@ -207,6 +223,37 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
       expect(text).not.toMatch(/distinct published pictures of every recall and every photo/);
     }
     expect(README).toContain(`the ${int(facts.catalog.catalog)} published pictures of every recall that are distinct enough to tell their recall apart (of ${int(facts.catalog.stored)} stored)`);
+  });
+
+  it("the reviewer comparison's decisions and the error rates' decisions are counted from one set, and the docs say how they differ", () => {
+    const e = errorRates();
+    const c = reviewerComparison();
+    const known = c.rows.filter((r) => r.known !== "reading").length;
+    const reading = c.rows.length - known;
+    const code = e.bySource.find((b) => b.source === "public")?.decisions ?? 0;
+    // The error rates' model decisions are exactly the reviewer rows with a known answer.
+    expect(e.decisions - code).toBe(known);
+    expect(doc("results.md")).toContain(
+      `Of ${c.rows.length} recorded model decisions at the claim path's setting, ${c.reached.length} reached the two reviewers. (The ${c.rows.length} are the ${known} decisions with a known answer that the error rates below also count, and ${reading} readings of the CPSC's own photos, which count in neither rate; the error rates' ${e.decisions} decisions are those ${known} and ${code} public runs settled in code with no model call.)`,
+    );
+    expect(read("src", "components", "evidence", "ErrorRates.tsx")).toContain('{e.decisions - n("public")} by the model and {n("public")} settled in code');
+  });
+
+  it("who pays on a real CPSC recall: one sentence on the claim page's footer and in the README", () => {
+    expect(README).toContain(STAND_IN);
+    expect(payerWords("27056").demo).toBe(STAND_IN);
+    expect(read("src", "app", "claim", "[recall]", "page.tsx")).toContain("payerWords(pr.number).demo");
+    // What the code does: a claim's firm with no connected PayPal app pays from the platform's account.
+    expect(read("src", "lib", "paypal", "firm-account.ts")).toMatch(/null pays from the platform account/);
+  });
+
+  it("the one-photo positive case is stated plainly wherever the held-back rate appears", () => {
+    const h = heldBackStory();
+    expect(h.photos).toBe(1);
+    expect(h.score).toBe(range(facts.references.after));
+    expect(h.pass).toBe("0.85");
+    for (const text of [README, doc("results.md")]) expect(text).toContain(h.sentence.replace(/\.$/, ""));
+    expect(read("src", "components", "evidence", "ErrorRates.tsx")).toContain("heldBackStory().sentence");
   });
 
   it("one story for the free answers' times, from the recorded runs, and no figure they do not support", () => {
@@ -365,6 +412,22 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(d.value.correctionRate).toBe(PROBLEM.correctionRate.rate);
     const money = read("src", "components", "evidence", "Money.tsx");
     for (const field of ["VALUE.unclaimedLowUsd", "VALUE.unclaimedAtCorrectionLowUsd", "PROBLEM.correctionRate.rate", "RESEARCH.comeBack.share"]) expect(money).toContain(field);
+    // The lower end of the unclaimed range leads, wherever both ends are printed.
+    for (const text of [...ALL, money, read("src", "app", "page.tsx")]) {
+      const lo = text.indexOf(d.value.unclaimedAtCorrection);
+      const hi = text.indexOf(d.value.unclaimed);
+      if (lo >= 0 && hi >= 0) expect(lo).toBeLessThan(hi);
+    }
+    expect(money.indexOf("{m.unclaimedAtCorrection}")).toBeLessThan(money.indexOf("{m.unclaimed}"));
+    // Concentration, computed from value.json: the two largest recalls' share and the median recall, one sentence.
+    const value = JSON.parse(read("content", "recalls", "value.json")) as { lowUsd: number; largest: { number: string; usd: number }[]; concentration: { topTwoUsd: number; topTwoShare: number; medianUsd: number } };
+    expect(value.concentration.topTwoUsd).toBe(value.largest[0].usd + value.largest[1].usd);
+    expect(value.concentration.topTwoShare).toBe(Math.round((value.concentration.topTwoUsd / value.lowUsd) * 1000) / 10);
+    expect(value.concentration.medianUsd).toBeGreaterThan(0);
+    const conc = concentrationWords();
+    expect(conc).toContain(`(${value.concentration.topTwoShare.toFixed(1)}%)`);
+    expect(README).toContain(conc.replace(/\.$/, ""));
+    expect(doc("results.md")).toContain(conc.replace(/\.$/, ""));
     // The arithmetic closes: covered plus the two kinds left out is the whole, and the README says all three.
     expect(d.value.covered + d.value.proRated + d.value.noPrice).toBe(d.value.recalls);
     const leftOut = `(${d.value.covered} of ${d.value.recalls} state units and a price; ${d.value.proRated} pro-rated refunds state no share and ${d.value.noPrice} records state no price, so those ${d.value.proRated + d.value.noPrice} are left out)`;
@@ -392,12 +455,18 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(README).toContain(`had not claimed ${RESEARCH.simpler.benefit} after a first notice`);
     for (const text of ALL) expect(text).not.toMatch(/a full refund lifts/i);
     // The contrast: the portal's own words and page, against the payout measured in the sandbox.
-    const items = (JSON.parse(read("content", "public", "measured.json")) as { items: { id: string; figure: string }[] }).items;
-    const payout = items.find((i) => i.id === "payout")!.figure.replace(/ s$/, " seconds");
+    const pt = payoutTiming()!;
+    const payout = pt.seconds;
     expect(RESEARCH.portal.quote).toContain("10-15 business days");
     expect(README).toContain(`"via check within 10-15 business days"`);
     expect(README).toContain(RESEARCH.portal.url);
-    expect(README).toContain(`**${payout}** after approval`);
+    expect(README).toContain(`**${payout}** after approval, in ${pt.runs} sandbox runs`);
+    // Wherever a payout range and its runs are printed, they are the ones counted from both records.
+    for (const text of [...ALL, TESTING]) {
+      for (const [a, b] of all(text, /(\d+) to (\d+) seconds (?:from )?(?:after )?approval/g)) expect([Number(a), Number(b)]).toEqual([pt.min, pt.max]);
+      for (const [n] of all(text, /in (\d+) (?:PayPal )?sandbox runs/g)) expect(Number(n)).toBe(pt.runs);
+      for (const [a, b] of all(text, /reached SUCCESS (\d+) to (\d+) seconds/g)) expect([Number(a), Number(b)]).toEqual([pt.min, pt.max]);
+    }
     expect(README.indexOf("**The difference:**")).toBeLessThan(README.indexOf("Reaching the owner directly"));
     expect(doc("research.md")).toContain(RESEARCH.portal.url);
     expect(doc("research.md")).toContain(payout);
@@ -448,7 +517,7 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
       expect(text).toContain("COMPLETED at once");
       expect(text).toContain(PROBLEM.refundTerms.reach);
     }
-    const pages = ["src/app/page.tsx", "src/components/evidence/Contrast.tsx", "src/components/evidence/Compare.tsx", "content/public/measured.json"].map((f) => read(...f.split("/")));
+    const pages = ["src/app/page.tsx", "src/components/evidence/Contrast.tsx", "src/components/evidence/Compare.tsx", "src/components/evidence/Research.tsx", "content/public/measured.json"].map((f) => read(...f.split("/")));
     for (const text of [...ALL, ...pages]) expect(text).not.toMatch(/went through at once|the sandbox did at once/);
     // The CPSC's FY2025 figure is an average correction rate across recalls, never a share of recalled products.
     const home = read("src", "app", "page.tsx");

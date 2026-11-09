@@ -121,7 +121,10 @@ export function existingBatchId(status: number, b: PayPalError) {
   return id && /^[A-Z0-9]{8,30}$/.test(id) ? id : null;
 }
 
-/** Send one Payouts batch. Retries a 5xx with the same request id; resends Venmo items as PHONE if the sandbox refuses the wallet. */
+/**
+ * Send one Payouts batch. Retries a 5xx with the same request id (a timeout is retried once below, in paypalFetch);
+ * resends Venmo items as PHONE if the sandbox refuses the wallet.
+ */
 export async function createPayoutBatch(lines: PayoutLine[], o: { senderBatchId: string; mock?: string }, partial?: Partial<PaymentsDeps>): Promise<CreateBatchResult> {
   const deps = await resolveDeps(partial);
   const send = async (senderBatchId: string, venmoWallet: boolean) => {
@@ -138,10 +141,14 @@ export async function createPayoutBatch(lines: PayoutLine[], o: { senderBatchId:
         body: JSON.stringify(body),
         headers: o.mock ? { "PayPal-Mock-Response": JSON.stringify({ mock_application_codes: o.mock }) } : {},
       });
-    let r = await call().catch(() => ({ status: 599, body: { name: "NETWORK_ERROR" } as BatchBody, debugId: null }));
-    for (let i = 1; r.status >= 500 && i <= 2; i++) {
+    // A timeout was already sent twice with this id (src/lib/paypal/http.ts), so it is not sent again here: it comes back
+    // as not definite, and the next attempt with the same sender_batch_id finds the batch if PayPal made one.
+    const attempt = () =>
+      call().catch((e: Error) => (e?.name === "PayPalTimeoutError" ? { status: 504, body: { name: "TIMEOUT" } as BatchBody, debugId: null } : { status: 599, body: { name: "NETWORK_ERROR" } as BatchBody, debugId: null }));
+    let r = await attempt();
+    for (let i = 1; r.status >= 500 && r.body.name !== "TIMEOUT" && i <= 2; i++) {
       await new Promise((res) => setTimeout(res, 600 * i));
-      r = await call().catch(() => ({ status: 599, body: { name: "NETWORK_ERROR" } as BatchBody, debugId: null }));
+      r = await attempt();
     }
     return r;
   };

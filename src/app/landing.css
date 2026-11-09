@@ -516,6 +516,68 @@
   white-space: nowrap;
   color: var(--ink);
 }
+/* Each idea is its own heading; how it works opens under it with the site's plus, the line staying where it is. */
+.ideas-more {
+  grid-column: 1 / -1;
+}
+.ideas-more > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.ideas-more > summary::-webkit-details-marker {
+  display: none;
+}
+.ideas-more > summary::after {
+  content: "";
+  flex: none;
+  width: 14px;
+  height: 14px;
+  align-self: center;
+  color: var(--muted);
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:
+    14px 1.5px,
+    1.5px 14px;
+  transition:
+    transform var(--dur-menu) var(--ease-out),
+    background-size var(--dur-menu) var(--ease-out);
+}
+.ideas-more[open] > summary::after {
+  background-size:
+    14px 1.5px,
+    1.5px 0;
+  transform: rotate(180deg);
+}
+.ideas-more > summary:active {
+  opacity: 0.7;
+}
+.ideas-more > summary:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.ideas-more .ideas-note {
+  margin-top: 0.75rem;
+  padding-top: 0;
+  max-width: 60ch;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ideas-more > summary:hover::after {
+    color: var(--ink);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ideas-more > summary::after {
+    transition: none;
+  }
+}
 @media (max-width: 760px) {
   .ideas-item {
     display: block;

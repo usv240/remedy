@@ -2,7 +2,7 @@ import { fmtInt } from "@/lib/api/format";
 import { PROBLEM as P } from "@/lib/research";
 import { MEASURED, S } from "./data";
 
-/** "17 to 18 seconds", from content/public/measured.json, the same figure the contrast and the README print. */
+/** "16 to 19 seconds", from content/public/measured.json, the same figure the contrast and the README print. */
 const payoutFigure = () => (MEASURED.items.find((i) => i.id === "payout")?.figure ?? "seconds").replace(/\bs$/, "seconds");
 
 /**

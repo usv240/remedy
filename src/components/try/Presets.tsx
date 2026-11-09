@@ -55,9 +55,10 @@ function againstExpected(p: PresetCard, r: ClaimView): { ok: boolean; line: stri
     : { ok: true, line: `As expected: ${EXPECT[e.decision] ?? e.decision}${named.length ? `, and ${named.join(", ")}` : ""}.` };
 }
 
+/** The example's expected result: a check on the harness, so it shows in the Technical view only. */
 function Expected({ e }: { e: PresetCard["expected"] }) {
   return (
-    <p className="tr-preset-expect">
+    <p className="tr-preset-expect cl-tech">
       {e.decision && (
         <span className="pill" data-tone={toneOf(e.decision)}>
           Expected: {EXPECT[e.decision] ?? e.decision}
@@ -117,7 +118,7 @@ function PresetRow({ p }: { p: PresetCard }) {
         <Link className="text-link" href={`/try/presets/${p.id}`}>
           Full result
         </Link>
-        <a className="text-link" href={`/api/try/presets/${p.id}`} download>
+        <a className="text-link cl-tech" href={`/api/try/presets/${p.id}`} download>
           Download JSON
         </a>
         <a className="text-link" href={`/api/try/presets/${p.id}/photo?download=1`} download>
@@ -144,7 +145,7 @@ function PresetRow({ p }: { p: PresetCard }) {
             <Result claim={run.result} ctx={{ action: null, word: null, example: null }} preview previewNote={p.pay && run.result.decision === "verified" ? "Checked, and nothing is paid yet: send the refund below as a real PayPal sandbox payout." : undefined} />
             {p.pay && run.result.decision === "verified" && <SandboxPay amount={p.pay.amount} payee={p.pay.payee} />}
             {vs && (
-              <p className="tr-vs" data-ok={vs.ok ? "" : undefined}>
+              <p className="tr-vs cl-tech" data-ok={vs.ok ? "" : undefined}>
                 {vs.line}
               </p>
             )}

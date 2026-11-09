@@ -155,6 +155,7 @@ create table if not exists claim (
   reviewed_by      text,
   reviewed_at      timestamptz,
   is_sample        boolean not null default false,
+  origin           text not null default 'app' check (origin in ('app', 'test')),
   decided_at       timestamptz,
   created_at       timestamptz not null default now(),
   updated_at       timestamptz not null default now()
@@ -168,6 +169,12 @@ alter table claim add column if not exists visitor_hash text;
 create index if not exists claim_visitor_idx on claim (visitor_hash, recall_number);
 -- The photo retention prune finds claims decided more than 90 days ago.
 create index if not exists claim_decided_idx on claim (decided_at);
+-- Where a claim came from: 'app' for every real and sample claim, 'test' for a row a test script made
+-- (scripts/payments/e2e.ts) or whose payout status it faked (scripts/payments/seed-event.ts, run by tests/e2e/firm.mjs).
+-- The firm console leaves test rows out of every list and count (src/lib/firm/origin.ts).
+alter table claim add column if not exists origin text not null default 'app';
+alter table claim drop constraint if exists claim_origin_check;
+alter table claim add constraint claim_origin_check check (origin in ('app', 'test'));
 
 -- Payments --------------------------------------------------------------------------------------------------------
 
@@ -219,6 +226,8 @@ create index if not exists payment_claim_idx on payment (claim_id);
 create index if not exists payment_batch_idx on payment (paypal_batch_id);
 create unique index if not exists payment_request_idx on payment (request_id) where request_id is not null;
 create unique index if not exists payment_item_idx on payment (paypal_item_id) where paypal_item_id is not null;
+-- Earlier seed-event.ts runs marked real sandbox payouts UNCLAIMED for the Gantt demo, with this issue code: test rows.
+update claim set origin = 'test' where origin = 'app' and id in (select claim_id from payment where error ->> 'issue' = 'SEEDED_FOR_DEMO');
 
 -- The firm's loop: notices, the corrective-action plan, monthly reports ----------------------------------------
 

@@ -14,36 +14,40 @@ import { Money, moneyHeadline } from "@/components/evidence/Money";
 import { Network } from "@/components/evidence/Network";
 import { HashPoolCall, HashPoolCallLive } from "@/components/evidence/HashPoolCall";
 import { HashReuse } from "@/components/evidence/HashReuse";
-import { checkTimes, errorRates, freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/evidence/errors";
+import { checkTimeWords, errorRates, freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/evidence/errors";
 import { Fold } from "@/components/evidence/Fold";
+import { PoolLimits, poolLimits } from "@/components/evidence/PoolLimits";
 import { PoolTrust } from "@/components/evidence/PoolTrust";
 import { Results } from "@/components/evidence/Results";
 import { Tested } from "@/components/evidence/Tested";
 import { BENCH, MEASURED, S } from "@/components/evidence/data";
-import { TIME_WORDS } from "@/lib/time-words";
 import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { limitRules } from "@/lib/firm/limits";
 import { TourStart } from "@/components/tour/Tour";
 import { TOUR } from "@/components/tour/steps";
 import { fmtDate, fmtInt } from "@/lib/api/format";
 import { HEADLINE } from "@/lib/recall/headline";
+import { RECORDED_RECEIPT_URL } from "@/lib/recorded-receipt";
 import "../pages.css";
 import "../landing-shared.css";
 import "../ops/ops.css";
 import "./evidence.css";
 
-export const metadata: Metadata = { title: "Evidence", description: "Every number on this site, where it comes from, and a five-minute path through the product." };
+export const metadata: Metadata = { title: "Evidence", description: "Every number on this site, where it comes from, and a path through the product that starts with one photo." };
 
 /*
  * The page opens on two screens: the five-minute path and the results band. Every other section is closed under its
  * heading with one line of what it holds (Fold), and opens on a press or from any link into it (OpenOnHash).
  */
 
-/** The five-minute path: six stops, in the order the story runs. */
+/**
+ * The longer path: six stops. It starts where the home page and the README start, with Try a photo, so there is one
+ * first step everywhere.
+ */
 const PATH = [
+  { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Try a photo, as on the home page: run Brightline's sample charger with its cord cut through the six checks and send its $34.99 refund as a real PayPal sandbox payout, or open a recorded receipt without sending one. In the sample shop, buy the charger, claim it with the sample photo, and watch the refund go back to the original PayPal purchase." },
   { href: "/#showcase", label: "Every recall, read as a checklist", time: "20 s", look: "On the home page, type any product into the headline. The closest recalls answer with what each one asks: what to cut or mark, and the refund." },
-  { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy (CPSC 27056), word for word, and the checklist Claude read from it, with how sure it is of each field. Switch Display to Technical for the batch trace and the raw CPSC record." },
-  { href: "/try", label: "A photo becomes a refund", time: "90 s", look: "Run Brightline's sample charger with its cord cut through the six checks and send its $34.99 refund as a real PayPal sandbox payout, or try your own photo. In the sample shop, buy the charger, claim it with the sample photo, see it verified, and watch the refund go back to the original PayPal purchase. The receipt follows the refund live." },
+  { href: "/recalls/27056", label: "One recall's proof rule", time: "40 s", look: "The power bank recall's official remedy (CPSC 27056), word for word, and the checklist Claude read from it, with how sure it is of each field. Switch Plain or Technical, top right, to Technical for the batch trace and the raw CPSC record." },
   { href: "/firm", label: "The firm's side", time: "60 s", look: "Brightline Home, a fictional sample firm: the claims queue, the recall plan that updates itself from PayPal's payout events, and the monthly report." },
   { href: "/developers", label: "For developers and AI agents", time: "40 s", look: "A free key and a live playground, and a recorded session of an AI assistant using the MCP tools to find a recall and open a claim." },
   { href: "#results", label: "The numbers, and where they come from", time: "30 s", look: "The CPSC count, the extraction benchmark and the recorded photo checks, each with its source file." },
@@ -134,7 +138,6 @@ export default function EvidencePage() {
   const free = { caught: fc.caught, total: fc.total, retake: t.retake, firmReview: t.firmReview };
   const e = errorRates();
   const money = moneyHeadline();
-  const ct = checkTimes();
   const payout = MEASURED.items.find((i) => i.id === "payout")?.figure.replace(/ s$/, " seconds") ?? null;
   return (
     <div className="page frame evidence">
@@ -153,7 +156,14 @@ export default function EvidencePage() {
       </header>
 
       <section id="path" className="page-section" aria-labelledby="path-h">
-        <h2 id="path-h">The five-minute path</h2>
+        <h2 id="path-h">Start with a photo, then go further</h2>
+        <p className="page-prose">
+          The first step is the one the home page gives: <Link className="text-link" href="/try">Try a photo</Link>. The stops after it take about five minutes. A paid sandbox receipt, without sending a payout:{" "}
+          <Link className="text-link" href={RECORDED_RECEIPT_URL}>
+            the recorded receipt
+          </Link>
+          .
+        </p>
         <ol className="jp-path">
           {PATH.map((p, i) => (
             <li key={p.label} className="jp-step" data-ui>
@@ -184,7 +194,7 @@ export default function EvidencePage() {
       <div className="ev-folds">
         <p className="ev-folds-note muted">Each section below opens on a press; a link to any part of it opens it too.</p>
 
-        <Fold id="errors" title="Error rates, on photos with a known answer" what={`${e.wrongPay.count} of ${e.wrongPay.of} paid when they should not have been; ${e.heldBack.count} of ${e.heldBack.of} held for a person or a new photo when they could have been paid.`}>
+        <Fold id="errors" title="Error rates, on photos with a known answer" what={`${e.wrongPay.count} of ${e.wrongPay.of} paid when they should not have been; ${e.heldBack.count} of ${e.heldBack.of} held for a person or a new photo when they could have been paid, ${e.heldBack.of} decisions on ${e.heldBack.cases === 1 ? "one photo" : `${e.heldBack.cases} photos`}.`}>
           <p className="ev-fold-info">
             <Info id="evidence.errors" label="" topic="The error rates" />
           </p>
@@ -205,8 +215,9 @@ export default function EvidencePage() {
           </p>
         </Fold>
 
-        <Fold id="network" title="One photo, two firms" what="A photo already claimed at one firm is held at the next before any model call; only a hash and a row id cross. Who may write to the pool, who may read it, and the recorded calls.">
+        <Fold id="network" title="One photo, two firms" what={`A photo already claimed at one firm is held at the next before any model call; only a hash and a row id cross. ${poolLimits().sentence}`}>
           <Network />
+          <PoolLimits />
           <PoolTrust />
           <Suspense fallback={<HashPoolCall host={null} />}>
             <HashPoolCallLive />
@@ -311,7 +322,7 @@ export default function EvidencePage() {
           <p className="page-note">The sample firm&rsquo;s settings; each firm sets its own. Counted in code by src/lib/firm/limits.ts and checked again when a claim is paid.</p>
         </Fold>
 
-        <Fold id="measured" title="Measured in the sandbox" what={`A photo check in about ${ct.about} seconds (${TIME_WORDS.median}); a PayPal payout in ${payout ?? "seconds"} after approval.`}>
+        <Fold id="measured" title="Measured in the sandbox" what={`A photo check takes ${checkTimeWords().short}; a PayPal payout ${payout ?? "seconds"} after approval.`}>
           <p className="page-prose jp-intro">Timings from the owner&rsquo;s claim flow, run end to end against the PayPal sandbox.</p>
           <Measured />
         </Fold>

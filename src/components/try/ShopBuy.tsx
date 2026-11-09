@@ -22,15 +22,15 @@ declare module "react" {
   }
 }
 
-const SDK_SRC = "https://www.sandbox.paypal.com/web-sdk/v6/core";
 let sdkPromise: Promise<{ sdk: SdkInstance; eligible: boolean }> | null = null;
 
-function loadSdk(clientId: string) {
+/** `src` is the JavaScript SDK v6 address for PAYPAL_ENV, read on the server (paypalJsSdkSrc in src/lib/paypal/env.ts). */
+function loadSdk(clientId: string, src: string) {
   sdkPromise ??= new Promise<void>((resolve, reject) => {
     const w = window as unknown as { paypal?: PayPalNs };
     if (w.paypal) return resolve();
     const s = document.createElement("script");
-    s.src = SDK_SRC;
+    s.src = src;
     s.async = true;
     s.onload = () => resolve();
     s.onerror = () => reject(new Error("PayPal could not load."));
@@ -51,7 +51,7 @@ function loadSdk(clientId: string) {
  * approval the server captures it and stores the sale; this device keeps the sale and capture id, so the claim page
  * can link it and the refund can go back to this purchase.
  */
-export function ShopBuy() {
+export function ShopBuy({ sdkSrc }: { sdkSrc: string }) {
   const ref = useRef<HTMLElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "working" | "unavailable" | "failed">("loading");
   const [message, setMessage] = useState("");
@@ -67,7 +67,7 @@ export function ShopBuy() {
       return;
     }
     let cancelled = false;
-    loadSdk(clientId)
+    loadSdk(clientId, sdkSrc)
       .then(({ sdk, eligible }) => {
         if (cancelled || !ref.current) return;
         if (!eligible) {
@@ -132,7 +132,7 @@ export function ShopBuy() {
     return () => {
       cancelled = true;
     };
-  }, [clientId, attempt]);
+  }, [clientId, sdkSrc, attempt]);
 
   if (bought) {
     return (

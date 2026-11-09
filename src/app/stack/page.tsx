@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { OpenOnHash } from "@/components/OpenOnHash";
+import { GOING_LIVE } from "@/lib/paypal/env";
 import "../pages.css";
 import "../developers/dev.css";
 import "../learn/disclosure.css";
@@ -182,7 +183,7 @@ export default function StackPage() {
           <Info id="stack.paypal_apis" label="" />
         </div>
         <p className="page-prose">
-          {PAYPAL_APIS.length} PayPal APIs, each with one job. All run against the PayPal sandbox. Going live changes only the base URL, the client ID and the secret.
+          {PAYPAL_APIS.length} PayPal APIs, each with one job. All run against the PayPal sandbox. {GOING_LIVE}
         </p>
         {MCP_READ?.getOrder.ok && (
           <p className="page-prose">

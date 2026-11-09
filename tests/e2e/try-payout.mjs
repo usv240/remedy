@@ -37,7 +37,9 @@ async function main() {
     check("PayPal accepted the payout: sent, $34.99, to the sandbox buyer, with a batch id", r?.sent === true && r.amount === "$34.99" && Boolean(r.receipt?.batchId), `${r?.plain ?? body?.error?.message ?? ""} batch ${r?.receipt?.batchId ?? "none"}`);
     transcript.ids({ claim_ids: r?.receipt?.claimId ? [r.receipt.claimId] : [], amount: "34.99", route: "payout", payout_batch_id: r?.receipt?.batchId, payout_item_id: r?.receipt?.itemId });
     await page.waitForURL(/\/r\/[0-9a-f-]{36}$/, { timeout: 30_000 });
-    check("the page opens the receipt", page.url().endsWith(r?.receipt?.url ?? "-"), page.url().replace(B, ""));
+    // The receipt at /r/<claim> lives in this run's database; the transcript points at the recorded copy every
+    // deployment serves from this file (src/app/r/recorded/page.tsx).
+    check("the page opens the receipt", page.url().endsWith(r?.receipt?.url ?? "-"), "the run opened its own claim's receipt; the recorded copy is /r/recorded");
     // The receipt follows PayPal live; poll the claim the way the receipt does until PayPal reports it paid.
     let view = null;
     while (Date.now() - t0 < 120_000) {

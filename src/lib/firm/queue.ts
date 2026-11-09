@@ -19,6 +19,7 @@ import { CHECK_LABEL, CHECK_ORDER, checkWords, confidence } from "./checks";
 import { recallThumb, shortName, type Firm } from "./firm";
 import { ensureReadyClaims } from "./sample-claims";
 import type { ClaimDetail, Decision, PayStatus, QueueRow, Review, Stage } from "./types";
+import { notTest } from "./origin";
 
 type Raw = {
   id: string;
@@ -111,7 +112,7 @@ const QUEUE_SQL = (firmId: number, where = sql`true`) => sql`
   left join payment_plan pp on pp.claim_id = c.id
   left join lateral (select * from payment x where x.claim_id = c.id order by x.id desc limit 1) p on true
   left join sale s on s.id = c.linked_sale_id
-  where c.firm_id = ${firmId} and ${where}
+  where c.firm_id = ${firmId} and ${notTest()} and ${where}
   order by c.created_at desc
   limit 500`;
 

@@ -84,6 +84,20 @@
   outline: none;
 }
 
+/* An assistant does it: the recorded MCP session, folded under its heading at the foot of the page. */
+.tr-assistant {
+  margin-top: 40px;
+}
+.tr-assistant-h {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.375rem;
+  margin: 0;
+}
+.tr-assistant .page-prose {
+  margin-top: 12px;
+}
+
 /* Ready-made examples */
 .tr-live {
   margin-top: 10px;
@@ -155,6 +169,13 @@
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+}
+/* The JSON download is for the Technical view, like the expected result. */
+.tr-preset-actions .cl-tech {
+  display: none;
+}
+:root[data-mode="technical"] .tr-preset-actions .cl-tech {
+  display: inline-flex;
 }
 .tr-run {
   min-height: 44px;

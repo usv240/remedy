@@ -137,13 +137,25 @@
     display: inline-flex;
   }
 }
+.view-btn {
+  white-space: nowrap;
+}
 @media (max-width: 560px) {
   .header-cta {
     display: none;
   }
+  /* "Plain or Technical" stays on one line beside the wordmark and Menu on a phone. */
+  .header-actions {
+    gap: 0.4rem;
+  }
+  .view-btn,
+  .menu-btn {
+    padding-inline: 0.7rem;
+    font-size: 0.9375rem;
+  }
 }
 
-/* Display settings popover (floats, so it may cast a shadow). */
+/* The Plain or Technical settings popover (floats, so it may cast a shadow). */
 .view-pop {
   z-index: 70;
   width: min(340px, calc(100vw - 24px));

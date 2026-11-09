@@ -1,4 +1,4 @@
-import measured from "../../../content/public/measured.json";
+import { measured, payoutTiming } from "@/lib/payout-timing";
 import { RESEARCH, REFUND_TIMING } from "@/lib/research";
 
 /**
@@ -8,16 +8,16 @@ import { RESEARCH, REFUND_TIMING } from "@/lib/research";
  * holds them to these sources.
  */
 export function speedContrast() {
-  const item = (id: string) => measured.items.find((i) => i.id === id);
-  const payout = item("payout");
-  const refund = item("refund");
+  const m = measured();
+  const t = payoutTiming();
+  const refund = m.items.find((i) => i.id === "refund");
   return {
     portal: RESEARCH.portal,
-    /** "17 to 18 seconds", from "17 to 18 s". */
-    payout: payout ? { figure: payout.figure.replace(/\bs$/, "seconds"), what: payout.what, source: payout.source, runs: /in (\d+) sandbox runs/.exec(payout.what)?.[1] ?? null } : null,
+    /** "16 to 19 seconds", with its run count. */
+    payout: t ? { figure: t.seconds, what: t.what, source: t.source, runs: String(t.runs) } : null,
     refundAtOnce: refund?.figure === "At once",
-    measuredAt: measured.measuredAt,
-    environment: measured.environment,
+    measuredAt: m.measuredAt,
+    environment: m.environment,
   };
 }
 

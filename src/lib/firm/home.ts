@@ -1,12 +1,14 @@
 /**
  * The console's home: the main recall's progress, what needs a person, the next CPSC report and the payouts nobody
- * has accepted yet. Every figure is counted here from the database. Server only.
+ * has accepted yet. Every figure is counted here from the database, leaving out rows a test script made (./origin).
+ * Server only.
  */
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { daysBetween, isoDay, nextReportDue } from "./dates";
 import type { Firm, FirmRecall } from "./firm";
 import { payFromDb, SAMPLE_PAYPAL_STATUS } from "./queue";
+import { notTest } from "./origin";
 import { completion } from "./report";
 import type { HomeSummary } from "./types";
 
@@ -20,14 +22,14 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
       count(*) filter (where decision = 'verified' and coalesce(review_outcome, '') not in ('retake', 'declined') or review_outcome = 'approved')::int as verified,
       coalesce(sum(units_claimed) filter (where decision = 'verified' and coalesce(review_outcome, '') not in ('retake', 'declined') or review_outcome = 'approved'), 0)::int as units,
       count(*) filter (where is_sample)::int as sample
-    from claim where firm_id = ${firm.id} and recall_number = ${main.number}`)
+    from claim where firm_id = ${firm.id} and recall_number = ${main.number} and ${notTest("claim")}`)
   ).rows as { total: number; verified: number; units: number; sample: number }[];
 
   const [p] = (
     await db().execute(sql`
     select count(*)::int as n, coalesce(sum(p.amount), 0)::text as usd
     from payment p join claim c on c.id = p.claim_id
-    where c.firm_id = ${firm.id} and c.recall_number = ${main.number} and ((p.route = 'payout' and p.status = 'success') or (p.route = 'refund' and p.status = 'refunded'))`)
+    where c.firm_id = ${firm.id} and c.recall_number = ${main.number} and ${notTest()} and ((p.route = 'payout' and p.status = 'success') or (p.route = 'refund' and p.status = 'refunded'))`)
   ).rows as { n: number; usd: string }[];
 
   // Needs a person: firm-review claims nobody has decided, and payments that could not be sent.
@@ -38,7 +40,7 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
       count(*) filter (where p.status in ('failed', 'blocked'))::int as failed,
       count(*) filter (where (c.decision = 'verified' or c.review_outcome = 'approved') and coalesce(c.review_outcome, '') not in ('retake', 'declined') and p.id is null and c.amount > 0)::int as ready
     from claim c left join lateral (select id, status from payment x where x.claim_id = c.id order by x.id desc limit 1) p on true
-    where c.firm_id = ${firm.id}`)
+    where c.firm_id = ${firm.id} and ${notTest()}`)
   ).rows as { review: number; failed: number; ready: number }[];
 
   // Waiting to be accepted, as the claims queue counts it (stageOf in ./queue): a claim whose latest payment PayPal holds
@@ -46,7 +48,7 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
   // beside it shows the oldest few.
   const waiting = sql`
     from claim c join lateral (select * from payment x where x.claim_id = c.id order by x.id desc limit 1) p on true
-    where c.firm_id = ${firm.id} and p.status in ('unclaimed', 'returned') and coalesce(c.review_outcome, '') not in ('declined', 'retake')`;
+    where c.firm_id = ${firm.id} and ${notTest()} and p.status in ('unclaimed', 'returned') and coalesce(c.review_outcome, '') not in ('declined', 'retake')`;
   const [w] = (await db().execute(sql`select count(*)::int as n ${waiting}`)).rows as { n: number }[];
   const unclaimed = (
     await db().execute(sql`
@@ -56,7 +58,7 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
   ).rows as { id: string; payee_masked: string | null; amount: string; created_at: Date; status: string; route: string; paypal_status: string | null }[];
 
   const counts = (
-    await db().execute(sql`select recall_number, count(*)::int as n from claim where firm_id = ${firm.id} group by recall_number`)
+    await db().execute(sql`select recall_number, count(*)::int as n from claim where firm_id = ${firm.id} and ${notTest("claim")} group by recall_number`)
   ).rows as { recall_number: string; n: number }[];
   const byRecall = new Map(counts.map((r) => [r.recall_number, r.n]));
 

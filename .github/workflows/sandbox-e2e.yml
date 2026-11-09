@@ -1,0 +1,123 @@
+# The two suites that move PayPal sandbox money, on demand: Actions > "Sandbox money, end to end" > Run workflow.
+#
+# Repository secrets it reads (Settings > Secrets and variables > Actions), all from the PayPal sandbox:
+#   PAYPAL_CLIENT_ID       a sandbox REST app's client ID (developer.paypal.com > Apps & Credentials > Sandbox)
+#   PAYPAL_CLIENT_SECRET   the same app's secret
+#   SANDBOX_BUYER_EMAIL    the sandbox personal account that receives the payouts (Testing Tools > Sandbox Accounts)
+# Without them the first job says which are missing and the run stops there, with nothing sent.
+#
+# What it runs, against a production build and a freshly seeded Postgres, with no Claude key (every model answer is a
+# recorded one): tests/e2e/claim.mjs (a claim, the firm's approval, a $1.25 sandbox payout and its receipt) and
+# tests/e2e/try-payout.mjs (the one-click $34.99 sandbox payout on /try). Practice money only. The run's transcript,
+# content/public/e2e-transcript.json with emails redacted, is kept as the run's artifact.
+name: Sandbox money, end to end
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sandbox-e2e
+  cancel-in-progress: false
+
+jobs:
+  secrets:
+    name: Sandbox secrets present
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - id: check
+        env:
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_CLIENT_SECRET: ${{ secrets.PAYPAL_CLIENT_SECRET }}
+          SANDBOX_BUYER_EMAIL: ${{ secrets.SANDBOX_BUYER_EMAIL }}
+        run: |
+          missing=""
+          for name in PAYPAL_CLIENT_ID PAYPAL_CLIENT_SECRET SANDBOX_BUYER_EMAIL; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::notice title=Sandbox money e2e not run::These repository secrets are not set:$missing. Add them under Settings > Secrets and variables > Actions, then run this workflow again. Nothing was sent."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "All three sandbox secrets are set."
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  e2e:
+    name: Claim payout and one-click payout, in the PayPal sandbox
+    needs: secrets
+    if: needs.secrets.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: remedy
+          POSTGRES_PASSWORD: remedy
+          POSTGRES_DB: remedy
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U remedy"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgres://remedy:remedy@localhost:5432/remedy
+      PORT: "3400"
+      BASE_URL: http://localhost:3400
+      CHROME_PATH: /usr/bin/google-chrome
+      PAYPAL_ENV: sandbox
+      PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+      PAYPAL_CLIENT_SECRET: ${{ secrets.PAYPAL_CLIENT_SECRET }}
+      NEXT_PUBLIC_PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+      SANDBOX_BUYER_EMAIL: ${{ secrets.SANDBOX_BUYER_EMAIL }}
+      # No Claude key: every model answer is a recorded one, and a new photo goes to a person at the firm.
+      ANTHROPIC_API_KEY: ""
+      # The dev data key stands in, as in ci.yml, so the seed can run.
+      REMEDY_ALLOW_DEV_KEY: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: A throwaway shared secret and payee key for this run only
+        run: |
+          checks="$(openssl rand -hex 24)"; payee="$(openssl rand -hex 32)"
+          echo "::add-mask::$checks"; echo "::add-mask::$payee"
+          echo "CHECKS_SECRET=$checks" >> "$GITHUB_ENV"
+          echo "REMEDY_SECRET_KEY=$payee" >> "$GITHUB_ENV"
+      - name: Create the tables, load the recalls, seed the sample firms, load the recorded photo answers
+        run: |
+          node scripts/migrate.mjs
+          npx tsx scripts/load-recalls.ts
+          npx tsx scripts/seed.ts
+          npx tsx scripts/seed-firm.ts
+          npx tsx scripts/verify/precompute.ts --run --yes --recorded-only
+      - name: Start the app
+        run: |
+          npm start > server.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf "$BASE_URL/api/health" -o /dev/null && exit 0; sleep 1; done
+          echo "The app did not start"; cat server.log; exit 1
+      - name: The owner's claim, the firm's approval and a $1.25 sandbox payout (tests/e2e/claim.mjs)
+        run: node tests/e2e/claim.mjs
+      - name: The one-click $34.99 sandbox payout on /try (tests/e2e/try-payout.mjs)
+        run: node tests/e2e/try-payout.mjs
+      - name: Keep the run's transcript
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-transcript
+          path: content/public/e2e-transcript.json
+          if-no-files-found: ignore
+      - name: Server log
+        if: failure()
+        run: cat server.log

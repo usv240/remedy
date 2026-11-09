@@ -16,6 +16,7 @@ import { homeSummary } from "@/lib/firm/home";
 import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 import { fmtInt, fmtPct, fmtUsd } from "@/lib/firm/report";
 import { isSampleNumber, recallCredit, RecallLabel } from "@/lib/recall/label";
+import { ONBOARDING_TODAY } from "@/lib/paypal/onboarding";
 
 /** "4 days ago" reads in lower case after a comma; a date keeps its capital month ("Oct 20, 2026"). */
 const sinceWords = (w: string) => (/^[A-Z][a-z]{2} \d/.test(w) ? w : w.toLowerCase());
@@ -225,12 +226,10 @@ export default function FirmPage() {
           </div>
           <p className="firm-sub">The recall console: claims to review, the recall plan and the monthly CPSC report. A fictional sample firm.</p>
           <p className="firm-sub firm-open">
-            This console is open to everyone, by design, so the sample firm can be seen end to end; approving a payout takes one click to sign in as Ana, the sample reviewer. A firm&rsquo;s own deployment runs on its own PayPal app and signs in through
-            PayPal&rsquo;s Partner Referrals onboarding, as{" "}
+            This console is open to everyone, by design, so the sample firm can be seen end to end; approving a payout takes one click to sign in as Ana, the sample reviewer. {ONBOARDING_TODAY}{" "}
             <Link className="text-link" href="/stack#onboarding">
-              the stack page
-            </Link>{" "}
-            describes.
+              How firms connect
+            </Link>
           </p>
         </div>
       </header>

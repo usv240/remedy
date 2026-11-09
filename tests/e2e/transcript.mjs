@@ -2,7 +2,8 @@
 // result and the time since the run began, the PayPal resource ids and statuses the run saw, and the totals. No
 // secrets and no email addresses are written: every email in a detail line is replaced by "<email>", and the only
 // identifiers kept are the ones PayPal and Remedy issue (claim ids, payout batch and item ids, refund, order and capture
-// ids). Every suite writes into the same file, each under its own name, so the file holds the last run of each.
+// ids). Every suite writes into the same file, each under its own name, so the file holds the last run of each, and
+// payoutRuns keeps the payout timing of every passing run.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
@@ -39,7 +40,15 @@ export function startTranscript(suite, about) {
       }
       file.note =
         "Redacted transcripts of the end-to-end suites run against a local production build with PayPal sandbox keys and a fresh database: each step, the PayPal resource ids and statuses the run saw, and timings. Written by tests/e2e/transcript.mjs from tests/e2e/claim.mjs, tests/e2e/claim-shop.mjs and tests/e2e/try-payout.mjs. No secrets; email addresses are replaced by <email>. Sandbox only: no real money moved.";
-      file.suites[suite] = { about, ranAt: new Date(began).toISOString(), base: redactBase(process.env.BASE_URL ?? "http://localhost:3300"), total_ms: Date.now() - began, passed: totals.passed, failed: totals.failed, ids, steps };
+      const ranAt = new Date(began).toISOString();
+      file.suites[suite] = { about, ranAt, base: redactBase(process.env.BASE_URL ?? "http://localhost:3300"), total_ms: Date.now() - began, passed: totals.passed, failed: totals.failed, ids, steps };
+      // Every passing run's payout timing is kept, not only the last run of each suite, so the measured range and its
+      // run count grow with each run (src/lib/payout-timing.ts reads them).
+      if (!totals.failed && typeof ids.approval_to_paid_s === "number") {
+        const runs = Array.isArray(file.payoutRuns) ? file.payoutRuns : [];
+        if (!runs.some((r) => r.suite === suite && r.ranAt === ranAt)) runs.push({ suite, ranAt, seconds: ids.approval_to_paid_s, payout_batch_id: ids.payout_batch_id ?? null });
+        file.payoutRuns = runs;
+      }
       mkdirSync(path.dirname(FILE), { recursive: true });
       writeFileSync(FILE, JSON.stringify(file, null, 2) + "\n");
       return FILE;

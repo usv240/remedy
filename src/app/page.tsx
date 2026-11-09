@@ -12,10 +12,9 @@ import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
 import { HEADLINE, shareParts } from "@/lib/recall/headline";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
-import { aboutSeconds, PROBLEM, REFUND_TIMING, RESEARCH } from "@/lib/research";
-import { TIME_WORDS } from "@/lib/time-words";
+import { PROBLEM, REFUND_TIMING, RESEARCH } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import { checkTimes, errorRates } from "@/components/evidence/errors";
+import { checkTimeWords, errorRates } from "@/components/evidence/errors";
 import { Contrast } from "@/components/evidence/Contrast";
 import { moneyHeadline } from "@/components/evidence/Money";
 import { fmtDate, fmtInt, shortTitle } from "@/lib/api/format";
@@ -175,13 +174,12 @@ const measured = (id: string) => MEASURED.items.find((i) => i.id === id)?.figure
 /** The recall's short title; the label beside it already says when it is a sample recall. */
 const panelTitle = (title: string) => shortTitle(title).replace(/\s*\(sample recall\)$/i, "");
 
-/** For a run the two reviewers settled: how long the photo check and the reviewers took, against every recorded live check. */
-function timingsFor(t?: { vision_ms?: number; reviewers_ms?: number }): string | null {
-  // The same recorded runs the headline's "about N seconds" is the median of (checkTimes in src/components/evidence/errors.ts).
-  const ct = checkTimes();
-  return t?.vision_ms && t.reviewers_ms
-    ? `The photo check took ${(t.vision_ms / 1000).toFixed(1)} s (recorded live checks: ${ct.check.min} to ${ct.check.max} s, median ${ct.check.median} s), and the two reviewers ${(t.reviewers_ms / 1000).toFixed(1)} s more.`
-    : null;
+/**
+ * For a run the two reviewers settled: its own times, then what a check takes across every recorded live run, said the
+ * way the data does (checkTimeWords in src/components/evidence/errors.ts, the one source the try section shares).
+ */
+function timingsFor(t?: { vision_ms?: number; reviewers_ms?: number; total_ms?: number }): string | null {
+  return t?.vision_ms && t.reviewers_ms ? checkTimeWords(t.total_ms).flagship : null;
 }
 
 function nextFor(decision: string, decidedBy: string, checks: Record<string, { status: string; score: number | null }>, guidance: string | null, summary: string): string {
@@ -294,15 +292,12 @@ export default async function Home() {
   const start = await showcaseStart();
   const quotes = QUOTES.filter((q) => recallByNumber(q.n)?.remedyText.includes(q.text));
   const fragment = devFragment();
-  // The two measured results the intro states: the error rate (src/components/evidence/errors.ts) and the timings
-  // measured in the sandbox (content/public/measured.json).
+  // The one measured result the first screen states: the error rate (src/components/evidence/errors.ts). How long a
+  // check takes sits with the example that shows it (the try section); the payout's time with the contrast.
   const rates = errorRates();
   const money = moneyHeadline();
-  const proof = {
-    wrongPay: `${rates.wrongPay.count} of ${rates.wrongPay.of}`,
-    check: checkTimes().about,
-    payout: aboutSeconds(MEASURED.items.find((i) => i.id === "payout")?.figure),
-  };
+  const times = checkTimeWords();
+  const proof = { wrongPay: `${rates.wrongPay.count} of ${rates.wrongPay.of}` };
 
   return (
     <>
@@ -327,7 +322,7 @@ export default async function Home() {
         </p>
         {/* The first screen holds one result and one action; everything else is further down the page. */}
         <p className="hero-result">
-          <strong className="tabular">{proof.wrongPay}</strong> paid wrongly on photos with a known answer.{proof.check ? <> Checked in about {proof.check} seconds ({TIME_WORDS.median}){proof.payout ? <>, paid in about {proof.payout}</> : null}.</> : null}{" "}
+          <strong className="tabular">{proof.wrongPay}</strong> paid wrongly on photos with a known answer.{" "}
           <Link className="text-link" href="/evidence#errors">
             How it was measured
           </Link>
@@ -371,18 +366,21 @@ export default async function Home() {
               <Info id="intro.stat" label="" topic={`How ${fmtInt(HEADLINE.count)} was counted`} />
             </p>
             <Contrast className="vs intro-vs" />
-            <p className="intro-money">
-              Those refunds come to <strong className="tabular">{money.total}</strong> at the lowest stated prices, and <strong className="tabular">{money.range}</strong> of it goes unclaimed, at the CPSC&rsquo;s {money.correctionRate} correction
-              rate and at its figure of about {money.share} products that come back.{" "}
-              <Link className="text-link" href="/evidence/market#money">
-                How it was counted
-              </Link>
-            </p>
-            {quotes.length > 0 && (
-              <ul className="intro-quotes" aria-label="In the recalls' own words">
-                <Quote q={quotes[0]} />
-              </ul>
-            )}
+            <details className="intro-more">
+              <summary>What is at stake</summary>
+              <p className="intro-money">
+                Those refunds come to <strong className="tabular">{money.total}</strong> at the lowest stated prices, and <strong className="tabular">{money.range}</strong> of it goes unclaimed, at the CPSC&rsquo;s {money.correctionRate} correction
+                rate and at its figure of about {money.share} products that come back. {money.concentration}{" "}
+                <Link className="text-link" href="/evidence/market#money">
+                  How it was counted
+                </Link>
+              </p>
+              {quotes.length > 0 && (
+                <ul className="intro-quotes" aria-label="In the recalls' own words">
+                  <Quote q={quotes[0]} />
+                </ul>
+              )}
+            </details>
             <details className="intro-more">
               <summary>Why reaching owners directly matters</summary>
               <p className="intro-why">
@@ -435,13 +433,15 @@ export default async function Home() {
           <ol className="ideas-list">
             {ideas().map((d, i) => (
               <li key={d.line} className="ideas-item" data-reveal="" style={{ "--reveal-i": i } as React.CSSProperties}>
-                <p className="ideas-line">{d.line}</p>
-                <p className="ideas-note">
-                  {d.note}{" "}
-                  <Link className="text-link ideas-see" href={d.href}>
-                    {d.see}
-                  </Link>
-                </p>
+                <details className="ideas-more">
+                  <summary className="ideas-line">{d.line}</summary>
+                  <p className="ideas-note">
+                    {d.note}{" "}
+                    <Link className="text-link ideas-see" href={d.href}>
+                      {d.see}
+                    </Link>
+                  </p>
+                </details>
               </li>
             ))}
           </ol>
@@ -480,14 +480,14 @@ export default async function Home() {
             See a photo become a refund
           </h2>
           <p className="try-p">
-            Start with Brightline&rsquo;s sample charger: verified, then refunded through PayPal. The other photos show the checks that ask for a new one.{" "}
+            Start with Brightline&rsquo;s sample charger: verified, then refunded through PayPal. A check takes {times.short}.{" "}
             <Info id="try.panel" label="" topic="The photo checks" />
           </p>
           <p className="try-actions">
             <Link className="btn btn-primary" href="/try">
               Try a photo
             </Link>
-            <TourButton className="text-link" />
+            <TourButton className="text-link try-tour" label="Or take the 2-minute tour" />
           </p>
         </div>
         <div className="try-fragment" data-reveal="" style={{ "--reveal-i": 1 } as React.CSSProperties}>
@@ -504,8 +504,7 @@ export default async function Home() {
             From the CPSC Recalls API, pulled {fmtDate(C.pulledAt.slice(0, 10))}.{" "}
             <Link className="text-link" href="/learn#data">
               How we counted
-            </Link>{" "}
-            <Info id="stats.figures" label="" topic="These figures" />
+            </Link>
           </p>
           {/* The sources sit under the heading the figures answer, so the column beside the figures carries its proof. */}
           <div id="research" className="stats-research">
@@ -515,7 +514,6 @@ export default async function Home() {
               <Link className="text-link" href="/evidence#research">
                 What each source says
               </Link>
-              <Info id="research.row" label="" topic="The sources" />
             </div>
           </div>
         </div>

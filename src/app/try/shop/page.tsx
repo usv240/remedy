@@ -5,6 +5,7 @@ import { ClaimInfo } from "@/components/claim/ClaimInfo";
 import { SandboxLogin } from "@/components/SandboxLogin";
 import { ShopBuy } from "@/components/try/ShopBuy";
 import { SHOP } from "@/lib/payments/shop-catalog";
+import { paypalJsSdkSrc } from "@/lib/paypal/env";
 import "../../pages.css";
 import "@/components/claim/claim.css";
 import "@/components/try/try.css";
@@ -51,7 +52,7 @@ export default function ShopPage() {
           <h2 id="shop-pay" className="tr-product-name">
             Pay with PayPal
           </h2>
-          <ShopBuy />
+          <ShopBuy sdkSrc={paypalJsSdkSrc()} />
           <div>
             <p className="cl-hint">Log in to PayPal with the sandbox buyer account:</p>
             <Suspense fallback={<p className="cl-hint">Loading the sandbox login</p>}>

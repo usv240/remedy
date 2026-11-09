@@ -7,7 +7,7 @@
  * Unit tests: counted from vitest's own JSON report of this run. Accessibility: the tally tests/e2e/pages-a11y.mjs
  * wrote at its last run (content/public/a11y.json). MCP tools: src/lib/mcp/tools.ts. Photo checks and error rates:
  * src/components/evidence/errors.ts, from the recorded runs. The catalog of distinct published pictures:
- * src/lib/verify/dhash.ts. Payout timing: content/public/measured.json; photo check timing: checkTimes() over every recorded
+ * src/lib/verify/dhash.ts. Payout timing: payoutTiming() over content/public/measured.json and the e2e transcript; photo check timing: checkTimes() over every recorded
  * live call. The hosted AI budget: render.yaml. tests/facts.test.ts fails when the README, docs/*.md or TESTING.md
  * disagree with this file, or when this file disagrees with the code.
  */
@@ -22,7 +22,7 @@ import { photoAsk } from "../src/lib/recall/photo-count";
 import { proofSplit, type SplitRecall, type SplitRule } from "../src/lib/recall/made-safe";
 import { moneyWords, recallValue, type ValueRecall } from "../src/lib/recall/value";
 import { TOOLS } from "../src/lib/mcp/tools";
-import { aboutSeconds } from "../src/lib/research";
+import { payoutTiming } from "../src/lib/payout-timing";
 import { catalogCounts, catalogOfficialHashes } from "../src/lib/verify/dhash";
 
 const ROOT = process.cwd();
@@ -44,6 +44,8 @@ type Facts = {
   /** The same catalog in full: pictures stored, distinct hash values among them, and the pictures distinct enough to tell their recall apart. */
   catalog: { stored: number; distinctHashes: number; catalog: number };
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
+  /** The payout from approval to SUCCESS: its range and run count over both records (src/lib/payout-timing.ts). */
+  payout: { min: number; max: number; runs: number; figure: string } | null;
   /** The free answers' times, from the recorded runs (content/public/verify-runs.json): the whole answer and the hash comparison. */
   timings: { free: Spread; match: Spread; recordedAt: string; sentence: string };
   /** A live photo check at the claim path's setting, in seconds, from every recorded live call (checkTimes). */
@@ -201,7 +203,7 @@ function main() {
   const a11y = existsSync(a11yFile) ? read<{ pages: number; views: number; passed: number; ranAt: string }>(a11yFile) : null;
   const e = errorRates();
   const free = freeCaught();
-  const measured = read<{ items: { id: string; figure: string }[] }>(path.join(ROOT, "content", "public", "measured.json")).items;
+  const pt = payoutTiming();
   const facts: Facts = {
     note: "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
     writtenAt: new Date().toISOString(),
@@ -217,7 +219,8 @@ function main() {
     },
     catalogPictures: catalogOfficialHashes().length,
     catalog: catalogCounts(),
-    measured: { checkSeconds: checkTimes().about, payoutSeconds: aboutSeconds(measured.find((m) => m.id === "payout")?.figure) },
+    measured: { checkSeconds: checkTimes().about, payoutSeconds: pt?.about ?? null },
+    payout: pt ? { min: pt.min, max: pt.max, runs: pt.runs, figure: pt.figure } : null,
     ...derived(),
     history: history(before),
   };

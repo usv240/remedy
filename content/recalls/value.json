@@ -60,5 +60,10 @@
    "price": 120,
    "usd": 13612800
   }
- ]
+ ],
+ "concentration": {
+  "topTwoUsd": 184000000,
+  "topTwoShare": 39.1,
+  "medianUsd": 68625
+ }
 }

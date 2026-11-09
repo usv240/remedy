@@ -28,11 +28,18 @@ export const recallLabel = (n: string) => (isSampleNumber(n) ? `sample recall ${
  * the payer only of its own fictional sample recall, never of a real CPSC recall. In this build every refund comes from
  * the platform's PayPal sandbox account (src/lib/payments/deps.ts); a firm that connects its own PayPal app pays from it.
  */
+/**
+ * What the code does on a real CPSC recall, in one sentence: no real recalling firm is connected, so the claim's payment
+ * runs on the platform's PayPal sandbox account (the default `rest` in src/lib/payments/deps.ts; restForFirm finds no
+ * firm credentials). The claim page's footer and the README say it word for word (tests/facts.test.ts).
+ */
+export const STAND_IN = "On real CPSC recalls, Remedy's PayPal sandbox account stands in for the recalling firm and pays the refund, so no real money moves.";
+
 export function payerWords(n: string): { demo: string; real: string; short: string } {
   const firm = sampleFirmOf(n);
   if (firm) return { demo: `Paid by ${firm}, a fictional sample firm, from its PayPal sandbox account.`, real: "", short: `${firm}, a fictional sample firm, from its PayPal sandbox account` };
   return {
-    demo: "In this demo, refunds on real CPSC recalls are paid from Remedy's PayPal sandbox account, so no real money moves.",
+    demo: STAND_IN,
     real: "In a real deployment, the recalling firm pays from its own PayPal account; Remedy never holds the money.",
     short: "Remedy's PayPal sandbox account in this demo; in a real deployment, the recalling firm, from its own PayPal account",
   };

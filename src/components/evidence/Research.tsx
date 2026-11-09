@@ -1,9 +1,10 @@
-import { aboutSeconds, PROBLEM as P, RESEARCH as R } from "@/lib/research";
+import { PROBLEM as P, REFUND_TIMING, RESEARCH as R } from "@/lib/research";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
-import measured from "../../../content/public/measured.json";
+import { payoutTiming } from "@/lib/payout-timing";
 import { checkTimes } from "./errors";
 
-const seconds = (id: string) => aboutSeconds(measured.items.find((i) => i.id === id)?.figure);
+/** "about N seconds" for the payout: the largest measured, from both records (src/lib/payout-timing.ts). */
+const payoutAbout = () => payoutTiming()?.about ?? null;
 
 /**
  * Grounded in research: published findings Remedy is built on, each with what Remedy does about it. Every figure was
@@ -50,7 +51,7 @@ const FINDINGS: { fig: string; finding: string; source: string; url: string; inR
     finding: "Recalled products that come back through a recall, on average, by the CPSC's measure: every finished claim adds to it.",
     source: R.comeBack.source,
     url: R.comeBack.url,
-    inRemedy: `A finished claim takes one photo: the check runs in about ${checkTimes().about} seconds (the median of the recorded live checks) and the PayPal payout in about ${seconds("payout")}, measured in the sandbox.`,
+    inRemedy: `A finished claim takes one photo: the check runs in about ${checkTimes().about} seconds (the median of the recorded live checks) and the PayPal payout in about ${payoutAbout()}, measured in the sandbox.`,
   },
   {
     fig: R.amazonOrder.products,
@@ -85,7 +86,7 @@ type Finding = { fig: string; finding: string; source: string; url: string; date
  * quoted; each with the code in Remedy that answers it, named in the Technical view. Shown on /evidence/market#problem.
  */
 function problemFindings(): Finding[] {
-  const payout = seconds("payout");
+  const payout = payoutAbout();
   const p = P.listing;
   return [
     {
@@ -121,8 +122,8 @@ function problemFindings(): Finding[] {
       source: `${P.paypalPortal.source}; ${P.weeksPortal.source}; ${R.portal.source}`,
       date: `${P.paypalPortal.date}; ${P.weeksPortal.date}`,
       url: P.paypalPortal.url,
-      inRemedy: `Remedy's PayPal payout reached the owner ${payout ? `in about ${payout} seconds` : "in seconds"} after approval, measured in the PayPal sandbox, and a refund to the original PayPal purchase went through at once.`,
-      code: "content/public/measured.json, src/lib/payments/router.ts",
+      inRemedy: `Remedy's PayPal payout reached the owner ${payout ? `in about ${payout} seconds` : "in seconds"} after approval, measured in the PayPal sandbox, and ${REFUND_TIMING.marked}.`,
+      code: "src/lib/payout-timing.ts, content/public/measured.json, content/public/e2e-transcript.json, src/lib/payments/router.ts",
     },
     {
       fig: `${p.paypal} of ${p.records.toLocaleString("en-US")}`,
