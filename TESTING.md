@@ -39,7 +39,7 @@ Open `/try`. The **Examples** tab starts with **Photos of products made safe**: 
 
 | Example | Recall | Expected result |
 |---|---|---|
-| Brightline's sample charger, cord cut | Sample recall BH-2026-01 | **Verified.** The product match is under the bar on the opened case, so two AI reviewers look; both find the charger with its cord cut. $34.99 is under Brightline's $50.00 auto-approve cap, so a real claim is refunded at once. |
+| Brightline's sample charger, cord cut | Sample recall BH-2026-01 | **Verified** in this recorded run. The product match is just under the pass mark, so two AI reviewers look; both find the charger with its cord cut. Across its 4 recorded runs: verified 3 times, and sent to a person at the firm once. $34.99 is under Brightline's $50.00 auto-approve cap, so a verified claim is refunded at once. |
 | The same charger, opened, cord still attached | BH-2026-01 | **Retake:** cut the cord first. Shown with its three measured runs (a retake in each), not run again. |
 | The same charger, taken apart | BH-2026-01 | **Retake:** the cord is still wired in. Three measured runs, a retake in each. |
 | The CPSC's own made-safe photo | 26125, hair dryer, cut the cord | **Retake:** Remedy recognizes the recall's published example in code and asks for the owner's own photo. Press **Run with the official-image match off** to see what the photo checks read: the right product, and Claude noting it is the CPSC's own published picture rather than the owner's photo. No payout either way. |
@@ -205,7 +205,7 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 562 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests, no network | `npm test` | 578 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |

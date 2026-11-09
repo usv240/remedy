@@ -327,7 +327,7 @@ export const HASH_LINEAGE = {
     url: "https://stopncii.org/how-it-works/",
     read: "November 9, 2026",
   },
-  differs: "Remedy's pool is open code, holds recall photos, and shares only a 64-bit hash and a row id between firms",
+  differs: "Remedy's pool is open code, holds recall photos, and shares only two 64-bit hashes and a row id between firms",
 } as const;
 
 /**

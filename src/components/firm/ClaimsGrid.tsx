@@ -4,7 +4,7 @@ import { ClientSideRowModelModule, CsvExportModule, DateFilterModule, ModuleRegi
 import { ColumnMenuModule, LicenseManager, SetFilterModule, StatusBarModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
-import { CHECK_LABEL, CHECK_ORDER, TONE, WORD } from "@/lib/firm/checks";
+import { CHECK_LABEL, CHECK_ORDER, REVIEWERS_LABEL, REVIEWERS_PLAIN, REVIEWERS_TONE, TONE, WORD } from "@/lib/firm/checks";
 import { STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
 import { AG_LICENSE_KEY, agGridEnterprise } from "./ag-license";
 import { remedyGridTheme } from "./agTheme";
@@ -66,7 +66,7 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
     handleRef.current = {
       selectPayable: () => api.current?.forEachNodeAfterFilter((n) => n.data?.payable && n.setSelected(true)),
       clearSelection: () => api.current?.deselectAll(),
-      exportCsv: () => api.current?.exportDataAsCsv({ fileName: "brightline-claims.csv", columnKeys: ["claimant", "decision", "confidence", "amountCents", "stage", "submittedAt"] }),
+      exportCsv: () => api.current?.exportDataAsCsv({ fileName: "brightline-claims.csv", columnKeys: ["claimant", "confidence", "reviewers", "decision", "amountCents", "stage", "submittedAt"] }),
     };
     return () => {
       handleRef.current = null;
@@ -116,16 +116,28 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         headerName: "Checks",
         colId: "checks",
         headerTooltip: CHECK_ORDER.map((id) => `${id} ${CHECK_LABEL[id].long}`).join(", "),
-        width: 172,
+        width: 236,
         sortable: false,
         filter: false,
         valueGetter: (p) => (p.data ? CHECK_ORDER.map((id) => `${id} ${WORD[p.data!.checks[id]]}`).join(", ") : ""),
+        // Each chip names its check (C1 to C6) beside the word; the short name is in its tooltip and in the Technical
+        // view's key above the grid.
         cellRenderer: (p: ICellRendererParams<QueueRow>) =>
           p.data ? (
             <span className="cq-checks" role="list" aria-label="The six checks">
               {CHECK_ORDER.map((id) => (
-                <span key={id} role="listitem" className="cq-check" data-tone={TONE[p.data!.checks[id]]} title={`${CHECK_LABEL[id].long}: ${WORD[p.data!.checks[id]]}`} aria-label={`${CHECK_LABEL[id].long}: ${WORD[p.data!.checks[id]]}`}>
-                  {WORD[p.data!.checks[id]]}
+                <span
+                  key={id}
+                  role="listitem"
+                  className="cq-check"
+                  data-tone={TONE[p.data!.checks[id]]}
+                  title={`${id} ${CHECK_LABEL[id].short} (${CHECK_LABEL[id].long}): ${WORD[p.data!.checks[id]]}`}
+                  aria-label={`${id} ${CHECK_LABEL[id].long}: ${WORD[p.data!.checks[id]]}`}
+                >
+                  <span className="cq-check-id" aria-hidden="true">
+                    {id}
+                  </span>
+                  <span aria-hidden="true">{WORD[p.data!.checks[id]]}</span>
                 </span>
               ))}
             </span>
@@ -140,6 +152,24 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
         filter: "agNumberColumnFilter",
         cellClass: "num",
         valueFormatter: (p) => (p.value === null || p.value === undefined ? "–" : Number(p.value).toFixed(2)),
+      },
+      {
+        // Between the confidence and the decision, so an unsure check reads through to why it was paid or held.
+        headerName: "Reviewers",
+        field: "reviewers",
+        width: 132,
+        headerTooltip: "What the two AI reviewers did: agreed, disagreed, or not needed",
+        filter: ENTERPRISE ? "agSetColumnFilter" : "agTextColumnFilter",
+        valueFormatter: (p) => REVIEWERS_LABEL[p.value as QueueRow["reviewers"]] ?? "",
+        filterValueGetter: (p) => (p.data ? REVIEWERS_LABEL[p.data.reviewers] : ""),
+        filterParams: ENTERPRISE ? { valueFormatter: (p: { value: QueueRow["reviewers"] }) => REVIEWERS_LABEL[p.value] ?? p.value } : undefined,
+        tooltipValueGetter: (p) => (p.data ? REVIEWERS_PLAIN[p.data.reviewers] : ""),
+        cellRenderer: (p: ICellRendererParams<QueueRow>) =>
+          p.data ? (
+            <span className="cq-reviewers" data-tone={REVIEWERS_TONE[p.data.reviewers]}>
+              {REVIEWERS_LABEL[p.data.reviewers]}
+            </span>
+          ) : null,
       },
       {
         headerName: "Decision",

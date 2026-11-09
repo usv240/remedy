@@ -19,13 +19,21 @@
  * match there is the same picture, not a false one. A different photograph of the same product (the three charger photos)
  * counts as unrelated: matching one with another would hold a photo nobody had sent before.
  *
+ * The second hash (src/lib/verify/phash.ts) is measured beside it on the same copies: each copy hashed in its framings
+ * (phashFramings) against the source's stored center hash, and against the same unrelated pictures (the other sources'
+ * hashes, and every other recall's distinct published pictures from content/recalls/image-phashes.json). The run
+ * reports, at each threshold, what the dHash alone catches, what the new hash alone catches, and what either catches,
+ * with the unrelated matches for each, so the new hash's threshold (PHASH_MAX_DISTANCE) is set from it.
+ *
  * Writes content/public/hash-reuse-run.json with every distance, so tests/hash-reuse-run.test.ts can derive the table again.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
-import { CATALOG_MAX_DISTANCE, catalogOfficialHashes, closestMatch, DUPLICATE_MAX_DISTANCE, nearestDistances, photoHashes } from "@/lib/verify/dhash";
+import { CATALOG_MAX_DISTANCE, catalogOfficialHashes, closestMatch, DUPLICATE_MAX_DISTANCE, hamming, nearestDistances, photoHashes } from "@/lib/verify/dhash";
 import { FIXTURES_DIR } from "@/lib/verify/fixtures";
+import { decodeHashGrey } from "@/lib/verify/image";
+import { PHASH_MAX_DISTANCE, PHASH_REGION, phashDistance, phashFramings, phashGrey, storedPhashes } from "@/lib/verify/phash";
 
 const OUT = path.join(process.cwd(), "content", "public", "hash-reuse-run.json");
 
@@ -110,7 +118,18 @@ export type Row = {
   caught4: boolean;
   /** The nearest picture the copy is not a copy of: another source photo, or a published picture of a different recall. */
   nearestUnrelated: { ref: string; distance: number; where: "source" | "catalog" };
+  /** The second hash: the nearest framing of the copy to the source's stored center hash, and which framing it was. */
+  phashDistance: number;
+  phashFraming: string | null;
+  /** The second hash's nearest picture the copy is not a copy of, over the same unrelated pictures. */
+  nearestUnrelatedPhash: { ref: string; distance: number; where: "source" | "catalog" };
 };
+
+/** At one threshold: copies caught and copies within it of an unrelated picture, for each hash and for either. */
+export type AtThreshold = { bits: number; dhash: { caught: number; unrelated: number }; phash: { caught: number; unrelated: number }; either: { caught: number; unrelated: number } };
+
+/** The thresholds the comparison is reported at: the dHash's two (4 and 10 bits) and the steps around them. */
+export const COMPARE_AT = [4, 6, 8, 10, 12];
 
 export type KindCount = { kind: string; label: string; parameters: string; n: number; caught10: number; caught4: number; medianDistance: number; maxDistance: number };
 
@@ -118,11 +137,23 @@ export type Run = {
   note: string;
   recordedAt: string;
   thresholds: { sameRecall: number; otherRecalls: number };
-  sources: { file: string; recall: string | null; what: string; credit: string; dhash: string }[];
+  sources: { file: string; recall: string | null; what: string; credit: string; dhash: string; phash: string }[];
   variants: { kind: string; label: string; parameters: string }[];
   byKind: KindCount[];
   totals: { n: number; caught10: number; caught4: number; medianDistance: number; maxDistance: number };
   falseMatches: { of: number; within10: number; within4: number; nearestUnrelatedMin: number; unrelatedRefs: { sources: number; catalog: number } };
+  /** The second hash beside the dHash: its threshold, its framings, and the comparison at each threshold. */
+  phash: {
+    region: number;
+    maxDistance: number;
+    framings: string[];
+    catalogPictures: number;
+    nearestUnrelatedMin: number;
+    byThreshold: AtThreshold[];
+    /** At the thresholds in use: the dHash at 4 bits across firms, the new hash at PHASH_MAX_DISTANCE, and either. */
+    inUse: { dhashBits: number; phashBits: number; dhash: { caught: number; unrelated: number }; phash: { caught: number; unrelated: number }; either: { caught: number; unrelated: number } };
+    byKind: { kind: string; n: number; dhash4: number; phash: number; either: number }[];
+  };
   rows: Row[];
 };
 
@@ -136,23 +167,37 @@ const median = (xs: number[]) => {
 export async function measure(): Promise<Omit<Run, "note" | "recordedAt">> {
   const bytes = SOURCES.map((s) => readFileSync(path.join(FIXTURES_DIR, s.file)));
   const stored = await Promise.all(bytes.map((b) => photoHashes(b)));
-  const sources = SOURCES.map((s, i) => ({ ...s, dhash: stored[i].dhash }));
+  const storedP = await Promise.all(bytes.map(async (b) => phashGrey(await decodeHashGrey(b))));
+  const sources = SOURCES.map((s, i) => ({ ...s, dhash: stored[i].dhash, phash: storedP[i] }));
   const catalog = catalogOfficialHashes();
+  const pcat = storedPhashes();
   const rows: Row[] = [];
   let unrelatedCatalog = 0;
+  let framingNames: string[] = [];
   for (let i = 0; i < SOURCES.length; i++) {
     const s = SOURCES[i];
     const self = [{ ref: s.file, dhash: stored[i].dhash }];
     const otherSources = sources.filter((_, j) => j !== i).map((o) => ({ ref: o.file, dhash: o.dhash }));
     const otherRecalls = catalog.filter((c) => c.recall !== s.recall).map((c) => ({ ref: c.ref, dhash: c.dhash }));
+    // The same unrelated pictures, by their second hash.
+    const otherP = [...sources.filter((_, j) => j !== i).map((o) => ({ ref: o.file, phash: o.phash, where: "source" as const })), ...catalog.filter((c) => c.recall !== s.recall && pcat[c.ref]).map((c) => ({ ref: c.ref, phash: pcat[c.ref], where: "catalog" as const }))];
     if (i === 0) unrelatedCatalog = otherRecalls.length;
     for (const v of VARIANTS) {
-      const { variants } = await photoHashes(await v.make(bytes[i]));
+      const copy = await v.make(bytes[i]);
+      const { variants } = await photoHashes(copy);
+      const framed = phashFramings(await decodeHashGrey(copy));
+      if (!framingNames.length) framingNames = framed.map((f) => f.name);
       const m = closestMatch(variants, self, 64);
       const distance = m?.distance ?? 65;
       const nearSource = nearestDistances(variants, otherSources)[0];
       const nearCatalog = nearestDistances(variants, otherRecalls)[0];
       const nearest = nearSource.distance <= nearCatalog.distance ? { ref: nearSource.ref, distance: nearSource.distance, where: "source" as const } : { ref: nearCatalog.ref, distance: nearCatalog.distance, where: "catalog" as const };
+      const p = phashDistance(framed, storedP[i]);
+      let nearP = { ref: "", distance: 65, where: "source" as "source" | "catalog" };
+      for (const o of otherP) {
+        const d = Math.min(...framed.map((f) => hamming(f.phash, o.phash)));
+        if (d < nearP.distance) nearP = { ref: o.ref, distance: d, where: o.where };
+      }
       rows.push({
         source: s.file,
         kind: v.kind,
@@ -161,9 +206,19 @@ export async function measure(): Promise<Omit<Run, "note" | "recordedAt">> {
         caught10: Boolean(closestMatch(variants, self, DUPLICATE_MAX_DISTANCE)),
         caught4: Boolean(closestMatch(variants, self, CATALOG_MAX_DISTANCE)),
         nearestUnrelated: nearest,
+        phashDistance: p.distance,
+        phashFraming: p.framing,
+        nearestUnrelatedPhash: nearP,
       });
     }
   }
+  const at = (bits: number): AtThreshold => ({
+    bits,
+    dhash: { caught: rows.filter((r) => r.distance <= bits).length, unrelated: rows.filter((r) => r.nearestUnrelated.distance <= bits).length },
+    phash: { caught: rows.filter((r) => r.phashDistance <= bits).length, unrelated: rows.filter((r) => r.nearestUnrelatedPhash.distance <= bits).length },
+    either: { caught: rows.filter((r) => r.distance <= bits || r.phashDistance <= bits).length, unrelated: rows.filter((r) => r.nearestUnrelated.distance <= bits || r.nearestUnrelatedPhash.distance <= bits).length },
+  });
+  const inUseCaught = (r: Row) => r.distance <= CATALOG_MAX_DISTANCE || r.phashDistance <= PHASH_MAX_DISTANCE;
   const count = (list: Row[]) => ({ n: list.length, caught10: list.filter((r) => r.caught10).length, caught4: list.filter((r) => r.caught4).length, medianDistance: median(list.map((r) => r.distance)), maxDistance: Math.max(...list.map((r) => r.distance)) });
   const byKind = VARIANTS.map((v) => ({ kind: v.kind, label: v.label, parameters: v.parameters, ...count(rows.filter((r) => r.kind === v.kind)) }));
   return {
@@ -179,6 +234,25 @@ export async function measure(): Promise<Omit<Run, "note" | "recordedAt">> {
       nearestUnrelatedMin: Math.min(...rows.map((r) => r.nearestUnrelated.distance)),
       unrelatedRefs: { sources: SOURCES.length - 1, catalog: unrelatedCatalog },
     },
+    phash: {
+      region: PHASH_REGION,
+      maxDistance: PHASH_MAX_DISTANCE,
+      framings: framingNames,
+      catalogPictures: unrelatedCatalog,
+      nearestUnrelatedMin: Math.min(...rows.map((r) => r.nearestUnrelatedPhash.distance)),
+      byThreshold: COMPARE_AT.map(at),
+      inUse: {
+        dhashBits: CATALOG_MAX_DISTANCE,
+        phashBits: PHASH_MAX_DISTANCE,
+        dhash: { caught: rows.filter((r) => r.distance <= CATALOG_MAX_DISTANCE).length, unrelated: rows.filter((r) => r.nearestUnrelated.distance <= CATALOG_MAX_DISTANCE).length },
+        phash: { caught: rows.filter((r) => r.phashDistance <= PHASH_MAX_DISTANCE).length, unrelated: rows.filter((r) => r.nearestUnrelatedPhash.distance <= PHASH_MAX_DISTANCE).length },
+        either: { caught: rows.filter(inUseCaught).length, unrelated: rows.filter((r) => r.nearestUnrelated.distance <= CATALOG_MAX_DISTANCE || r.nearestUnrelatedPhash.distance <= PHASH_MAX_DISTANCE).length },
+      },
+      byKind: VARIANTS.map((v) => {
+        const list = rows.filter((r) => r.kind === v.kind);
+        return { kind: v.kind, n: list.length, dhash4: list.filter((r) => r.caught4).length, phash: list.filter((r) => r.phashDistance <= PHASH_MAX_DISTANCE).length, either: list.filter(inUseCaught).length };
+      }),
+    },
     rows,
   };
 }
@@ -193,6 +267,9 @@ async function main() {
   writeFileSync(OUT, JSON.stringify(out, null, 2) + "\n");
   console.log(`hash reuse: ${m.totals.caught10} of ${m.totals.n} copies caught at ${m.thresholds.sameRecall} bits, ${m.totals.caught4} at ${m.thresholds.otherRecalls}; unrelated within ${m.thresholds.sameRecall}: ${m.falseMatches.within10}, within ${m.thresholds.otherRecalls}: ${m.falseMatches.within4}; nearest unrelated ${m.falseMatches.nearestUnrelatedMin} bits`);
   console.table(m.byKind.map((k) => ({ kind: k.kind, caught10: `${k.caught10}/${k.n}`, caught4: `${k.caught4}/${k.n}`, median: k.medianDistance, max: k.maxDistance })));
+  console.table(m.phash.byThreshold.map((t) => ({ bits: t.bits, dhash: `${t.dhash.caught} (${t.dhash.unrelated} unrelated)`, phash: `${t.phash.caught} (${t.phash.unrelated} unrelated)`, either: `${t.either.caught} (${t.either.unrelated} unrelated)` })));
+  console.table(m.phash.byKind);
+  console.log(`second hash: nearest unrelated ${m.phash.nearestUnrelatedMin} bits; in use (dHash ${m.phash.inUse.dhashBits}, new ${m.phash.inUse.phashBits}): either catches ${m.phash.inUse.either.caught} of ${m.totals.n}, unrelated ${m.phash.inUse.either.unrelated}`);
 }
 
 if (process.argv[1] && /hash-reuse-run\.ts$/.test(process.argv[1])) {

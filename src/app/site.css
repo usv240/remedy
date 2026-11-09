@@ -280,6 +280,8 @@
     flex-direction: column;
     flex-wrap: nowrap;
     min-width: 0;
+    /* Room for Back to top, which sits at the right of the first note. */
+    padding-right: 7.5rem;
   }
   .fc-top-link {
     position: absolute;
@@ -308,9 +310,6 @@
   max-width: 58%;
   font-size: 0.9375rem;
 }
-.fc-wordmark {
-  font-weight: 500;
-}
 .fc-top-link {
   font-size: 0.9375rem;
   min-height: 44px;
@@ -319,19 +318,14 @@
   text-underline-offset: 0.25em;
 }
 .fc-display {
-  align-self: end;
-  display: flex;
-  flex-wrap: wrap;
+  align-self: start;
   font-family: var(--font-display);
   font-weight: 300;
-  /* Sized so the whole address runs on one line from 900px up (about 90% of the width); on a phone it breaks at the slash. */
-  font-size: clamp(2.75rem, 7.4vw, 8.25rem);
-  letter-spacing: -0.03em;
-  line-height: 0.95;
+  /* The wordmark at display size: about half the width from 900px up, and inside the margins on a phone. */
+  font-size: clamp(3.5rem, 13vw, 12rem);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
   text-decoration: none;
-  overflow-wrap: anywhere;
-}
-.fc-display span {
   white-space: nowrap;
 }
 @media (hover: hover) and (pointer: fine) {
@@ -381,10 +375,8 @@
   .fc-year {
     padding-bottom: 0;
   }
-  /* 10vw keeps ".onrender.com" inside the margins at 390px (11vw ran the longer line 7px past them). */
   .fc-display {
-    flex-direction: column;
-    font-size: clamp(2.25rem, 10vw, 5rem);
+    font-size: clamp(3.5rem, 21vw, 7.5rem);
   }
 }
 

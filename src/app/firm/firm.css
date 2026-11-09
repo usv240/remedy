@@ -533,18 +533,54 @@
 }
 .cq-check {
   flex: none;
-  min-width: 2.6rem;
+  min-width: 4.4rem;
   height: 20px;
-  padding: 0 4px;
+  padding: 0 5px;
   line-height: 1;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 500;
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   background: var(--pill-neutral);
   color: var(--pill-neutral-ink);
   white-space: nowrap;
+}
+/* The check's id inside its chip, lighter in weight than the word, in the same ink so it keeps its contrast. */
+.cq-check-id {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+/* The two reviewers' outcome: a word in the tone of its outcome, no chip, so the decision beside it stays the mark. */
+.cq-reviewers {
+  font-weight: 500;
+}
+.cq-reviewers[data-tone="positive"] {
+  color: var(--positive);
+}
+.cq-reviewers[data-tone="attention"] {
+  color: var(--attention);
+}
+.cq-reviewers[data-tone="neutral"] {
+  color: var(--muted);
+  font-weight: 400;
+}
+/* The key to the check chips, in the Technical view only. */
+.cq-legend {
+  display: none;
+  margin: 12px 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  gap: 4px 16px;
+  flex-wrap: wrap;
+}
+.cq-legend strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+:root[data-mode="technical"] .cq-legend {
+  display: flex;
 }
 .cq-check[data-tone="positive"] {
   background: var(--pill-positive);
@@ -908,6 +944,18 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+/* The chart mounts under the list, hidden, and takes its place once its bars are drawn (PlanLoader). */
+.plan-stage {
+  position: relative;
+}
+.plan-stage:not([data-ready]) .plan-stage-chart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 .plan-loading {
   display: grid;
   place-items: center;
@@ -1177,8 +1225,10 @@
     position: static;
     padding: 8px 16px 0;
   }
+  /* The console's one line on the sample firm and the sandbox stays in view on a phone, under the navigation. */
   .firm-side-label {
-    display: none;
+    margin: 0 0 8px;
+    max-width: none;
   }
   .firm-nav {
     margin-top: 8px;

@@ -1,8 +1,8 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-09T12:17:43.788Z",
+  "writtenAt": "2026-11-09T14:16:13.260Z",
   "unitTests": {
-    "passed": 562,
+    "passed": 578,
     "skipped": 51,
     "skippedNeeds": {
       "database": 21,
@@ -11,16 +11,16 @@
       "other": 0
     },
     "failed": 0,
-    "files": 70,
-    "testsHash": "8c349acd8e2779d0",
-    "ranAt": "2026-11-09T12:03:36.684Z",
+    "files": 72,
+    "testsHash": "3a227c5fc6f3fc35",
+    "ranAt": "2026-11-09T14:15:45.028Z",
     "note": "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed)."
   },
   "a11y": {
     "pages": 32,
     "views": 128,
     "passed": 128,
-    "ranAt": "2026-11-09T12:12:33.915Z"
+    "ranAt": "2026-11-09T14:12:42.136Z"
   },
   "mcp": {
     "tools": 7,
@@ -65,7 +65,7 @@
   "payout": {
     "min": 16,
     "max": 19,
-    "runs": 8,
+    "runs": 10,
     "figure": "16 to 19 s"
   },
   "timings": {
@@ -220,7 +220,7 @@
   "history": {
     "first": "November 5, 2026",
     "latest": "November 9, 2026",
-    "latestCommit": "29cd5bf",
+    "latestCommit": "a5f3b7e",
     "sentence": "History: the first commit is dated November 5, 2026 and the latest November 9, 2026."
   }
 }

@@ -26,9 +26,17 @@ async function main() {
     const first = page.locator(".tr-preset").first();
     check("the first example is Brightline's sample charger, cord cut", /sample charger, cord cut/i.test(await first.locator(".tr-preset-title").innerText()));
     await first.getByRole("button", { name: "Run it", exact: true }).click();
-    const pay = first.getByRole("button", { name: /Send \$34\.99 to the sandbox buyer/ });
+    // At desktop width the result opens full width below the examples, with focus moved to it and a way back.
+    const out = page.locator("#tr-result-sample-charger-cut");
+    const pay = out.getByRole("button", { name: /Send \$34\.99 to the sandbox buyer/ });
     await pay.waitFor({ timeout: 30_000 });
-    check("once verified, the result offers the sandbox payout, labelled as one", (await first.locator(".tr-pay .pill").innerText()).trim() === "Sandbox payout");
+    const wide = await page.evaluate(() => {
+      const panel = document.querySelector("#tr-result-sample-charger-cut");
+      const card = document.querySelector(".tr-preset");
+      return { width: panel?.getBoundingClientRect().width ?? 0, card: card?.getBoundingClientRect().width ?? 0, focus: Boolean(document.activeElement?.closest("#tr-result-sample-charger-cut")) };
+    });
+    check("the result opens full width below the examples, with focus on it", wide.width > wide.card * 2 && wide.focus, `${Math.round(wide.width)} px against a ${Math.round(wide.card)} px card`);
+    check("once verified, the result offers the sandbox payout, labelled as one", (await out.locator(".tr-pay .pill").innerText()).trim() === "Sandbox payout");
     const t0 = Date.now();
     const answer = page.waitForResponse((r) => r.url().endsWith("/api/try/sandbox-payout") && r.request().method() === "POST", { timeout: 120_000 });
     await pay.click();
@@ -56,8 +64,8 @@ async function main() {
 
     // The same visitor presses again: nothing is sent, and the latest receipt is shown.
     await page.goto(`${B}/try`, { waitUntil: "networkidle" });
-    const again = page.locator(".tr-preset").first();
-    await again.getByRole("button", { name: "Run it", exact: true }).click();
+    await page.locator(".tr-preset").first().getByRole("button", { name: "Run it", exact: true }).click();
+    const again = page.locator("#tr-result-sample-charger-cut");
     const pay2 = again.getByRole("button", { name: /Send \$34\.99 to the sandbox buyer/ });
     await pay2.waitFor({ timeout: 30_000 });
     const second = page.waitForResponse((x) => x.url().endsWith("/api/try/sandbox-payout"), { timeout: 60_000 });

@@ -15,7 +15,7 @@ import { refundWindow } from "@/lib/payments/refunds";
 import type { PaymentStatus } from "@/lib/payments/types";
 import { decrypt } from "@/lib/secure";
 import type { CheckId, Checks } from "@/lib/verify/types";
-import { CHECK_LABEL, CHECK_ORDER, checkWords, confidence } from "./checks";
+import { CHECK_LABEL, CHECK_ORDER, checkWords, confidence, reviewersOutcome } from "./checks";
 import { recallThumb, shortName, type Firm } from "./firm";
 import { ensureReadyClaims } from "./sample-claims";
 import type { ClaimDetail, Decision, PayStatus, QueueRow, Review, Stage } from "./types";
@@ -35,6 +35,10 @@ type Raw = {
   has_payee: boolean;
   checks: Partial<Checks> | null;
   decision: Decision;
+  /** claim.result.decided_by, and the referee's decision and agreement from claim.debate. */
+  decided_by: string | null;
+  referee_decision: string | null;
+  referee_agreed: string | null;
   status: string;
   review_outcome: "approved" | "retake" | "declined" | null;
   amount: string | null;
@@ -102,7 +106,8 @@ export function stageOf(r: { decision: Decision; reviewOutcome: Raw["review_outc
 
 const QUEUE_SQL = (firmId: number, where = sql`true`) => sql`
   select c.id, c.recall_number, r.title, r.products, c.photo_id, (ph.bytes is not null) as photo_kept, ph.removed_reason as photo_removed, c.payee_type, c.payee_masked, (c.payee_value_enc is not null) as has_payee,
-         c.checks, c.decision, c.status, c.review_outcome, c.amount::text as amount, c.channel, c.created_at, c.is_sample,
+         c.checks, c.decision, c.result->>'decided_by' as decided_by, c.debate->'referee'->>'decision' as referee_decision, c.debate->'referee'->>'agreed' as referee_agreed,
+         c.status, c.review_outcome, c.amount::text as amount, c.channel, c.created_at, c.is_sample,
          pp.id as plan_id, coalesce(pp.detail->>'status', pp.status) as plan_status,
          p.status as pay_status, p.route as pay_route, p.paid_at, p.paypal_batch_id, p.paypal_item_id, p.paypal_status, p.error->>'issue' as issue,
          s.paypal_capture_id as capture_id
@@ -133,6 +138,7 @@ function toRow(r: Raw): QueueRow {
     payeeType: r.payee_type,
     checks: checkWords(r.checks),
     confidence: confidence(r.checks),
+    reviewers: reviewersOutcome({ decision: r.decision, decidedBy: r.decided_by, refereeDecision: r.referee_decision, refereeAgreed: r.referee_agreed === null ? null : r.referee_agreed === "true" }),
     decision: r.decision,
     stage,
     reviewOutcome: r.review_outcome,

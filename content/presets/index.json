@@ -4,7 +4,7 @@
     {
       "id": "sample-charger-cut",
       "title": "Brightline's sample charger, cord cut",
-      "summary": "A charger with its cord cut where it meets the case, sent for Brightline Home's sample recall BH-2026-01. On a real claim this is the full automatic path: verified, then the refund at once. Buy the charger in the sample shop to see it paid.",
+      "summary": "A charger with its cord cut where it meets the case, sent for Brightline Home's sample recall BH-2026-01. Its right-product score sits just under the pass mark, so the two reviewers settle it. Measured on its 4 recorded runs: verified 3 times, through the two reviewers, and sent to a person at the firm once. Buy the charger in the sample shop to see it paid.",
       "recall": "BH-2026-01",
       "photo": "sample/cord-cut.jpg",
       "photo_alt": "A hand holding a laptop charger's cord, cut where it met the charger case, with the bare wires showing; the opened charger case lies behind it.",
@@ -13,7 +13,7 @@
       "group": "made-safe",
       "expected": {
         "decision": "verified",
-        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so on a real claim the sandbox refund goes out at once."
+        "plain": "Verified: the right charger, with its cord cut. Brightline's auto-approve rule covers $34.99, so when a claim is verified the sandbox refund goes out at once."
       },
       "recorded": "sample-charger-cut.json"
     },

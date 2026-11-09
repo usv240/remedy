@@ -226,11 +226,13 @@ export async function ensureReadyClaims(firmId: number, recall: string = SAMPLE_
     if (!known) return 0;
     for (let k = n; k < READY_TARGET; k++) {
       const created = new Date(now.getTime() - (90 - k * 30) * 60_000);
+      // The two reviewers' recorded votes, kept with the claim like the seeded history's, so the queue shows them.
+      const debate = sampleDebate("paid", k, recall);
       await tx.execute(sql`
-        insert into claim (recall_number, firm_id, photo_id, payee_type, payee_value_enc, payee_hash, payee_masked, units_claimed, checks, decision, status, amount, channel,
+        insert into claim (recall_number, firm_id, photo_id, payee_type, payee_value_enc, payee_hash, payee_masked, units_claimed, checks, decision, status, debate, amount, channel,
                            is_sample, decided_at, created_at, updated_at, result)
         values (${recall}, ${firmId}, ${photo}::uuid, 'email', ${encrypt(payee)}, ${hashContact(payee)}, ${maskContact(payee)}, 1, ${JSON.stringify(sampleChecks("paid", k, recall))}::jsonb,
-                'verified', 'verified', ${READY_AMOUNT}, ${k % 2 ? "link" : "web"}, true, ${new Date(created.getTime() + 22_000)}, ${created}, ${created},
+                'verified', 'verified', ${debate ? JSON.stringify(debate) : null}::jsonb, ${READY_AMOUNT}, ${k % 2 ? "link" : "web"}, true, ${new Date(created.getTime() + 22_000)}, ${created}, ${created},
                 ${JSON.stringify(sampleResult("paid", k, recall))}::jsonb)`);
     }
     return READY_TARGET - n;

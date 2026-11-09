@@ -7,7 +7,7 @@ import { log } from "@/lib/log";
 import { checkPool, type PoolRow } from "../_lib/pool";
 
 /**
- * POST /api/v1/hash-pool/check: { dhash, recall_number? }. Is this photo already in the shared pool? The answer is a
+ * POST /api/v1/hash-pool/check: { dhash, phash?, recall_number? }. Is this photo already in the shared pool? The answer is a
  * hit or no hit, the distance in bits, the threshold that applied and the holding row's opaque ref. No photo is
  * sent and nothing about the holder comes back. Works without a database: the pool is then empty and only the
  * published pictures of every recall are checked.
@@ -22,12 +22,12 @@ export async function POST(req: Request) {
     try {
       const rows: PoolRow[] = dbConfigured()
         ? ((await db()
-            .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash, source: schema.imageHashes.source, recallNumber: schema.imageHashes.recallNumber })
+            .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash, phash: schema.imageHashes.phash, source: schema.imageHashes.source, recallNumber: schema.imageHashes.recallNumber })
             .from(schema.imageHashes)
             .where(inArray(schema.imageHashes.source, ["claim", "partner"]))
             .limit(50000)) as PoolRow[])
         : [];
-      return ok(checkPool(parsed.data.dhash, parsed.data.recall_number ?? null, rows), started);
+      return ok(checkPool(parsed.data.dhash, parsed.data.recall_number ?? null, rows, undefined, parsed.data.phash ?? null), started);
     } catch (e) {
       log.error("v1.hash-pool.check failed", { error: e });
       return fail("internal", "The pool check did not finish. Please try again.", 500);

@@ -45,7 +45,7 @@ export function checkWord(status: string, opts: { reviewersAgreed?: boolean } = 
   if (status === "unclear" && opts.reviewersAgreed) return { word: "Confirmed by two reviewers", tone: "positive" };
   switch (status) {
     case "pass":
-      return { word: "Done", tone: "positive" };
+      return { word: "Passed", tone: "positive" };
     case "fail":
       return { word: "Needs a change", tone: "attention" };
     case "unclear":

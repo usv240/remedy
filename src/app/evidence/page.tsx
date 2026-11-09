@@ -8,6 +8,7 @@ import { ErrorRates } from "@/components/evidence/ErrorRates";
 import { Measured } from "@/components/evidence/Measured";
 import { NeverDecides } from "@/components/evidence/NeverDecides";
 import { FraudDocket, Research } from "@/components/evidence/Research";
+import { PROBLEM } from "@/lib/research";
 import { LANDSCAPE } from "@/components/evidence/Compare";
 import { Contrast } from "@/components/evidence/Contrast";
 import { Money, moneyHeadline } from "@/components/evidence/Money";
@@ -58,7 +59,7 @@ type Part = { name: string; line: string; links: [string, string][] };
 /** Each part of the product, one line on what it does, and where on the site to see it. */
 const PARTS: Part[] = [
   {
-    name: "Technology",
+    name: "Checks and payment",
     line: "Claude Opus 5.5 reads every remedy into a structured proof rule and checks photos against it; plain code makes the decision and PayPal pays.",
     links: [
       ["/recalls/27056", "A proof rule"],
@@ -70,7 +71,7 @@ const PARTS: Part[] = [
     ],
   },
   {
-    name: "Design",
+    name: "The owner's screens",
     line: "Phone first for owners, every rule and decision with an Info button, Plain and Technical views, and light and dark themes.",
     links: [
       ["/", "Home"],
@@ -79,7 +80,7 @@ const PARTS: Part[] = [
     ],
   },
   {
-    name: "Impact",
+    name: "Who it helps",
     line: `${fmtInt(HEADLINE.count)} recalls since 2024 already refund a photo of the product made safe, and more each year. Their portals pay by check in days; Remedy's PayPal payout lands in seconds.`,
     links: [
       ["/evidence/market#adoption", "Who runs it first"],
@@ -88,7 +89,7 @@ const PARTS: Part[] = [
     ],
   },
   {
-    name: "What is new",
+    name: "Three ideas",
     line: "Each firm that joins makes the others safer, the refund goes back the way it was paid, and a payout nobody accepts becomes a task in the recall plan.",
     links: [
       ["#network", "One photo, two firms"],
@@ -96,7 +97,7 @@ const PARTS: Part[] = [
       ["/developers", "For AI agents"],
     ],
   },
-  { name: "Openness", line: "This page and its guided tour, every figure linked to its source file, and what is real and what is a sample, labeled.", links: [["/about", "About"]] },
+  { name: "Sources and labels", line: "This page and its guided tour, every figure linked to its source file, and what is real and what is a sample, labeled.", links: [["/about", "About"]] },
 ];
 
 
@@ -111,7 +112,7 @@ const FIRST: { line: string; near: string; rows: string[] }[] = [
     rows: ["truepic-vision", "patent-2016", "rtr"],
   },
   {
-    line: "A pool of photo hashes shared across firms, so a photo already paid at one firm is held at the next before any model call, with only a 64-bit hash and a row id crossing.",
+    line: "A pool of photo hashes shared across firms, so a photo already paid at one firm is held at the next before any model call, with only two 64-bit hashes and a row id crossing.",
     near: "The nearest shared-signal network is built on device and capture signals for lenders and insurers; the nearest recall tool checks one claim live at the moment it is made.",
     rows: ["truepic-risk-network", "live-capture"],
   },
@@ -226,6 +227,28 @@ export default function EvidencePage() {
           <FraudDocket />
         </Fold>
 
+        <Fold id="live-capture" title="A photo taken now" what="A recall setting that opens the camera instead of the photo library, and what it does and does not prove.">
+          <p className="page-prose">
+            A firm can set a recall to ask for a photo taken now. The claim page&rsquo;s photo button then opens the phone&rsquo;s rear camera (<code>capture=&quot;environment&quot;</code>), the photo library and the sample photo are not offered, and the claim
+            records that the camera was asked for. It is off on the sample recalls, so a visitor on a laptop can try a saved photo.{" "}
+            <Link className="text-link" href="/claim/BH-2026-01?capture=live">
+              The claim page with it on
+            </Link>
+          </p>
+          <p className="page-prose">
+            <strong>What it does.</strong> On a phone, the photo is taken at the moment of the claim, so a picture saved from somewhere else is not one tap away. A recall administrator told the CPSC&rsquo;s 2026 docket on recall claims that it now often
+            requires live capture (
+            <a className="text-link" href={PROBLEM.adminComment.url} target="_blank" rel="noreferrer">
+              {PROBLEM.adminComment.short}
+            </a>
+            ).
+          </p>
+          <p className="page-prose">
+            <strong>What it does not prove.</strong> The browser treats <code>capture</code> as a request: a desktop browser may still show a file picker, and a camera can photograph a screen or a printout. It does not sign the image the way a capture
+            attestation product does. So every photo still goes through the hash pool, the own-photo check&rsquo;s reading of screens and prints, and the other five checks, with the setting on or off.
+          </p>
+        </Fold>
+
         <Fold id="first" title="What is first here" what="Three things, each set beside the nearest existing thing, from its own page.">
           <p className="ev-fold-info">
             <Info id="evidence.first" label="" topic="What is first here" />
@@ -263,7 +286,7 @@ export default function EvidencePage() {
           </p>
         </Fold>
 
-        <Fold id="parts" title="Where to see each part" what="Technology, design, impact, what is new and openness, each with the pages that show it.">
+        <Fold id="parts" title="Where each part lives" what="Checks and payment, the owner's screens, who it helps, three ideas, and sources and labels, each with the pages that show it.">
           <dl className="jp-parts">
             {PARTS.map((c) => (
               <div key={c.name} className="jp-part">

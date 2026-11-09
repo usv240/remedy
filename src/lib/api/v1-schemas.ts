@@ -51,14 +51,23 @@ export const DhashField = z
   .describe("The 64-bit perceptual hash of the photo, upright, as 16 lowercase hex characters (the dHash in src/lib/verify/dhash.ts).");
 
 /** POST /api/v1/hash-pool/check: is this photo hash already in the shared pool? */
+/** The second 64-bit hash (src/lib/verify/phash.ts), optional beside the dHash. */
+const PhashField = z
+  .string()
+  .regex(/^[0-9a-fA-F]{16}$/, "phash is 16 hex characters: the second 64-bit hash of the photo's center.")
+  .optional()
+  .describe("Optional: the second 64-bit hash of the photo's center (src/lib/verify/phash.ts), which holds under a small crop or turn. Matched against claim and partner rows that carry one, at 6 bits.");
+
 export const HashPoolCheckRequest = z.object({
   dhash: DhashField,
+  phash: PhashField,
   recall_number: z.string().min(4).max(40).optional().describe("The recall the photo is claimed on. With it, that recall's own earlier claim photos and published pictures are matched at 10 bits; everything else at 4."),
 });
 
 /** POST /api/v1/hash-pool/register: a connected firm adds a hash it has paid on. */
 export const HashPoolRegisterRequest = z.object({
   dhash: DhashField,
+  phash: PhashField,
   recall_number: z.string().min(4).max(40).describe("The recall the photo was claimed on, as your firm names it."),
   ref: z
     .string()

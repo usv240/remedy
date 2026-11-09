@@ -443,6 +443,12 @@ export function heldBackStory() {
     paid: e.of - e.count,
     toPerson,
     sentence: `That is ${e.of} decisions on ${photo}, whose right-product score of ${score} is under the ${LIMITS.productPass.toFixed(2)} pass mark, so only the two reviewers verify it: ${e.of - e.count} of ${e.of}${toPerson ? `, and ${toPerson} went to a person at the firm` : ""}.`,
+    /** The same story, one fact a line, for the README's results list. */
+    bullets: [
+      `The ${e.of} decisions are on ${photo}.`,
+      `Its right-product score of ${score} is under the ${LIMITS.productPass.toFixed(2)} pass mark, so only the two reviewers verify it.`,
+      `The two reviewers verified ${e.of - e.count} of ${e.of}${toPerson ? `; ${toPerson} went to a person at the firm` : ""}.`,
+    ],
   };
 }
 

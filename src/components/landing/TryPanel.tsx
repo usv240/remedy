@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { fmtMs } from "@/lib/api/format";
-import { scoreLine, settledLine } from "@/components/claim/format";
+import { checkWord, scoreLine, settledLine } from "@/components/claim/format";
 import { TIME_WORDS } from "@/lib/time-words";
 
 export type PanelCheck = { id: string; name: string; status: string; score: number | null; reason: string; technical: string };
@@ -30,17 +30,6 @@ export type PanelRun = {
   /** What PayPal does next, for a verified run. */
   paid: { line: string; note: string; more?: string | null; href: string; cta: string } | null;
 };
-
-/** The same words the owner's claim page uses for each result (src/components/claim/format.ts), with Unclear kept. */
-const STATUS: Record<string, { word: string; tone: string }> = {
-  pass: { word: "Passed", tone: "positive" },
-  fail: { word: "Needs a change", tone: "attention" },
-  unclear: { word: "Unclear", tone: "info" },
-  skipped: { word: "Not checked", tone: "neutral" },
-  unavailable: { word: "For a person", tone: "info" },
-};
-
-const SETTLED = { word: "Confirmed by two reviewers", tone: "positive" };
 
 const DECISION: Record<PanelRun["decision"], string> = {
   verified: "Verified",
@@ -143,7 +132,8 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
           {run.checks.map((c, i) => {
             // Unsure, then settled by the two reviewers: one state, with the photo check's own score a tap away.
             const settled = run.reviewersSettled && c.status === "unclear";
-            const st = settled ? SETTLED : (STATUS[c.status] ?? STATUS.unclear);
+            // The same words /try, the full result and the owner's claim page use (checkWord in src/components/claim/format.ts).
+            const st = checkWord(c.status, { reviewersAgreed: run.reviewersSettled });
             const on = i < shown;
             return (
               <li key={c.id} className="tp-check" data-on={on ? "" : undefined}>
@@ -209,7 +199,7 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
             )}
           </div>
         )}
-        <p className="tp-credit">{run.credit} A run of Remedy&rsquo;s real verifier, replayed; nothing here calls the AI.</p>
+        <p className="tp-credit">{run.credit} A recorded run of Remedy&rsquo;s real verifier; nothing here calls the AI.</p>
       </div>
     </div>
   );

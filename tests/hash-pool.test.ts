@@ -200,9 +200,9 @@ describe("the hash pool in the API description", () => {
     const spec = openapi("https://remedy.example") as { paths: Record<string, Record<string, { tags: string[]; requestBody?: { content: Record<string, { schema: { properties?: Record<string, unknown>; required?: string[] } }> } }>>; tags: { name: string }[] };
     const c = spec.paths["/api/v1/hash-pool/check"].post;
     const r = spec.paths["/api/v1/hash-pool/register"].post;
-    expect(Object.keys(c.requestBody!.content["application/json"].schema.properties!)).toEqual(["dhash", "recall_number"]);
+    expect(Object.keys(c.requestBody!.content["application/json"].schema.properties!)).toEqual(["dhash", "phash", "recall_number"]);
     expect(c.requestBody!.content["application/json"].schema.required).toEqual(["dhash"]);
-    expect(Object.keys(r.requestBody!.content["application/json"].schema.properties!)).toEqual(["dhash", "recall_number", "ref"]);
+    expect(Object.keys(r.requestBody!.content["application/json"].schema.properties!)).toEqual(["dhash", "phash", "recall_number", "ref"]);
     expect(r.requestBody!.content["application/json"].schema.required).toEqual(["dhash", "recall_number"]);
     expect(c.tags).toEqual(["Hash pool"]);
     expect(spec.tags.map((t) => t.name)).toContain("Hash pool");

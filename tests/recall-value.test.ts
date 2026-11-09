@@ -24,7 +24,7 @@ describe("the photo-refund recalls, split by what the photo must show", () => {
     expect(madeSafeRefund(rule({ remedy: "refund_or_replacement" }))).toBe(true);
   });
 
-  it("matches the recalls the judge named: 25451 and 24281 ask for a photo of the product, not made safe", () => {
+  it("matches the two recalls flagged in review: 25451 and 24281 ask for a photo of the product, not made safe", () => {
     expect(proofKind(rules["25451"])).toBe("product");
     expect(proofKind(rules["24281"])).toBe("product");
     expect(proofKind(rules["24309"])).toBe("made_safe");

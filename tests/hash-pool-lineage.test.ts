@@ -29,7 +29,9 @@ describe("the hash pool's measured limits and lineage", () => {
     for (const src of [HASH_LINEAGE.photoDna, HASH_LINEAGE.stopNcii]) {
       expect(first).toContain(`[${src.name}](${src.url})`);
     }
-    expect(first).toContain("shares only a 64-bit hash and a row id");
+    expect(first).toContain("shares only two 64-bit hashes and a row id");
+    // The second hash's figures, from the same run, in the same idea.
+    expect(first).toContain(poolLimits().second.replace(/\.$/, ""));
     expect(first).toContain("open code");
   });
 

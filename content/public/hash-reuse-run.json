@@ -1,6 +1,6 @@
 {
   "note": "What the hash pool catches on a reused photo, measured in code on 9 photos from content/verify/fixtures, each put through 13 changes a reuser makes (saved again, resized, cropped, turned, brightened, screenshotted, mirrored): how many of the 117 copies the two thresholds catch against the source photo's stored hash, and how many copies come within those thresholds of a picture they are not a copy of (the other source photos, and every other recall's distinct published pictures). It measures these photos and these changes; recorded by scripts/public/hash-reuse-run.ts with no model call, no network and no database, and derived again by tests/hash-reuse-run.test.ts.",
-  "recordedAt": "2026-11-08T23:21:06.036Z",
+  "recordedAt": "2026-11-09T13:56:14.589Z",
   "thresholds": {
     "sameRecall": 10,
     "otherRecalls": 4
@@ -11,63 +11,72 @@
       "recall": "BH-2026-01",
       "what": "the sample charger with its cord cut",
       "credit": "Dmitry G, Wikimedia Commons, public domain",
-      "dhash": "337bfb9f4e7f3e0f"
+      "dhash": "337bfb9f4e7f3e0f",
+      "phash": "d524aae40283d5ff"
     },
     {
       "file": "sample/opened-cord-attached.jpg",
       "recall": "BH-2026-01",
       "what": "the sample charger opened, its cord still attached",
       "credit": "Dmitry G, Wikimedia Commons, public domain",
-      "dhash": "63e1731616305951"
+      "dhash": "63e1731616305951",
+      "phash": "a7322c48cfb8b635"
     },
     {
       "file": "sample/opened-case.jpg",
       "recall": "BH-2026-01",
       "what": "the sample charger taken apart",
       "credit": "Dmitry G, Wikimedia Commons, public domain",
-      "dhash": "679139368edef6fe"
+      "dhash": "679139368edef6fe",
+      "phash": "d6a962053ba6c1d7"
     },
     {
       "file": "other/commons-powerbank-oraimo.jpg",
       "recall": null,
       "what": "a look-alike power bank",
       "credit": "Reladex, Wikimedia Commons, CC BY-SA 4.0",
-      "dhash": "03e8e8c9e161631f"
+      "dhash": "03e8e8c9e161631f",
+      "phash": "adabd0209277d2b6"
     },
     {
       "file": "other/commons-powerbank-romoss.jpg",
       "recall": null,
       "what": "a second look-alike power bank",
       "credit": "Shwangtianyuan, Wikimedia Commons, CC BY-SA 4.0",
-      "dhash": "63636373733d393d"
+      "dhash": "63636373733d393d",
+      "phash": "b437343e343e264e"
     },
     {
       "file": "other/commons-coffee-in-a-mug.jpg",
       "recall": null,
       "what": "a mug of coffee",
       "credit": "Kurt Kaiser, Wikimedia Commons, CC0 1.0",
-      "dhash": "22626e3a339458d1"
+      "dhash": "22626e3a339458d1",
+      "phash": "e59c8fa3a541d0d9"
     },
     {
       "file": "official/26125-hair-dryer-cord-cut.png",
       "recall": "26125",
       "what": "the CPSC's example: the hair dryer with its cord cut",
       "credit": "U.S. Consumer Product Safety Commission, recall 26125, public domain",
-      "dhash": "e0808ed69ce174f8"
+      "dhash": "e0808ed69ce174f8",
+      "phash": "93cd38a0cf373389"
     },
     {
       "file": "official/25007-droyd-4-straps-cut.jpg",
       "recall": "25007",
       "what": "the CPSC's example: the helmet with its straps cut",
       "credit": "U.S. Consumer Product Safety Commission, recall 25007, public domain",
-      "dhash": "294cf0e8c8ccec78"
+      "dhash": "294cf0e8c8ccec78",
+      "phash": "fe90dad69a5a7820"
     },
     {
       "file": "official/25007-droyd-5-in-trash.jpg",
       "recall": "25007",
       "what": "the CPSC's example: the helmet in the trash",
       "credit": "U.S. Consumer Product Safety Commission, recall 25007, public domain",
-      "dhash": "0e337179796933af"
+      "dhash": "0e337179796933af",
+      "phash": "fd51904fc53c4d34"
     }
   ],
   "variants": [
@@ -286,6 +295,213 @@
       "catalog": 1776
     }
   },
+  "phash": {
+    "region": 0.7,
+    "maxDistance": 6,
+    "framings": [
+      "upright center",
+      "center widened for a 4 percent crop",
+      "center widened for a 7 percent crop",
+      "center widened for a 10 percent crop",
+      "turned back 5 degrees left, white corners",
+      "turned back 5 degrees left, cropped",
+      "turned back 2.5 degrees left, white corners",
+      "turned back 2.5 degrees left, cropped",
+      "turned back 2.5 degrees right, white corners",
+      "turned back 2.5 degrees right, cropped",
+      "turned back 5 degrees right, white corners",
+      "turned back 5 degrees right, cropped",
+      "mirrored"
+    ],
+    "catalogPictures": 1776,
+    "nearestUnrelatedMin": 8,
+    "byThreshold": [
+      {
+        "bits": 4,
+        "dhash": {
+          "caught": 74,
+          "unrelated": 0
+        },
+        "phash": {
+          "caught": 107,
+          "unrelated": 0
+        },
+        "either": {
+          "caught": 108,
+          "unrelated": 0
+        }
+      },
+      {
+        "bits": 6,
+        "dhash": {
+          "caught": 79,
+          "unrelated": 1
+        },
+        "phash": {
+          "caught": 108,
+          "unrelated": 0
+        },
+        "either": {
+          "caught": 109,
+          "unrelated": 1
+        }
+      },
+      {
+        "bits": 8,
+        "dhash": {
+          "caught": 83,
+          "unrelated": 4
+        },
+        "phash": {
+          "caught": 108,
+          "unrelated": 1
+        },
+        "either": {
+          "caught": 109,
+          "unrelated": 4
+        }
+      },
+      {
+        "bits": 10,
+        "dhash": {
+          "caught": 85,
+          "unrelated": 23
+        },
+        "phash": {
+          "caught": 108,
+          "unrelated": 9
+        },
+        "either": {
+          "caught": 109,
+          "unrelated": 31
+        }
+      },
+      {
+        "bits": 12,
+        "dhash": {
+          "caught": 93,
+          "unrelated": 53
+        },
+        "phash": {
+          "caught": 108,
+          "unrelated": 15
+        },
+        "either": {
+          "caught": 109,
+          "unrelated": 64
+        }
+      }
+    ],
+    "inUse": {
+      "dhashBits": 4,
+      "phashBits": 6,
+      "dhash": {
+        "caught": 74,
+        "unrelated": 0
+      },
+      "phash": {
+        "caught": 108,
+        "unrelated": 0
+      },
+      "either": {
+        "caught": 108,
+        "unrelated": 0
+      }
+    },
+    "byKind": [
+      {
+        "kind": "jpeg-85",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "jpeg-60",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "jpeg-35",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "resize-50",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "resize-25",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "crop-4",
+        "n": 9,
+        "dhash4": 1,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "crop-10",
+        "n": 9,
+        "dhash4": 0,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "rotate-2",
+        "n": 9,
+        "dhash4": 1,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "rotate-5",
+        "n": 9,
+        "dhash4": 0,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "bright-115",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "bright-85",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      },
+      {
+        "kind": "screenshot",
+        "n": 9,
+        "dhash4": 0,
+        "phash": 0,
+        "either": 0
+      },
+      {
+        "kind": "mirror",
+        "n": 9,
+        "dhash4": 9,
+        "phash": 9,
+        "either": 9
+      }
+    ]
+  },
   "rows": [
     {
       "source": "sample/cord-cut.jpg",
@@ -297,6 +513,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -311,6 +534,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -323,6 +553,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -337,6 +574,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -350,6 +594,13 @@
         "ref": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
         "distance": 14,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -362,6 +613,13 @@
       "nearestUnrelated": {
         "ref": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/gunaito-5.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -376,6 +634,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2-2-2_1.png",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/gunaito-5.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -389,6 +654,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/KICIMPRO.jpg",
         "distance": 14,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture5_10.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -400,6 +672,13 @@
       "caught4": false,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/KICIMPRO.jpg",
+        "distance": 14,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
         "distance": 14,
         "where": "catalog"
       }
@@ -415,6 +694,13 @@
         "ref": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
         "distance": 14,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -427,6 +713,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/PenguinDress.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -441,6 +734,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture17_2.jpg",
         "distance": 9,
         "where": "catalog"
+      },
+      "phashDistance": 28,
+      "phashFraming": "turned back 5 degrees left, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture2_50.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -453,6 +753,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/AliExpress-LED-3.png",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/sofoliana-1_0.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -467,6 +774,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/multi-styler-3.png",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -479,6 +793,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/multi-styler-3.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -493,6 +814,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Insignia-10-qt.jpg",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -505,6 +833,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/multi-styler-3.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -519,6 +854,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Insignia-10-qt.jpg",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -531,6 +873,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture5_29.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -545,6 +894,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/lol-bright-pink-pjs.png",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/gummybearshortslv.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -557,6 +913,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/babyjoy-3_0.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 2.5 degrees right, cropped",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/gumili-2.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -571,6 +934,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/green-black-plaid.png",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/gumili-2.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -584,6 +954,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 14,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/misco-1.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -596,6 +973,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/multi-styler-3.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -610,6 +994,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture17_2.jpg",
         "distance": 9,
         "where": "catalog"
+      },
+      "phashDistance": 22,
+      "phashFraming": "turned back 2.5 degrees left, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/poundinggame-3.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -622,6 +1013,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Picture2_42.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vevor-2_0.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -636,6 +1034,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -648,6 +1053,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -662,6 +1074,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -675,6 +1094,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -687,6 +1113,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -701,6 +1134,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Leon-Rading-clock-2.jpg",
         "distance": 17,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/sanlebi-5.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -713,6 +1153,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Leon-Rading-clock-2.jpg",
         "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/recalledfuelbottle.png",
+        "distance": 12,
         "where": "catalog"
       }
     },
@@ -727,6 +1174,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/BBWOO-7.png",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-3_0.png",
+        "distance": 12,
+        "where": "catalog"
       }
     },
     {
@@ -739,6 +1193,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/babyga.png",
         "distance": 12,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-3_0.png",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -753,6 +1214,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -765,6 +1233,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HONEYJOY-5.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -779,6 +1254,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture17_2.jpg",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 22,
+      "phashFraming": "turned back 5 degrees left, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/LFC-junior-gray-long.png",
+        "distance": 12,
+        "where": "catalog"
       }
     },
     {
@@ -791,6 +1273,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/RXY-1.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-3_0.png",
+        "distance": 12,
         "where": "catalog"
       }
     },
@@ -805,6 +1294,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -817,6 +1313,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -831,6 +1334,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Droyd1.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -843,6 +1353,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -857,6 +1374,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -870,6 +1394,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/seeday-11.gif",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/gikpal-3.jpg",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -881,6 +1412,13 @@
       "caught4": false,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Atomi-heater-AT1482-AT1521.png",
+        "distance": 8,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/giantex-10.png",
         "distance": 8,
         "where": "catalog"
       }
@@ -896,6 +1434,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-1.gif",
         "distance": 9,
         "where": "catalog"
+      },
+      "phashDistance": 4,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -908,6 +1453,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/oitnlaughter-3.png",
         "distance": 10,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/playpurse-4.jpg",
+        "distance": 12,
         "where": "catalog"
       }
     },
@@ -922,6 +1474,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 6,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/slojd-1.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -934,6 +1493,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/droyd2.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -948,6 +1514,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-1.png",
         "distance": 6,
         "where": "catalog"
+      },
+      "phashDistance": 20,
+      "phashFraming": "turned back 2.5 degrees right, cropped",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/basel-counterweight-beads.jpg",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -960,6 +1533,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/allegro-chair-stamp.png",
         "distance": 10,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/sviyato-1.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -974,6 +1554,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
+        "where": "catalog"
       }
     },
     {
@@ -986,6 +1573,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
         "where": "catalog"
       }
     },
@@ -1000,6 +1594,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
+        "where": "catalog"
       }
     },
     {
@@ -1012,6 +1613,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
         "where": "catalog"
       }
     },
@@ -1026,6 +1634,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
+        "where": "catalog"
       }
     },
     {
@@ -1038,6 +1653,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/JURLEA-gray-beige.png",
         "distance": 13,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
         "where": "catalog"
       }
     },
@@ -1052,6 +1674,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Kobayashi3.png",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture29_0.jpg",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1064,6 +1693,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 9,
+        "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 12,
         "where": "catalog"
       }
     },
@@ -1078,6 +1714,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/RecalledWLIVEFabric16DrawerDresserWhite.png",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/image003_2.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1090,6 +1733,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
         "where": "catalog"
       }
     },
@@ -1104,6 +1754,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Picture3.gif",
+        "distance": 10,
+        "where": "catalog"
       }
     },
     {
@@ -1115,6 +1772,13 @@
       "caught4": false,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/JURLEA-gray-beige.png",
+        "distance": 14,
+        "where": "catalog"
+      },
+      "phashDistance": 16,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/mini-2.png",
         "distance": 14,
         "where": "catalog"
       }
@@ -1130,6 +1794,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Funlio-2.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/OrangeTwist-2.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1141,6 +1812,13 @@
       "caught4": true,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
         "distance": 16,
         "where": "catalog"
       }
@@ -1156,6 +1834,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
         "distance": 16,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1167,6 +1852,13 @@
       "caught4": true,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
         "distance": 16,
         "where": "catalog"
       }
@@ -1182,6 +1874,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
         "distance": 16,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1193,6 +1892,13 @@
       "caught4": true,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
         "distance": 16,
         "where": "catalog"
       }
@@ -1208,6 +1914,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Ambiano-purple.png",
         "distance": 16,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/babyjump-1.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1220,6 +1933,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/raychy-2.jpg",
         "distance": 15,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Screenshot%202026-02-05%20090518.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -1234,6 +1954,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Yaomiao-3.png",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ZHORANGE-3.jpg",
+        "distance": 18,
+        "where": "catalog"
       }
     },
     {
@@ -1246,6 +1973,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/Yaomiao-3.png",
         "distance": 14,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/basel-display-stackable-packaging.jpg",
+        "distance": 18,
         "where": "catalog"
       }
     },
@@ -1260,6 +1994,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1271,6 +2012,13 @@
       "caught4": true,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/ligne-3.jpg",
         "distance": 16,
         "where": "catalog"
       }
@@ -1286,6 +2034,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/blacksheep-1.png",
         "distance": 9,
         "where": "catalog"
+      },
+      "phashDistance": 24,
+      "phashFraming": "turned back 2.5 degrees left, cropped",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/MTC-3.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1297,6 +2052,13 @@
       "caught4": true,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/bstone-2.jpg",
+        "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/90-V1-1-B.jpg",
         "distance": 16,
         "where": "catalog"
       }
@@ -1312,6 +2074,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1324,6 +2093,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1338,6 +2114,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1350,6 +2133,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1364,6 +2154,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/SNLN-2.jpg",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1377,6 +2174,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture9_5.jpg",
         "distance": 15,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1388,6 +2192,13 @@
       "caught4": false,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/1lightpink.png",
+        "distance": 16,
+        "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
         "distance": 16,
         "where": "catalog"
       }
@@ -1403,6 +2214,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Woolite-Delicates-1.jpg",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 4,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1415,6 +2233,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/mGanna-1.png",
         "distance": 12,
+        "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/nerf-3.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1429,6 +2254,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1441,6 +2273,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Vevor-1.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1455,6 +2294,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/babyoil-1.png",
         "distance": 8,
         "where": "catalog"
+      },
+      "phashDistance": 30,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/bankhead-basic.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1467,6 +2313,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/aowos-3.gif",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/almpal-1.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1481,6 +2334,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1494,6 +2354,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1506,6 +2373,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
         "distance": 12,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -1520,6 +2394,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/nightgown-clear-blue.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1532,6 +2413,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
         "distance": 12,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -1546,6 +2434,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Picture20_1.jpg",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1558,6 +2453,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/OrangeTwist-3.png",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/Jeriflyer-3.jpg",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -1572,6 +2474,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/DR-Power-1.png",
         "distance": 8,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/enhomee-2.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1584,6 +2493,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/nightgown-navy.jpg",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/enhomee-2.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -1598,6 +2514,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/superb-bath-seat-1.jpg",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 2,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1610,6 +2533,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/jammers-3.png",
         "distance": 12,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/E-Backlbl.png",
+        "distance": 14,
         "where": "catalog"
       }
     },
@@ -1624,6 +2554,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/philton-2.png",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 28,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/LFC-red-gray-long.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1636,6 +2573,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/helmet-blue.png",
         "distance": 13,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/KICIMPRO.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1650,6 +2594,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vasicar-4.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1662,6 +2613,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vasicar-4.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1676,6 +2634,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vasicar-4.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1688,6 +2653,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/TonGass2.png",
         "distance": 10,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vasicar-4.png",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1702,6 +2674,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/TonGass2.png",
         "distance": 10,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vasicar-4.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1713,6 +2692,13 @@
       "caught4": true,
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/TonGass2.png",
+        "distance": 14,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 4 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/samithelmet-1.jpg",
         "distance": 14,
         "where": "catalog"
       }
@@ -1728,6 +2714,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/yoox-2.jpg",
         "distance": 12,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "center widened for a 10 percent crop",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/4GOETAS.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1740,6 +2733,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 12,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 2.5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HabiLife-3.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1754,6 +2754,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 13,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "turned back 5 degrees right, white corners",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/nightgown-clear-blue.jpg",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1766,6 +2773,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/HabiLife-3.jpg",
+        "distance": 16,
         "where": "catalog"
       }
     },
@@ -1780,6 +2794,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 11,
         "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "upright center",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/vasicar-4.png",
+        "distance": 16,
+        "where": "catalog"
       }
     },
     {
@@ -1793,6 +2814,13 @@
         "ref": "https://www.cpsc.gov/s3fs-public/Tadakazu-1.png",
         "distance": 9,
         "where": "catalog"
+      },
+      "phashDistance": 24,
+      "phashFraming": "turned back 2.5 degrees right, cropped",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/nightgown-lilac.jpg",
+        "distance": 14,
+        "where": "catalog"
       }
     },
     {
@@ -1805,6 +2833,13 @@
       "nearestUnrelated": {
         "ref": "https://www.cpsc.gov/s3fs-public/1TOPINCN-topview.png",
         "distance": 11,
+        "where": "catalog"
+      },
+      "phashDistance": 0,
+      "phashFraming": "mirrored",
+      "nearestUnrelatedPhash": {
+        "ref": "https://www.cpsc.gov/s3fs-public/redhelmet-2.png",
+        "distance": 16,
         "where": "catalog"
       }
     }

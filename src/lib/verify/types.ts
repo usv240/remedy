@@ -89,7 +89,8 @@ export type ClaimContext = {
 };
 
 /** A stored perceptual hash: an earlier claim photo, or an official image of a recall. */
-export type HashRef = { ref: string; dhash: string; caption?: string | null };
+/** A stored hash: the dHash, and for earlier claim photos and pool rows the second hash too (./phash.ts). */
+export type HashRef = { ref: string; dhash: string; caption?: string | null; phash?: string | null };
 
 export type CheckId = "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
 export const CHECK_IDS: readonly CheckId[] = ["C1", "C2", "C3", "C4", "C5", "C6"];

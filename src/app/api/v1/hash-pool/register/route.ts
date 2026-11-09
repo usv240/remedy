@@ -7,13 +7,13 @@ import { db, dbConfigured, schema } from "@/lib/db";
 import { log } from "@/lib/log";
 
 /**
- * POST /api/v1/hash-pool/register: { dhash, recall_number, ref? }. A connected firm adds the hash of a photo it has
+ * POST /api/v1/hash-pool/register: { dhash, phash?, recall_number, ref? }. A connected firm adds the hash of a photo it has
  * paid on, so the same photo sent to any other firm is held before a person sees it. Stored as image_hash source
  * "partner" with the firm's own opaque ref (or a UUID). Registering the same ref twice changes nothing.
  *
  * Who may write: only a key tied to a firm connected to Remedy (scope hash-pool:register and firm:<id>, src/lib/api/keys.ts).
  * A self-serve sandbox key is refused with a plain 403, so nobody outside a firm can put hashes in the pool. Who may
- * read: anyone, through /check, key or not. What crosses: the 64-bit hash and an opaque ref. The registering firm is
+ * read: anyone, through /check, key or not. What crosses: the 64-bit hash (and the optional second hash) and an opaque ref. The registering firm is
  * written to Remedy's audit ledger for accountability, never to the pool row, so a hit can never name it.
  */
 export async function POST(req: Request) {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     try {
       const inserted = await db()
         .insert(schema.imageHashes)
-        .values({ source: "partner", ref, recallNumber: parsed.data.recall_number, dhash: parsed.data.dhash })
+        .values({ source: "partner", ref, recallNumber: parsed.data.recall_number, dhash: parsed.data.dhash, phash: parsed.data.phash?.toLowerCase() ?? null })
         .onConflictDoNothing()
         .returning({ id: schema.imageHashes.id });
       const registered = inserted.length > 0;

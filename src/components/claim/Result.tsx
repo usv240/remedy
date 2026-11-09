@@ -23,7 +23,7 @@ export type ResultContext = {
  * `preview` is a ready-made example on /try: it shows the answer and never pays.
  */
 /** `previewNote` replaces the ready-made example's note, where the example offers its own way to pay (the sandbox payout on /try). */
-export function Result({ claim, ctx, onRetake, onPaid, preview = false, previewNote }: { claim: ClaimView; ctx: ResultContext; onRetake?: () => void; onPaid?: (p: PayView) => void; preview?: boolean; previewNote?: string }) {
+export function Result({ claim, ctx, onRetake, onPaid, preview = false, previewNote }: { claim: ClaimView; ctx: ResultContext; onRetake?: () => void; onPaid?: (p: PayView) => void; preview?: boolean; previewNote?: React.ReactNode }) {
   const d = claim.decision;
   if (d === "verified") {
     return (

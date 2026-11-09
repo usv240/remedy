@@ -15,7 +15,7 @@ import { firmContext } from "@/lib/firm/firm";
 import { homeSummary } from "@/lib/firm/home";
 import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 import { fmtInt, fmtPct, fmtUsd } from "@/lib/firm/report";
-import { isSampleNumber, recallCredit, RecallLabel } from "@/lib/recall/label";
+import { isSampleNumber, recallCredit, RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
 import { ONBOARDING_TODAY } from "@/lib/paypal/onboarding";
 
 /** "4 days ago" reads in lower case after a comma; a date keeps its capital month ("Oct 20, 2026"). */
@@ -49,7 +49,8 @@ async function Home() {
             {RecallLabel(s.recall.number)}, announced {dayName(s.recall.announced)}. {s.recall.units ? `${fmtInt(s.recall.units)} units` : s.recall.unitsText} in the US.{" "}
             <Info id={isSampleNumber(s.recall.number) ? "recall.images.sample" : "recall.images"} label="" topic={isSampleNumber(s.recall.number) ? "the recall's photos" : "the official CPSC photo"} />
           </p>
-          <p className="firm-recall-meta">{recallCredit(s.recall.number)}</p>
+          {/* The console's one line on the sample firm and the sandbox is beside the navigation (src/app/firm/layout.tsx). */}
+          <p className="firm-recall-meta">{isSampleNumber(s.recall.number) ? `${SAMPLE_PHOTO_CREDIT}.` : recallCredit(s.recall.number)}</p>
         </div>
       </div>
 
@@ -185,6 +186,13 @@ async function Home() {
             <p className="tabular firm-kpi-sub">
               Auto-paid today on {s.recall.short}: {fmtUsd(paidToday)} of {fmtUsd(terms.autoDailyCents)}.
             </p>
+            <p className="firm-rule-title">A photo taken now: {terms.requireLiveCapture ? "on" : "off"} for this recall</p>
+            <p className="muted">
+              When it is on, the claim page&rsquo;s photo button opens the camera and the photo library is hidden, and each claim records that the camera was asked for.{" "}
+              <Link className="text-link" href={`/claim/${s.recall.number}?capture=live`}>
+                See the claim page with it on
+              </Link>
+            </p>
           </div>
         </div>
       </section>
@@ -209,7 +217,7 @@ async function Home() {
 
       <p className="firm-label">
         {s.sampleClaims > 0 ? `${fmtInt(s.sampleClaims)} of these claims are sample history, seeded so the console is not empty; their payments are marked sample and no money moved. ` : ""}
-        Sample history uses the firm&rsquo;s refund for each recall; the sample claims ready to pay are at the recall&rsquo;s refund of $34.99, and two more are added when they have been paid. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.
+        Sample history uses the firm&rsquo;s refund for each recall; the sample claims ready to pay are at the recall&rsquo;s refund of $34.99, and two more are added when they have been paid.
       </p>
     </>
   );
@@ -224,7 +232,7 @@ export default function FirmPage() {
             <h1 className="firm-title">Brightline Home</h1>
             <Info id="page.firm" />
           </div>
-          <p className="firm-sub">The recall console: claims to review, the recall plan and the monthly CPSC report. A fictional sample firm.</p>
+          <p className="firm-sub">The recall console: claims to review, the recall plan and the monthly CPSC report.</p>
           <p className="firm-sub firm-open">
             This console is open to everyone, by design, so the sample firm can be seen end to end; approving a payout takes one click to sign in as Ana, the sample reviewer. {ONBOARDING_TODAY}{" "}
             <Link className="text-link" href="/stack#onboarding">

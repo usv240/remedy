@@ -8,7 +8,7 @@ import Link from "next/link";
 export const LINEAGE: { who: string; year: string; what: string; url: string }[] = [
   { who: "Zheng and others, Judging LLM-as-a-Judge", year: "2023", what: "A model as the reviewer of another's output, with its position and verbosity biases measured.", url: "https://arxiv.org/abs/2306.05685" },
   { who: "Madras, Pitassi and Zemel, Predict Responsibly", year: "2018", what: "Learning to defer: a model that hands the cases it should not decide to a person.", url: "https://arxiv.org/abs/1711.06664" },
-  { who: "Jung, Brahman and Choi, Trust or Escalate", year: "2024", what: "A judge that answers only when confident and escalates the rest, with a guaranteed level of agreement with people.", url: "https://arxiv.org/abs/2407.18370" },
+  { who: "Jung, Brahman and Choi, Trust or Escalate", year: "2024", what: "A model reviewer that answers only when confident and escalates the rest, with a guaranteed level of agreement with people.", url: "https://arxiv.org/abs/2407.18370" },
   { who: "Badshah, Emami and Sajjad, Judge, Retrieve, or Abstain", year: "2026", what: "When unsure, fetch evidence and judge again; still unsure, abstain and flag the case for human review.", url: "https://arxiv.org/abs/2608.17994" },
   { who: "Kohli, Nine Judges, Two Effective Votes", year: "2026", what: "Nine frontier models from seven families made the same mistakes on the same items, so a panel of different model names gave about two independent votes.", url: "https://arxiv.org/abs/2605.29800" },
 ];
@@ -17,7 +17,7 @@ export function Lineage() {
   return (
     <div className="ev-lineage">
       <p className="page-prose jp-intro">
-        Two reviewers and a referee is a design with a lineage. The published pattern is one judge that abstains on its own confidence, or a panel of different models. The finding that panels from one model family share errors is why the
+        Two reviewers and a referee is a design with a lineage. The published pattern is one model reviewer that abstains on its own confidence, or a panel of different models. The finding that panels from one model family share errors is why the
         two reviewers here read two different rulebooks rather than two model names.
       </p>
       <ul className="ev-rules ev-lineage-list">

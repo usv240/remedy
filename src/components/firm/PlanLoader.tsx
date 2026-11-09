@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ComponentType } from "react";
+import { useCallback, useEffect, useState, type ComponentType } from "react";
 import { ensureBryntumScript, ensureBryntumTheme } from "@/components/gantt/bryntum";
 import { dayShort } from "@/lib/firm/dates";
 import type { GanttTask } from "@/lib/firm/plan";
@@ -11,8 +11,10 @@ import type { PlanData } from "./PlanGantt";
  * (5.8 MB, kept out of the bundle, scripts/vendor-bryntum.mjs), then the component that uses it. Until the chart is
  * ready, and for good if the script cannot load, the plan's tasks show as a plain list, rendered on the server with the
  * page, so the panel is never empty: a slow phone, a blocked script or a reader without scripts still sees the plan.
+ * The chart mounts behind the list, hidden and inert, and the two swap only once its task bars are drawn (onReady), so
+ * there is never an empty grid on screen.
  */
-type Gantt = ComponentType<{ data: PlanData }>;
+type Gantt = ComponentType<{ data: PlanData; onReady?: () => void }>;
 type State = "loading" | "slow" | "failed";
 
 const SLOW_MS = 12_000;
@@ -22,6 +24,8 @@ export function PlanLoader({ data }: { data: PlanData }) {
   const [Chart, setChart] = useState<Gantt | null>(null);
   const [state, setState] = useState<State>("loading");
   const [attempt, setAttempt] = useState(0);
+  const [ready, setReady] = useState(false);
+  const onReady = useCallback(() => setReady(true), []);
 
   useEffect(() => {
     let alive = true;
@@ -37,8 +41,16 @@ export function PlanLoader({ data }: { data: PlanData }) {
     };
   }, [attempt]);
 
-  if (Chart) return <Chart data={data} />;
-  return <PlanList data={data} state={state} retry={() => (setState("loading"), setAttempt((n) => n + 1))} />;
+  return (
+    <div className="plan-stage" data-ready={ready ? "" : undefined}>
+      {!ready && <PlanList data={data} state={state} retry={() => (setState("loading"), setAttempt((n) => n + 1))} />}
+      {Chart && (
+        <div className="plan-stage-chart" inert={!ready}>
+          <Chart data={data} onReady={onReady} />
+        </div>
+      )}
+    </div>
+  );
 }
 
 /** The plan's tasks in date order, with what the chart is doing. Also what a reader without scripts gets. */

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { passCount } from "@/lib/firm/checks";
+import { CHECK_LABEL, CHECK_ORDER, passCount, REVIEWERS_LABEL, REVIEWERS_PLAIN } from "@/lib/firm/checks";
 import { SAMPLE_REVIEWER, STAGE_LABEL, STAGE_TONE, type QueueRow } from "@/lib/firm/types";
 import { ClaimDrawer } from "./ClaimDrawer";
 import type { GridHandle } from "./ClaimsGrid";
@@ -48,6 +48,7 @@ function FirstRows({ rows, total }: { rows: QueueRow[]; total: number }) {
             <th>Photo</th>
             <th>Claimant and recall</th>
             <th>Checks</th>
+            <th>Reviewers</th>
             <th>Decision</th>
             <th className="num">Amount</th>
             <th>Submitted</th>
@@ -68,6 +69,7 @@ function FirstRows({ rows, total }: { rows: QueueRow[]; total: number }) {
                 </span>
               </td>
               <td className="tabular">{passCount(r.checks)} of 6</td>
+              <td>{REVIEWERS_LABEL[r.reviewers]}</td>
               <td>
                 <span className="pill" data-tone={STAGE_TONE[r.stage]}>
                   {STAGE_LABEL[r.stage]}
@@ -290,6 +292,14 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
         )}
       </div>
 
+      {/* The Technical view's key to the check chips: each check's id and short name. */}
+      <p className="cq-legend">
+        {CHECK_ORDER.map((id) => (
+          <span key={id}>
+            <strong>{id}</strong> {CHECK_LABEL[id].short}
+          </span>
+        ))}
+      </p>
       <p className="cq-total" style={{ marginTop: 12 }}>
         {visible.length} of {rows.length} claims shown.{" "}
         {!narrow && (
@@ -313,6 +323,7 @@ export function ClaimsQueue({ initial, initialView }: { initial: QueueRow[]; ini
                 <p className="cq-card-meta">
                   {passCount(r.checks)} of 6 checks pass. {TIME.format(new Date(r.submittedAt))}
                 </p>
+                {r.reviewers !== "not_needed" && <p className="cq-card-meta">Reviewers: {REVIEWERS_PLAIN[r.reviewers]}</p>}
               </div>
               <p className="cq-card-amt">{usd(r.amountCents)}</p>
               <div className="cq-card-foot">

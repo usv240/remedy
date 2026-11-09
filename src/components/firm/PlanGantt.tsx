@@ -93,7 +93,10 @@ function useBryntumA11y(root: React.RefObject<HTMLDivElement | null>) {
   }, [root]);
 }
 
-export function PlanGantt({ data }: { data: PlanData }) {
+/** Once the chart has drawn its first task bars (or after a while regardless), the loader swaps the list for it. */
+const READY_AFTER_MS = 15_000;
+
+export function PlanGantt({ data, onReady }: { data: PlanData; onReady?: () => void }) {
   const gantt = useRef<{ instance: Gantt } | null>(null);
   const box = useRef<HTMLDivElement>(null);
   const schedBox = useRef<HTMLDivElement>(null);
@@ -115,6 +118,29 @@ export function PlanGantt({ data }: { data: PlanData }) {
   } | null>(null);
   useBryntumA11y(box);
   useBryntumA11y(schedBox);
+
+  // Tell the loader when the bars are on the page, so the server's task list stays in place until then.
+  useEffect(() => {
+    const el = box.current;
+    if (!el || !onReady) return;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      watch.disconnect();
+      window.clearTimeout(late);
+      requestAnimationFrame(() => onReady());
+    };
+    const watch = new MutationObserver(() => el.querySelector(".b-gantt-task-wrap") && finish());
+    watch.observe(el, { childList: true, subtree: true });
+    const late = window.setTimeout(finish, READY_AFTER_MS);
+    if (el.querySelector(".b-gantt-task-wrap")) finish();
+    return () => {
+      done = true;
+      watch.disconnect();
+      window.clearTimeout(late);
+    };
+  }, [onReady]);
 
   // Keep Bryntum's theme in step with the site's light and dark mode.
   useEffect(() => {

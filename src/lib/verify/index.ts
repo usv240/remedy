@@ -19,6 +19,7 @@ import {
 } from "./checks";
 import { decide, guidanceFor, shouldReview, summaryFor, type Blocker, type DecidedBy } from "./decide";
 import { CATALOG_MAX_DISTANCE, closestMatch, dhashVariants, otherRecallMatch, storedOfficialHashes } from "./dhash";
+import { phashFramings, phashMatch } from "./phash";
 import { claimMaxSide, decodeImage, PhotoUnreadableError, sniffMime, type DecodedImage } from "./image";
 import { fetchImageBytes, loadOfficialImages, MAX_OFFICIAL_IMAGES, pickForVision, type FetchImage, type OfficialImage } from "./official";
 import { assessQuality } from "./quality";
@@ -97,9 +98,9 @@ export type VerifyResult = {
   amount: Amount | null;
   quality: QualityReport;
   /** `dhash` is the upright hash to store (image_hash, source "claim"); `dhash_variants` are all eight orientations, for matching in SQL. */
-  photo: { dhash: string | null; dhash_variants: string[]; width: number; height: number; exif: boolean; mime: string | null; sha256: string };
+  photo: { dhash: string | null; dhash_variants: string[]; width: number; height: number; exif: boolean; mime: string | null; sha256: string; /** The second hash's upright centre (./phash.ts), stored beside the dHash. */ phash?: string | null };
   /** The further photos of a remedy that asks for more than one: each one's upright hash, to store with the claim. */
-  more_photos?: { dhash: string | null; width: number; height: number }[];
+  more_photos?: { dhash: string | null; phash?: string | null; width: number; height: number }[];
   /** A person (a face, a body or a child) seen in the photo by the vision call: the claim deletes the stored photo. */
   person: { visible: true; kinds: string[] } | null;
   review: ReturnType<typeof debatePayload> | null;
@@ -215,15 +216,17 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   }
   const firstQuality = assessQuality(img.qualityGrey, img);
   const variants = dhashVariants(img.hashGrey);
+  // The second hash, in the framings a cropped or turned copy needs; the first framing is the one stored.
+  const framed = phashFramings(img.hashGrey);
   // The further photos: each decoded, quality-checked and hashed the same way. One that cannot be read is a retake.
-  const more: { img: DecodedImage; quality: QualityReport; variants: string[] }[] = [];
+  const more: { img: DecodedImage; quality: QualityReport; variants: string[]; framed: { name: string; phash: string }[] }[] = [];
   for (const b of moreBytes) {
     try {
       const m = await decodeImage(b, claimMaxSide(rule.must_show));
-      more.push({ img: m, quality: assessQuality(m.qualityGrey, m), variants: dhashVariants(m.hashGrey) });
+      more.push({ img: m, quality: assessQuality(m.qualityGrey, m), variants: dhashVariants(m.hashGrey), framed: phashFramings(m.hashGrey) });
     } catch (e) {
       if (!(e instanceof PhotoUnreadableError)) throw e;
-      more.push({ img, quality: { ...emptyQuality(), issues: ["small"] }, variants: [] });
+      more.push({ img, quality: { ...emptyQuality(), issues: ["small"] }, variants: [], framed: [] });
     }
   }
   // The claim's quality is its weakest photo's.
@@ -236,16 +239,19 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
   const officialHashes: HashRef[] =
     input.options?.officialHashCheck === false ? [] : dedupeRefs([...storedHashes, ...official.images.map((o) => ({ ref: o.url, dhash: o.dhash, caption: o.caption }))]);
   const matchStarted = performance.now();
-  const matchOne = (v: string[]) => {
+  // Earlier claim photos and pool hashes are matched by the dHash and, where they carry one, by the second hash
+  // (PHASH_MAX_DISTANCE), which holds under a crop or a few degrees of turn. Published pictures stay on the dHash.
+  const matchOne = (v: string[], pf: { name: string; phash: string }[]) => {
     const h = hashMatches(v, officialHashes, input.priorHashes ?? []);
+    if (!h.prior && pf.length) h.prior = phashMatch(pf, input.priorHashes ?? []);
     const e = {
       official: input.options?.officialHashCheck === false || h.official ? null : otherRecallMatch(v, recall.number),
-      prior: h.prior || !input.elsewhereHashes?.length ? null : closestMatch(v, input.elsewhereHashes, CATALOG_MAX_DISTANCE),
+      prior: h.prior || !input.elsewhereHashes?.length ? null : (closestMatch(v, input.elsewhereHashes, CATALOG_MAX_DISTANCE) ?? phashMatch(pf, input.elsewhereHashes)),
     };
     return { hashes: h, elsewhere: e, hit: Boolean(h.official || h.prior || e.official || e.prior) };
   };
-  const first = matchOne(variants);
-  const found = first.hit ? first : (more.map((m) => (m.variants.length ? matchOne(m.variants) : null)).find((m) => m?.hit) ?? first);
+  const first = matchOne(variants, framed);
+  const found = first.hit ? first : (more.map((m) => (m.variants.length ? matchOne(m.variants, m.framed) : null)).find((m) => m?.hit) ?? first);
   const { hashes, elsewhere } = found;
   timings.match_ms = Math.round((performance.now() - matchStarted) * 10) / 10;
   const cached = await cachedP;
@@ -310,8 +316,8 @@ export async function verifyPhoto(input: VerifyInput, deps: VerifyDeps = {}): Pr
       summary,
       amount: amount.amount,
       quality,
-      photo: { dhash: variants[0], dhash_variants: variants, width: img.width, height: img.height, exif: img.exif, mime, sha256 },
-      ...(more.length ? { more_photos: more.map((m) => ({ dhash: m.variants[0] ?? null, width: m.img.width, height: m.img.height })) } : {}),
+      photo: { dhash: variants[0], dhash_variants: variants, width: img.width, height: img.height, exif: img.exif, mime, sha256, phash: framed[0]?.phash ?? null },
+      ...(more.length ? { more_photos: more.map((m) => ({ dhash: m.variants[0] ?? null, phash: m.framed[0]?.phash ?? null, width: m.img.width, height: m.img.height })) } : {}),
       person: person ? { visible: true, kinds: person.kinds } : null,
       review: reviewRun ? debatePayload(reviewRun) : null,
       blockers: verdict.blockers,

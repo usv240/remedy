@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getRecall, publicRecall } from "@/app/api/claims/_lib/recall";
 import { isRecallNumber, refundPhrase, SAMPLE_PHOTO_CREDIT } from "@/app/api/claims/_lib/recall-text";
-import { SHOP_RECALL } from "@/app/api/claims/_lib/terms";
+import { firmTerms, SHOP_RECALL } from "@/app/api/claims/_lib/terms";
 import { payerWords } from "@/lib/recall/label";
 import { ClaimFlow } from "@/components/claim/ClaimFlow";
 import { ClaimInfo } from "@/components/claim/ClaimInfo";
@@ -18,6 +18,7 @@ import "../../pages.css";
 import "@/components/claim/claim.css";
 
 type Params = { params: Promise<{ recall: string }> };
+type Props = Params & { searchParams: Promise<{ capture?: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { recall } = await params;
@@ -27,8 +28,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     : { title: "Claim a recall refund" };
 }
 
-async function Claim({ params }: Params) {
+async function Claim({ params, searchParams }: Props) {
   const { recall } = await params;
+  // A recall that asks for a photo taken now opens the camera alone; ?capture=live shows that page on any recall. The
+  // query can only turn it on, never off.
+  const { capture } = await searchParams;
   if (!isRecallNumber(recall)) notFound();
   const r = getRecall(recall);
   if (!r) notFound();
@@ -38,6 +42,7 @@ async function Claim({ params }: Params) {
   const action = pr.rule.actions.includes("write_recalled") ? "write" : pr.rule.actions.includes("cut_cord") ? "cut_cord" : pr.rule.actions.includes("cut_in_half") ? "cut_in_half" : steps.find((s) => !["stop", "photo", "send", "dispose"].includes(s.kind))?.kind ?? null;
   const asksPhoto = pr.rule.photo_required;
   const refund = refundPhrase(pr.rule.refund_amount_text);
+  const liveCapture = capture === "live" || (await firmTerms(pr.number).catch(() => null))?.requireLiveCapture === true;
 
   return (
     <>
@@ -112,7 +117,7 @@ async function Claim({ params }: Params) {
         </li>
 
         {asksPhoto ? (
-          <ClaimFlow recall={{ number: pr.number, product: pr.product, word, action, example: pr.example, shop: pr.number === SHOP_RECALL, photos: photoAsk(r.remedyText) }} />
+          <ClaimFlow recall={{ number: pr.number, product: pr.product, word, action, example: pr.example, shop: pr.number === SHOP_RECALL, photos: photoAsk(r.remedyText), liveCapture }} />
         ) : (
           <li className="cl-step" data-step="photo">
             <h2 className="cl-step-title" data-n="3">
@@ -138,11 +143,11 @@ async function Claim({ params }: Params) {
 }
 
 // The recall number is runtime data, so the page reads it inside Suspense; the fallback holds the page's height.
-export default function ClaimPage({ params }: Params) {
+export default function ClaimPage({ params, searchParams }: Props) {
   return (
     <div className="cl-page frame">
       <Suspense fallback={<p className="page-loading">Loading your recall</p>}>
-        <Claim params={params} />
+        <Claim params={params} searchParams={searchParams} />
       </Suspense>
     </div>
   );

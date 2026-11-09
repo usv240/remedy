@@ -188,6 +188,81 @@
 .tr-out:empty {
   display: none;
 }
+/* Side by side, a result opens full width under its group of examples (Presets.tsx); its card keeps an edge in the
+   accent's edge color so the two read as one. One card wide, the result stays inside its card. */
+.tr-preset[data-open] {
+  border-color: var(--accent-edge);
+}
+.tr-open-note {
+  font-size: 0.875rem;
+}
+.tr-show {
+  min-height: 44px;
+}
+.tr-slot {
+  margin-top: 12px;
+}
+.tr-slot:empty {
+  display: none;
+}
+.tr-result {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sheet);
+  padding: 20px 24px 24px;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+@starting-style {
+  .tr-result {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tr-result {
+    transition: opacity 120ms linear;
+  }
+  @starting-style {
+    .tr-result {
+      transform: none;
+    }
+  }
+}
+.tr-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+.tr-result-title {
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+.tr-back {
+  min-height: 44px;
+}
+/* Inside a card (a phone) the result flows as one column, as it always has; in the full-width panel it is a grid. */
+.tr-result .tr-out-grid {
+  display: grid;
+  gap: 12px;
+}
+/* Wide enough, the checks sit on the left and the answer, with what to do next, on the right. */
+@media (min-width: 900px) {
+  .tr-result .tr-out-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+}
 .tr-out .cl-checking {
   margin-top: 4px;
 }

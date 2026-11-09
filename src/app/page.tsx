@@ -61,7 +61,7 @@ function ideas() {
   return [
     {
       line: "Each firm that joins makes every other firm safer.",
-      note: `Every claim photo is matched by a 64-bit hash against the ${fmtInt(catalogOfficialHashes().length)} pictures published with every recall and every photo already claimed at any firm, before any model call. Firms share only hashes, never a photo.`,
+      note: `Every claim photo is matched by two 64-bit hashes against the ${fmtInt(catalogOfficialHashes().length)} pictures published with every recall and every photo already claimed at any firm, before any model call. Firms share only hashes, never a photo.`,
       href: "/evidence#network",
       see: "One photo, two firms",
     },

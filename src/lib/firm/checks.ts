@@ -61,5 +61,50 @@ export function confidence(checks: StoredChecks): number | null {
   return Math.round(Math.min(...scores) * 100) / 100;
 }
 
+/**
+ * What the two reviewers did with a claim, so the queue reads from left to right: an unsure check, its confidence, the
+ * reviewers, then the decision. From the stored debate (claim.debate, the referee's decision and whether the two counted
+ * votes agreed) and who decided (claim.result.decided_by):
+ * - agreed: both reviewers found the recalled product made safe, so code verified it (decide() in src/lib/verify/decide.ts
+ *   verifies over soft items only when the two agree);
+ * - agreed_not: both found the photo does not show it yet, so a person looks;
+ * - disagreed: the two counted votes differed, or one was set aside, so a person looks;
+ * - not_settled: the reviewers looked and a person was asked to decide; this run kept no votes;
+ * - not_needed: the checks settled the claim without them.
+ */
+export type ReviewersWord = "agreed" | "agreed_not" | "disagreed" | "not_settled" | "not_needed";
+
+export function reviewersOutcome(r: { decision: string; decidedBy: string | null; refereeDecision: string | null; refereeAgreed: boolean | null }): ReviewersWord {
+  if (r.refereeDecision === "verify" || (r.decidedBy === "reviewers" && r.decision === "verified")) return "agreed";
+  if (r.refereeDecision === "person") return r.refereeAgreed ? "agreed_not" : "disagreed";
+  if (r.decidedBy === "reviewers") return "not_settled";
+  return "not_needed";
+}
+
+export const REVIEWERS_LABEL: Record<ReviewersWord, string> = {
+  agreed: "Agreed",
+  agreed_not: "Agreed: not yet",
+  disagreed: "Disagreed",
+  not_settled: "Not settled",
+  not_needed: "Not needed",
+};
+
+/** One sentence per outcome, for the cell's tooltip and the phone card. */
+export const REVIEWERS_PLAIN: Record<ReviewersWord, string> = {
+  agreed: "Both reviewers found the recalled product made safe, so code verified it.",
+  agreed_not: "Both reviewers found the photo does not show it yet, so a person at the firm decides.",
+  disagreed: "The two reviewers did not agree, so a person at the firm decides.",
+  not_settled: "The two reviewers looked and did not settle it, so a person at the firm decides.",
+  not_needed: "The checks settled this claim without the two reviewers.",
+};
+
+export const REVIEWERS_TONE: Record<ReviewersWord, "positive" | "attention" | "info" | "neutral"> = {
+  agreed: "positive",
+  agreed_not: "attention",
+  disagreed: "attention",
+  not_settled: "attention",
+  not_needed: "neutral",
+};
+
 /** How many of the six checks passed, for a phone card ("5 of 6 checks pass"). */
 export const passCount = (words: Record<CheckId, CheckWord>) => CHECK_ORDER.filter((id) => words[id] === "pass").length;

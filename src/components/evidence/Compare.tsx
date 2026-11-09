@@ -32,7 +32,7 @@ export const LANDSCAPE: { id: string; name: string; date: string; does: string; 
     name: "Truepic Vision for recall and warranty claims",
     date: "product page, undated; partnership announced February 10, 2025",
     does: "The owner takes a fresh photo inside Truepic's own camera; the photo passes authenticity checks, the model and serial number are read and matched to the firm's records, and duplicate claims and unexpected locations are flagged for the firm's agents to decide.",
-    notThis: "It verifies that the capture is real and the serial fits. It does not read the recall's remedy into a rule, judge whether the product was made safe, or pay the refund; those three are what Remedy adds, and an owner's existing photo is accepted.",
+    notThis: "It verifies that the capture is real and the serial fits. It does not read the recall's remedy into a rule, decide whether the product was made safe, or pay the refund; those three are what Remedy adds, and an owner's existing photo is accepted.",
     url: "https://www.truepic.com/blog/introducing-truepic-vision-for-consumer-product-safety-warranty-and-recall-claims",
   },
   {
@@ -40,7 +40,7 @@ export const LANDSCAPE: { id: string; name: string; date: string; does: string; 
     name: "Truepic Risk Network",
     date: "September 25, 2025",
     does: "Opt-in, anonymized signals shared across participating companies: the same device across companies, the same vantage point across hundreds of claims, reused objects. Built for lenders and insurers.",
-    notThis: "The signals are about devices and capture. Remedy's pool compares the picture itself, as a 64-bit hash, across recall firms and against every published recall picture, in open code; only the hash and a row id cross.",
+    notThis: "The signals are about devices and capture. Remedy's pool compares the picture itself, as 64-bit hashes, across recall firms and against every published recall picture, in open code; only the hash and a row id cross.",
     url: "https://www.truepic.com/blog/introducing-the-truepic-risk-network",
   },
   {

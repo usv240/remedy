@@ -2,24 +2,38 @@ import { perRefund } from "@/lib/pricing";
 import Link from "next/link";
 import { Info } from "@/components/Info";
 import { fmtInt } from "@/lib/api/format";
-import { PROBLEM } from "@/lib/research";
+import { PROBLEM, RESEARCH } from "@/lib/research";
 import { S, pct } from "./data";
 
-/** The pilot's two outcomes: each with the baseline it is compared to and where Remedy already records it. */
-const OUTCOMES = [
+/**
+ * The pilot's outcomes, the claim rate first: each with the baseline it is compared to and where Remedy already records
+ * it. The published reference points come from src/lib/research.ts; docs/research.md says the same (tests/facts.test.ts).
+ */
+export const OUTCOMES = [
   {
+    rank: "Primary",
+    what: "Claim rate: completed claims as a share of the recall's units",
+    baseline: `The firm's own share of units corrected in the 30 days before. Published reference points: about ${RESEARCH.comeBack.share} recalled units come back through a recall (${RESEARCH.comeBack.source}), and the CPSC's ${PROBLEM.correctionRate.year} average correction rate across recalls was ${PROBLEM.correctionRate.rate}, a different measure.`,
+    where: "Each claim's claim.paid entry in the audit ledger, counted as units corrected in the console's Completion figure and the monthly CPSC report.",
+  },
+  {
+    rank: "Secondary",
     what: "Time from photo to refund",
     baseline: "The firm's median days from an emailed photo to its refund, from its own records for the 30 days before.",
     where: "Each claim's claim.submitted and claim.paid entries in the audit ledger and the payment's paid time, shown in the firm's claims queue.",
   },
   {
+    rank: "Also recorded",
     what: "Share of claims a person had to open",
     baseline: "Every emailed photo, which a person reads by hand today.",
     where: "Each claim's decision (verified, new photo, firm review) in the claim table and the ledger's claim.decided entries, and the queue's Needs review view.",
   },
 ];
 
-/** One concrete pilot with two measured outcomes, and why it holds up if an established tool adds the same AI. */
+/** Why a firm wants more completed claims, in one line from the CPSC's own performance report. */
+export const WHY_CLAIMS = `The CPSC measures recalls by their correction rate and set a ${PROBLEM.correctionRate.target} target for ${PROBLEM.correctionRate.year} (${PROBLEM.correctionRate.rate} reached), and every completed claim is a corrected unit in the firm's monthly progress report.`;
+
+/** One concrete pilot, the claim rate measured first, and why it holds up if an established tool adds the same AI. */
 export function Pilot() {
   return (
     <div className="jpl">
@@ -29,13 +43,21 @@ export function Pilot() {
           <Info id="evidence.pilot" label="" topic="The pilot" />
         </div>
         <p>
-          One small firm with an open photo-refund recall runs every claim on that recall through Remedy for 30 days, from its own claim link, beside its current inbox. Two outcomes are measured against the month before.
+          One small firm with an open photo-refund recall runs every claim on that recall through Remedy for 30 days, from its own claim link, beside its current inbox. The claim rate is measured first, then payout speed, each against the month before.
+        </p>
+        <p>
+          <span className="jpl-k">Why more completed claims:</span> {WHY_CLAIMS}{" "}
+          <a className="text-link" href={PROBLEM.correctionRate.url} target="_blank" rel="noreferrer">
+            {PROBLEM.correctionRate.short}
+          </a>
         </p>
       </div>
       <ol className="jpl-list">
         {OUTCOMES.map((o) => (
           <li key={o.what}>
-            <p className="jpl-what">{o.what}</p>
+            <p className="jpl-what">
+              <span className="jpl-rank">{o.rank}</span> {o.what}
+            </p>
             <p>
               <span className="jpl-k">Baseline:</span> {o.baseline}
             </p>
@@ -57,7 +79,7 @@ export function Pilot() {
         .
       </p>
       <p className="jpl-holds">
-        <span className="jpl-k">Why it holds up:</span> an established tool that adds the same model gains a reader of photos; what makes each payout safe to send is the checks in code, the hash-chained evidence behind every payment, and the error rates measured on photos with known answers. It also grows with use: every claim photo is checked against the published pictures of every recall and every photo already claimed on any recall, at any firm, by a 64-bit hash alone, so each firm that joins makes every other firm&rsquo;s refunds safer.
+        <span className="jpl-k">Why it holds up:</span> an established tool that adds the same model gains a reader of photos; what makes each payout safe to send is the checks in code, the hash-chained evidence behind every payment, and the error rates measured on photos with known answers. It also grows with use: every claim photo is checked against the published pictures of every recall and every photo already claimed on any recall, at any firm, by its hashes alone, so each firm that joins makes every other firm&rsquo;s refunds safer.
       </p>
     </div>
   );

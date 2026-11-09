@@ -41,6 +41,8 @@ export type FirmTerms = {
   reviewHours: number;
   /** The firm runs this recall in Remedy (a firm_recall row), or it is a demo of a recall it does not run. */
   runsRecall: boolean;
+  /** The recall asks for a photo taken now (firm_recall.require_live_capture): the claim page offers the camera alone. */
+  requireLiveCapture: boolean;
 };
 
 const cents = (v: string | number | null | undefined) => {
@@ -49,7 +51,7 @@ const cents = (v: string | number | null | undefined) => {
   return Number.isFinite(n) && n >= 0 ? n : null;
 };
 
-export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, ownerName: "the recalling firm", autoCapCents: 5000, autoDailyCents: 35_000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false };
+export const DEFAULT_TERMS: FirmTerms = { firmId: null, firmName: SAMPLE_FIRM, ownerName: "the recalling firm", autoCapCents: 5000, autoDailyCents: 35_000, refundCents: DEMO_REFUND_CENTS, refundSource: "demo", reviewHours: 48, runsRecall: false, requireLiveCapture: false };
 
 export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
   // Without a database, a sample recall is still named for the firm that runs it.
@@ -81,6 +83,7 @@ export async function firmTerms(recallNumber: string): Promise<FirmTerms> {
       refundSource: refund !== null ? "firm" : "demo",
       reviewHours: settings.reviewHours ?? DEFAULT_TERMS.reviewHours,
       runsRecall: Boolean(fr),
+      requireLiveCapture: Boolean(fr?.requireLiveCapture),
     };
   } catch {
     return fallback;

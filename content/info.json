@@ -466,8 +466,8 @@
   },
   "evidence.pilot": {
     "title": "The pilot",
-    "what": "One firm, one recall, 30 days, and two outcomes measured against the month before: the time from photo to refund, and the share of claims a person had to open.",
-    "why": "Both are what a firm feels: owners paid sooner, and fewer photos read by hand.",
+    "what": "One firm, one recall, 30 days, measured against the month before: the claim rate first (completed claims as a share of the recall's units), then the time from photo to refund, and the share of claims a person had to open.",
+    "why": "The claim rate is what the CPSC measures a recall by; the others are what a firm feels: owners paid sooner, and fewer photos read by hand.",
     "technical": "Both are already recorded: claim.submitted, claim.decided and claim.paid in the hash-chained audit ledger (GET /api/ledger/verify checks it), the payment's paid_at, and each claim's decision in the claim table, with the firm console's queue views over them."
   },
   "evidence.research": {

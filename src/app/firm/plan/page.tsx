@@ -47,7 +47,7 @@ export default function PlanPage() {
           <Plan />
         </Suspense>
       </div>
-      <p className="firm-label">Tasks marked sample are fictional history. Bryntum Gantt runs as a trial and shows its watermark. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
+      <p className="firm-label">Tasks marked sample are fictional history. Bryntum Gantt runs as a trial and shows its watermark.</p>
     </>
   );
 }

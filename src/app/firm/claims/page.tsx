@@ -40,7 +40,7 @@ export default function ClaimsPage({ searchParams }: { searchParams: Promise<{ v
           <Queue searchParams={searchParams} />
         </Suspense>
       </div>
-      <p className="firm-label">Sample claims are fictional and marked sample. Paying a claim sends a real PayPal sandbox payout; the sample claims ready to pay are at the recall&rsquo;s refund of $34.99, and two more are added when they have been paid. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
+      <p className="firm-label">Sample claims are fictional and marked sample. Paying a claim sends a real PayPal sandbox payout; the sample claims ready to pay are at the recall&rsquo;s refund of $34.99, and two more are added when they have been paid.</p>
     </>
   );
 }

@@ -1,4 +1,4 @@
-// Approve a PayPal sandbox order as the sandbox buyer, in a real browser, the way a judge would (redirect checkout).
+// Approve a PayPal sandbox order as the sandbox buyer, in a real browser, the way a visitor would (redirect checkout).
 // Approves a sandbox order as the buyer: log in with SANDBOX_BUYER_EMAIL and
 // SANDBOX_BUYER_PASSWORD, press Pay, and stop when PayPal sends the browser to the return URL (answered locally, so
 // no server needs to be running). Needs Chrome (CHROME_PATH, or the default Windows install path).

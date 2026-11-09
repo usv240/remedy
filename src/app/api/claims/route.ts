@@ -84,6 +84,7 @@ export async function POST(req: Request) {
       // Test-only switches: no live AI, and a $1 to $2 payout, so the sandbox flow is tested for free.
       test: test ? { noAi: form.get("e2e_no_ai") === "1", amountCents: Number.isFinite(amount) && amount >= 1 && amount <= 2 ? Math.round(amount * 100) : undefined } : null,
       noticeToken: String(form.get("notice") ?? "").trim().slice(0, 128) || null,
+      capture: form.get("capture") === "camera" ? "camera" : "any",
       visitorHash: visitorHash(ip, req.headers.get("user-agent")),
     };
 

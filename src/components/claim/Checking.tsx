@@ -2,7 +2,7 @@
 
 import type { CheckView } from "@/app/api/claims/_lib/types";
 import { ClaimInfo } from "./ClaimInfo";
-import { TIME_WORDS } from "@/lib/time-words";
+import { ANSWER_WORDS, TIME_WORDS } from "@/lib/time-words";
 import { CHECK_ORDER, checkWord, scoreLine, seconds, settledLine } from "./format";
 
 export type Stage = "sending" | "stored" | "vision" | "reviewers" | "done";
@@ -33,8 +33,14 @@ function Mark({ status }: { status: CheckView["status"] | "pending" }) {
  * stage (sending, comparing with the official pictures, the two reviewers). When the answer lands, the checks resolve
  * in order, 70 ms apart, and the timer stops at the real elapsed time.
  */
-/** A word beside the timer saying where the model's answer came from: Replayed (a recorded run) or Live (just now). */
-export type AnswerSource = "replayed" | "live";
+/**
+ * Where the answer came from, said beside the timer in the words every page uses (src/lib/time-words.ts): "recorded",
+ * the model's answer from a recorded run, timed as that run; "live", the model read the photo just now; "code", no
+ * model call was needed and code answered just now.
+ */
+export type AnswerSource = "recorded" | "live" | "code";
+/** A recorded run's own times: the model's calls when recorded, and the whole run with the checks in code. */
+export type RecordedTimes = { totalMs: number; visionMs: number; reviewersMs: number };
 
 export function Checking({
   checks,
@@ -43,6 +49,7 @@ export function Checking({
   technical,
   reviewersAgreed = false,
   source,
+  recorded,
 }: {
   checks: CheckView[] | null;
   stage: Stage;
@@ -50,8 +57,14 @@ export function Checking({
   technical?: Record<string, number> | null;
   reviewersAgreed?: boolean;
   source?: AnswerSource | null;
+  /** For a recorded answer: the run's own times, shown in place of the replay's few milliseconds. */
+  recorded?: RecordedTimes | null;
 }) {
   const done = Boolean(checks);
+  const rec = done && source === "recorded" && recorded ? recorded : null;
+  const shownMs = rec ? rec.totalMs : elapsedMs;
+  const timeWord = source ? TIME_WORDS[source === "recorded" ? "recorded" : "live"] : null;
+  const pill = source === "recorded" ? ANSWER_WORDS.recorded : source === "live" ? ANSWER_WORDS.live : null;
   return (
     <div className="cl-checking" data-ui>
       <div className="cl-checking-head">
@@ -59,18 +72,22 @@ export function Checking({
           {STAGE_LINE[stage]}
           {!done && <span className="cl-dots" aria-hidden="true" />}
         </p>
-        {done && source && (
-          <span className="pill cl-source" data-tone={source === "live" ? "positive" : "info"} title={source === "live" ? "The model read this photo just now" : "The model's answer is replayed from a recorded run; the checks around it ran just now"}>
-            {source === "live" ? "Live" : "Replayed"}
+        {done && pill && (
+          <span className="pill cl-source" data-tone={source === "live" ? "positive" : "info"} title={source === "live" ? "The model read this photo just now" : "The model's answer is from a recorded run; the checks around it ran again just now"}>
+            {pill}
           </span>
         )}
-        <p className="cl-elapsed tabular" aria-label={`${done ? "Checked in" : "Elapsed"} ${seconds(elapsedMs)}${done && source ? `, ${TIME_WORDS[source]}` : ""}`}>
-          <span>{seconds(elapsedMs)}</span>
-          {done && source && <span className="cl-elapsed-k">{TIME_WORDS[source]}</span>}
+        <p className="cl-elapsed tabular" aria-label={`${done ? "Checked in" : "Elapsed"} ${seconds(shownMs)}${done && timeWord ? `, ${timeWord}` : ""}`}>
+          <span>{seconds(shownMs)}</span>
+          {done && timeWord && <span className="cl-elapsed-k">{timeWord}</span>}
         </p>
         <ClaimInfo k="claim.checks" topic="the six checks" />
       </div>
-      {done && technical && technical.reviewers_ms > 0 && technical.vision_ms > 0 ? (
+      {rec ? (
+        <p className="cl-split tabular">
+          {seconds(rec.visionMs)} for the photo check{rec.reviewersMs > 0 ? `, then ${seconds(rec.reviewersMs)} for the two reviewers` : ""}, when it was recorded. The checks in code ran again just now, in {seconds(elapsedMs)}.
+        </p>
+      ) : done && technical && technical.reviewers_ms > 0 && technical.vision_ms > 0 ? (
         <p className="cl-split tabular">
           {seconds(technical.vision_ms)} for the photo check, then {seconds(technical.reviewers_ms)} for the two reviewers.
         </p>

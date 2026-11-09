@@ -20,6 +20,14 @@ function answerWords(e: AnswerChange["was"]): string {
 }
 
 /**
+ * Why the claim path keeps its setting while a cheaper one scores as well: the recordings and the verification cache are
+ * keyed to it (engineVersion() in src/lib/verify/cache.ts names the effort). tests/facts.test.ts checks every recording's
+ * engine and the one line that sets the effort, so this stays true. docs/results.md says the same.
+ */
+export const KEYED_LINE =
+  "It stays on that setting because every recorded answer on this site, and the verification cache, are keyed to it: switching means a paid re-run of those recordings. The switch itself is one line, effortFor() in src/lib/verify/vision.ts.";
+
+/**
  * Which model setting the claim path uses, and why, from the measured sweep (content/verify/sweep-results.json),
  * scored by src/components/evidence/errors.ts: money first (paid when it should not have been), then accuracy against the
  * known answers as they stood the day the sweep ran, then re-scored against today's, beside the dated list of every
@@ -91,7 +99,8 @@ export function Settings() {
         {hb.count ? `, the other ${hb.count === 1 ? "one" : hb.count} sent to a person at the firm` : ""}. So the claim path stays on {NAMES[claim.id]}.
         {cheaper.length
           ? ` ${cheaper.map((c) => NAMES[c.id]).join(" and ")} ${cheaper.length === 1 ? "scores" : "score"} at least as well on both counts, with no more CPSC pictures paid with the match off, at ${cheaper.map((c) => `$${c.usdPerCase.toFixed(4)}`).join(" and ")} a check, and ${cheaper.length === 1 ? "is" : "are"} the next to measure on owners' photos.`
-          : ""}
+          : ""}{" "}
+        {KEYED_LINE}
       </p>
       <h3 id="answer-changes" className="ev-sub">
         Known answers revised after the sweep

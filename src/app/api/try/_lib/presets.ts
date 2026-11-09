@@ -236,11 +236,32 @@ export type PresetRun = {
   preset: Preset;
   result: ClaimView;
   /** Whether a recorded Claude answer was replayed, and when it was recorded. */
-  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null; ms_when_recorded: { vision: number; reviewers: number } | null };
+  replay: { used: boolean; recorded_at: string | null; model: string | null; cost_usd_when_recorded: number | null; ms_when_recorded: { vision: number; reviewers: number } | null; total_ms_when_recorded: number | null };
   live_ai: boolean;
   /** A "Run it live" request: whether the model ran just now, what it cost, or why the recorded run is shown instead. */
   live?: { ran: boolean; note: string | null; usd: number | null; model: string | null } | null;
 };
+
+type PublicRuns = { runs: { id: string; needs_vision?: boolean; result: { timings: { vision_ms?: number; total_ms: number } } }[] };
+let publicRunsCache: PublicRuns | null = null;
+
+/**
+ * A recorded run's own time, the model's recorded calls and the checks in code together, so a replayed example shows
+ * the same time wherever it appears. The run the home page replays (content/public/verify-runs.json, the same recorded
+ * model answer) gives its total as recorded there; any other recording adds its model calls to this replay's code time.
+ */
+export function recordedTotalMs(presetId: string, rec: Recorded | null, codeMs: number): number | null {
+  if (!rec?.vision) return null;
+  const model = rec.vision.ms + (rec.reviews?.ms ?? 0);
+  try {
+    publicRunsCache ??= JSON.parse(readFileSync(path.join(ROOT, "content", "public", "verify-runs.json"), "utf8")) as PublicRuns;
+    const run = publicRunsCache.runs.find((r) => r.id === presetId && r.needs_vision && r.result.timings.vision_ms === rec.vision!.ms);
+    if (run) return run.result.timings.total_ms;
+  } catch {
+    // No public runs file: the model calls and this replay's code time.
+  }
+  return model + codeMs;
+}
 
 /** The one example a visitor may run live against the model: Brightline's sample charger with its cord cut. */
 export const LIVE_PRESET = "sample-charger-cut";
@@ -303,7 +324,14 @@ export async function runPreset(p: Preset, opts: { technical?: boolean; live?: L
   return {
     preset: p,
     result: viewFromResult(r, p, { name: terms.firmName, reviewHours: terms.reviewHours }),
-    replay: { used: !liveAi && Boolean(recorded?.vision), recorded_at: recorded?.recorded_at ?? null, model: recorded?.vision?.model ?? null, cost_usd_when_recorded: recorded?.cost_usd ?? null, ms_when_recorded: recorded?.vision ? { vision: recorded.vision.ms, reviewers: recorded.reviews?.ms ?? 0 } : null },
+    replay: {
+      used: !liveAi && Boolean(recorded?.vision),
+      recorded_at: recorded?.recorded_at ?? null,
+      model: recorded?.vision?.model ?? null,
+      cost_usd_when_recorded: recorded?.cost_usd ?? null,
+      ms_when_recorded: recorded?.vision ? { vision: recorded.vision.ms, reviewers: recorded.reviews?.ms ?? 0 } : null,
+      total_ms_when_recorded: recordedTotalMs(p.id, recorded, r.timings.total_ms),
+    },
     live_ai: liveAi,
     live: live ? { ran: ranLive, note: ranLive ? null : (liveNote ?? (liveAi ? "The model could not be reached just now, so a person at the firm would look at this claim." : null)), usd: usd === null ? null : Math.round(usd * 10000) / 10000, model: ranLive ? r.model : null } : null,
   };

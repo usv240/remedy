@@ -11,7 +11,7 @@ export const POOL_TRUST: { k: string; v: string }[] = [
     v: `Firms connected to Remedy, each with a key tied to its firm (scope ${POOL_WRITE_SCOPE}), issued when the firm connects. Claims a firm takes on Remedy add their photo's hash as they are checked. A self-serve sandbox key can check but not register, so the pool holds only photos a firm has handled.`,
   },
   { k: "Who may read", v: "Anyone, with or without a key: POST /api/v1/hash-pool/check answers whether a hash is within range of one already in the pool or a published recall picture." },
-  { k: "What crosses", v: "Only the 64-bit hash and an opaque ref. No photo, no name, no contact and no firm: the registering firm is kept in Remedy's own audit ledger, never in the pool row or an answer." },
+  { k: "What crosses", v: "Only the 64-bit hashes and an opaque ref. No photo, no name, no contact and no firm: the registering firm is kept in Remedy's own audit ledger, never in the pool row or an answer." },
 ];
 
 export function PoolTrust({ className = "ev-trust" }: { className?: string }) {

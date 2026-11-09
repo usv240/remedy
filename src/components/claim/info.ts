@@ -65,6 +65,12 @@ export const CLAIM_INFO = {
     why: "Seeing a real example makes it easy to take a photo that passes the first time.",
     technical: "Image: US Consumer Product Safety Commission, public domain. Remedy recognizes this exact picture and asks for your own photo if it is sent as a claim.",
   },
+  "claim.live-capture": {
+    title: "A photo taken now",
+    what: "This recall asks for a new photo, so the photo button opens your phone's camera and the photo library is not offered.",
+    why: "A photo taken at the moment of the claim is harder to copy from somewhere else. The same six checks still run on it.",
+    technical: "The firm's setting firm_recall.require_live_capture. The file input carries capture=\"environment\", which phone browsers open as the rear camera; a desktop browser treats it as a hint and may show a file picker. The claim records capture.via \"camera\" in its result: what the page asked for, not proof of which the owner used.",
+  },
   "claim.photo": {
     title: "Your photo",
     what: "Take the photo with your phone camera, or choose one you already took. Show just the product, with no people in it. JPEG or PNG, up to 15 MB.",

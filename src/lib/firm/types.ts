@@ -2,7 +2,7 @@
  * Shapes the firm console's pages, API routes and client components share. Type-only and client safe.
  */
 import type { CheckId } from "@/lib/verify/types";
-import type { CheckWord } from "./checks";
+import type { CheckWord, ReviewersWord } from "./checks";
 
 export type Decision = "pending" | "verified" | "retake" | "firm_review";
 export type ClaimStatus = "checking" | "verified" | "retake" | "firm_review" | "approved" | "paid" | "unclaimed" | "closed";
@@ -34,6 +34,8 @@ export type QueueRow = {
   payeeType: "email" | "phone" | "venmo" | null;
   checks: Record<CheckId, CheckWord>;
   confidence: number | null;
+  /** What the two reviewers did: agreed, disagreed, not settled, or not needed (reviewersOutcome in ./checks). */
+  reviewers: ReviewersWord;
   decision: Decision;
   /** Where the claim stands for the firm, in plain words: "Ready to pay", "Needs review", "Paid". */
   stage: Stage;

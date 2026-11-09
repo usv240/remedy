@@ -7,6 +7,10 @@
 .ev-reuse .ev-sub {
   margin-top: 0;
 }
+/* A later heading inside the block (the second hash) gets the room a new part needs. */
+.ev-reuse .ev-sub:not(:first-child) {
+  margin-top: 32px;
+}
 .ev-reuse .page-prose {
   max-width: 72ch;
 }

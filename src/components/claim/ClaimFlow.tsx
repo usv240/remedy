@@ -43,6 +43,11 @@ export type FlowRecall = {
   shop: boolean;
   /** How many photos the remedy asks for, and what each shows when it says (src/lib/recall/photo-count.ts). */
   photos?: { count: number; shows: string[] };
+  /**
+   * The recall asks for a photo taken now (firm_recall.require_live_capture): the photo button opens the camera, the
+   * library choice and the sample photo are hidden, and the claim records that the camera was asked for.
+   */
+  liveCapture?: boolean;
 };
 
 /** The sample shop's receipt, kept on this device after a purchase so the claim can link it. */
@@ -168,6 +173,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
     const notice = new URLSearchParams(window.location.search).get("n");
     fd.set("source", notice ? "link" : source);
     if (notice) fd.set("notice", notice);
+    fd.set("capture", recall.liveCapture ? "camera" : "any");
     if (recall.shop && sale && useSale) {
       fd.set("sale_id", sale.saleId);
       fd.set("capture_id", sale.captureId);
@@ -274,11 +280,18 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
               <input id={takeId} className="cl-file" type="file" accept={ACCEPT} capture="environment" aria-describedby={tipId} onChange={(e) => void pick(e.target.files?.[0])} disabled={phase === "checking"} />
               {file ? "Take it again" : "Take a photo"}
             </label>
-            <label className="btn btn-quiet cl-pick-btn" onPointerDown={() => void loadPhotoCheck()}>
-              <input id={chooseId} className="cl-file" type="file" accept={ACCEPT} onChange={(e) => void pick(e.target.files?.[0])} disabled={phase === "checking"} />
-              Choose a photo
-            </label>
+            {!recall.liveCapture && (
+              <label className="btn btn-quiet cl-pick-btn" onPointerDown={() => void loadPhotoCheck()}>
+                <input id={chooseId} className="cl-file" type="file" accept={ACCEPT} onChange={(e) => void pick(e.target.files?.[0])} disabled={phase === "checking"} />
+                Choose a photo
+              </label>
+            )}
           </div>
+          {recall.liveCapture && (
+            <p className="cl-hint cl-live-capture">
+              <strong>A photo taken now:</strong> this recall asks for a new photo, so the button opens your camera. <ClaimInfo k="claim.live-capture" topic="a photo taken now" />
+            </p>
+          )}
           {extras.map((f, i) => (
             <div key={i} className="cl-extra">
               <p className="cl-extra-k">
@@ -301,7 +314,7 @@ export function ClaimFlow({ recall, source = "web", startAt = 3 }: { recall: Flo
               </label>
             </div>
           ))}
-          {recall.shop && (
+          {recall.shop && !recall.liveCapture && (
             <div className="cl-sample">
               <button type="button" className="btn btn-quiet cl-sample-btn" onClick={() => void pickSamplePhoto()} disabled={phase === "checking"}>
                 Use Brightline&rsquo;s sample photo

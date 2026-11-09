@@ -118,6 +118,8 @@ export const firmRecalls = pgTable(
     dailyCap: money("daily_cap").notNull().default("2500.00"),
     /** active | paused | closed */
     status: text("status").notNull().default("active"),
+    /** The claim page asks for a photo taken now: its photo button opens the camera, and library upload is hidden. */
+    requireLiveCapture: boolean("require_live_capture").notNull().default(false),
     announcedOn: date("announced_on"),
     createdAt: created(),
   },
@@ -433,6 +435,8 @@ export const imageHashes = pgTable(
     ref: text("ref").notNull(),
     recallNumber: text("recall_number"),
     dhash: text("dhash").notNull(),
+    /** The second 64-bit hash (src/lib/verify/phash.ts), for claim photos and pool rows; null for older rows. */
+    phash: text("phash"),
     createdAt: created(),
   },
   (t) => [uniqueIndex("image_hash_source_ref_idx").on(t.source, t.ref), index("image_hash_recall_idx").on(t.recallNumber), index("image_hash_dhash_idx").on(t.dhash)],

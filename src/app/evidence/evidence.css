@@ -245,7 +245,8 @@
   }
 }
 
-/* The 30-day pilot under the three groups: what runs, the two outcomes with their baselines, and why it holds up. */
+/* The 30-day pilot under the three groups: what runs, the claim rate first and the other outcomes with their baselines,
+   and why it holds up. */
 .jpl {
   margin-top: 8px;
   display: grid;
@@ -291,6 +292,16 @@
 }
 .jpl-what {
   font-weight: 600;
+}
+/* The claim rate is the pilot's primary outcome: it takes the full row, the other two share the next. */
+.jpl-list li:first-child {
+  grid-column: 1 / -1;
+}
+.jpl-rank {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
 }
 .jpl-k {
   font-weight: 500;

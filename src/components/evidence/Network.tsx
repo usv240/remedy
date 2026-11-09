@@ -13,7 +13,7 @@ export function Network() {
   return (
     <>
       <p className="page-prose jp-intro">
-        Every claim photo is checked against every photo already claimed, at any firm, by its 64-bit hash alone. Here is that check across two firms, recorded with no model call. Both firms and their recalls are fictional samples.
+        Every claim photo is checked against every photo already claimed, at any firm, by its hashes alone. Here is that check across two firms, recorded with no model call. Both firms and their recalls are fictional samples.
       </p>
       <ol className="ev-net" aria-label="One photo, two firms">
         <li className="ev-net-step">

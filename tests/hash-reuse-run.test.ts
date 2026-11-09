@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { CATALOG_MAX_DISTANCE, DUPLICATE_MAX_DISTANCE } from "@/lib/verify/dhash";
+import { PHASH_MAX_DISTANCE, PHASH_REGION } from "@/lib/verify/phash";
 import { measure, SOURCES, VARIANTS, type Run } from "../scripts/public/hash-reuse-run";
 
 /**
@@ -46,6 +47,34 @@ describe("the hash pool against a reused photo (content/public/hash-reuse-run.js
     expect(run.falseMatches.within4).toBe(0);
   });
 
+  it("the second hash: each count follows from the rows, and its threshold is set from the run", () => {
+    const rows = run.rows;
+    const p = run.phash;
+    expect(p.maxDistance).toBe(PHASH_MAX_DISTANCE);
+    expect(p.region).toBe(PHASH_REGION);
+    for (const b of p.byThreshold) {
+      expect(b.dhash).toEqual({ caught: rows.filter((r) => r.distance <= b.bits).length, unrelated: rows.filter((r) => r.nearestUnrelated.distance <= b.bits).length });
+      expect(b.phash).toEqual({ caught: rows.filter((r) => r.phashDistance <= b.bits).length, unrelated: rows.filter((r) => r.nearestUnrelatedPhash.distance <= b.bits).length });
+      expect(b.either.caught).toBe(rows.filter((r) => r.distance <= b.bits || r.phashDistance <= b.bits).length);
+    }
+    expect(p.nearestUnrelatedMin).toBe(Math.min(...rows.map((r) => r.nearestUnrelatedPhash.distance)));
+    // No copy within the threshold of a picture it is not a copy of, with two bits to spare.
+    expect(p.inUse.phash.unrelated).toBe(0);
+    expect(p.inUse.either.unrelated).toBe(0);
+    expect(PHASH_MAX_DISTANCE).toBeLessThanOrEqual(p.nearestUnrelatedMin - 2);
+    expect(p.inUse.either.caught).toBe(rows.filter((r) => r.distance <= CATALOG_MAX_DISTANCE || r.phashDistance <= PHASH_MAX_DISTANCE).length);
+    // What the second hash adds at the thresholds in use: more copies caught than the dHash alone.
+    expect(p.inUse.either.caught).toBeGreaterThan(run.totals.caught4);
+    // The README and docs/results.md print the same figures.
+    const docs = ["README.md", "docs/results.md"].map((f) => readFileSync(path.join(process.cwd(), f), "utf8"));
+    for (const d of docs) expect(d).toContain(`${p.inUse.phash.caught} of ${run.totals.n}`);
+    expect(docs[1]).toContain(`either hash catches ${p.inUse.either.caught} of ${run.totals.n} with ${p.inUse.either.unrelated} unrelated matches`);
+    for (const k of p.byKind) {
+      const mine = rows.filter((r) => r.kind === k.kind);
+      expect([k.n, k.dhash4, k.phash]).toEqual([mine.length, mine.filter((r) => r.caught4).length, mine.filter((r) => r.phashDistance <= PHASH_MAX_DISTANCE).length]);
+    }
+  });
+
   it("comes out the same when the copies are made and hashed again", { timeout: 120_000 }, async () => {
     const again = await measure();
     expect(again.sources.map((s) => s.dhash)).toEqual(run.sources.map((s) => s.dhash));
@@ -59,6 +88,9 @@ describe("the hash pool against a reused photo (content/public/hash-reuse-run.js
       expect([a.source, a.kind]).toEqual([b.source, b.kind]);
       expect(Math.abs(a.distance - b.distance), `${b.source} ${b.kind}: distance`).toBeLessThanOrEqual(1);
       expect(Math.abs(a.nearestUnrelated.distance - b.nearestUnrelated.distance), `${b.source} ${b.kind}: nearest unrelated`).toBeLessThanOrEqual(1);
+      expect(Math.abs(a.phashDistance - b.phashDistance), `${b.source} ${b.kind}: second hash`).toBeLessThanOrEqual(1);
+      expect(Math.abs(a.nearestUnrelatedPhash.distance - b.nearestUnrelatedPhash.distance), `${b.source} ${b.kind}: second hash, nearest unrelated`).toBeLessThanOrEqual(1);
     }
+    expect(again.sources.map((s) => s.phash)).toEqual(run.sources.map((s) => s.phash));
   });
 });

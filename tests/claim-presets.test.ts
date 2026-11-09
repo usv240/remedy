@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { getRecall } from "@/app/api/claims/_lib/recall";
@@ -33,6 +33,22 @@ describe("ready-made examples", () => {
     expect(r.payment).toBeNull();
     expect(r.decision === "verified" && !p.expected.decision).toBe(false);
     expect(run.replay.used).toBe(Boolean(p.recorded));
+  }, 60_000);
+
+  it("a recorded answer shows its recorded run's own time, the same one the home page replays", async () => {
+    const runs = JSON.parse(readFileSync(path.join(process.cwd(), "content", "public", "verify-runs.json"), "utf8")) as { runs: { id: string; result: { timings: { total_ms: number } } }[] };
+    const flagship = await runPreset(getPreset("sample-charger-cut")!);
+    expect(flagship.replay.total_ms_when_recorded).toBe(runs.runs.find((r) => r.id === "sample-charger-cut")!.result.timings.total_ms);
+    // Any other recording: its model calls when recorded, and this replay's checks in code.
+    const other = await runPreset(getPreset("look-alike-oraimo")!);
+    const rec = readRecorded("look-alike-oraimo.json")!;
+    expect(other.replay.total_ms_when_recorded).toBe(rec.vision!.ms + (rec.reviews?.ms ?? 0) + other.result.timings!.total_ms);
+    // One set of words for a run's time on the home page, /try and the full result.
+    const words = readFileSync(path.join(process.cwd(), "src", "lib", "time-words.ts"), "utf8");
+    expect(words).not.toMatch(/replayed now/);
+    for (const f of ["src/components/claim/Checking.tsx", "src/components/try/Presets.tsx", "src/app/try/presets/[id]/page.tsx", "src/components/landing/TryPanel.tsx"]) {
+      expect(readFileSync(path.join(process.cwd(), ...f.split("/")), "utf8"), f).not.toMatch(/"Replayed"|"Done"/);
+    }
   }, 60_000);
 
   it("the CPSC example, with the official-image match off, sees the right product and is never paid", async () => {

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { csvTemplate, noticeText, parseSales, publicLine } from "@/lib/firm/buyers";
-import { checkWords, confidence, passCount } from "@/lib/firm/checks";
+import { checkWords, confidence, passCount, REVIEWERS_LABEL, reviewersOutcome } from "@/lib/firm/checks";
+import { sampleDebate, sampleResult, SAMPLE_PLAN } from "@/lib/firm/sample-claims";
 import { addMonths, daysBetween, nextReportDue, reportMonths, reportPeriod, whenWords } from "@/lib/firm/dates";
 import { fingerprint, narrativeProblems, promptFigures } from "@/lib/firm/narrative";
 import { basePlan, groupFor, MOVABLE, taskFor, toGantt, type PlanRow } from "@/lib/firm/plan";
@@ -57,6 +58,31 @@ describe("checks as the grid shows them", () => {
   it("confidence is the lower of the product and made-safe scores", () => {
     expect(confidence(checks)).toBe(0.55);
     expect(confidence({ C3: { status: "fail" } } as never)).toBeNull();
+  });
+  it("the reviewers column says what the two reviewers did, from the stored debate and who decided", () => {
+    expect(reviewersOutcome({ decision: "verified", decidedBy: "reviewers", refereeDecision: "verify", refereeAgreed: true })).toBe("agreed");
+    // Verified by the reviewers implies they agreed (decide() verifies over soft items only then), even with no votes kept.
+    expect(reviewersOutcome({ decision: "verified", decidedBy: "reviewers", refereeDecision: null, refereeAgreed: null })).toBe("agreed");
+    expect(reviewersOutcome({ decision: "firm_review", decidedBy: "reviewers", refereeDecision: "person", refereeAgreed: false })).toBe("disagreed");
+    expect(reviewersOutcome({ decision: "firm_review", decidedBy: "reviewers", refereeDecision: "person", refereeAgreed: true })).toBe("agreed_not");
+    expect(reviewersOutcome({ decision: "firm_review", decidedBy: "reviewers", refereeDecision: null, refereeAgreed: null })).toBe("not_settled");
+    expect(reviewersOutcome({ decision: "verified", decidedBy: "checks", refereeDecision: null, refereeAgreed: null })).toBe("not_needed");
+    expect(reviewersOutcome({ decision: "retake", decidedBy: "made_safe", refereeDecision: null, refereeAgreed: null })).toBe("not_needed");
+  });
+  it("every sample claim's reviewers cell follows from its recorded run: 0.80 agreed and verified, 0.82 not settled", () => {
+    const seen = new Set<string>();
+    for (const p of SAMPLE_PLAN) {
+      p.at.forEach((_, i) => {
+        const result = sampleResult(p.kind, i) as { decided_by: string };
+        const debate = sampleDebate(p.kind, i) as { referee?: { decision: string; agreed: boolean } } | null;
+        const decision = p.kind === "paid" || p.kind === "unclaimed" ? "verified" : p.kind === "retake" ? "retake" : "firm_review";
+        const word = reviewersOutcome({ decision, decidedBy: result.decided_by, refereeDecision: debate?.referee?.decision ?? null, refereeAgreed: debate?.referee?.agreed ?? null });
+        if (decision === "verified") expect(word).toBe("agreed");
+        if (decision === "retake") expect(word).toBe("not_needed");
+        seen.add(REVIEWERS_LABEL[word]);
+      });
+    }
+    expect([...seen].sort()).toEqual(["Agreed", "Not needed", "Not settled"]);
   });
 });
 

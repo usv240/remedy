@@ -89,6 +89,8 @@ export type SubmitInput = {
   test?: { noAi?: boolean; amountCents?: number } | null;
   /** The token from a firm's personal claim link (`?n=`), so the firm can see which notice led to this claim. */
   noticeToken?: string | null;
+  /** "camera": the claim page offered only the camera (the recall asks for a photo taken now); "any": camera or library. */
+  capture?: "camera" | "any";
   /** Keyed hash of the caller's network address and browser (src/lib/firm/limits.ts), for the claim limit. */
   visitorHash?: string | null;
 };
@@ -197,10 +199,16 @@ export type StoredResult = {
   source: SubmitInput["source"];
   link: LinkView | null;
   resting: boolean;
+  /**
+   * How the photo was asked for: `required` when the recall asks for a photo taken now (firm_recall.require_live_capture),
+   * and `via` what the claim page offered (the camera alone, or camera or library). The browser does not prove which
+   * the owner used; it is a record of what was asked.
+   */
+  capture?: { required: boolean; via: "camera" | "any" };
 };
 
 /** What the verify_claim job needs beside the claim row: the request's own facts, none of them personal. */
-export type CheckOptions = { test: SubmitInput["test"]; source: SubmitInput["source"]; mime: string | null; link: LinkView | null; /** The further photos the remedy asks for, stored in order. */ morePhotoIds?: string[] };
+export type CheckOptions = { test: SubmitInput["test"]; source: SubmitInput["source"]; mime: string | null; link: LinkView | null; /** The further photos the remedy asks for, stored in order. */ morePhotoIds?: string[]; /** What the claim page offered for the photo. */ capture?: "camera" | "any" };
 
 /**
  * Open the claim: store the photo, insert the claim row, mark a personal claim link answered, and write the first
@@ -249,7 +257,7 @@ export async function openClaim(input: SubmitInput, emit: (e: ClaimEvent) => voi
   }
   await audit("person", "claim.submitted", `claim:${claim.id}`, { recall: recall.number, source: input.source, photo: photoId, linked_sale: sale?.id ?? null, test: isTest });
   log.info("claim opened", { claim_id: claim.id, recall: recall.number, source: input.source, linked_sale: sale?.id ?? null, test: isTest });
-  return { claimId: claim.id, options: { test: input.test ?? null, source: input.source, mime: input.mime, link: linked?.view ?? null, ...(morePhotoIds.length ? { morePhotoIds } : {}) } };
+  return { claimId: claim.id, options: { test: input.test ?? null, source: input.source, mime: input.mime, link: linked?.view ?? null, ...(morePhotoIds.length ? { morePhotoIds } : {}), capture: input.capture ?? "any" } };
 }
 
 /** The claim's original photo bytes, kept until the checks ran. */
@@ -287,7 +295,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
 
   const [priorRows, elsewhereRows, [recallCount]] = await Promise.all([
     db()
-      .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash })
+      .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash, phash: schema.imageHashes.phash })
       .from(schema.imageHashes)
       .where(and(inArray(schema.imageHashes.source, POOL_SOURCES), eq(schema.imageHashes.recallNumber, recall.number)))
       .orderBy(desc(schema.imageHashes.id))
@@ -295,7 +303,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     // Earlier claim photos on every other recall, from any firm, and the hashes connected firms registered through
     // POST /api/v1/hash-pool/register: only their hashes, matched at CATALOG_MAX_DISTANCE.
     db()
-      .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash })
+      .select({ ref: schema.imageHashes.ref, dhash: schema.imageHashes.dhash, phash: schema.imageHashes.phash })
       .from(schema.imageHashes)
       .where(and(inArray(schema.imageHashes.source, POOL_SOURCES), ne(schema.imageHashes.recallNumber, recall.number)))
       .orderBy(desc(schema.imageHashes.id))
@@ -324,7 +332,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
   let result: VerifyResult;
   try {
     result = await verifyPhoto(
-      { photo: input.photo, morePhotos: morePhotos.length ? morePhotos : undefined, mime: input.mime ?? undefined, recall: verifyRecallFor(recall), proofRule: rule, priorHashes: priorRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), elsewhereHashes: elsewhereRows.map((r) => ({ ref: r.ref, dhash: r.dhash })), claimContext: ctx },
+      { photo: input.photo, morePhotos: morePhotos.length ? morePhotos : undefined, mime: input.mime ?? undefined, recall: verifyRecallFor(recall), proofRule: rule, priorHashes: priorRows.map((r) => ({ ref: r.ref, dhash: r.dhash, phash: r.phash })), elsewhereHashes: elsewhereRows.map((r) => ({ ref: r.ref, dhash: r.dhash, phash: r.phash })), claimContext: ctx },
       deps,
     );
   } catch (e) {
@@ -356,6 +364,7 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     source: input.source,
     link: linked?.view ?? null,
     resting,
+    capture: { required: terms.requireLiveCapture, via: options.capture ?? "any" },
   };
   if (!photoId) throw new ClaimError("internal", "The photo for this claim is missing.", 500);
   await db()
@@ -376,10 +385,11 @@ export async function checkClaim(claimId: string, options: CheckOptions, emit: (
     // Only photos that could be paid are kept for the earlier-claim check, so an owner's own retake never trips it.
     // Brightline's published sample photo stays out of it, so every visitor can claim the sample recall with it.
     if (result.decision !== "retake" && !isSamplePhoto(recall.number, photo)) {
-      await db().insert(schema.imageHashes).values({ source: "claim", ref: photoId, recallNumber: recall.number, dhash: result.photo.dhash }).onConflictDoNothing();
+      // The second hash goes beside the dHash (src/lib/verify/phash.ts): only hashes and the photo row id are kept.
+      await db().insert(schema.imageHashes).values({ source: "claim", ref: photoId, recallNumber: recall.number, dhash: result.photo.dhash, phash: result.photo.phash ?? null }).onConflictDoNothing();
       for (const [i, id] of morePhotoIds.entries()) {
         const d = result.more_photos?.[i]?.dhash;
-        if (d) await db().insert(schema.imageHashes).values({ source: "claim", ref: id, recallNumber: recall.number, dhash: d }).onConflictDoNothing();
+        if (d) await db().insert(schema.imageHashes).values({ source: "claim", ref: id, recallNumber: recall.number, dhash: d, phash: result.more_photos?.[i]?.phash ?? null }).onConflictDoNothing();
       }
     }
   }

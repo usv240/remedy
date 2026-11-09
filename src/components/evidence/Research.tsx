@@ -113,7 +113,7 @@ function problemFindings(): Finding[] {
       source: `${P.adminComment.source}; ${P.truepicComment.source}`,
       date: `${P.adminComment.date}; ${P.truepicComment.date}`,
       url: P.truepicComment.url,
-      inRemedy: "The shared hash pool: every claim photo is compared by its 64-bit hash with every photo already claimed at any firm and with every published recall picture, so a reused photo is held before a person sees it, and only the hash crosses between firms.",
+      inRemedy: "The shared hash pool: every claim photo is compared by its 64-bit hashes with every photo already claimed at any firm and with every published recall picture, so a reused photo is held before a person sees it, and only the hash crosses between firms.",
       code: "src/lib/verify/dhash.ts (CATALOG_MAX_DISTANCE), content/public/network-run.json",
     },
     {

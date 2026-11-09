@@ -97,7 +97,7 @@ export default function BuyersPage() {
       <Suspense fallback={<p className="firm-sub page-loading">Loading the buyers&hellip;</p>}>
         <Buyers />
       </Suspense>
-      <p className="firm-label">Sales files stay private: contacts are stored encrypted and shown masked, and the download takes each address from your own file, in your browser. Remedy sends no mail; you send the notices from your mail tool. Demonstration in PayPal sandbox. Remedy is not affiliated with the recalling firm.</p>
+      <p className="firm-label">Sales files stay private: contacts are stored encrypted and shown masked, and the download takes each address from your own file, in your browser. Remedy sends no mail; you send the notices from your mail tool.</p>
     </>
   );
 }

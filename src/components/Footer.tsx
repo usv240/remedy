@@ -22,7 +22,7 @@ const QUIET = /^\/(claim|firm)(\/|$)/;
 
 /**
  * "Contact as the headline" from the direction sheet: a saturated field (lime in light, the second tone step in dark),
- * three short notes on top, and the product's own address set at display size. Work screens get a short footer.
+ * two short notes on top, and the product's wordmark set at display size. Work screens get a short footer.
  */
 export function Footer() {
   return (
@@ -34,17 +34,18 @@ export function Footer() {
 
 function FooterAt() {
   const path = usePathname() ?? "/";
-  return QUIET.test(path) ? <QuietFooter /> : <ContactFooter home={path === "/"} />;
+  return QUIET.test(path) ? <QuietFooter firm={path.startsWith("/firm")} /> : <ContactFooter home={path === "/"} />;
 }
 
-function QuietFooter() {
+/** The firm console says once, beside its navigation, that the firm is a sample and payouts run in the sandbox. */
+function QuietFooter({ firm }: { firm: boolean }) {
   return (
     <footer className="footer-quiet frame" aria-label="Site footer">
       <p className="footer-quiet-lead">
         <Link href="/" className="text-link">
           Remedy
         </Link>
-        . Recall refunds on a verified photo, paid through PayPal. Demonstration in PayPal sandbox.
+        . Recall refunds on a verified photo, paid through PayPal.{firm ? "" : " Demonstration in PayPal sandbox."}
       </p>
       <p className="footer-credit">Recall data and images: U.S. Consumer Product Safety Commission</p>
     </footer>
@@ -56,7 +57,6 @@ function ContactFooter({ home }: { home: boolean }) {
     <footer className="footer-contact frame" data-home={home ? "" : undefined} aria-label="Site footer">
       <div className="fc-top">
         <ul className="fc-notes">
-          <li className="fc-wordmark">Remedy</li>
           <li>Recall refunds on a verified photo, paid through PayPal</li>
           <li>Demonstration in PayPal sandbox</li>
         </ul>
@@ -64,9 +64,8 @@ function ContactFooter({ home }: { home: boolean }) {
           Back to top
         </a>
       </div>
-      <Link className="fc-display" href="/">
-        <span>remedy-y0ym</span>
-        <span>.onrender.com</span>
+      <Link className="fc-display" href="/" aria-label="Remedy, home">
+        Remedy
       </Link>
       <div className="fc-meta">
         <nav aria-label="Footer">

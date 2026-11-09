@@ -76,10 +76,13 @@ create table if not exists firm_recall (
   auto_cap         numeric(10, 2) not null default 50.00,
   daily_cap        numeric(10, 2) not null default 2500.00,
   status           text not null default 'active' check (status in ('active', 'paused', 'closed')),
+  require_live_capture boolean not null default false,
   announced_on     date,
   created_at       timestamptz not null default now()
 );
 create unique index if not exists firm_recall_firm_recall_idx on firm_recall (firm_id, recall_number);
+-- A recall can ask for a photo taken now: the claim page's photo button opens the camera and library upload is hidden.
+alter table firm_recall add column if not exists require_live_capture boolean not null default false;
 
 create table if not exists sale (
   id                 serial primary key,
@@ -296,6 +299,7 @@ create table if not exists image_hash (
   ref            text not null,
   recall_number  text,
   dhash          text not null check (dhash ~ '^[0-9a-f]{16}$'),
+  phash          text,
   created_at     timestamptz not null default now()
 );
 -- source 'partner' (a hash a connected firm registered through POST /api/v1/hash-pool/register) was added after the
@@ -305,6 +309,8 @@ alter table image_hash add constraint image_hash_source_check check (source in (
 create unique index if not exists image_hash_source_ref_idx on image_hash (source, ref);
 create index if not exists image_hash_recall_idx on image_hash (recall_number);
 create index if not exists image_hash_dhash_idx on image_hash (dhash);
+-- The second 64-bit hash (src/lib/verify/phash.ts), beside the dHash, for claim photos and pool rows. Older rows keep null.
+alter table image_hash add column if not exists phash text;
 
 -- Platform: keys, usage, the audit ledger, integrations, webhooks -----------------------------------------------
 

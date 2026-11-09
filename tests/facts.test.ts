@@ -3,6 +3,10 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { answerChanges, checkTimes, errorRates, freeCaught, hashSpeed, heldBackStory, sweepSettings } from "@/components/evidence/errors";
 import { concentrationWords } from "@/components/evidence/Money";
+import { OUTCOMES, WHY_CLAIMS } from "@/components/evidence/Adoption";
+import { KEYED_LINE } from "@/components/evidence/Settings";
+import { MODEL } from "@/lib/ai/claude";
+import { effortFor } from "@/lib/verify/vision";
 import { reviewerComparison } from "@/components/evidence/reviewer-data";
 import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 import { dailyBudgetUsd } from "@/lib/ai/usage";
@@ -252,8 +256,37 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(h.photos).toBe(1);
     expect(h.score).toBe(range(facts.references.after));
     expect(h.pass).toBe("0.85");
-    for (const text of [README, doc("results.md")]) expect(text).toContain(h.sentence.replace(/\.$/, ""));
+    expect(doc("results.md")).toContain(h.sentence.replace(/\.$/, ""));
+    // The README lists the same story one fact a line.
+    for (const line of h.bullets) expect(README).toContain(`  - ${line}`);
     expect(read("src", "components", "evidence", "ErrorRates.tsx")).toContain("heldBackStory().sentence");
+  });
+
+  it("the claim path's setting is the one every recording and the cache are keyed to, set in one line", () => {
+    expect(effortFor(MODEL, undefined)).toBe("medium");
+    const recordings = readdirSync(path.join(ROOT, "content", "presets", "recorded")).filter((f) => f.endsWith(".json"));
+    for (const f of recordings) expect((JSON.parse(read("content", "presets", "recorded", f)) as { engine: string }).engine, f).toMatch(/:claude-opus-5-5:medium$/);
+    expect(read("src", "lib", "verify", "vision.ts").match(/return model === MODEL \? "medium" : undefined;/g)).toHaveLength(1);
+    expect(KEYED_LINE).toContain("effortFor() in src/lib/verify/vision.ts");
+    expect(doc("results.md")).toContain("`effortFor()` in [`src/lib/verify/vision.ts`]");
+  });
+
+  it("the README's first paragraph states the problem: the recalls, the money at stake and the check wait", () => {
+    const d = derived();
+    const first = README.split(/\r?\n\r?\n/).find((p) => p.startsWith("Since January 2024")) ?? "";
+    expect(README.indexOf(first)).toBeLessThan(README.indexOf("- **In 30 seconds:**"));
+    expect(first).toContain(`**${d.headline.madeSafeRefund}** US consumer product recalls`);
+    expect(first).toContain(`**${d.value.total}** in refunds at the lowest stated price`);
+    expect(first).toContain(`pays by check within ${RESEARCH.portal.days}`);
+  });
+
+  it("the sample preset says what its recorded runs measured, not a promise of the automatic path", () => {
+    const h = heldBackStory();
+    const preset = (JSON.parse(read("content", "presets", "index.json")) as { presets: { id: string; summary: string; expected: { plain: string } }[] }).presets.find((p) => p.id === "sample-charger-cut")!;
+    const times = (n: number) => (n === 1 ? "once" : `${WORDS[n] ?? n} times`);
+    expect(preset.summary).toContain(`Measured on its ${h.of} recorded runs: verified ${h.paid} times, through the two reviewers, and sent to a person at the firm ${times(h.toPerson)}.`);
+    expect(preset.summary).not.toMatch(/full automatic path/);
+    expect(preset.expected.plain).not.toMatch(/on a real claim/);
   });
 
   it("one story for the free answers' times, from the recorded runs, and no figure they do not support", () => {
@@ -325,6 +358,14 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(fee.checkLow).toBeGreaterThan(Number(fee.withRemedy.slice(1)));
     expect(README).toContain(fee.sentence.replace(/\.$/, ""));
     expect(pilot).toContain("perRefund().sentence");
+    // The pilot measures the claim rate first, with its baseline and the one line on why, from src/lib/research.ts.
+    expect(OUTCOMES[0]).toMatchObject({ rank: "Primary" });
+    expect(OUTCOMES[0].what).toMatch(/^Claim rate/);
+    expect(OUTCOMES[1]).toMatchObject({ rank: "Secondary", what: "Time from photo to refund" });
+    const research = doc("research.md");
+    expect(research).toContain(`**Why more completed claims:** ${WHY_CLAIMS.replace(/\.$/, "")}`);
+    for (const fig of [RESEARCH.comeBack.share, PROBLEM.correctionRate.rate, PROBLEM.correctionRate.target]) expect(OUTCOMES[0].baseline + WHY_CLAIMS).toContain(fig);
+    expect(research).toContain(OUTCOMES[0].baseline.replace(/\.$/, ""));
     // Venmo: the sandbox refuses the wallet and the payout is resent by phone; the README says so wherever it offers Venmo.
     const payouts = read("src", "lib", "payments", "payouts.ts");
     expect(payouts).toContain('recipient_wallet: "VENMO"');
