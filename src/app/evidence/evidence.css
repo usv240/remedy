@@ -1410,6 +1410,38 @@
   font-size: 0.9375rem;
   line-height: 1.55;
 }
+/* The two reviewers on one model and on two: one small table of the two runs, one column each, narrow enough to sit
+   whole on a phone. Table styles are .jb, above. */
+.rvm-wrap {
+  margin-top: 16px;
+  max-width: 46rem;
+}
+.rvm-wrap + .page-prose {
+  margin-top: 16px;
+}
+.jb.rvm thead th {
+  vertical-align: bottom;
+  white-space: normal;
+}
+.jb.rvm thead th + th {
+  width: 12rem;
+}
+.jb.rvm tbody th {
+  white-space: normal;
+}
+.rvm-env {
+  overflow-wrap: anywhere;
+}
+.rvm-default {
+  font-weight: 400;
+  color: var(--muted);
+}
+@media (max-width: 760px) {
+  .jb.rvm thead th + th {
+    width: 6.5rem;
+  }
+}
+
 .ev-land-disc {
   margin-top: 20px;
 }

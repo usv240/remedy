@@ -1,0 +1,3372 @@
+{
+ "ranAt": "2026-11-09T18:38:56.885Z",
+ "trials": 5,
+ "configs": [
+  {
+   "id": "A",
+   "model": "claude-opus-5-5",
+   "claimPath": true,
+   "env": {},
+   "note": "Both reviewers on Claude Opus 5.5, the default setting."
+  },
+  {
+   "id": "B",
+   "model": "claude-opus-5-5",
+   "claimPath": true,
+   "env": {
+    "REMEDY_REVIEWER_MODEL_REMEDY": "claude-sonnet-5-5"
+   },
+   "note": "The Remedy reviewer on Claude Sonnet 5.5 (REMEDY_REVIEWER_MODEL_REMEDY), the Product reviewer unchanged."
+  }
+ ],
+ "stopped": null,
+ "runs": [
+  {
+   "trials": "1 to 5",
+   "direct": true,
+   "spentUsd": 0.9773
+  }
+ ],
+ "summary": [
+  {
+   "config": "A",
+   "trial": 1,
+   "pass": 3,
+   "of": 3,
+   "pass %": 100,
+   "usd": 0.216,
+   "usd per case": 0.072,
+   "median ms": 24146
+  },
+  {
+   "config": "B",
+   "trial": 1,
+   "pass": 2,
+   "of": 3,
+   "pass %": 67,
+   "usd": 0.214,
+   "usd per case": 0.0715,
+   "median ms": 6251
+  },
+  {
+   "config": "A",
+   "trial": 2,
+   "pass": 3,
+   "of": 3,
+   "pass %": 100,
+   "usd": 0.157,
+   "usd per case": 0.0524,
+   "median ms": 23779
+  },
+  {
+   "config": "B",
+   "trial": 2,
+   "pass": 2,
+   "of": 3,
+   "pass %": 67,
+   "usd": 0.156,
+   "usd per case": 0.052,
+   "median ms": 8903
+  },
+  {
+   "config": "A",
+   "trial": 3,
+   "pass": 1,
+   "of": 3,
+   "pass %": 33,
+   "usd": 0.104,
+   "usd per case": 0.0345,
+   "median ms": 20742
+  },
+  {
+   "config": "B",
+   "trial": 3,
+   "pass": 1,
+   "of": 3,
+   "pass %": 33,
+   "usd": 0.133,
+   "usd per case": 0.0445,
+   "median ms": 6629
+  },
+  {
+   "config": "A",
+   "trial": 4,
+   "pass": 3,
+   "of": 3,
+   "pass %": 100,
+   "usd": 0.204,
+   "usd per case": 0.0681,
+   "median ms": 24020
+  },
+  {
+   "config": "B",
+   "trial": 4,
+   "pass": 2,
+   "of": 3,
+   "pass %": 67,
+   "usd": 0.163,
+   "usd per case": 0.0544,
+   "median ms": 5909
+  },
+  {
+   "config": "A",
+   "trial": 5,
+   "pass": 2,
+   "of": 3,
+   "pass %": 67,
+   "usd": 0.161,
+   "usd per case": 0.0538,
+   "median ms": 23418
+  },
+  {
+   "config": "B",
+   "trial": 5,
+   "pass": 1,
+   "of": 3,
+   "pass %": 33,
+   "usd": 0.145,
+   "usd per case": 0.0482,
+   "median ms": 10033
+  }
+ ],
+ "cases": [
+  {
+   "config": "A",
+   "trial": 1,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white body with black bristles, MY ONLY STYLER printing, button layout, vent and cord all match the official image. Model number MOS-22 on the back of the handle is not visible. The photo appears identical to the official CPSC image, same framing and cord layout.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. Two loose cord ends are visible near the top center of the photo, one ending around the middle top and one hanging below the cord strap at the upper left, showing the cord cut through. However this photo appears identical to the official CPSC image, so it may not show the owner's own product.",
+   "C3_reason": "Claude: digital_image (confidence 0.6; signs: none). The image looks like a real camera photo of an object, but it appears identical to the official CPSC recall image in framing, cord position, lighting and background, which suggests it is ",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.93,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White handle with \"MY ONLY STYLER\" printed in black capital letters",
+       "where": "Center right of the photo, on the white handle next to the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "Rectangular brush head with dense black bristles on a white body",
+       "where": "Lower center of the photo, left end of the dryer"
+      },
+      {
+       "check": "right_product",
+       "seen": "Round vented grille at the end of the handle where the black cord enters",
+       "where": "Lower right of the photo, right end of the dryer"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Black power cord cut through, with a loose cut end lying separately",
+       "where": "Upper center of the photo, cut cord end near the middle of the image"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Every element matches the official CPSC image exactly: same gray wood plank background, same cord loops, same position of the plug, Velcro cord strap and cut end, same lighting and framing",
+       "where": "Whole photo, for example the plug at top center and the black Velcro strap at upper left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.75,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hot brush hair dryer with black bristles, a round button, and printed brand text reading MY ONLY STYLER",
+       "where": "center of the photo, on the white handle to the right of the bristles"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Whole dryer from bristle tip to vented end where the cord exits, plus the full black cord with the two prong plug, laid out on a gray wood surface",
+       "where": "dryer across the lower middle; plug at top center; cord looping across the whole image"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Free cord end with a cleanly cut face and exposed conductor tip, not attached to anything",
+       "where": "upper middle, just right of center, below the plug"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A second loose cord end lying near a black hook and loop cord strap, showing the cord is in two separate pieces",
+       "where": "left of center, slightly above the middle, next to the black strap"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.1005,
+   "reviewers_usd": 0.0535,
+   "paid_usd": 0.1005,
+   "ms": 27259,
+   "vision_ms": 14475,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1060,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4806
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 712,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 2148
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 816,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 1727
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 1,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "checks",
+   "C1": 0.2,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.2 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), brush head shape (narrow strip vs wide paddle), handle and vent design, and the printed brand MY ONLY STYLER all conflict with the official images and description. Only the general product category matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. In the upper left center, near the black velcro cord tie, the black power cord ends in a severed tip with exposed inner wires, and a separate cut end lies nearby, showing the cord cut through between the plug and the styler.",
+   "C3_reason": "Claude: camera_photo (confidence 0.92; signs: none). Natural lighting, real shadows and wood grain texture show a camera photo of a physical object, with no screen or print artifacts. dHash e0808ed69ce174f8; nearest official none, nearest e",
+   "referee": null,
+   "votes": null,
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0283,
+   "reviewers_usd": 0,
+   "paid_usd": 0.0283,
+   "ms": 22306,
+   "vision_ms": 13873,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1066,
+     "cache_read_input_tokens": 3915,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "A",
+   "trial": 1,
+   "case": "sample-charger-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "reviewers",
+   "C1": 0.78,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.78 (pass at 0.85, unclear from 0.5). Strain relief ribbing, black round cord, barrel plug and rounded black case halves fit the reference. Case is disassembled and no printed text or label is readable, so exact identity is unconfirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. At left center the cord end with its strain relief is held in fingers, with bare stranded wires and a white insulated wire sticking out, showing the cord is severed from the charger. The opened charger case is in view at right.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus blur, camera noise and a hand in frame show a real camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier claim",
+   "referee": "verify",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black ribbed strain relief boot where the cord left the charger body, with rows of small oval indents, matching the ribbed boot in official image 2",
+       "where": "Left center, held between the owner's thumb and finger"
+      },
+      {
+       "check": "right_product",
+       "seen": "Opened black charger housing with rounded ends, matching the black rounded rectangular body in official image 1",
+       "where": "Right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Thin black round cord with a ferrite bead lump and a metal barrel plug tip, matching the DC cord in official image 1",
+       "where": "Background center, running across the photo toward the top middle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut off at the strain relief with bare stranded wires and a white insulated inner wire exposed",
+       "where": "Center left, at the end of the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Housing taken apart with yellow insulating sheets removed and lying separately",
+       "where": "Top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real fingertip and thumb in the foreground with natural blur and depth of field, no screen pixels or print texture",
+       "where": "Left edge of the photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "Cord end with its black strain relief collar, with bare wires sticking out: one white insulated wire and two stranded silver conductors with frayed ends, showing the cord is severed",
+       "where": "Held between fingers at left center, wires pointing right toward center"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The cut end is at the strain relief collar, the part that normally sits where the cord meets the charger case, so the cord is separated at the case",
+       "where": "Left center, just right of the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black charger case housing, opened, lying on the table with no cord attached",
+       "where": "Right side of photo, slightly out of focus"
+      },
+      {
+       "check": "right_product",
+       "seen": "Yellow insulating sheet pieces from inside the charger lying near the case",
+       "where": "Top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Black cord running in a loop across the table from the held end, with its far end near the yellow pieces",
+       "where": "Center and lower half of photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0872,
+   "reviewers_usd": 0.0593,
+   "paid_usd": 0.0872,
+   "ms": 24146,
+   "vision_ms": 10496,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 664,
+     "cache_read_input_tokens": 3915,
+     "cache_creation_input_tokens": 1454
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 846,
+      "cache_read_input_tokens": 1419,
+      "cache_creation_input_tokens": 1315
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 1041,
+      "cache_read_input_tokens": 1386,
+      "cache_creation_input_tokens": 235
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 1,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white body with black bristles, MY ONLY STYLER printing, button layout, vent and cord all match the official image. Model number MOS-22 on the back of the handle is not visible. The photo appears identical to the official CPSC image, same framing and cord layout.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. Two loose cord ends are visible near the top center of the photo, one ending around the middle top and one hanging below the cord strap at the upper left, showing the cord cut through. However this photo appears identical to the official CPSC image, so it may not show the owner's own product.",
+   "C3_reason": "Claude: digital_image (confidence 0.6; signs: none). The image looks like a real camera photo of an object, but it appears identical to the official CPSC recall image in framing, cord position, lighting and background, which suggests it is ",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.93,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White handle with \"MY ONLY STYLER\" printed in black capital letters",
+       "where": "Center right of the photo, on the white handle next to the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "Rectangular brush head with dense black bristles on a white body",
+       "where": "Lower center of the photo, left end of the dryer"
+      },
+      {
+       "check": "right_product",
+       "seen": "Round vented grille at the end of the handle where the black cord enters",
+       "where": "Lower right of the photo, right end of the dryer"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Black power cord cut through, with a loose cut end lying separately",
+       "where": "Upper center of the photo, cut cord end near the middle of the image"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Every element matches the official CPSC image exactly: same gray wood plank background, same cord loops, same position of the plug, Velcro cord strap and cut end, same lighting and framing",
+       "where": "Whole photo, for example the plug at top center and the black Velcro strap at upper left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.88,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hot-air brush styler with a black bristle brush head and the printed words MY ONLY STYLER on the handle, with a power button and control icons",
+       "where": "center of the photo, lower half, on the handle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The black power cord has a clean break with an open cut end, ending in a loose tip with no plug attached",
+       "where": "upper middle, near the Velcro cord tie, where the cord end curls to the right"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The cord is in two pieces: the plug end with the two-prong plug runs across the top, and the other piece runs to the dryer, with the cut ends separated from each other",
+       "where": "plug at top left; cut end at upper center-left"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The dryer and cord lie on a worn gray wood-grain surface with natural lighting and no watermark or stock-photo look",
+       "where": "entire background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0842,
+   "reviewers_usd": 0.0372,
+   "paid_usd": 0.0104,
+   "ms": 6005,
+   "vision_ms": 4,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1060,
+     "cache_read_input_tokens": 0,
+     "cache_creation_input_tokens": 4806
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 712,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 2148
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 523,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 1727
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 1,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.2,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.2 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), brush head shape (narrow strip vs wide paddle), handle and vent design, and the printed brand MY ONLY STYLER all conflict with the official images and description. Only the general product category matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. In the upper left center, near the black velcro cord tie, the black power cord ends in a severed tip with exposed inner wires, and a separate cut end lies nearby, showing the cord cut through between the plug and the styler.",
+   "C3_reason": "Claude: camera_photo (confidence 0.92; signs: none). Natural lighting, real shadows and wood grain texture show a camera photo of a physical object, with no screen or print artifacts. dHash e0808ed69ce174f8; nearest official none, nearest e",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "The styler body is white with a silver perforated air vent end, not black with a pink stripe like the recalled XR-8801.",
+       "where": "Center to right of the photo, the handle running toward the cord"
+      },
+      {
+       "check": "right_product",
+       "seen": "The printed brand text reads MY ONLY STYLER, not Wantefully or XRUI.",
+       "where": "On the white body just right of the bristles, center of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "The brush head is a narrow straight row of black bristles, not the wide oval paddle brush with pink-tipped bristles shown in the CPSC images.",
+       "where": "Left end of the styler, center left of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "The control panel has small sliding switches and a vertical marking, unlike the recalled dryer's button layout.",
+       "where": "On the white body right of the brand text"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The power cord has a cut end lying loose, separated from the plug section.",
+       "where": "Upper middle left, cord end near the hook-and-loop strap"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The device lies on a gray wood-grain surface with natural shadows and a coiled cord, consistent with a real camera photo.",
+       "where": "Whole photo background and cord"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.85,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "The black power cord has a clean break. One piece ends in a visible cut end near the middle of the photo, and the other piece ends a short distance away, leaving a gap between the two ends.",
+       "where": "Upper middle to center left, where the cord loops end near the Velcro strap"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The two-prong plug is still attached to a length of cord that runs off the product, so the cord is separated from the unit.",
+       "where": "Top center, at the plug"
+      },
+      {
+       "check": "right_product",
+       "seen": "A white hair dryer brush with a black bristle head, printed 'MY ONLY STYLER', with its control buttons and a mesh vent end, is fully in frame.",
+       "where": "Lower center to right, across the handle and brush"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The product is laid on a gray wood-grain surface with its cord looped around it, which looks like an ordinary home photo.",
+       "where": "Whole photo background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0628,
+   "reviewers_usd": 0.0345,
+   "paid_usd": 0.0113,
+   "ms": 9619,
+   "vision_ms": 4,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1066,
+     "cache_read_input_tokens": 3915,
+     "cache_creation_input_tokens": 874
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 878,
+      "cache_read_input_tokens": 1419,
+      "cache_creation_input_tokens": 723
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 955,
+      "cache_read_input_tokens": 1386,
+      "cache_creation_input_tokens": 278
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 1,
+   "case": "sample-charger-cut",
+   "ok": false,
+   "misses": "decision firm_review, expected verified",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.78,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.78 (pass at 0.85, unclear from 0.5). Strain relief ribbing, black round cord, barrel plug and rounded black case halves fit the reference. Case is disassembled and no printed text or label is readable, so exact identity is unconfirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. At left center the cord end with its strain relief is held in fingers, with bare stranded wires and a white insulated wire sticking out, showing the cord is severed from the charger. The opened charger case is in view at right.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus blur, camera noise and a hand in frame show a real camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier claim",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black ribbed strain relief boot where the cord left the charger body, with rows of small oval indents, matching the ribbed boot in official image 2",
+       "where": "Left center, held between the owner's thumb and finger"
+      },
+      {
+       "check": "right_product",
+       "seen": "Opened black charger housing with rounded ends, matching the black rounded rectangular body in official image 1",
+       "where": "Right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Thin black round cord with a ferrite bead lump and a metal barrel plug tip, matching the DC cord in official image 1",
+       "where": "Background center, running across the photo toward the top middle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut off at the strain relief with bare stranded wires and a white insulated inner wire exposed",
+       "where": "Center left, at the end of the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Housing taken apart with yellow insulating sheets removed and lying separately",
+       "where": "Top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real fingertip and thumb in the foreground with natural blur and depth of field, no screen pixels or print texture",
+       "where": "Left edge of the photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "unclear",
+     "confidence": 0.6,
+     "counted": false,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "A black cord with a molded strain relief is held between a thumb and finger, and its end shows cut wires: a white insulated wire and two twisted bare metal strands sticking out.",
+       "where": "Left center, held in the hand"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A long black cord loops across the background on the white surface, so the held cord end looks like a separate piece cut from the rest.",
+       "where": "Center and right background"
+      },
+      {
+       "check": "right_product",
+       "seen": "The charger case is opened up and in pieces: a black casing half on the right and a yellow-green circuit board with black parts above it. It is not a whole, closed charger.",
+       "where": "Top center and right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The photo is a close-up with the cord end in focus and the rest blurred, showing no model label or marking that ties the parts to the recalled charger.",
+       "where": "Whole photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0675,
+   "reviewers_usd": 0.0396,
+   "paid_usd": 0.0092,
+   "ms": 6251,
+   "vision_ms": 4,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 664,
+     "cache_read_input_tokens": 3915,
+     "cache_creation_input_tokens": 1454
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 846,
+      "cache_read_input_tokens": 1419,
+      "cache_creation_input_tokens": 1315
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 514,
+      "cache_read_input_tokens": 1386,
+      "cache_creation_input_tokens": 235
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 2,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "checks",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white body with black bristles, printed MY ONLY STYLER logo, control layout and vent end all match the official image. Model number MOS-22 on the back of the handle is not visible. The image appears pixel for pixel the same as the CPSC reference image, including cord layout and floor grain.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. Near the top center of the photo, the black cord ends in a cut end with exposed inner material, and a second loose cord end lies to its left, showing the cord cut through. The image matches the official recall photo exactly, so it may not show the owner's own product.",
+   "C3_reason": "Claude: digital_image (confidence 0.75; signs: none). The image looks like an ordinary camera photo on a wood floor, but it appears identical to the official CPSC recall image in framing, cord placement, lighting and floor grain, which sugg",
+   "referee": null,
+   "votes": null,
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0232,
+   "reviewers_usd": 0,
+   "paid_usd": 0.0232,
+   "ms": 23779,
+   "vision_ms": 12824,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1021,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "A",
+   "trial": 2,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripes), printed brand MY ONLY STYLER, slim brush head vs wide paddle, and different controls all conflict with the official images and description; only the general product type matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. Near the center of the photo, a cord end lies loose with what looks like exposed wire at the tip, separate from the plug end at top center, showing the cord cut through.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real shadows and floor texture consistent with a camera photo of a physical object; no screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earli",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Printed brand text reading MY ONLY STYLER on the product body, not Wantefully or XR-8801",
+       "where": "right half of the styler body, just right of the black bristles, center of photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "The styler body is white with a silver perforated air vent end, not black with a striped pink design",
+       "where": "styler body across the center, vent at the right end near the cord"
+      },
+      {
+       "check": "right_product",
+       "seen": "A narrow straight brush head with black bristles, unlike the wide oval paddle brush head of the recalled dryer",
+       "where": "left part of the styler, center of photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "A row of small slide buttons and a round button on a white body, unlike the recalled dryer's controls on a black handle",
+       "where": "middle of the styler body, right of the bristles"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The black power cord has a cut, open end lying loose",
+       "where": "upper middle of the photo, end of the cord near the Velcro strap"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The product lies on a gray wood grain surface with natural shadows and a plug and Velcro cord strap visible",
+       "where": "whole photo background, plug at top center, strap at upper left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.8,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "own_photo",
+       "seen": "A white hair dryer brush with black bristles, a perforated air vent at the end, and a black power cord laid on a gray wood surface",
+       "where": "Whole photo, brush across the lower middle"
+      },
+      {
+       "check": "right_product",
+       "seen": "Printed text MY ONLY STYLER on the white handle beside the control buttons",
+       "where": "Lower middle right, on the handle next to the bristles"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A loose cord end showing a cut cross section with the inner conductors visible, not attached to anything",
+       "where": "Upper center, just right of the middle of the photo"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A second loose cord end lying free on the wood, matching the other cut end, so the cord is separated into two pieces",
+       "where": "Upper left center, below and right of the black hook and loop strap"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The wall plug is on one cord segment, separated from the dryer by the cut",
+       "where": "Top center, plug with two prongs"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0575,
+   "reviewers_usd": 0.0339,
+   "paid_usd": 0.0575,
+   "ms": 22497,
+   "vision_ms": 12908,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1042,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 762,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 720,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 2,
+   "case": "sample-charger-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "reviewers",
+   "C1": 0.8,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Strain relief shape, black fixed cord, and case shape match the official images. Case is disassembled and no printed label or model text is readable, so exact product cannot be confirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.93. In the left foreground, the cord end held by fingers is severed just past the strain relief, with a white insulated wire and two bare stranded metal conductors sticking out. The cord continues across the photo to the opened charger case on the right.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shallow focus, camera noise, a real hand in the foreground and a casual tabletop scene point to a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest offic",
+   "referee": "verify",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.75,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black cord strain relief with a ribbed, dotted grip pattern and a flat flange, matching the ribbed strain relief where the cord meets the charger in official image 2",
+       "where": "left center, held between the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Opened black charger housing with rounded edges, matching the black rectangular body in official image 1",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Long black fixed cord looping across the surface with a cylindrical ferrite bead and a barrel plug, matching the cord, bead and plug in official image 1",
+       "where": "center background, running from left to upper middle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut free from the housing with bare stranded silver wires and a white insulated wire exposed",
+       "where": "center left, sticking out of the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Yellow insulating sheets removed from inside the charger, one with holes cut in it",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real fingers holding the cord, with soft focus in the background and natural shadows on a white tiled surface with a grout line",
+       "where": "left edge for the fingers, grout line running down the middle"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "The cord end is separated from the charger, with a black strain relief collar and exposed wires: one white insulated wire and two bare braided metal strands with frayed ends",
+       "where": "center left, held between the fingers"
+      },
+      {
+       "check": "within_recall",
+       "seen": "The separated end carries the molded strain relief collar that sits where the cord enters the charger case, showing the cord was severed at the case",
+       "where": "center left, just in front of the fingertips"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black charger case, opened, with its halves lying on the table",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Yellow insulating sheets from inside the charger, one with round holes",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The same black cord loops across the table, with its small plug end near the yellow sheet",
+       "where": "middle of the photo, plug near top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0764,
+   "reviewers_usd": 0.0541,
+   "paid_usd": 0.0764,
+   "ms": 25047,
+   "vision_ms": 11612,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 730,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 905,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 1096,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 2,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white body with black bristles, printed MY ONLY STYLER logo, control layout and vent end all match the official image. Model number MOS-22 on the back of the handle is not visible. The image appears pixel for pixel the same as the CPSC reference image, including cord layout and floor grain.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. Near the top center of the photo, the black cord ends in a cut end with exposed inner material, and a second loose cord end lies to its left, showing the cord cut through. The image matches the official recall photo exactly, so it may not show the owner's own product.",
+   "C3_reason": "Claude: digital_image (confidence 0.75; signs: none). The image looks like an ordinary camera photo on a wood floor, but it appears identical to the official CPSC recall image in framing, cord placement, lighting and floor grain, which sugg",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.9,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair dryer brush with black bristles and \"MY ONLY STYLER\" printed in black on the white handle",
+       "where": "Lower center to right, on the handle next to the bristle head"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black power cord cut through, with a loose cut end separate from the plug end",
+       "where": "Upper center, cut cord end near the middle of the photo, plug at top center"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The whole image matches the official CPSC recall image exactly: same gray wood plank background, same cord loops, same velcro cord tie position, same plug angle, same dryer position and framing",
+       "where": "Entire photo, notably the velcro tie at upper left and the plug at top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.82,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hot-air brush styler with a black bristle brush head and the printed brand text 'MY ONLY STYLER' on the handle",
+       "where": "center of the photo, lower middle, on the white handle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The black power cord is severed: one end has the plug attached and ends at the top, while the other cord end near the loop at upper left shows a cut end with exposed cut edge, separate from the plug side",
+       "where": "upper left to upper center, near the velcro cord tie, where the cord end stops at about the top center-left"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The plug end of the cord runs from the plug at the top, around the right side, and does not connect to the cut end near the velcro tie, so the cord is in two pieces",
+       "where": "top center, plug with two flat prongs, with cord running to the right side"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The product lies on a light brown wood plank surface with natural lighting and the cord arranged in loops, consistent with a real photo taken by the owner",
+       "where": "whole background of the photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.045,
+   "reviewers_usd": 0.0219,
+   "paid_usd": 0.007,
+   "ms": 6544,
+   "vision_ms": 4,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1021,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 633,
+      "cache_read_input_tokens": 2148,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 595,
+      "cache_read_input_tokens": 1727,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 2,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripes), printed brand MY ONLY STYLER, slim brush head vs wide paddle, and different controls all conflict with the official images and description; only the general product type matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. Near the center of the photo, a cord end lies loose with what looks like exposed wire at the tip, separate from the plug end at top center, showing the cord cut through.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, real shadows and floor texture consistent with a camera photo of a physical object; no screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earli",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Printed brand text reading MY ONLY STYLER on the product body, not Wantefully or XR-8801",
+       "where": "right half of the styler body, just right of the black bristles, center of photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "The styler body is white with a silver perforated air vent end, not black with a striped pink design",
+       "where": "styler body across the center, vent at the right end near the cord"
+      },
+      {
+       "check": "right_product",
+       "seen": "A narrow straight brush head with black bristles, unlike the wide oval paddle brush head of the recalled dryer",
+       "where": "left part of the styler, center of photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "A row of small slide buttons and a round button on a white body, unlike the recalled dryer's controls on a black handle",
+       "where": "middle of the styler body, right of the bristles"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The black power cord has a cut, open end lying loose",
+       "where": "upper middle of the photo, end of the cord near the Velcro strap"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The product lies on a gray wood grain surface with natural shadows and a plug and Velcro cord strap visible",
+       "where": "whole photo background, plug at top center, strap at upper left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "A white hair dryer brush with black bristles and the printed words MY ONLY STYLER on the handle, lying fully in frame on a wooden surface.",
+       "where": "Center to lower right of the photo"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A black power cord with an open, cut end, with no plug or connector on it, ending in a short curl.",
+       "where": "Upper middle, just left of center, near the end of the looped cord"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The two-prong plug is at the end of a separate cord length, so the cord looks divided into pieces rather than one continuous run.",
+       "where": "Top center, at the plug and the cord running right from it"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Natural wood plank surface, a black hook-and-loop cord strap, and ordinary daylight shadows, consistent with a casual photo taken at home.",
+       "where": "Background across the whole photo; the strap is at the left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.055,
+   "reviewers_usd": 0.0314,
+   "paid_usd": 0.014,
+   "ms": 12948,
+   "vision_ms": 5,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1042,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 762,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 1291,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 2,
+   "case": "sample-charger-cut",
+   "ok": false,
+   "misses": "decision firm_review, expected verified",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.8,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Strain relief shape, black fixed cord, and case shape match the official images. Case is disassembled and no printed label or model text is readable, so exact product cannot be confirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.93. In the left foreground, the cord end held by fingers is severed just past the strain relief, with a white insulated wire and two bare stranded metal conductors sticking out. The cord continues across the photo to the opened charger case on the right.",
+   "C3_reason": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shallow focus, camera noise, a real hand in the foreground and a casual tabletop scene point to a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest offic",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.75,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black cord strain relief with a ribbed, dotted grip pattern and a flat flange, matching the ribbed strain relief where the cord meets the charger in official image 2",
+       "where": "left center, held between the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Opened black charger housing with rounded edges, matching the black rectangular body in official image 1",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Long black fixed cord looping across the surface with a cylindrical ferrite bead and a barrel plug, matching the cord, bead and plug in official image 1",
+       "where": "center background, running from left to upper middle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut free from the housing with bare stranded silver wires and a white insulated wire exposed",
+       "where": "center left, sticking out of the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Yellow insulating sheets removed from inside the charger, one with holes cut in it",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real fingers holding the cord, with soft focus in the background and natural shadows on a white tiled surface with a grout line",
+       "where": "left edge for the fingers, grout line running down the middle"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "A black cord held between a thumb and finger ends in a strain relief with three frayed wire ends sticking out: a white insulated wire and two twisted bare metal strands. This shows a cut or damaged cord end.",
+       "where": "left center, held in the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "The charger appears taken apart. A yellow and black circuit board piece and a black housing section lie open and separate, not as an intact charger case.",
+       "where": "top center and right side"
+      },
+      {
+       "check": "own_photo",
+       "seen": "A long black cord loops across the background, with a plug end near the yellow board piece. The cut end in the fingers is a close, blurry-background shot, so it is not clear the loose cord end connects to this loop.",
+       "where": "center background, looping from left to right"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.056,
+   "reviewers_usd": 0.0337,
+   "paid_usd": 0.0084,
+   "ms": 8903,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 730,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 905,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 493,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 3,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Color, bristle head, MY ONLY STYLER logo, control layout, vent and cord tie all match the official image. Model number MOS-22 on the back of the handle is not visible. The owner's photo appears to be the exact same image as the official CPSC image, pixel for pixel in layout, cord position and background.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.6. Two cut cord ends are visible near the top center: one loose end near the middle of the photo and another short end just left of it, showing the cord severed into two pieces. However, this photo appears identical to the official CPSC image, so it may not show the owner's own product.",
+   "C3_reason": "Claude: digital_image (confidence 0.75; signs: none). The image looks like a real camera photo, but it is the same as the official CPSC recall image in every detail, including cord position, cut ends, cord tie and wood grain, which strongly",
+   "referee": null,
+   "votes": null,
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0238,
+   "reviewers_usd": 0,
+   "paid_usd": 0.0238,
+   "ms": 12387,
+   "vision_ms": 12332,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1050,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "A",
+   "trial": 3,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.25,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.25 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), brush head shape (narrow block vs wide paddle), and printed brand MY ONLY STYLER all conflict with the recall images and description. Only the general product type matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.75. Near the center left of the photo, the cord appears to end in two separate cut ends, one with exposed wire showing, separating the plug section from the section that runs to the brush.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and wood floor texture show a real object photographed with a camera; no screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earlier cla",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Brand text 'MY ONLY STYLER' printed in black on the handle, not Wantefully, XRUI, or XR-8801",
+       "where": "center right, on the white handle beside the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "Body is white with no pink stripe, while the recalled dryer brush is black with a striped pink design",
+       "where": "center right, the whole styler body"
+      },
+      {
+       "check": "right_product",
+       "seen": "Narrow rectangular brush head with short black bristles, not the wide oval paddle brush shown in the CPSC images",
+       "where": "center, left half of the styler"
+      },
+      {
+       "check": "right_product",
+       "seen": "Silver perforated vent grille at the cord end and a small control panel with sliding switches",
+       "where": "right side of the styler, near where the cord enters"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Power cord is cut through, leaving a loose cut end with exposed wire tip",
+       "where": "upper center, the cord end lying near the middle of the photo"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real object lying on a gray wood grain floor with natural shadows and cord depth",
+       "where": "whole photo background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.8,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "own_photo",
+       "seen": "A white hair dryer brush with black bristles and the printed words MY ONLY STYLER, with its black power cord laid out on a wood surface",
+       "where": "center to right of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Hair dryer brush with bristle head, control buttons and a vented barrel end where the cord enters, matching the recalled hair dryer brush type",
+       "where": "lower center to right, front panel and right end"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A loose cord end with a blunt, severed tip that is not attached to anything, showing the cord has been cut through",
+       "where": "upper center, just right of the middle of the photo"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A second free cord end trailing down from the black hook and loop strap, the other side of the cut",
+       "where": "upper left center, below the velcro strap"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The two-prong plug sits on a separate length of cord, apart from the product",
+       "where": "top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0588,
+   "reviewers_usd": 0.0371,
+   "paid_usd": 0.0588,
+   "ms": 20742,
+   "vision_ms": 10747,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 948,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 860,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 781,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 3,
+   "case": "sample-charger-cut",
+   "ok": false,
+   "misses": "decision firm_review, expected verified",
+   "decision": "firm_review",
+   "decided_by": "checks",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Strain relief style, black cord, barrel plug and case shape resemble official images, but the case is disassembled and no printed text, logo or rating label is readable, so exact identity is unconfirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. At left center the cord end with its strain relief is held up showing exposed white insulated wire and two bare braided strands, so the cord is severed from the charger board. The opened charger case is at right and the rest of the cord runs across the background.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus blur, real hand in frame and camera noise indicate a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier cla",
+   "referee": null,
+   "votes": null,
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.021,
+   "reviewers_usd": 0,
+   "paid_usd": 0.021,
+   "ms": 22108,
+   "vision_ms": 10529,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 664,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "B",
+   "trial": 3,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Color, bristle head, MY ONLY STYLER logo, control layout, vent and cord tie all match the official image. Model number MOS-22 on the back of the handle is not visible. The owner's photo appears to be the exact same image as the official CPSC image, pixel for pixel in layout, cord position and background.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.6. Two cut cord ends are visible near the top center: one loose end near the middle of the photo and another short end just left of it, showing the cord severed into two pieces. However, this photo appears identical to the official CPSC image, so it may not show the owner's own product.",
+   "C3_reason": "Claude: digital_image (confidence 0.75; signs: none). The image looks like a real camera photo, but it is the same as the official CPSC recall image in every detail, including cord position, cut ends, cord tie and wood grain, which strongly",
+   "referee": null,
+   "votes": null,
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0238,
+   "reviewers_usd": 0,
+   "paid_usd": 0,
+   "ms": 131,
+   "vision_ms": 34,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1050,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "B",
+   "trial": 3,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.25,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.25 (pass at 0.85, unclear from 0.5). Color (white vs black with pink stripe), brush head shape (narrow block vs wide paddle), and printed brand MY ONLY STYLER all conflict with the recall images and description. Only the general product type matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.75. Near the center left of the photo, the cord appears to end in two separate cut ends, one with exposed wire showing, separating the plug section from the section that runs to the brush.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and wood floor texture show a real object photographed with a camera; no screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earlier cla",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Brand text 'MY ONLY STYLER' printed in black on the handle, not Wantefully, XRUI, or XR-8801",
+       "where": "center right, on the white handle beside the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "Body is white with no pink stripe, while the recalled dryer brush is black with a striped pink design",
+       "where": "center right, the whole styler body"
+      },
+      {
+       "check": "right_product",
+       "seen": "Narrow rectangular brush head with short black bristles, not the wide oval paddle brush shown in the CPSC images",
+       "where": "center, left half of the styler"
+      },
+      {
+       "check": "right_product",
+       "seen": "Silver perforated vent grille at the cord end and a small control panel with sliding switches",
+       "where": "right side of the styler, near where the cord enters"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Power cord is cut through, leaving a loose cut end with exposed wire tip",
+       "where": "upper center, the cord end lying near the middle of the photo"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real object lying on a gray wood grain floor with natural shadows and cord depth",
+       "where": "whole photo background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.72,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair dryer brush with black bristles and the printed words MY ONLY STYLER on the handle, plus a small control panel with buttons.",
+       "where": "Lower right, on the handle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A cord end that stops in the open, with a blunt cut tip and no plug, lying separate from the plug end.",
+       "where": "Center left, just right of the velcro tie loop at the end of the cord strand"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Black cord looped across a gray wood plank surface, with the whole brush, cord and plug laid out in one casual photo.",
+       "where": "Whole frame"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The two-prong plug sits at the end of a cord separate from the brush end, with the cord laid in loops around the product.",
+       "where": "Top center, plug near the top edge"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0552,
+   "reviewers_usd": 0.0335,
+   "paid_usd": 0.0141,
+   "ms": 13782,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 948,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 860,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 1300,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 3,
+   "case": "sample-charger-cut",
+   "ok": false,
+   "misses": "decision firm_review, expected verified",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Strain relief style, black cord, barrel plug and case shape resemble official images, but the case is disassembled and no printed text, logo or rating label is readable, so exact identity is unconfirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. At left center the cord end with its strain relief is held up showing exposed white insulated wire and two bare braided strands, so the cord is severed from the charger board. The opened charger case is at right and the rest of the cord runs across the background.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus blur, real hand in frame and camera noise indicate a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier cla",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.72,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black cord strain relief with a ribbed pattern and a flanged base where it fit into the charger case, matching the ribbed strain relief in official image 2",
+       "where": "left center, held between the owner's fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black charger housing half with rounded, raised ends, matching the case shape in official image 1",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Long black fixed power cord running from the charger toward a barrel plug with a cylindrical bump on the cord, matching the cord and ferrite bead in official image 1",
+       "where": "background, center and upper middle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut off at the strain relief with exposed white insulated wire and two bare braided metal conductors",
+       "where": "center left, extending right from the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Charger case opened, with yellow insulation sheets removed from the internals",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real fingertips holding the cord in the foreground, shallow depth of field with blurred background, and natural shadows on a white surface",
+       "where": "left edge foreground and across the background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "A black cord held between a thumb and finger ends in a strain relief with frayed, exposed metal strands and a white inner wire. The cord is cut or severed at this end.",
+       "where": "left center, held in the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "The black cord runs across the photo and ends in a small plug tip near a green and black part. It is not clear this is a charger cord.",
+       "where": "center, looping across the background"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The charger case is opened and taken apart. Its green circuit board pieces and black casing parts lie separately on the surface. This is not an intact charger case with a cut cord.",
+       "where": "top center and right side of the background"
+      },
+      {
+       "check": "within_recall",
+       "seen": "No model number, label or printed text is visible on any part, so the product cannot be matched to the recall.",
+       "where": "whole photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0545,
+   "reviewers_usd": 0.0335,
+   "paid_usd": 0.0088,
+   "ms": 6629,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 664,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 877,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 537,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 4,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.92,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.92 (pass at 0.85, unclear from 0.5). Color, bristle head, printed MY ONLY STYLER name, button layout and vent all match the official image. Model number MOS-22 on the back of the handle is not visible. The image matches the CPSC image exactly in framing, cord positions and lighting, so it may not be the owner's own photo.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. The power cord is cut through, with one cut end showing exposed wires near the top center and a second loose end near the velcro tie on the left. The cord shown is identical to the official CPSC image, so this may not show the owner's own cord.",
+   "C3_reason": "Claude: digital_image (confidence 0.7; signs: none). The image looks like a real camera photo, but it is identical to the official CPSC recall image in framing, cord placement, lighting and floor pattern, which suggests it was downloaded ra",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.93,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair dryer brush with black bristles and \"MY ONLY STYLER\" printed in black on the white handle",
+       "where": "Center to lower right, on the handle beside the bristle head"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black bristle brush head on a white body with a perforated vent cap at the cord end",
+       "where": "Lower center (bristles) and lower right (vent cap)"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Power cord cut through, leaving a loose cut end with exposed wires",
+       "where": "Upper center, cord end near the middle of the photo"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Every detail matches the official CPSC image exactly: same cord loops, same plug position at top center, same black hook-and-loop cord tie at upper left, same wood grain pattern, same framing and lighting",
+       "where": "Whole image compared with official CPSC image 1"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.78,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hot air brush with black bristles and the brand name MY ONLY STYLER printed on the handle",
+       "where": "lower center, on the front of the white handle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Loose cord end with exposed wire tips at the cut, not attached to anything",
+       "where": "center of the photo, just above the brush, below the plug"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Second loose cord end near the velcro cable tie, matching the other cut end",
+       "where": "left of center, just right of the black velcro strap"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Plug is still attached to one length of cord that leads away from the dryer, separated from the dryer side by the cut",
+       "where": "top center, plug prongs pointing left"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Whole dryer and full cord laid out on a light gray wood grain surface",
+       "where": "entire photo background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0563,
+   "reviewers_usd": 0.0324,
+   "paid_usd": 0.0563,
+   "ms": 21521,
+   "vision_ms": 12551,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1061,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 700,
+      "cache_read_input_tokens": 2148,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 703,
+      "cache_read_input_tokens": 1727,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 4,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink), brand text MY ONLY STYLER, and narrow straight brush head vs wide oval paddle all conflict with the official images and description. Only the general product category matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. Near the top center of the photo, a black cord end terminates with what looks like a clean cut and exposed inner wires, separate from the plug end at top center. The cut appears real, but the cord is looped and it is not fully clear which segments connect to the brush.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and floor texture consistent with a phone camera photo of a physical object. No screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earl",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Printed text reading MY ONLY STYLER on the device handle",
+       "where": "Center of the photo, on the white handle just right of the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "The device body is white or off white with no pink stripe design, unlike the black body with pink stripes in the recall images",
+       "where": "Lower center, the whole styler body"
+      },
+      {
+       "check": "right_product",
+       "seen": "Narrow rectangular brush head with straight rows of black bristles, not the wide oval paddle brush with pink tipped bristles shown in the recall images",
+       "where": "Lower center left, the brush end of the styler"
+      },
+      {
+       "check": "right_product",
+       "seen": "Silver perforated vent grille at the cord end and three small slider style controls with a fan or wave icon",
+       "where": "Lower right, end of the handle and the control panel next to the text"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Black power cord appears cut, with a loose severed end lying separate from the rest of the cord",
+       "where": "Upper center, cord end lying near the middle of the photo below the plug"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real object lying on a gray wood grain floor with natural shadows and a black hook and loop cord strap",
+       "where": "Whole photo background, strap at upper left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.75,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair dryer brush with black bristles and the printed brand text MY ONLY STYLER on the handle",
+       "where": "lower center to right of the photo"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The whole styler, the full black power cord, and the plug lie together on a gray wooden surface",
+       "where": "entire photo"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A loose cord end that stops in the open with a frayed, cut look and no plug or device attached",
+       "where": "center of the photo, just right of middle, above the brush"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A second free cord end hanging loose with nothing attached",
+       "where": "left of center, below the black velcro strap"
+      },
+      {
+       "check": "right_product",
+       "seen": "Two prong wall plug still on its own cord section, separate from the cut ends",
+       "where": "top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0612,
+   "reviewers_usd": 0.0368,
+   "paid_usd": 0.0612,
+   "ms": 24020,
+   "vision_ms": 13043,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1081,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 843,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 783,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 4,
+   "case": "sample-charger-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "reviewers",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Black cord, ribbed strain relief and rounded black case match the official images. No printed text, logo or model number visible, and the case is disassembled, so exact identity cannot be confirmed. Score held in the 0.6 to 0.85 range.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. In the left foreground, the cord end held in the fingers ends at the strain relief with a white insulated wire and two bare stranded wires cut off and exposed. The cord is separated from the opened charger case at the right.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Real objects with natural depth of field, uneven lighting, shadows and camera noise; no screen, paper or digital image signs. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earl",
+   "referee": "verify",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.65,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black charger housing with rounded end caps, opened up, matching the shape of the black case in the official images",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black ribbed cord strain relief with small recessed holes, similar to the ribbed strain relief where the cord meets the charger in official image 2",
+       "where": "left center, held between the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Long black fixed cord ending in a barrel style DC plug, like the official image 1 cord and plug",
+       "where": "background center, running from the yellow piece toward the left"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut off at the strain relief with bare stranded wires and a white insulated wire exposed",
+       "where": "left center, sticking out of the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Yellow insulating shield pieces removed from the housing, one with holes punched in it",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "A real finger holding the cord, with shallow focus blur on the background and natural shadows, no screen pixels or print texture",
+       "where": "left edge and across the background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.6,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "The black cord ends at its molded strain relief with bare conductors sticking out: one white insulated wire and two twisted bundles of silver strands with frayed, freshly cut tips. The cord is no longer attached to any case.",
+       "where": "Left center, held between the owner's fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "An opened black charger housing lying on its side, with a metal part visible inside",
+       "where": "Right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Yellow insulating sheets and black case pieces from the charger, one with round holes",
+       "where": "Top center and top right"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The same black cord loops across the table toward the charger parts, with a small plug end near the yellow piece",
+       "where": "Running through the middle of the photo toward the top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0868,
+   "reviewers_usd": 0.0588,
+   "paid_usd": 0.0868,
+   "ms": 28837,
+   "vision_ms": 14919,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 1014,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 1143,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 1093,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 4,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.92,
+   "C1_status": "pass",
+   "C2": "pass",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.92 (pass at 0.85, unclear from 0.5). Color, bristle head, printed MY ONLY STYLER name, button layout and vent all match the official image. Model number MOS-22 on the back of the handle is not visible. The image matches the CPSC image exactly in framing, cord positions and lighting, so it may not be the owner's own photo.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. The power cord is cut through, with one cut end showing exposed wires near the top center and a second loose end near the velcro tie on the left. The cord shown is identical to the official CPSC image, so this may not show the owner's own cord.",
+   "C3_reason": "Claude: digital_image (confidence 0.7; signs: none). The image looks like a real camera photo, but it is identical to the official CPSC recall image in framing, cord placement, lighting and floor pattern, which suggests it was downloaded ra",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.93,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair dryer brush with black bristles and \"MY ONLY STYLER\" printed in black on the white handle",
+       "where": "Center to lower right, on the handle beside the bristle head"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black bristle brush head on a white body with a perforated vent cap at the cord end",
+       "where": "Lower center (bristles) and lower right (vent cap)"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Power cord cut through, leaving a loose cut end with exposed wires",
+       "where": "Upper center, cord end near the middle of the photo"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Every detail matches the official CPSC image exactly: same cord loops, same plug position at top center, same black hook-and-loop cord tie at upper left, same wood grain pattern, same framing and lighting",
+       "where": "Whole image compared with official CPSC image 1"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.86,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair styler with a black bristle brush head, printed 'MY ONLY STYLER' on the handle, matching the recalled brand",
+       "where": "center of the photo, on the handle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The power cord is cut through: one end with the plug at the top left and a separate cut end with an exposed, open tip near the middle left, so the cord is in two pieces",
+       "where": "upper left to center, near the black velcro cord tie and the loose cord end"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The cord section with the two-prong plug is separate from the cord running into the handle; the loose cut end is visible with no connection to another piece",
+       "where": "top left near the plug, and center left at the cut tip"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The whole styler, the cord and the plug are all in frame on a wooden surface, taken from above",
+       "where": "entire photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0462,
+   "reviewers_usd": 0.0222,
+   "paid_usd": 0.006,
+   "ms": 5809,
+   "vision_ms": 4,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1061,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 700,
+      "cache_read_input_tokens": 2148,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 499,
+      "cache_read_input_tokens": 1727,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 4,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink), brand text MY ONLY STYLER, and narrow straight brush head vs wide oval paddle all conflict with the official images and description. Only the general product category matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. Near the top center of the photo, a black cord end terminates with what looks like a clean cut and exposed inner wires, separate from the plug end at top center. The cut appears real, but the cord is looped and it is not fully clear which segments connect to the brush.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and floor texture consistent with a phone camera photo of a physical object. No screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earl",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Printed text reading MY ONLY STYLER on the device handle",
+       "where": "Center of the photo, on the white handle just right of the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "The device body is white or off white with no pink stripe design, unlike the black body with pink stripes in the recall images",
+       "where": "Lower center, the whole styler body"
+      },
+      {
+       "check": "right_product",
+       "seen": "Narrow rectangular brush head with straight rows of black bristles, not the wide oval paddle brush with pink tipped bristles shown in the recall images",
+       "where": "Lower center left, the brush end of the styler"
+      },
+      {
+       "check": "right_product",
+       "seen": "Silver perforated vent grille at the cord end and three small slider style controls with a fan or wave icon",
+       "where": "Lower right, end of the handle and the control panel next to the text"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Black power cord appears cut, with a loose severed end lying separate from the rest of the cord",
+       "where": "Upper center, cord end lying near the middle of the photo below the plug"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real object lying on a gray wood grain floor with natural shadows and a black hook and loop cord strap",
+       "where": "Whole photo background, strap at upper left"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.8,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "within_recall",
+       "seen": "A white hair dryer brush with a black bristle head and a perforated end cap, printed with the text MY ONLY STYLER on the handle, lying fully in frame on a wooden surface.",
+       "where": "center of the photo, running left to right across the lower half"
+      },
+      {
+       "check": "made_safe",
+       "seen": "The black power cord has a clean break with two separate ends. One end carries the plug and the other end has a cut, open tip near a small black hook-and-loop strap.",
+       "where": "upper left of center, where the cord ends in a loose tip just right of the strap"
+      },
+      {
+       "check": "right_product",
+       "seen": "The cord section with the two-prong plug is on one side of the cut, and the rest of the cord runs on to the brush handle. The two pieces are not joined.",
+       "where": "top center, at the plug, and along the cord looping around to the handle at right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The whole brush, cord, and plug are in one shot on a wood-grain surface, so the cut cord can be seen along with the full product.",
+       "where": "entire photo"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0501,
+   "reviewers_usd": 0.0257,
+   "paid_usd": 0.0067,
+   "ms": 5909,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1081,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 843,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 562,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 4,
+   "case": "sample-charger-cut",
+   "ok": false,
+   "misses": "decision firm_review, expected verified",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Black cord, ribbed strain relief and rounded black case match the official images. No printed text, logo or model number visible, and the case is disassembled, so exact identity cannot be confirmed. Score held in the 0.6 to 0.85 range.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.8. In the left foreground, the cord end held in the fingers ends at the strain relief with a white insulated wire and two bare stranded wires cut off and exposed. The cord is separated from the opened charger case at the right.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Real objects with natural depth of field, uneven lighting, shadows and camera noise; no screen, paper or digital image signs. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earl",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.65,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black charger housing with rounded end caps, opened up, matching the shape of the black case in the official images",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black ribbed cord strain relief with small recessed holes, similar to the ribbed strain relief where the cord meets the charger in official image 2",
+       "where": "left center, held between the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Long black fixed cord ending in a barrel style DC plug, like the official image 1 cord and plug",
+       "where": "background center, running from the yellow piece toward the left"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut off at the strain relief with bare stranded wires and a white insulated wire exposed",
+       "where": "left center, sticking out of the strain relief"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Yellow insulating shield pieces removed from the housing, one with holes punched in it",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "A real finger holding the cord, with shallow focus blur on the background and natural shadows, no screen pixels or print texture",
+       "where": "left edge and across the background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "unclear",
+     "confidence": 0.6,
+     "counted": false,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "A black cord held between a thumb and finger ends in a cut end with a strain relief boot, and frayed bare metal strands and a white wire stick out of it.",
+       "where": "left center, held in the fingers"
+      },
+      {
+       "check": "within_recall",
+       "seen": "The cut is at a strain relief boot, but the photo does not show whether the cut is where the cord meets the charger case, because the case is not attached to this cord end.",
+       "where": "center left, at the cord end"
+      },
+      {
+       "check": "right_product",
+       "seen": "The charger is in pieces: a yellow and black taken-apart part and a black open case section lie on the surface. No intact charger case with the cord is shown.",
+       "where": "top center and right side"
+      },
+      {
+       "check": "own_photo",
+       "seen": "A long black cord loops across the background and a plug end is visible near the yellow part, but it is not clear it is connected to the cut end in the fingers.",
+       "where": "center, looping from left to right"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0669,
+   "reviewers_usd": 0.0389,
+   "paid_usd": 0.0089,
+   "ms": 6480,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 1014,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 1143,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 542,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 5,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white and black colors, printed MY ONLY STYLER text, button layout, vent grille, plug and cord strap all match. Model MOS-22 on the back of the handle is not visible. The image appears identical to the official CPSC image in framing, cord placement and background.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.6. The cord shows two cut ends in the upper middle of the photo, one near the strap at upper left and one just left of center at the top, with exposed wire. However, the image appears identical to the official CPSC recall image, so it may not show the owner's own dryer.",
+   "C3_reason": "Claude: digital_image (confidence 0.8; signs: none). The photo matches the official CPSC recall image exactly in framing, cord layout, lighting and background, which strongly suggests a copied or downloaded image rather than a new camera ph",
+   "referee": null,
+   "votes": null,
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0246,
+   "reviewers_usd": 0,
+   "paid_usd": 0.0246,
+   "ms": 12310,
+   "vision_ms": 12197,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1091,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "A",
+   "trial": 5,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink), printed brand name MY ONLY STYLER, narrow bar brush head vs wide paddle, and different control layout all conflict with the official images; only the general product type matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. Near the center of the photo, slightly left of middle, a black cord ends in a loose open end that looks cut, separate from the plug end at the top; the cord appears severed, though the cut end is small and not shown up close.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and floor texture consistent with a real camera photo of a physical object; no screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earli",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Printed brand text reading MY ONLY STYLER on the white body of the styler",
+       "where": "Center right, on the handle just right of the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "Body of the styler is white with a gray perforated vent cap, not black with a pink stripe like the recalled XR-8801",
+       "where": "Lower center to right, the handle and the end near the cord"
+      },
+      {
+       "check": "right_product",
+       "seen": "Narrow rectangular brush head with black bristles in rows, unlike the wide oval paddle brush with pink-tipped bristles in the CPSC images",
+       "where": "Lower center, left part of the styler"
+      },
+      {
+       "check": "right_product",
+       "seen": "Control panel with small sliding switches and a fan icon on the white handle, different from the recalled dryer's layout",
+       "where": "Center right, on the handle next to the brand text"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Black power cord cut, with a loose cut end lying separately from the plug section",
+       "where": "Upper center, cord end near the black velcro strap"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real object lying on a gray wood-grain surface with natural shadows under the cord and plug",
+       "where": "Whole photo, background and plug at top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.7,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "White hair dryer brush with black bristles, labeled MY ONLY STYLER, with control buttons and a vented barrel end",
+       "where": "lower center to right of the photo"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A loose black cord end with no plug, ending abruptly with a cut face showing",
+       "where": "center of the photo, just above the middle, near the top of a cord loop"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A second free cord end trailing down from the loop with the velcro strap, not attached to a plug",
+       "where": "upper left, below the black velcro cord strap"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Whole product with its cord and two prong plug laid out on a gray wood surface",
+       "where": "plug at top center, product across the lower half"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0634,
+   "reviewers_usd": 0.0389,
+   "paid_usd": 0.0634,
+   "ms": 25534,
+   "vision_ms": 13205,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1090,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 808,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 920,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "A",
+   "trial": 5,
+   "case": "sample-charger-cut",
+   "ok": true,
+   "misses": "",
+   "decision": "verified",
+   "decided_by": "reviewers",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Strain relief style, black case shape and fixed black cord match the official images. The case is disassembled and no printed text, logo or rating label is readable, so exact identity cannot be confirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. At left center, the cord end with its strain relief is held in the hand with three loose wires sticking out: a white insulated wire and two bare braided metal conductors with frayed ends. The cord is clearly separated from the charger case, which lies opened at right. The cord appears detached at the case end rather than cut with a clean blade cut, but it is n",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus with a blurred background, real shadows and a hand in frame point to a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, n",
+   "referee": "verify",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.72,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black cord strain relief with rows of small oval ribs and a flat flange, matching the ribbed boot where the cord meets the charger in official image 2",
+       "where": "left side, held between the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Opened black charger housing with rounded end caps, same shape and color as the charger body in official image 1",
+       "where": "right side, standing upright"
+      },
+      {
+       "check": "right_product",
+       "seen": "Thin black fixed cord running in a loop with a black ferrite bead section and a metal barrel plug",
+       "where": "center background, plug near the top center"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut at the strain relief with a white insulated wire and two bare braided wire bundles sticking out",
+       "where": "center left, to the right of the fingers"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Yellow insulation sheets and metal shield pieces removed from the charger",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Owner's fingertip holding the cord, with natural shadows and blur in the background, showing a real camera photo of a physical object",
+       "where": "left edge"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.72,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "Black cord end with its molded strain relief collar, completely separated from the charger, with a white insulated wire and two bare braided metal wires sticking out of the end",
+       "where": "left center, held between the owner's fingers"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Ends of the bare braided wires are frayed and loose, with no connection to anything, showing the cord is severed at the point where it entered the case",
+       "where": "center, tips of the wires pointing right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Owner's thumb and finger holding the cut cord end",
+       "where": "far left edge"
+      },
+      {
+       "check": "right_product",
+       "seen": "Black plastic charger case half, opened, with internal parts visible",
+       "where": "right side of the photo"
+      },
+      {
+       "check": "right_product",
+       "seen": "Yellow taped metal shield pieces from inside the charger case, one with round holes",
+       "where": "top center and top right"
+      },
+      {
+       "check": "right_product",
+       "seen": "Long black cord looping across the table with a plug end near the yellow shield piece",
+       "where": "background, running across the middle and top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": false,
+   "usd": 0.0735,
+   "reviewers_usd": 0.0516,
+   "paid_usd": 0.0735,
+   "ms": 23418,
+   "vision_ms": 11128,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 708,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 903,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 973,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 5,
+   "case": "made-safe-hair-dryer-cord-cut",
+   "ok": false,
+   "misses": "C2 fail, expected pass",
+   "decision": "retake",
+   "decided_by": "made_safe",
+   "C1": 0.95,
+   "C1_status": "pass",
+   "C2": "fail",
+   "C3": "unclear",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.95 (pass at 0.85, unclear from 0.5). Shape, white and black colors, printed MY ONLY STYLER text, button layout, vent grille, plug and cord strap all match. Model MOS-22 on the back of the handle is not visible. The image appears identical to the official CPSC image in framing, cord placement and background.",
+   "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.6. The cord shows two cut ends in the upper middle of the photo, one near the strap at upper left and one just left of center at the top, with exposed wire. However, the image appears identical to the official CPSC recall image, so it may not show the owner's own dryer.",
+   "C3_reason": "Claude: digital_image (confidence 0.8; signs: none). The photo matches the official CPSC recall image exactly in framing, cord layout, lighting and background, which strongly suggests a copied or downloaded image rather than a new camera ph",
+   "referee": null,
+   "votes": null,
+   "known": "reading",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0246,
+   "reviewers_usd": 0,
+   "paid_usd": 0,
+   "ms": 95,
+   "vision_ms": 4,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1091,
+     "cache_read_input_tokens": 4806,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": []
+   }
+  },
+  {
+   "config": "B",
+   "trial": 5,
+   "case": "look-alike-hair-dryer",
+   "ok": true,
+   "misses": "",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.15,
+   "C1_status": "fail",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Color (white vs black with pink), printed brand name MY ONLY STYLER, narrow bar brush head vs wide paddle, and different control layout all conflict with the official images; only the general product type matches.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.7. Near the center of the photo, slightly left of middle, a black cord ends in a loose open end that looks cut, separate from the plug end at the top; the cord appears severed, though the cut end is small and not shown up close.",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and floor texture consistent with a real camera photo of a physical object; no screen or print signs. dHash e0808ed69ce174f8; nearest official none, nearest earli",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "does_not_meet",
+     "confidence": 0.95,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Printed brand text reading MY ONLY STYLER on the white body of the styler",
+       "where": "Center right, on the handle just right of the bristles"
+      },
+      {
+       "check": "right_product",
+       "seen": "Body of the styler is white with a gray perforated vent cap, not black with a pink stripe like the recalled XR-8801",
+       "where": "Lower center to right, the handle and the end near the cord"
+      },
+      {
+       "check": "right_product",
+       "seen": "Narrow rectangular brush head with black bristles in rows, unlike the wide oval paddle brush with pink-tipped bristles in the CPSC images",
+       "where": "Lower center, left part of the styler"
+      },
+      {
+       "check": "right_product",
+       "seen": "Control panel with small sliding switches and a fan icon on the white handle, different from the recalled dryer's layout",
+       "where": "Center right, on the handle next to the brand text"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Black power cord cut, with a loose cut end lying separately from the plug section",
+       "where": "Upper center, cord end near the black velcro strap"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Real object lying on a gray wood-grain surface with natural shadows under the cord and plug",
+       "where": "Whole photo, background and plug at top center"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "meets",
+     "confidence": 0.82,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "A white hair dryer brush with a black bristle head and a mesh vent at the end, with the printed words MY ONLY STYLER on the handle. The whole body is in frame.",
+       "where": "Lower center to right, on the handle"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A black power cord ends in a clean, blunt cut end with no plug attached, curling near the middle of the photo.",
+       "where": "Upper center, just right of the left cord loop"
+      },
+      {
+       "check": "made_safe",
+       "seen": "A second separate cord end with no plug sits near the cord tie, so the cord is in separate pieces. The plug is still on its own length of cord and is not connected to the dryer.",
+       "where": "Center left, below the black cord tie; plug at top center"
+      },
+      {
+       "check": "own_photo",
+       "seen": "The dryer and its loose cord lie on a light gray wood-grain surface, a casual home setting.",
+       "where": "Entire background"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "not_paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0586,
+   "reviewers_usd": 0.034,
+   "paid_usd": 0.0157,
+   "ms": 13966,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 448,
+     "output_tokens": 1090,
+     "cache_read_input_tokens": 4789,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 443,
+      "output_tokens": 808,
+      "cache_read_input_tokens": 2142,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 442,
+      "output_tokens": 1463,
+      "cache_read_input_tokens": 1664,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  },
+  {
+   "config": "B",
+   "trial": 5,
+   "case": "sample-charger-cut",
+   "ok": false,
+   "misses": "decision firm_review, expected verified",
+   "decision": "firm_review",
+   "decided_by": "reviewers",
+   "C1": 0.75,
+   "C1_status": "unclear",
+   "C2": "pass",
+   "C3": "pass",
+   "C4": "pass",
+   "C1_reason": "Claude vision match score 0.75 (pass at 0.85, unclear from 0.5). Strain relief style, black case shape and fixed black cord match the official images. The case is disassembled and no printed text, logo or rating label is readable, so exact identity cannot be confirmed.",
+   "C2_reason": "cut_cord: confirmed, confidence 0.85. At left center, the cord end with its strain relief is held in the hand with three loose wires sticking out: a white insulated wire and two bare braided metal conductors with frayed ends. The cord is clearly separated from the charger case, which lies opened at right. The cord appears detached at the case end rather than cut with a clean blade cut, but it is n",
+   "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow focus with a blurred background, real shadows and a hand in frame point to a camera photo of physical objects. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, n",
+   "referee": "person",
+   "votes": [
+    {
+     "reviewer": "product",
+     "model": "claude-opus-5-5",
+     "answer": "meets",
+     "confidence": 0.72,
+     "counted": true,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "right_product",
+       "seen": "Black cord strain relief with rows of small oval ribs and a flat flange, matching the ribbed boot where the cord meets the charger in official image 2",
+       "where": "left side, held between the fingers"
+      },
+      {
+       "check": "right_product",
+       "seen": "Opened black charger housing with rounded end caps, same shape and color as the charger body in official image 1",
+       "where": "right side, standing upright"
+      },
+      {
+       "check": "right_product",
+       "seen": "Thin black fixed cord running in a loop with a black ferrite bead section and a metal barrel plug",
+       "where": "center background, plug near the top center"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Cord cut at the strain relief with a white insulated wire and two bare braided wire bundles sticking out",
+       "where": "center left, to the right of the fingers"
+      },
+      {
+       "check": "made_safe",
+       "seen": "Yellow insulation sheets and metal shield pieces removed from the charger",
+       "where": "top center and top right"
+      },
+      {
+       "check": "own_photo",
+       "seen": "Owner's fingertip holding the cord, with natural shadows and blur in the background, showing a real camera photo of a physical object",
+       "where": "left edge"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": true
+    },
+    {
+     "reviewer": "remedy",
+     "model": "claude-sonnet-5-5",
+     "answer": "unclear",
+     "confidence": 0.55,
+     "counted": false,
+     "set_aside": null,
+     "evidence": [
+      {
+       "check": "made_safe",
+       "seen": "A black cord ends in a molded strain relief boot with the wires cut through. A white insulated wire and two twisted bare metal strands stick out of the end.",
+       "where": "Center left, held between the thumb and finger"
+      },
+      {
+       "check": "right_product",
+       "seen": "The charger case is open and in pieces. There is a yellow circuit board part and a black housing half, so no intact charger is visible and no label or model number can be read.",
+       "where": "Top center and right side, in the background"
+      },
+      {
+       "check": "right_product",
+       "seen": "A long black cord loops across the background and ends in a small plug. It is not clear that this cord is the same one that was cut.",
+       "where": "Center, from the left edge up to the plug near the top center"
+      },
+      {
+       "check": "own_photo",
+       "seen": "A real hand holds the cut cord end in a casual indoor setting. It looks like an original, unedited photo.",
+       "where": "Left edge"
+      }
+     ],
+     "model_read": null,
+     "marker_text_read": null,
+     "replayed": false
+    }
+   ],
+   "known": "paid",
+   "vision_model": "claude-opus-5-5",
+   "vision_replayed": true,
+   "usd": 0.0615,
+   "reviewers_usd": 0.0396,
+   "paid_usd": 0.0144,
+   "ms": 10033,
+   "vision_ms": 3,
+   "usage": {
+    "vision": {
+     "input_tokens": 1658,
+     "output_tokens": 708,
+     "cache_read_input_tokens": 5369,
+     "cache_creation_input_tokens": 0
+    },
+    "reviewers": [
+     {
+      "input_tokens": 1653,
+      "output_tokens": 903,
+      "cache_read_input_tokens": 2734,
+      "cache_creation_input_tokens": 0
+     },
+     {
+      "input_tokens": 1652,
+      "output_tokens": 1091,
+      "cache_read_input_tokens": 1621,
+      "cache_creation_input_tokens": 0
+     }
+    ]
+   }
+  }
+ ],
+ "spentUsd": 0.9773,
+ "note": "The claim path's own setting, run twice per trial (scripts/verify/sweep.ts --claim-path). A: both reviewers on Claude Opus 5.5. B: the Remedy reviewer on Claude Sonnet 5.5, the Product reviewer unchanged; B re-read A's vision report and Product vote for the same trial from the replay cache, so the Remedy reviewer's model is the only difference. usd is the list price of a claim's calls at that setting; paid_usd is what this run paid (replayed calls cost nothing). Known answers from content/verify/fixtures/cases.json.",
+ "comparison": {
+  "runs": [
+   {
+    "id": "A",
+    "note": "Both reviewers on Claude Opus 5.5, the default setting.",
+    "models": {
+     "product": [
+      "claude-opus-5-5"
+     ],
+     "remedy": [
+      "claude-opus-5-5"
+     ]
+    },
+    "claims": 15,
+    "reviewed": 10,
+    "sameAnswer": 4,
+    "bothCountedSame": 4,
+    "setAside": 0,
+    "refereePaid": 4,
+    "wrongPay": {
+     "count": 0,
+     "of": 5
+    },
+    "wrongHold": {
+     "count": 1,
+     "of": 5
+    },
+    "reviewerUsdPerReview": 0.0456,
+    "usdPerClaim": 0.0562,
+    "paidUsd": 0.8425
+   },
+   {
+    "id": "B",
+    "note": "The Remedy reviewer on Claude Sonnet 5.5 (REMEDY_REVIEWER_MODEL_REMEDY), the Product reviewer unchanged.",
+    "models": {
+     "product": [
+      "claude-opus-5-5"
+     ],
+     "remedy": [
+      "claude-sonnet-5-5"
+     ]
+    },
+    "claims": 15,
+    "reviewed": 13,
+    "sameAnswer": 0,
+    "bothCountedSame": 0,
+    "setAside": 0,
+    "refereePaid": 0,
+    "wrongPay": {
+     "count": 0,
+     "of": 5
+    },
+    "wrongHold": {
+     "count": 5,
+     "of": 5
+    },
+    "reviewerUsdPerReview": 0.0327,
+    "usdPerClaim": 0.0541,
+    "paidUsd": 0.1349
+   }
+  ],
+  "pairs": 10,
+  "remedyChanged": 4,
+  "decisionChanged": [
+   {
+    "case": "sample-charger-cut",
+    "trial": 1,
+    "a": "verified",
+    "b": "firm_review"
+   },
+   {
+    "case": "sample-charger-cut",
+    "trial": 2,
+    "a": "verified",
+    "b": "firm_review"
+   },
+   {
+    "case": "sample-charger-cut",
+    "trial": 4,
+    "a": "verified",
+    "b": "firm_review"
+   },
+   {
+    "case": "sample-charger-cut",
+    "trial": 5,
+    "a": "verified",
+    "b": "firm_review"
+   }
+  ],
+  "agreement": "less"
+ },
+ "aiUsage": {
+  "since": "2026-11-09T18:31:27.601Z",
+  "usd": 1.040055,
+  "calls": 51
+ }
+}

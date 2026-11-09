@@ -5,6 +5,8 @@ import { OpenOnHash } from "@/components/OpenOnHash";
 import { Lineage } from "@/components/evidence/Lineage";
 import { PhotoChecks } from "@/components/evidence/PhotoChecks";
 import { RefPictures } from "@/components/evidence/RefPictures";
+import { ReviewerModels } from "@/components/evidence/ReviewerModels";
+import { reviewerModels } from "@/components/evidence/reviewer-models";
 import { Reviewers } from "@/components/evidence/Reviewers";
 import { Reading, Settings } from "@/components/evidence/Settings";
 import "../../pages.css";
@@ -58,6 +60,16 @@ export default function PhotoChecksPage() {
         </div>
         <Lineage />
       </section>
+
+      {reviewerModels() ? (
+        <section id="reviewer-models" className="page-section" aria-labelledby="reviewer-models-h">
+          <div className="title-row">
+            <h2 id="reviewer-models-h">The two reviewers on one model and on two</h2>
+            <Info id="evidence.models" label="" topic="The two reviewers on one model and on two" />
+          </div>
+          <ReviewerModels />
+        </section>
+      ) : null}
 
       <section id="settings" className="page-section" aria-labelledby="settings-h">
         <h2 id="settings-h">Which model setting checks the photo, and why</h2>

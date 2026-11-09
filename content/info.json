@@ -505,5 +505,11 @@
     "what": "The published work the design rests on, and the part that is new: two reviewers reading two different rulebooks, with a disagreement sent to a person, in payments.",
     "why": "A model panel built from different model names shares errors; independence has to come from different inputs, so one reviewer sees only the official pictures and the other only the remedy text.",
     "technical": "src/lib/verify/reviewers.ts runs the two reviewers and the referee, which counts only votes whose cited evidence checks out; src/lib/verify/decide.ts turns the referee's result into verified, retake or a person's review. Papers: Zheng 2023 (arXiv 2306.05685), Madras 2018 (1711.06664), Jung 2024 (2407.18370), Badshah 2026 (2608.17994), Kohli 2026 (2605.29800)."
+  },
+  "evidence.models": {
+    "title": "The two reviewers on one model and on two",
+    "what": "The claim path run twice on the photos that reach the two reviewers: both reviewers on Claude Opus 5.5, then the Remedy reviewer on Claude Sonnet 5.5, with how often they agreed, the two money mistakes and the cost per claim.",
+    "why": "A panel of different models is one published way to make reviewers independent. On these photos a second model made the pair no safer, since neither run paid a photo wrongly, and it held back the photo that should be paid, so both reviewers stay on Opus 5.5 and their independence comes from the rulebook each reads.",
+    "technical": "scripts/verify/sweep.ts --claim-path wrote content/verify/reviewer-models.json; src/components/evidence/reviewer-models.ts counts it from its rows. The second run sets REMEDY_REVIEWER_MODEL_REMEDY and re-reads the photo check and the Product vote from the first run's replay cache. Small sample: 3 photos, 5 trials each; tests/reviewer-models.test.ts checks the figures."
   }
 }

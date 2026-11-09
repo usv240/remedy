@@ -104,7 +104,12 @@ export default function MarketPage() {
         <p className="page-prose" id="reviewers">
           The two reviewers both run on Claude Opus 5.5 today. Their independence comes from the rulebook each reads: one holds the photo against the recall&rsquo;s official pictures, the other against the remedy text, and when they disagree a
           person at the firm decides. Each reviewer&rsquo;s model is its own setting, <code>{REVIEWER_MODEL_ENV.product}</code> and <code>{REVIEWER_MODEL_ENV.remedy}</code> (read by reviewerModel in src/lib/verify/reviewers.ts, empty for
-          Opus 5.5), so running one reviewer on a second model is a configuration change with no code change; tests/reviewer-model.test.ts checks that each request carries the model its setting names.
+          Opus 5.5), so running one reviewer on a second model is a configuration change with no code change; tests/reviewer-model.test.ts checks that each request carries the model its setting names. That change has been
+          measured once, with the Remedy reviewer on Claude Sonnet 5.5: it paid nothing wrongly, and it held back the genuine photo every time, so both stay on Opus 5.5 (
+          <Link className="text-link" href="/evidence/photo-checks#reviewer-models">
+            the comparison
+          </Link>
+          ).
         </p>
       </section>
 

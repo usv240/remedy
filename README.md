@@ -30,7 +30,7 @@ docker compose up -d                                # Postgres 17
 npm run db:migrate && npm run db:load && npm run db:seed
 npx tsx --env-file=.env.local scripts/seed-firm.ts  # sample claims and plan
 npm run dev                                         # http://localhost:3300
-npm test                                            # 593 passed, 51 skipped without a database or keys
+npm test                                            # 603 passed, 51 skipped without a database or keys
 ```
 
 Without a Claude key, every model answer shown is a recorded one (labeled Recorded on `/try`) and a new photo goes to a person at the firm; the checks in code, sandbox payments and the firm console run live.
