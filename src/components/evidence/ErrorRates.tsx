@@ -25,18 +25,20 @@ function happened(r: ErrorRate): string {
  * back when it could have been paid. Each with its denominator, a one-line definition and, in Technical view, the
  * files it is counted from (src/components/evidence/errors.ts).
  */
-export function ErrorRates() {
+export function ErrorRates({ folded = false }: { folded?: boolean } = {}) {
   const e = errorRates();
   const hs = hashSpeed();
   const ra = readingAccuracy();
   const src = e.sources;
   const n = (s: string) => e.bySource.find((b) => b.source === s)?.decisions ?? 0;
   return (
-    <section id="errors" className="je" aria-labelledby="errors-h">
+    <section id={folded ? undefined : "errors"} className="je" aria-labelledby="errors-h">
       <div className="je-lead">
-        <h2 id="errors-h" className="je-title">
-          Error rates, on photos with a known answer <Info id="evidence.errors" label="" topic="The error rates" />
-        </h2>
+        {!folded && (
+          <h2 id="errors-h" className="je-title">
+            Error rates, on photos with a known answer <Info id="evidence.errors" label="" topic="The error rates" />
+          </h2>
+        )}
         <p className="je-scope tabular">
           Every recorded decision where the right answer is known: {e.decisions} decisions on {e.photos} photos.
         </p>

@@ -10,6 +10,9 @@ import { payFromDb, SAMPLE_PAYPAL_STATUS } from "./queue";
 import { completion } from "./report";
 import type { HomeSummary } from "./types";
 
+/** How many of the payouts waiting to be accepted the home tile lists; the count above the list covers them all. */
+export const UNCLAIMED_SHOWN = 6;
+
 export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmRecall[], now = new Date()): Promise<HomeSummary> {
   const [c] = (
     await db().execute(sql`
@@ -38,12 +41,18 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
     where c.firm_id = ${firm.id}`)
   ).rows as { review: number; failed: number; ready: number }[];
 
+  // Waiting to be accepted, as the claims queue counts it (stageOf in ./queue): a claim whose latest payment PayPal holds
+  // as unclaimed or returned, not since declined or sent back for a new photo. The count is its own query; the list
+  // beside it shows the oldest few.
+  const waiting = sql`
+    from claim c join lateral (select * from payment x where x.claim_id = c.id order by x.id desc limit 1) p on true
+    where c.firm_id = ${firm.id} and p.status in ('unclaimed', 'returned') and coalesce(c.review_outcome, '') not in ('declined', 'retake')`;
+  const [w] = (await db().execute(sql`select count(*)::int as n ${waiting}`)).rows as { n: number }[];
   const unclaimed = (
     await db().execute(sql`
     select c.id, c.payee_masked, p.amount::text as amount, p.created_at, p.status, p.route, p.paypal_status
-    from payment p join claim c on c.id = p.claim_id
-    where c.firm_id = ${firm.id} and p.status in ('unclaimed', 'returned')
-    order by p.created_at asc limit 6`)
+    ${waiting}
+    order by p.created_at asc limit ${UNCLAIMED_SHOWN}`)
   ).rows as { id: string; payee_masked: string | null; amount: string; created_at: Date; status: string; route: string; paypal_status: string | null }[];
 
   const counts = (
@@ -71,6 +80,7 @@ export async function homeSummary(firm: Firm, main: FirmRecall, others: FirmReca
       sample: u.paypal_status === SAMPLE_PAYPAL_STATUS,
       status: payFromDb(u.status, u.route),
     })),
+    unclaimedCount: w?.n ?? 0,
     sampleClaims: c?.sample ?? 0,
     claimsAllRecalls: { claims: counts.reduce((s, r) => s + r.n, 0), recalls: counts.length },
     otherRecalls: others.map((r) => ({ number: r.number, short: r.short, claims: byRecall.get(r.number) ?? 0 })),

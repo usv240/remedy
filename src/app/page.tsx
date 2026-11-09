@@ -12,7 +12,8 @@ import { DEFAULT_TERMS } from "@/app/api/claims/_lib/terms";
 import { REFUND_WINDOW_DAYS } from "@/lib/payments/refunds";
 import { HEADLINE, shareParts } from "@/lib/recall/headline";
 import { RecallLabel, SAMPLE_PHOTO_CREDIT } from "@/lib/recall/label";
-import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
+import { aboutSeconds, PROBLEM, REFUND_TIMING, RESEARCH } from "@/lib/research";
+import { TIME_WORDS } from "@/lib/time-words";
 import { catalogOfficialHashes } from "@/lib/verify/dhash";
 import { checkTimes, errorRates } from "@/components/evidence/errors";
 import { Contrast } from "@/components/evidence/Contrast";
@@ -23,7 +24,7 @@ import "./landing-shared.css";
 import "./landing.css";
 
 /**
- * The home page (plan section 4; direction .taste-skill/remedy-sheet.txt, "The sentence is the layout").
+ * The home page ("The sentence is the layout").
  *
  * Idea: on this page, the recall's own instruction (send a photo of the product made safe) becomes the picture inside
  * the headline: the CPSC's published example photo of recall 26125, its cord cut in half, sits where a word would.
@@ -252,9 +253,9 @@ async function panelRuns(): Promise<PanelRun[]> {
         paid:
           verified && res.amount
             ? {
-                line: `$${res.amount.value} back through PayPal, at once`,
+                line: `$${res.amount.value} back through PayPal, sent at once`,
                 note: `Under Brightline's $${(DEFAULT_TERMS.autoCapCents / 100).toFixed(2)} auto-approve cap, so no person is needed.`,
-                more: `Bought with PayPal, it goes back to that purchase, which the sandbox did at once; otherwise it is a payout to an email or phone${payout ? `, which reached SUCCESS in ${payout}` : ""}.`,
+                more: `Bought with PayPal, it goes back to that purchase: ${REFUND_TIMING.marked.replace(/^PayPal marked the refund to the original PayPal purchase/, "PayPal marked it")}, and ${REFUND_TIMING.reach.replace(/^PayPal says/, "says")}. Otherwise it is a payout to an email or phone${payout ? `, which reached SUCCESS in ${payout}` : ""}.`,
                 href: "/try/shop",
                 cta: "Buy the charger in the sandbox and claim it",
               }
@@ -326,7 +327,7 @@ export default async function Home() {
         </p>
         {/* The first screen holds one result and one action; everything else is further down the page. */}
         <p className="hero-result">
-          <strong className="tabular">{proof.wrongPay}</strong> paid wrongly on photos with a known answer.{proof.check ? <> Checked in about {proof.check} seconds{proof.payout ? <>, paid in about {proof.payout}</> : null}.</> : null}{" "}
+          <strong className="tabular">{proof.wrongPay}</strong> paid wrongly on photos with a known answer.{proof.check ? <> Checked in about {proof.check} seconds ({TIME_WORDS.median}){proof.payout ? <>, paid in about {proof.payout}</> : null}.</> : null}{" "}
           <Link className="text-link" href="/evidence#errors">
             How it was measured
           </Link>
@@ -396,7 +397,7 @@ export default async function Home() {
                 ).
               </p>
               <p className="intro-why">
-                By the CPSC&rsquo;s own measure, an average of {PROBLEM.correctionRate.rate} of recalled products were corrected in {PROBLEM.correctionRate.year}, against its {PROBLEM.correctionRate.target} target (
+                By the CPSC&rsquo;s own measure, its average correction rate across recalls was {PROBLEM.correctionRate.rate} in {PROBLEM.correctionRate.year}, against its {PROBLEM.correctionRate.target} target (
                 <a className="text-link" href={PROBLEM.correctionRate.url} target="_blank" rel="noreferrer">
                   {PROBLEM.correctionRate.short}
                 </a>

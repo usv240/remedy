@@ -19,7 +19,7 @@ export const metadata: Metadata = { title: "Recalls", description: "Every US con
 const PAGE = 20;
 
 /**
- * The recall explorer (plan 5.2): every recall since 2024, Elastic hybrid search, filters, and each recall's proof rule
+ * The recall explorer: every recall since 2024, Elastic hybrid search, filters, and each recall's proof rule
  * in short. A table on wide screens and cards on phones, 20 at first with Show more. A plain semantic table rather than
  * AG Grid: a read-only list of links needs no grid, and it renders on the server for every reader.
  */

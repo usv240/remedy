@@ -4,7 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { checkPool, POOL_ANSWER_FIELDS, type PoolRow } from "@/app/api/v1/hash-pool/_lib/pool";
 import { POST as check } from "@/app/api/v1/hash-pool/check/route";
 import { POST as register } from "@/app/api/v1/hash-pool/register/route";
-import { ENDPOINTS } from "@/lib/api/endpoints";
+import { ENDPOINTS, ERRORS } from "@/lib/api/endpoints";
+import { firmOfScopes, POOL_WRITE_SCOPE } from "@/lib/api/keys";
 import { openapi } from "@/lib/api/openapi";
 import { HashPoolCheckRequest, HashPoolRegisterRequest } from "@/lib/api/v1-schemas";
 import { photoHashes } from "@/lib/verify";
@@ -32,7 +33,13 @@ const post = (url: string, body: unknown, headers: Record<string, string> = {}) 
  * never opened. `configured` is what dbConfigured() answers inside the routes.
  */
 let configured = false;
-vi.mock("@/lib/api/keys", async (importOriginal) => ({ ...(await importOriginal<typeof import("@/lib/api/keys")>()), guard: (_req: Request, _endpoint: string, handler: () => Promise<Response>) => handler() }));
+/** The two kinds of key, as keyFirm reads them from api_key: a self-serve sandbox key, and a key tied to firm 1. */
+const KEYS: Record<string, { keyId: number; firmId: number | null }> = { "Bearer rm_test_selfserve": { keyId: 1, firmId: null } };
+vi.mock("@/lib/api/keys", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/api/keys")>()),
+  guard: (_req: Request, _endpoint: string, handler: () => Promise<Response>) => handler(),
+  keyFirm: async (req: Request) => KEYS[req.headers.get("authorization") ?? ""] ?? null,
+}));
 vi.mock("@/lib/db", async (importOriginal) => ({ ...(await importOriginal<typeof import("@/lib/db")>()), dbConfigured: () => configured }));
 
 const saved = { ...process.env };
@@ -152,6 +159,29 @@ describe("POST /api/v1/hash-pool/register", () => {
     expect(body.error?.code).toBe("unauthorized");
   });
 
+  it("refuses a self-serve sandbox key with a plain 403: only a key tied to a connected firm may write to the pool", async () => {
+    configured = true;
+    const { status, body } = await json(await register(post("/api/v1/hash-pool/register", { dhash: "337bfb9f4e7f3e0f", recall_number: "BH-2026-01" }, { Authorization: "Bearer rm_test_selfserve" })));
+    expect(status).toBe(403);
+    expect(body.error?.code).toBe("forbidden");
+    expect(body.error?.message).toMatch(/can check hashes but not register them/);
+    expect(body.error?.message).toMatch(/firms connected to Remedy/);
+    // Checking stays open: the same caller, and a caller with no key at all, get an answer (here with no database: the published pictures alone).
+    configured = false;
+    for (const headers of [{ Authorization: "Bearer rm_test_selfserve" }, {}] as Record<string, string>[]) expect((await check(post("/api/v1/hash-pool/check", { dhash: "337bfb9f4e7f3e0f" }, headers))).status).toBe(200);
+  });
+
+  it("reads the firm a key is tied to from its scopes, and only with the register scope", () => {
+    expect(firmOfScopes(["read", "verify", POOL_WRITE_SCOPE, "firm:7"])).toBe(7);
+    expect(firmOfScopes(["read", "verify", "payments:sandbox"])).toBeNull();
+    // A firm scope without the register scope, or the register scope without a firm, writes nothing.
+    expect(firmOfScopes(["read", "firm:7"])).toBeNull();
+    expect(firmOfScopes([POOL_WRITE_SCOPE])).toBeNull();
+    expect(firmOfScopes([POOL_WRITE_SCOPE, "firm:0", "firm:x"])).toBeNull();
+    expect(firmOfScopes(null)).toBeNull();
+    expect(ERRORS.map((e) => e.code)).toContain("forbidden");
+  });
+
   it("validates the body first", async () => {
     const { status } = await json(await register(post("/api/v1/hash-pool/register", { dhash: "337bfb9f4e7f3e0f" })));
     expect(status).toBe(422);
@@ -165,7 +195,8 @@ describe("the hash pool in the API description", () => {
     expect(ids).toContain("hash-pool-register");
     const reg = ENDPOINTS.find((e) => e.id === "hash-pool-register")!;
     expect(reg.keyed).toBe(true);
-    expect(reg.scope).toBe("verify");
+    expect(reg.scope).toBe(POOL_WRITE_SCOPE);
+    expect(reg.note).toMatch(/firm key/);
     const spec = openapi("https://remedy.example") as { paths: Record<string, Record<string, { tags: string[]; requestBody?: { content: Record<string, { schema: { properties?: Record<string, unknown>; required?: string[] } }> } }>>; tags: { name: string }[] };
     const c = spec.paths["/api/v1/hash-pool/check"].post;
     const r = spec.paths["/api/v1/hash-pool/register"].post;

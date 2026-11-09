@@ -15,8 +15,36 @@ export type Window = { ok: true; count: number; remaining: number } | { ok: fals
 /** A client's address, hashed with the server secret so no raw address is kept anywhere. */
 export const clientKey = (ip: string, salt = process.env.AUDIT_SALT ?? process.env.CHECKS_SECRET ?? "remedy") => createHash("sha256").update(`${salt}|${ip}`).digest("hex").slice(0, 32);
 
-/** The caller's address, from the proxy's header when there is one. */
-export const clientIp = (req: Request) => req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "local";
+/**
+ * Where the caller's address is read from, most trusted first. The hosted site sits behind Cloudflare and Render's
+ * proxy, which set cf-connecting-ip (and true-client-ip) to the address that reached them; a caller can put any value
+ * at the left of X-Forwarded-For, so that header is read only when neither is there (a local run, or a test that sets
+ * it). Every per-client limit reads the address here, through clientIp.
+ */
+export const CLIENT_ADDRESS_HEADERS = ["cf-connecting-ip", "true-client-ip", "x-forwarded-for", "x-real-ip"] as const;
+export type ClientAddressSource = (typeof CLIENT_ADDRESS_HEADERS)[number] | "none";
+
+/** The caller's address and the header it came from ("none" when no header names one). */
+export function clientAddress(req: Request): { ip: string; from: ClientAddressSource } {
+  for (const h of ["cf-connecting-ip", "true-client-ip"] as const) {
+    const v = req.headers.get(h)?.trim();
+    if (v) return { ip: v, from: h };
+  }
+  const forwarded = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  if (forwarded) return { ip: forwarded, from: "x-forwarded-for" };
+  const real = req.headers.get("x-real-ip")?.trim();
+  if (real) return { ip: real, from: "x-real-ip" };
+  return { ip: "local", from: "none" };
+}
+
+/** The caller's address, for per-client limits and hashed keys. */
+export const clientIp = (req: Request) => clientAddress(req).ip;
+
+/** For /api/health: the header this request's client address came from. Only the header's name, never the address. */
+export function addressSource(req: Request) {
+  const from = clientAddress(req).from;
+  return { client_address_from: from, note: `client address from: ${from === "none" ? "no proxy header (a direct request)" : from}` };
+}
 
 const memory = new Map<string, number>();
 const MEMORY_MAX = 20_000;

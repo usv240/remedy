@@ -1,4 +1,4 @@
--- Remedy database schema (plan section 8). Reviewed SQL, applied by hand:
+-- Remedy database schema. Reviewed SQL, applied by hand:
 --   npm run db:migrate   (or: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f db/schema.sql)
 -- Every statement is idempotent (if not exists), so applying it twice changes nothing.
 -- src/lib/db/schema.ts declares the same tables for Drizzle; tests/schema.test.ts keeps the two in step.

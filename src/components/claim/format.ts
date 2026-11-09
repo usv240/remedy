@@ -1,6 +1,6 @@
 /** Small pure formatters for the owner's pages. */
 
-/** The six checks in the owner's words, in order (plan 7.2). */
+/** The six checks in the owner's words, in order (docs/how-it-works.md, "How it works"). */
 export const CHECK_ORDER: { id: "C1" | "C2" | "C3" | "C4" | "C5" | "C6"; name: string }[] = [
   { id: "C1", name: "Right product" },
   { id: "C2", name: "Made safe" },

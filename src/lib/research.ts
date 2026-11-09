@@ -309,6 +309,16 @@ export const PROBLEM = {
   },
 } as const;
 
+/**
+ * How a refund to the original PayPal purchase is timed, said the same way everywhere: what PayPal answered in the
+ * sandbox (content/public/e2e-transcript.json, refund_status COMPLETED) and how long PayPal says the money takes to reach
+ * the buyer (its refund documentation, PROBLEM.refundTerms).
+ */
+export const REFUND_TIMING = {
+  marked: "PayPal marked the refund to the original PayPal purchase COMPLETED at once",
+  reach: `PayPal says a refund takes ${PROBLEM.refundTerms.reach} to reach the buyer`,
+} as const;
+
 /** "about 12 seconds" from a measured figure such as "12.3 s" or "17 to 18 s": the largest number, rounded. */
 export function aboutSeconds(figure: string | null | undefined): number | null {
   const nums = [...(figure ?? "").matchAll(/\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));

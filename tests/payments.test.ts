@@ -140,7 +140,7 @@ describe("router: choosing the route", () => {
     expect(r.route).toBe("refund");
     expect(r.plain).toContain("12 days ago");
   });
-  it("refunds before a replacement when the capture is refundable (plan 7.3 order)", () => {
+  it("refunds before a replacement when the capture is refundable (the router's order)", () => {
     expect(chooseRoute({ choice: "replacement", capture: capture(), replacement, payee, now: NOW }).route).toBe("refund");
   });
   it("pays out after the window, after a refund, or with a dispute", () => {

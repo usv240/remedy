@@ -1,6 +1,6 @@
 # Every push and pull request: the dependency audit, types, lint and unit tests, then a production build served
-# against an empty Postgres with no service keys, where every page must answer and pass axe (WCAG 2.2 AA) on desktop
-# and phone, in light and dark.
+# against a freshly seeded Postgres with no service keys, where every page must answer and pass axe (WCAG 2.2 AA) on
+# desktop and phone, in light and dark, and the unit tests run once more with the database, so the Postgres suites run.
 #
 # The checks that move sandbox money (payouts, refunds, the sample shop) need keys and run from a machine that has
 # them; see TESTING.md.
@@ -71,11 +71,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Create the tables from the reviewed SQL, load the recalls, seed the sample firm
+      - name: Create the tables from the reviewed SQL, load the recalls, seed the sample firms and their claims
         run: |
           node scripts/migrate.mjs
           npx tsx scripts/load-recalls.ts
           npx tsx scripts/seed.ts
+          npx tsx scripts/seed-firm.ts
       - name: Start the app
         run: |
           npm start > server.log 2>&1 &
@@ -85,6 +86,10 @@ jobs:
         run: npm run e2e:smoke
       - name: axe (WCAG 2.2 AA) and sideways scroll on every page, desktop and phone, light and dark
         run: npm run e2e:a11y
+      # The unit tests again, now with DATABASE_URL set, so the Postgres suites run too (the checks job runs them with
+      # no database, where they skip). No keys: the Claude and PayPal suites still skip.
+      - name: Unit tests with the database, including the Postgres suites
+        run: npm test
       - name: Server log
         if: failure()
         run: cat server.log

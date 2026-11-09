@@ -1,7 +1,6 @@
 /**
  * The guided tour's stops, in the order a visitor walks them (about two minutes). Each names a page, a CSS selector for
- * the element it describes, and one sentence. Stops on other builders' pages point at their h1 until those pages pick
- * a stable target. Read by src/components/tour/steps.ts.
+ * the element it describes, and one sentence. A stop on a page with no stable target points at its h1. Read by src/components/tour/steps.ts.
  */
 export type Stop = { path: string; target: string; title: string; text: string };
 

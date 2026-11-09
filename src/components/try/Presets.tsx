@@ -7,6 +7,7 @@ import type { RecordedSample } from "@/app/api/try/_lib/presets";
 import { Checking } from "@/components/claim/Checking";
 import { ClaimInfo } from "@/components/claim/ClaimInfo";
 import { Result } from "@/components/claim/Result";
+import { SandboxPay } from "./SandboxPay";
 
 export type PresetCard = {
   id: string;
@@ -20,6 +21,8 @@ export type PresetCard = {
   user: boolean;
   /** This example can also run live against the model, once a day per visitor (Brightline's sample charger). */
   live?: boolean;
+  /** Once verified, this example can send a real PayPal sandbox payout to the sandbox buyer (Brightline's sample charger). */
+  pay?: { amount: string; payee: string | null } | null;
 };
 
 type Run = {
@@ -138,7 +141,8 @@ function PresetRow({ p }: { p: PresetCard }) {
               reviewersAgreed={run.result.decision === "verified" && run.result.decided_by === "reviewers"}
               source={run.live?.ran ? "live" : run.replay.used ? "replayed" : null}
             />
-            <Result claim={run.result} ctx={{ action: null, word: null, example: null }} preview />
+            <Result claim={run.result} ctx={{ action: null, word: null, example: null }} preview previewNote={p.pay && run.result.decision === "verified" ? "Checked, and nothing is paid yet: send the refund below as a real PayPal sandbox payout." : undefined} />
+            {p.pay && run.result.decision === "verified" && <SandboxPay amount={p.pay.amount} payee={p.pay.payee} />}
             {vs && (
               <p className="tr-vs" data-ok={vs.ok ? "" : undefined}>
                 {vs.line}
@@ -151,7 +155,7 @@ function PresetRow({ p }: { p: PresetCard }) {
                     <span className="pill" data-tone="positive">
                       Live
                     </span>{" "}
-                    {run.live.model ?? "Claude"} read this photo just now{run.live.usd !== null ? `, for $${run.live.usd.toFixed(4)} from today's AI budget` : ""}. Nothing is paid from this page.
+                    {run.live.model ?? "Claude"} read this photo just now{run.live.usd !== null ? `, for $${run.live.usd.toFixed(4)} from today's AI budget` : ""}. Nothing is paid unless you send the sandbox payout below.
                   </>
                 ) : (
                   <>
@@ -225,7 +229,7 @@ export function Presets({ madeSafe, recorded, others, user }: { madeSafe: Preset
   return (
     <div className="tr-presets">
       <p className="tr-intro">
-        Real photos through the real checks. Nothing is paid. <ClaimInfo k="try.presets" topic="ready-made examples" />
+        Real photos through the real checks. Running one pays nothing; the verified sample charger can send its refund as a sandbox payout. <ClaimInfo k="try.presets" topic="ready-made examples" />
       </p>
       <h3 className="tr-sub">Photos of products made safe</h3>
       <p className="tr-sub-lede">

@@ -1,5 +1,5 @@
 /**
- * The owner's claim, end to end (plan 5.1 and 7.3): store the photo, run the checks, record the decision, and pay a
+ * The owner's claim, end to end (docs/how-it-works.md, "How it works"): store the photo, run the checks, record the decision, and pay a
  * verified claim through the payments engine. The routes under /api/claims and the owner's pages call these; the
  * public API (/api/v1/claims) can too. Server only.
  *

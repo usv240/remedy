@@ -17,6 +17,7 @@ import { SHOP } from "@/lib/payments/shop-catalog";
 import type { ParsedLine, Target } from "./buyers";
 import { noticeEmail } from "./notices";
 import { SAMPLE_RECALL, type Firm, type FirmRecall } from "./firm";
+import { SAMPLE_TS_MARK } from "./samples/transaction-search";
 
 /** The names a sales line can match: the recall's products, and for the sample recall the sample shop's product. */
 export function targetsFor(recall: FirmRecall): Target[] {
@@ -123,12 +124,12 @@ export async function notifySales(firm: Firm, recall: FirmRecall, saleIds: numbe
 export async function knownSales(firm: Firm, recall: FirmRecall) {
   const rows = (
     await db().execute(sql`
-    select s.id, s.source, s.item_name, s.amount::text as amount, s.paid_at, s.paypal_capture_id, s.buyer_contact_enc,
+    select s.id, s.source, s.item_name, s.amount::text as amount, s.paid_at, s.paypal_capture_id, s.paypal_order_id, s.buyer_contact_enc,
            (select count(*)::int from notice n where n.sale_id = s.id) as notices,
            (select count(*)::int from claim c where c.linked_sale_id = s.id) as claims
     from sale s where s.firm_id = ${firm.id} and (s.recall_number = ${recall.number} or s.recall_number is null)
     order by s.paid_at desc nulls last limit 200`)
-  ).rows as { id: number; source: string; item_name: string; amount: string; paid_at: Date | null; paypal_capture_id: string | null; buyer_contact_enc: string | null; notices: number; claims: number }[];
+  ).rows as { id: number; source: string; item_name: string; amount: string; paid_at: Date | null; paypal_capture_id: string | null; paypal_order_id: string | null; buyer_contact_enc: string | null; notices: number; claims: number }[];
   const now = new Date();
   return rows.map((r) => {
     let contact = "Kept as a hash only";
@@ -150,6 +151,8 @@ export async function knownSales(firm: Firm, recall: FirmRecall) {
       refundToOriginal: Boolean(win?.within),
       notified: r.notices > 0,
       claimed: r.claims > 0,
+      /** A row of the labelled sample Transaction Search answer (src/lib/firm/samples/transaction-search.ts). */
+      sample: r.paypal_order_id === SAMPLE_TS_MARK,
     };
   });
 }

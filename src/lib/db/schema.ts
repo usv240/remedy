@@ -1,5 +1,5 @@
 /**
- * Remedy's tables (plan section 8). db/schema.sql is the reviewed SQL for the same tables and is what gets applied;
+ * Remedy's tables (db/schema.sql). db/schema.sql is the reviewed SQL for the same tables and is what gets applied;
  * tests/schema.test.ts keeps the two in step. Money is numeric(10,2), which Drizzle reads as a string ("34.99").
  * Personal data never sits here in the clear: contact details are encrypted (`*_enc`, src/lib/secure.ts) or hashed
  * (`*_hash`), and the claims grid shows a masked form.
@@ -50,7 +50,7 @@ export const recalls = pgTable(
 );
 
 /**
- * A recall's proof rule (plan 7.1): what the owner must do and what the photo must show. Each edit is a new version;
+ * A recall's proof rule (docs/how-it-works.md, "How it works"): what the owner must do and what the photo must show. Each edit is a new version;
  * the highest version is the one in force. source: ai (extracted), firm (edited by the firm), baseline (regex).
  */
 export const proofRules = pgTable(
@@ -244,7 +244,7 @@ export const claims = pgTable(
 // ---------------------------------------------------------------------------------------------------------------
 
 /**
- * How a claim will be paid (plan 7.3), approved by the firm's auto-rule or a reviewer. One plan per claim, so a
+ * How a claim will be paid (docs/how-it-works.md, "What the AI never decides"), approved by the firm's auto-rule or a reviewer. One plan per claim, so a
  * second "pay" finds the first plan and never pays twice.
  * route: refund | payout | replacement. status: planned | approved | executing | done | failed | canceled.
  */

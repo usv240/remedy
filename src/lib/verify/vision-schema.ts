@@ -64,7 +64,7 @@ export function personInPhoto(r: Pick<VisionReport, "person"> | { person?: Visio
   return p?.visible ? { visible: true, kinds: [...(p.kinds ?? [])], where: p.where ?? "" } : null;
 }
 
-/** Two reviewers, two evidence bases (plan 7.2). */
+/** Two reviewers, two evidence bases (docs/how-it-works.md, "How it works"). */
 export const REVIEW_CHECKS = ["right_product", "made_safe", "own_photo", "within_recall"] as const;
 
 export const ReviewSchema = z.object({

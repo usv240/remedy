@@ -870,3 +870,38 @@
   font-size: var(--step-small);
   color: var(--muted);
 }
+
+/* The shared hash pool's trust model, beside the uses: who may write, who may read, what crosses. */
+.dev-trust-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 16px 0 10px;
+}
+.dev-trust-list > div {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.dev-trust-list dt {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.dev-trust-list dd {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.dev-trust .dev-use-link {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+@media (max-width: 860px) {
+  .dev-trust-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

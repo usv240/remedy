@@ -11,7 +11,7 @@ import { paymentIdFor } from "./store";
 import type { Approval, Payee, PaymentPlan, PaymentRecord, PaymentRoute, PaymentStatus, Replacement } from "./types";
 
 /**
- * The payment router (plan 7.3). Deterministic code, never the model:
+ * The payment router (docs/how-it-works.md, "What the AI never decides"). Deterministic code, never the model:
  *   linked PayPal capture, 180 days old or less, not refunded or disputed  -> refund to that capture
  *   else the owner chose a replacement with no active recall              -> Orders v2 to the retailer stand-in
  *   else                                                                   -> Payouts item (email, phone or Venmo)
@@ -25,7 +25,7 @@ export type ClaimForPayment = {
   recallNumber: string;
   recallTitle: string;
   firmId?: string | null;
-  /** The verification decision (plan 7.2). A retake is never paid. */
+  /** The verification decision (docs/how-it-works.md, "How it works"). A retake is never paid. */
   decision: "verified" | "retake" | "firm_review";
   /** The refund amount from verification: the firm's amount for the model or the linked capture, whichever is lower. */
   amountCents: number;

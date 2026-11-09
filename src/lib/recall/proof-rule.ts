@@ -30,7 +30,7 @@ export type MustShow = (typeof MUST_SHOW)[number];
 
 const unit = z.number().min(0).max(1);
 
-/** The stored rule (plan section 7.1, plus `refund_amount` and `steps`). */
+/** The stored rule (docs/how-it-works.md, "How it works", plus `refund_amount` and `steps`). */
 export const ProofRule = z.object({
   photo_required: z.boolean(),
   actions: z.array(z.enum(ACTIONS)),

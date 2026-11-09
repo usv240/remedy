@@ -131,7 +131,7 @@ const ROWS: { label: string; cells: [string, string, string] }[] = [
     cells: [
       "As the firm arranges",
       `By check in 10 to 15 business days after confirmation [1], or a prepaid virtual card in 10 to 14 [2]; one provider lists checks, virtual cards, PayPal and Venmo among its options [3]. On firms' own pages: PayPal or a gift card, with an email confirmation in ${P.paypalPortal.confirm} and no delivery time stated [5], or "allow ${P.weeksPortal.wait}" [6]`,
-      `A PayPal payout once verified, which reached the owner in ${payoutFigure()} in the PayPal sandbox, or back to the original PayPal purchase inside 180 days, at once`,
+      `A PayPal payout once verified, which reached the owner in ${payoutFigure()} in the PayPal sandbox, or back to the original PayPal purchase inside 180 days, which PayPal marked COMPLETED at once (it says ${P.refundTerms.reach} to reach the buyer)`,
     ],
   },
   { label: "The monthly report", cells: ["Prepared by the firm", "Real-time tracking and reporting from the provider's own system [4]", "Drafted from Remedy's own numbers"] },

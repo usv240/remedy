@@ -8,7 +8,7 @@ import { getPreset, LIVE_PRESET, liveGate, runPreset } from "../../../_lib/prese
  * POST /api/try/presets/{id}/run: run a ready-made example through the verifier. `{ "technical": true }` runs its
  * second configuration where it has one. `{ "live": true }` on Brightline's sample charger runs it live against the
  * model, once a day per visitor and within the site's daily AI budget; otherwise the recorded run, with the reason.
- * Never creates a claim and never pays.
+ * Never creates a claim and never pays; the sandbox payout is its own call (POST /api/try/sandbox-payout).
  */
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
   return guard(req, "POST /api/try/presets/{id}/run", async () => {

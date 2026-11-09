@@ -30,7 +30,10 @@ import { basePlan } from "../src/lib/firm/plan";
 import { SAMPLE_RECALL } from "../src/lib/firm/firm";
 import { SAMPLE_PAYPAL_STATUS } from "../src/lib/firm/queue";
 import { SHOP } from "../src/lib/payments/shop-catalog";
-import { ensureReadyClaims, READY_AMOUNT, sampleChecks, samplePhotoFor, samplePhotoIds, sampleResult, type SampleKind } from "../src/lib/firm/sample-claims";
+import { findBuyers } from "../src/lib/payments/buyers";
+import { memoryLedger } from "../src/lib/payments/deps";
+import { SAMPLE_TS_MARK, sampleTransactionSearch } from "../src/lib/firm/samples/transaction-search";
+import { ensureReadyClaims, READY_AMOUNT, readyPayee, SAMPLE_PLAN, sampleChecks, sampleDebate, samplePhotoFor, samplePhotoIds, sampleResult, type SampleKind } from "../src/lib/firm/sample-claims";
 import type { Checks } from "../src/lib/verify/types";
 
 const DAY = 86_400_000;
@@ -60,34 +63,27 @@ function rng(seed: number) {
 const NAMES = ["jordan", "maria", "sam", "lee", "priya", "alex", "dana", "chris", "noor", "taylor", "kim", "jamie", "rosa", "omar", "beth", "luis", "mei", "ravi", "ana", "tom", "ivy", "hugo", "zoe", "ben", "lena", "max", "nia", "eli", "sara", "joe", "ada", "kai", "liz", "raj", "amy", "dev", "fay", "gus", "ines", "ola"];
 
 type Kind = SampleKind;
-/**
- * The history, as fractions of the days since the announcement (0 is the announcement day, 1 is today): paid claims
- * spread over the whole time, three payouts not yet accepted, and the open reviews and retakes in the last days.
- */
-const PLAN: { kind: Kind; at: number[] }[] = [
-  { kind: "paid", at: Array.from({ length: 23 }, (_, i) => (i / 23) * 0.95) },
-  { kind: "unclaimed", at: [0.15, 0.45, 0.6] },
-  { kind: "reviewed_paid", at: [0.3, 0.6] },
-  { kind: "review_retake", at: [0.5] },
-  { kind: "retake", at: [0.7, 0.8, 0.9, 0.97] },
-  { kind: "review", at: [0.82, 0.88, 0.93, 0.96, 0.99] },
-];
+/** The history: src/lib/firm/sample-claims.ts holds it, so the tests check every claim this seed writes. */
+const PLAN = SAMPLE_PLAN;
 /** Fictional US numbers in the 555-0100 to 555-0199 range. */
 const phone = (area: number, k: number) => `(${area}) 555-01${String(k % 100).padStart(2, "0")}`;
-
-const checksFor = (kind: Kind, r: () => number) => sampleChecks(kind, r);
 
 async function sampleFirm() {
   const [f] = (await db().execute(sql`select id, name from firm where is_sample = true order by id limit 1`)).rows as { id: number; name: string }[];
   return f ?? null;
 }
 
-/** Remove the earlier sample history. Claims with a real PayPal payment stay, and so do their plan tasks. */
+/**
+ * Remove the earlier sample history. Claims with a real PayPal payment stay, and so do their plan tasks: a real payment
+ * carries an id PayPal gave it (a payout batch or item, a refund, a capture or a transaction). A sample payment an earlier
+ * version of this seed wrote with a PayPal-like status and no PayPal id is sample history too, and goes.
+ */
 async function clearSamples(firmId: number) {
   const gone = (
     await db().execute(sql`
     select c.id from claim c where c.firm_id = ${firmId} and c.is_sample
-      and not exists (select 1 from payment p where p.claim_id = c.id and coalesce(p.paypal_status, '') <> ${SAMPLE_PAYPAL_STATUS})`)
+      and not exists (select 1 from payment p where p.claim_id = c.id and coalesce(p.paypal_status, '') <> ${SAMPLE_PAYPAL_STATUS}
+        and coalesce(p.paypal_batch_id, p.paypal_item_id, p.paypal_refund_id, p.paypal_capture_id, p.paypal_transaction_id) is not null)`)
   ).rows as { id: string }[];
   const ids = gone.map((g) => g.id);
   if (ids.length) {
@@ -100,6 +96,10 @@ async function clearSamples(firmId: number) {
     for (const p of photos) await db().execute(sql`delete from photo where id = ${p.photo_id}::uuid and source = 'preset' and not exists (select 1 from claim where photo_id = ${p.photo_id}::uuid)`);
   }
   await db().execute(sql`delete from notice where firm_id = ${firmId} and provider = 'sample'`);
+  // The labelled sample Transaction Search buyers, and any notices made for them, unless a claim came through one.
+  const sampleSales = sql`select s.id from sale s where s.firm_id = ${firmId} and s.paypal_order_id = ${SAMPLE_TS_MARK} and not exists (select 1 from claim c where c.linked_sale_id = s.id)`;
+  await db().execute(sql`delete from notice where sale_id in (${sampleSales})`);
+  await db().execute(sql`delete from sale where id in (${sampleSales})`);
   await db().execute(sql`delete from plan_task where firm_id = ${firmId} and (ref like 'sample-%' or ref like 'plan:%')`);
   return ids.length;
 }
@@ -119,7 +119,7 @@ async function insertClaim(o: {
   debate?: unknown;
   photoId?: string | null;
   units?: number;
-  result?: unknown;
+  result: unknown;
 }) {
   const [row] = (
     await db().execute(sql`
@@ -128,7 +128,7 @@ async function insertClaim(o: {
     values (${o.recall}, ${o.firmId}, ${o.photoId ?? null}, ${o.payee.type}, ${encrypt(o.payee.value)}, ${hashContact(o.payee.value)}, ${maskContact(o.payee.value)}, ${o.units ?? 1},
             ${JSON.stringify(o.checks)}::jsonb, ${o.decision}, ${o.status}, ${o.debate ? JSON.stringify(o.debate) : null}::jsonb, ${o.amount}, ${o.channel},
             ${o.review?.outcome ?? null}, ${o.review?.by ?? null}, ${o.review?.at ?? null}, true, ${o.decided}, ${o.created}, ${o.created},
-            ${JSON.stringify(o.result ?? sampleResult(o.decision))}::jsonb)
+            ${JSON.stringify(o.result)}::jsonb)
     returning id`)
   ).rows as { id: string }[];
   return row.id;
@@ -205,14 +205,18 @@ async function main() {
   const when = (fraction: number) => new Date(Math.min(latest, announced.getTime() + fraction * span + (r() - 0.5) * 4 * 3_600_000));
 
   const kinds = PLAN.flatMap((p) => p.at.map((f) => ({ kind: p.kind, f })));
-  // Real thumbnails in the queue and the drawer: the sample set's own photos of the charger (public/samples/charger).
+  // Real thumbnails in the queue and the drawer: the sample set's own photos of the charger (public/samples/charger),
+  // each claim with the photo of the recorded run whose checks it shows (src/lib/firm/samples/claim-runs.json).
   const photoIds = recall.number === SAMPLE_RECALL ? await samplePhotoIds() : {};
   const channels = ["link", "link", "link", "web", "link", "email", "link", "web", "api", "link"];
   const batches = new Map<string, { claims: string[]; day: Date }>();
   const unclaimed: { claimId: string; batchKey: string }[] = [];
   let n = 0;
+  const ofKind = new Map<Kind, number>();
   for (const { kind, f } of kinds) {
     const i = n++;
+    const k = ofKind.get(kind) ?? 0;
+    ofKind.set(kind, k + 1);
     const created = when(f);
     const name = NAMES[i % NAMES.length];
     const payee: { type: "email" | "phone" | "venmo"; value: string } = i % 9 === 4 ? { type: "phone", value: phone(415, i) } : i % 13 === 7 ? { type: "venmo", value: phone(212, i) } : { type: "email", value: `${name}.${100 + i}@example.com` };
@@ -225,7 +229,7 @@ async function main() {
       firmId: firm.id,
       recall: recall.number,
       payee,
-      checks: checksFor(kind, r),
+      checks: sampleChecks(kind, k, recall.number),
       decision,
       status,
       amount: SHOP_PRICE,
@@ -234,7 +238,9 @@ async function main() {
       decided: new Date(created.getTime() + 25_000),
       review,
       units: i % 11 === 3 ? 2 : 1,
-      photoId: photoIds[samplePhotoFor(kind, i)] ?? null,
+      photoId: photoIds[samplePhotoFor(kind, k)] ?? null,
+      debate: sampleDebate(kind, k, recall.number),
+      result: sampleResult(kind, k, recall.number),
     });
     if (kind === "paid" || kind === "unclaimed" || kind === "reviewed_paid") {
       // Paid in the next morning's batch (17:00 UTC, 9 am Pacific), once the claim is verified or approved.
@@ -255,10 +261,31 @@ async function main() {
   const ready = await ensureReadyClaims(firm.id, recall.number, now);
   if (!ready) console.log("seed-firm: the claims ready to pay were already there (or no sandbox buyer is known).");
 
+  // The buyers step: a labelled sample of a PayPal Transaction Search answer, built from the sandbox test buyer, run
+  // through the real search code and saved as sales marked SAMPLE_TS_MARK (src/lib/firm/samples/transaction-search.ts).
+  let searchBuyers = 0;
+  const buyer = await readyPayee();
+  if (buyer && recall.number === SAMPLE_RECALL) {
+    const body = sampleTransactionSearch(buyer, now);
+    const found = await findBuyers(
+      { start: new Date(now.getTime() - 30 * DAY), end: now, product: { name: SHOP.product.name, sku: SHOP.product.sku } },
+      { rest: async () => ({ status: 200, body }) as never, store: {} as never, ledger: memoryLedger().ledger, now: () => now },
+    );
+    for (const b of found.buyers) {
+      const have = (await db().execute(sql`select 1 from sale s where s.firm_id = ${firm.id} and s.paypal_order_id = ${SAMPLE_TS_MARK} and s.paid_at = ${new Date(b.paidAt)}`)).rows;
+      if (have.length) continue;
+      await db().execute(sql`
+        insert into sale (firm_id, recall_number, source, buyer_email_hash, buyer_contact_enc, item_name, sku, quantity, amount, paid_at, paypal_order_id, paypal_capture_id)
+        values (${firm.id}, ${recall.number}, 'paypal', null, ${encrypt(buyer)}, ${b.item}, ${b.sku}, ${b.quantity}, ${(b.amountCents / 100).toFixed(2)}, ${new Date(b.paidAt)}, ${SAMPLE_TS_MARK}, null)`);
+      searchBuyers++;
+    }
+  }
+
   // The recorded look-alike on recall 26754, if it was recorded.
   let recorded = false;
   if (existsSync(RECORDED)) {
     const rec = JSON.parse(readFileSync(RECORDED, "utf8")) as {
+      recordedAt: string;
       result: { decision: "verified" | "retake" | "firm_review"; decided_by: string; checks: Checks; review: unknown; summary: unknown; guidance?: unknown; quality: { ok: boolean; issues: string[] }; timings: unknown; model: string | null; usage: unknown };
     };
     const bytes = readFileSync(path.join(process.cwd(), "content", "verify", "fixtures", LOOK_ALIKE.photo));
@@ -278,7 +305,18 @@ async function main() {
       decided: new Date(created.getTime() + 40_000),
       debate: rec.result.review,
       photoId: ph.id,
-      result: { decided_by: rec.result.decided_by, guidance: rec.result.guidance ?? null, summary: rec.result.summary, quality: { ok: rec.result.quality.ok, issues: rec.result.quality.issues }, timings: rec.result.timings, model: rec.result.model, usage: rec.result.usage, recorded: true },
+      result: {
+        decided_by: rec.result.decided_by,
+        guidance: rec.result.guidance ?? null,
+        summary: rec.result.summary,
+        quality: { ok: rec.result.quality.ok, issues: rec.result.quality.issues },
+        timings: rec.result.timings,
+        model: rec.result.model,
+        usage: rec.result.usage,
+        sample: true,
+        photo: { kind: "cpsc_example", what: "the CPSC's own made-safe example for recall 26125 (a different hair dryer)", credit: "US Consumer Product Safety Commission, public domain" },
+        recorded: { file: "src/lib/firm/samples/look-alike.json", at: "one live check of this photo against recall 26754, recorded", recordedAt: rec.recordedAt, live: true },
+      },
     });
     recorded = true;
   }
@@ -315,8 +353,8 @@ async function main() {
       values (${firm.id}, ${recall.number}, 'notice', ${contact.includes("@") ? "email" : "sms"}, ${hashContact(contact)}, 'sent', 'sample', ${sentAt}, ${sentAt})`);
   }
 
-  await audit("system", "seed.firm_history", `firm:${firm.id}`, { recall: recall.number, claims: kinds.length, ready, recorded, removed });
-  console.log(`seed-firm: ${kinds.length} sample claims on ${recall.number}, ${ready} new claims ready to pay ($${READY_AMOUNT} each), ${batches.size} sample payout batches, ${unclaimed.length} waiting to be accepted${recorded ? ", 1 recorded look-alike on 26754" : ""}; removed ${removed} earlier sample claims.`);
+  await audit("system", "seed.firm_history", `firm:${firm.id}`, { recall: recall.number, claims: kinds.length, ready, recorded, removed, searchBuyers });
+  console.log(`seed-firm: ${kinds.length} sample claims on ${recall.number}, ${ready} new claims ready to pay ($${READY_AMOUNT} each), ${batches.size} sample payout batches, ${unclaimed.length} waiting to be accepted${recorded ? ", 1 recorded look-alike on 26754" : ""}, ${searchBuyers} sample Transaction Search buyers; removed ${removed} earlier sample claims.`);
   process.exit(0);
 }
 

@@ -1,25 +1,6 @@
 "use client";
 
-import {
-  ClientSideRowModelModule,
-  CsvExportModule,
-  DateFilterModule,
-  ModuleRegistry,
-  NumberFilterModule,
-  QuickFilterModule,
-  RowSelectionModule,
-  TextFilterModule,
-  ExternalFilterModule,
-  CellStyleModule,
-  RenderApiModule,
-  RowApiModule,
-  TooltipModule,
-  type ColDef,
-  type GridApi,
-  type ICellRendererParams,
-  type IRowNode,
-  type SelectionChangedEvent,
-} from "ag-grid-community";
+import { ClientSideRowModelModule, CsvExportModule, DateFilterModule, ModuleRegistry, NumberFilterModule, QuickFilterModule, RowSelectionModule, TextFilterModule, ExternalFilterModule, CellStyleModule, RenderApiModule, RowApiModule, TooltipModule, type ColDef, type GridApi, type ICellRendererParams, type IRowNode, type SelectionChangedEvent, type RowClickedEvent, type CellKeyDownEvent } from "ag-grid-community";
 import { ColumnMenuModule, LicenseManager, SetFilterModule, StatusBarModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
@@ -69,6 +50,9 @@ type Props = {
   /** Called once the grid has drawn its first rows, so the server-rendered first rows can step aside. */
   onReady?: () => void;
 };
+
+/** The parts of a row that keep their own click: the select box, buttons and links. */
+const ROW_CONTROLS = "button, a, input, label, .ag-selection-checkbox, .ag-checkbox-input-wrapper";
 
 export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelection, onReady }: Props) {
   const api = useRef<GridApi<QueueRow> | null>(null);
@@ -221,6 +205,26 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
   );
 
   const onSelectionChanged = useCallback((e: SelectionChangedEvent<QueueRow>) => onSelection(e.api.getSelectedRows().map((r) => r.id)), [onSelection]);
+  // A click anywhere on a row opens its claim, except on the row's own controls (the select box, a button or a link)
+  // and when the reviewer was selecting text to copy. Enter on a focused cell does the same from the keyboard.
+  const onRowClicked = useCallback(
+    (e: RowClickedEvent<QueueRow>) => {
+      const target = e.event?.target as HTMLElement | null;
+      if (!e.data || !target || target.closest(ROW_CONTROLS)) return;
+      if (window.getSelection()?.toString()) return;
+      onOpen(e.data.id, (target.closest(".ag-cell") as HTMLElement | null) ?? null);
+    },
+    [onOpen],
+  );
+  const onCellKeyDown = useCallback(
+    (e: CellKeyDownEvent<QueueRow>) => {
+      const k = e.event as KeyboardEvent | null | undefined;
+      const target = k?.target as HTMLElement | null;
+      if (k?.key !== "Enter" || !e.data || (target && target.closest(ROW_CONTROLS))) return;
+      onOpen(e.data.id, (target?.closest(".ag-cell") as HTMLElement | null) ?? null);
+    },
+    [onOpen],
+  );
   const isExternalFilterPresent = useCallback(() => true, []);
   const doesExternalFilterPass = useCallback((n: IRowNode<QueueRow>) => (n.data ? filterRef.current(n.data) : false), []);
 
@@ -241,6 +245,8 @@ export function ClaimsGrid({ handleRef, rows, search, filter, onOpen, onSelectio
       }}
       onFirstDataRendered={() => onReady?.()}
       onSelectionChanged={onSelectionChanged}
+      onRowClicked={onRowClicked}
+      onCellKeyDown={onCellKeyDown}
       statusBar={ENTERPRISE ? { statusPanels: [{ statusPanel: "agTotalAndFilteredRowCountComponent", align: "left" }, { statusPanel: "agSelectedRowCountComponent", align: "left" }] } : undefined}
       overlayNoRowsTemplate='<span class="muted">No claims in this view.</span>'
       animateRows={false}

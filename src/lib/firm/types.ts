@@ -141,7 +141,10 @@ export type HomeSummary = {
   needsReview: number;
   readyToPay: number;
   nextReport: { index: number; month: string; dueOn: string; daysLeft: number } | null;
+  /** The oldest payouts waiting to be accepted, at most UNCLAIMED_SHOWN of them. */
   unclaimed: { claimId: string; claimant: string; amountCents: number; since: string; sample: boolean; status: PayStatus }[];
+  /** How many claims wait for their payout to be accepted, counted on its own: the queue's "Waiting to be accepted" view. */
+  unclaimedCount: number;
   sampleClaims: number;
   /** Every claim in this console, across its recalls: what the claims queue lists. */
   claimsAllRecalls: { claims: number; recalls: number };

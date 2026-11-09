@@ -956,9 +956,17 @@
   font-size: 0.9375rem;
 }
 .tp-time {
+  display: grid;
+  justify-items: end;
   font-size: 1.25rem;
   font-weight: 500;
   white-space: nowrap;
+}
+/* What the time is: this recorded run's own, replayed (src/lib/time-words.ts). */
+.tp-time-k {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
 }
 .tp-about {
   margin-top: 4px;

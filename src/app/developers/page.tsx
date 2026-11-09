@@ -6,6 +6,7 @@ import { CopyButton } from "@/components/developers/CopyButton";
 import { DevConsole } from "@/components/developers/DevConsole";
 import { EmbedBadge } from "@/components/developers/EmbedBadge";
 import { McpSession } from "@/components/developers/McpSession";
+import { PoolTrust } from "@/components/evidence/PoolTrust";
 import { LIMITS } from "@/lib/api/keys";
 import { pageOrigin } from "@/lib/origin";
 import "../pages.css";
@@ -102,6 +103,20 @@ export default function DevelopersPage() {
           </p>
         </li>
       </ul>
+
+      <section id="hash-pool" className="page-section dev-trust" aria-labelledby="hash-pool-h">
+        <h2 id="hash-pool-h">The shared hash pool</h2>
+        <p className="page-prose">A photo already paid at one firm is held at the next, before any model call. Who may write to the pool, who may read it, and what crosses between firms:</p>
+        <PoolTrust className="dev-trust-list" />
+        <p className="dev-use-link">
+          <Link className="text-link" href="/developers/docs#hash-pool-register">
+            Register a hash
+          </Link>{" "}
+          <Link className="text-link" href="/evidence#network">
+            One photo, two firms, recorded
+          </Link>
+        </p>
+      </section>
 
       <Suspense fallback={<p className="page-loading muted">Loading the recorded session</p>}>
         <HostedExamples />

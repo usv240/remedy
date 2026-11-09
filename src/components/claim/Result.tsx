@@ -22,7 +22,8 @@ export type ResultContext = {
  * drawing and the CPSC example), or firm review (who looks and when, and where to send the refund once approved).
  * `preview` is a ready-made example on /try: it shows the answer and never pays.
  */
-export function Result({ claim, ctx, onRetake, onPaid, preview = false }: { claim: ClaimView; ctx: ResultContext; onRetake?: () => void; onPaid?: (p: PayView) => void; preview?: boolean }) {
+/** `previewNote` replaces the ready-made example's note, where the example offers its own way to pay (the sandbox payout on /try). */
+export function Result({ claim, ctx, onRetake, onPaid, preview = false, previewNote }: { claim: ClaimView; ctx: ResultContext; onRetake?: () => void; onPaid?: (p: PayView) => void; preview?: boolean; previewNote?: string }) {
   const d = claim.decision;
   if (d === "verified") {
     return (
@@ -41,7 +42,7 @@ export function Result({ claim, ctx, onRetake, onPaid, preview = false }: { clai
           </p>
         )}
         {preview || !onPaid ? (
-          <p className="cl-note">This is a ready-made example, so nothing is paid. Run your own photo to send a sandbox refund.</p>
+          <p className="cl-note">{previewNote ?? "This is a ready-made example, so nothing is paid. Run your own photo to send a sandbox refund."}</p>
         ) : (
           <Payout claim={claim} onDone={onPaid} />
         )}

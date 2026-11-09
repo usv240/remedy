@@ -6,6 +6,7 @@ import { hostedDailyUsd } from "@/lib/ai/hosted-budget";
 import { dailyBudgetUsd } from "@/lib/ai/usage";
 import { ENTERPRISE_FEATURES } from "@/components/firm/ag-license";
 import { TOOLS } from "@/lib/mcp/tools";
+import { perRefund } from "@/lib/pricing";
 import { aboutSeconds, PROBLEM, RESEARCH } from "@/lib/research";
 import { catalogCounts, catalogOfficialHashes } from "@/lib/verify/dhash";
 import { derived, skipNeed, testsHash } from "../scripts/facts";
@@ -28,6 +29,7 @@ type Facts = {
   catalogPictures: number;
   catalog: { stored: number; distinctHashes: number; catalog: number };
   measured: { checkSeconds: number | null; payoutSeconds: number | null };
+  history: { first: string; latest: string; latestCommit: string; sentence: string } | null;
 } & ReturnType<typeof derived>;
 const facts = JSON.parse(readFileSync(FACTS, "utf8")) as Facts;
 const README = read("README.md");
@@ -266,10 +268,16 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
 
   it("who pays, Venmo in the sandbox, and the end-to-end transcript", () => {
     // Who pays Remedy: the README and the pilot say the same, with the two issuer figures from src/lib/research.ts.
-    expect(README).toContain(`**Who pays Remedy:** the firm, a fee per finished claim, set against the ${PROBLEM.checkCost.cost} a paper check costs its issuer and the ${PROBLEM.payoutFee.fee} a PayPal payout costs the sender`);
+    expect(README).toContain("**Who pays Remedy:** the firm, a fee per finished claim.");
     const pilot = read("src", "app", "evidence", "market", "page.tsx") + read("src", "components", "evidence", "Adoption.tsx");
     expect(pilot).toContain("Who pays Remedy:");
     expect(pilot).toContain("PROBLEM.checkCost.cost");
+    // The proposed fee, labelled a proposal, beside what a refund costs a firm today: one sentence, from src/lib/pricing.ts.
+    const fee = perRefund();
+    expect(fee.sentence).toMatch(/^Proposed: .* \(a proposal, not a price list\)/);
+    expect(fee.checkLow).toBeGreaterThan(Number(fee.withRemedy.slice(1)));
+    expect(README).toContain(fee.sentence.replace(/\.$/, ""));
+    expect(pilot).toContain("perRefund().sentence");
     // Venmo: the sandbox refuses the wallet and the payout is resent by phone; the README says so wherever it offers Venmo.
     const payouts = read("src", "lib", "payments", "payouts.ts");
     expect(payouts).toContain('recipient_wallet: "VENMO"');
@@ -280,7 +288,7 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     const file = path.join(ROOT, "content", "public", "e2e-transcript.json");
     expect(existsSync(file)).toBe(true);
     const t = JSON.parse(readFileSync(file, "utf8")) as { suites: Record<string, { passed: number; failed: number; steps: unknown[]; ids: Record<string, unknown> }> };
-    expect(Object.keys(t.suites).sort()).toEqual(["claim", "claim-shop"]);
+    expect(Object.keys(t.suites).sort()).toEqual(["claim", "claim-shop", "try-payout"]);
     for (const s of Object.values(t.suites)) {
       expect(s.failed).toBe(0);
       expect(s.steps.length).toBeGreaterThan(5);
@@ -291,6 +299,10 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     expect(raw).not.toMatch(/rm_test_[A-Za-z0-9]{20,}|localhost:\d+/);
     expect(t.suites["claim-shop"].ids.refund_id).toBeTruthy();
     expect(t.suites.claim.ids.payout_item_id).toBeTruthy();
+    // The one-click sandbox payout on /try: one real sandbox payout, its batch id, and PayPal reporting it paid.
+    expect(t.suites["try-payout"].ids).toMatchObject({ amount: "34.99", route: "payout" });
+    expect(t.suites["try-payout"].ids.payout_batch_id).toBeTruthy();
+    expect(t.suites["try-payout"].ids.payout_status).toBe("SUCCESS");
     for (const text of [README, doc("results.md")]) expect(text).toContain("content/public/e2e-transcript.json");
   });
 
@@ -412,6 +424,36 @@ describe("the README, docs/*.md and TESTING.md print the same figures", () => {
     for (const [p] of all(README, /\]\(((?:src|content|tests|scripts|docs|public|\.github)\/[\w./\-[\]]+)\)/g)) expect(existsSync(path.join(ROOT, p)), p).toBe(true);
     // The submission-period sentence names the first and latest commit dates.
     expect(README).toMatch(/first commit is dated November \d+, 2026 and the latest November \d+, 2026/);
+  });
+
+  it("figures that could be read two ways say which they are, and the history sentence is computed", () => {
+    // 1,779 is the whole catalog of distinct published pictures; the reuse run compares each photo with every other
+    // recall's pictures, which for the sample charger's photos is the catalog less the sample recall's own.
+    const reuse = JSON.parse(read("content", "public", "hash-reuse-run.json")) as { falseMatches: { unrelatedRefs: { catalog: number } } };
+    const catalog = catalogOfficialHashes();
+    const own = catalog.filter((c) => c.recall === "BH-2026-01").length;
+    expect(own).toBeGreaterThan(0);
+    expect(reuse.falseMatches.unrelatedRefs.catalog).toBe(catalog.length - own);
+    expect(doc("results.md")).toContain(`(${int(catalog.length - own)} for the sample charger's photos: the catalog's ${int(catalog.length)} across all recalls, less the sample recall's own ${own})`);
+    const research = read("src", "components", "evidence", "Research.tsx");
+    expect(research).toContain("in a catalog of ${catalogOfficialHashes().length");
+    for (const text of [...ALL, research]) expect(text).not.toMatch(/[\d,]+ (?:distinct )?published pictures of other recalls/);
+    // The README's history sentence is the one scripts/facts.ts computed from git.
+    expect(facts.history).not.toBeNull();
+    expect(README).toContain(facts.history!.sentence);
+    // A refund to the original purchase: PayPal marked it COMPLETED at once, and says how long it takes to reach the buyer.
+    const t = JSON.parse(read("content", "public", "e2e-transcript.json")) as { suites: Record<string, { ids: Record<string, unknown> }> };
+    expect(t.suites["claim-shop"].ids.refund_status).toBe("COMPLETED");
+    for (const text of [README, doc("research.md")]) {
+      expect(text).toContain("COMPLETED at once");
+      expect(text).toContain(PROBLEM.refundTerms.reach);
+    }
+    const pages = ["src/app/page.tsx", "src/components/evidence/Contrast.tsx", "src/components/evidence/Compare.tsx", "content/public/measured.json"].map((f) => read(...f.split("/")));
+    for (const text of [...ALL, ...pages]) expect(text).not.toMatch(/went through at once|the sandbox did at once/);
+    // The CPSC's FY2025 figure is an average correction rate across recalls, never a share of recalled products.
+    const home = read("src", "app", "page.tsx");
+    expect(home).toContain("its average correction rate across recalls was {PROBLEM.correctionRate.rate}");
+    for (const text of [...ALL, home]) expect(text).not.toMatch(/of recalled products were corrected/);
   });
 
   it("the problem, measured from primary sources: the README and docs/research.md print the figures src/lib/research.ts holds", () => {

@@ -18,7 +18,7 @@ export type Endpoint = {
   ai?: boolean;
   keyed: boolean;
   /** The key scope the endpoint needs: read, verify or payments:sandbox. */
-  scope?: "read" | "verify" | "payments:sandbox";
+  scope?: "read" | "verify" | "payments:sandbox" | "hash-pool:register";
   /** The path the playground calls, with sample values in place of {params}, for example /api/v1/recalls/27056. */
   samplePath?: string;
   /** Query parameters for GET endpoints. The first example values make the playground's request. */
@@ -281,13 +281,13 @@ export const ENDPOINTS: Endpoint[] = [
     summary: "Add the hash of a photo your firm has paid a claim on, so the same photo sent to any other firm is held for a person before any model call. Only the hash, your recall number and your own opaque ref are stored.",
     example: { dhash: "337bfb9f4e7f3e0f", recall_number: "BH-2026-01", ref: "partner-demo-1" },
     keyed: true,
-    scope: "verify",
+    scope: "hash-pool:register",
     responseFields: [
       { name: "registered", type: "boolean", about: "True when the row is new. False when the same ref was already in the pool; nothing changed." },
       { name: "ref", type: "string", about: "The ref stored: yours, or the UUID Remedy made." },
       { name: "dhash", type: "string", about: "The hash stored." },
     ],
-    note: "Needs an API key. The key is not written to the row, so a hit at another firm can never name yours. A hash within 4 bits of a registered one, sent on any other recall at any firm, is held for a person at that firm.",
+    note: "Needs a firm key: a key tied to a firm connected to Remedy, with the hash-pool:register scope, issued to the firm when it connects. A self-serve sandbox key is answered 403 forbidden; checking needs no key. The firm is recorded in Remedy's audit ledger, never in the pool row, so a hit at another firm can never name yours. A hash within 4 bits of one registered, sent on any other recall at any firm, is held for a person at that firm.",
   },
   {
     id: "badge",
@@ -325,6 +325,7 @@ export const ENDPOINTS: Endpoint[] = [
 export const ERRORS = [
   { code: "invalid_request", status: "400, 409, 413, 422", plain: "Something in the request is missing or not valid. The message says what; details lists each field." },
   { code: "unauthorized", status: "401", plain: "The API key is not valid or was revoked, or the call needs a key. Create a new key on the Developers page." },
+  { code: "forbidden", status: "403", plain: "The key is valid but cannot make this call: registering a hash in the shared pool needs a key tied to a firm connected to Remedy. Checking a hash needs no key." },
   { code: "not_found", status: "404", plain: "The thing you asked for does not exist, such as an unknown recall or claim." },
   { code: "rate_limited", status: "429", plain: "Too many requests. Wait for the time in the Retry-After header. Keys allow 60 a minute and 1,000 a day." },
   { code: "upstream_unavailable", status: "502, 503", plain: "PayPal or the AI service did not answer, or is not connected on this server. The message says which." },

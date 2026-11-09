@@ -3,7 +3,7 @@ import { qualityGuidance } from "./quality";
 import type { CheckId, Checks, Decision, Guidance, QualityReport, VerifyProofRule, VerifyRecall } from "./types";
 
 /**
- * The decision (plan 7.2), in plain code:
+ * The decision (docs/how-it-works.md, "How it works"), in plain code:
  *  - verified: C1 to C6 pass and the amount is at or under the firm's auto-approve cap;
  *  - retake: C2 fails or the photo quality is low, with guidance naming what to change. A photo that is not the
  *    owner's own (the official image, a screen, a printout, a web picture) also gets a retake asking for their own

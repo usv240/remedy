@@ -399,3 +399,36 @@
   font-weight: 400;
   font-size: 1.5rem;
 }
+
+/* The one-click sandbox payout under the verified sample charger: one action, labelled a sandbox payout. */
+.tr-pay {
+  margin-top: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  display: grid;
+  gap: 8px;
+  max-width: 44rem;
+}
+.tr-pay p {
+  margin: 0;
+}
+.tr-pay-head {
+  font-weight: 600;
+}
+.tr-pay-note {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.tr-pay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+}
+.tr-pay-state {
+  font-size: 0.9375rem;
+  min-height: 1.4em;
+}

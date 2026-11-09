@@ -1,3 +1,4 @@
+import { clientIp } from "@/lib/ratelimit";
 import { visitorHash } from "@/lib/firm/limits";
 import { fail, ok } from "@/lib/api/envelope";
 import { guard } from "@/lib/api/keys";
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
   return guard(req, "POST /api/claims", async () => {
     const started = Date.now();
     const test = isTestRequest(req);
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "local";
+    const ip = clientIp(req);
     const limit = await liveLimit({ ip, keyed: hasApiKey(req), test });
     if (!limit.ok) {
       const res = fail("rate_limited", limit.message, 429);

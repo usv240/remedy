@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { fmtMs } from "@/lib/api/format";
+import { TIME_WORDS } from "@/lib/time-words";
 import { MEASURED, cpscExampleRun } from "./data";
 import { checkTimes, hashSpeed } from "./errors";
 
@@ -14,7 +15,7 @@ export function Measured() {
         <li>
           <p className="jm-fig tabular">about {ct.about} s</p>
           <p className="jm-what">
-            for one photo check by Claude Opus 5.5 at the claim path&rsquo;s setting: a median of {ct.check.median} s, {ct.check.min} to {ct.check.max} s across {ct.check.n} recorded live checks. When the product match is unclear, the two reviewers add a
+            for one photo check by Claude Opus 5.5 at the claim path&rsquo;s setting, the {TIME_WORDS.median}: a median of {ct.check.median} s, {ct.check.min} to {ct.check.max} s across {ct.check.n} recorded live checks. When the product match is unclear, the two reviewers add a
             median of {ct.reviewers.median} s ({ct.reviewers.min} to {ct.reviewers.max} s in {ct.reviewers.n} runs).
           </p>
           <p className="jm-src">Counted from {ct.sources.join(", ")}</p>

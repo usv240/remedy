@@ -5,7 +5,7 @@ export const size = OG_SIZE;
 export const contentType = "image/png";
 export const alt = "Remedy: recall refunds in seconds. Snap a photo of the product made safe, AI checks it, PayPal pays you.";
 
-/** The site's share image: the headline, and the one figure that frames it (CPSC data, plan section 4.6). */
+/** The site's share image: the headline, and the one figure that frames it (CPSC data). */
 export default async function Image() {
   const fonts = await ogFonts();
   return new ImageResponse(

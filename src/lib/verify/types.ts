@@ -1,18 +1,18 @@
 /**
- * Types for Remedy's photo verification engine (plan section 7.2).
+ * Types for Remedy's photo verification engine (docs/how-it-works.md, "How it works").
  * The model reports what it sees; plain code makes every decision, computes every amount and picks every route.
  */
 
-/** Actions a proof rule can ask the owner to take (plan section 7.1). */
+/** Actions a proof rule can ask the owner to take (docs/how-it-works.md, "How it works"). */
 export const PROOF_ACTIONS = ["cut_cord", "cut_in_half", "write_recalled", "remove_part", "puncture", "disassemble", "other"] as const;
 export type ProofAction = (typeof PROOF_ACTIONS)[number];
 
-/** What the photo must show (plan section 7.1). */
+/** What the photo must show (docs/how-it-works.md, "How it works"). */
 export const MUST_SHOW = ["whole_product", "label", "model_number", "serial_or_lot", "date_code", "cut_or_damage", "marking"] as const;
 export type MustShow = (typeof MUST_SHOW)[number];
 
 /**
- * The parts of a proof rule the verifier reads. Structurally compatible with the full ProofRule schema in plan 7.1,
+ * The parts of a proof rule the verifier reads. Structurally compatible with the full ProofRule schema (src/lib/recall/proof-rule.ts),
  * so the data builder's rule can be passed in as it is.
  */
 export type VerifyProofRule = {

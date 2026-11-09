@@ -247,7 +247,7 @@ export async function priorRefundCheck(captureId: string, partial?: Partial<Paym
   return { refunded: r.refunded, disputed, plain: r.plain, technical: r.technical };
 }
 
-/** Check C6 in the verification builder's shape. No linked purchase passes, as the plan says. */
+/** Check C6 in the verification builder's shape. No linked purchase passes: there is no earlier PayPal refund to find. */
 export async function c6Check(captureId: string | null | undefined, partial?: Partial<PaymentsDeps>) {
   if (!captureId) return { pass: true, reason_plain: "No PayPal purchase linked.", reason_technical: "No capture id on this claim.", evidence: null };
   const r = await hasPriorRefund(captureId, partial);

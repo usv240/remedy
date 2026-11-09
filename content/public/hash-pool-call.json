@@ -1,17 +1,36 @@
 {
-  "note": "A firm joining the shared hash pool from outside the app: three real curl calls against a local production build, recorded by scripts/public/record-hash-pool-call.ts. The register call used a sandbox API key, shown masked; the key is never stored on the row, so a hit names no firm. Only the 64-bit hash and an opaque ref cross. Brightline Home, Fernway Home and their recalls are fictional samples; the photo is the sample charger (Dmitry G, Wikimedia Commons, public domain) and the mug is Kurt Kaiser, CC0.",
-  "recordedAt": "2026-11-09T00:10:48.686Z",
+  "note": "A firm joining the shared hash pool from outside the app: four real curl calls against a local production build, recorded by scripts/public/record-hash-pool-call.ts. A self-serve sandbox key is refused (403) when it tries to register; Brightline Home's own firm key registers, both shown masked. The firm is kept in Remedy's audit ledger, never on the pool row, so a hit names no firm. Only the 64-bit hash and an opaque ref cross. Brightline Home, Fernway Home and their recalls are fictional samples; the photo is the sample charger (Dmitry G, Wikimedia Commons, public domain) and the mug is Kurt Kaiser, CC0.",
+  "recordedAt": "2026-11-09T09:58:05.434Z",
   "crossed": [
     "dhash",
     "ref"
   ],
   "calls": [
     {
+      "step": "register-self-serve",
+      "why": "A self-serve sandbox key from the Developers page tries to register the same hash: only a key tied to a connected firm may write to the pool.",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -H \"Authorization: Bearer rm_test_...\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"BH-2026-01\",\"ref\":\"partner-demo-1\"}' http://localhost:3405/api/v1/hash-pool/register",
+      "status": 403,
+      "ms": 79,
+      "response": {
+        "data": null,
+        "meta": {
+          "request_id": "req_d4ecbcb675a34ed28531",
+          "version": "2026-11-05"
+        },
+        "error": {
+          "code": "forbidden",
+          "message": "This key can check hashes but not register them. Registering is for firms connected to Remedy, each with a key tied to its firm (scope hash-pool:register), so the shared pool holds only photos a firm has paid on. Request id: req_d4ecbcb675a34ed28531",
+          "docs": "/developers/docs#errors-forbidden"
+        }
+      }
+    },
+    {
       "step": "register",
-      "why": "Brightline Home has paid a claim on this photo and registers its hash for its own recall, with its own opaque ref.",
-      "command": "curl -X POST -H \"Content-Type: application/json\" -H \"Authorization: Bearer rm_test_...\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"BH-2026-01\",\"ref\":\"partner-demo-1\"}' http://localhost:3401/api/v1/hash-pool/register",
+      "why": "Brightline Home has paid a claim on this photo and registers its hash for its own recall, with its own firm key and opaque ref.",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -H \"Authorization: Bearer rm_test_...\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"BH-2026-01\",\"ref\":\"partner-demo-1\"}' http://localhost:3405/api/v1/hash-pool/register",
       "status": 200,
-      "ms": 386,
+      "ms": 74,
       "response": {
         "data": {
           "registered": true,
@@ -20,9 +39,9 @@
           "note": "In the pool. A photo within 4 bits of this hash, sent on any other recall at any firm, is now held for a person."
         },
         "meta": {
-          "request_id": "req_7100a81a4c1d4c2fba11",
+          "request_id": "req_1bd6eb11487d443ebf0d",
           "version": "2026-11-05",
-          "latency_ms": 62
+          "latency_ms": 20
         },
         "error": null
       }
@@ -30,9 +49,9 @@
     {
       "step": "check-hit",
       "why": "Fernway Home receives the same photo on its own recall and asks the pool with the hash alone.",
-      "command": "curl -X POST -H \"Content-Type: application/json\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"FW-2026-01\"}' http://localhost:3401/api/v1/hash-pool/check",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -d '{\"dhash\":\"337bfb9f4e7f3e0f\",\"recall_number\":\"FW-2026-01\"}' http://localhost:3405/api/v1/hash-pool/check",
       "status": 200,
-      "ms": 455,
+      "ms": 63,
       "response": {
         "data": {
           "hit": true,
@@ -47,9 +66,9 @@
           }
         },
         "meta": {
-          "request_id": "req_91a5d0cec12d4cb2a531",
+          "request_id": "req_25b40d39181f46959446",
           "version": "2026-11-05",
-          "latency_ms": 248
+          "latency_ms": 10
         },
         "error": null
       }
@@ -57,9 +76,9 @@
     {
       "step": "check-no-hit",
       "why": "A photo of a mug, never claimed anywhere, asked the same way: no hit.",
-      "command": "curl -X POST -H \"Content-Type: application/json\" -d '{\"dhash\":\"22626e3a339458d1\",\"recall_number\":\"FW-2026-01\"}' http://localhost:3401/api/v1/hash-pool/check",
+      "command": "curl -X POST -H \"Content-Type: application/json\" -d '{\"dhash\":\"22626e3a339458d1\",\"recall_number\":\"FW-2026-01\"}' http://localhost:3405/api/v1/hash-pool/check",
       "status": 200,
-      "ms": 178,
+      "ms": 54,
       "response": {
         "data": {
           "hit": false,
@@ -74,9 +93,9 @@
           }
         },
         "meta": {
-          "request_id": "req_70c12b19d63041c28fbd",
+          "request_id": "req_7f3d2c64180b44469145",
           "version": "2026-11-05",
-          "latency_ms": 11
+          "latency_ms": 5
         },
         "error": null
       }

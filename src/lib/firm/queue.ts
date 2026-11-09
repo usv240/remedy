@@ -58,8 +58,14 @@ type StoredResult = {
   summary?: { plain: string; technical: string };
   guidance?: { plain: string; steps: string[]; technical: string } | null;
   model?: string | null;
-  timings?: { total_ms?: number };
+  timings?: { total_ms?: number } | null;
   quality?: { ok: boolean; issues: string[] };
+  /** A sample claim's photo, in words, with its credit (src/lib/firm/sample-claims.ts, scripts/seed-firm.ts). */
+  photo?: { kind?: string; what: string; credit: string } | null;
+  /** The recorded run a sample claim's checks are read from. `live`: the photo was checked live once and recorded. */
+  recorded?: { file: string; at?: string; recordedAt?: string; live?: boolean } | true | null;
+  /** "try": opened by the one-click sandbox payout on /try (src/app/api/try/_lib/sandbox-payout.ts). */
+  source?: string;
 };
 
 const iso = (d: Date | string | null) => (d === null ? null : typeof d === "string" ? new Date(d).toISOString() : d.toISOString());
@@ -158,18 +164,35 @@ async function rawClaim(firmId: number, claimId: string) {
   return r ?? null;
 }
 
-/** A note on what kind of claim this is, for the drawer. */
-function noteFor(r: Raw, extra: { recorded: boolean }) {
-  const note = noteText(r, extra);
-  return note && r.is_sample && r.photo_id && !extra.recorded ? `${note} Sample photo: Dmitry G, Wikimedia Commons, public domain.` : note;
-}
+const recordedDay = (iso?: string) => {
+  const d = iso ? new Date(iso) : null;
+  return d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }) : null;
+};
 
-function noteText(r: Raw, extra: { recorded: boolean }) {
-  if (extra.recorded) return "Sample claim. The photo is the CPSC's own made-safe example for recall 26125 (a different hair dryer), checked live once against this recall by Claude and recorded.";
-  if (r.is_sample && r.paypal_status === SAMPLE_PAYPAL_STATUS) return "Sample history (not paid). Seeded so the console is not empty; no money moved for this claim.";
-  if (r.is_sample && r.decision === "verified" && !r.paypal_status) return `Sample claim ready to pay, at the recall's refund of $${r.amount}. Paying it sends a real PayPal sandbox payout to the sandbox buyer, and two new sample claims take its place.`;
-  if (r.is_sample) return "Sample claim, seeded for the demo. Paying it sends a real PayPal sandbox payout.";
-  return null;
+/**
+ * A note on what kind of claim this is, for the drawer. A sample claim's caption describes its own photo, from what the
+ * seed stored with that claim (claim.result.photo and claim.result.recorded), never from where the photo row came from.
+ */
+export function claimNote(r: Pick<Raw, "is_sample" | "paypal_status" | "decision" | "amount" | "photo_id">, result: StoredResult | null): string | null {
+  if (!r.is_sample) return null;
+  const photo = r.photo_id && result?.photo ? result.photo : null;
+  const rec = result?.recorded && result.recorded !== true ? result.recorded : null;
+  if (photo && rec?.live) {
+    const day = recordedDay(rec.recordedAt);
+    return `Sample claim. The photo is ${photo.what}, checked live once against this recall by Claude${day ? ` on ${day}` : ""} and recorded (${rec.file}). Photo: ${photo.credit}.`;
+  }
+  const lead =
+    result?.source === "try"
+      ? "Sent from the Try page: a real PayPal sandbox payout to the sandbox buyer, after the sample charger's recorded checks."
+      : r.paypal_status === SAMPLE_PAYPAL_STATUS
+      ? "Sample history (not paid). Seeded so the console is not empty; no money moved for this claim."
+      : r.decision === "verified" && !r.paypal_status
+        ? `Sample claim ready to pay, at the recall's refund of $${r.amount}. Paying it sends a real PayPal sandbox payout to the sandbox buyer, and two new sample claims take its place.`
+        : "Sample claim, seeded for the demo. Paying it sends a real PayPal sandbox payout.";
+  if (!photo) return lead;
+  const day = recordedDay(rec?.recordedAt);
+  const checks = rec ? ` Its checks and scores are a recorded run of this photo (${rec.file}${day ? `, ${day}` : ""}); no model call was made for this claim.` : "";
+  return `${lead} The photo is ${photo.what} (${photo.credit}).${checks}`;
 }
 
 export async function claimDetail(firm: Firm, claimId: string): Promise<ClaimDetail | null> {
@@ -184,14 +207,12 @@ export async function claimDetail(firm: Firm, claimId: string): Promise<ClaimDet
     debate: Review | null;
     reviewed_by: string | null;
     reviewed_at: Date | null;
-    photo_source: string | null;
     paid_at: Date | null;
     result: StoredResult | null;
   }>(sql`
-    select r.url, r.units, pr.rule, pr.source as rule_source, c.debate, c.reviewed_by, c.reviewed_at, ph.source as photo_source, s.paid_at, c.result
+    select r.url, r.units, pr.rule, pr.source as rule_source, c.debate, c.reviewed_by, c.reviewed_at, s.paid_at, c.result
     from claim c join recall r on r.number = c.recall_number
     left join lateral (select rule, source from proof_rule where recall_number = c.recall_number order by version desc limit 1) pr on true
-    left join photo ph on ph.id = c.photo_id
     left join sale s on s.id = c.linked_sale_id
     where c.id = ${claimId}::uuid`);
   const rule = extra?.rule as { steps?: string[]; actions?: string[]; must_show?: string[]; explanation?: { plain?: string } } | null;
@@ -267,7 +288,7 @@ export async function claimDetail(firm: Firm, claimId: string): Promise<ClaimDet
           quality: extra.result.quality ?? null,
         }
       : null,
-    note: noteFor(r, { recorded: extra?.photo_source === "preset" }),
+    note: claimNote(r, extra?.result ?? null),
     reviewedBy: extra?.reviewed_by ?? null,
     reviewedAt: extra?.reviewed_at ? new Date(extra.reviewed_at).toISOString() : null,
   });

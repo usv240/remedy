@@ -103,7 +103,7 @@ async function planRowsById(firm: Firm, id: number) {
   return raw.map(toRow);
 }
 
-/** Sample reviewers at Brightline Home (fictional). Ana is the compliance lead from the plan's people. */
+/** Sample reviewers at Brightline Home (fictional). Ana is the compliance lead. */
 export const REVIEWERS = [
   { id: "ana", name: "Ana", role: "Compliance lead" },
   { id: "devon", name: "Devon", role: "Claims reviewer" },

@@ -1,0 +1,662 @@
+{
+  "note": "Written by scripts/verify/sample-claim-runs.ts from content/presets/recorded/sample-charger-cut.json and content/verify/sweep-sample.json. Every check, score, decision and reviewer vote a sample claim shows is one of these recorded runs; no model call was made for any sample claim.",
+  "runs": [
+    {
+      "id": "cut-verified",
+      "photo": "made_safe",
+      "from": {
+        "file": "content/presets/recorded/sample-charger-cut.json",
+        "at": "the recorded vision answer and both reviewers' votes, replayed through the verifier",
+        "trial": null,
+        "recordedAt": "2026-11-08T05:12:08.175Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "verified",
+      "decidedBy": "reviewers",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": false,
+          "status": "unclear",
+          "score": 0.8,
+          "reason_plain": "We could not confirm this is the exact recalled product.",
+          "reason_technical": "Claude vision match score 0.8 (pass at 0.85, unclear from 0.5). Strain relief texture, case profile, ferrite bead and barrel plug match the official images. No printed brand, label or model number is readable to confirm the exact product, so score stays below 0.9."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "The photo shows the product made safe.",
+          "reason_technical": "cut_cord: confirmed, confidence 0.9. At left center, the cord is severed at its strain relief collar where it attaches to the case, with stranded bare wires and a white insulated wire sticking out of the cut end. The opened case is at right."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.92,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.92; signs: none). Real hand, natural shadows, shallow focus and a casual tabletop setting with no screen or print artifacts. dHash 337bfb9f4e7f3e0f; nearest official 24 bits, nearest earlier claim none (reused at 10 or less)."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "Your photo checks out.",
+        "technical": "Verified by two agreeing reviewers over soft items (C1 unclear). firm amount 34.99; no linked capture; refund 34.99 USD (firm, the lower); auto cap 50.00 USD. Reviewers: Product reviewer: meets, confidence 0.75; evidence: [right_product] Black charger housing with rounded end caps, opened and lying on its side, matching the shape of the recalled charger body (right side of the photo); [right_product] Black ribbed cord strain relief like the one where the cord meets the charger in official image 2, now pulled out of the housing (left center, held between the fingers); [right_product] Black fixed power cord running from the charger toward a barrel style DC plug (center of the photo, plug near top center); [made_safe] Cord cut at the strain relief with a white insulated wire and two bare stranded wires exposed (center left, sticking out to the right of the strain relief); [made_safe] Yellow insulating sheets removed from inside the housing, one with holes cut in it (top center and top right); [own_photo] Owner's thumb and finger in the foreground, shallow focus with the background blurred, real shadows and a seam line on the white surface (left edge foreground and across the background) | Remedy reviewer: meets, confidence 0.7; evidence: [made_safe] Black power cord end with its molded strain relief collar, with bare stranded metal wires and a white insulated wire sticking out, showing the cord has been severed at the collar where it joined the case (left center, held between the fingers); [made_safe] The separated cord runs loose across the table with no charger body attached to this end (center and bottom of the photo, looping cable); [right_product] Black charger housing, opened, lying on the table near the cut cord (right side of the photo); [right_product] Yellow and black insulating pieces from inside the charger case (top center and top right)"
+      },
+      "review": {
+        "reviews": [
+          {
+            "reviewer": "product",
+            "name": "Product reviewer",
+            "reads": "the official CPSC images and product data",
+            "answer": "meets",
+            "evidence": [
+              {
+                "check": "right_product",
+                "seen": "Black charger housing with rounded end caps, opened and lying on its side, matching the shape of the recalled charger body",
+                "where": "right side of the photo"
+              },
+              {
+                "check": "right_product",
+                "seen": "Black ribbed cord strain relief like the one where the cord meets the charger in official image 2, now pulled out of the housing",
+                "where": "left center, held between the fingers"
+              },
+              {
+                "check": "right_product",
+                "seen": "Black fixed power cord running from the charger toward a barrel style DC plug",
+                "where": "center of the photo, plug near top center"
+              },
+              {
+                "check": "made_safe",
+                "seen": "Cord cut at the strain relief with a white insulated wire and two bare stranded wires exposed",
+                "where": "center left, sticking out to the right of the strain relief"
+              },
+              {
+                "check": "made_safe",
+                "seen": "Yellow insulating sheets removed from inside the housing, one with holes cut in it",
+                "where": "top center and top right"
+              },
+              {
+                "check": "own_photo",
+                "seen": "Owner's thumb and finger in the foreground, shallow focus with the background blurred, real shadows and a seam line on the white surface",
+                "where": "left edge foreground and across the background"
+              }
+            ],
+            "model_read": null,
+            "marker_text_read": null,
+            "reason": {
+              "plain": "Meets. This is a real camera photo of a black laptop charger with a fixed cord, matching the recall, taken apart with its cord cut.",
+              "technical": "Housing profile with rounded end caps, ribbed strain relief, black fixed cord and barrel DC plug are consistent with official images 1 and 2. Recall lists no model numbers and none is visible, so identification rests on form and color. Photo shows hand in frame, depth of field blur and natural lighting, with no screen moire or print artifacts."
+            },
+            "confidence": 0.75,
+            "counted": true,
+            "set_aside_reason": null
+          },
+          {
+            "reviewer": "remedy",
+            "name": "Remedy reviewer",
+            "reads": "the recall's remedy text and proof rule",
+            "answer": "meets",
+            "evidence": [
+              {
+                "check": "made_safe",
+                "seen": "Black power cord end with its molded strain relief collar, with bare stranded metal wires and a white insulated wire sticking out, showing the cord has been severed at the collar where it joined the case",
+                "where": "left center, held between the fingers"
+              },
+              {
+                "check": "made_safe",
+                "seen": "The separated cord runs loose across the table with no charger body attached to this end",
+                "where": "center and bottom of the photo, looping cable"
+              },
+              {
+                "check": "right_product",
+                "seen": "Black charger housing, opened, lying on the table near the cut cord",
+                "where": "right side of the photo"
+              },
+              {
+                "check": "right_product",
+                "seen": "Yellow and black insulating pieces from inside the charger case",
+                "where": "top center and top right"
+              }
+            ],
+            "model_read": null,
+            "marker_text_read": null,
+            "reason": {
+              "plain": "Meets. The power cord is cut off at the collar where it joined the charger case, and the charger housing is in the same photo.",
+              "technical": "cut_cord is satisfied: the cord terminates at its strain relief grommet with exposed conductors (two bare stranded wires and one white insulated lead), so it is severed at the case junction. whole_product is shown as the opened black housing and internal insulator pieces in frame with the cord. The case has been disassembled, and the internal board is not visible, which slightly weakens the whole_product showing. No model label is readable."
+            },
+            "confidence": 0.7,
+            "counted": true,
+            "set_aside_reason": null
+          }
+        ],
+        "referee": {
+          "decision": "verify",
+          "agreed": true,
+          "summary": {
+            "plain": "Both reviewers found it in the photo: this is the recalled product, made safe.",
+            "technical": "Product reviewer: meets, confidence 0.75; evidence: [right_product] Black charger housing with rounded end caps, opened and lying on its side, matching the shape of the recalled charger body (right side of the photo); [right_product] Black ribbed cord strain relief like the one where the cord meets the charger in official image 2, now pulled out of the housing (left center, held between the fingers); [right_product] Black fixed power cord running from the charger toward a barrel style DC plug (center of the photo, plug near top center); [made_safe] Cord cut at the strain relief with a white insulated wire and two bare stranded wires exposed (center left, sticking out to the right of the strain relief); [made_safe] Yellow insulating sheets removed from inside the housing, one with holes cut in it (top center and top right); [own_photo] Owner's thumb and finger in the foreground, shallow focus with the background blurred, real shadows and a seam line on the white surface (left edge foreground and across the background) | Remedy reviewer: meets, confidence 0.7; evidence: [made_safe] Black power cord end with its molded strain relief collar, with bare stranded metal wires and a white insulated wire sticking out, showing the cord has been severed at the collar where it joined the case (left center, held between the fingers); [made_safe] The separated cord runs loose across the table with no charger body attached to this end (center and bottom of the photo, looping cable); [right_product] Black charger housing, opened, lying on the table near the cut cord (right side of the photo); [right_product] Yellow and black insulating pieces from inside the charger case (top center and top right)"
+          }
+        },
+        "model": "claude-opus-5-5",
+        "ms": 10959
+      }
+    },
+    {
+      "id": "made_safe-firm_review-trial-3",
+      "photo": "made_safe",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-cut, setting opus-medium, trial 3",
+        "trial": 3,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "firm_review",
+      "decidedBy": "reviewers",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": false,
+          "status": "unclear",
+          "score": 0.82,
+          "reason_plain": "We could not confirm this is the exact recalled product.",
+          "reason_technical": "Claude vision match score 0.82 (pass at 0.85, unclear from 0.5). Strain relief ribbing, case shape and cord match the official images; no printed brand or label visible and the case is disassembled, so exact identity cannot be confirmed above 0.85."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "The photo shows the product made safe.",
+          "reason_technical": "cut_cord: confirmed, confidence 0.9. At left center, the cord end with its strain relief is held up, cut off from the case, showing a white insulated wire and two bare stranded metal wires sticking out. The opened case sits separately at right."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.93,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shallow focus with a blurred background, real shadows and a hand in the frame show a camera photo of physical objects."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The two reviewers did not settle it, so a person at the firm looks.",
+        "technical": "Decided by reviewers; the referee answered \"person\". This run kept the referee's answer, not each reviewer's vote."
+      },
+      "review": null
+    },
+    {
+      "id": "opened-retake-trial-1",
+      "photo": "opened",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-opened-cord-attached, setting opus-medium, trial 1",
+        "trial": 1,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "retake",
+      "decidedBy": "made_safe",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": false,
+          "status": "unclear",
+          "score": 0.6,
+          "reason_plain": "We could not confirm this is the exact recalled product.",
+          "reason_technical": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Strain relief style and black cord resemble official image 2, but with the case removed there is no case shape, logo, label or 65W marking to confirm the Brightline product. Score kept in the same kind of product range."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": false,
+          "status": "fail",
+          "reason_plain": "The photo does not show the product made safe yet.",
+          "reason_technical": "cut_cord: not confirmed (not_visible), confidence 0.85. The black cord runs down the center of the photo unbroken from the strain relief to the bottom edge. Its wires are still attached to the circuit board at the top. No cut ends or severed piece are visible. The charger has been taken apart instead."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.9,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shallow depth of field with a blurred background, camera noise and a real hand holding a physical object."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The photo does not show the product made safe yet, so the owner is asked for one more photo.",
+        "technical": "Decided by made_safe: the made-safe check did not pass."
+      },
+      "review": null
+    },
+    {
+      "id": "opened_case-retake-trial-1",
+      "photo": "opened_case",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-opened-case, setting opus-medium, trial 1",
+        "trial": 1,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "retake",
+      "decidedBy": "made_safe",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": true,
+          "status": "pass",
+          "score": 0.85,
+          "reason_plain": "This looks like the recalled product.",
+          "reason_technical": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Ferrite bead position, barrel plug shape, ribbed strain relief and rounded black housing match the official images with no conflicts. No readable label or model number, and disassembly prevents full comparison, so score is held below 0.9."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": false,
+          "status": "fail",
+          "reason_plain": "The photo does not show the product made safe yet.",
+          "reason_technical": "cut_cord: not confirmed (not_visible), confidence 0.9. The cord runs unbroken from the ribbed strain relief on the foil wrapped inner module at left center, through the ferrite bead, to the barrel plug. No cut ends or severed piece are visible. The case was opened and removed instead, but the cord itself is not cut."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.9,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and camera noise on a real tiled surface, with no screen or print signs."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The photo does not show the product made safe yet, so the owner is asked for one more photo.",
+        "technical": "Decided by made_safe: the made-safe check did not pass."
+      },
+      "review": null
+    },
+    {
+      "id": "opened-retake-trial-2",
+      "photo": "opened",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-opened-cord-attached, setting opus-medium, trial 2",
+        "trial": 2,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "retake",
+      "decidedBy": "made_safe",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": false,
+          "status": "unclear",
+          "score": 0.6,
+          "reason_plain": "We could not confirm this is the exact recalled product.",
+          "reason_technical": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). Only the internal board and cord strain relief are visible. Cord color and ridged, perforated strain relief broadly resemble the official image, but no case shape, branding, wattage marking or model number can be checked."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": false,
+          "status": "fail",
+          "reason_plain": "The photo does not show the product made safe yet.",
+          "reason_technical": "cut_cord: not confirmed (not_visible), confidence 0.85. The black cord runs unbroken from the bottom of the photo up through the strain relief into the circuit board at the top. No cut end or severed piece is visible. The case has been taken apart, but the cord is not shown cut."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.93,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.93; signs: none). Natural lighting, shallow depth of field with a blurred room background, and normal camera noise; no screen or print signs."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The photo does not show the product made safe yet, so the owner is asked for one more photo.",
+        "technical": "Decided by made_safe: the made-safe check did not pass."
+      },
+      "review": null
+    },
+    {
+      "id": "opened_case-retake-trial-2",
+      "photo": "opened_case",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-opened-case, setting opus-medium, trial 2",
+        "trial": 2,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "retake",
+      "decidedBy": "made_safe",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": false,
+          "status": "unclear",
+          "score": 0.82,
+          "reason_plain": "We could not confirm this is the exact recalled product.",
+          "reason_technical": "Claude vision match score 0.82 (pass at 0.85, unclear from 0.5). Cord, ferrite bead, barrel plug, ribbed strain relief and black rounded case shell all match the official images. No model numbers are listed and no readable label is visible, so the exact product cannot be confirmed above 0.85."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": false,
+          "status": "fail",
+          "reason_plain": "The photo does not show the product made safe yet.",
+          "reason_technical": "cut_cord: not confirmed (not_visible), confidence 0.85. The cord runs unbroken from the ribbed strain relief on the left edge of the foil wrapped board, through its loops and the ferrite bead, to the barrel plug. No cut ends or severed piece are visible. The charger case was opened instead, which is not the cut the remedy asks for."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.92,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.92; signs: none). Natural lighting, shadows and camera texture on a real tabletop with tape lines; no screen or print signs."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The photo does not show the product made safe yet, so the owner is asked for one more photo.",
+        "technical": "Decided by made_safe: the made-safe check did not pass."
+      },
+      "review": null
+    },
+    {
+      "id": "opened-retake-trial-3",
+      "photo": "opened",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-opened-cord-attached, setting opus-medium, trial 3",
+        "trial": 3,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "retake",
+      "decidedBy": "made_safe",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": false,
+          "status": "unclear",
+          "score": 0.6,
+          "reason_plain": "We could not confirm this is the exact recalled product.",
+          "reason_technical": "Claude vision match score 0.6 (pass at 0.85, unclear from 0.5). The strain relief shape and black cord resemble official image 2, but the case has been removed, so shape, color and label of the charger body cannot be compared. Same kind of product, exact product unconfirmed."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": false,
+          "status": "fail",
+          "reason_plain": "The photo does not show the product made safe yet.",
+          "reason_technical": "cut_cord: not confirmed (not_visible), confidence 0.9. The black cord runs unbroken from the bottom of the photo up through the strain relief and into the circuit board at the top. No cut ends or severed piece are visible. The charger was opened instead, which is not the requested action."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.95,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.95; signs: none). Natural lighting, shallow focus with a blurred background, real hand and table scene, and normal camera noise."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The photo does not show the product made safe yet, so the owner is asked for one more photo.",
+        "technical": "Decided by made_safe: the made-safe check did not pass."
+      },
+      "review": null
+    },
+    {
+      "id": "opened_case-retake-trial-3",
+      "photo": "opened_case",
+      "from": {
+        "file": "content/verify/sweep-sample.json",
+        "at": "case sample-charger-opened-case, setting opus-medium, trial 3",
+        "trial": 3,
+        "recordedAt": "2026-11-08T05:14:47.603Z"
+      },
+      "model": "claude-opus-5-5",
+      "decision": "retake",
+      "decidedBy": "made_safe",
+      "checks": {
+        "C1": {
+          "id": "C1",
+          "name": "Right product",
+          "pass": true,
+          "status": "pass",
+          "score": 0.85,
+          "reason_plain": "This looks like the recalled product.",
+          "reason_technical": "Claude vision match score 0.85 (pass at 0.85, unclear from 0.5). Case profile, ferrite choke, barrel plug and ribbed strain relief match official images. No model number listed or readable. Missing strap and lack of labels keep the score below 0.9."
+        },
+        "C2": {
+          "id": "C2",
+          "name": "Made safe",
+          "pass": false,
+          "status": "fail",
+          "reason_plain": "The photo does not show the product made safe yet.",
+          "reason_technical": "cut_cord: not confirmed (not_visible), confidence 0.9. The cord runs unbroken from the strain relief on the inner module, left of center, around the loop to the ferrite bead and barrel plug. No cut ends or severed piece are visible. The charger case was opened instead, but the cord is still attached and intact."
+        },
+        "C3": {
+          "id": "C3",
+          "name": "Your own photo",
+          "pass": true,
+          "status": "pass",
+          "score": 0.9,
+          "reason_plain": "This is a new photo of the product.",
+          "reason_technical": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, shadows and camera noise on a real tiled surface, with no screen or print signs."
+        },
+        "C4": {
+          "id": "C4",
+          "name": "Within the recall",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No model or lot number is needed for this recall.",
+          "reason_technical": "The proof rule asks for no model, lot or date code, and nothing read conflicts with the recall."
+        },
+        "C5": {
+          "id": "C5",
+          "name": "Claim limits",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "This claim is within the limit for one purchase.",
+          "reason_technical": "Payee claim 1 of 1 unit purchased; recall claim 1 of 1200 units."
+        },
+        "C6": {
+          "id": "C6",
+          "name": "Not already refunded",
+          "pass": true,
+          "status": "pass",
+          "reason_plain": "No PayPal purchase linked.",
+          "reason_technical": "No capture is linked, so there is no earlier PayPal refund or dispute to check."
+        }
+      },
+      "summary": {
+        "plain": "The photo does not show the product made safe yet, so the owner is asked for one more photo.",
+        "technical": "Decided by made_safe: the made-safe check did not pass."
+      },
+      "review": null
+    }
+  ]
+}

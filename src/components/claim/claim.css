@@ -645,10 +645,19 @@
   }
 }
 .cl-elapsed {
+  display: grid;
+  justify-items: end;
   font-size: 1.25rem;
   font-weight: 500;
   min-width: 4.5ch;
   text-align: right;
+}
+/* What the time is: a run replayed or read live just now (src/lib/time-words.ts). */
+.cl-elapsed-k {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
 }
 /* Where the model's answer came from, beside the time: Replayed for a recorded run, Live for one made just now. */
 .cl-source {

@@ -1,14 +1,17 @@
 /**
- * Records a firm joining the shared hash pool from outside the app: three real `curl` calls against a running Remedy
+ * Records a firm joining the shared hash pool from outside the app: four real `curl` calls against a running Remedy
  * (the curl binary, not fetch, so the calls come from another process), written to content/public/hash-pool-call.json
  * for /evidence#network.
  *
- *   REMEDY_DEV_KEY=rm_test_... BASE_URL=http://localhost:3400 npx tsx scripts/public/record-hash-pool-call.ts
+ *   REMEDY_DEV_KEY=rm_test_... REMEDY_FIRM_KEY=rm_test_... BASE_URL=http://localhost:3400 npx tsx scripts/public/record-hash-pool-call.ts
  *
- * 1. Register the sample charger's hash for Brightline Home's sample recall BH-2026-01 as partner ref "partner-demo-1"
- *    (needs the key; the key is never written to the file).
- * 2. Check the same hash for Fernway Home's sample recall FW-2026-01: a hit at 0 bits, source partner, ref only.
- * 3. Check the hash of a photo of a mug (Wikimedia Commons, CC0) for FW-2026-01: no hit.
+ * REMEDY_DEV_KEY is a self-serve sandbox key from /developers; REMEDY_FIRM_KEY is Brightline Home's own firm key
+ * (scripts/hash-pool-key.ts --firm brightline-home). Neither key is ever written to the file.
+ * 1. The self-serve key tries to register the sample charger's hash: refused, 403, because only a key tied to a
+ *    connected firm may write to the pool.
+ * 2. Brightline Home's firm key registers it for its sample recall BH-2026-01 as partner ref "partner-demo-1".
+ * 3. Check the same hash for Fernway Home's sample recall FW-2026-01, with no key: a hit at 0 bits, source partner, ref only.
+ * 4. Check the hash of a photo of a mug (Wikimedia Commons, CC0) for FW-2026-01: no hit.
  * The script fails loudly when any step does not answer as expected. Both firms and recalls are fictional samples.
  *
  * The row it registers is a real pool entry: on that database, the sample charger photo is then held as already used
@@ -22,7 +25,8 @@ import { photoHashes } from "@/lib/verify";
 import { FIXTURES_DIR } from "@/lib/verify/fixtures";
 
 const B = (process.env.BASE_URL ?? "http://localhost:3400").replace(/\/$/, "");
-const KEY = process.env.REMEDY_DEV_KEY ?? "";
+const KEY = process.env.REMEDY_FIRM_KEY ?? "";
+const SELF_SERVE = process.env.REMEDY_DEV_KEY ?? "";
 const OUT = path.join(process.cwd(), "content", "public", "hash-pool-call.json");
 const MASK = "rm_test_...";
 
@@ -53,12 +57,17 @@ function curl(step: string, why: string, url: string, body: unknown, key: string
 }
 
 async function main() {
-  if (!KEY.startsWith("rm_test_")) throw new Error("REMEDY_DEV_KEY is not set to an rm_test_ key. Create one on /developers and pass it in the environment.");
+  if (!KEY.startsWith("rm_test_")) throw new Error("REMEDY_FIRM_KEY is not set to an rm_test_ key. Issue one with scripts/hash-pool-key.ts --firm brightline-home.");
+  if (!SELF_SERVE.startsWith("rm_test_")) throw new Error("REMEDY_DEV_KEY is not set to an rm_test_ key. Create one on /developers and pass it in the environment.");
   const charger = (await photoHashes(readFileSync(path.join(FIXTURES_DIR, "sample/cord-cut.jpg")))).dhash;
   const mug = (await photoHashes(readFileSync(path.join(FIXTURES_DIR, "other/commons-coffee-in-a-mug.jpg")))).dhash;
   const ref = "partner-demo-1";
 
-  const reg = curl("register", "Brightline Home has paid a claim on this photo and registers its hash for its own recall, with its own opaque ref.", `${B}/api/v1/hash-pool/register`, { dhash: charger, recall_number: "BH-2026-01", ref }, KEY);
+  const refused = curl("register-self-serve", "A self-serve sandbox key from the Developers page tries to register the same hash: only a key tied to a connected firm may write to the pool.", `${B}/api/v1/hash-pool/register`, { dhash: charger, recall_number: "BH-2026-01", ref }, SELF_SERVE);
+  const refusedErr = (refused.response as { error?: { code?: string } }).error;
+  if (refused.status !== 403 || refusedErr?.code !== "forbidden") throw new Error(`a self-serve key was not refused: ${refused.status} ${JSON.stringify(refused.response)}`);
+
+  const reg = curl("register", "Brightline Home has paid a claim on this photo and registers its hash for its own recall, with its own firm key and opaque ref.", `${B}/api/v1/hash-pool/register`, { dhash: charger, recall_number: "BH-2026-01", ref }, KEY);
   const regData = (reg.response as { data?: { registered?: boolean; ref?: string; dhash?: string } }).data;
   if (reg.status !== 200 || regData?.ref !== ref || regData?.dhash !== charger) throw new Error(`register answered ${reg.status}: ${JSON.stringify(reg.response)}`);
 
@@ -72,13 +81,13 @@ async function main() {
   if (miss.status !== 200 || missData?.hit !== false) throw new Error(`check (no hit) answered ${miss.status}: ${JSON.stringify(miss.response)}`);
 
   const out = {
-    note: "A firm joining the shared hash pool from outside the app: three real curl calls against a local production build, recorded by scripts/public/record-hash-pool-call.ts. The register call used a sandbox API key, shown masked; the key is never stored on the row, so a hit names no firm. Only the 64-bit hash and an opaque ref cross. Brightline Home, Fernway Home and their recalls are fictional samples; the photo is the sample charger (Dmitry G, Wikimedia Commons, public domain) and the mug is Kurt Kaiser, CC0.",
+    note: "A firm joining the shared hash pool from outside the app: four real curl calls against a local production build, recorded by scripts/public/record-hash-pool-call.ts. A self-serve sandbox key is refused (403) when it tries to register; Brightline Home's own firm key registers, both shown masked. The firm is kept in Remedy's audit ledger, never on the pool row, so a hit names no firm. Only the 64-bit hash and an opaque ref cross. Brightline Home, Fernway Home and their recalls are fictional samples; the photo is the sample charger (Dmitry G, Wikimedia Commons, public domain) and the mug is Kurt Kaiser, CC0.",
     recordedAt: new Date().toISOString(),
     crossed: ["dhash", "ref"],
-    calls: [reg, hit, miss],
+    calls: [refused, reg, hit, miss],
   };
   writeFileSync(OUT, JSON.stringify(out, null, 2) + "\n");
-  console.log(`hash pool call: registered ${ref} (${reg.ms} ms), hit at ${hitData.distance} bits (${hit.ms} ms), mug no hit (${miss.ms} ms). Wrote ${path.relative(process.cwd(), OUT)}.`);
+  console.log(`hash pool call: self-serve key refused (${refused.status}), registered ${ref} (${reg.ms} ms), hit at ${hitData.distance} bits (${hit.ms} ms), mug no hit (${miss.ms} ms). Wrote ${path.relative(process.cwd(), OUT)}.`);
 }
 
 main().catch((e) => {

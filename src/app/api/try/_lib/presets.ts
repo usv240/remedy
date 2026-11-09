@@ -2,7 +2,8 @@
  * Ready-made examples for /try (content/presets/index.json). Running one runs the real verifier on the real photo.
  * Checks that need no model (the official-image match, the quality precheck) run live every time, for free. Checks that
  * need Claude replay the one recorded live answer in content/presets/recorded/, and every check around that answer runs
- * again in code. Presets never create a claim and never pay. Server only.
+ * again in code. Running a preset never creates a claim and never pays (the one-click sandbox payout is
+ * src/app/api/try/_lib/sandbox-payout.ts). Server only.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";

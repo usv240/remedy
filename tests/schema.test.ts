@@ -24,7 +24,7 @@ const drizzleTables = Object.values(schema as Record<string, unknown>).filter((v
 describe("db/schema.sql and the Drizzle schema", () => {
   const fromSql = sqlTables();
 
-  it("define the same tables, the ones plan section 8 names", () => {
+  it("define the same tables, the ones listed here", () => {
     const names = drizzleTables.map((t) => getTableConfig(t).name).sort();
     expect([...fromSql.keys()].sort()).toEqual(names);
     expect(names).toEqual(

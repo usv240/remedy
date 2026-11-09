@@ -1,7 +1,7 @@
 import { currentRequestId, newRequestId } from "@/lib/log";
 import { redactDeep, redactSecrets } from "@/lib/mask";
 
-export type ApiErrorCode = "invalid_request" | "rate_limited" | "unauthorized" | "not_found" | "upstream_unavailable" | "internal";
+export type ApiErrorCode = "invalid_request" | "rate_limited" | "unauthorized" | "forbidden" | "not_found" | "upstream_unavailable" | "internal";
 
 /** The API's version date. Every response carries it in meta.version. */
 export const API_VERSION = "2026-11-05";

@@ -2,6 +2,7 @@
 
 import type { CheckView } from "@/app/api/claims/_lib/types";
 import { ClaimInfo } from "./ClaimInfo";
+import { TIME_WORDS } from "@/lib/time-words";
 import { CHECK_ORDER, checkWord, scoreLine, seconds, settledLine } from "./format";
 
 export type Stage = "sending" | "stored" | "vision" | "reviewers" | "done";
@@ -63,8 +64,9 @@ export function Checking({
             {source === "live" ? "Live" : "Replayed"}
           </span>
         )}
-        <p className="cl-elapsed tabular" aria-label={`${done ? "Checked in" : "Elapsed"} ${seconds(elapsedMs)}`}>
-          {seconds(elapsedMs)}
+        <p className="cl-elapsed tabular" aria-label={`${done ? "Checked in" : "Elapsed"} ${seconds(elapsedMs)}${done && source ? `, ${TIME_WORDS[source]}` : ""}`}>
+          <span>{seconds(elapsedMs)}</span>
+          {done && source && <span className="cl-elapsed-k">{TIME_WORDS[source]}</span>}
         </p>
         <ClaimInfo k="claim.checks" topic="the six checks" />
       </div>

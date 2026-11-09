@@ -66,6 +66,8 @@ type Facts = {
   value: { covered: number; recalls: number; proRated: number; noPrice: number; total: string; unclaimed: string; unclaimedAtCorrection: string; correctionRate: string; perPoint: string };
   /** The headline count, and what the other photo-refund recalls ask for (content/recalls/proof-split.json). */
   headline: { recalls: number; photoRefund: number; madeSafeRefund: number; share: number; byYear: Record<string, number>; madeSafeCredit: number; otherPhoto: number; noPhoto: number };
+  /** The first and latest commit dates, US Eastern time, from git: the README's history sentence. */
+  history: { first: string; latest: string; latestCommit: string; sentence: string } | null;
 };
 type Spread = { median: number; min: number; max: number; n: number };
 
@@ -178,6 +180,16 @@ export function derived() {
   };
 }
 
+/** The first and latest commit, from git, dated in US Eastern time; the last written ones when git is not there. */
+function history(before: Facts | null): Facts["history"] {
+  const git = (args: string[]) => spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
+  const first = git(["log", "--reverse", "--format=%cI"]).stdout?.split("\n")[0]?.trim();
+  const [latest, commit] = (git(["log", "-1", "--format=%cI %h"]).stdout ?? "").trim().split(" ");
+  if (!first || !latest || !commit) return before?.history ?? null;
+  const day = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" });
+  return { first: day(first), latest: day(latest), latestCommit: commit, sentence: `History: the first commit is dated ${day(first)} and the latest ${day(latest)}.` };
+}
+
 function main() {
   const before = existsSync(OUT) ? read<Facts>(OUT) : null;
   const ran = process.argv.includes("--no-tests") && before ? before.unitTests : unitTests();
@@ -207,6 +219,7 @@ function main() {
     catalog: catalogCounts(),
     measured: { checkSeconds: checkTimes().about, payoutSeconds: aboutSeconds(measured.find((m) => m.id === "payout")?.figure) },
     ...derived(),
+    history: history(before),
   };
   writeFileSync(OUT, JSON.stringify(facts, null, 2) + "\n");
   console.log(

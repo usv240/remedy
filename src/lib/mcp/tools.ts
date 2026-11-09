@@ -9,7 +9,7 @@ import { SCAN_LIMITS, scanCatalog } from "@/lib/recall/scan";
 import { isFetchableUrl, normalizeImageUrl } from "@/lib/verify/official";
 
 /**
- * The Remedy MCP server's tools (plan section 9). Each is a Zod input schema plus a handler that returns plain text for
+ * The Remedy MCP server's tools (docs/how-it-works.md, "What is inside"). Each is a Zod input schema plus a handler that returns plain text for
  * the model and structured data for programs. The claim tools call the owner's claim routes on this same server, so
  * an agent and the /claim page open claims the same way.
  */

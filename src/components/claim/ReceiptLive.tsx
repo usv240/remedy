@@ -32,7 +32,8 @@ function idLine(c: ClaimView) {
   if (!p) return null;
   if (p.route === "refund" && p.ids.refund_id) return `Sandbox refund ID ${p.ids.refund_id}`;
   if (p.route === "replacement" && p.ids.order_id) return `Sandbox order ID ${p.ids.order_id}`;
-  if (p.ids.payout_item_id) return `Sandbox payout ID ${p.ids.payout_item_id}`;
+  // A payout names its item and its batch, as PayPal issued them, and PayPal's own word for where it stands.
+  if (p.ids.payout_item_id) return `Sandbox payout ID ${p.ids.payout_item_id}${p.ids.payout_batch_id ? `, batch ${p.ids.payout_batch_id}` : ""}${p.paypal_status ? `, PayPal status ${p.paypal_status}` : ""}`;
   if (p.ids.payout_batch_id) return `Sandbox payout batch ${p.ids.payout_batch_id}`;
   return null;
 }

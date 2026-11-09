@@ -17,6 +17,9 @@ import { ensureReadyClaims } from "@/lib/firm/sample-claims";
 import { fmtInt, fmtPct, fmtUsd } from "@/lib/firm/report";
 import { isSampleNumber, recallCredit, RecallLabel } from "@/lib/recall/label";
 
+/** "4 days ago" reads in lower case after a comma; a date keeps its capital month ("Oct 20, 2026"). */
+const sinceWords = (w: string) => (/^[A-Z][a-z]{2} \d/.test(w) ? w : w.toLowerCase());
+
 export const metadata: Metadata = { title: "Firm console", description: "Brightline Home's recall console: claims to review, the recall plan and the monthly report. A fictional sample firm." };
 
 async function Home() {
@@ -127,8 +130,8 @@ async function Home() {
           <h2 className="firm-tile-head" id="t-unclaimed">
             Waiting to be accepted <FirmInfo id="firm.unclaimed" label="" />
           </h2>
-          <p className="firm-tile-value">{fmtInt(s.unclaimed.length)}</p>
-          {s.unclaimed.length === 0 ? (
+          <p className="firm-tile-value">{fmtInt(s.unclaimedCount)}</p>
+          {s.unclaimedCount === 0 ? (
             <p className="muted">Every payout sent has been accepted.</p>
           ) : (
             <ul className="firm-list">
@@ -139,11 +142,19 @@ async function Home() {
                     {u.sample ? <span className="muted"> (sample)</span> : null}
                   </span>
                   <span className="tabular muted">
-                    {fmtUsd(u.amountCents)}, {whenWords(u.since, now).toLowerCase()}
+                    {fmtUsd(u.amountCents)}, {sinceWords(whenWords(u.since, now))}
                   </span>
                 </li>
               ))}
             </ul>
+          )}
+          {s.unclaimedCount > s.unclaimed.length && (
+            <p className="muted tabular">
+              The oldest {fmtInt(s.unclaimed.length)} of {fmtInt(s.unclaimedCount)}.{" "}
+              <Link className="text-link" href="/firm/claims?view=unclaimed">
+                See all {fmtInt(s.unclaimedCount)}
+              </Link>
+            </p>
           )}
           <p className="firm-tile-foot">
             <Link className="firm-link" href="/firm/plan">

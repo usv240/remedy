@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Cost and operations", description: "
 const COST = [
   { what: "Identical requests replay", how: "A request that matches one already answered (same model, prompt, images and settings) is read back from a local cache in test runs instead of paid for again." },
   { what: "An identical photo reuses its result", how: "The same claim photo for the same recall and rule reuses its checked result from the database, with no new AI call." },
-  { what: "Images are downscaled", how: "Photos and official images are shrunk before the vision call: up to 16% fewer input tokens on large photos, measured by the verification builder." },
+  { what: "Images are downscaled", how: "Photos and official images are shrunk before the vision call: up to 16% fewer input tokens on large photos, measured on recorded calls (content/verify/tokens.json)." },
   { what: "The recall's part is cached", how: "Each request puts the recall's data and official images first, so repeat checks on one recall read that part from Claude's prompt cache." },
   { what: "A daily spend cap", how: "The hosted site keeps to a daily AI budget. Past it, every free check still runs and a person at the firm looks at the rest." },
 ];

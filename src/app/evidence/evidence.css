@@ -1385,3 +1385,131 @@
   color: var(--muted);
   overflow-wrap: anywhere;
 }
+
+/* Every section after the results, closed under its heading (Fold): the closed page reads as a list of headings, each
+   with one line of what it holds. One hairline between rows, the chevron turns on open, and the body keeps the
+   section's own layout. */
+.ev-folds {
+  margin-top: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  max-width: 86rem;
+}
+.ev-folds-note {
+  font-size: 0.875rem;
+  margin: 0 0 8px;
+}
+.ev-fold {
+  border-top: 1px solid var(--edge);
+}
+.ev-fold:last-child {
+  border-bottom: 1px solid var(--edge);
+}
+.ev-fold-sum {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+  padding: 14px 4px;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 8px;
+  transition: background-color 160ms ease;
+}
+.ev-fold-sum::-webkit-details-marker {
+  display: none;
+}
+.ev-fold-sum:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ev-fold-sum:hover {
+    background: color-mix(in srgb, var(--ink) 4%, transparent);
+  }
+}
+.ev-fold-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.evidence .ev-fold-h {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.ev-fold-what {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 80ch;
+  font-variant-numeric: tabular-nums;
+}
+.ev-fold-mark {
+  flex: none;
+  color: var(--muted);
+  transition: transform 200ms var(--ease-out);
+}
+.ev-fold[open] > .ev-fold-sum .ev-fold-mark {
+  transform: rotate(180deg);
+}
+.ev-fold-body {
+  padding: 4px 0 28px;
+}
+/* On a wide screen each closed section is one row: the heading, then what it holds, then the chevron. */
+@media (min-width: 1000px) {
+  .ev-fold-sum {
+    min-height: 44px;
+    padding: 10px 4px;
+  }
+  .ev-fold-text {
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: 24px;
+  }
+}
+.ev-fold-info {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+}
+.ev-fold-body > .je {
+  margin-top: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-fold-mark,
+  .ev-fold-sum {
+    transition: none;
+  }
+}
+
+/* The shared hash pool's trust model: who may write, who may read, what crosses (PoolTrust). */
+.ev-trust {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 20px 0;
+}
+.ev-trust > div {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+}
+.ev-trust dt {
+  font-weight: 500;
+}
+.ev-trust dd {
+  margin: 4px 0 0;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+@media (max-width: 860px) {
+  .ev-trust {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,5 +1,5 @@
 import measured from "../../../content/public/measured.json";
-import { RESEARCH } from "@/lib/research";
+import { RESEARCH, REFUND_TIMING } from "@/lib/research";
 
 /**
  * The measured contrast the impact story leads with: how a claim portal states its refund timing on its own page
@@ -40,7 +40,7 @@ export function Contrast({ className = "vs" }: { className?: string }) {
       <div className="vs-row" data-rm="">
         <dt className="vs-fig tabular">{c.payout.figure}</dt>
         <dd className="vs-what">
-          {`Remedy’s refund: from approval to a PayPal payout reaching the owner, measured in the ${c.environment}${c.payout.runs ? ` (${c.payout.runs} runs)` : ""}.${c.refundAtOnce ? " A refund to the original PayPal purchase went through at once." : ""}`}
+          {`Remedy’s refund: from approval to a PayPal payout reaching the owner, measured in the ${c.environment}${c.payout.runs ? ` (${c.payout.runs} runs)` : ""}.${c.refundAtOnce ? ` ${REFUND_TIMING.marked}; ${REFUND_TIMING.reach}.` : ""}`}
         </dd>
       </div>
     </dl>

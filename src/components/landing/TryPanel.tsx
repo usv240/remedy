@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { fmtMs } from "@/lib/api/format";
 import { scoreLine, settledLine } from "@/components/claim/format";
+import { TIME_WORDS } from "@/lib/time-words";
 
 export type PanelCheck = { id: string; name: string; status: string; score: number | null; reason: string; technical: string };
 export type PanelRun = {
@@ -130,8 +131,9 @@ export function TryPanel({ runs }: { runs: PanelRun[] }) {
           <p className="tp-recall">
             {run.recall.label}: {run.recall.title}
           </p>
-          <p className="tp-time tabular" aria-label={`Checked in ${fmtMs(run.totalMs)}`}>
-            {fmtMs(elapsed)}
+          <p className="tp-time tabular" aria-label={`Checked in ${fmtMs(run.totalMs)}, ${TIME_WORDS.recorded}`}>
+            <span>{fmtMs(elapsed)}</span>
+            <span className="tp-time-k">{TIME_WORDS.recorded}</span>
           </p>
         </div>
         <p className="tp-about">

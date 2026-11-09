@@ -49,7 +49,10 @@ async function Buyers() {
                   <tr key={s.saleId}>
                     <td>{s.contact}</td>
                     <td>{s.item}</td>
-                    <td>{SOURCE[s.source] ?? s.source}</td>
+                    <td>
+                      {SOURCE[s.source] ?? s.source}
+                      {s.sample ? <span className="muted"> (sample)</span> : null}
+                    </td>
                     <td className="tabular">{s.paidAt ? dayName(s.paidAt) : "None"}</td>
                     <td className="num">{fmtUsd(s.amountCents)}</td>
                     <td>
@@ -68,6 +71,11 @@ async function Buyers() {
               </tbody>
             </table>
           </div>
+        )}
+        {sales.some((s) => s.sample) && (
+          <p className="muted" style={{ marginTop: 10, maxWidth: "72ch" }}>
+            The rows marked sample are a labelled sample of a PayPal Transaction Search answer for this recall, built from the sandbox test buyer&rsquo;s purchases of the sample charger and matched by the same search code a firm&rsquo;s own PayPal search runs. No PayPal call was made for them, and they carry no payment to refund.
+          </p>
         )}
       </section>
     </>

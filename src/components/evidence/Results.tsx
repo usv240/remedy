@@ -53,7 +53,7 @@ export function Results() {
         </a>
       </li>
       <li className="jr-item">
-        <a className="jr-link" href="#adoption">
+        <a className="jr-link" href="/evidence/market#adoption">
           <span className="jr-fig tabular">{S.all.paypalOrVenmo.count}</span>
           <span className="jr-what">recalls mention PayPal or Venmo. The photo goes to an email address in <span className="tabular">{S.photoRefund.email.count}</span> of the {fmtInt(S.all.photoRefund.count)} recalls whose remedy names a photo and a refund.</span>
           <span className="jr-base">

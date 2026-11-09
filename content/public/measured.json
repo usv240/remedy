@@ -1,9 +1,9 @@
 {
-  "note": "Figures measured on the owner's claim flow in the PayPal sandbox on 2026-11-05, reported by the owner builder from its e2e runs (tests/e2e/claim.mjs and tests/e2e/claim-shop.mjs). How long a photo check takes is not typed in here: checkTimes() in src/components/evidence/errors.ts counts it from every recorded live Claude call in the repo. The time to answer a recall's own picture comes from content/public/verify-runs.json (hashSpeed in the same file). Update this file when the runs are repeated.",
+  "note": "Figures measured on the owner's claim flow in the PayPal sandbox on 2026-11-05, measured by the end-to-end suites (tests/e2e/claim.mjs and tests/e2e/claim-shop.mjs). How long a photo check takes is not typed in here: checkTimes() in src/components/evidence/errors.ts counts it from every recorded live Claude call in the repo. The time to answer a recall's own picture comes from content/public/verify-runs.json (hashSpeed in the same file). Update this file when the runs are repeated.",
   "measuredAt": "2026-11-05",
   "environment": "PayPal sandbox",
   "items": [
     { "id": "payout", "figure": "17 to 18 s", "what": "from approval to a PayPal payout reaching SUCCESS, in 4 sandbox runs", "source": "tests/e2e/claim.mjs" },
-    { "id": "refund", "figure": "At once", "what": "a sample-shop purchase refunded to its original PayPal capture after the photo checked out; a second claim on that purchase was refused", "source": "tests/e2e/claim-shop.mjs" }
+    { "id": "refund", "figure": "At once", "what": "for PayPal to mark a sample-shop purchase's refund to its original PayPal capture COMPLETED after the photo checked out (PayPal says a refund takes 3 to 5 business days to reach the buyer); a second claim on that purchase was refused", "source": "tests/e2e/claim-shop.mjs" }
   ]
 }

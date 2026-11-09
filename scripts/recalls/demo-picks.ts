@@ -1,5 +1,5 @@
 /**
- * Choose the real CPSC recalls behind the /try presets (plan section 6) and write content/recalls/demo-picks.json.
+ * Choose the real CPSC recalls behind the /try presets and write content/recalls/demo-picks.json.
  *
  *   npx tsx scripts/recalls/demo-picks.ts
  *

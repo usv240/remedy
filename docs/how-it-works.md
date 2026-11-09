@@ -26,7 +26,7 @@ Part of the [Remedy README](../README.md). Screenshots, the claim from recall to
    |---|---|---|
    | C1 Right product | Is it the recalled product? | Claude vision against the official CPSC images, product names and model numbers; passes at 0.85 |
    | C2 Made safe | Was it made safe as the recall asks? | Claude vision checks each required action; marker words are read and compared in code |
-   | C3 Your own photo | Is it the owner's own photo? | A 64-bit perceptual hash (dHash) against the recall's official images and earlier claim photos within 10 bits, and against the 1,779 distinct published pictures of every other recall and every photo claimed on any recall within 4 bits, in all eight orientations; Claude checks for a photo of a screen or printout |
+   | C3 Your own photo | Is it the owner's own photo? | A 64-bit perceptual hash (dHash) against the recall's official images and earlier claim photos within 10 bits, and against every other recall's published pictures (a catalog of 1,779 distinct ones across all recalls) and every photo claimed on any recall within 4 bits, in all eight orientations; Claude checks for a photo of a screen or printout |
    | C4 Within the recall | Is it a recalled model, lot or date? | Identifiers read from the photo, compared in code with the recall's ranges, when the rule needs them |
    | C5 Claim limits | Is it within the units bought and the recall's units? | Code, per person: a second claim on the recall that shares the payee, the PayPal purchase, the PayPal account that paid, or the hashed network and browser goes to a person, so a new email alone does not reset it |
    | C6 Not already refunded | Has the linked PayPal purchase been refunded or disputed? | PayPal's capture, its order's refunds (read through PayPal's own MCP server with its read-only `get_order` tool, the Orders API as the fallback) and the Disputes API |
@@ -50,6 +50,8 @@ Claude reads remedies and photos. The money math, the decision and the payment r
 | Deleting a photo that shows a person, and every owner's photo 90 days after the decision | [`src/lib/ops/photos.ts`](../src/lib/ops/photos.ts) |
 
 What Claude does instead: it reads each remedy into a proof rule once, ahead of any claim; it describes the photo (how closely it matches, whether each step is done, any writing or label, whether it is a camera photo, whether a person is in it); two reviewers cite what they see when a check is unclear, and a referee in code counts only votes whose evidence checks out; it reads unclear rows in a catalog scan; and Claude Haiku 5.5 writes the monthly report's summary from numbers SQL counted.
+
+**The two reviewers** both run on Claude Opus 5.5 and read two different rulebooks, the official pictures and the remedy text; a disagreement goes to a person. Kohli (2026) found that panels from one model family share errors, so the split is by rulebook, and each reviewer's model is one setting (`REMEDY_REVIEWER_MODEL_PRODUCT`, `REMEDY_REVIEWER_MODEL_REMEDY`). Lineage: [`/evidence/photo-checks#lineage`](https://remedy-y0ym.onrender.com/evidence/photo-checks#lineage).
 
 ## What is inside
 

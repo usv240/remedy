@@ -18,7 +18,7 @@ export const CHECK_NAMES: Record<CheckId, string> = {
 };
 
 export const LIMITS = {
-  /** C1 passes at or above this (plan 7.2). */
+  /** C1 passes at or above this (docs/how-it-works.md, "How it works"). */
   productPass: 0.85,
   /** Below this C1 fails outright; between the two it is unclear and goes to the Two reviewers. */
   productFloor: 0.5,

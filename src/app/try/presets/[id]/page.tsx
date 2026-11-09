@@ -91,7 +91,7 @@ async function Preset({ params }: Params) {
           <RecallCard recall={publicRecall(r)} />
         </div>
       </section>
-      <p className="page-note">{SANDBOX_LABEL} Ready-made examples never pay.</p>
+      <p className="page-note">{SANDBOX_LABEL} Running a ready-made example pays nothing; the sandbox payout for the verified sample charger is on the Try page.</p>
     </>
   );
 }
