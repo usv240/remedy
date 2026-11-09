@@ -89,7 +89,9 @@ jobs:
       # The unit tests again, now with DATABASE_URL set, so the Postgres suites run too (the checks job runs them with
       # no database, where they skip). No keys: the Claude and PayPal suites still skip.
       - name: Unit tests with the database, including the Postgres suites
-        run: npm test
+        # The payment suites seal payee details, which needs a data key. CI holds no secrets, so each run makes a
+        # throwaway one that exists only for this step.
+        run: REMEDY_SECRET_KEY="$(openssl rand -hex 32)" npm test
       - name: Server log
         if: failure()
         run: cat server.log
