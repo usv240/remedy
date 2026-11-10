@@ -334,6 +334,9 @@ export default async function Home() {
           <Link href="/try" className="btn btn-primary hero-cta">
             Try a photo
           </Link>
+          <Link href="/claim#snap" className="text-link hero-snap">
+            Is it recalled? Snap the label
+          </Link>
         </div>
         <p className="hero-note">In the headline: the CPSC&rsquo;s photo for recall 26125, a hair dryer with its cord cut in half.</p>
       </section>

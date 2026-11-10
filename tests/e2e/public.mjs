@@ -172,7 +172,9 @@ for (const t of QUERIES) {
   const rpc = (method, params = {}) => json("/api/mcp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) }).then((x) => x.j);
   const list = await rpc("tools/list");
   const names = (list?.result?.tools ?? []).map((t) => t.name);
-  check("MCP tools/list: the six tools and ping", ["search_recalls", "scan_catalog", "get_proof_rule", "verify_photo", "open_claim", "claim_status", "ping"].every((n) => names.includes(n)), names.join(" "));
+  check("MCP tools/list: the seven tools and ping", ["search_recalls", "check_label", "scan_catalog", "get_proof_rule", "verify_photo", "open_claim", "claim_status", "ping"].every((n) => names.includes(n)), names.join(" "));
+  const l = await rpc("tools/call", { name: "check_label", arguments: { sample: "kidisle" } });
+  check("MCP check_label: the sample label finds recall 26557 by its model number", !l?.result?.isError && l?.result?.structuredContent?.matches?.[0]?.number === "26557");
   const s = await rpc("tools/call", { name: "search_recalls", arguments: { query: "space heater", limit: 3 } });
   check("MCP search_recalls answers", !s?.result?.isError && s?.result?.structuredContent?.hits?.length === 3);
   const g = await rpc("tools/call", { name: "get_proof_rule", arguments: { recall_number: "27045" } });

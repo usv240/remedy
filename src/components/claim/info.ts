@@ -78,6 +78,14 @@ export const CLAIM_INFO = {
     technical: "The photo is stored as a resized JPEG that sharp re-encodes with no EXIF or GPS metadata; the untouched upload is cleared once the checks have run. Its SHA-256 and 64-bit difference hash stay after the bytes are deleted, so the earlier-claim check still knows a photo that was paid or reviewed (src/lib/ops/photos.ts). It is sent to Claude Opus 5.5 only for the checks. The blur check here runs in your browser before upload.",
     sponsor: ["Claude"],
   },
+  "claim.label": {
+    title: "Snap the label",
+    what: "Take a photo of the product's label, the sticker or plate with its model number, and we check it against every US product recall since January 2024.",
+    why: "Most people never hear that something they own was recalled. The model number on the label says for certain which recall, if any, covers it, so you can go straight to your refund.",
+    technical:
+      "One Claude Opus 5.5 call reads brand, product, model numbers, UPC and lot or date codes, each with the exact text read and a confidence (structured output, effort low). Plain code then checks the reading and runs the catalog scan's matcher with Claude off: a model number or UPC in a recall's own list settles it (src/lib/label/check.ts). The photo is re-encoded without camera or location data, read once and never stored. POST /api/v1/label and the check_label MCP tool do the same.",
+    sponsor: ["Claude"],
+  },
   "claim.checks": {
     title: "The six checks",
     what: "Right product, made safe, your own photo, within the recall, claim limits, and not already refunded.",

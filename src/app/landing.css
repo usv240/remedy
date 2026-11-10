@@ -120,6 +120,13 @@
   min-height: 52px;
   padding-inline: 1.5rem;
 }
+/* The owner who does not know yet: a second way in, quieter than the one action. */
+.hero-snap {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.0625rem;
+}
 .hero-note {
   margin-top: auto;
   padding-top: 2.5rem;

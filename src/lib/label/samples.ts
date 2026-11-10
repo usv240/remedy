@@ -14,6 +14,8 @@ export type LabelSample = {
   expect: string | null;
   /** A label drawn for Remedy for its fictional sample recall. */
   drawn: boolean;
+  /** What kind of picture it is, in two words, under its name. */
+  kind: string;
 };
 
 export const LABEL_SAMPLES: readonly LabelSample[] = [
@@ -25,6 +27,7 @@ export const LABEL_SAMPLES: readonly LabelSample[] = [
     credit: "Sample label drawn for Remedy. Brightline Home, its charger and its recall are fictional.",
     expect: "BH-2026-01",
     drawn: true,
+    kind: "Sample label",
   },
   {
     id: "kidisle",
@@ -34,6 +37,7 @@ export const LABEL_SAMPLES: readonly LabelSample[] = [
     credit: "Photo: US Consumer Product Safety Commission, recall 26557.",
     expect: "26557",
     drawn: false,
+    kind: "CPSC photo",
   },
   {
     id: "lenovo",
@@ -43,7 +47,12 @@ export const LABEL_SAMPLES: readonly LabelSample[] = [
     credit: "Photo: Siarhei Besarab, Wikimedia Commons, CC BY-SA 4.0, resized.",
     expect: null,
     drawn: false,
+    kind: "Commons photo",
   },
 ];
+
+/** The credit line under the samples (public/samples/label/CREDITS.json). */
+export const LABEL_CREDITS =
+  "Sample labels: Brightline's is drawn for Remedy, and Brightline Home and its recall are fictional; the coffee maker's is the CPSC's photo for recall 26557; the Lenovo adapter's is by Siarhei Besarab, CC BY-SA 4.0, via Wikimedia Commons, resized.";
 
 export const labelSample = (id: string | null | undefined) => LABEL_SAMPLES.find((s) => s.id === id) ?? null;

@@ -73,6 +73,22 @@ export function FindRecall({ onPick, picks = [], label = "What is the product?" 
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
+  // "Search by name" from the label check (LabelScan) fills this search with the brand and product it read.
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (onPick) return;
+    const onSearch = (e: Event) => {
+      const q = String((e as CustomEvent<string>).detail ?? "").trim();
+      if (!q) return;
+      setQ(q);
+      void search(q);
+      inputRef.current?.focus({ preventScroll: true });
+      inputRef.current?.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    };
+    window.addEventListener("remedy:search", onSearch);
+    return () => window.removeEventListener("remedy:search", onSearch);
+  }, [onPick]);
+
   const row = (h: RecallPick) => (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element -- local CPSC thumbnails */}
@@ -102,6 +118,7 @@ export function FindRecall({ onPick, picks = [], label = "What is the product?" 
         </label>
         <div className="fr-row">
           <input
+            ref={inputRef}
             id={id}
             type="search"
             value={q}
