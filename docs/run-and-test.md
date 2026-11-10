@@ -44,7 +44,7 @@ Every push to `main` runs [CI](../.github/workflows/ci.yml): the dependency audi
 
 | Suite | Command | Result |
 |---|---|---|
-| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 603 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests: proof rules, the classifier and stats, search, the six checks and the decision, perceptual hashing, the verification cache and spend guard, payments and webhooks, the firm console, the API and MCP, encryption | `npm test` | 630 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
 | Accessibility (axe, WCAG 2.2 AA) and sideways scroll, 32 pages at phone and desktop width, light and dark | `npm run e2e:a11y` | 128 of 128 page views |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, and the MCP tools | `node tests/e2e/public.mjs` | All pass |
@@ -54,6 +54,8 @@ Every push to `main` runs [CI](../.github/workflows/ci.yml): the dependency audi
 | The owner's claim: presets, a streamed claim, firm review, approval, a real sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23; the run's steps and PayPal ids in [`content/public/e2e-transcript.json`](../content/public/e2e-transcript.json) |
 | Buy in the sample shop, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11; transcribed in the same file |
 | The firm console: queue and drawer, bulk Approve and pay, the report against SQL, and a live Gantt re-notice | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
+| Is it recalled? The label check over every recall that lists a model number or UPC, and products no recall lists, with no AI call | `npx tsx scripts/label/eval-catalog.ts` | Found the right recall for 2,201 of 2,216 label readings; 511 of 511 not-recalled products matched no recall. [`content/public/label-eval.json`](../content/public/label-eval.json); `tests/label-eval.test.ts` runs a slice again |
+| The label check on 30 real label photos, answers written down first (prepared; reads each with Claude under `--max-usd`) | `npx tsx --env-file=.env.local scripts/label/eval-photos.ts` | Plan and estimate (about $0.77); [`content/label/photo-eval-cases.json`](../content/label/photo-eval-cases.json) |
 | The audit ledger's hash chain | `npm run verify-ledger` | Every hash links to the one before it |
 | The figures the README, these pages and TESTING.md repeat, counted after the suites run | `npx tsx scripts/facts.ts` | [`content/public/facts.json`](../content/public/facts.json); `tests/facts.test.ts` fails when the README, `docs/*.md` or TESTING.md disagree with it |
 | 100 visitors at once on the free paths, against the production build | `node --env-file=.env.local scripts/load-test.mjs` | p50, p95, p99 and the error rate per path on `/evidence/operations#load` |

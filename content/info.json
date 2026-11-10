@@ -354,7 +354,7 @@
     "title": "MCP server",
     "what": "AI assistants can search recalls, read a proof rule, check a photo and open a claim with Remedy's tools.",
     "why": "An assistant helping someone with a recall can give exact steps, and the owner still chooses where the refund goes.",
-    "technical": "Model Context Protocol over streamable HTTP at /api/mcp, stateless JSON-RPC. Seven tools: search_recalls, scan_catalog, get_proof_rule, verify_photo, open_claim, claim_status and ping. Discovery: /api/mcp/server-card and /.well-known/ai-catalog.json."
+    "technical": "Model Context Protocol over streamable HTTP at /api/mcp, stateless JSON-RPC. Eight tools: search_recalls, check_label, scan_catalog, get_proof_rule, verify_photo, open_claim, claim_status and ping. Discovery: /api/mcp/server-card and /.well-known/ai-catalog.json."
   },
   "dev.mcp-session": {
     "title": "The recorded session",

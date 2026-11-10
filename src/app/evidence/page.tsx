@@ -16,6 +16,7 @@ import { Money, moneyHeadline } from "@/components/evidence/Money";
 import { Network } from "@/components/evidence/Network";
 import { HashPoolCall, HashPoolCallLive } from "@/components/evidence/HashPoolCall";
 import { HashReuse } from "@/components/evidence/HashReuse";
+import { LabelEval, labelEvalSentence } from "@/components/evidence/LabelEval";
 import { checkTimeWords, errorRates, freeCaught, freeTimings, hashSpeed, readingAccuracy } from "@/components/evidence/errors";
 import { Fold } from "@/components/evidence/Fold";
 import { PoolLimits, poolLimits } from "@/components/evidence/PoolLimits";
@@ -333,6 +334,10 @@ export default function EvidencePage() {
               Every recorded run, the model settings compared, and what the model read
             </Link>
           </p>
+        </Fold>
+
+        <Fold id="label" title="Is it recalled? The label check, measured" what={labelEvalSentence()}>
+          <LabelEval />
         </Fold>
 
         <Fold id="never" title="What the AI never decides" what="Whether to pay, how much and by which route are decided in code; the claim limits, in plain rules.">

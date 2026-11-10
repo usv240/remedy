@@ -30,14 +30,14 @@ docker compose up -d                                # Postgres 17
 npm run db:migrate && npm run db:load && npm run db:seed
 npx tsx --env-file=.env.local scripts/seed-firm.ts  # sample claims and plan
 npm run dev                                         # http://localhost:3300
-npm test                                            # 603 passed, 51 skipped without a database or keys
+npm test                                            # 630 passed, 51 skipped without a database or keys
 ```
 
-Without a Claude key, every model answer shown is a recorded one (labeled Recorded on `/try`) and a new photo goes to a person at the firm; the checks in code, sandbox payments and the firm console run live.
+Without a Claude key, every model answer is a recorded one and a new photo goes to a person at the firm; the checks in code, sandbox payments and the firm console run live.
 
 ## Results
 
-Every figure is counted by code from a repo file ([docs/results.md](docs/results.md)).
+Every figure is counted by code ([docs/results.md](docs/results.md)).
 
 - **Two error rates, on photos with a known answer** ([`src/components/evidence/errors.ts`](src/components/evidence/errors.ts)):
   - **paid when it should not have been: 0 of 36** decisions, on 18 photos.
@@ -47,6 +47,7 @@ Every figure is counted by code from a repo file ([docs/results.md](docs/results
   - The two reviewers verified 3 of 4; 1 went to a person at the firm.
 - **Photos needing a closer look:** **7 of 7** stopped by code alone, before any AI call ([`content/public/verify-runs.json`](content/public/verify-runs.json)). They are the 7 of the error rates' 40 decisions settled in code; the model made the other 33.
 - **Reading the remedy:** Claude Opus 5.5 with a self-check got every field right on **113 of 130** real CPSC remedies, keyword rules 73 of 130 (draft labels, [`content/recalls/benchmark/results.json`](content/recalls/benchmark/results.json)).
+- **Snap the label:** **2,201 of 2,216** label readings found their recall; **511 of 511** unlisted products matched none ([`label-eval.json`](content/public/label-eval.json)).
 
 **The difference:** a recall claim portal pays "via check within 10-15 business days" ([its own page](https://www.recallrtr.com/SiteResources/3in1grill/locales/en/translation.json)). Remedy's PayPal payout reached the owner **16 to 19 seconds** after approval, in 12 sandbox runs, and PayPal marked a refund to the original PayPal purchase COMPLETED at once; PayPal says a refund takes 3 to 5 business days to reach the buyer ([`measured.json`](content/public/measured.json), [`e2e-transcript.json`](content/public/e2e-transcript.json)). Other pages read November 8, 2026:
 
@@ -79,7 +80,7 @@ Orders and Payments run on the APIMatic-generated PayPal Server SDK; the rest is
 | PayPal MCP server | `get_order`, read only, for C6; the Orders API is the fallback | [`src/lib/paypal/mcp.ts`](src/lib/paypal/mcp.ts) | [`tests/paypal-mcp.test.ts`](tests/paypal-mcp.test.ts) |
 | Webhooks | Verified with PayPal (signature, or the event looked up by id) on 15 events; `PAYMENT.PAYOUTS-ITEM.UNCLAIMED` becomes a re-notice task | [`src/lib/payments/webhooks.ts`](src/lib/payments/webhooks.ts), [`src/lib/payments/events.ts`](src/lib/payments/events.ts) | [`tests/payments.test.ts`](tests/payments.test.ts); `tests/e2e/firm.mjs` (needs a database) |
 
-Also built on Claude Opus 5.5, Elastic, Channel3, Bryntum Gantt, AG Grid and Render ([`/stack`](https://remedy-y0ym.onrender.com/stack)). History: the first commit is dated November 5, 2026 and the latest November 9, 2026.
+Also built on Claude Opus 5.5, Elastic, Channel3, Bryntum Gantt, AG Grid and Render ([`/stack`](https://remedy-y0ym.onrender.com/stack)). History: the first commit is dated November 5, 2026 and the latest November 10, 2026.
 
 ## The problem, and the result
 
@@ -120,7 +121,7 @@ Measured: **0 of 36 paid wrongly**, the photo check in **about 11 seconds** (abo
 
 ## Read more
 
-[docs/how-it-works.md](docs/how-it-works.md) (the six checks, what the AI never decides), [docs/results.md](docs/results.md), [docs/research.md](docs/research.md) (sources, a pilot), [docs/operations.md](docs/operations.md) (security, privacy), [docs/run-and-test.md](docs/run-and-test.md) and [TESTING.md](TESTING.md) (sandbox accounts).
+[docs/how-it-works.md](docs/how-it-works.md) (the six checks), [docs/results.md](docs/results.md), [docs/research.md](docs/research.md), [docs/operations.md](docs/operations.md), [docs/run-and-test.md](docs/run-and-test.md) and [TESTING.md](TESTING.md) (sandbox accounts).
 
 ## Sources and credits
 

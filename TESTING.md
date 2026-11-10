@@ -147,6 +147,7 @@ Add `--header "Authorization: Bearer rm_test_..."` for full photo checks in `ver
 | Tool | What it does |
 |---|---|
 | `search_recalls` | Finds recalls since 2024 from plain words, each with what to cut or mark and the refund |
+| `check_label` | Says whether a product is recalled from a photo of its label (or a sample label): Claude reads it, code matches the model number or UPC |
 | `scan_catalog` | Checks a list of products at once: photo_refund, recalled, clear or unknown per row, with the claim link |
 | `get_proof_rule` | One recall's proof rule, with the official remedy text it came from |
 | `verify_photo` | Checks a photo (URL or base64) against a recall; stores and pays nothing |
@@ -205,7 +206,7 @@ Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run w
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 603 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests, no network | `npm test` | 630 passed, 51 skipped: 21 need a database, 28 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |

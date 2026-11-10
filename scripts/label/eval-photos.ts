@@ -15,8 +15,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { checkReading } from "../../src/lib/label/check";
 import { readLabelLive, sha256 } from "../../src/lib/label/read";
+import { readingUsd } from "../../src/lib/label/cost";
 import { codeOf, gtin } from "../../src/lib/recall/codes";
-import { LABEL_MAX_SIDE, visualTokens } from "../../src/lib/verify/image";
 
 type Case = {
   id: string;
@@ -34,21 +34,8 @@ const ROOT = process.cwd();
 const CASES = path.join(ROOT, "content", "label", "photo-eval-cases.json");
 const OUT = path.join(ROOT, "content", "label", "photo-eval-results.json");
 
-/** Tokens a label reading costs besides the image (instructions and the output schema), measured on the recorded samples. */
-export const OVERHEAD_TOKENS = 2450;
-/** Output tokens a reading takes, rounded up from the recorded samples (295 to 420). */
-export const OUTPUT_TOKENS = 500;
-
-/** The image as sent: fit inside LABEL_MAX_SIDE, never enlarged. */
-export const sentSize = (w: number, h: number) => {
-  const k = Math.min(1, LABEL_MAX_SIDE / Math.max(w, h));
-  return [Math.round(w * k), Math.round(h * k)] as const;
-};
-/** US dollars for one reading at Opus 5.5 rates, the prompt priced as a cache write ($5 per million), as the recorded samples were billed. */
-export const estimateUsd = (c: Pick<Case, "width" | "height">) => {
-  const [w, h] = sentSize(c.width, c.height);
-  return ((OVERHEAD_TOKENS + visualTokens(w, h)) * 5 + OUTPUT_TOKENS * 20) / 1e6;
-};
+/** US dollars for one reading at most (src/lib/label/cost.ts). */
+export const estimateUsd = (c: Pick<Case, "width" | "height">) => readingUsd(c);
 
 export function plan(file: CasesFile = JSON.parse(readFileSync(CASES, "utf8")) as CasesFile) {
   const rows = file.cases.map((c) => ({ id: c.id, expect: c.expect.recall ?? "no recall", est_usd: Number(estimateUsd(c).toFixed(4)) }));
