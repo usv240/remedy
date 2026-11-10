@@ -5,7 +5,12 @@ import { actionLabel, remedyLabel, ruleChips } from "@/lib/api/rule-chips";
 import { VERIFY_LIMITS } from "@/lib/api/v1-schemas";
 import { VerifyInputError, sha256, verifyBody, verifyForApi, verifyMode } from "@/lib/api/verify-service";
 import { extractBaseline } from "@/lib/recall/proof-rule";
+import { allowLabelRead } from "@/lib/label/limits";
+import { checkLabel, LabelInputError, sampleByBytes, withOrigin } from "@/lib/label/read";
+import { LABEL_SAMPLES } from "@/lib/label/samples";
+import { AiRefusedError, AiUnavailableError, publicAiError } from "@/lib/ai/claude";
 import { SCAN_LIMITS, scanCatalog } from "@/lib/recall/scan";
+import { PhotoUnreadableError } from "@/lib/verify/image";
 import { isFetchableUrl, normalizeImageUrl } from "@/lib/verify/official";
 
 /**
@@ -127,6 +132,46 @@ export const TOOLS = [
   }),
 
   tool({
+    name: "check_label",
+    title: "Check a product label",
+    description:
+      "Says whether a product is recalled from a photo of its label (the rating plate, sticker or tag with the model number). Claude reads the label once; code then looks the model number or UPC up in every CPSC recall since 2024, and a code in a recall's own list settles it. Returns match, candidates, no_match, unreadable or person, with each recall, how it matched, and the owner's claim link. The photo is never stored. Reading your own photo needs an API key; the sample labels need none. Changes nothing.",
+    input: z.object({
+      ...image,
+      sample: z
+        .enum(LABEL_SAMPLES.map((s) => s.id) as [string, ...string[]])
+        .optional()
+        .describe(`A sample label instead of a photo: ${LABEL_SAMPLES.map((s) => `${s.id} (${s.title})`).join(", ")}. Replays its recorded reading with no model call.`),
+    }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+    run: async (i, ctx) => {
+      let photo: Uint8Array | null = null;
+      if (!i.sample) {
+        const p = await photoFrom(i);
+        if (typeof p === "string") return { text: `${p} Or send sample: ${LABEL_SAMPLES.map((s) => s.id).join(", ")}.`, isError: true };
+        photo = p.bytes;
+        if (!sampleByBytes(photo)) {
+          if (!ctx.keyId) return { text: `Reading your own label photo needs an API key (a free one is on ${ctx.origin}/developers). Without one, try a sample label: ${LABEL_SAMPLES.map((s) => s.id).join(", ")}.`, isError: true };
+          const allowed = await allowLabelRead({ keyId: ctx.keyId });
+          if (!allowed.ok) return { text: allowed.plain, isError: true };
+        }
+      }
+      try {
+        const c = withOrigin(await checkLabel({ sample: i.sample ?? null, photo }), ctx.origin);
+        const lines = c.matches.map((m, n) => `${n + 1}. Recall ${m.number}, ${m.product}: ${m.how} ${m.photo_refund ? `Refund for a photo of it made safe (${m.remedy_summary}); claim at ${m.claim_url}.` : `Remedy: ${m.remedy_summary}. ${m.page}`}`);
+        const read = [c.label.brand?.value, c.label.product?.value, ...c.label.models.map((m) => `model ${m.value}`), c.label.upc ? `UPC ${c.label.upc.digits}` : ""].filter(Boolean).join(", ");
+        const src = c.source.kind === "recorded" ? `Recorded reading of the sample label, ${c.source.recorded_at?.slice(0, 10)}; no model call.` : `Read just now by ${c.source.model}.`;
+        return { text: [`${c.outcome}: ${c.plain}`, read ? `Read from the label: ${read}.` : "", ...lines, src].filter(Boolean).join("\n"), data: c as unknown as Record<string, unknown> };
+      } catch (e) {
+        if (e instanceof LabelInputError || e instanceof PhotoUnreadableError) return { text: e instanceof PhotoUnreadableError ? "That photo could not be read. Send a JPEG or PNG of the label." : e.message, isError: true };
+        if (e instanceof AiUnavailableError) return { text: `${publicAiError(e, "label reading")} Try a sample label, or search_recalls by name.`, isError: true };
+        if (e instanceof AiRefusedError) return { text: "The label could not be read from this photo. Try a closer photo of the label alone.", isError: true };
+        throw e;
+      }
+    },
+  }),
+
+  tool({
     name: "get_proof_rule",
     title: "Get a recall's proof rule",
     description:
@@ -240,4 +285,4 @@ export const TOOLS = [
 
 export const SERVER_INFO = { name: "remedy", title: "Remedy", version: "2026.11.5" };
 export const INSTRUCTIONS =
-  "Remedy pays recall refunds the moment a photo of the product made safe is verified, through PayPal. It reads public CPSC recall data since 2024. Use search_recalls to find a recall by product, scan_catalog to check a whole list of products at once, get_proof_rule to see what the owner must do and photograph, verify_photo to check a photo, and open_claim to start a claim (with only a recall number it returns the owner's own claim link). The owner always chooses where the refund goes. Sandbox only: no real money moves. Remedy is independent and not affiliated with the CPSC or any recalling firm.";
+  "Remedy pays recall refunds the moment a photo of the product made safe is verified, through PayPal. It reads public CPSC recall data since 2024. Use search_recalls to find a recall by product, check_label to find it from a photo of the product's label, scan_catalog to check a whole list of products at once, get_proof_rule to see what the owner must do and photograph, verify_photo to check a photo, and open_claim to start a claim (with only a recall number it returns the owner's own claim link). The owner always chooses where the refund goes. Sandbox only: no real money moves. Remedy is independent and not affiliated with the CPSC or any recalling firm.";

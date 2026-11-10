@@ -156,8 +156,8 @@ describe("the MCP tools", () => {
     expect(s.note).toMatch(/no AI model was called/);
   });
 
-  it("are the five plan tools, the catalog scan and ping, each with a schema and plain description", () => {
-    expect(TOOLS.map((t) => t.name).sort()).toEqual(["claim_status", "get_proof_rule", "open_claim", "ping", "scan_catalog", "search_recalls", "verify_photo"]);
+  it("are the five plan tools, the catalog scan, the label check and ping, each with a schema and plain description", () => {
+    expect(TOOLS.map((t) => t.name).sort()).toEqual(["check_label", "claim_status", "get_proof_rule", "open_claim", "ping", "scan_catalog", "search_recalls", "verify_photo"]);
     for (const t of TOOLS) expect(t.description).not.toMatch(/—|\bfraud|\bfake/i);
     expect(TOOLS.find((t) => t.name === "open_claim")!.changes).toBeTruthy();
   });

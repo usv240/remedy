@@ -15,7 +15,7 @@
       "products": [
         {
           "name": "Brightline 65W laptop charger (sample)",
-          "model": "",
+          "model": "BLC-6520",
           "description": "A black 65W laptop charger with a fixed cord. A fictional sample product.",
           "type": "Battery Chargers",
           "units": 1200,
@@ -70,7 +70,7 @@
       },
       "category": "Batteries and chargers",
       "recallId": 0,
-      "description": "This sample recall involves Brightline 65W laptop chargers, black, with a fixed power cord. Brightline Home is a fictional sample firm, and this recall is fictional.",
+      "description": "This sample recall involves Brightline 65W laptop chargers, black, with a fixed power cord. Model BLC-6520, UPC 400000652009 and the month the charger was made are printed on a label on the bottom of the charger. The recalled chargers were manufactured from October 2025 through February 2026. Brightline Home is a fictional sample firm, and this recall is fictional: its model number is made up, and its UPC starts with 4, the number kept for a store's own in-store codes, so no retail product carries it.",
       "injuries": [],
       "firms": [
         {
@@ -79,7 +79,9 @@
         }
       ],
       "countries": [],
-      "upcs": [],
+      "upcs": [
+        "400000652009"
+      ],
       "emails": [],
       "lastPublishDate": "2026-10-15"
     },

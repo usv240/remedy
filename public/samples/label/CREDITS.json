@@ -1,0 +1,25 @@
+{
+  "note": "The label samples on Find your recall (Snap the label). Claude's reading of each is recorded once in content/label/recorded/ and replayed with no model call.",
+  "files": [
+    {
+      "file": "brightline-blc-6520.png",
+      "what": "A sample rating label for Brightline Home's fictional 65W laptop charger (sample recall BH-2026-01), model BLC-6520, UPC 400000652009 (number system 4, kept for in-store codes, so no retail product carries it).",
+      "credit": "Drawn for Remedy by scripts/label/draw-sample-label.mjs, in the site's own type. Marked Sample label. Brightline Home, its charger and its recall are fictional.",
+      "license": "Same as the repository"
+    },
+    {
+      "file": "cpsc-26557-kidisle.jpg",
+      "what": "The rating sticker on the underside of a recalled Kidisle coffee maker, model KC101B (CPSC recall 26557).",
+      "source": "https://www.cpsc.gov/s3fs-public/kidisle-2.jpg",
+      "credit": "US Consumer Product Safety Commission",
+      "license": "Public domain (a work of the US government)"
+    },
+    {
+      "file": "lenovo-65w-adapter.jpg",
+      "what": "The label on a Lenovo 65W 20V laptop AC adapter, P/N 92P1154, FRU P/N 42T5283. No recall since January 2024 lists it.",
+      "source": "https://commons.wikimedia.org/w/index.php?curid=178326919",
+      "credit": "\"Lenovo 65W 20V AC adapter (FRU 42T5283) for ThinkPad laptops\" by Siarhei Besarab, CC BY-SA 4.0, via Wikimedia Commons. Resized to 1568 px on the long side; otherwise unchanged.",
+      "license": "CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  ]
+}
