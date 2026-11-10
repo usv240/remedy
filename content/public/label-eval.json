@@ -1,0 +1,263 @@
+{
+  "note": "The label check against every CPSC recall since January 2024 that lists a model number or UPC, measured in code with no model call: owner-style readings of each recall's own codes must find that recall, settled by code; negative controls (each recall's model with its digits changed, and everyday products) must match no recall. Written by scripts/label/eval-catalog.ts; tests/label-eval.test.ts runs it again.",
+  "ranAt": "2026-11-10T18:47:05.276Z",
+  "catalog": {
+    "recalls": 1239,
+    "withCodes": 516,
+    "models": 821,
+    "upcs": 81,
+    "shortModelsOnly": 21,
+    "search": "in-app keyword search (Elastic off), Claude off"
+  },
+  "positives": {
+    "n": 2216,
+    "ok": 2201,
+    "candidates": 151,
+    "shared": 147,
+    "byKind": {
+      "model_brand": {
+        "n": 821,
+        "ok": 814,
+        "candidates": 53,
+        "shared": 52
+      },
+      "model_ocr": {
+        "n": 1297,
+        "ok": 1289,
+        "candidates": 92,
+        "shared": 89
+      },
+      "upc": {
+        "n": 81,
+        "ok": 81,
+        "candidates": 4,
+        "shared": 4
+      },
+      "upc_no_zero": {
+        "n": 17,
+        "ok": 17,
+        "candidates": 2,
+        "shared": 2
+      }
+    },
+    "missed": [
+      {
+        "kind": "model_brand",
+        "recall": "27070",
+        "brand": "C.A.M.P. USA Inc.",
+        "product": null,
+        "model": "3641",
+        "upc": null,
+        "outcome": "candidates",
+        "got": [
+          "24334",
+          "24227",
+          "26324"
+        ],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_brand",
+        "recall": "26499",
+        "brand": "The",
+        "product": null,
+        "model": "17451",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_brand",
+        "recall": "26499",
+        "brand": "The",
+        "product": null,
+        "model": "41929",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_brand",
+        "recall": "26320",
+        "brand": "ProRider",
+        "product": null,
+        "model": "00094811 BG-14BIC",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "26320",
+        "brand": "ProRider",
+        "product": null,
+        "model": "00094811 BG 14BIC",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "26320",
+        "brand": "ProRider",
+        "product": null,
+        "model": "00094811BG14BIC",
+        "upc": null,
+        "outcome": "candidates",
+        "got": [
+          "26320"
+        ],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "26320",
+        "brand": "ProRider",
+        "product": null,
+        "model": "00094811 bg-14bic",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_brand",
+        "recall": "26219",
+        "brand": "Shenzhen",
+        "product": null,
+        "model": "688-59",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "26219",
+        "brand": "Shenzhen",
+        "product": null,
+        "model": "688 59",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "26219",
+        "brand": "Shenzhen",
+        "product": null,
+        "model": "68859",
+        "upc": null,
+        "outcome": "candidates",
+        "got": [
+          "26399",
+          "24287",
+          "26348"
+        ],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_brand",
+        "recall": "26046",
+        "brand": null,
+        "product": null,
+        "model": "1223",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_brand",
+        "recall": "25150",
+        "brand": "SuperATV",
+        "product": null,
+        "model": "A01 1/25/19",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "25150",
+        "brand": "SuperATV",
+        "product": null,
+        "model": "A011/25/19",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "25150",
+        "brand": "SuperATV",
+        "product": null,
+        "model": "a01 1/25/19",
+        "upc": null,
+        "outcome": "no_match",
+        "got": [],
+        "found": false,
+        "shared": false
+      },
+      {
+        "kind": "model_ocr",
+        "recall": "25703",
+        "brand": "Polaris Industries Inc.",
+        "product": null,
+        "model": "XP41000",
+        "upc": null,
+        "outcome": "candidates",
+        "got": [
+          "25024",
+          "25208",
+          "24218"
+        ],
+        "found": false,
+        "shared": false
+      }
+    ]
+  },
+  "negatives": {
+    "n": 511,
+    "ok": 511,
+    "candidates": 379,
+    "shared": 0,
+    "byKind": {
+      "changed_model": {
+        "n": 483,
+        "ok": 483,
+        "candidates": 376,
+        "shared": 0
+      },
+      "ordinary": {
+        "n": 28,
+        "ok": 28,
+        "candidates": 3,
+        "shared": 0
+      }
+    },
+    "matched": [],
+    "changedSkipped": 1
+  },
+  "sentence": "Found the right recall for 2,201 of 2,216 label readings; 511 of 511 not-recalled products matched no recall."
+}

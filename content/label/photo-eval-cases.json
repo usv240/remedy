@@ -1,0 +1,611 @@
+{
+  "note": "The prepared photo eval for the label check, written before any run: real label photos, each looked at by hand, with the recall it must find (CPSC official recall images, public domain) or no recall (openly licensed photos of adapters no recall since January 2024 lists). scripts/label/eval-photos.ts reads each with Claude and scores it; it checks each image's SHA-256 against this file before reading, so the run reads the very pictures listed here. Not run yet.",
+  "written_at": "2026-11-10T18:56:58.280Z",
+  "scoring": "A case with a recall is right when the label check names that recall settled by its code (the one match, or among recalls that share the code). A case with no recall is right when the check names no match. Model or UPC read exactly as looked at is counted beside it.",
+  "cases": [
+    {
+      "id": "cpsc-26792",
+      "url": "https://www.cpsc.gov/s3fs-public/NEWDERY2.png",
+      "sha256": "3360f3e8ad8ad670363230d76319b1c56ec1deebd8143dbbd8bb48fb82a8b1c9",
+      "width": 1468,
+      "height": 1957,
+      "expect": {
+        "outcome": "match",
+        "recall": "26792",
+        "code": "ZHX-PB22"
+      },
+      "looked_at": {
+        "model": "Model (HVIN) : ZHX - PB22",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Printed spec block on back of power bank (built-in yellow cables), 10000mAh/36Wh, FCC ID 2A4MT-PB22; real high-res photo, no annotations"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26792, public domain"
+    },
+    {
+      "id": "cpsc-26557",
+      "url": "https://www.cpsc.gov/s3fs-public/kidisle-2.jpg",
+      "sha256": "6ff9a5ad4845dae3036b0541a7b12b87ed03bdbedcaab88c24835d0249c8e291",
+      "width": 614,
+      "height": 311,
+      "expect": {
+        "outcome": "match",
+        "recall": "26557",
+        "code": "KC101B"
+      },
+      "looked_at": {
+        "model": "MODEL: KC101B",
+        "upc": null,
+        "lot_or_date": "DATE: 2527",
+        "legibility": "clear",
+        "note": "Rating sticker on underside of coffee maker (120V 60Hz 1150W, ETL Intertek 4005318); real photo, no annotations"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26557, public domain"
+    },
+    {
+      "id": "cpsc-26576",
+      "url": "https://www.cpsc.gov/s3fs-public/lomi-2.png",
+      "sha256": "991ce759a31613fa9b20b0cee15b2dce46745e8e2159ed11283a378263ee28bf",
+      "width": 343,
+      "height": 170,
+      "expect": {
+        "outcome": "match",
+        "recall": "26576",
+        "code": "LOMB2004PK"
+      },
+      "looked_at": {
+        "model": "Model No.: LOMB2004PK",
+        "upc": null,
+        "lot_or_date": "Made in China (09/2025)",
+        "legibility": "clear",
+        "note": "Close-up of rating label on bottom of portable wax kit (110V 0.36A); real photo, no annotations"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26576, public domain"
+    },
+    {
+      "id": "cpsc-26250",
+      "url": "https://www.cpsc.gov/s3fs-public/Picture2-2_10.png",
+      "sha256": "ce28b584fb7f1ee528d54a578ea3db3330316c92131bb251b754bf3e11a0ef3f",
+      "width": 576,
+      "height": 338,
+      "expect": {
+        "outcome": "match",
+        "recall": "26250",
+        "code": "PS-510"
+      },
+      "looked_at": {
+        "model": "Model : PS-510",
+        "upc": null,
+        "lot_or_date": "B/N: 2110P1114000627; Date Code: 2110",
+        "legibility": "clear",
+        "note": "Rating label on bottom of PurSteam Mini Steamer (110-120V 60Hz 900W, Intertek 5017077); CPSC red oval around date code"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26250, public domain"
+    },
+    {
+      "id": "cpsc-26007",
+      "url": "https://www.cpsc.gov/s3fs-public/ambiano-pc-2.png",
+      "sha256": "47138cf1d1e27fbea64551252d7eef9a1bd634f1238a6dcf50160fa863f87aed",
+      "width": 454,
+      "height": 329,
+      "expect": {
+        "outcome": "match",
+        "recall": "26007",
+        "code": "93550"
+      },
+      "looked_at": {
+        "model": "KY-318B / 93550 (also 'PLU 93550')",
+        "upc": null,
+        "lot_or_date": "09/2016; Barcode 20035396; Serial Number 918717936 (partly under glare)",
+        "legibility": "clear",
+        "note": "Silver rating plate on Ambiano electric pressure cooker (AC 120V 60Hz 1000W); some glare"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26007, public domain"
+    },
+    {
+      "id": "cpsc-26605",
+      "url": "https://www.cpsc.gov/s3fs-public/cuisipropel-3.png",
+      "sha256": "b8eaf5b2aadc5f617cef712902c620f6992d2740f963d113ac6e1d2006f16972",
+      "width": 464,
+      "height": 419,
+      "expect": {
+        "outcome": "match",
+        "recall": "26605",
+        "code": "CGG-6331"
+      },
+      "looked_at": {
+        "model": "MODEL NO.: CGG-6331",
+        "upc": null,
+        "lot_or_date": "SERIAL NUMBER: CGG0625990860",
+        "legibility": "clear",
+        "note": "Rating plate on Cuisinart 4-burner 3-in-1 gas grill (propane, 55,000 BTU/HR total)"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26605, public domain"
+    },
+    {
+      "id": "cpsc-26539",
+      "url": "https://www.cpsc.gov/s3fs-public/hotcold-2.gif",
+      "sha256": "b7a81dbe2276e9a57dccbc7946755ecf35f11ebd9864cefa280933844418f628",
+      "width": 362,
+      "height": 357,
+      "expect": {
+        "outcome": "match",
+        "recall": "26539",
+        "code": "MI-DHC02"
+      },
+      "looked_at": {
+        "model": "Model: MI-DHC02",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Underside label of Merkury hot+cool heater fan (110V, fan 10W, heating 380W); CPSC red box around model"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26539, public domain"
+    },
+    {
+      "id": "cpsc-26670",
+      "url": "https://www.cpsc.gov/s3fs-public/eemb-2_0.png",
+      "sha256": "5ea32178422defd1f2c822a3f73d780124aa02110d56019c8a4fc42bad379742",
+      "width": 320,
+      "height": 452,
+      "expect": {
+        "outcome": "match",
+        "recall": "26670",
+        "code": "SKLC-0420-0040"
+      },
+      "looked_at": {
+        "model": "MODEL: SKLC-0420-0040",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Silver rating sticker on back of EEMB coin battery charger (input USB DC 5V, output 4.2V 40mA)"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26670, public domain"
+    },
+    {
+      "id": "cpsc-27011",
+      "url": "https://www.cpsc.gov/s3fs-public/Kobayashi3.png",
+      "sha256": "2d1383752a30e562750d2c086e6abcb488bc49fcd62aa4bb704b22c8d31ab1ff",
+      "width": 849,
+      "height": 849,
+      "expect": {
+        "outcome": "match",
+        "recall": "27011",
+        "code": "H163650"
+      },
+      "looked_at": {
+        "model": "Model: H163650",
+        "upc": null,
+        "lot_or_date": "Batch E225",
+        "legibility": "clear",
+        "note": "Printed text on back of HotHands rechargeable hand warmer (2500mAh/9.25Wh, UL E545799); product render with CPSC red arrows"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 27011, public domain"
+    },
+    {
+      "id": "cpsc-26715",
+      "url": "https://www.cpsc.gov/s3fs-public/workbless-2.jpg",
+      "sha256": "8edcee50d52ed6f892aff0d2a882d503aeeeacafe5388d0970fb2306c66f1b46",
+      "width": 1544,
+      "height": 1030,
+      "expect": {
+        "outcome": "match",
+        "recall": "26715",
+        "code": "WB0301"
+      },
+      "looked_at": {
+        "model": "WB0301",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Black rating plate on back of Workbless electric pressure washer (120V~ 60Hz); studio photo"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26715, public domain"
+    },
+    {
+      "id": "cpsc-26423",
+      "url": "https://www.cpsc.gov/s3fs-public/Picture24_3.png",
+      "sha256": "a4a824d3af07b88736a26857f4bb9b4cbf912c55eba2d9d7dfae81195bb8b433",
+      "width": 340,
+      "height": 280,
+      "expect": {
+        "outcome": "match",
+        "recall": "26423",
+        "code": "XCJ-K01"
+      },
+      "looked_at": {
+        "model": "XCJ-K01",
+        "upc": null,
+        "lot_or_date": "Production date: June 12th, 2025",
+        "legibility": "clear",
+        "note": "Rating plate on Sweetcrispy high pressure washer (120V/60Hz, 1430W, 2100PSI)"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26423, public domain"
+    },
+    {
+      "id": "cpsc-26781",
+      "url": "https://www.cpsc.gov/s3fs-public/Picture4_76.png",
+      "sha256": "19fe57158672de459a43452b6d94b0990c60bb90f6f95bb459fe111abe04c5f2",
+      "width": 468,
+      "height": 586,
+      "expect": {
+        "outcome": "match",
+        "recall": "26781",
+        "code": "SME004"
+      },
+      "looked_at": {
+        "model": "Model: SME004",
+        "upc": null,
+        "lot_or_date": "Prototype ID: AMGSW066; Date of Manufacture: 2025-06",
+        "legibility": "clear",
+        "note": "Federal flammability law label on BedsPick mattress; photo, maker/importer redacted. Sibling 26781-1 shows a different model (AMG005197_12_Q_GLT), so use -2 only"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26781, public domain"
+    },
+    {
+      "id": "cpsc-26069",
+      "url": "https://www.cpsc.gov/s3fs-public/criblike-2.png",
+      "sha256": "2afdd4946df02b31c2655f3a4bcf2b8d176202288c7f75b7c79ce2dce5327ed8",
+      "width": 293,
+      "height": 549,
+      "expect": {
+        "outcome": "match",
+        "recall": "26069",
+        "code": "XCD-002"
+      },
+      "looked_at": {
+        "model": "Model number: XCD-002 / Model Name XCD-002",
+        "upc": null,
+        "lot_or_date": "Batch No.: 2025.5; Manufacture Date: 2025.5; PO#24120318",
+        "legibility": "ok",
+        "note": "Sewn-in fabric tag on Criblike pack-and-play mattress; smaller text, partly redacted"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26069, public domain"
+    },
+    {
+      "id": "cpsc-26652",
+      "url": "https://www.cpsc.gov/s3fs-public/octrot-3.png",
+      "sha256": "f41f9e0aa089860ea76aff907da9068ecdf2403d141a03f86fdbcb5ab20b6f0d",
+      "width": 736,
+      "height": 464,
+      "expect": {
+        "outcome": "match",
+        "recall": "26652",
+        "code": "OCT-5060"
+      },
+      "looked_at": {
+        "model": "Model Number OCT-5060",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Octrot heated throw retail box with model number printed on front; CPSC red circle and arrow"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26652, public domain"
+    },
+    {
+      "id": "cpsc-26147",
+      "url": "https://www.cpsc.gov/s3fs-public/vevorice-7.jpg",
+      "sha256": "d79beaf6ed25630d252824f63c52d2ed76c61e43033b46143ab08c1354764100",
+      "width": 342,
+      "height": 608,
+      "expect": {
+        "outcome": "match",
+        "recall": "26147",
+        "code": "BY-300"
+      },
+      "looked_at": {
+        "model": "Model: BY-300",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Rating label on top of Vevor ice crusher (110VAC 60Hz 300W, 95 kg/h)"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26147, public domain"
+    },
+    {
+      "id": "cpsc-26090",
+      "url": "https://www.cpsc.gov/s3fs-public/belkin-02.png",
+      "sha256": "72ed884d839fa84c0d6ba85c454cbd0ec74977720deaa1400e0bf919f21cea94",
+      "width": 571,
+      "height": 583,
+      "expect": {
+        "outcome": "match",
+        "recall": "26090",
+        "code": "MMA008"
+      },
+      "looked_at": {
+        "model": "Model 型號 型号: MMA008",
+        "upc": null,
+        "lot_or_date": "SN: 57X10F63E06040; 2024年 03월 (Mar 2024)",
+        "legibility": "ok",
+        "note": "Light-grey print on base of Belkin Auto-Tracking Stand Pro with DockKit (input 15V 2A); CPSC red box"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26090, public domain"
+    },
+    {
+      "id": "cpsc-25469",
+      "url": "https://www.cpsc.gov/s3fs-public/ambiano-3.png",
+      "sha256": "922185b198336341d7fb7190cc6388f5258c77e01d2ac5fd55cc1435dab85cfd",
+      "width": 303,
+      "height": 211,
+      "expect": {
+        "outcome": "match",
+        "recall": "25469",
+        "code": "836098"
+      },
+      "looked_at": {
+        "model": "MODEL NO.: TM-2040  Item No.: 836098",
+        "upc": null,
+        "lot_or_date": "Date Code: 08/2024",
+        "legibility": "ok",
+        "note": "Rating label on base of Ambiano cotton candy maker (120V 60Hz 480W); small image (303x211)"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 25469, public domain"
+    },
+    {
+      "id": "cpsc-26369",
+      "url": "https://www.cpsc.gov/s3fs-public/Picture11_6.png",
+      "sha256": "e105328e49fabb7db2db84d4c6d2275c23720eaa1d4ce20bafd43f20f6ceb6e7",
+      "width": 357,
+      "height": 244,
+      "expect": {
+        "outcome": "match",
+        "recall": "26369",
+        "code": "SJP-50"
+      },
+      "looked_at": {
+        "model": "Model No : SJP-50",
+        "upc": null,
+        "lot_or_date": "Production Date: Aug.2025; Production Batch: SDJRJJZ0813 (FNSKU X002ZD8WWT)",
+        "legibility": "clear",
+        "note": "Amazon FNSKU barcode sticker on Coluans light-up rings packaging"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26369, public domain"
+    },
+    {
+      "id": "cpsc-27059",
+      "url": "https://cpsc.gov/s3fs-public/Yinklev4.png?VersionId=4jXKPLcS48mFOv1l.lpG0mTiVEKoOF_J",
+      "sha256": "3efd573b75c805b0715097c93cb074a9789a584e37140ba13976f14935a35849",
+      "width": 391,
+      "height": 529,
+      "expect": {
+        "outcome": "match",
+        "recall": "27059",
+        "code": "C-0633"
+      },
+      "looked_at": {
+        "model": "Model: C-0633",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Permanent label on back panel of Jocoevol 6-drawer dresser with tip-over warning; address block blurred by CPSC"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 27059, public domain"
+    },
+    {
+      "id": "cpsc-27018",
+      "url": "https://www.cpsc.gov/s3fs-public/ONTHEWEI2.jpg",
+      "sha256": "b395349798419a7a8401eb7722bf540b6aa575d8ba67842e06539e9c3101eefd",
+      "width": 264,
+      "height": 334,
+      "expect": {
+        "outcome": "match",
+        "recall": "27018",
+        "code": "MY002"
+      },
+      "looked_at": {
+        "model": "Model No: MY002",
+        "upc": null,
+        "lot_or_date": "Product Batch: 802-11-6; Date of manufacturer: 2026/1/10",
+        "legibility": "clear",
+        "note": "Printed table label on back of baby bath seat; importer details redacted"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 27018, public domain"
+    },
+    {
+      "id": "cpsc-26609",
+      "url": "https://www.cpsc.gov/s3fs-public/wonderstone-3.jpg",
+      "sha256": "bb2492690b041eccb128db62973f3816fcc19cd60ad838d12cc303e6e6aba163",
+      "width": 384,
+      "height": 288,
+      "expect": {
+        "outcome": "match",
+        "recall": "26609",
+        "code": "616"
+      },
+      "looked_at": {
+        "model": "MODEL NO.: 616",
+        "upc": null,
+        "lot_or_date": "BATCH NO.: 616-USA-JX1220; Date of Production: 20260115",
+        "legibility": "clear",
+        "note": "White label under tray of WonderStone infant walker"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26609, public domain"
+    },
+    {
+      "id": "cpsc-26733",
+      "url": "https://www.cpsc.gov/s3fs-public/Picture15_6.jpg",
+      "sha256": "521f779fd2510f91f113f346e5032695d694ef8dd36f9d105f30bc2fd92681c9",
+      "width": 1224,
+      "height": 1723,
+      "expect": {
+        "outcome": "match",
+        "recall": "26733",
+        "code": "FBL140202"
+      },
+      "looked_at": {
+        "model": "Mode[l]: FBL140202 (first letter wraps around the tube)",
+        "upc": null,
+        "lot_or_date": "...ture Date: 2025-10-09",
+        "legibility": "clear",
+        "note": "Wrap-around label on leg of Loyoda adult bed rail (capacity 350LBS); model line fully visible"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 26733, public domain"
+    },
+    {
+      "id": "cpsc-25467",
+      "url": "https://www.cpsc.gov/s3fs-public/pit-3.png",
+      "sha256": "b581b27d25c954630afa40c9dded817d16745c1c22c1146e84fe68b1d2a7a9d3",
+      "width": 361,
+      "height": 383,
+      "expect": {
+        "outcome": "match",
+        "recall": "25467",
+        "code": "1922343012788"
+      },
+      "looked_at": {
+        "model": null,
+        "upc": "1 922343 012788",
+        "lot_or_date": "TRACKING NUMBER FO031124 (very small)",
+        "legibility": "ok",
+        "note": "Back of Five Below tabletop fire pit box; UPC digits under barcode at bottom right, small"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 25467, public domain"
+    },
+    {
+      "id": "cpsc-27047",
+      "url": "https://cpsc.gov/s3fs-public/PILLANI2.png?VersionId=qklo03N.mxLdRvqNJiHjY1GlcaYTL8VA",
+      "sha256": "a7697bc9aa0a128091e82a746c3a5c872205d25e05e5487398c365970773e887",
+      "width": 259,
+      "height": 258,
+      "expect": {
+        "outcome": "match",
+        "recall": "27047",
+        "code": "NP4351"
+      },
+      "looked_at": {
+        "model": "Model No: NP4351",
+        "upc": null,
+        "lot_or_date": "Batch number: 202605; Production Date: May 30th 2026",
+        "legibility": "clear",
+        "note": "Flat label artwork for Pillani nursing pillow (scan-like, not a photo); maker details redacted"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 27047, public domain"
+    },
+    {
+      "id": "cpsc-25179",
+      "url": "https://www.cpsc.gov/s3fs-public/Konwin-2.jpg",
+      "sha256": "eebcb12c09225a876f8530c7e25542fa2541fc39c448aaf7b85db7e518bb1964",
+      "width": 793,
+      "height": 644,
+      "expect": {
+        "outcome": "match",
+        "recall": "25179",
+        "code": "BHN2133"
+      },
+      "looked_at": {
+        "model": "Factory Model No.: BHN2133 (Item No.: FH22)",
+        "upc": null,
+        "lot_or_date": "Serial No: 21240413",
+        "legibility": "clear",
+        "note": "Rating label on underside of Konwin tabletop fan heater (120V 60Hz 1500W, Intertek 5012202); CPSC red boxes"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 25179, public domain"
+    },
+    {
+      "id": "cpsc-25190",
+      "url": "https://www.cpsc.gov/s3fs-public/VC-power-bank-2.jpg",
+      "sha256": "a81df9cea7eda182bce80a50e907b1d579d14deaa67d225c099e1f3556816139",
+      "width": 1536,
+      "height": 2048,
+      "expect": {
+        "outcome": "match",
+        "recall": "25190",
+        "code": "ZHX-PB21"
+      },
+      "looked_at": {
+        "model": "Model: ZHX-PB21 (also embossed 'PO-PP004')",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Owner-style photo of Velvet Caviar magnetic wireless power pack on a wooden table; spec block on back (3.85V/5000mAh)"
+      },
+      "credit": "US Consumer Product Safety Commission, recall 25190, public domain"
+    },
+    {
+      "id": "commons-lenovo-65w-20v-ac-adapter-fru-42t5283",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Lenovo_65W_20V_AC_adapter_%28FRU_42T5283%29_for_ThinkPad_laptops.jpg/1280px-Lenovo_65W_20V_AC_adapter_%28FRU_42T5283%29_for_ThinkPad_laptops.jpg",
+      "sha256": "731a2405ba06574c042284f9a302f9439da746ffd34cf1110b9beadb2d6c6eb3",
+      "width": 1280,
+      "height": 2360,
+      "expect": {
+        "outcome": "no_recall",
+        "recall": null,
+        "code": null
+      },
+      "looked_at": {
+        "model": "P/N 92P1154, FRU P/N 42T5283",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Lenovo 65W 20V adapter label, fully legible"
+      },
+      "credit": "\"Lenovo 65W 20V AC adapter (FRU 42T5283) for ThinkPad laptops\" by Siarhei Besarab, CC BY-SA 4.0, via Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/w/index.php?curid=178326919"
+    },
+    {
+      "id": "commons-lenovo-power-adapter-ac-135w-20v",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Lenovo_Power_Adapter_AC_135W_20V.jpg/1280px-Lenovo_Power_Adapter_AC_135W_20V.jpg",
+      "sha256": "a2edd5f0fb4af79e9c80a895fd3c75d9d69bb42c4e8911aac656612e9d79e315",
+      "width": 1280,
+      "height": 592,
+      "expect": {
+        "outcome": "no_recall",
+        "recall": null,
+        "code": null
+      },
+      "looked_at": {
+        "model": "45N0056 (FRU 45N0057)",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "clear",
+        "note": "Lenovo 135W 20V adapter label, small print"
+      },
+      "credit": "\"Lenovo Power Adapter AC 135W 20V\" by Neozoon, CC0, via Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:Lenovo_Power_Adapter_AC_135W_20V.jpg"
+    },
+    {
+      "id": "commons-panasonic-ac-adapter-re7-87",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Panasonic_AC_ADAPTER_RE7-87.jpg/1280px-Panasonic_AC_ADAPTER_RE7-87.jpg",
+      "sha256": "06fca237d3295806fd4f9b136ac26c2f2b3075867f2f2ec5de0459bbc7adeec2",
+      "width": 1280,
+      "height": 698,
+      "expect": {
+        "outcome": "no_recall",
+        "recall": null,
+        "code": null
+      },
+      "looked_at": {
+        "model": "RE7-87",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "partial",
+        "note": "Small Panasonic adapter, label partly legible"
+      },
+      "credit": "\"Panasonic AC ADAPTER RE7-87\" by Dinkun Chen, CC BY-SA 4.0, via Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:Panasonic_AC_ADAPTER_RE7-87.jpg"
+    },
+    {
+      "id": "commons-panasonic-ac-adapter-re7-87-2",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Panasonic_AC_ADAPTER_RE7-87_%282%29.jpg/1280px-Panasonic_AC_ADAPTER_RE7-87_%282%29.jpg",
+      "sha256": "fcffc68cc77e367ee74b50301c1c7ed656987c954d7e6db6dc044b27ee34f715",
+      "width": 1280,
+      "height": 771,
+      "expect": {
+        "outcome": "no_recall",
+        "recall": null,
+        "code": null
+      },
+      "looked_at": {
+        "model": "RE7-87",
+        "upc": null,
+        "lot_or_date": null,
+        "legibility": "partial",
+        "note": "The same Panasonic adapter, second view"
+      },
+      "credit": "\"Panasonic AC ADAPTER RE7-87 (2)\" by Dinkun Chen, CC BY-SA 4.0, via Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:Panasonic_AC_ADAPTER_RE7-87_(2).jpg"
+    }
+  ]
+}
