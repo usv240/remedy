@@ -55,9 +55,16 @@ describe("catalog scan", () => {
     const r = await scanCatalog([{ name: "portable charger", model: "HA-PB-10K" }]);
     // Whatever the model code is in the data, a code that is absent must not match by model.
     expect(r.results[0].matched_by).not.toBe("model");
-    expect(codeMatch({ name: "x", model: "AB-123", sku: null, brand: null }, { models: "modelsab123andab124", upcs: new Set() })).toBe("model");
+    expect(codeMatch({ name: "x", model: "AB-123", sku: null, brand: null }, { models: "Models AB123 and AB124", upcs: new Set() })).toBe("model");
+    expect(codeMatch({ name: "x", model: "ab 123", sku: null, brand: null }, { models: 'Model "AB-123" is printed underneath.', upcs: new Set() })).toBe("model");
     expect(codeMatch({ name: "x", model: "AB", sku: null, brand: null }, { models: "ab", upcs: new Set() })).toBeNull();
+    // A model must be a whole code in the recall's text: not the front of a longer one, not digits inside a measure.
+    expect(codeMatch({ name: "x", model: "KC101", sku: null, brand: null }, { models: "Model KC101B", upcs: new Set() })).toBeNull();
+    expect(codeMatch({ name: "x", model: "5-cup", sku: null, brand: null }, { models: "It holds 2.5 cups of water.", upcs: new Set() })).toBeNull();
     expect(codeMatch({ name: "x", model: null, sku: "0123456789012", brand: null }, { models: "", upcs: new Set(["0123456789012"]) })).toBe("upc");
+    // UPC-A, EAN-13 and GTIN-14 are one product: a leading zero dropped or added still matches.
+    expect(codeMatch({ name: "x", model: null, sku: "123456789012", brand: null }, { models: "", upcs: new Set(["0123456789012"]) })).toBe("upc");
+    expect(codeMatch({ name: "x", model: null, sku: "00123456789012", brand: null }, { models: "", upcs: new Set(["123456789012"]) })).toBe("upc");
   });
 
   it("the keyword score covers the row's words and halves when a given brand is absent", () => {

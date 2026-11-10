@@ -4,11 +4,15 @@
  * made safe, with the claim link. Server only.
  *
  * How a row is decided, in order:
- *   1. The recall search (Elastic, or the in-app ranking) finds up to eight candidate recalls for the row's words.
- *   2. A stated model number or UPC that appears in a candidate's own models or UPCs settles it ("model", "upc").
+ *   1. The recall search (Elastic, or the in-app ranking) finds up to eight candidate recalls for the row's words, and
+ *      a stated model number or UPC is also looked up in every recall's own codes (src/lib/recall/codes.ts), so a row
+ *      whose words find nothing, or that has a code and no name, still meets its recall.
+ *   2. A stated model number or UPC that appears in a candidate's own models or UPCs settles it ("model", "upc"). UPCs
+ *      compare as GTINs, so a leading zero dropped or added does not matter.
  *   3. Otherwise a keyword score: how much of the row's words the candidate's product names, title, firm and models
  *      cover; a brand that is given and absent halves it ("keywords"). At or over MATCH it is a match; under REVIEW
- *      it is clear.
+ *      it is clear. A row that states a model the candidate's own model list does not hold never matches on words
+ *      alone: the same brand's coffee maker with another model number is not the recalled one.
  *   4. Rows in between are ambiguous. With an API key set and today's AI budget left, Claude Opus 5.5 reads them in
  *      batches of twenty against their candidates ("claude"); otherwise they come back "unknown", never guessed.
  * The money math is never the model's: the refund amount comes from the stored proof rule.
@@ -18,7 +22,9 @@ import { asData, structured } from "@/lib/ai/claude";
 import { overBudget } from "@/lib/ai/usage";
 import { recallByNumber, refreshOverlay, storedRule, summarize } from "@/lib/api/recall-data";
 import { ruleChips } from "@/lib/api/rule-chips";
-import { searchRecalls, tokens, type RecallHit } from "./search";
+import { extractModels } from "@/lib/verify/identifiers";
+import { codeOf, codeText, gtin, looksLikeModel, modelInText, recallCodes, recallsByCode } from "./codes";
+import { loadAllRecalls, searchRecalls, tokens } from "./search";
 import type { Recall } from "./types";
 
 export type ScanItem = { name: string; model?: string | null; sku?: string | null; brand?: string | null };
@@ -48,7 +54,12 @@ export type ScanRow = {
   recall: ScanRecall | null;
   /** The owner's claim page for a photo-refund recall, relative to this server. */
   claim_url: string | null;
+  /** Only when the scan is asked for them (opts.alternatives): the other candidates worth a look, best first. */
+  alternatives?: ScanAlternative[];
 };
+
+/** Another candidate for a row: a recall whose own codes also hold the row's code, or whose words cover the row's. */
+export type ScanAlternative = { recall: ScanRecall; matched_by: MatchedBy; confidence: number; claim_url: string | null };
 
 export type ScanReport = {
   summary: { total: number; photo_refund: number; recalled: number; clear: number; unknown: number };
@@ -74,7 +85,7 @@ export const MATCH = 0.75;
 export const REVIEW = 0.4;
 
 const clean = (s: string | null | undefined) => (s ?? "").replace(/\s+/g, " ").trim();
-const code = (s: string | null | undefined) => clean(s).toLowerCase().replace(/[^a-z0-9]/g, "");
+const code = codeOf;
 
 export function normalizeItem(i: ScanItem): ScanRow["item"] {
   return { name: clean(i.name).slice(0, 200), model: clean(i.model).slice(0, 80) || null, sku: clean(i.sku).slice(0, 80) || null, brand: clean(i.brand).slice(0, 80) || null };
@@ -83,28 +94,47 @@ export function normalizeItem(i: ScanItem): ScanRow["item"] {
 /** The words a row is searched and scored by: brand, name, model. */
 export const itemText = (i: ScanRow["item"]) => [i.brand, i.name, i.model].filter(Boolean).join(" ");
 
-type Candidate = { recall: Recall; hit: RecallHit; text: Set<string>; models: string; upcs: Set<string> };
+type Candidate = { recall: Recall; text: Set<string>; models: string; upcs: Set<string>; listsModels: boolean };
 
-function candidate(hit: RecallHit): Candidate | null {
-  const r = recallByNumber(hit.number);
+const candCache = new WeakMap<Recall, Candidate>();
+function candidate(number: string): Candidate | null {
+  const r = recallByNumber(number);
   if (!r) return null;
+  const hit = candCache.get(r);
+  if (hit) return hit;
   const names = r.products.map((p) => p.name).join(" ");
-  return {
+  const out: Candidate = {
     recall: r,
-    hit,
     text: new Set(tokens(`${names} ${r.title} ${r.manufacturers.join(" ")} ${r.products.map((p) => p.model).join(" ").slice(0, 1500)}`)),
-    // The CPSC's model field is often blank; model codes then sit in the recall's description.
-    models: code(`${r.products.map((p) => `${p.model} ${p.description}`).join(" ")} ${r.description}`),
-    upcs: new Set(r.upcs.map(code)),
+    // The CPSC's model field is often blank; model codes then sit in the recall's title, product names or description,
+    // read as written.
+    models: codeText(r),
+    // The CPSC's UPC list and any UPC its text names, as GTINs.
+    upcs: new Set([...r.upcs.map(code), ...recallCodes(r).upcs]),
+    listsModels: r.products.some((p) => /\d/.test(p.model)) || extractModels(codeText(r)).some(looksLikeModel),
   };
+  candCache.set(r, out);
+  return out;
 }
 
-/** A stated model number or UPC in the candidate's own list: the strongest signal. */
+/** A model code long enough to compare: four or more letters and digits, with a digit. */
+const modelCode = (s: string | null | undefined) => {
+  const m = code(s);
+  return m.length >= 4 && /\d/.test(m) ? m : null;
+};
+
+/**
+ * A stated model number or UPC in the candidate's own list: the strongest signal. `models` is the text the recall names
+ * its models in; the model must appear there as a whole code (modelInText), so "KC101" is not found in "KC101B" and
+ * "5-cup" is not found in "2.5 cups".
+ */
 export function codeMatch(item: ScanRow["item"], c: Pick<Candidate, "models" | "upcs">): MatchedBy | null {
-  const model = code(item.model);
-  if (model.length >= 4 && /\d/.test(model) && c.models.includes(model)) return "model";
+  if (modelCode(item.model) && modelInText(item.model, c.models)) return "model";
   const sku = code(item.sku);
   if (sku.length >= 8 && c.upcs.has(sku)) return "upc";
+  // UPC-A, EAN-13 and GTIN-14 name the same product with or without leading zeros.
+  const g = gtin(item.sku);
+  if (g && g.length >= 7) for (const u of c.upcs) if (gtin(u) === g) return "upc";
   return null;
 }
 
@@ -117,6 +147,15 @@ export function keywordScore(item: ScanRow["item"], candText: Set<string>): numb
   const brand = tokens(item.brand ?? "");
   if (brand.length && !brand.every((w) => candText.has(w))) score *= 0.5;
   return Math.round(score * 100) / 100;
+}
+
+/**
+ * The keyword score a candidate may reach for this row: under MATCH when the row states a model code that the
+ * candidate, which does list model numbers, does not hold. Same brand and product, another model: not a match on words.
+ */
+export function cappedScore(item: ScanRow["item"], c: Pick<Candidate, "listsModels">, score: number): number {
+  if (modelCode(item.model) && c.listsModels) return Math.min(score, Math.round((MATCH - 0.01) * 100) / 100);
+  return score;
 }
 
 function recallOut(r: Recall): ScanRecall {
@@ -135,6 +174,8 @@ function recallOut(r: Recall): ScanRecall {
     page: `/recalls/${r.number}`,
   };
 }
+
+const alternative = (r: Recall, by: MatchedBy, confidence: number): ScanAlternative => ({ recall: recallOut(r), matched_by: by, confidence, claim_url: r.photoRefund ? `/claim/${r.number}` : null });
 
 function matched(row: number, item: ScanRow["item"], r: Recall, confidence: number, by: MatchedBy, reason: string): ScanRow {
   return {
@@ -215,9 +256,11 @@ async function aiResolve(pending: Pending[], results: ScanRow[]): Promise<{ done
 }
 
 /**
- * Scan a catalog. `ai: false` skips Claude for the ambiguous rows (they come back "unknown").
+ * Scan a catalog. `ai: false` skips Claude for the ambiguous rows (they come back "unknown"). `alternatives: n` adds
+ * up to n other candidates to each row (other recalls holding the same code, then the nearest by words), for a person
+ * to choose from; the row's own decision is the same either way.
  */
-export async function scanCatalog(items: ScanItem[], opts: { ai?: boolean } = {}): Promise<ScanReport> {
+export async function scanCatalog(items: ScanItem[], opts: { ai?: boolean; alternatives?: number } = {}): Promise<ScanReport> {
   const started = Date.now();
   await refreshOverlay();
   const list = items.slice(0, SCAN_LIMITS.maxItems).map(normalizeItem);
@@ -236,35 +279,65 @@ export async function scanCatalog(items: ScanItem[], opts: { ai?: boolean } = {}
   for (const { t, res } of searched) {
     mode ??= res.mode;
     model ??= res.model;
-    found.set(t, res.hits.map(candidate).filter((c): c is Candidate => c !== null));
+    found.set(t, res.hits.map((h) => candidate(h.number)).filter((c): c is Candidate => c !== null));
   }
+  const all = loadAllRecalls();
+  const want = Math.max(0, Math.min(5, opts.alternatives ?? 0));
 
   list.forEach((item, idx) => {
     const row = idx + 1;
     const key = itemText(item).toLowerCase();
-    const cands = found.get(key) ?? [];
-    if (!tokens(key).length) {
+    // The recalls whose own codes hold the row's model or UPC come first, then the search's candidates for its words.
+    const byCode = recallsByCode(all, { model: item.model, upc: item.sku })
+      .map(candidate)
+      .filter((c): c is Candidate => c !== null);
+    const cands = [...byCode, ...(found.get(key) ?? []).filter((c) => !byCode.some((b) => b.recall.number === c.recall.number))];
+    if (!tokens(key).length && !byCode.length && !gtin(item.sku)) {
       results[idx] = unmatched(row, item, "unknown", 0, "No product name to check.");
       return;
     }
-    for (const c of cands) {
-      const by = codeMatch(item, c);
-      if (by) {
-        results[idx] = matched(row, item, c.recall, 0.98, by, by === "model" ? `Model ${item.model} is in the recall's models.` : `UPC ${item.sku} is in the recall's UPCs.`);
-        return;
-      }
+    const coded = cands.map((c) => ({ c, by: codeMatch(item, c) })).filter((x): x is { c: Candidate; by: MatchedBy } => x.by !== null);
+    const scored = cands
+      .filter((c) => !coded.some((x) => x.c === c))
+      .map((c) => ({ c, raw: keywordScore(item, c.text) }))
+      .map((x) => ({ ...x, score: cappedScore(item, x.c, x.raw) }))
+      .sort((a, b) => b.score - a.score);
+    const others = (skip: Candidate | null): ScanAlternative[] =>
+      want
+        ? [...coded.filter((x) => x.c !== skip).map((x) => alternative(x.c.recall, x.by, 0.98)), ...scored.filter((s) => s.c !== skip && s.score >= REVIEW).map((s) => alternative(s.c.recall, "keywords", s.score))].slice(0, want)
+        : [];
+    const withAlternatives = (r: ScanRow, skip: Candidate | null): ScanRow => (want ? { ...r, alternatives: others(skip) } : r);
+    if (coded.length) {
+      const { c, by } = coded[0];
+      results[idx] = withAlternatives(matched(row, item, c.recall, 0.98, by, by === "model" ? `Model ${item.model} is in the recall's models.` : `UPC ${item.sku} is in the recall's UPCs.`), c);
+      return;
     }
-    const scored = cands.map((c) => ({ c, score: keywordScore(item, c.text) })).sort((a, b) => b.score - a.score);
+    if (!tokens(key).length) {
+      results[idx] = withAlternatives(unmatched(row, item, "clear", 1, `No recall since 2024 lists UPC ${item.sku}.`), null);
+      return;
+    }
     const best = scored[0];
     if (!best || best.score < REVIEW) {
-      results[idx] = unmatched(row, item, "clear", best ? Math.round((1 - best.score) * 100) / 100 : 1, best ? `No recall since 2024 covers these words; the nearest, recall ${best.c.recall.number}, shares too little.` : "No recall since 2024 matches these words.");
+      results[idx] = withAlternatives(unmatched(row, item, "clear", best ? Math.round((1 - best.score) * 100) / 100 : 1, best ? `No recall since 2024 covers these words; the nearest, recall ${best.c.recall.number}, shares too little.` : "No recall since 2024 matches these words."), null);
       return;
     }
     if (best.score >= MATCH) {
-      results[idx] = matched(row, item, best.c.recall, best.score, "keywords", `The recall's product and firm cover ${Math.round(best.score * 100)}% of the row's words.`);
+      results[idx] = withAlternatives(matched(row, item, best.c.recall, best.score, "keywords", `The recall's product and firm cover ${Math.round(best.score * 100)}% of the row's words.`), best.c);
       return;
     }
-    results[idx] = unmatched(row, item, "unknown", best.score, `A candidate looks close: recall ${best.c.recall.number}, ${Math.round(best.score * 100)}% of the row's words.`);
+    const otherModel = best.score < best.raw;
+    results[idx] = withAlternatives(
+      unmatched(
+        row,
+        item,
+        "unknown",
+        best.score,
+        otherModel
+          ? `A candidate looks close: recall ${best.c.recall.number} covers the row's words, but its models do not include ${item.model}.`
+          : `A candidate looks close: recall ${best.c.recall.number}, ${Math.round(best.score * 100)}% of the row's words.`,
+      ),
+      null,
+    );
     pending.push({ row, item, cands: scored.slice(0, 5).map((s) => s.c) });
   });
 
