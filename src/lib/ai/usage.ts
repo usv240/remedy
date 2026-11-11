@@ -4,7 +4,7 @@ import { log } from "@/lib/log";
 
 /**
  * AI spend: what each live Claude call cost, logged per call, and a daily budget that caps the hosted site.
- * There is no Admin API key, so this log is the measurement channel (plan: cost optimization, free win F).
+ * There is no Admin API key, so this log is the measurement channel.
  *
  * Rates per million tokens, from https://platform.claude.com/docs/en/about-claude/pricing.md (fetched 2026-11-05).
  * Cache writes use the 5-minute rate, the only TTL Remedy uses. Batches are half of every rate, cache included.

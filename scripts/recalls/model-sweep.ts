@@ -1,5 +1,5 @@
 /**
- * Proof-rule model sweep (cost tradeoff G): the 130-recall benchmark sample through Claude Haiku 5.5 and Claude
+ * Proof-rule model sweep: the 130-recall benchmark sample through Claude Haiku 5.5 and Claude
  * Sonnet 5.5, with the same prompt, schema, effort and scoring as the Opus 5.5 results already in
  * content/recalls/extract/plain.json. Message Batches API (half price).
  *

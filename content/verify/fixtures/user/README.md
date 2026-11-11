@@ -31,4 +31,4 @@ Photos of products the team owns go here, with an `expected.json` beside them. T
 }
 ```
 
-`decision` is `verified`, `retake` or `firm_review`; `checks` lists results to assert (`pass`, `fail`, `unclear`). Only use products you own, and do not edit a photo after taking it. The most useful additions match plan section 12: a product made safe and checked against its own recall (P1 to P3), the same product before it is made safe (P4), a different model made safe (P5), and photos of a monitor showing the official CPSC image (T31 to T40).
+`decision` is `verified`, `retake` or `firm_review`; `checks` lists results to assert (`pass`, `fail`, `unclear`). Only use products you own, and do not edit a photo after taking it. The most useful additions: a product made safe and checked against its own recall (P1 to P3), the same product before it is made safe (P4), a different model made safe (P5), and photos of a monitor showing the official CPSC image (T31 to T40).

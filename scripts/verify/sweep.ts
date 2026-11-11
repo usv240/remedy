@@ -1,5 +1,5 @@
 /**
- * Verification sweep (cost tradeoff H): the same known-answer fixture cases through four model and effort settings,
+ * Verification sweep: the same known-answer fixture cases through four model and effort settings,
  * scored on whether each decision matches its expected answer, with cost and time per case.
  *
  *   npx tsx --env-file=.env.local scripts/verify/sweep.ts                 estimate only, free (count_tokens)

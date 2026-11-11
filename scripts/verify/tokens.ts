@@ -1,5 +1,5 @@
 /**
- * Input tokens per claim for the vision call, before and after the image-size change (cost free win C), on every
+ * Input tokens per claim for the vision call, before and after the image-size change, on every
  * fixture photo plus a 12 MP phone-sized photo.
  *
  *   npx tsx --env-file=.env.local scripts/verify/tokens.ts
