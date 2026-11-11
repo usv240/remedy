@@ -86,12 +86,15 @@ describe("the docket replay (content/public/docket-replay.json)", () => {
     expect(logged.length).toBe(again.rows.filter((r) => r.reached_model).length);
   });
 
-  it("the home page and the README state it as a replay of the pattern, with the file's figures", () => {
+  it("the home page, the README and docs/results.md state it as a replay of the pattern, with the file's figures", () => {
     const t = file.totals;
-    const readme = readFileSync(path.join(process.cwd(), "README.md"), "utf8");
-    expect(readme).toContain(`**${t.held} of ${t.claims}**`);
-    expect(readme).toMatch(/replay of the pattern/i);
-    expect(readme).toContain("content/public/docket-replay.json");
+    for (const f of ["README.md", "docs/results.md"]) {
+      const text = readFileSync(path.join(process.cwd(), f), "utf8");
+      expect(text, f).toContain(`**${t.held} of ${t.claims}**`);
+      expect(text, f).toMatch(/replay of the pattern/i);
+      expect(text, f).toContain("content/public/docket-replay.json");
+      expect(text, f).toContain(t.paid === 0 ? `none of the ${t.claims} was paid` : `${t.paid} of ${t.claims}`);
+    }
     const home = readFileSync(path.join(process.cwd(), "src", "app", "page.tsx"), "utf8");
     expect(home).toContain("docketWords()");
   });

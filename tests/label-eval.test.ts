@@ -31,6 +31,8 @@ describe("the label check against the recall list (content/public/label-eval.jso
     expect(evalFile.sentence).toBe(`Found the right recall for ${p.ok.toLocaleString("en-US")} of ${p.n.toLocaleString("en-US")} label readings; ${n.ok.toLocaleString("en-US")} of ${n.n.toLocaleString("en-US")} not-recalled products matched no recall.`);
     expect(evalFile.catalog.recalls).toBe(loadRecalls().length);
     expect(evalFile.note).toMatch(/no model call/);
+    // docs/results.md and TESTING.md print the file's own sentence (the README's figures are checked in tests/facts.test.ts).
+    for (const f of ["docs/results.md", "TESTING.md"]) expect(readFileSync(path.join(process.cwd(), f), "utf8"), f).toContain(evalFile.sentence.replace(/\.$/, ""));
   });
 
   it("a fixed slice of the readings, run again, comes out as the file says", async () => {

@@ -5,12 +5,12 @@ import { poolLimits } from "@/components/evidence/PoolLimits";
 import { HASH_LINEAGE } from "@/lib/research";
 
 /**
- * The pool's measured limits are stated up front, in the README's first idea and beside the two-firm run on /evidence,
- * from content/public/hash-reuse-run.json, with the hash-list lineage cited to each service's own page.
+ * The pool's measured limits are stated in one place, in docs/results.md ("The pool, in short") and beside the two-firm
+ * run on /evidence, from content/public/hash-reuse-run.json, with the hash-list lineage cited to each service's own page.
  */
 const ROOT = process.cwd();
 const read = (...p: string[]) => readFileSync(path.join(ROOT, ...p), "utf8");
-const README = read("README.md");
+const RESULTS = read("docs", "results.md");
 const run = JSON.parse(read("content", "public", "hash-reuse-run.json")) as {
   totals: { n: number; caught4: number; caught10: number };
   falseMatches: { within4: number };
@@ -30,26 +30,27 @@ describe("the hash pool's measured limits and lineage", () => {
     expect(p.either).toBe(run.phash.inUse.either.caught);
   });
 
-  it("the README's first idea states them before anything else about the pool's speed, with the lineage", () => {
-    const first = README.slice(README.indexOf("1. **Each firm that joins makes every other firm safer.**"), README.indexOf("2. **"));
+  it("docs/results.md states them in one line, two hashes first, with the lineage", () => {
+    const at = RESULTS.indexOf("- **The pool, in short.**");
+    expect(at).toBeGreaterThan(-1);
+    const pool = RESULTS.slice(at, RESULTS.indexOf("\n- **", at + 1));
     const limits = poolLimits().sentence.replace(/\.$/, "");
-    expect(first).toContain(limits);
-    // Every place in the README and docs/results.md that gives both, gives the two-hash figure first.
+    expect(pool).toContain(limits);
+    // Wherever docs/results.md gives both, it gives the two-hash figure first.
     const t = run.totals;
-    for (const doc of [README, read("docs", "results.md")]) {
-      const both = doc.indexOf(`${run.phash.inUse.either.caught} of ${t.n}`);
-      const alone = Math.max(doc.indexOf(`${t.caught4} of ${t.n}`), doc.indexOf(`catches ${t.caught4} at`));
-      expect(both).toBeGreaterThan(-1);
-      expect(alone).toBeGreaterThan(both);
-    }
-    expect(first.indexOf(limits)).toBeLessThan(first.indexOf("The hash comparison itself"));
+    const both = RESULTS.indexOf(`${run.phash.inUse.either.caught} of ${t.n}`);
+    const alone = Math.max(RESULTS.indexOf(`${t.caught4} of ${t.n}`), RESULTS.indexOf(`catches ${t.caught4} at`));
+    expect(both).toBeGreaterThan(-1);
+    expect(alone).toBeGreaterThan(both);
     for (const src of [HASH_LINEAGE.photoDna, HASH_LINEAGE.stopNcii]) {
-      expect(first).toContain(`[${src.name}](${src.url})`);
+      expect(pool).toContain(`[${src.name}](${src.url})`);
     }
-    expect(first).toContain("shares only two 64-bit hashes and a row id");
-    // The second hash's figures, from the same run, in the same idea.
-    expect(first).toContain(poolLimits().second.replace(/\.$/, ""));
-    expect(first).toContain("open code");
+    expect(pool).toContain("shares only two 64-bit hashes and a row id");
+    // The second hash's figures, from the same run, in the same line.
+    expect(pool).toContain(poolLimits().second.replace(/\.$/, ""));
+    expect(pool).toContain("open code");
+    // The README says what crosses between firms the same way.
+    expect(read("README.md")).toContain("only the hash and a row id cross");
   });
 
   it("/evidence shows them beside the two-firm run", () => {

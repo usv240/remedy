@@ -197,24 +197,48 @@ npm run worker                # the job worker, in a second terminal (photo chec
 | `CHECKS_SECRET` | Guards the test-only approval route the claim suites use |
 | `DATA_KEY`, `AUDIT_SALT`, `REMEDY_SECRET_KEY` | Encryption and hashing secrets; set long random values when hosted |
 
-`/status` shows whether each integration is live or on its fallback, and today's AI spend.
+`/status` shows whether each integration is live or on its fallback, and today's AI spend. `npm ci` also copies Bryntum Gantt's script into `public/bryntum/`.
+
+### PayPal keys
+
+Payouts, refunds and the sample shop need PayPal sandbox keys, free from PayPal in three steps:
+
+1. Sign in at [developer.paypal.com](https://developer.paypal.com) and open **Apps & Credentials** in **Sandbox** mode.
+2. Create a sandbox app; its page shows a **Client ID** and a **Secret**.
+3. Put them in `.env.local` as `PAYPAL_CLIENT_ID=` and `PAYPAL_CLIENT_SECRET=`, and the Client ID again as `NEXT_PUBLIC_PAYPAL_CLIENT_ID=` for the sample shop's button. Restart `npm run dev`.
+
+`PAYPAL_ENV` (default `sandbox`) picks the PayPal every call uses, from one place, `src/lib/paypal/env.ts`: the REST API, the Server SDK, the sample shop's JavaScript SDK and PayPal's MCP server. Every PayPal call has a 15-second timeout; a call that times out is sent once more only where that cannot pay twice (a read, the token request, or a write with its `PayPal-Request-Id`), in `src/lib/paypal/http.ts`.
+
+### A production build, and your own copy on Render
+
+`npm run build`, then `PORT=3400 npm start`. [`render.yaml`](render.yaml) is one Blueprint for the web service, the job worker, the daily recall job and Postgres 17, with `SENTRY_DSN` for error tracking (optional):
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/usv240/remedy)
 
 ## Run the tests
+
+Every push to `main` runs [CI](.github/workflows/ci.yml): the dependency audit, types, lint and the unit tests, then a production build served against a freshly seeded Postgres with no service keys, where every page must answer and pass axe, and the unit tests run again with the database. [Sandbox money, end to end](.github/workflows/sandbox-e2e.yml) runs the claim payout and the one-click payout on demand (Actions > Run workflow) once the repository holds the sandbox secrets named at the top of that file.
 
 Start the app on port 3300 first (or set `BASE_URL`), and the worker (`npm run worker`) so the claim suites run their checks and payouts through the queue as production does. The browser suites drive Chrome; if Chrome is not at `C:/Program Files/Google/Chrome/Application/chrome.exe`, set `CHROME_PATH`. The claim and firm suites move small amounts of sandbox money ($1.00 to $1.50 a payment, plus one $34.99 sample-shop purchase), and they remove their own test claims afterwards unless you pass `--keep`.
 
 | Suite | Command | Expected |
 |---|---|---|
 | Types and lint | `npm run typecheck`, `npm run lint` | No errors |
-| Unit tests, no network | `npm test` | 630 passed, 61 skipped: 21 need a database, 38 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
+| Unit tests, no network | `npm test` | 631 passed, 61 skipped: 21 need a database, 38 a Claude key and 2 PayPal sandbox keys (counted by what each needs in `content/public/facts.json`) |
 | The logger's masking, the rate-limit table and the job queue's retry and dead letter | `npx vitest run tests/log.test.ts tests/ratelimit.test.ts tests/jobs.test.ts` (with `DATABASE_URL` for the Postgres parts) | All pass |
 | A person in the photo (a retake, the photo deleted at once), the stored copy's missing EXIF and GPS, and the 90-day photo prune | `npx vitest run tests/photo-privacy.test.ts` (with `DATABASE_URL` for the deletion and prune on the real tables) | All pass |
 | Every page and public endpoint, each integration on its fallback | `npm run e2e:smoke` | All pass |
-| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 32 pages, phone and desktop, light and dark | `npm run e2e:a11y` | All 128 page views pass |
+| Accessibility (axe, WCAG 2.2 AA, serious and critical) and sideways scroll: 32 pages, phone and desktop, light and dark | `npm run e2e:a11y` | 128 of 128 page views pass |
 | Search relevance, the explorer, the public API with and without a key, OpenAPI, docs and the MCP tools (no AI call) | `node tests/e2e/public.mjs` | All pass |
 | The owner's claim: examples, a streamed claim, firm review, approval, a $1.25 sandbox payout and the receipt | `node --env-file=.env.local tests/e2e/claim.mjs` | 23 of 23 |
 | Buy in the sample shop as the sandbox buyer, claim, and refund to the original capture | `npx tsx --env-file=.env.local tests/e2e/claim-shop.mjs` | 11 of 11 |
 | The firm console: queue and drawer, bulk Approve and pay ($34.99 payouts), the report against SQL, and a live Gantt re-notice (run `scripts/seed-firm.ts` first; `FIRM_E2E_PAY=0` skips the payouts) | `node --env-file=.env.local tests/e2e/firm.mjs` | All pass |
+| One photo, two firms: the cross-firm hash check, recorded with no model call | `npx tsx scripts/public/record-network-run.ts` | Writes `content/public/network-run.json`; `tests/network-run.test.ts` runs it again |
+| Another firm joins the hash pool: register, a hit and a no-hit, with curl against the local build and a sandbox key | `REMEDY_DEV_KEY=rm_test_... BASE_URL=http://localhost:3400 npx tsx scripts/public/record-hash-pool-call.ts` | Writes `content/public/hash-pool-call.json`; `tests/hash-pool.test.ts` runs the same comparison with no database |
+| The hash against a reused photo: 9 photos, 13 changes each, caught at 10 and 4 bits, false matches against the catalog | `npx tsx scripts/public/hash-reuse-run.ts` | Writes `content/public/hash-reuse-run.json`; `tests/hash-reuse-run.test.ts` makes the copies again |
+| The docket replay: 400 altered copies of one claimed photo at two sample firms, no model call | `npx tsx scripts/public/docket-replay.ts` | Writes `content/public/docket-replay.json`; `tests/docket-replay.test.ts` files the first claims again |
+| Is it recalled? The label check over every recall that lists a model number or UPC, and products no recall lists, with no AI call | `npx tsx scripts/label/eval-catalog.ts` | Found the right recall for 2,201 of 2,216 label readings; 511 of 511 not-recalled products matched no recall (`content/public/label-eval.json`; `tests/label-eval.test.ts` runs a slice again) |
+| The label check on 30 real label photos, answers written down first (prepared; reads each with Claude under `--max-usd`) | `npx tsx --env-file=.env.local scripts/label/eval-photos.ts` | Plan and estimate, about $0.77 (`content/label/photo-eval-cases.json`) |
 | The audit ledger's hash chain, straight from the database | `npm run verify-ledger` | Every hash links to the one before it |
 | 60 ledger appends at once keep one chain | `npm run test:ledger-race` | Chain verified |
 | 100 visitors at once on the free paths (official-picture claim, search, scan sample), against the production build on port 3400 | `BASE_URL=http://localhost:3400 node --env-file=.env.local scripts/load-test.mjs` | Writes `content/public/load-test.json`, shown on `/evidence/operations#load`; 0 errors |

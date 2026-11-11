@@ -65,10 +65,10 @@ describe("the hash pool against a reused photo (content/public/hash-reuse-run.js
     expect(p.inUse.either.caught).toBe(rows.filter((r) => r.distance <= CATALOG_MAX_DISTANCE || r.phashDistance <= PHASH_MAX_DISTANCE).length);
     // What the second hash adds at the thresholds in use: more copies caught than the dHash alone.
     expect(p.inUse.either.caught).toBeGreaterThan(run.totals.caught4);
-    // The README and docs/results.md print the same figures.
-    const docs = ["README.md", "docs/results.md"].map((f) => readFileSync(path.join(process.cwd(), f), "utf8"));
-    for (const d of docs) expect(d).toContain(`${p.inUse.phash.caught} of ${run.totals.n}`);
-    expect(docs[1]).toContain(`either hash catches ${p.inUse.either.caught} of ${run.totals.n} with ${p.inUse.either.unrelated} unrelated matches`);
+    // docs/results.md prints the same figures (the README leaves the reuse run to it).
+    const results = readFileSync(path.join(process.cwd(), "docs", "results.md"), "utf8");
+    expect(results).toContain(`${p.inUse.phash.caught} of ${run.totals.n}`);
+    expect(results).toContain(`either hash catches ${p.inUse.either.caught} of ${run.totals.n} with ${p.inUse.either.unrelated} unrelated matches`);
     for (const k of p.byKind) {
       const mine = rows.filter((r) => r.kind === k.kind);
       expect([k.n, k.dhash4, k.phash]).toEqual([mine.length, mine.filter((r) => r.caught4).length, mine.filter((r) => r.phashDistance <= PHASH_MAX_DISTANCE).length]);

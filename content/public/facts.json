@@ -1,8 +1,8 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-10T23:55:36.370Z",
+  "writtenAt": "2026-11-11T19:41:35.658Z",
   "unitTests": {
-    "passed": 630,
+    "passed": 631,
     "skipped": 61,
     "skippedNeeds": {
       "database": 21,
@@ -12,8 +12,8 @@
     },
     "failed": 0,
     "files": 76,
-    "testsHash": "90f536a813a610bc",
-    "ranAt": "2026-11-10T23:54:29.714Z",
+    "testsHash": "f7b8087ee83c2808",
+    "ranAt": "2026-11-11T19:40:38.171Z",
     "note": "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed)."
   },
   "a11y": {
@@ -220,8 +220,8 @@
   },
   "history": {
     "first": "November 5, 2026",
-    "latest": "November 10, 2026",
-    "latestCommit": "65b0d84",
-    "sentence": "History: the first commit is dated November 5, 2026 and the latest November 10, 2026."
+    "latest": "November 11, 2026",
+    "latestCommit": "0aa9ae4",
+    "sentence": "History: the first commit is dated November 5, 2026 and the latest November 11, 2026."
   }
 }
