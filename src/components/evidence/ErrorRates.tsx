@@ -50,7 +50,7 @@ export function ErrorRates({ folded = false }: { folded?: boolean } = {}) {
         </p>
         <p className="je-what">paid when it should not have been</p>
         <p className="je-def">
-          A decision to pay a photo whose known answer is no payment: a copy, a look-alike, another product, or one not yet made safe, like a charger opened up with its cord still attached. <span className="tabular">{photos(e.wrongPay.cases)}</span>.
+          A decision to pay a photo whose known answer is no payment: a copy, a look-alike, another product, or one not yet made safe, like a charger opened up with its cord still attached, and photos by other photographers of intact chargers, a cut cable with no charger and an unrelated cable. <span className="tabular">{photos(e.wrongPay.cases)}</span>.
         </p>
         {e.wrongPay.count > 0 && <p className="je-def">{happened(e.wrongPay)}</p>}
       </div>

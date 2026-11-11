@@ -51,7 +51,10 @@ type SweepRow = {
   C3_reason: string;
   referee: string | null;
 };
-type Sweep = { ranAt: string; configs: { id: string; model: string }[]; cases: SweepRow[] };
+type Sweep = { ranAt: string; configs: { id: string; model: string }[]; cases: SweepRow[]; runs?: { cases?: string[]; ranAt?: string }[] };
+
+/** When a row was recorded: the date of the run that holds its case (a file's later runs keep earlier rows), else the file's. */
+const rowRanAt = (sweep: Sweep, row: SweepRow) => [...(sweep.runs ?? [])].reverse().find((r) => r.ranAt && r.cases?.includes(row.case))?.ranAt ?? sweep.ranAt;
 
 const SWEEP_PHOTO: Record<string, SamplePhoto> = {
   "sample-charger-cut": "made_safe",
@@ -146,7 +149,7 @@ function sweepRun(row: SweepRow, codeChecks: Pick<Checks, "C5" | "C6">, sweep: S
   return {
     id: `${photo}-${row.decision}-trial-${row.trial}`,
     photo,
-    from: { file: SWEEP_FILE, at: `case ${row.case}, setting ${row.config}, trial ${row.trial}`, trial: row.trial, recordedAt: sweep.ranAt },
+    from: { file: SWEEP_FILE, at: `case ${row.case}, setting ${row.config}, trial ${row.trial}`, trial: row.trial, recordedAt: rowRanAt(sweep, row) },
     model: config?.model ?? "claude-opus-5-5",
     decision: row.decision,
     decidedBy: row.decided_by,

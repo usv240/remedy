@@ -30,7 +30,7 @@ docker compose up -d                                # Postgres 17
 npm run db:migrate && npm run db:load && npm run db:seed
 npx tsx --env-file=.env.local scripts/seed-firm.ts  # sample claims and plan
 npm run dev                                         # http://localhost:3300
-npm test                                            # 630 passed, 51 skipped without a database or keys
+npm test                                            # 630 passed, 61 skipped without a database or keys
 ```
 
 Without a Claude key, every model answer is a recorded one and a new photo goes to a person at the firm; the checks in code, sandbox payments and the firm console run live.
@@ -40,12 +40,12 @@ Without a Claude key, every model answer is a recorded one and a new photo goes 
 Every figure is counted by code ([docs/results.md](docs/results.md)).
 
 - **Two error rates, on photos with a known answer** ([`src/components/evidence/errors.ts`](src/components/evidence/errors.ts)):
-  - **paid when it should not have been: 0 of 36** decisions, on 18 photos.
+  - **paid when it should not have been: 0 of 46** decisions, on 28 photos.
   - **held for a person or a new photo when it could have been paid: 1 of 4**.
   - The 4 decisions are on one photo, the sample charger with its cord cut.
   - Its right-product score of 0.80 to 0.82 is under the 0.85 pass mark, so only the two reviewers verify it.
   - The two reviewers verified 3 of 4; 1 went to a person at the firm.
-- **Photos needing a closer look:** **7 of 7** stopped by code alone, before any AI call ([`content/public/verify-runs.json`](content/public/verify-runs.json)). They are the 7 of the error rates' 40 decisions settled in code; the model made the other 33.
+- **Photos needing a closer look:** **7 of 7** stopped by code alone, before any AI call ([`content/public/verify-runs.json`](content/public/verify-runs.json)). They are the 7 of the error rates' 50 decisions settled in code; the model made the other 43.
 - **Reading the remedy:** Claude Opus 5.5 with a self-check got every field right on **113 of 130** real CPSC remedies, keyword rules 73 of 130 (draft labels, [`content/recalls/benchmark/results.json`](content/recalls/benchmark/results.json)).
 - **Snap the label:** **2,201 of 2,216** label readings found their recall; **511 of 511** unlisted products matched none ([`label-eval.json`](content/public/label-eval.json)).
 
@@ -96,7 +96,7 @@ Also built on Claude Opus 5.5, Elastic, Channel3, Bryntum Gantt, AG Grid and Ren
 
 **Reaching the owner directly moves recalls.** Across 338 CPSC recalls from 2001 to 2013, the share corrected was **11.4%** higher on average with a full remedy than a partial one ([Raithel, Hock and Mafael, 2024](https://link.springer.com/article/10.1007/s11747-023-00967-x)). From a tax credit, not a recall: of 35,050 filers who had not claimed the Earned Income Tax Credit after a first notice, a simpler second notice raised claiming from **14% to 23%**, and showing the amount raised it to **31%** ([Bhargava and Manoli, 2015](https://www.aeaweb.org/articles?id=10.1257/aer.20121493)). That a faster refund raises claims is an inference from the cited studies (a full remedy against a partial one; a simpler tax-credit notice), not a measurement of Remedy.
 
-Measured: **0 of 36 paid wrongly**, the photo check in **about 11 seconds** (about 22 when the two reviewers look), the PayPal payout in **about 19** ([`content/public/facts.json`](content/public/facts.json)).
+Measured: **0 of 46 paid wrongly**, the photo check in **about 11 seconds** (about 22 when the two reviewers look), the PayPal payout in **about 19** ([`content/public/facts.json`](content/public/facts.json)).
 
 **Who pays Remedy:** the firm, a fee per finished claim. Proposed: $1.00 per finished claim (a proposal, not a price list), so a refund costs the firm $1.25 with PayPal's $0.25 payout fee, against the $2 to $4 a paper check costs its issuer today ([`src/lib/pricing.ts`](src/lib/pricing.ts)).
 

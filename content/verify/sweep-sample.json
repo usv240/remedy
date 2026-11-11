@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-11-08T05:14:47.603Z",
-  "trials": 3,
+  "ranAt": "2026-11-10T23:43:47.642Z",
+  "trials": 1,
   "configs": [
     {
       "id": "opus-medium",
@@ -10,10 +10,6 @@
     }
   ],
   "stopped": null,
-  "earlier": {
-    "file": "content/verify/history/sweep-sample.2026-11-07.json",
-    "why": "The same three photos and setting, run on 2026-11-07 with the sample recall's earlier reference pictures (the whole charger and a small crop of where its cord meets the case). The reference pictures changed on 2026-11-08 (content/verify/sample-references.json); this file is the run after that change."
-  },
   "runs": [
     {
       "trials": "1 to 3",
@@ -23,19 +19,38 @@
         "sample-charger-opened-case"
       ],
       "direct": true,
-      "spentUsd": 0.3819
+      "spentUsd": 0.3819,
+      "ranAt": "2026-11-08T05:14:47.603Z"
+    },
+    {
+      "trials": "1 to 1",
+      "cases": [
+        "outside-laptop-charger-intact-1",
+        "outside-laptop-charger-intact-2",
+        "outside-laptop-charger-intact-3",
+        "outside-laptop-charger-intact-4",
+        "outside-laptop-charger-unplugged",
+        "outside-wall-adapter-intact-1",
+        "outside-wall-adapter-intact-2",
+        "outside-wall-adapter-intact-3",
+        "outside-cut-cable-no-charger",
+        "outside-unrelated-cable"
+      ],
+      "direct": false,
+      "spentUsd": 0.2914,
+      "ranAt": "2026-11-10T23:43:47.642Z"
     }
   ],
   "summary": [
     {
       "config": "opus-medium",
       "trial": 1,
-      "pass": 3,
-      "of": 3,
+      "pass": 13,
+      "of": 13,
       "pass %": 100,
-      "usd": 0.126,
-      "usd per case": 0.0421,
-      "median ms": 11122
+      "usd": 0.418,
+      "usd per case": 0.0321,
+      "median ms": 11514
     },
     {
       "config": "opus-medium",
@@ -367,7 +382,337 @@
         },
         "reviewers": []
       }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-laptop-charger-intact-1",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.25,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "unclear",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.25 (pass at 0.85, unclear from 0.5). An embossed Lenovo logo, a rectangular case shape that differs from the official rounded case, a gray barrel tip and a detachable AC cord all conflict with the recall data. It is the same product category but a different brand, so the score is under 0.6.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.95. Both cords are whole and coiled. The DC cord runs intact to the gray barrel plug at the lower left, and the AC cord runs intact to the two-prong plug at the lower center. No cut ends or severed piece can be seen.",
+      "C3_reason": "Claude: digital_image (confidence 0.8; signs: studio_background, no_camera_noise). The product sits on a perfectly clean, evenly lit white studio background with no camera noise, like a catalog or downloaded picture. dHash 2331f0b8d3b4f430;",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0534,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0534,
+      "ms": 17073,
+      "vision_ms": 16841,
+      "usage": {
+        "vision": {
+          "input_tokens": 1060,
+          "output_tokens": 1082,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 5497
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-laptop-charger-intact-2",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.15,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "fail",
+      "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Printed brand lenovo, part numbers 92P1154 and 42T5283, date 20110714, a detachable input cord and a rectangular case all conflict with the Brightline BLC-6520 data and images. Only the product category and 65W rating match.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.95. The output cord along the right side and the power cord plugged into the bottom both look whole and continuous. No cut ends or severed pieces can be seen anywhere.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). This is a natural photo of a physical adapter on a green surface, with real lighting and texture. There are no signs of a screen or a printout. dHash e0d8c4d4d4e0e4e4; nearest official 22 ",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0262,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0262,
+      "ms": 11992,
+      "vision_ms": 11835,
+      "usage": {
+        "vision": {
+          "input_tokens": 1198,
+          "output_tokens": 1015,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-laptop-charger-intact-3",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.2,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "fail",
+      "C1_reason": "Claude vision match score 0.2 (pass at 0.85, unclear from 0.5). The brand printed on the label is Lenovo and the rating is 135W 20V. The recalled model BLC-6520 and UPC are absent, and the 2012/04 date is outside the recall window. Only the generic black adapter shape matches.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.9. Only a short piece of cord is visible at the top right where it leaves the frame. No cut end or severed cord can be seen, and the place where the cord meets the case is not clearly shown.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). A real object photographed on a wooden floor with natural lighting, perspective and camera grain. No screen or print signs. dHash fb8a07173b2b2fe8; nearest official 26 bits, nearest earlie",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0266,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0266,
+      "ms": 13700,
+      "vision_ms": 13606,
+      "usage": {
+        "vision": {
+          "input_tokens": 1060,
+          "output_tokens": 1064,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-laptop-charger-intact-4",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.4,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.4 (pass at 0.85, unclear from 0.5). Shape, strain relief, barrel plug and ferrite bead resemble the official images, but the embossed Dell logo on the case conflicts with the Brightline brand, and no model number or UPC is readable. Different brand of the same product type scores under 0.6.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.9. The cord leaves the charger case at lower left through its strain relief and appears whole. The barrel plug cord at right also looks continuous. No cut ends or severed piece are visible anywhere.",
+      "C3_reason": "Claude: camera_photo (confidence 0.92; signs: none). Natural sunlight with hard shadows, a worn surface with debris and scratches, and normal camera texture. No screen or print signs. dHash 4898d56ae1c9d3f1; nearest official 22 bits, neares",
+      "referee": null,
+      "votes": null,
+      "usd": 0.024,
+      "reviewers_usd": 0,
+      "paid_usd": 0.024,
+      "ms": 10528,
+      "vision_ms": 10442,
+      "usage": {
+        "vision": {
+          "input_tokens": 1084,
+          "output_tokens": 927,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-laptop-charger-unplugged",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.3,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.3 (pass at 0.85, unclear from 0.5). Printed DELL logo on the label conflicts with the Brightline brand; gray housing and detachable C5 inlet differ from the black charger in the official images; no recalled model or UPC readable. Same product category, different brand, so scored under 0.6.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The AC cord plug at the top is unplugged from the brick's inlet socket, not cut. The black cord at the lower right shows no cut ends or severed piece. No cut is visible where the cord meets the case.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural outdoor lighting with shadows, shallow focus blur and camera noise on a real tabletop; no screen or print signs. dHash 31303939a26ad72f; nearest official 25 bits, nearest earlier c",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0253,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0253,
+      "ms": 11514,
+      "vision_ms": 11430,
+      "usage": {
+        "vision": {
+          "input_tokens": 1084,
+          "output_tokens": 991,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-wall-adapter-intact-1",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.15,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Built-in wall prongs, flat striped cord, small two-pin tip connector and compact case all conflict with the official images showing a large brick, round cord and barrel plug with ferrite bead. No label is visible to confirm the model BLC-6520.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.95. The cord runs whole from the strain relief on the charger at right to the connector at bottom center. No cut, cut ends or severed piece is visible.",
+      "C3_reason": "Claude: camera_photo (confidence 0.7; signs: none). Real object on a plain white surface with natural soft shadows and lighting. No screen, printout or watermark signs are visible. dHash 315053ceaf250405; nearest official 24 bits, nearest e",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0247,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0247,
+      "ms": 11244,
+      "vision_ms": 11158,
+      "usage": {
+        "vision": {
+          "input_tokens": 1198,
+          "output_tokens": 939,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-wall-adapter-intact-2",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.15,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "fail",
+      "C1_reason": "Claude vision match score 0.15 (pass at 0.85, unclear from 0.5). Printed model RE7-87, integrated wall prongs, 4.8 V 1.25 A output rating, and flat cord with small appliance connector all conflict with the BLC-6520 65W brick with barrel plug in the official images.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.95. The cord runs unbroken from the strain relief on the right side of the case through loops to the connector at the left; no cut ends or severed piece are visible.",
+      "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). Natural lighting, soft shadows under the cord and case, and surface texture indicate a camera photo of a real object with no screen or print signs. dHash 0c3868588a838280; nearest officia",
+      "referee": null,
+      "votes": null,
+      "usd": 0.029,
+      "reviewers_usd": 0,
+      "paid_usd": 0.029,
+      "ms": 13913,
+      "vision_ms": 13813,
+      "usage": {
+        "vision": {
+          "input_tokens": 1336,
+          "output_tokens": 1128,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-wall-adapter-intact-3",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.3,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "unclear",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.3 (pass at 0.85, unclear from 0.5). Integrated wall prongs, boxy wall adapter shape, small barrel connector and absent ferrite bead and strap conflict with the official images; no model or UPC visible to confirm.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.95. The cord runs whole from the case at top center, coils on the right, and ends in an intact barrel plug at bottom center. No cut or severed end is visible.",
+      "C3_reason": "Claude: digital_image (confidence 0.7; signs: studio_background, no_camera_noise). Perfectly clean seamless white background, even studio lighting and no visible camera noise suggest a catalog or downloaded picture. dHash cfc3cac8cc93ea3c; ",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0243,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0243,
+      "ms": 11257,
+      "vision_ms": 11193,
+      "usage": {
+        "vision": {
+          "input_tokens": 1014,
+          "output_tokens": 958,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-cut-cable-no-charger",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.1,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.1 (pass at 0.85, unclear from 0.5). The charger body, label, model BLC-6520 and UPC are absent. Only generic black cords and insulation scraps are shown, with nothing tying them to the recalled charger.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.3. A black cord running from the top center to the right middle ends in a stripped tip with bare wire exposed, and a short severed piece of black tubing lies at upper right. However, no charger case is visible, so the photo does not show the charger's cord cut where it meets the case.",
+      "C3_reason": "Claude: camera_photo (confidence 0.9; signs: none). Natural lighting, camera noise, perspective and a real workbench and floor in view; no screen or print artifacts. dHash 4387553434eec840; nearest official 23 bits, nearest earlier claim no",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0358,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0358,
+      "ms": 15408,
+      "vision_ms": 15325,
+      "usage": {
+        "vision": {
+          "input_tokens": 1658,
+          "output_tokens": 1404,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
+    },
+    {
+      "config": "opus-medium",
+      "trial": 1,
+      "case": "outside-unrelated-cable",
+      "ok": true,
+      "misses": "",
+      "decision": "retake",
+      "decided_by": "made_safe",
+      "C1": 0.1,
+      "C1_status": "fail",
+      "C2": "fail",
+      "C3": "pass",
+      "C4": "pass",
+      "C1_reason": "Claude vision match score 0.1 (pass at 0.85, unclear from 0.5). Twisted fabric covered two wire cord, pin plugs and a small single pin plug differ from the black brick charger, round rubber cord, ribbed strain relief and barrel DC connector in the official images. No charger body or label present.",
+      "C2_reason": "cut_cord: not confirmed (not_visible), confidence 0.85. The cord is whole from end to end with plugs at both ends (pin plugs at lower center, small black plug at right center). No cut ends or severed pieces are visible, and no charger case is in the photo to show a cut where the cord meets it.",
+      "C3_reason": "Claude: camera_photo (confidence 0.85; signs: none). Natural lighting, real surface texture and camera noise on a speckled floor, with no screen, paper or studio signs. dHash feeccccca8a8e13b; nearest official 16 bits, nearest earlier claim",
+      "referee": null,
+      "votes": null,
+      "usd": 0.0222,
+      "reviewers_usd": 0,
+      "paid_usd": 0.0222,
+      "ms": 8895,
+      "vision_ms": 8771,
+      "usage": {
+        "vision": {
+          "input_tokens": 1658,
+          "output_tokens": 722,
+          "cache_read_input_tokens": 5497,
+          "cache_creation_input_tokens": 0
+        },
+        "reviewers": []
+      }
     }
   ],
-  "spentUsd": 0.3819
+  "spentUsd": 0.6733
 }

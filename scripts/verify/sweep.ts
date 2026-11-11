@@ -260,17 +260,19 @@ async function sweep(configs: Config[], cases: FixtureCase[]) {
       aiUsage: measured ? { since: startedAt.toISOString(), usd: Number(measured.usd.toFixed(6)), calls: measured.calls } : null,
     };
   };
+  /** When this run started: the file's date, and its own entry's in `runs` (earlier runs keep theirs). */
+  const now = new Date().toISOString();
   const save = async () => {
     const extras = await claimPathExtras();
     writeFileSync(
       path.join(FIXTURES_DIR, "..", OUT),
       JSON.stringify(
         {
-          ranAt: new Date().toISOString(),
+          ranAt: now,
           trials: trialOffset + trials,
           configs,
           stopped,
-          runs: [...(prior?.runs ?? (prior ? [{ trials: "earlier", note: "kept from --merge-with" }] : [])), { trials: `${trialOffset + 1} to ${trialOffset + trials}`, ...(set ? { cases: [...ranCases] } : {}), direct: !process.env.ANTHROPIC_BASE_URL, spentUsd: Number(spent.toFixed(4)) }],
+          runs: [...(prior?.runs ?? (prior ? [{ trials: "earlier", note: "kept from --merge-with" }] : [])), { trials: `${trialOffset + 1} to ${trialOffset + trials}`, ranAt: now, ...(set ? { cases: [...ranCases] } : {}), direct: !process.env.ANTHROPIC_BASE_URL, spentUsd: Number(spent.toFixed(4)) }],
           summary: set ? setSummary([...keptCases(), ...perCase]) : [...(prior?.summary.filter((s) => !inTrials(s.trial)) ?? []), ...results],
           cases: [...keptCases(), ...perCase],
           spentUsd: Number((spent + (set ? (prior?.spentUsd ?? 0) : 0)).toFixed(4)),

@@ -1,19 +1,19 @@
 {
   "note": "Written by scripts/facts.ts. The one source for figures the README, TESTING.md and /evidence repeat; tests/facts.test.ts checks them against it and against the code.",
-  "writtenAt": "2026-11-10T20:14:28.920Z",
+  "writtenAt": "2026-11-10T23:55:36.370Z",
   "unitTests": {
     "passed": 630,
-    "skipped": 51,
+    "skipped": 61,
     "skippedNeeds": {
       "database": 21,
-      "claude": 28,
+      "claude": 38,
       "paypal": 2,
       "other": 0
     },
     "failed": 0,
     "files": 76,
-    "testsHash": "b318c60fab34f5de",
-    "ranAt": "2026-11-10T20:13:50.793Z",
+    "testsHash": "90f536a813a610bc",
+    "ranAt": "2026-11-10T23:54:29.714Z",
     "note": "npm test with no keys and no database, as CI runs it. The skipped tests need a Postgres database, a Claude key or PayPal sandbox keys, counted by what each needs (skipNeed)."
   },
   "a11y": {
@@ -42,16 +42,16 @@
   "errors": {
     "wrongPay": {
       "count": 0,
-      "of": 36,
-      "photos": 18
+      "of": 46,
+      "photos": 28
     },
     "heldBack": {
       "count": 1,
       "of": 4,
       "photos": 1
     },
-    "decisions": 40,
-    "photos": 19
+    "decisions": 50,
+    "photos": 29
   },
   "catalogPictures": 1779,
   "catalog": {
@@ -87,10 +87,10 @@
   },
   "checkTimes": {
     "check": {
-      "median": 10.8,
+      "median": 11.2,
       "min": 6.4,
       "max": 20.7,
-      "n": 36
+      "n": 46
     },
     "reviewers": {
       "median": 10.7,
@@ -221,7 +221,7 @@
   "history": {
     "first": "November 5, 2026",
     "latest": "November 10, 2026",
-    "latestCommit": "4f11d84",
+    "latestCommit": "65b0d84",
     "sentence": "History: the first commit is dated November 5, 2026 and the latest November 10, 2026."
   }
 }
