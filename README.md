@@ -8,9 +8,9 @@
   <img src="docs/img/strip-3-queue.png" alt="The firm's claims queue" height="300">
 </p>
 
-Remedy pays a recall refund through PayPal once one photo shows the recalled product made safe. It is for the owners of recalled products and the firms that recall them. Start at [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com) and press **Try a photo**.
+Remedy pays a recall refund through PayPal once one photo shows the recalled product made safe. It is for owners of recalled products and the firms recalling them. Start at [remedy-y0ym.onrender.com](https://remedy-y0ym.onrender.com) and press **Try a photo**.
 
-Since January 2024, **447** US consumer product recalls refund an owner who sends a photo of the product made safe, **$471.1 million** in refunds at the lowest stated price, and a recall claim portal today pays by check within 10 to 15 business days. The owner makes it safe as the recall asks and snaps one photo; Remedy checks it against the official recall, and PayPal pays, back to the original purchase or as a payout to an email, a phone or Venmo (in the sandbox, a PayPal payout to that phone number stands in for Venmo).
+Since January 2024, **447** US consumer product recalls refund an owner who sends a photo of the product made safe, **$471.1 million** in refunds at the lowest stated price, and a recall claim portal today pays by check within 10 to 15 business days. The owner makes it safe as the recall asks and snaps one photo; Remedy checks it against the official recall, and PayPal pays, back to the original purchase or as a payout to an email, a phone or Venmo (in the sandbox, a PayPal payout to that phone stands in for Venmo).
 
 - **In 30 seconds:** press **Try a photo** on the [home page](https://remedy-y0ym.onrender.com), **Run it** on the first photo (Brightline's sample charger, cord cut), then **Send $34.99 to the sandbox buyer**: a real PayPal sandbox payout, with its batch id. A paid receipt without sending one: [`/r/recorded`](https://remedy-y0ym.onrender.com/r/recorded).
 - **Then:** [`/evidence`](https://remedy-y0ym.onrender.com/evidence), [TESTING.md](TESTING.md#buy-claim-and-refund-to-the-original-purchase-about-3-minutes) and [`/firm`](https://remedy-y0ym.onrender.com/firm).
@@ -114,6 +114,8 @@ Measured: **0 of 46 paid wrongly**, the photo check in **about 11 seconds** (abo
 **What is first here,** beside the nearest products: [`/evidence#first`](https://remedy-y0ym.onrender.com/evidence#first).
 
 ## See it
+
+Demo video: [youtu.be/n5HRqnyH4so](https://youtu.be/n5HRqnyH4so)
 
 | Refunded to the PayPal purchase | Two reviewers, when unsure | The recall plan |
 |---|---|---|
